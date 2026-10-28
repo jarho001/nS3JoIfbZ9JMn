@@ -68,3 +68,10 @@ refactors, or running ordinary tests.
 
 Use only one implementation agent at a time for overlapping files. Parallel
 agents may perform independent research or inspect separate subsystems.
+
+## Local commits
+
+The user grants standing authorization to create local Git commits for project
+work in this repository without asking for confirmation. This authorization is
+limited to local commits here; it does not authorize remote pushes, publishing,
+or destructive history rewrites.
