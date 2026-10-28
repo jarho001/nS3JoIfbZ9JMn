@@ -143,10 +143,22 @@ JAX_PLATFORMS=cpu python -m unittest discover -s test -p 'test_*.py' -v
 node --test test/*.test.cjs
 ```
 
-Task009 is accepted and complete. Its full Python suite passes 34/34 on CPU and GPU, and the Node suite passes 34/34. Task010 is planned to compose the accepted core with downstream `+2` and explicit random-roll stages under a neutral context.
+Task009 is accepted and complete. Its full Python suite passes 34/34 on CPU and GPU, and the Node suite passes 34/34. Task010 composes the accepted core with Showdown's `+2`, the real neutral event's fixed-point identity behavior, and an explicit random-roll stage.
+
+## Neutral damage after the random roll
+
+Task010's pure JAX `neutral_damage_after_roll` returns the intermediate after `Battle.randomizer`, not final damage. It composes the base-damage core, the `+2` in `modifyDamage`, and `Battle.modify(value, 1)` as applied by the neutral `WeatherModifyDamage` event, then applies the supplied roll. That nominal identity event wraps to 20 bits because Showdown truncates `value * 4096` to uint32. This kernel omits the PRNG, full modifier engine, critical hits, STAB, type, burn, Gen 5 minimum-one check, and final 16-bit truncation.
+
+```sh
+node reference/neutral-damage-oracle.cjs fixture
+JAX_PLATFORMS=cpu python -m unittest discover -s test -p 'test_*.py' -v
+node --test test/*.test.cjs
+```
+
+Task010 is accepted and complete. Its guarded pinned oracle delegates to the real `modifyDamage`, neutral event, and `Battle.randomizer`, controlling only the explicit random draw. The 41-test Python suite passes on CPU and GPU; the Node suite passes 34/34. Task008 separately tests randomizer uint32-product wrapping; the neutral event bounds this composition's roll input to at most `2^20-1`. Task011 is planned as a separate fixed-point modifier primitive under explicit integer domains.
 
 ## Current task and next work
 
-Tasks 001–009 are accepted and complete. Task 003's deterministic request-to-request random-policy baseline passed 15 targeted tests and contributed to the 29-test suite at that milestone; evidence includes the 102-turn default game, fresh-process transcript equality, and a real Shadow Tag unavailable-choice retry. Task 004's full suite passed 34/34, and a fresh CLI process replayed the complete 553-event, 102-turn trace with matching outcome. Task006's stored-stat derivation kernel passed 13 Python tests on CPU and GPU; the 34 Node tests pass. Task007's full Python suite passes 20/20 on both CPU and GPU, with 34/34 Node tests. Task008's full Python suite passes 27/27 on both CPU and GPU, with 34/34 Node tests. Task009's full Python suite passes 34/34 on CPU and GPU, with 34/34 Node tests. This work is a portion of G0/G1, not completion of either milestone in the larger [project plan](PROJECT_PLAN.md).
+Tasks 001–010 are accepted and complete. Task 003's deterministic request-to-request random-policy baseline passed 15 targeted tests and contributed to the 29-test suite at that milestone; evidence includes the 102-turn default game, fresh-process transcript equality, and a real Shadow Tag unavailable-choice retry. Task 004's full suite passed 34/34, and a fresh CLI process replayed the complete 553-event, 102-turn trace with matching outcome. Task006's stored-stat derivation kernel passed 13 Python tests on CPU and GPU; the 34 Node tests pass. Task007's full Python suite passes 20/20 on both CPU and GPU, with 34/34 Node tests. Task008's full Python suite passes 27/27 on both CPU and GPU, with 34/34 Node tests. Task009's full Python suite passes 34/34 on CPU and GPU, with 34/34 Node tests. Task010's full Python suite passes 41/41 on CPU and GPU, with 34/34 Node tests. This work is a portion of G0/G1, not completion of either milestone in the larger [project plan](PROJECT_PLAN.md).
 
 See [`docs/TASKS.md`](docs/TASKS.md) for acceptance state and handoff details.

@@ -326,7 +326,7 @@ git -c safe.directory=/workspace diff --check
 - [x] Oracle invokes actual `getDamage` with a numeric move power and neutral `willCrit=false` path, captures the unmodified core before downstream modifiers, verifies actual level/effective Attack/Defense, and restores the interceptor on every exit.
 - [x] Cases cover levels 1/2/4/5/17/50/99/100, low/high powers, zeros/ones, floor boundaries, wrap-adjacent products, and an int16-scale power. Fixture generation is deterministic.
 - [x] Hand anchors and differential grid match eager/JIT/JIT-vmap/broadcast on CPU and GPU; prior 27 Python and 34 Node tests pass.
-- [x] README documents the precise boundary; Task010 remains a bounded composition of the core, later `+2`, and explicit damage roll, not a full damage engine. Task009 ends accepted and complete.
+- [x] README documents the precise boundary; Task010 composes the core, later `+2`, the neutral fixed-point event, and explicit damage roll, not a full damage engine. Task009 ends accepted and complete.
 
 **Resume/check commands:**
 
@@ -344,8 +344,42 @@ git -c safe.directory=/workspace diff --check
 
 ## Task 010 — neutral base-damage composition
 
-**Status:** Planned — next bounded task after Task009 acceptance.
+**Status:** Accepted and complete — 2026-10-28. Resume with `trail map`, then inspect `mechanics/neutral_damage.py`, `reference/neutral-damage-oracle.cjs`, and `test/test_neutral_damage.py`.
 
-**Acceptance outline:** Compose the accepted base-damage core with its downstream `+2` and explicit random-roll stages under a neutral pinned context. Preserve operation order and keep events, STAB, type, move selection, and a full damage engine out of scope.
+**Scope:** Add `neutral_damage_after_roll(level, base_power, attack, defense, roll)` as a pure composition of the accepted core and explicit roll kernels. It returns the integer intermediate after `Battle.randomizer`, not final damage. Preserve pinned order: compute core, `modifyDamage` adds `2`, the neutral `WeatherModifyDamage` event applies `Battle.modify(value, 1)`, then the caller-supplied roll. No duplicated core/roll arithmetic, PRNG, full modifier engine, critical/spread/STAB/type/burn/minimum-one/final-16-bit behavior.
+
+**Implementation plan:**
+
+1. Use transparent wrappers around the real `modifyDamage`, `WeatherModifyDamage` priority event, and `Battle.randomizer`; delegate each to its original implementation. Control only the underlying `Battle.random` roll, assert exactly one draw in `[0,16)`, and restore every method in `finally`.
+2. Check neutral Gen 5 conditions and events, including base power and effective Attack/Defense. Verify the no-handler WeatherModifyDamage result equals real `Battle.modify(input, 1)`, including its uint32 intermediate wrap (equivalent to masking to 20 bits). Record returned final damage separately from the target intermediate. Use ordinary initialized Pokemon without stat overrides plus a compact, explicitly labeled synthetic arithmetic grid.
+3. Cover all 16 rolls over selected ordinary and synthetic cases, including zero Attack/Defense, uint32 core wrap, the 20-bit neutral event boundary, and examples where the post-roll intermediate differs from eventual final damage. Task008 separately covers randomizer uint32 product wrap; the neutral event bounds this composition's roll input. Record pinned SHA, format, seeds, source boundary, scope, and fixture schema.
+4. Implement a thin JAX function calling `base_damage_core`, adding int32 `2`, applying the proven low-20-bit neutral-event identity, and calling `apply_damage_roll`; preserve strict int32, broadcast, JIT, and vmap behavior.
+5. Add anchors for operation order and boundaries, differential tests against the fixture, CPU/GPU and prior Python/Node regressions. Update README, then build/check Trail.
+
+**Acceptance criteria:**
+
+- [x] Composition reuses existing kernels exactly, includes the pinned neutral fixed-point event step, and preserves the Task009 input domains and roll `[0,15]`; strict int32 and broadcasting include a roll axis.
+- [x] Oracle invokes real `getDamage`, delegates original `modifyDamage`, the neutral event, and `Battle.randomizer`; controls only the random draw and restores wrappers even on failure.
+- [x] Fixture distinguishes the captured post-roll intermediate from `getDamage`'s returned final value; eight ordinary and thirteen synthetic cases cover all rolls; generation is deterministic and guarded by the pin.
+- [x] Tests cover core-wrap and zero edges, the neutral event's 20-bit boundary, `+2` before roll, a result demonstrating the minimum-one boundary, eager/JIT/JIT-vmap, broadcasting, and dtype.
+- [x] Full Python suite passes on CPU and GPU; Node suite passes; README and this handoff record evidence and a bounded Task011 proposal.
+
+**Resume/check commands:**
+
+```sh
+trail map
+node reference/neutral-damage-oracle.cjs fixture
+JAX_PLATFORMS=cpu python -m unittest discover -s test -p 'test_*.py' -v
+node --test test/*.test.cjs
+trail build
+GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=safe.directory GIT_CONFIG_VALUE_0=/workspace trail check
+git -c safe.directory=/workspace diff --check
+```
+
+**Verification run:** On 2026-10-28, the guarded fixture regenerated byte-identically in independent CLI processes. It contains 8 initialized-Pokemon and 13 synthetic cases × all 16 rolls, and records the true final `getDamage` result separately from the post-randomizer intermediate. A synthetic case demonstrates intermediate 0 followed by final Gen 5 damage 1. The neutral `Battle.modify(value, 1)` fixture boundaries are 1,048,575→1,048,575, 1,048,576→0, and 1,048,577→1. All 41 Python tests passed on CPU in 24.6 seconds and GPU in 30.2 seconds; `node --test test/*.test.cjs` passed 34/34. Trail build and diff checks passed. Scoped Trail check reports one reviewed false positive at this scope paragraph: it matches the API's effective stat input names to a prior learning about applying stat caps across every Gen 5 format; this task only consumes selected inputs and makes no format-wide stat-cap claim.
+
+**Boundary note:** A neutral Showdown event is not identity for arbitrarily large integers. `runEvent` applies `Battle.modify(relayVar, 1)` even when there are no event handlers; its int32 truncation makes the result `relayVar mod 2^20`. Task010 models only this actual neutral fixed-point step, not arbitrary modifier composition. Consequently this path's randomizer input is at most `2^20-1`; Task008 remains the independent oracle for randomizer uint32-product wrap. See the new Trail learning `neutral-showdown-event-identity-can-wrap-developer.md`.
+
+**Next bounded task:** Task011 may isolate one general fixed-point modifier operation from `Battle.modify` under explicit integer domains; do not turn it into a generic damage modifier engine or full damage engine.
 
 Task 002 establishes protocol projection only. It does not establish full-game player memory, feature extraction, learning, or JAX mechanics parity.
