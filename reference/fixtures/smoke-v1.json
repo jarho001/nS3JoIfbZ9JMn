@@ -1,0 +1,813 @@
+{
+  "formatId": "gen5randombattle",
+  "initialBattle": {
+    "gameType": "singles",
+    "generation": 5,
+    "playerRequests": {
+      "p1": {
+        "active": [
+          {
+            "moves": [
+              {
+                "disabled": false,
+                "id": "toxic",
+                "maxpp": 16,
+                "move": "Toxic",
+                "pp": 16,
+                "target": "normal"
+              },
+              {
+                "disabled": false,
+                "id": "scald",
+                "maxpp": 24,
+                "move": "Scald",
+                "pp": 24,
+                "target": "normal"
+              },
+              {
+                "disabled": false,
+                "id": "roost",
+                "maxpp": 16,
+                "move": "Roost",
+                "pp": 16,
+                "target": "self"
+              },
+              {
+                "disabled": false,
+                "id": "bravebird",
+                "maxpp": 24,
+                "move": "Brave Bird",
+                "pp": 24,
+                "target": "any"
+              }
+            ]
+          }
+        ],
+        "side": {
+          "id": "p1",
+          "name": "p1",
+          "pokemon": [
+            {
+              "active": true,
+              "baseAbility": "hydration",
+              "condition": "260/260",
+              "details": "Swanna, L83, M",
+              "ident": "p1: Swanna",
+              "item": "leftovers",
+              "moves": [
+                "toxic",
+                "scald",
+                "roost",
+                "bravebird"
+              ],
+              "pokeball": "pokeball",
+              "stats": {
+                "atk": 192,
+                "def": 152,
+                "spa": 192,
+                "spd": 152,
+                "spe": 210
+              }
+            },
+            {
+              "active": false,
+              "baseAbility": "cloudnine",
+              "condition": "281/281",
+              "details": "Golduck, L87, M",
+              "ident": "p1: Golduck",
+              "item": "leftovers",
+              "moves": [
+                "icebeam",
+                "substitute",
+                "calmmind",
+                "scald"
+              ],
+              "pokeball": "pokeball",
+              "stats": {
+                "atk": 147,
+                "def": 185,
+                "spa": 215,
+                "spd": 189,
+                "spe": 198
+              }
+            },
+            {
+              "active": false,
+              "baseAbility": "waterabsorb",
+              "condition": "305/305",
+              "details": "Maractus, L98, M",
+              "ident": "p1: Maractus",
+              "item": "leftovers",
+              "moves": [
+                "hiddenpowerfire",
+                "protect",
+                "gigadrain",
+                "leechseed"
+              ],
+              "pokeball": "pokeball",
+              "stats": {
+                "atk": 175,
+                "def": 187,
+                "spa": 262,
+                "spd": 187,
+                "spe": 172
+              }
+            },
+            {
+              "active": false,
+              "baseAbility": "vitalspirit",
+              "condition": "249/249",
+              "details": "Primeape, L85, M",
+              "ident": "p1: Primeape",
+              "item": "choicescarf",
+              "moves": [
+                "earthquake",
+                "closecombat",
+                "uturn",
+                "stoneedge"
+              ],
+              "pokeball": "pokeball",
+              "stats": {
+                "atk": 227,
+                "def": 151,
+                "spa": 151,
+                "spd": 168,
+                "spe": 210
+              }
+            },
+            {
+              "active": false,
+              "baseAbility": "magicguard",
+              "condition": "300/300",
+              "details": "Clefable, L85, M",
+              "ident": "p1: Clefable",
+              "item": "lifeorb",
+              "moves": [
+                "softboiled",
+                "aromatherapy",
+                "thunderwave",
+                "doubleedge"
+              ],
+              "pokeball": "pokeball",
+              "stats": {
+                "atk": 168,
+                "def": 173,
+                "spa": 193,
+                "spd": 202,
+                "spe": 151
+              }
+            },
+            {
+              "active": false,
+              "baseAbility": "overgrow",
+              "condition": "249/249",
+              "details": "Sceptile, L82, M",
+              "ident": "p1: Sceptile",
+              "item": "leftovers",
+              "moves": [
+                "leechseed",
+                "substitute",
+                "hiddenpowerfire",
+                "gigadrain"
+              ],
+              "pokeball": "pokeball",
+              "stats": {
+                "atk": 146,
+                "def": 154,
+                "spa": 219,
+                "spd": 187,
+                "spe": 243
+              }
+            }
+          ]
+        }
+      },
+      "p2": {
+        "active": [
+          {
+            "moves": [
+              {
+                "disabled": false,
+                "id": "nightslash",
+                "maxpp": 24,
+                "move": "Night Slash",
+                "pp": 24,
+                "target": "normal"
+              },
+              {
+                "disabled": false,
+                "id": "bugbite",
+                "maxpp": 32,
+                "move": "Bug Bite",
+                "pp": 32,
+                "target": "normal"
+              },
+              {
+                "disabled": false,
+                "id": "brickbreak",
+                "maxpp": 24,
+                "move": "Brick Break",
+                "pp": 24,
+                "target": "normal"
+              },
+              {
+                "disabled": false,
+                "id": "swordsdance",
+                "maxpp": 48,
+                "move": "Swords Dance",
+                "pp": 48,
+                "target": "self"
+              }
+            ]
+          }
+        ],
+        "side": {
+          "id": "p2",
+          "name": "p2",
+          "pokemon": [
+            {
+              "active": true,
+              "baseAbility": "technician",
+              "condition": "316/316",
+              "details": "Kricketune, M",
+              "ident": "p2: Kricketune",
+              "item": "lifeorb",
+              "moves": [
+                "nightslash",
+                "bugbite",
+                "brickbreak",
+                "swordsdance"
+              ],
+              "pokeball": "pokeball",
+              "stats": {
+                "atk": 227,
+                "def": 159,
+                "spa": 167,
+                "spd": 159,
+                "spe": 187
+              }
+            },
+            {
+              "active": false,
+              "baseAbility": "hypercutter",
+              "condition": "243/243",
+              "details": "Kingler, L89, F",
+              "ident": "p2: Kingler",
+              "item": "leftovers",
+              "moves": [
+                "swordsdance",
+                "agility",
+                "crabhammer",
+                "return102"
+              ],
+              "pokeball": "pokeball",
+              "stats": {
+                "atk": 282,
+                "def": 255,
+                "spa": 140,
+                "spd": 140,
+                "spe": 184
+              }
+            },
+            {
+              "active": false,
+              "baseAbility": "defiant",
+              "condition": "271/271",
+              "details": "Purugly, L89, F",
+              "ident": "p2: Purugly",
+              "item": "lifeorb",
+              "moves": [
+                "irontail",
+                "honeclaws",
+                "hypnosis",
+                "return102"
+              ],
+              "pokeball": "pokeball",
+              "stats": {
+                "atk": 197,
+                "def": 165,
+                "spa": 165,
+                "spd": 156,
+                "spe": 250
+              }
+            },
+            {
+              "active": false,
+              "baseAbility": "shellarmor",
+              "condition": "243/243",
+              "details": "Omastar, L80, M",
+              "ident": "p2: Omastar",
+              "item": "whiteherb",
+              "moves": [
+                "shellsmash",
+                "icebeam",
+                "hiddenpowergrass",
+                "surf"
+              ],
+              "pokeball": "pokeball",
+              "stats": {
+                "atk": 102,
+                "def": 246,
+                "spa": 229,
+                "spd": 158,
+                "spe": 134
+              }
+            },
+            {
+              "active": false,
+              "baseAbility": "naturalcure",
+              "condition": "566/566",
+              "details": "Blissey, L84, F",
+              "ident": "p2: Blissey",
+              "item": "leftovers",
+              "moves": [
+                "seismictoss",
+                "protect",
+                "wish",
+                "toxic"
+              ],
+              "pokeball": "pokeball",
+              "stats": {
+                "atk": 21,
+                "def": 65,
+                "spa": 174,
+                "spd": 275,
+                "spe": 141
+              }
+            },
+            {
+              "active": false,
+              "baseAbility": "shedskin",
+              "condition": "242/242",
+              "details": "Dragonair, L85, F",
+              "ident": "p2: Dragonair",
+              "item": "eviolite",
+              "moves": [
+                "rest",
+                "outrage",
+                "dragondance",
+                "sleeptalk"
+              ],
+              "pokeball": "pokeball",
+              "stats": {
+                "atk": 192,
+                "def": 159,
+                "spa": 168,
+                "spd": 168,
+                "spe": 168
+              }
+            }
+          ]
+        }
+      }
+    },
+    "rawUpdateEvents": [
+      "|gametype|singles",
+      "|player|p1|p1||",
+      "|player|p2|p2||",
+      "|gen|5",
+      "|tier|[Gen 5] Random Battle",
+      "|rule|Sleep Clause Mod: Limit one foe put to sleep",
+      "|rule|HP Percentage Mod: HP is shown in percentages",
+      "|rule|Illusion Level Mod: Illusion disguises the Pokemon's true level",
+      "|",
+      "|teamsize|p1|6",
+      "|teamsize|p2|6",
+      "|start",
+      "|split|p1",
+      "|switch|p1a: Swanna|Swanna, L83, M|260/260",
+      "|switch|p1a: Swanna|Swanna, L83, M|100/100",
+      "|split|p2",
+      "|switch|p2a: Kricketune|Kricketune, M|316/316",
+      "|switch|p2a: Kricketune|Kricketune, M|100/100",
+      "|turn|1"
+    ],
+    "teamPreview": false,
+    "trustedEventNote": "rawUpdateEvents includes Showdown |split| markers and private SECRET lines. It is an omniscient oracle transcript, not a public player view."
+  },
+  "purpose": "Trusted Showdown oracle fixture. It contains both complete private teams and private player requests; it is not a policy observation or training example.",
+  "schemaVersion": 1,
+  "seeds": {
+    "battle": [
+      9,
+      10,
+      11,
+      12
+    ],
+    "teamP1": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "teamP2": [
+      5,
+      6,
+      7,
+      8
+    ]
+  },
+  "teams": [
+    [
+      {
+        "ability": "Hydration",
+        "evs": {
+          "atk": 85,
+          "def": 85,
+          "hp": 85,
+          "spa": 85,
+          "spd": 85,
+          "spe": 85
+        },
+        "gender": "",
+        "item": "Leftovers",
+        "ivs": {
+          "atk": 31,
+          "def": 31,
+          "hp": 31,
+          "spa": 31,
+          "spd": 31,
+          "spe": 31
+        },
+        "level": 83,
+        "moves": [
+          "toxic",
+          "scald",
+          "roost",
+          "bravebird"
+        ],
+        "name": "Swanna",
+        "role": "Bulky Attacker",
+        "shiny": false,
+        "species": "Swanna",
+        "speciesId": "swanna"
+      },
+      {
+        "ability": "Cloud Nine",
+        "evs": {
+          "atk": 0,
+          "def": 85,
+          "hp": 85,
+          "spa": 85,
+          "spd": 85,
+          "spe": 85
+        },
+        "gender": "",
+        "item": "Leftovers",
+        "ivs": {
+          "atk": 0,
+          "def": 31,
+          "hp": 31,
+          "spa": 31,
+          "spd": 31,
+          "spe": 31
+        },
+        "level": 87,
+        "moves": [
+          "icebeam",
+          "substitute",
+          "calmmind",
+          "scald"
+        ],
+        "name": "Golduck",
+        "role": "Bulky Setup",
+        "shiny": false,
+        "species": "Golduck",
+        "speciesId": "golduck"
+      },
+      {
+        "ability": "Water Absorb",
+        "evs": {
+          "atk": 0,
+          "def": 85,
+          "hp": 85,
+          "spa": 85,
+          "spd": 85,
+          "spe": 85
+        },
+        "gender": "",
+        "item": "Leftovers",
+        "ivs": {
+          "atk": 2,
+          "def": 31,
+          "hp": 31,
+          "spa": 30,
+          "spd": 31,
+          "spe": 30
+        },
+        "level": 98,
+        "moves": [
+          "hiddenpowerfire",
+          "protect",
+          "gigadrain",
+          "leechseed"
+        ],
+        "name": "Maractus",
+        "role": "Staller",
+        "shiny": false,
+        "species": "Maractus",
+        "speciesId": "maractus"
+      },
+      {
+        "ability": "Vital Spirit",
+        "evs": {
+          "atk": 85,
+          "def": 85,
+          "hp": 85,
+          "spa": 85,
+          "spd": 85,
+          "spe": 85
+        },
+        "gender": "",
+        "item": "Choice Scarf",
+        "ivs": {
+          "atk": 31,
+          "def": 31,
+          "hp": 31,
+          "spa": 31,
+          "spd": 31,
+          "spe": 31
+        },
+        "level": 85,
+        "moves": [
+          "earthquake",
+          "closecombat",
+          "uturn",
+          "stoneedge"
+        ],
+        "name": "Primeape",
+        "role": "Fast Attacker",
+        "shiny": false,
+        "species": "Primeape",
+        "speciesId": "primeape"
+      },
+      {
+        "ability": "Magic Guard",
+        "evs": {
+          "atk": 85,
+          "def": 85,
+          "hp": 85,
+          "spa": 85,
+          "spd": 85,
+          "spe": 85
+        },
+        "gender": "",
+        "item": "Life Orb",
+        "ivs": {
+          "atk": 31,
+          "def": 31,
+          "hp": 31,
+          "spa": 31,
+          "spd": 31,
+          "spe": 31
+        },
+        "level": 85,
+        "moves": [
+          "softboiled",
+          "aromatherapy",
+          "thunderwave",
+          "doubleedge"
+        ],
+        "name": "Clefable",
+        "role": "Bulky Support",
+        "shiny": false,
+        "species": "Clefable",
+        "speciesId": "clefable"
+      },
+      {
+        "ability": "Overgrow",
+        "evs": {
+          "atk": 0,
+          "def": 85,
+          "hp": 85,
+          "spa": 85,
+          "spd": 85,
+          "spe": 85
+        },
+        "gender": "",
+        "item": "Leftovers",
+        "ivs": {
+          "atk": 2,
+          "def": 31,
+          "hp": 31,
+          "spa": 30,
+          "spd": 31,
+          "spe": 30
+        },
+        "level": 82,
+        "moves": [
+          "leechseed",
+          "substitute",
+          "hiddenpowerfire",
+          "gigadrain"
+        ],
+        "name": "Sceptile",
+        "role": "Staller",
+        "shiny": false,
+        "species": "Sceptile",
+        "speciesId": "sceptile"
+      }
+    ],
+    [
+      {
+        "ability": "Technician",
+        "evs": {
+          "atk": 85,
+          "def": 85,
+          "hp": 85,
+          "spa": 85,
+          "spd": 85,
+          "spe": 85
+        },
+        "gender": "",
+        "item": "Life Orb",
+        "ivs": {
+          "atk": 31,
+          "def": 31,
+          "hp": 31,
+          "spa": 31,
+          "spd": 31,
+          "spe": 31
+        },
+        "level": 100,
+        "moves": [
+          "nightslash",
+          "bugbite",
+          "brickbreak",
+          "swordsdance"
+        ],
+        "name": "Kricketune",
+        "role": "Setup Sweeper",
+        "shiny": false,
+        "species": "Kricketune",
+        "speciesId": "kricketune"
+      },
+      {
+        "ability": "Hyper Cutter",
+        "evs": {
+          "atk": 85,
+          "def": 85,
+          "hp": 85,
+          "spa": 85,
+          "spd": 85,
+          "spe": 85
+        },
+        "gender": "",
+        "item": "Leftovers",
+        "ivs": {
+          "atk": 31,
+          "def": 31,
+          "hp": 31,
+          "spa": 31,
+          "spd": 31,
+          "spe": 31
+        },
+        "level": 89,
+        "moves": [
+          "swordsdance",
+          "agility",
+          "crabhammer",
+          "return"
+        ],
+        "name": "Kingler",
+        "role": "Bulky Setup",
+        "shiny": false,
+        "species": "Kingler",
+        "speciesId": "kingler"
+      },
+      {
+        "ability": "Defiant",
+        "evs": {
+          "atk": 85,
+          "def": 85,
+          "hp": 85,
+          "spa": 85,
+          "spd": 85,
+          "spe": 85
+        },
+        "gender": "",
+        "item": "Life Orb",
+        "ivs": {
+          "atk": 31,
+          "def": 31,
+          "hp": 31,
+          "spa": 31,
+          "spd": 31,
+          "spe": 31
+        },
+        "level": 89,
+        "moves": [
+          "irontail",
+          "honeclaws",
+          "hypnosis",
+          "return"
+        ],
+        "name": "Purugly",
+        "role": "Setup Sweeper",
+        "shiny": false,
+        "species": "Purugly",
+        "speciesId": "purugly"
+      },
+      {
+        "ability": "Shell Armor",
+        "evs": {
+          "atk": 0,
+          "def": 85,
+          "hp": 85,
+          "spa": 85,
+          "spd": 85,
+          "spe": 85
+        },
+        "gender": "",
+        "item": "White Herb",
+        "ivs": {
+          "atk": 2,
+          "def": 31,
+          "hp": 31,
+          "spa": 30,
+          "spd": 31,
+          "spe": 31
+        },
+        "level": 80,
+        "moves": [
+          "shellsmash",
+          "icebeam",
+          "hiddenpowergrass",
+          "surf"
+        ],
+        "name": "Omastar",
+        "role": "Setup Sweeper",
+        "shiny": false,
+        "species": "Omastar",
+        "speciesId": "omastar"
+      },
+      {
+        "ability": "Natural Cure",
+        "evs": {
+          "atk": 0,
+          "def": 85,
+          "hp": 85,
+          "spa": 85,
+          "spd": 85,
+          "spe": 85
+        },
+        "gender": "F",
+        "item": "Leftovers",
+        "ivs": {
+          "atk": 0,
+          "def": 31,
+          "hp": 31,
+          "spa": 31,
+          "spd": 31,
+          "spe": 31
+        },
+        "level": 84,
+        "moves": [
+          "seismictoss",
+          "protect",
+          "wish",
+          "toxic"
+        ],
+        "name": "Blissey",
+        "role": "Bulky Support",
+        "shiny": false,
+        "species": "Blissey",
+        "speciesId": "blissey"
+      },
+      {
+        "ability": "Shed Skin",
+        "evs": {
+          "atk": 85,
+          "def": 85,
+          "hp": 85,
+          "spa": 85,
+          "spd": 85,
+          "spe": 85
+        },
+        "gender": "",
+        "item": "Eviolite",
+        "ivs": {
+          "atk": 31,
+          "def": 31,
+          "hp": 31,
+          "spa": 31,
+          "spd": 31,
+          "spe": 31
+        },
+        "level": 85,
+        "moves": [
+          "rest",
+          "outrage",
+          "dragondance",
+          "sleeptalk"
+        ],
+        "name": "Dragonair",
+        "role": "Bulky Setup",
+        "shiny": false,
+        "species": "Dragonair",
+        "speciesId": "dragonair"
+      }
+    ]
+  ],
+  "upstreamCommit": "1242c1e2d9763ba5b85d33f13aecb89bae19ae3d"
+}

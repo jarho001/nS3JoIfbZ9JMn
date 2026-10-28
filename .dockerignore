@@ -1,0 +1,4 @@
+# The image fetches its tools itself; never send project data or credentials.
+**
+!Dockerfile
+!.dockerignore
