@@ -190,10 +190,48 @@ git -c safe.directory=/workspace diff --check
 
 **Verification run:** On 2026-10-28, an isolated Python 3.13 environment installed `jax==0.12.0.1` and `jaxlib==0.12.0.1`; `JAX_PLATFORMS=cpu` reported CPU. The six Python tests passed in 5.1 seconds and compare 13,363 live pinned-Showdown outputs through eager, JIT, and JIT-vmap paths. The existing `/opt/jax-env` suite also passed 6/6 on its GPU backend in 8.4 seconds and was not modified. `node --test test/*.test.cjs` passed 34/34. The stored-stat range `[1, 65535]` is a documented input precondition, not dynamically validated.
 
-## Task 006 — base-stat derivation slice
+## Task 006 — stored-stat derivation slice
 
-**Status:** Planned — next bounded task after Task005 review.
+**Status:** Accepted and complete — 2026-10-28. Architect review accepted the target-format nature semantics, joint-axis broadcasting, and 13/13 CPU/GPU test evidence. Resume with `trail map`, then inspect `mechanics/stats.py`, `reference/stats-oracle.cjs`, and `test/test_stats.py`.
 
-**Acceptance outline:** Implement the preceding Gen 5 stored-stat derivation step in JAX from base stat, level, IV, EV, and nature using actual pinned `Pokemon` instances as the oracle. Preserve integer flooring and nature boundaries; do not combine it with the Task005 stage scaler into a full `calculateStat` implementation until each step has its own differential evidence.
+**Scope:** Compute six stored stats from base stats, level, IVs, EVs, and per-stat nature multipliers. Axis order is `hp, atk, def, spa, spd, spe`. Target the pinned `gen5randombattle` stat path, including Gen 5 unsigned 16-bit truncation during nature modification. The effective format has no `overflowstatmod` rule, so do not apply its 595/728 cap branch. Shedinja has an explicit fixed-1 HP override; do not infer the override from base HP 1. This task does not apply stat stages, forms, event hooks, or team legality.
+
+**Implementation plan:**
+
+1. Confirm target format rule-table facts and exact `Pokemon`/`Battle` stat paths from the pinned source.
+2. Add a pure JAX int32 API with final-axis-six arrays, level and nature broadcasting, exact HP/non-HP floor operations, explicit nature multipliers `[9, 10, 11]`, and a separate Shedinja mask.
+3. Generate a small versioned fixture by constructing real pinned Gen 5 Pokemon from sets and reading `maxhp` and `storedStats`, without overriding their calculations.
+4. Cover all 25 natures over levels `1, 17, 50, 99, 100`, rotate IV and EV boundary patterns across each stat, and vary real species/base-stat profiles including Shedinja. Add separate real `battle.statModify` synthetic cases at pre-nature Attack 595, 596, and 609 for plus/minus/neutral nature paths.
+5. Test hand anchors, fixture reproduction, eager/JIT/JIT-vmap parity, dtype and broadcast contracts, CPU and available GPU; run the prior Python and Node suites.
+
+**Acceptance criteria:**
+
+- [x] Pure int32 JAX API has final axis order `hp, atk, def, spa, spd, spe` and supports documented batch broadcasting; domains are base stats `1..255`, level `1..100`, IV `0..31`, EV `0..255`, and nature multipliers `9/10/11`. Value ranges are caller preconditions, not dynamic checks.
+- [x] HP and non-HP stat equations match pinned Gen 5 `Battle.statModify` floor behavior; nature products preserve unsigned low-16-bit truncation. Do not apply `overflowstatmod` caps because the target format rule is absent.
+- [x] Explicit Shedinja input forces max HP 1; a different species/profile with base HP 1 uses the ordinary formula.
+- [x] Versioned fixture is generated from actual pinned Pokemon sets and `Pokemon.maxhp`/`storedStats`; includes pinned SHA, format rule facts, and exact source paths. No JavaScript formula clone supplies expected fixture outputs.
+- [x] Differential grid covers all 25 natures, levels `1/17/50/99/100`, IV/EV boundaries `0/3/4/31` and `0/3/4/252/255`, varied real species, Shedinja, and real-`statModify` synthetic nature paths at the 595/596 wrap threshold and 609 upper base-stat case.
+- [x] Independent anchors plus eager/JIT/JIT-vmap and broadcast checks pass under pinned CPU JAX and available GPU; Task005 Python tests and all Node tests pass.
+- [x] README and handoff document scope, pinned environment, range preconditions, test evidence, and Task007. Task006 ends awaiting architect review.
+
+**Resume/check commands:**
+
+```sh
+trail map
+node reference/stats-oracle.cjs fixture
+JAX_PLATFORMS=cpu python -m unittest discover -s test -p 'test_*.py' -v
+node --test test/*.test.cjs
+trail build
+GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=safe.directory GIT_CONFIG_VALUE_0=/workspace trail check
+git -c safe.directory=/workspace diff --check
+```
+
+**Verification run:** On 2026-10-28, the pinned fixture regenerated identically and confirmed Gen 5 `gen5randombattle` has `overflowstatmod: false`. The fixture contains 125 real Pokemon cases across all 25 natures and five levels, plus nine real `Battle.statModify` synthetic cases: pre-nature Attack 595/596 and base-stat upper case 609 under Adamant, Modest, and Hardy. At 595, `595*110=65450` does not wrap and the final stored Attack is 654; at 596, `596*110=65560` wraps to 24 and the final stored Attack is 0. Python tests passed 13/13 on isolated pinned CPU JAX in 9.8 seconds and 13/13 on the existing GPU environment in 14.0 seconds. `node --test test/*.test.cjs` passed 34/34. Both existing environments remain unchanged.
+
+## Task 007 — compose the first two stat arithmetic slices
+
+**Status:** Planned — next bounded task after Task006 review.
+
+**Acceptance outline:** Compose the independently tested stored-stat derivation and stat-stage scaling kernels for one selected non-HP stat, then compare against the pinned `Pokemon.calculateStat` path with neutral field selection, unchanged `ModifyBoost`, and modifier 1. Before composition, resolve the domain boundary where valid Task006 synthetic inputs can produce stored stat 0, outside Task005's positive stored-stat precondition; either narrow composition inputs to target species or define an explicit zero case. Preserve each unit's independent tests; do not add event handlers, form changes, full battle mechanics, or policy integration.
 
 Task 002 establishes protocol projection only. It does not establish full-game player memory, feature extraction, learning, or JAX mechanics parity.
