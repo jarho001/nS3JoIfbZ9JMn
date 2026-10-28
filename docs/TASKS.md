@@ -156,7 +156,7 @@ git -c safe.directory=/workspace diff --check
 
 **Status:** Accepted and complete — 2026-10-28. Resume with `trail map`, then inspect `reference/stat-stage-oracle.cjs`, `mechanics/stat_stage.py`, and `test/test_stat_stage.py`.
 
-**Scope:** Implement the integer stat-stage scaling substep used by the pinned Gen 5 `Pokemon.calculateStat`, after `ModifyBoost` and field stat selection and before stat modifiers. The API accepts a positive stored non-HP stat in `[1, 65535]` and an already-selected int32 stage. This value-range precondition is documented but not checked dynamically. It does not implement full `calculateStat`, base stat derivation, natures, EVs, Wonder Room selection, event hooks, or stat modifiers.
+**Scope:** Implement the integer stat-stage scaling substep used by the pinned Gen 5 `Pokemon.calculateStat`, after `ModifyBoost` and field stat selection and before stat modifiers. The current scaler's caller precondition is `[0, 65535]`; Task007 includes the zero-valued result reachable through Gen 5 nature truncation. The bounds are not checked dynamically. This is not the complete `calculateStat` pipeline and does not handle natures, EVs, Wonder Room selection, event hooks, or stat modifiers.
 
 **Implementation plan:**
 
@@ -228,10 +228,48 @@ git -c safe.directory=/workspace diff --check
 
 **Verification run:** On 2026-10-28, the pinned fixture regenerated identically and confirmed Gen 5 `gen5randombattle` has `overflowstatmod: false`. The fixture contains 125 real Pokemon cases across all 25 natures and five levels, plus nine real `Battle.statModify` synthetic cases: pre-nature Attack 595/596 and base-stat upper case 609 under Adamant, Modest, and Hardy. At 595, `595*110=65450` does not wrap and the final stored Attack is 654; at 596, `596*110=65560` wraps to 24 and the final stored Attack is 0. Python tests passed 13/13 on isolated pinned CPU JAX in 9.8 seconds and 13/13 on the existing GPU environment in 14.0 seconds. `node --test test/*.test.cjs` passed 34/34. Both existing environments remain unchanged.
 
-## Task 007 — compose the first two stat arithmetic slices
+## Task 007 — compose Attack stored-stat derivation and stage scaling
 
-**Status:** Planned — next bounded task after Task006 review.
+**Status:** Accepted and complete — 2026-10-28. Architect review accepted the Attack-only composition, zero-inclusive stage domain, and guarded pinned oracle. Resume with `trail map`, then inspect `mechanics/attack.py`, `reference/attack-oracle.cjs`, `test/test_attack.py`, and the two stat-slice fixtures.
 
-**Acceptance outline:** Compose the independently tested stored-stat derivation and stat-stage scaling kernels for one selected non-HP stat, then compare against the pinned `Pokemon.calculateStat` path with neutral field selection, unchanged `ModifyBoost`, and modifier 1. Before composition, resolve the domain boundary where valid Task006 synthetic inputs can produce stored stat 0, outside Task005's positive stored-stat precondition; either narrow composition inputs to target species or define an explicit zero case. Preserve each unit's independent tests; do not add event handlers, form changes, full battle mechanics, or policy integration.
+**Scope:** Compose the existing stored-stat derivation and stage-scaling kernels for Attack only, matching `Pokemon.calculateStat('atk', stage, 1)` on pinned format id `gen5randombattle` with neutral `ModifyBoost`, no Wonder Room, and modifier 1. This does not implement ability/item/status effects, dynamic field selection, other stat selectors, a general event engine, or a full battle calculator.
+
+**Implementation plan:**
+
+1. Extend the stage scaler's caller precondition from positive to nonnegative stored stats and add zero cases to its live Showdown fixture/grid; keep the formula unchanged.
+2. Add a thin `derive_attack` composition that calls `derive_stored_stats`, selects final-axis Attack, then calls `scale_stat_stage`. Let stage inputs add broadcast axes.
+3. Generate a guarded, compact pinned fixture from ordinary real Pokemon sets across natures, levels, IV/EV profiles, and all stages including clamp extremes. Read stored values from actual Pokemon instances and expected values from the real `calculateStat` method; check neutral event and field behavior without monkeypatching.
+4. Add one labeled synthetic-zero oracle row: obtain zero from real `Battle.statModify` at the nature-wrap edge, then explicitly inject that stored Attack into a real Pokemon only for the arithmetic-only `calculateStat` call.
+5. Test hand-computed noncommuting floor anchors and every stage value in the synthetic-zero fixture vector, plus fixture reproduction, eager/JIT/JIT-vmap, shared-table and multidimensional broadcasting, and prior CPU/GPU Python plus Node suites.
+
+**Acceptance criteria:**
+
+- [x] `scale_stat_stage` documents and supports `stored_stat` in `[0, 65535]`; its integer formula is unchanged and zero remains zero for all stages.
+- [x] `derive_attack(base_stats, level, ivs, evs, nature_multipliers, stage)` is a thin pure composition: no duplicated equations, final-stat selector, modifier, or policy behavior.
+- [x] Attack inputs preserve Task006 int32/domain and nature semantics; stage and all batch axes broadcast, including shared `(6,)` stat tables with batched levels/stages.
+- [x] Guarded oracle fixture records pin, source paths, conditions, and both ordinary real-Pokemon cases and the separately labeled synthetic-zero case. Ordinary expected values come directly from real `Pokemon.calculateStat('atk', stage, 1)` without overwriting stored stats.
+- [x] Oracle fixture covers all 25 natures, varied levels/IVs/EVs/species, all 13 stages and out-of-range clamp inputs; live fixture regeneration is deterministic.
+- [x] Tests cover the synthetic zero across all stages, hand anchors demonstrating nature then stage rounding, eager/JIT/JIT-vmap/broadcast parity, strict dtype, CPU and available GPU; Task005/006 and all Node tests pass.
+- [x] README/task handoff documents the neutral Attack-only boundary and Task008. Task007 ends awaiting architect review.
+
+**Resume/check commands:**
+
+```sh
+trail map
+node reference/attack-oracle.cjs fixture
+JAX_PLATFORMS=cpu python -m unittest discover -s test -p 'test_*.py' -v
+node --test test/*.test.cjs
+trail build
+GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=safe.directory GIT_CONFIG_VALUE_0=/workspace trail check
+git -c safe.directory=/workspace diff --check
+```
+
+**Verification run:** On 2026-10-28, `node reference/attack-oracle.cjs fixture` produced identical bytes in separate runs, and matched `reference/fixtures/attack-v1.json`; the zero-inclusive stat-stage fixture also regenerated identically. The Attack fixture has 25 initialized Pokemon cases (all 25 natures), each checked at 17 stage inputs: all 13 stages and four out-of-range clamp inputs. It also has one synthetic zero case: real `Battle.statModify` derives zero from pre-nature Attack 596; zero is injected only into a real Pokemon for `calculateStat` arithmetic. The 20-test Python suite passed on CPU in 13.2 seconds and the available GPU environment in 17.6 seconds. `node --test test/*.test.cjs` passed 34/34. Both oracle scripts assert the pin before requiring Showdown. `trail build` passed. Scoped `trail check` reports one reviewed false positive at `docs/TASKS.md:235`: it interprets the mention of pinned format id `gen5randombattle` as applying to every Gen 5 format. The Task007 oracle and implementation are scoped to that exact format id. Other rule matches are non-blocking advisories. `git diff --check` passed.
+
+## Task 008 — first damage arithmetic primitive
+
+**Status:** Planned — next bounded task after Task007 review.
+
+**Acceptance outline:** Select one damage-pipeline integer primitive and compare its exact edge cases against pinned Showdown under explicit type/field conditions. Keep the scope to a scalar arithmetic slice; do not add move selection, a battle loop, or a learner.
 
 Task 002 establishes protocol projection only. It does not establish full-game player memory, feature extraction, learning, or JAX mechanics parity.

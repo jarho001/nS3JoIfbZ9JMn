@@ -9,7 +9,7 @@ const ROOT = path.resolve(__dirname, '..');
 const LOCK = JSON.parse(fs.readFileSync(path.join(ROOT, 'reference-lock.json'), 'utf8'));
 const FORMAT_ID = 'gen5customgame';
 const SOURCE_PATH = 'sim/pokemon.ts:581-612';
-const FIXTURE_STATS = [1, 2, 3, 5, 7, 9, 15, 31, 127, 255, 257, 1023, 1024, 65534, 65535];
+const FIXTURE_STATS = [0, 1, 2, 3, 5, 7, 9, 15, 31, 127, 255, 257, 1023, 1024, 65534, 65535];
 const FIXTURE_STAGES = [-7, -6, -5, -3, -2, -1, 0, 1, 2, 3, 5, 6, 7];
 const GRID_STAGES = [-2147483648, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 2147483647];
 
@@ -63,7 +63,7 @@ function generateFixture(ps) {
 				modifyBoost: 'identity for the tested stage',
 				fieldStatSelection: 'no Wonder Room; selected stat is atk',
 				modifier: 1,
-				storedStatDomain: [1, 65535],
+				storedStatDomain: [0, 65535],
 				stageInput: 'integer; Pokemon.calculateStat clamps to [-6, 6]',
 			},
 			cases,
@@ -77,7 +77,7 @@ function generateGrid(ps) {
 	const { battle, pokemon } = setupBattle(ps);
 	try {
 		const cases = [];
-		for (let storedStat = 1; storedStat <= 1024; storedStat++) {
+		for (let storedStat = 0; storedStat <= 1024; storedStat++) {
 			for (let stage = -6; stage <= 6; stage++) {
 				cases.push([storedStat, stage, calculate(pokemon, storedStat, stage)]);
 			}

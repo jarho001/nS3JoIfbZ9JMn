@@ -36,6 +36,8 @@ class StatStageTests(unittest.TestCase):
 
 	def test_hand_computed_anchors_and_stage_clamping(self):
 		anchors = [
+			(0, -6, 0),
+			(0, 6, 0),
 			(1, 0, 1),
 			(1, 6, 4),
 			(3, -1, 2),
@@ -66,7 +68,7 @@ class StatStageTests(unittest.TestCase):
 		self.assertEqual(oracle["formatId"], "gen5customgame")
 		self.assertEqual(oracle["sourcePath"], "sim/pokemon.ts:581-612")
 		cases = oracle["cases"]
-		self.assertEqual(len(cases), 1024 * 13 + 3 * 17)
+		self.assertEqual(len(cases), 1025 * 13 + 3 * 17)
 		stats = jnp.asarray([case[0] for case in cases], dtype=jnp.int32)
 		stages = jnp.asarray([case[1] for case in cases], dtype=jnp.int32)
 		expected = [case[2] for case in cases]
