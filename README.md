@@ -119,8 +119,22 @@ node --test test/*.test.cjs
 
 The compact fixture covers all 25 natures with initialized Pokemon and all 13 stages plus clamp inputs. Ordinary expected values come from the actual `Pokemon.calculateStat` call without overwriting `storedStats`. A separate synthetic case uses real `Battle.statModify` to derive zero at the Gen 5 nature-wrap boundary, then injects it only to check the real stage arithmetic. The fixture records the pin and source paths. On 2026-10-28, all 20 Python tests passed on both CPU and available GPU environments; all 34 Node tests passed. Task007 is accepted and complete.
 
+## Damage randomizer arithmetic
+
+Task008 implements the `Battle.randomizer(baseDamage)` arithmetic as an explicit-roll JAX kernel. It models the uint32-wrapped multiplication by `100-roll`, followed by floor division by 100. The input roll is supplied by the caller; this slice does not generate randomness or include the minimum-damage clamp, STAB, type effectiveness, or other modifiers. Its live oracle records battle seed `[101, 202, 303, 404]` and observes later `Battle.random(16)` results after Battle initialization; it does not label them as the PRNG's first draws.
+
+The bounded oracle/test commands are:
+
+```sh
+node reference/damage-roll-oracle.cjs fixture
+JAX_PLATFORMS=cpu python -m unittest discover -s test -p 'test_*.py' -v
+node --test test/*.test.cjs
+```
+
+Task008 is accepted and complete. Its 27-test Python suite passes on CPU and available GPU, and the existing Node suite passes 34/34. Task009 is planned as a separately scoped base-damage integer core. Both are arithmetic slices, not a complete damage calculator.
+
 ## Current task and next work
 
-Tasks 001–007 are accepted and complete. Task 003's deterministic request-to-request random-policy baseline passed 15 targeted tests and contributed to the 29-test suite at that milestone; evidence includes the 102-turn default game, fresh-process transcript equality, and a real Shadow Tag unavailable-choice retry. Task 004's full suite passed 34/34, and a fresh CLI process replayed the complete 553-event, 102-turn trace with matching outcome. Task006's stored-stat derivation kernel passed 13 Python tests on CPU and GPU; the 34 Node tests pass. Task007's full Python suite passes 20/20 on both CPU and GPU, with 34/34 Node tests. Task008 is planned as one bounded damage arithmetic primitive. This work is a portion of G0/G1, not completion of either milestone in the larger [project plan](PROJECT_PLAN.md).
+Tasks 001–008 are accepted and complete. Task 003's deterministic request-to-request random-policy baseline passed 15 targeted tests and contributed to the 29-test suite at that milestone; evidence includes the 102-turn default game, fresh-process transcript equality, and a real Shadow Tag unavailable-choice retry. Task 004's full suite passed 34/34, and a fresh CLI process replayed the complete 553-event, 102-turn trace with matching outcome. Task006's stored-stat derivation kernel passed 13 Python tests on CPU and GPU; the 34 Node tests pass. Task007's full Python suite passes 20/20 on both CPU and GPU, with 34/34 Node tests. Task008's full Python suite passes 27/27 on both CPU and GPU, with 34/34 Node tests. Task009 is planned as one bounded base-damage arithmetic primitive. This work is a portion of G0/G1, not completion of either milestone in the larger [project plan](PROJECT_PLAN.md).
 
 See [`docs/TASKS.md`](docs/TASKS.md) for acceptance state and handoff details.

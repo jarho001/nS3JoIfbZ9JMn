@@ -268,8 +268,46 @@ git -c safe.directory=/workspace diff --check
 
 ## Task 008 — first damage arithmetic primitive
 
-**Status:** Planned — next bounded task after Task007 review.
+**Status:** Accepted and complete — 2026-10-28. Architect review accepted the uint32 random-roll kernel, guarded controlled/live oracle, and test coverage. Resume with `trail map`, then inspect `mechanics/damage_roll.py`, `reference/damage-roll-oracle.cjs`, `test/test_damage_roll.py`, and `reference/fixtures/damage-roll-v1.json`.
 
-**Acceptance outline:** Select one damage-pipeline integer primitive and compare its exact edge cases against pinned Showdown under explicit type/field conditions. Keep the scope to a scalar arithmetic slice; do not add move selection, a battle loop, or a learner.
+**Scope:** Mirror the pinned Showdown `Battle.randomizer(baseDamage)` operation with an explicit supplied roll. Match uint32 truncation of the multiplication followed by floor division by 100. The kernel stops at the value returned by `Battle.randomizer`; it does not generate the roll or implement later damage steps.
+
+**Implementation plan:**
+
+1. Verify the pinned `Battle.randomizer` and its `Battle.random(16)` contract, exact `tr`/unsigned-width behavior, and call position in the damage pipeline.
+2. Add a pure JAX int32 API `apply_damage_roll(base_damage, roll)`, with caller preconditions `base_damage` in `[0, 2147483647]` and roll in `[0, 15]`; use uint32 multiplication for explicit wrap, then floor division by 100 and int32 output.
+3. Generate a guarded pinned oracle fixture using real `Battle.randomizer` calls. Control only the `Battle.random` result for the exhaustive fixture and restore it in `finally`; separately record live seeded draws, including battle seed `[101, 202, 303, 404]`, by wrapping the original random method after Battle initialization.
+4. Cover all rolls for damage `0..1024`, wrap boundaries and high values through int32 max, plus small independent anchors; clearly distinguish controlled arithmetic rows from real seeded draw rows.
+5. Test eager/JIT/JIT-vmap, broadcasting, dtype, fixture regeneration, CPU/GPU parity, and the prior Python/Node suites. Update README and handoff, then refresh/check Trail.
+
+**Acceptance criteria:**
+
+- [x] The pure kernel returns `floor(uint32(base_damage * (100-roll)) mod 2^32 / 100)` as int32; all inputs are strict int32 arrays/scalars and broadcast normally.
+- [x] The documented input domain is base damage `[0, 2147483647]`, roll `[0,15]`; caller preconditions are not dynamically checked. Output fits int32.
+- [x] Guarded pinned oracle records source SHA, format, source paths, domains, and draw contract. Controlled oracle calls actual `Battle.randomizer` and asserts exactly one `random(16)` invocation; restore the original method even on failure.
+- [x] A separate live seeded oracle records battle seed `[101, 202, 303, 404]`, wraps the original random method after initialization, records each draw, and matches the real `randomizer` outputs. It does not claim these are the PRNG's first draws. Fixture generation is deterministic.
+- [x] Differential coverage includes every roll for base damage 0..1024, multiplication wrap boundaries and high values including int32 max. Anchors include zero, floor-to-zero, 100 at roll 15, and verified uint32 overflow.
+- [x] Eager/JIT/JIT-vmap/broadcast, strict dtype, CPU and GPU tests pass; prior 20 Python and 34 Node tests remain passing.
+- [x] README documents the arithmetic-only boundary and Task009. Task008 ends accepted and complete.
+
+**Resume/check commands:**
+
+```sh
+trail map
+node reference/damage-roll-oracle.cjs fixture
+JAX_PLATFORMS=cpu python -m unittest discover -s test -p 'test_*.py' -v
+node --test test/*.test.cjs
+trail build
+GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=safe.directory GIT_CONFIG_VALUE_0=/workspace trail check
+git -c safe.directory=/workspace diff --check
+```
+
+**Verification run:** On 2026-10-28, the pinned fixture reproduced byte-identically in two independent CLI processes. Its controlled matrix covers 1,036 base-damage values (0..1024 plus selected wrap/high boundaries) by all 16 rolls; it includes a separate seven-case live seeded sequence with battle seed `[101, 202, 303, 404]`, recorded after Battle initialization. Python tests passed 27/27 on CPU in 15.4 seconds and 27/27 on the available GPU in 19.1 seconds. `node --test test/*.test.cjs` passed 34/34. `trail build` and staged `git diff --check` passed. Scoped `trail check` reports one reviewed false positive at this section's function name `apply_damage_roll`; the matcher interprets it as a broad format claim, though this API is a pure arithmetic kernel with no format selection. The commit body records the same limitation.
+
+## Task 009 — base-damage integer core
+
+**Status:** Planned — next bounded task after Task008 review.
+
+**Acceptance outline:** Add one separately scoped integer slice before the random damage roll, cross-checking its exact output against pinned Showdown with a controlled real battle context. Keep input construction and post-damage modifiers outside this slice; do not implement the full damage engine.
 
 Task 002 establishes protocol projection only. It does not establish full-game player memory, feature extraction, learning, or JAX mechanics parity.
