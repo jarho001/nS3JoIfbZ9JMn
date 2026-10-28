@@ -1,3 +1,6 @@
 reference/vendor/
 node_modules/
 /graft/.cache/
+/.venv-jax/
+__pycache__/
+*.py[cod]
