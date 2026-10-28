@@ -380,6 +380,46 @@ git -c safe.directory=/workspace diff --check
 
 **Boundary note:** A neutral Showdown event is not identity for arbitrarily large integers. `runEvent` applies `Battle.modify(relayVar, 1)` even when there are no event handlers; its int32 truncation makes the result `relayVar mod 2^20`. Task010 models only this actual neutral fixed-point step, not arbitrary modifier composition. Consequently this path's randomizer input is at most `2^20-1`; Task008 remains the independent oracle for randomizer uint32-product wrap. See the new Trail learning `neutral-showdown-event-identity-can-wrap-developer.md`.
 
-**Next bounded task:** Task011 may isolate one general fixed-point modifier operation from `Battle.modify` under explicit integer domains; do not turn it into a generic damage modifier engine or full damage engine.
+**Next bounded task:** Task011 completed the fixed-point primitive. Task012 can implement one pinned damage-finalization primitive under explicit inputs; keep the scope below a full damage engine.
+
+## Task 011 — fixed-point modifier primitive
+
+**Status:** Accepted and complete — 2026-10-28. Resume with `trail map`, then inspect `mechanics/fixedpoint.py`, `reference/fixedpoint-oracle.cjs`, and `test/test_fixedpoint.py`.
+
+**Scope:** Add strict-int32 `apply_fixedpoint_modifier(value, modifier)` for an already encoded Gen 5 modifier. Domain preconditions: `value` in `[0, 2147483647]`, encoded modifier in `[0, 65535]`; neither is dynamically checked. Reproduce `Battle.modify(value, modifier, 4096)` with uint32 product wrap, then its JavaScript-number `+2047` and floor division by 4096. Do not implement fraction-to-encoded conversion, chained modifiers, event ordering, or a generic modifier engine.
+
+**Implementation plan:**
+
+1. Use uint32 multiplication to preserve product wrap. Compute quotient and remainder by 4096 and round up only when remainder is greater than 2048; exact half ties round down. Avoid uint32-wrapping the post-product `+2047`, which Showdown performs as a JavaScript number.
+2. Extend the neutral damage helper to call `apply_fixedpoint_modifier(value, 4096)` without changing Task010 outputs. This verifies the identity modifier path remains a 20-bit wrap.
+3. Add a guarded pinned oracle calling the real `Battle.modify(value, modifier, 4096)` with no overrides. Store a compact fixture grid covering values 0..1024 over representative modifiers and targeted rounding/product-wrap pairs, with pin/source/domain provenance.
+4. Test eager/JIT/JIT-vmap, multi-axis broadcasting, strict dtype, identity and rounding anchors, UINT32_MAX-product carry, and neutral-composition parity. Preserve prior Python/Node suites on CPU/GPU.
+5. Update README and this handoff with evidence; suggest Task012 as a bounded damage finalization primitive or other well-motivated next slice, not a full engine.
+
+**Acceptance criteria:**
+
+- [x] Kernel exactly matches pinned `Battle.modify(value, modifier, 4096)` for its documented domains and broadcasting behavior.
+- [x] Product is uint32-wrapped before rounding; the `+2047` rounding step does not wrap. Ties at remainder 2048 round down; 2049 rounds up.
+- [x] Guarded fixture is generated from actual pinned Showdown with no formula clone or arithmetic override, records source pin/path/domain, and reproduces deterministically.
+- [x] Existing Task010 neutral results are unchanged after routing through the new primitive.
+- [x] Eager/JIT/JIT-vmap, broadcast, dtype, CPU/GPU and prior Node/Python regressions pass; docs record the accepted scope and evidence.
+
+**Resume/check commands:**
+
+```sh
+trail map
+node reference/fixedpoint-oracle.cjs fixture
+JAX_PLATFORMS=cpu python -m unittest discover -s test -p 'test_*.py' -v
+node --test test/*.test.cjs
+trail build
+GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=safe.directory GIT_CONFIG_VALUE_0=/workspace trail check
+git -c safe.directory=/workspace diff --check
+```
+
+**Verification run:** On 2026-10-28, the pinned fixture reproduced byte-identically in independent CLI runs. Its real `Battle.modify` grid covers 1,025 values × 13 encoded modifiers (13,325 outputs) plus targeted half-rounding, identity-wrap, int32-maximum, and UINT32_MAX-product carry cases. The full Python suite passed 47/47 on CPU in 28.1 seconds and GPU in 34.2 seconds; `node --test test/*.test.cjs` passed 34/34. Task010's neutral-event tests remain in that suite and pass unchanged. Trail build and staged diff checks passed. Scoped Trail check emitted two reviewed false positives: it interpreted this pinned arithmetic-oracle fixture as player-view evidence, and the modifier input domain as an earlier stored-stat domain. These are unrelated to the contents or information boundary of this task.
+
+**Boundary note:** The modifier input is already encoded as an integer and is not a fraction. The uint32 product wraps before rounding, but Showdown's `+2047` occurs afterward as a JavaScript number. Therefore a wrapped product of `2^32-1` rounds to `2^20`, rather than wrapping again or being masked to 20 bits. See `keep-fixed-point-rounding-carry-outside-developer.md`.
+
+**Next bounded task:** Task012 can implement one pinned damage-finalization primitive under explicit inputs; do not expand this into fraction encoding, modifier chains, or a complete damage engine.
 
 Task 002 establishes protocol projection only. It does not establish full-game player memory, feature extraction, learning, or JAX mechanics parity.

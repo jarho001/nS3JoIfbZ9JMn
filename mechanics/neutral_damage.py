@@ -13,13 +13,13 @@ import jax.numpy as jnp
 
 from .base_damage import base_damage_core
 from .damage_roll import apply_damage_roll
+from .fixedpoint import apply_fixedpoint_modifier
 from .stat_stage import _as_int32
 
 
 def _neutral_weather_identity_damage(value):
 	"""Match ``Battle.modify(value, 1)`` in the no-handler weather event."""
-	damage = _as_int32(value, "value")
-	return (damage.astype(jnp.uint32) & jnp.asarray(0xFFFFF, dtype=jnp.uint32)).astype(jnp.int32)
+	return apply_fixedpoint_modifier(_as_int32(value, "value"), jnp.asarray(4096, dtype=jnp.int32))
 
 
 def neutral_damage_after_roll(level, base_power, attack, defense, roll):

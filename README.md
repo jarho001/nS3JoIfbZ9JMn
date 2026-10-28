@@ -155,10 +155,22 @@ JAX_PLATFORMS=cpu python -m unittest discover -s test -p 'test_*.py' -v
 node --test test/*.test.cjs
 ```
 
-Task010 is accepted and complete. Its guarded pinned oracle delegates to the real `modifyDamage`, neutral event, and `Battle.randomizer`, controlling only the explicit random draw. The 41-test Python suite passes on CPU and GPU; the Node suite passes 34/34. Task008 separately tests randomizer uint32-product wrapping; the neutral event bounds this composition's roll input to at most `2^20-1`. Task011 is planned as a separate fixed-point modifier primitive under explicit integer domains.
+Task010 is accepted and complete. Its guarded pinned oracle delegates to the real `modifyDamage`, neutral event, and `Battle.randomizer`, controlling only the explicit random draw. The 41-test Python suite passes on CPU and GPU; the Node suite passes 34/34. Task008 separately tests randomizer uint32-product wrapping; the neutral event bounds this composition's roll input to at most `2^20-1`.
+
+## Fixed-point modifier arithmetic
+
+Task011 adds `apply_fixedpoint_modifier(value, modifier)` for an already encoded Gen 5 modifier. Strict int32 inputs have caller-precondition ranges `value` `[0, 2147483647]` and `modifier` `[0, 65535]`. It follows `Battle.modify(value, modifier, 4096)`, including unsigned 32-bit product wrap and round-half-down behavior. It does not encode fractions or combine a chain of modifiers.
+
+```sh
+node reference/fixedpoint-oracle.cjs fixture
+JAX_PLATFORMS=cpu python -m unittest discover -s test -p 'test_*.py' -v
+node --test test/*.test.cjs
+```
+
+Task011 is accepted and complete. The 47-test Python suite passes on CPU and GPU; the Node suite passes 34/34. The same primitive implements Task010's neutral identity event, preserving its 20-bit wrap behavior. Task012 is planned as one pinned damage-finalization primitive under explicit inputs.
 
 ## Current task and next work
 
-Tasks 001–010 are accepted and complete. Task 003's deterministic request-to-request random-policy baseline passed 15 targeted tests and contributed to the 29-test suite at that milestone; evidence includes the 102-turn default game, fresh-process transcript equality, and a real Shadow Tag unavailable-choice retry. Task 004's full suite passed 34/34, and a fresh CLI process replayed the complete 553-event, 102-turn trace with matching outcome. Task006's stored-stat derivation kernel passed 13 Python tests on CPU and GPU; the 34 Node tests pass. Task007's full Python suite passes 20/20 on both CPU and GPU, with 34/34 Node tests. Task008's full Python suite passes 27/27 on both CPU and GPU, with 34/34 Node tests. Task009's full Python suite passes 34/34 on CPU and GPU, with 34/34 Node tests. Task010's full Python suite passes 41/41 on CPU and GPU, with 34/34 Node tests. This work is a portion of G0/G1, not completion of either milestone in the larger [project plan](PROJECT_PLAN.md).
+Tasks 001–011 are accepted and complete. Task 003's deterministic request-to-request random-policy baseline passed 15 targeted tests and contributed to the 29-test suite at that milestone; evidence includes the 102-turn default game, fresh-process transcript equality, and a real Shadow Tag unavailable-choice retry. Task 004's full suite passed 34/34, and a fresh CLI process replayed the complete 553-event, 102-turn trace with matching outcome. Task006's stored-stat derivation kernel passed 13 Python tests on CPU and GPU; the 34 Node tests pass. Task007's full Python suite passes 20/20 on both CPU and GPU, with 34/34 Node tests. Task008's full Python suite passes 27/27 on both CPU and GPU, with 34/34 Node tests. Task009's full Python suite passes 34/34 on CPU and GPU, with 34/34 Node tests. Task010's full Python suite passes 41/41 on CPU and GPU, with 34/34 Node tests. Task011's full Python suite passes 47/47 on CPU and GPU, with 34/34 Node tests. This work is a portion of G0/G1, not completion of either milestone in the larger [project plan](PROJECT_PLAN.md).
 
 See [`docs/TASKS.md`](docs/TASKS.md) for acceptance state and handoff details.
