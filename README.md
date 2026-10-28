@@ -131,10 +131,22 @@ JAX_PLATFORMS=cpu python -m unittest discover -s test -p 'test_*.py' -v
 node --test test/*.test.cjs
 ```
 
-Task008 is accepted and complete. Its 27-test Python suite passes on CPU and available GPU, and the existing Node suite passes 34/34. Task009 is planned as a separately scoped base-damage integer core. Both are arithmetic slices, not a complete damage calculator.
+Task008 and Task009 are accepted and complete. Task008's 27-test Python suite passes on CPU and available GPU; Task009's 34-test Python suite passes on CPU and GPU. The existing Node suite passes 34/34. Both are arithmetic slices, not a complete damage calculator.
+
+## Base-damage integer core
+
+Task009 implements the nested integer core inside pinned `BattleActions.getDamage`, before `modifyDamage` and the later `+2`. Inputs are the effective level, base power, Attack, and Defense. It preserves uint32 product truncation and matches the zero-Defense result safely. The kernel does not derive stats or model events, critical hits, `+2`, the random roll, STAB, or type effectiveness.
+
+```sh
+node reference/base-damage-oracle.cjs fixture
+JAX_PLATFORMS=cpu python -m unittest discover -s test -p 'test_*.py' -v
+node --test test/*.test.cjs
+```
+
+Task009 is accepted and complete. Its full Python suite passes 34/34 on CPU and GPU, and the Node suite passes 34/34. Task010 is planned to compose the accepted core with downstream `+2` and explicit random-roll stages under a neutral context.
 
 ## Current task and next work
 
-Tasks 001–008 are accepted and complete. Task 003's deterministic request-to-request random-policy baseline passed 15 targeted tests and contributed to the 29-test suite at that milestone; evidence includes the 102-turn default game, fresh-process transcript equality, and a real Shadow Tag unavailable-choice retry. Task 004's full suite passed 34/34, and a fresh CLI process replayed the complete 553-event, 102-turn trace with matching outcome. Task006's stored-stat derivation kernel passed 13 Python tests on CPU and GPU; the 34 Node tests pass. Task007's full Python suite passes 20/20 on both CPU and GPU, with 34/34 Node tests. Task008's full Python suite passes 27/27 on both CPU and GPU, with 34/34 Node tests. Task009 is planned as one bounded base-damage arithmetic primitive. This work is a portion of G0/G1, not completion of either milestone in the larger [project plan](PROJECT_PLAN.md).
+Tasks 001–009 are accepted and complete. Task 003's deterministic request-to-request random-policy baseline passed 15 targeted tests and contributed to the 29-test suite at that milestone; evidence includes the 102-turn default game, fresh-process transcript equality, and a real Shadow Tag unavailable-choice retry. Task 004's full suite passed 34/34, and a fresh CLI process replayed the complete 553-event, 102-turn trace with matching outcome. Task006's stored-stat derivation kernel passed 13 Python tests on CPU and GPU; the 34 Node tests pass. Task007's full Python suite passes 20/20 on both CPU and GPU, with 34/34 Node tests. Task008's full Python suite passes 27/27 on both CPU and GPU, with 34/34 Node tests. Task009's full Python suite passes 34/34 on CPU and GPU, with 34/34 Node tests. This work is a portion of G0/G1, not completion of either milestone in the larger [project plan](PROJECT_PLAN.md).
 
 See [`docs/TASKS.md`](docs/TASKS.md) for acceptance state and handoff details.
