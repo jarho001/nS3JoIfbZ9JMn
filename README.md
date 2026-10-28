@@ -58,8 +58,24 @@ The two random policies receive a frozen `{ history, request, random }` callback
 
 This is a deliberately small baseline. It does not provide a learned policy, observation features, a full game-memory contract, or JAX mechanics.
 
+## Trusted trace capture and replay
+
+[`reference/trace.cjs`](reference/trace.cjs) captures and replays the full BattleStream input/output sequence:
+
+```sh
+node reference/trace.cjs capture --output /tmp/gen5-random-trace.json
+node reference/trace.cjs capture --output /tmp/gen5-random-trace-seeded.json \
+  --team-seed-p1=1,2,3,4 --team-seed-p2=5,6,7,8 \
+  --battle-seed=9,10,11,12 \
+  --policy-seed-p1=13,14,15,16 --policy-seed-p2=17,18,19,20
+node reference/trace.cjs replay /tmp/gen5-random-trace.json
+node --test test/trace.test.cjs
+```
+
+The version 1 trusted trace records the pinned SHA, format, all five seeds, complete ordered start/player/choice inputs, complete output packets, and verified outcome. Replay submits those recorded inputs directly to a fresh pinned simulator; it does not regenerate teams or call a policy. Only clock-only `|t:|` messages are normalized, with blank split branches retained in place. These files contain packed teams, private requests, split `SECRET` records, and trusted end metadata. Never expose a trace to an actor; use `projectPackets` to derive a single recipient's view.
+
 ## Current task and next work
 
-Task 003's deterministic request-to-request random-policy baseline is accepted and complete. Its targeted suite passed 15 tests; the full suite passed 29, including the 102-turn default game, fresh-process transcript equality, and a real Shadow Tag unavailable-choice retry. The Task002/003 foundation and request-episode learning are committed together. This work is a portion of G0/G1, not completion of either milestone in the larger [project plan](PROJECT_PLAN.md). The next bounded task is Task 004, a reference protocol trace and replay harness described in [`docs/TASKS.md`](docs/TASKS.md). Later work includes a first JAX mechanics slice.
+Tasks 001–004 are accepted and complete. Task 003's deterministic request-to-request random-policy baseline passed 15 targeted tests and contributed to the 29-test suite at that milestone; evidence includes the 102-turn default game, fresh-process transcript equality, and a real Shadow Tag unavailable-choice retry. Task 004's full suite passed 34/34, and a fresh CLI process replayed the complete 553-event, 102-turn trace with matching outcome. The next bounded task is Task 005: select one JAX arithmetic mechanic and establish differential parity against pinned Showdown. This work is a portion of G0/G1, not completion of either milestone in the larger [project plan](PROJECT_PLAN.md).
 
 See [`docs/TASKS.md`](docs/TASKS.md) for acceptance state and handoff details.

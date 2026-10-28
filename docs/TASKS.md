@@ -115,16 +115,47 @@ git -c safe.directory=/workspace diff --check
 
 ## Task 004 — reference protocol trace and replay harness
 
-**Status:** Planned — next bounded task after Task 003 review.
+**Status:** Accepted and complete — 2026-10-28. Architect review accepted the trusted trace boundary, direct input replay, and 34/34 test evidence. Resume with `trail map`, then `node --test test/trace.test.cjs` and the capture/replay commands below.
 
-**Scope:** Record and replay complete pinned BattleStream input/output traces as trusted simulator evidence. This should help future differential checks without adding a learner, tournament, JAX implementation, or new public observation schema.
+**Scope:** Capture the complete input/output event sequence of the pinned Showdown BattleStream and replay recorded inputs directly into a fresh simulator. Replay does not rerun policies. Trace files contain packed teams, private requests, split update branches, and trusted end metadata; they are trusted oracle artifacts, not actor observations. This adds no policy, learning, or JAX mechanics.
 
-**Acceptance outline:**
+**Implementation plan:**
 
-- [ ] Version a compact trace format with exact pinned SHA, all team/battle/policy seeds, submitted command order, complete object packets, and trusted terminal metadata.
-- [ ] Replay a saved trace deterministically through the pinned reference or compare an independently regenerated seeded trace, reporting the first semantic mismatch after removing only documented clock messages.
-- [ ] Preserve complete split branches until projection; label trace artifacts trusted and private, and reuse Task 002's projector for any player-view assertion.
-- [ ] Add hand-reviewed fixture tests plus a live seeded trace test; bound time, packet count, and cleanup on all paths.
-- [ ] Keep the harness separate from Task 003's random policy API and document remaining limits. No JAX or learning work in this task.
+1. Wrap the accepted Task003 runner's BattleStream boundary to record every exact input before forwarding it and each complete output packet when read.
+2. Normalize only clock-only protocol lines without moving split branch positions; version the trace with pinned SHA, format, five seeds, events, and outcome.
+3. Validate the trace schema and allow only known start/player/choice inputs. Replay each recorded input directly and compare each output in order, reporting the first event mismatch.
+4. Bound replay time/events, require public terminal and trusted end evidence, check for unexpected trailing outputs, close the stream after successful replay, and destroy it on failures.
+5. Test fixtures and a full live capture/replay, update README and this handoff, then run the full suite and Trail/diff checks.
+
+**Acceptance criteria:**
+
+- [x] Trace schema records version, exact upstream SHA, format, all five seeds, ordered input/output events, and public/trusted terminal result.
+- [x] Capture records each input before submission and every complete output packet as read; packed teams are retained so replay is independent of team generation and policy execution.
+- [x] Replay feeds only validated start/player/move/switch commands directly to a fresh pinned `BattleStream`; rejects unknown/eval commands, wrong schema/pin/format, truncation, and malformed terminal evidence.
+- [x] Compare every replay output against the trace after removing only clock messages with split positions preserved; report the first mismatching event/channel or structural field; detect changed requests/damage/commands and trailing outputs.
+- [x] Keep traces trusted/private. Do not pass trace packets to policies; any player-view assertion must use `projectPackets`.
+- [x] Hand-authored tests cover normalization including empty split branches, mismatch cases, pin/schema validation, truncation/trailing output, and bounded cleanup. A real complete captured seeded battle replays successfully without invoking policy code.
+- [x] Document CLI/schema and limitations; the full suite passes all 34 tests. Task004 is accepted and complete.
+
+**Resume/check commands:**
+
+```sh
+trail map
+node --test test/trace.test.cjs
+node reference/trace.cjs capture --output /tmp/gen5-random-trace.json
+node reference/trace.cjs replay /tmp/gen5-random-trace.json
+node --test test/*.test.cjs
+trail build
+GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=safe.directory GIT_CONFIG_VALUE_0=/workspace trail check
+git -c safe.directory=/workspace diff --check
+```
+
+**Verification run:** On 2026-10-28, `node --test test/trace.test.cjs` passed 5/5 and `node --test test/*.test.cjs` passed all 34 tests (5 trace, 15 Task003, 7 Task002, 7 Task001). The live test captured and replayed a complete seeded battle in a fresh CLI process without team generation or policy execution during replay. CLI capture/replay also reproduced the default 102-turn result across 553 events. Tests exercised clock normalization with split blanks, input-order/schema/pin validation, request/damage/command mismatches, extra output, bounded timeout cleanup, and policy-free replay. `trail build` and `git diff --check` passed. Scoped `trail check` reports the reviewed false positive at `docs/TASKS.md:120`, where the trace is explicitly labeled trusted/private; README notes the same trusted boundary and is not flagged as a conflict. The learning's restriction is satisfied because trace inputs never reach an actor and player views still use `projectPackets`.
+
+## Task 005 — first JAX arithmetic slice
+
+**Status:** Planned — next bounded task after Task004 acceptance.
+
+**Acceptance outline:** Implement one explicitly selected Gen 5 arithmetic mechanic in JAX and compare it against pinned Showdown traces for exact edge cases, batching, and deterministic inputs. Keep the slice independent from a full battle simulator or learner; define the mechanic and parity boundary in a reviewed task plan before implementation.
 
 Task 002 establishes protocol projection only. It does not establish full-game player memory, feature extraction, learning, or JAX mechanics parity.
