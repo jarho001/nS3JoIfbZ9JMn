@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "description": "Hand-authored complete object packets combining independent routing cases, not a single plausible battle. Split branches and end metadata use distinct sentinels so visibility is reviewable.",
+  "packets": [
+    "update\n|gen|5\n|gametype|singles\n|teamsize|p1|6\n|teamsize|p2|6\n|turn|1\n|t:|1700000000\n|switch|p1a: Active|Pikachu, L50|100/100\n|split|p1\n|-damage|p1a: Active|60/120 brn\n|-damage|p1a: Active|50/100 brn\n|split|p2\n|detailschange|p2a: Opponent|Zoroark, L50\n|detailschange|p2a: Opponent|Pikachu, L50",
+    "update\n|split|p1\n|message|p1-private-event\n\n|split|p2\n\n|message|p2-public-event",
+    "update\n|t:|1700000001",
+    "sideupdate\np1\n|request|{\"active\":[{\"moves\":[{\"id\":\"tackle\",\"disabled\":false}]}],\"side\":{\"pokemon\":[{\"ident\":\"p1: Active\",\"condition\":\"100/100\"}]}}",
+    "sideupdate\np2\n|request|{\"active\":[{\"moves\":[{\"id\":\"hidden-move-sentinel\",\"disabled\":false}]}],\"side\":{\"pokemon\":[{\"ident\":\"p2: private-roster-sentinel\",\"condition\":\"100/100\"}]}}",
+    "update\n|win|p1\n|tie",
+    "end\n{\"teams\":[\"p1-complete-team-sentinel\",\"p2-complete-team-sentinel\"],\"seed\":\"trusted-seed-sentinel\"}"
+  ],
+  "expected": {
+    "p1": {
+      "schemaVersion": 1,
+      "audience": "p1",
+      "records": [
+        { "type": "event", "message": "|gen|5" },
+        { "type": "event", "message": "|gametype|singles" },
+        { "type": "event", "message": "|teamsize|p1|6" },
+        { "type": "event", "message": "|teamsize|p2|6" },
+        { "type": "event", "message": "|turn|1" },
+        { "type": "event", "message": "|switch|p1a: Active|Pikachu, L50|100/100" },
+        { "type": "event", "message": "|-damage|p1a: Active|60/120 brn" },
+        { "type": "event", "message": "|detailschange|p2a: Opponent|Pikachu, L50" },
+        { "type": "event", "message": "|message|p1-private-event" },
+        { "type": "event", "message": "|message|p2-public-event" },
+        { "type": "request", "request": { "active": [{ "moves": [{ "id": "tackle", "disabled": false }] }], "side": { "pokemon": [{ "ident": "p1: Active", "condition": "100/100" }] } } },
+        { "type": "event", "message": "|win|p1" },
+        { "type": "event", "message": "|tie" }
+      ]
+    },
+    "p2": {
+      "schemaVersion": 1,
+      "audience": "p2",
+      "records": [
+        { "type": "event", "message": "|gen|5" },
+        { "type": "event", "message": "|gametype|singles" },
+        { "type": "event", "message": "|teamsize|p1|6" },
+        { "type": "event", "message": "|teamsize|p2|6" },
+        { "type": "event", "message": "|turn|1" },
+        { "type": "event", "message": "|switch|p1a: Active|Pikachu, L50|100/100" },
+        { "type": "event", "message": "|-damage|p1a: Active|50/100 brn" },
+        { "type": "event", "message": "|detailschange|p2a: Opponent|Zoroark, L50" },
+        { "type": "request", "request": { "active": [{ "moves": [{ "id": "hidden-move-sentinel", "disabled": false }] }], "side": { "pokemon": [{ "ident": "p2: private-roster-sentinel", "condition": "100/100" }] } } },
+        { "type": "event", "message": "|win|p1" },
+        { "type": "event", "message": "|tie" }
+      ]
+    },
+    "spectator": {
+      "schemaVersion": 1,
+      "audience": "spectator",
+      "records": [
+        { "type": "event", "message": "|gen|5" },
+        { "type": "event", "message": "|gametype|singles" },
+        { "type": "event", "message": "|teamsize|p1|6" },
+        { "type": "event", "message": "|teamsize|p2|6" },
+        { "type": "event", "message": "|turn|1" },
+        { "type": "event", "message": "|switch|p1a: Active|Pikachu, L50|100/100" },
+        { "type": "event", "message": "|-damage|p1a: Active|50/100 brn" },
+        { "type": "event", "message": "|detailschange|p2a: Opponent|Pikachu, L50" },
+        { "type": "event", "message": "|message|p2-public-event" },
+        { "type": "event", "message": "|win|p1" },
+        { "type": "event", "message": "|tie" }
+      ]
+    }
+  }
+}

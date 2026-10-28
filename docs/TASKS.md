@@ -36,20 +36,95 @@ node --test test/reference.test.cjs
 
 ## Task 002 — player-view projection and visibility fixtures (G0/G1 portion)
 
-**Scope:** Define how the pinned Showdown protocol becomes one policy-safe view per player. This task does not implement complete battles, a learner, or the JAX simulator.
+**Status:** Accepted and complete — 2026-10-28. Architect review accepted the single-recipient protocol projector and its enforced split, request, clock, terminal, and fail-closed boundaries. Resume with `trail map`, then `rg --files environment test` and `node --test test/*.test.cjs`; protocol source is the pinned ignored checkout under `reference/vendor/pokemon-showdown`.
+
+**Scope:** Produce one scoped view (`p1`, `p2`, or `spectator`) from each complete Showdown object message. Route each `SECRET`/`PUBLIC` split for its audience before exposing events; raw message bodies are never actor-visible. This is a protocol view only; it does not implement feature extraction, belief tracking, action masking, a full battle runner, a learner, or the JAX simulator. Keep the raw oracle data from Task 001 trusted and separate.
+
+**Implementation plan:**
+
+1. Inspect the pinned object-packet routing behavior and agree a small versioned output record schema.
+2. Implement a pure CommonJS projector for an ordered array of complete object packets and one explicit recipient, with fail-closed handling for malformed, unsupported, error, and unknown channels.
+3. Add a hand-authored transcript fixture and tests for all three audiences, split visibility, addressed requests, terminal/error handling, ordering, and paired-history non-leakage.
+4. Cross-check representative routing against Showdown's API and a seeded Gen 5 initialization, then document the module and run the targeted and prior test suites.
 
 **Acceptance criteria:**
 
-- Convert `|split|PLAYER` sections into separate public events and the appropriate player's private events; never expose one player's `SECRET` lines or private requests to the other player's view.
-- Add protocol fixtures covering public-only events, player-specific `SECRET`/`PUBLIC` pairs, private `sideupdate` requests, and clock-line filtering.
-- Add paired-history tests showing that histories indistinguishable to one player produce identical projected views even when concealed state or the other player's private request differs.
-- Preserve the raw transcript only as a trusted oracle fixture; name the projected view separately and document its information boundary.
-- Keep generated artifacts deterministic and pass the focused Node test suite without adding full battle decision logic.
+- [x] Correctly route `|split|PLAYER` pairs; consume exactly the next two lines even if a branch is empty; reject unsupported IDs, malformed/nested markers, and truncated records without echoing secrets.
+- [x] Return records for only the requested `p1`, `p2`, or spectator. A recipient sees its own `SECRET` branch, others see `PUBLIC`; no raw split marker or unselected branch is returned.
+- [x] Route `sideupdate` only to its addressed player. Never expose private requests to the opponent or spectator, and do not disclose other private packet counts.
+- [x] Exclude clock-only `|t:|` events and structural blanks after split parsing, while preserving visible event order.
+- [x] Drop trusted `end` metadata; preserve public `|win|`/`|tie|`. Document and fail closed on `error` and unknown channels.
+- [x] Use a hand-reviewed, non-self-generated transcript fixture for exact projection assertions, including empty split branches, exact versus rounded HP, separate requests, clock lines, and terminal metadata.
+- [x] Show paired histories that vary only in concealed opponent data produce identical views, while the owner receives allowed private changes.
+- [x] Cross-check routing against the pinned Showdown API and a seeded initialization; keep all prior Task 001 tests passing.
+- [x] Document the schema and test commands; Task 002 ends awaiting architect review, with Task 003 identified as the complete request-to-request baseline runner.
 
-## Later bounded tasks — G0/G1 portions
+**Verification run:** On 2026-10-28, `node --test test/protocol.test.cjs` passed 7/7, including hand-fixture parity with pinned routing and seeded initialization. `node --test test/*.test.cjs` passed all 14 tests (7 Task 001 and 7 Task 002). `git diff --check` and `trail build` passed; scoped `trail check` reported no conflicts.
 
-1. **Request-to-request baseline battles:** implement legal random/simple policies and run complete battles by reading exact private requests and submitting choices through `BattleStream`.
-2. **Differential trace harness:** serialize reference transitions and normalized event snapshots for deterministic paired testing.
-3. **First JAX mechanics slice:** implement selected arithmetic and a normal move-resolution path, with parity fixtures through the trace harness.
+**Resume/check commands:**
 
-Each task needs its own acceptance criteria and review. The current task establishes none of the player-view, full-battle, or JAX parity contracts.
+```sh
+trail map
+node --test test/*.test.cjs
+node reference/oracle.cjs smoke
+trail build
+GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=safe.directory GIT_CONFIG_VALUE_0=/workspace trail check
+git -c safe.directory=/workspace diff --check
+```
+
+## Task 003 — request-to-request baseline battles
+
+**Status:** Accepted and complete — 2026-10-28. Task002/003 source, tests, docs, and the request-episode learning are committed together. Resume with `trail map`, then `node --test test/battle-runner.test.cjs` and `node --test test/*.test.cjs`.
+
+**Scope:** One deterministic random legal-choice policy per side and a complete request-driven Gen 5 Random Battle runner. Each policy receives only its own projected protocol history, current addressed request, and its own policy RNG. This task adds no tournament, strategy heuristics, JAX simulator, or learning.
+
+**Implementation plan:**
+
+1. Inspect pinned request, choice, rejection/reissue, and wait behavior; use the accepted projector as the sole policy visibility boundary.
+2. Define separate team, battle, and policy seeds plus request-derived legal command candidates.
+3. Implement a per-side random policy and request coordinator that submits choices through BattleStream while Showdown holds simultaneous choices.
+4. Bound battle time, packets, decisions, and retries; distinguish submitted/rejected/accepted choices and verify public terminal output against trusted end metadata.
+5. Add fake-stream and live full-battle tests; document the CLI, trusted transcript, and handoff limits.
+
+**Acceptance criteria:**
+
+- [x] Policy callbacks receive a frozen `{ history, request, random }` object containing only their own projected history/request and own RNG. Fake-stream spies vary opponent requests and private terminal metadata and observe identical own inputs; policies never receive teams, stream, transcript, opponent view, or pending commands.
+- [x] Candidate moves/switches come from the request, including forced replacement and forced move rows. Honor disclosed `trapped`; do not resolve `maybeTrapped`. Explicit wait has no policy action; malformed actionable requests without legal candidates fail.
+- [x] Independently seeded policies sample uniformly over request-derived candidate commands. Choices are sent to BattleStream on each player's own request; opponent pending choices are never policy inputs.
+- [x] Handle duplicate request payloads only while their previous submission is pending, corrected unavailable-choice requests, same-episode retry bounds/exclusions, one-sided waits/replacements, and unexpected invalid choices as failures.
+- [x] Canonical transcript records all five seeds, pinned SHA, requests, submitted/rejected/accepted choices, normalized complete packets, and verified outcome. Fresh CLI processes with identical seeds produce equal transcript JSON.
+- [x] Enforce a 60-second overall deadline, packet/decision/retry bounds, cleanup on success/failure, and explicit errors for premature end, stream error, missing/conflicting terminal evidence; no synthetic outcomes.
+- [x] Complete real seeded Gen 5 battles, verify public winner against end metadata, and exercise forced replacements.
+- [x] Fake streams cover repeated request episodes, simultaneous requests, one-sided forced switch plus wait, retries, terminal metadata, and cleanup; controlled teams against real BattleStream confirm an actual Gen 5 unavailable-choice error and corrected request.
+- [x] README and task handoff describe commands, policy input boundary, transcript sensitivity, and remaining scope; Task 001/002 tests pass.
+
+**Resume/check commands:**
+
+```sh
+trail map
+node --test test/battle-runner.test.cjs
+node --test test/*.test.cjs
+node environment/run-random.cjs --help
+node environment/run-random.cjs --team-seed-p1=1,2,3,4 --team-seed-p2=5,6,7,8 --battle-seed=9,10,11,12 --policy-seed-p1=13,14,15,16 --policy-seed-p2=17,18,19,20 --output trusted-battle.json
+trail build
+GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=safe.directory GIT_CONFIG_VALUE_0=/workspace trail check
+git -c safe.directory=/workspace diff --check
+```
+
+**Verification run:** On 2026-10-28, `node --test test/battle-runner.test.cjs` passed 15/15 and `node --test test/*.test.cjs` passed all 29 tests (15 Task 003, 7 Task 002, 7 Task 001). The default seeded game ended on turn 102; two fresh CLI processes produced identical trusted transcript JSON. Tests also exercised an actual Shadow Tag unavailable-choice retry, forced replacements, repeated request payloads, opponent-private retry noninterference, retry budgets, and cleanup. `trail build` and `git diff --check` passed. Scoped `trail check` reports one reviewed false positive at `docs/TASKS.md:56`: “brings back battlestream battle stream,” referencing Task002's accepted criterion to preserve public `|win|`/`|tie|` events. That criterion remains accurate: terminal events are preserved only through recipient-specific projection; trusted raw update splits and `end` metadata are not actor input. README passes the learning check. The request-episode implementation learning is `.trail/learnings/2026-10-28-track-choices-by-request-episode-developer.md` (uncommitted).
+
+## Task 004 — reference protocol trace and replay harness
+
+**Status:** Planned — next bounded task after Task 003 review.
+
+**Scope:** Record and replay complete pinned BattleStream input/output traces as trusted simulator evidence. This should help future differential checks without adding a learner, tournament, JAX implementation, or new public observation schema.
+
+**Acceptance outline:**
+
+- [ ] Version a compact trace format with exact pinned SHA, all team/battle/policy seeds, submitted command order, complete object packets, and trusted terminal metadata.
+- [ ] Replay a saved trace deterministically through the pinned reference or compare an independently regenerated seeded trace, reporting the first semantic mismatch after removing only documented clock messages.
+- [ ] Preserve complete split branches until projection; label trace artifacts trusted and private, and reuse Task 002's projector for any player-view assertion.
+- [ ] Add hand-reviewed fixture tests plus a live seeded trace test; bound time, packet count, and cleanup on all paths.
+- [ ] Keep the harness separate from Task 003's random policy API and document remaining limits. No JAX or learning work in this task.
+
+Task 002 establishes protocol projection only. It does not establish full-game player memory, feature extraction, learning, or JAX mechanics parity.
