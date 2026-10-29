@@ -492,3 +492,31 @@ git diff --check
 **Review:** Architect diff and evidence review accepted Task013. The implementer ran 4/4 focused CPU Python tests, 1/1 Node restoration test, Trail build, and diff checks. The parent will push the local commit to `main`.
 
 **Next bounded task:** Task014 can add the Gen 5 physical-burn reduction as an explicit arithmetic slice between type effectiveness and the Task012 finalization tail. Keep burn eligibility inputs explicit and defer event dispatch.
+
+## Task 014 — burn-reduction kernel
+
+**Status:** Accepted and complete — 2026-10-29. Scheduled run 2.
+
+**Scope:** Implement `apply_burn_reduction(damage, burned, physical, has_guts)` as a pure arithmetic slice after type-effectiveness and before finalization. It uses explicit strict-boolean eligibility inputs and delegates the eligible `0.5` modifier to the existing fixed-point kernel. The pinned `BattleActions.getDamage` path in `gen5randombattle` reduces burned physical moves unless Guts is active; Facade receives the same reduction. This task does not resolve runtime status, move category, or ability, dispatch events, or include any other damage steps.
+
+**Bounded implementation plan:**
+
+1. Use the pinned Gen 5 `modifyDamage` condition as the guarded oracle, with ordinary real moves for physical/special, burned/unburned, Guts, and Facade checks. For arithmetic boundaries, control only the randomizer output, capture immediately before burn through a transparent `Battle.modify` wrapper, and delegate to the original implementation.
+2. Implement strict int32 damage and strict bool eligibility inputs with broadcast semantics. Apply the existing `apply_fixedpoint_modifier(damage, 2048)` only when `burned & physical & ~has_guts` is true; otherwise return damage unchanged.
+3. Cover real-oracle fixtures, synthetic low/odd/even/zero/int32-max/2**21-wrap cases, the zero intermediate before Gen 5 minimum-one, dtype/predicate/broadcast behavior, and restoration of every temporary descriptor and status after success or failure.
+4. Run the focused Python and Node tests once, record CPU/GPU availability, refresh Trail, check the diff against Trail learnings, then update README and this handoff with exact evidence.
+
+**Acceptance criteria:**
+
+- [x] Eligible damage matches pinned `Battle.modify(damage, 0.5)`; ineligible damage is unchanged. The predicate is exactly `burned & physical & ~has_guts`, with no Gen 5 Facade exemption.
+- [x] Inputs are strict int32 damage in `[0, 2147483647]` and strict bool eligibility flags; values broadcast normally and outputs are int32. Eligibility ranges are represented by booleans, not resolved from simulator state.
+- [x] Guarded fixture has ordinary real Gen 5 examples for burn, physical/special, Guts, Facade, and unburned conditions. Synthetic cases inject only randomizer output and use a transparent modifying wrapper that delegates to Showdown; they cover zero, low odd/even, int32 maximum, and 2**21 fixed-point wrap boundaries, including a pre-minimum zero result.
+- [x] Oracle monkeypatch descriptors and temporary status restore after successful capture and injected failure.
+- [x] Focused Python eager/JIT/vmap/broadcast/dtype/predicate tests and Node fixture/restoration test pass. Record available CPU/GPU devices without dependency-version assertions.
+- [x] README documents this slice's boundaries. Trail build and diff checks pass; Trail check's one blocking hit is a lexical false positive in the scope description against the unrelated stat-cap learning. The other printed hits are explicitly non-blocking and unrelated to this arithmetic slice. Task015 is proposed below.
+
+**Verification evidence:** On 2026-10-29, `JAX_PLATFORMS=cpu .venv-jax/bin/python -m unittest test.test_burn -v` passed 4/4. `node test/burn-oracle.test.cjs` passed 2/2, including pinned fixture reproduction and descriptor/status restoration after success and injected failure. The equivalent `node --test test/burn-oracle.test.cjs` worker launch was attempted with a narrow sandbox escalation, but automatic approval did not finish before its deadline; direct `node:test` execution passed. JAX reported `[CpuDevice(id=0)]` with backend `cpu`; no GPU is available. `trail build`, `trail build --check`, and `git diff --check` passed. `trail check --base HEAD` reports one blocking lexical false positive at this task's scope line: it matches the unrelated stat-cap learning, although this task neither changes nor models stat caps. Other printed hits are non-blocking matches to unrelated randomizer and stat-stage learnings. No conflicting implementation behavior was identified.
+
+**Review:** Architect reviewed and accepted the implementation and evidence. The implementer ran the focused Python and Node tests above; the parent reviewed the diff and ordinary differential evidence. A local Task014 commit is being created; the parent handles pushing it to `main`.
+
+**Next bounded task proposal:** Task015 can implement the explicit Gen 5 STAB multiplier as one arithmetic slice before type effectiveness, with STAB and any applicable ability state supplied explicitly. Resolve its exact pinned multiplier/rounding boundary first; keep type lookup, burn, finalization, event dispatch, and the full damage calculator outside that task.

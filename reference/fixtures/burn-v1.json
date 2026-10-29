@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 1,
+  "kind": "gen5-physical-burn-reduction-oracle",
+  "upstream": {
+    "repository": "https://github.com/smogon/pokemon-showdown.git",
+    "commit": "1242c1e2d9763ba5b85d33f13aecb89bae19ae3d"
+  },
+  "formatId": "gen5randombattle",
+  "generation": 5,
+  "battleSeed": [
+    101,
+    202,
+    303,
+    404
+  ],
+  "method": "BattleActions.getDamage -> Battle.modify(damage, 0.5)",
+  "sourcePaths": [
+    "sim/battle-actions.ts:1870-1882",
+    "sim/battle.ts:2337-2359",
+    "sim/dex.ts:364-369"
+  ],
+  "inputDomain": {
+    "damage": [
+      0,
+      2147483647
+    ],
+    "eligibility": "boolean",
+    "result": "int32"
+  },
+  "predicate": "pokemon.status === brn && move.category === Physical && !pokemon.hasAbility(guts)",
+  "scope": "One physical-burn arithmetic step after type effectiveness and before the Gen 5 minimum-one check. Gen 5 has no Facade exemption. No runtime status/ability/category resolution or event dispatch is modeled.",
+  "ordinaryContract": "Real initialized Gen 5 Pokemon and moves with real getDamage, type lookup, randomizer, and modifying arithmetic. A transparent Battle.modify wrapper records and delegates the burn call.",
+  "syntheticContract": "Only Battle.randomizer output is controlled. A burned physical ??? move uses real type handling; a transparent Battle.modify wrapper records and delegates the 0.5 call. The post-burn capture is before Gen 5 minimum-one and later events. No arithmetic formula is cloned.",
+  "ordinaryCases": [
+    {
+      "label": "burned-physical",
+      "move": "tackle",
+      "category": "Physical",
+      "ability": "static",
+      "burned": true,
+      "modifyCalls": 1,
+      "burnInput": 23,
+      "burnOutput": 11,
+      "finalDamage": 11
+    },
+    {
+      "label": "burned-special",
+      "move": "watergun",
+      "category": "Special",
+      "ability": "static",
+      "burned": true,
+      "modifyCalls": 0,
+      "burnInput": null,
+      "burnOutput": null,
+      "finalDamage": 7
+    },
+    {
+      "label": "burned-physical-guts",
+      "move": "tackle",
+      "category": "Physical",
+      "ability": "guts",
+      "burned": true,
+      "modifyCalls": 0,
+      "burnInput": null,
+      "burnOutput": null,
+      "finalDamage": 34
+    },
+    {
+      "label": "burned-facade-gen5",
+      "move": "facade",
+      "category": "Physical",
+      "ability": "static",
+      "burned": true,
+      "modifyCalls": 1,
+      "burnInput": 63,
+      "burnOutput": 31,
+      "finalDamage": 31
+    },
+    {
+      "label": "unburned-physical",
+      "move": "tackle",
+      "category": "Physical",
+      "ability": "static",
+      "burned": false,
+      "modifyCalls": 0,
+      "burnInput": null,
+      "burnOutput": null,
+      "finalDamage": 23
+    }
+  ],
+  "syntheticCases": [
+    {
+      "damage": 0,
+      "burnInput": 0,
+      "burnOutput": 0,
+      "postBurnAndGen5FinalDamage": 1
+    },
+    {
+      "damage": 1,
+      "burnInput": 1,
+      "burnOutput": 0,
+      "postBurnAndGen5FinalDamage": 1
+    },
+    {
+      "damage": 2,
+      "burnInput": 2,
+      "burnOutput": 1,
+      "postBurnAndGen5FinalDamage": 1
+    },
+    {
+      "damage": 3,
+      "burnInput": 3,
+      "burnOutput": 1,
+      "postBurnAndGen5FinalDamage": 1
+    },
+    {
+      "damage": 4,
+      "burnInput": 4,
+      "burnOutput": 2,
+      "postBurnAndGen5FinalDamage": 2
+    },
+    {
+      "damage": 5,
+      "burnInput": 5,
+      "burnOutput": 2,
+      "postBurnAndGen5FinalDamage": 2
+    },
+    {
+      "damage": 2097151,
+      "burnInput": 2097151,
+      "burnOutput": 1048575,
+      "postBurnAndGen5FinalDamage": 65535
+    },
+    {
+      "damage": 2097152,
+      "burnInput": 2097152,
+      "burnOutput": 0,
+      "postBurnAndGen5FinalDamage": 1
+    },
+    {
+      "damage": 2097153,
+      "burnInput": 2097153,
+      "burnOutput": 0,
+      "postBurnAndGen5FinalDamage": 1
+    },
+    {
+      "damage": 2147483647,
+      "burnInput": 2147483647,
+      "burnOutput": 1048575,
+      "postBurnAndGen5FinalDamage": 65535
+    }
+  ]
+}
