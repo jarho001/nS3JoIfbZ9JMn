@@ -550,3 +550,41 @@ git diff --check
 **Review:** Architect reviewed the corrected native/forced eligibility distinction, live STAB capture boundary, oracle state coverage, and focused test evidence; accepted Task015. Task014 was pushed as `2b9b00e` before this scheduled run. This implementation is ready for the authorized local commit; the parent handles pushing.
 
 **Next bounded task:** Task016 should compose the already implemented randomizer, STAB, type-effectiveness, burn, and finalization slices only after Task015 review. Keep its scope to a bounded arithmetic composition with explicit intermediate inputs; do not add runtime type/ability lookup, event dispatch, or a full damage engine.
+
+## Task 016 — bounded post-core damage composition
+
+**Status:** Accepted — scheduled run 4.
+
+**Scope:** Add `damage_from_preroll(pre_roll_damage, roll, stab_eligible, adaptability, typeless, type_exponent, burned, physical, has_guts, final_modifier)`.
+Compose the existing arithmetic slices in order: roll, STAB, type effectiveness, burn reduction, finalization.
+The arithmetic starts just before randomizer arithmetic and ends after finalization. Int32 fields and boolean flags use ordinary JAX broadcasting. Caller preconditions: `pre_roll_damage` `[0, 33554431]`, `roll` `[0, 15]`, signed-int32 `type_exponent` (clamped by the type kernel), `final_modifier` `[0, 65535]`. The API does not check ranges.
+The bounds keep the randomizer product below `2**32`, its result within `[0, 33554431]`, and the positive type result at most `2147483584`. Inputs beyond the preroll bound do not claim the standalone randomizer's uint32-wrap behavior.
+The slice starts after the core and earlier modifiers. It excludes `+2`, weather, critical, spread, RNG generation, event dispatch, bypassProtect, and other damage stages.
+
+**Implementation plan:**
+
+1. Capture through pinned `BattleActions.getDamage` and return its actual final result.
+Ordinary cases use real moves and initialized ability/status/type state. The original randomizer remains active; only its damage `random(16)` draw is controlled.
+Synthetic cases replace the input passed to the original randomizer, then delegate to that real randomizer. They explicitly control `target.runEffectiveness` and a registered final modifier event where needed.
+Record only observed intermediate operations and assert `bypassProtect` is false.
+Restore patched descriptors, temporary event registry, and status after success or injected failure.
+2. Add the pure JAX composition using the five existing primitives, with no duplicated arithmetic.
+3. Differentially cover ordinary and synthetic behavior, every roll 0–15, order-sensitive anchors, zero/odd low values, type exponent clamp extremes, typeless and typed STAB, burn eligibility, zero final modifier and uint16 truncation. Verify eager, JIT, vmap, broadcasting, and strict dtypes.
+4. Run focused Python and direct Node tests plus relevant constituent regression tests once, record current CPU/GPU availability, refresh and check Trail, inspect the diff, update README and this handoff, and report exact evidence for architect review.
+
+**Acceptance criteria:**
+
+- [x] Composition delegates to the five existing primitives in the required order and keeps every field strict int32/bool with broadcasting; range bounds are documented preconditions, not dynamically checked.
+- [x] Pinned oracle calls actual `getDamage` and returns its actual final result. Ordinary calls retain real move/type/status/ability and original randomizer behavior with a controlled damage draw. Synthetic calls inject only via the original randomizer input and controlled effectiveness/final event as declared; assert actual flags, event arguments, and captured stage values. Assert `bypassProtect` is false.
+- [x] Fixtures include all 16 rolls, high bounded preroll, type clamp boundaries, typed/typeless, physical burn and Guts bypass, zero-before-finalization and zero final modifier, plus anchors that distinguish the required order from reversed steps and expose final uint16 zero truncation.
+- [x] Oracle monkeypatches, temporary event state, and statuses restore after success and forced failure.
+- [x] Eager/JIT/vmap/broadcast/dtype checks and focused constituent regression tests pass. JAX reports CPU only; no GPU is available.
+- [x] README documents the composition boundaries and bounded-domain limitation. Trail build/check and `git diff --check` complete; Task017 proposal builds on this slice.
+
+**Verification evidence:** Before the final oracle assertions, the relevant Python constituent set passed 30/30 with `JAX_PLATFORMS=cpu .venv-jax/bin/python -m unittest test.test_damage_composition test.test_damage_roll test.test_stab test.test_type_effectiveness test.test_burn test.test_finalize_damage -v`. The direct Node constituent oracle tests passed: STAB 2/2, type effectiveness 1/1, burn 2/2, and finalization 1/1. After the final oracle/test edits, the composition-only rerun passed `JAX_PLATFORMS=cpu .venv-jax/bin/python -m unittest test.test_damage_composition -v` 4/4 and `node test/damage-composition-oracle.test.cjs` 2/2. The Node test regenerates the pinned fixture deterministically and checks temporary descriptor/event/status restoration after success and an injected failure. The fixture contains five ordinary cases spanning real native STAB, typed non-STAB, burned physical, burned physical with Guts, Adaptability, and Life Orb, plus 25 synthetic cases. Synthetic calls pass the selected preroll into the original `Battle.randomizer`, whose sole `random(16)` draw is controlled; captured stage outputs and actual final returns match the JAX composition. Device discovery reports `[CpuDevice(id=0)]`; `nvidia-smi` is unavailable. No GPU validation is claimed.
+
+**Trail review:** `trail build` and `trail build --check` pass. `trail check --base HEAD` reports two lexical false positives in this task section: the `apply_type_effectiveness` kernel name is matched to a warning about optional stat caps, although this task does not derive or modify stats; the type/arithmetic oracle is matched to a warning about player observation, although this fixture is trusted engineering evidence and is never exposed to a player. Other reported matches are marked non-blocking by Trail. `git diff --check` passes.
+
+**Review:** Architect reviewed and accepted the diff and evidence. Task015 was pushed as `0bb350e`; the parent handles pushing Task016. The authorized local Task016 commit is created after final checks.
+
+**Next bounded task proposal:** Task017 can compose a pre-roll prefix from `base_damage_core`, Gen 5 `+2`, and Task010's neutral `WeatherModifyDamage` fixed-point identity step, then feed that preroll into `damage_from_preroll` once. Effective Attack/Defense, resolved flags, and roll stay explicit. Capture the real `modifyDamage` tail and verify the event occurs before randomization; do not apply a second roll. End at final damage and continue to exclude runtime event/type/ability lookup and RNG generation.
