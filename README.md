@@ -167,10 +167,24 @@ JAX_PLATFORMS=cpu python -m unittest discover -s test -p 'test_*.py' -v
 node --test test/*.test.cjs
 ```
 
-Task011 is accepted and complete. The 47-test Python suite passes on CPU and GPU; the Node suite passes 34/34. The same primitive implements Task010's neutral identity event, preserving its 20-bit wrap behavior. Task012 is planned as one pinned damage-finalization primitive under explicit inputs.
+Task011 is accepted and complete. The 47-test Python suite passes on CPU and GPU; the Node suite passes 34/34. The same primitive implements Task010's neutral identity event, preserving its 20-bit wrap behavior. Task012 adds the bounded damage-finalization tail under explicit inputs.
+
+## Gen 5 damage finalization
+
+Task012 adds `finalize_damage(damage, modifier)` in `mechanics/finalize_damage.py`. It consumes damage after type effectiveness and burn, replaces zero with one, applies the already encoded final modifier through Task011, and truncates to 16 bits. The returned damage may be zero: Gen 5 does not repeat its minimum-one check after the final modifier or truncation. Both inputs are strict int32 and broadcast; caller-precondition ranges are damage `[0, 2147483647]` and modifier `[0, 65535]`.
+
+The guarded oracle delegates to the actual pinned `getDamage`/`modifyDamage` tail. Eight ordinary cases use initialized Pokemon with no item or real Life Orb (observed modifier 5324). The 430 synthetic cases inject only an explicit randomizer output in a neutral path and register one real modifier event; they preserve real zero-check, event application, and final truncation. Tests also compose the primitive with Task010's existing neutral damage fixture. This slice does not implement STAB, effectiveness, burn, event dispatch, modifier chaining, bypassProtect, or a full damage calculator.
+
+```sh
+node reference/finalize-damage-oracle.cjs fixture > reference/fixtures/finalize-damage-v1.json
+JAX_PLATFORMS=cpu .venv-jax/bin/python -m unittest discover -s test -p 'test_*.py' -v
+node --test test/*.test.cjs
+```
+
+Task012 is accepted and complete. All 54 Python tests and 35 Node tests pass. GPU validation is unavailable in this resumed CPU-only environment; it has no CUDA backend. See `docs/TASKS.md` for current Node validation evidence and the Task013 proposal.
 
 ## Current task and next work
 
-Tasks 001–011 are accepted and complete. Task 003's deterministic request-to-request random-policy baseline passed 15 targeted tests and contributed to the 29-test suite at that milestone; evidence includes the 102-turn default game, fresh-process transcript equality, and a real Shadow Tag unavailable-choice retry. Task 004's full suite passed 34/34, and a fresh CLI process replayed the complete 553-event, 102-turn trace with matching outcome. Task006's stored-stat derivation kernel passed 13 Python tests on CPU and GPU; the 34 Node tests pass. Task007's full Python suite passes 20/20 on both CPU and GPU, with 34/34 Node tests. Task008's full Python suite passes 27/27 on both CPU and GPU, with 34/34 Node tests. Task009's full Python suite passes 34/34 on CPU and GPU, with 34/34 Node tests. Task010's full Python suite passes 41/41 on CPU and GPU, with 34/34 Node tests. Task011's full Python suite passes 47/47 on CPU and GPU, with 34/34 Node tests. This work is a portion of G0/G1, not completion of either milestone in the larger [project plan](PROJECT_PLAN.md).
+Tasks 001–012 are accepted and complete. Task 003's deterministic request-to-request random-policy baseline passed 15 targeted tests and contributed to the 29-test suite at that milestone; evidence includes the 102-turn default game, fresh-process transcript equality, and a real Shadow Tag unavailable-choice retry. Task 004's full suite passed 34/34, and a fresh CLI process replayed the complete 553-event, 102-turn trace with matching outcome. Task006's stored-stat derivation kernel passed 13 Python tests on CPU and GPU; the 34 Node tests pass. Task007's full Python suite passes 20/20 on both CPU and GPU, with 34/34 Node tests. Task008's full Python suite passes 27/27 on both CPU and GPU, with 34/34 Node tests. Task009's full Python suite passes 34/34 on CPU and GPU, with 34/34 Node tests. Task010's full Python suite passes 41/41 on CPU and GPU, with 34/34 Node tests. Task011's full Python suite passes 47/47 on CPU and GPU, with 34/34 Node tests. This work is a portion of G0/G1, not completion of either milestone in the larger [project plan](PROJECT_PLAN.md).
 
 See [`docs/TASKS.md`](docs/TASKS.md) for acceptance state and handoff details.

@@ -423,3 +423,44 @@ git -c safe.directory=/workspace diff --check
 **Next bounded task:** Task012 can implement one pinned damage-finalization primitive under explicit inputs; do not expand this into fraction encoding, modifier chains, or a complete damage engine.
 
 Task 002 establishes protocol projection only. It does not establish full-game player memory, feature extraction, learning, or JAX mechanics parity.
+
+
+## Task 012 — Gen 5 damage-finalization tail
+
+**Status:** Accepted and complete — 2026-10-29.
+
+**Scope:** `finalize_damage(damage, modifier)` implements only the pinned tail after type effectiveness and burn: replace zero with one, apply one already encoded final modifier using Task011, and truncate to 16 bits. Strict int32 inputs broadcast, with caller-precondition domains damage `[0,2147483647]` and modifier `[0,65535]`. It excludes upstream damage calculation, event dispatch, modifier chains, bypassProtect, and runtime range checks. Zero can be returned after the modifier or final truncation.
+
+**Implementation plan:**
+
+1. Inspect the pinned `BattleActions.modifyDamage` tail and retain the Gen 5 order.
+2. Reuse `apply_fixedpoint_modifier`; do not duplicate its wrap/rounding arithmetic.
+3. Generate a pinned oracle fixture from actual `getDamage`: ordinary initialized Pokemon and Life Orb, plus explicitly synthetic pre-final damage inputs injected at the randomizer in a neutral path. Register a real event calling `chainModify(modifier,4096)` and delegate the actual finalization arithmetic.
+4. Check eager/JIT/JIT-vmap, broadcast, strict dtype, order and wrap anchors, ordinary item behavior, and composition against the existing Task010 fixture. Check oracle wrapper/event restoration on success and forced failure.
+5. Run regressions, refresh Trail, and record environmental validation limits.
+
+**Acceptance evidence:**
+
+- [x] Kernel preserves zero-to-one before modifier and uint16 truncation afterward, including possible final zero.
+- [x] Oracle fixture records the pin, source spans, input domains, seed, and synthetic interception boundary. Eight ordinary and 430 synthetic cases reproduce byte-identically in independent CLI processes.
+- [x] Real ordinary event modifiers are asserted as 4096 and 5324; synthetic modifier zero is honored. Oracle restores method/event descriptors even after failure.
+- [x] All 54 Python tests pass on CPU, including seven new differential/composition tests.
+- [x] All 35 Node tests pass with subprocess execution permitted.
+- [x] Final review accepted the bounded implementation and validation evidence.
+
+**Deferred validation:** GPU validation is unavailable in this CPU-only environment. Task012 acceptance covers CPU parity; it does not claim GPU parity. Rerun the Python suite on a CUDA-capable environment when available.
+
+**Verification run:** On 2026-10-29, JAX/JAXLIB 0.12.0.1 CPU ran all 54 Python tests successfully in 16.7 seconds. The fixture matched byte-for-byte across independent CLI runs. The runtime has no available CUDA backend; `JAX_PLATFORMS=cuda` fails backend initialization. Node v24.19.0 passes 34/35 tests with `--test-isolation=none`; the sole failure is the unchanged trace fresh-process test. A minimal `child_process.spawnSync('node', ...)` probe returns `EPERM` and empty stdout in this sandbox, which explains its JSON parse error. Direct shell-invoked trace capture and replay succeed for the same 553-event, 102-turn battle and outcome. The same complete Node suite was then rerun with sandbox escalation allowing the existing subprocess test and passed 35/35 in 3.0 seconds. No existing trace source or test was changed. Trail build and staged diff checks pass. Scoped Trail check reports two reviewed lexical false positives: it matches final-damage input prose to a stored-stat positivity warning, and trusted oracle evidence to a player-observation warning. This kernel makes no stored-stat claim and exposes no oracle data to an actor.
+
+**Resume/check commands:**
+
+```sh
+node reference/finalize-damage-oracle.cjs fixture > reference/fixtures/finalize-damage-v1.json
+JAX_PLATFORMS=cpu .venv-jax/bin/python -m unittest discover -s test -p 'test_*.py' -v
+node --test test/*.test.cjs
+trail build
+trail check --base HEAD
+git diff --check
+```
+
+**Next bounded task:** Task013 can implement the pinned type-effectiveness arithmetic with an explicit clamped exponent, using actual Showdown differential evidence. Keep immunity decisions, type lookup, STAB, burn, modifier chains, and the complete damage engine out of that slice. Resolve its precise input domain and overflow behavior from the pinned code before implementation.
