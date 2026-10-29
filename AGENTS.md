@@ -56,6 +56,18 @@ For non-trivial implementation work:
    make the corrective edits itself.
 6. Declare completion only after the implementation and validation pass review.
 
+## Bounded task execution
+
+- When asked for the next task, consult `docs/TASKS.md` and choose one independently reviewable deliverable. State its scope, exclusions, and acceptance criteria before delegation.
+- Persist the plan and progress in the task handoff so work can resume across sessions.
+- Assign implementation, tests, documentation, and routine checks to one implementer responsible for the affected files.
+- The primary agent performs one focused review against acceptance criteria. Send concrete corrections to the same implementer; broaden review only when new evidence warrants it.
+- Escalate contradictions in requirements or reference behavior with a concrete reproducer. Do not silently narrow the scope or weaken tests.
+- Run relevant validation once per meaningful implementation revision. Repeat only checks affected by later changes.
+- After acceptance and passing checks, update the handoff, create the authorized local commit, and stop at the task boundary.
+
+Before requesting review, the implementer should inspect its diff and run targeted tests. Its handoff should name changed files, exact validation results, and unresolved concerns. After review, make only requested corrections and run the checks those changes affect. Keep commit subjects short; put detail in the commit body.
+
 Use the primary model for:
 - Resolving ambiguous requirements.
 - Architecture and decomposition.
