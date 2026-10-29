@@ -464,3 +464,31 @@ git diff --check
 ```
 
 **Next bounded task:** Task013 can implement the pinned type-effectiveness arithmetic with an explicit clamped exponent, using actual Showdown differential evidence. Keep immunity decisions, type lookup, STAB, burn, modifier chains, and the complete damage engine out of that slice. Resolve its precise input domain and overflow behavior from the pinned code before implementation.
+
+## Task 013 — Gen 5 type-effectiveness arithmetic
+
+**Status:** Accepted and complete — 2026-10-29. Scheduled run 1. The architect accepted the implementation after reviewing the diff and validation evidence.
+
+**Scope:** `apply_type_effectiveness(damage, exponent)` applies only the pinned type exponent arithmetic. Inputs are strict int32 and broadcast; damage has caller-precondition domain `[0, 33554431]`, exponent is any signed int32 and is clamped to `[-6, 6]`. The output remains nonnegative int32, with the largest positive result `33554431 * 64 = 2147483584`. Positive exponents repeatedly multiply by two without truncation; negative exponents repeatedly truncate `damage / 2` toward zero. This excludes type lookup, immunity, STAB, burn, modifier chains, and the complete damage engine; ranges are not dynamically checked.
+
+**Implementation plan:**
+
+1. Use the actual pinned `BattleActions.getDamage` path with a guarded fixture. Ordinary cases use real type effectiveness. Synthetic cases replace only the randomizer output and type-effectiveness lookup; a temporary wrapper captures the value at the post-type burn boundary and delegates Showdown arithmetic. Restore every patched descriptor in `finally`.
+2. Add a pure JAX int32 kernel, with exponent clamp and broadcast behavior, then differential tests for ordinary and synthetic oracle records, clamp extremes, odd/floor cases, and the maximum domain boundary.
+3. Run targeted CPU validation, report GPU availability accurately, refresh the Trail graph, run `trail check`, and record exact evidence before requesting architect review.
+
+**Acceptance evidence:**
+
+- [x] Strict int32 inputs, broadcast behavior, explicit exponent clamp, and the documented nonnegative damage precondition are implemented. The domain maximum times `2**6` is `2147483584`, so positive doubling does not overflow int32.
+- [x] The guarded fixture records four ordinary initialized-Pokemon cases with real neutral, resisted, and super-effective type lookup, plus a 65-case synthetic grid over all 13 clamped exponents for damage values 0, 1, 63, 65, and 33554431. Three labeled synthetic anchors exercise signed-int32 clamp extremes. The synthetic boundary observes the value before burn and Gen 5 minimum-one; the fixture separately records downstream results so those later steps cannot be mistaken for this kernel.
+- [x] Differential checks cover odd repeated flooring, zero, all clamped exponents, both signed-int32 clamp extremes, exponent endpoints, and the maximum damage boundary. Eager, JIT, vmap, and 2D broadcasting agree with the live pinned oracle.
+- [x] Oracle wrappers and temporary source status restore after both successful capture and an injected failure.
+- [x] `JAX_PLATFORMS=cpu .venv-jax/bin/python -m unittest test.test_type_effectiveness -v` passes 4/4. `node --test test/type-effectiveness-oracle.test.cjs` passes 1/1. `trail build` and `git diff --check` pass.
+
+**Deferred validation:** This environment exposes only `[CpuDevice(id=0)]`; no GPU validation was available. The installed JAX and JAXLIB reported 0.12.0.1 during this run; the tests do not assert those exact versions.
+
+**Trail review:** `trail check --base HEAD` reports two lexical conflicts in the new task section, matching the unrelated stored-stat cap/zero-domain learning and trusted-oracle-versus-player-observation learning. This task neither applies stat caps nor exposes its oracle fixture to an actor.
+
+**Review:** Architect diff and evidence review accepted Task013. The implementer ran 4/4 focused CPU Python tests, 1/1 Node restoration test, Trail build, and diff checks. The parent will push the local commit to `main`.
+
+**Next bounded task:** Task014 can add the Gen 5 physical-burn reduction as an explicit arithmetic slice between type effectiveness and the Task012 finalization tail. Keep burn eligibility inputs explicit and defer event dispatch.

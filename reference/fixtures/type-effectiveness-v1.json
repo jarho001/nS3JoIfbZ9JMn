@@ -1,0 +1,616 @@
+{
+  "schemaVersion": 1,
+  "kind": "gen5-type-effectiveness-arithmetic-oracle",
+  "upstream": {
+    "repository": "https://github.com/smogon/pokemon-showdown.git",
+    "commit": "1242c1e2d9763ba5b85d33f13aecb89bae19ae3d"
+  },
+  "formatId": "gen5randombattle",
+  "generation": 5,
+  "battleSeed": [
+    101,
+    202,
+    303,
+    404
+  ],
+  "method": "BattleActions.getDamage type exponent loop",
+  "sourcePaths": [
+    "sim/battle-actions.ts:1849-1865",
+    "sim/battle-actions.ts:1870-1877",
+    "sim/battle-actions.ts:1640-1775"
+  ],
+  "inputDomain": {
+    "damage": [
+      0,
+      33554431
+    ],
+    "exponent": [
+      -2147483648,
+      2147483647
+    ],
+    "result": "int32 [0,2147483584]"
+  },
+  "scope": "Type-exponent arithmetic only. Type lookup, immunity, STAB, burn, modifiers, and full damage calculation are excluded.",
+  "ordinaryContract": "Real initialized Gen 5 Pokemon, real moves, real type lookup, real randomizer, and real damage path; no arithmetic or type lookup overrides.",
+  "syntheticContract": "Only randomizer output and target.runEffectiveness are controlled. A burned physical ??? move lets the temporary Battle.modify wrapper capture the value immediately after type arithmetic and before burn; the original burn, Gen 5 minimum-one, modifiers, and truncation all run afterward. No arithmetic formula is cloned.",
+  "ordinaryCases": [
+    {
+      "move": "tackle",
+      "moveType": "Normal",
+      "damageBeforeType": 23,
+      "typeMod": 0,
+      "damageAfterType": 23,
+      "finalDamage": 23
+    },
+    {
+      "move": "watergun",
+      "moveType": "Water",
+      "damageBeforeType": 15,
+      "typeMod": -1,
+      "damageAfterType": 7,
+      "finalDamage": 7
+    },
+    {
+      "move": "ember",
+      "moveType": "Fire",
+      "damageBeforeType": 14,
+      "typeMod": 1,
+      "damageAfterType": 28,
+      "finalDamage": 28
+    },
+    {
+      "move": "psychic",
+      "moveType": "Psychic",
+      "damageBeforeType": 32,
+      "typeMod": 1,
+      "damageAfterType": 64,
+      "finalDamage": 64
+    }
+  ],
+  "syntheticCases": [
+    {
+      "label": "grid-damage-0-exponent--6",
+      "damage": 0,
+      "exponent": -6,
+      "clampedExponent": -6,
+      "result": 0,
+      "postBurnAndGen5FinalDamage": 1
+    },
+    {
+      "label": "grid-damage-0-exponent--5",
+      "damage": 0,
+      "exponent": -5,
+      "clampedExponent": -5,
+      "result": 0,
+      "postBurnAndGen5FinalDamage": 1
+    },
+    {
+      "label": "grid-damage-0-exponent--4",
+      "damage": 0,
+      "exponent": -4,
+      "clampedExponent": -4,
+      "result": 0,
+      "postBurnAndGen5FinalDamage": 1
+    },
+    {
+      "label": "grid-damage-0-exponent--3",
+      "damage": 0,
+      "exponent": -3,
+      "clampedExponent": -3,
+      "result": 0,
+      "postBurnAndGen5FinalDamage": 1
+    },
+    {
+      "label": "grid-damage-0-exponent--2",
+      "damage": 0,
+      "exponent": -2,
+      "clampedExponent": -2,
+      "result": 0,
+      "postBurnAndGen5FinalDamage": 1
+    },
+    {
+      "label": "grid-damage-0-exponent--1",
+      "damage": 0,
+      "exponent": -1,
+      "clampedExponent": -1,
+      "result": 0,
+      "postBurnAndGen5FinalDamage": 1
+    },
+    {
+      "label": "grid-damage-0-exponent-0",
+      "damage": 0,
+      "exponent": 0,
+      "clampedExponent": 0,
+      "result": 0,
+      "postBurnAndGen5FinalDamage": 1
+    },
+    {
+      "label": "grid-damage-0-exponent-1",
+      "damage": 0,
+      "exponent": 1,
+      "clampedExponent": 1,
+      "result": 0,
+      "postBurnAndGen5FinalDamage": 1
+    },
+    {
+      "label": "grid-damage-0-exponent-2",
+      "damage": 0,
+      "exponent": 2,
+      "clampedExponent": 2,
+      "result": 0,
+      "postBurnAndGen5FinalDamage": 1
+    },
+    {
+      "label": "grid-damage-0-exponent-3",
+      "damage": 0,
+      "exponent": 3,
+      "clampedExponent": 3,
+      "result": 0,
+      "postBurnAndGen5FinalDamage": 1
+    },
+    {
+      "label": "grid-damage-0-exponent-4",
+      "damage": 0,
+      "exponent": 4,
+      "clampedExponent": 4,
+      "result": 0,
+      "postBurnAndGen5FinalDamage": 1
+    },
+    {
+      "label": "grid-damage-0-exponent-5",
+      "damage": 0,
+      "exponent": 5,
+      "clampedExponent": 5,
+      "result": 0,
+      "postBurnAndGen5FinalDamage": 1
+    },
+    {
+      "label": "grid-damage-0-exponent-6",
+      "damage": 0,
+      "exponent": 6,
+      "clampedExponent": 6,
+      "result": 0,
+      "postBurnAndGen5FinalDamage": 1
+    },
+    {
+      "label": "grid-damage-1-exponent--6",
+      "damage": 1,
+      "exponent": -6,
+      "clampedExponent": -6,
+      "result": 0,
+      "postBurnAndGen5FinalDamage": 1
+    },
+    {
+      "label": "grid-damage-1-exponent--5",
+      "damage": 1,
+      "exponent": -5,
+      "clampedExponent": -5,
+      "result": 0,
+      "postBurnAndGen5FinalDamage": 1
+    },
+    {
+      "label": "grid-damage-1-exponent--4",
+      "damage": 1,
+      "exponent": -4,
+      "clampedExponent": -4,
+      "result": 0,
+      "postBurnAndGen5FinalDamage": 1
+    },
+    {
+      "label": "grid-damage-1-exponent--3",
+      "damage": 1,
+      "exponent": -3,
+      "clampedExponent": -3,
+      "result": 0,
+      "postBurnAndGen5FinalDamage": 1
+    },
+    {
+      "label": "grid-damage-1-exponent--2",
+      "damage": 1,
+      "exponent": -2,
+      "clampedExponent": -2,
+      "result": 0,
+      "postBurnAndGen5FinalDamage": 1
+    },
+    {
+      "label": "grid-damage-1-exponent--1",
+      "damage": 1,
+      "exponent": -1,
+      "clampedExponent": -1,
+      "result": 0,
+      "postBurnAndGen5FinalDamage": 1
+    },
+    {
+      "label": "grid-damage-1-exponent-0",
+      "damage": 1,
+      "exponent": 0,
+      "clampedExponent": 0,
+      "result": 1,
+      "postBurnAndGen5FinalDamage": 1
+    },
+    {
+      "label": "grid-damage-1-exponent-1",
+      "damage": 1,
+      "exponent": 1,
+      "clampedExponent": 1,
+      "result": 2,
+      "postBurnAndGen5FinalDamage": 1
+    },
+    {
+      "label": "grid-damage-1-exponent-2",
+      "damage": 1,
+      "exponent": 2,
+      "clampedExponent": 2,
+      "result": 4,
+      "postBurnAndGen5FinalDamage": 2
+    },
+    {
+      "label": "grid-damage-1-exponent-3",
+      "damage": 1,
+      "exponent": 3,
+      "clampedExponent": 3,
+      "result": 8,
+      "postBurnAndGen5FinalDamage": 4
+    },
+    {
+      "label": "grid-damage-1-exponent-4",
+      "damage": 1,
+      "exponent": 4,
+      "clampedExponent": 4,
+      "result": 16,
+      "postBurnAndGen5FinalDamage": 8
+    },
+    {
+      "label": "grid-damage-1-exponent-5",
+      "damage": 1,
+      "exponent": 5,
+      "clampedExponent": 5,
+      "result": 32,
+      "postBurnAndGen5FinalDamage": 16
+    },
+    {
+      "label": "grid-damage-1-exponent-6",
+      "damage": 1,
+      "exponent": 6,
+      "clampedExponent": 6,
+      "result": 64,
+      "postBurnAndGen5FinalDamage": 32
+    },
+    {
+      "label": "grid-damage-63-exponent--6",
+      "damage": 63,
+      "exponent": -6,
+      "clampedExponent": -6,
+      "result": 0,
+      "postBurnAndGen5FinalDamage": 1
+    },
+    {
+      "label": "grid-damage-63-exponent--5",
+      "damage": 63,
+      "exponent": -5,
+      "clampedExponent": -5,
+      "result": 1,
+      "postBurnAndGen5FinalDamage": 1
+    },
+    {
+      "label": "grid-damage-63-exponent--4",
+      "damage": 63,
+      "exponent": -4,
+      "clampedExponent": -4,
+      "result": 3,
+      "postBurnAndGen5FinalDamage": 1
+    },
+    {
+      "label": "grid-damage-63-exponent--3",
+      "damage": 63,
+      "exponent": -3,
+      "clampedExponent": -3,
+      "result": 7,
+      "postBurnAndGen5FinalDamage": 3
+    },
+    {
+      "label": "grid-damage-63-exponent--2",
+      "damage": 63,
+      "exponent": -2,
+      "clampedExponent": -2,
+      "result": 15,
+      "postBurnAndGen5FinalDamage": 7
+    },
+    {
+      "label": "grid-damage-63-exponent--1",
+      "damage": 63,
+      "exponent": -1,
+      "clampedExponent": -1,
+      "result": 31,
+      "postBurnAndGen5FinalDamage": 15
+    },
+    {
+      "label": "grid-damage-63-exponent-0",
+      "damage": 63,
+      "exponent": 0,
+      "clampedExponent": 0,
+      "result": 63,
+      "postBurnAndGen5FinalDamage": 31
+    },
+    {
+      "label": "grid-damage-63-exponent-1",
+      "damage": 63,
+      "exponent": 1,
+      "clampedExponent": 1,
+      "result": 126,
+      "postBurnAndGen5FinalDamage": 63
+    },
+    {
+      "label": "grid-damage-63-exponent-2",
+      "damage": 63,
+      "exponent": 2,
+      "clampedExponent": 2,
+      "result": 252,
+      "postBurnAndGen5FinalDamage": 126
+    },
+    {
+      "label": "grid-damage-63-exponent-3",
+      "damage": 63,
+      "exponent": 3,
+      "clampedExponent": 3,
+      "result": 504,
+      "postBurnAndGen5FinalDamage": 252
+    },
+    {
+      "label": "grid-damage-63-exponent-4",
+      "damage": 63,
+      "exponent": 4,
+      "clampedExponent": 4,
+      "result": 1008,
+      "postBurnAndGen5FinalDamage": 504
+    },
+    {
+      "label": "grid-damage-63-exponent-5",
+      "damage": 63,
+      "exponent": 5,
+      "clampedExponent": 5,
+      "result": 2016,
+      "postBurnAndGen5FinalDamage": 1008
+    },
+    {
+      "label": "grid-damage-63-exponent-6",
+      "damage": 63,
+      "exponent": 6,
+      "clampedExponent": 6,
+      "result": 4032,
+      "postBurnAndGen5FinalDamage": 2016
+    },
+    {
+      "label": "grid-damage-65-exponent--6",
+      "damage": 65,
+      "exponent": -6,
+      "clampedExponent": -6,
+      "result": 1,
+      "postBurnAndGen5FinalDamage": 1
+    },
+    {
+      "label": "grid-damage-65-exponent--5",
+      "damage": 65,
+      "exponent": -5,
+      "clampedExponent": -5,
+      "result": 2,
+      "postBurnAndGen5FinalDamage": 1
+    },
+    {
+      "label": "grid-damage-65-exponent--4",
+      "damage": 65,
+      "exponent": -4,
+      "clampedExponent": -4,
+      "result": 4,
+      "postBurnAndGen5FinalDamage": 2
+    },
+    {
+      "label": "grid-damage-65-exponent--3",
+      "damage": 65,
+      "exponent": -3,
+      "clampedExponent": -3,
+      "result": 8,
+      "postBurnAndGen5FinalDamage": 4
+    },
+    {
+      "label": "grid-damage-65-exponent--2",
+      "damage": 65,
+      "exponent": -2,
+      "clampedExponent": -2,
+      "result": 16,
+      "postBurnAndGen5FinalDamage": 8
+    },
+    {
+      "label": "grid-damage-65-exponent--1",
+      "damage": 65,
+      "exponent": -1,
+      "clampedExponent": -1,
+      "result": 32,
+      "postBurnAndGen5FinalDamage": 16
+    },
+    {
+      "label": "grid-damage-65-exponent-0",
+      "damage": 65,
+      "exponent": 0,
+      "clampedExponent": 0,
+      "result": 65,
+      "postBurnAndGen5FinalDamage": 32
+    },
+    {
+      "label": "grid-damage-65-exponent-1",
+      "damage": 65,
+      "exponent": 1,
+      "clampedExponent": 1,
+      "result": 130,
+      "postBurnAndGen5FinalDamage": 65
+    },
+    {
+      "label": "grid-damage-65-exponent-2",
+      "damage": 65,
+      "exponent": 2,
+      "clampedExponent": 2,
+      "result": 260,
+      "postBurnAndGen5FinalDamage": 130
+    },
+    {
+      "label": "grid-damage-65-exponent-3",
+      "damage": 65,
+      "exponent": 3,
+      "clampedExponent": 3,
+      "result": 520,
+      "postBurnAndGen5FinalDamage": 260
+    },
+    {
+      "label": "grid-damage-65-exponent-4",
+      "damage": 65,
+      "exponent": 4,
+      "clampedExponent": 4,
+      "result": 1040,
+      "postBurnAndGen5FinalDamage": 520
+    },
+    {
+      "label": "grid-damage-65-exponent-5",
+      "damage": 65,
+      "exponent": 5,
+      "clampedExponent": 5,
+      "result": 2080,
+      "postBurnAndGen5FinalDamage": 1040
+    },
+    {
+      "label": "grid-damage-65-exponent-6",
+      "damage": 65,
+      "exponent": 6,
+      "clampedExponent": 6,
+      "result": 4160,
+      "postBurnAndGen5FinalDamage": 2080
+    },
+    {
+      "label": "grid-damage-33554431-exponent--6",
+      "damage": 33554431,
+      "exponent": -6,
+      "clampedExponent": -6,
+      "result": 524287,
+      "postBurnAndGen5FinalDamage": 65535
+    },
+    {
+      "label": "grid-damage-33554431-exponent--5",
+      "damage": 33554431,
+      "exponent": -5,
+      "clampedExponent": -5,
+      "result": 1048575,
+      "postBurnAndGen5FinalDamage": 65535
+    },
+    {
+      "label": "grid-damage-33554431-exponent--4",
+      "damage": 33554431,
+      "exponent": -4,
+      "clampedExponent": -4,
+      "result": 2097151,
+      "postBurnAndGen5FinalDamage": 65535
+    },
+    {
+      "label": "grid-damage-33554431-exponent--3",
+      "damage": 33554431,
+      "exponent": -3,
+      "clampedExponent": -3,
+      "result": 4194303,
+      "postBurnAndGen5FinalDamage": 65535
+    },
+    {
+      "label": "grid-damage-33554431-exponent--2",
+      "damage": 33554431,
+      "exponent": -2,
+      "clampedExponent": -2,
+      "result": 8388607,
+      "postBurnAndGen5FinalDamage": 65535
+    },
+    {
+      "label": "grid-damage-33554431-exponent--1",
+      "damage": 33554431,
+      "exponent": -1,
+      "clampedExponent": -1,
+      "result": 16777215,
+      "postBurnAndGen5FinalDamage": 65535
+    },
+    {
+      "label": "grid-damage-33554431-exponent-0",
+      "damage": 33554431,
+      "exponent": 0,
+      "clampedExponent": 0,
+      "result": 33554431,
+      "postBurnAndGen5FinalDamage": 65535
+    },
+    {
+      "label": "grid-damage-33554431-exponent-1",
+      "damage": 33554431,
+      "exponent": 1,
+      "clampedExponent": 1,
+      "result": 67108862,
+      "postBurnAndGen5FinalDamage": 65535
+    },
+    {
+      "label": "grid-damage-33554431-exponent-2",
+      "damage": 33554431,
+      "exponent": 2,
+      "clampedExponent": 2,
+      "result": 134217724,
+      "postBurnAndGen5FinalDamage": 65534
+    },
+    {
+      "label": "grid-damage-33554431-exponent-3",
+      "damage": 33554431,
+      "exponent": 3,
+      "clampedExponent": 3,
+      "result": 268435448,
+      "postBurnAndGen5FinalDamage": 65532
+    },
+    {
+      "label": "grid-damage-33554431-exponent-4",
+      "damage": 33554431,
+      "exponent": 4,
+      "clampedExponent": 4,
+      "result": 536870896,
+      "postBurnAndGen5FinalDamage": 65528
+    },
+    {
+      "label": "grid-damage-33554431-exponent-5",
+      "damage": 33554431,
+      "exponent": 5,
+      "clampedExponent": 5,
+      "result": 1073741792,
+      "postBurnAndGen5FinalDamage": 65520
+    },
+    {
+      "label": "grid-damage-33554431-exponent-6",
+      "damage": 33554431,
+      "exponent": 6,
+      "clampedExponent": 6,
+      "result": 2147483584,
+      "postBurnAndGen5FinalDamage": 65504
+    },
+    {
+      "label": "clamped-minimum-zero-result",
+      "damage": 1,
+      "exponent": -2147483648,
+      "clampedExponent": -6,
+      "result": 0,
+      "postBurnAndGen5FinalDamage": 1
+    },
+    {
+      "label": "clamped-minimum-positive-result",
+      "damage": 127,
+      "exponent": -2147483648,
+      "clampedExponent": -6,
+      "result": 1,
+      "postBurnAndGen5FinalDamage": 1
+    },
+    {
+      "label": "clamped-maximum",
+      "damage": 33554431,
+      "exponent": 2147483647,
+      "clampedExponent": 6,
+      "result": 2147483584,
+      "postBurnAndGen5FinalDamage": 65504
+    }
+  ]
+}
