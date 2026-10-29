@@ -187,8 +187,22 @@ Task013 is accepted and complete after scheduled run 1 and architect review. `ap
 
 Task014 is accepted and complete after scheduled run 2 and architect review. `apply_burn_reduction(damage, burned, physical, has_guts)` implements the pinned Gen 5 physical-burn arithmetic step. It applies the existing fixed-point `0.5` modifier only for `burned & physical & ~has_guts`; eligibility inputs are strict booleans and broadcast with strict int32 damage. Gen 5 does not exempt Facade. The guarded oracle covers real physical/special, Guts, Facade, and unburned moves, plus controlled randomizer boundary values observed before the minimum-one check. This kernel does not resolve runtime status, category, or ability, and does not dispatch events or include other damage steps. The focused Python tests pass 4/4 on CPU and the Node oracle/restoration tests pass 2/2; this environment exposes only a CPU device. See `docs/TASKS.md` for the exact fixture contract.
 
+## Gen 5 STAB arithmetic
+
+Task015 adds `apply_stab(damage, stab_eligible, adaptability, typeless)` in `mechanics/stab.py`. The strict int32 damage and strict boolean flags broadcast. Typed damage always uses the existing fixed-point kernel: 6144 for eligible STAB, 8192 for eligible Adaptability, and 4096 for typed non-STAB. `typeless` bypasses the modifying call and preserves the input, even if eligibility flags are true. The caller supplies already resolved eligibility and Adaptability state; this slice does not look up types or abilities, dispatch events, apply Tera, or include later damage steps.
+
+The guarded oracle uses real pinned Gen 5 `getDamage`, `ModifySTAB`, and Adaptability behavior for ordinary moves. Synthetic cases replace only `Battle.randomizer` output and record the actual event result and delegated `Battle.modify`; they cover 0/1/2/3, product-wrap-adjacent values for all three typed modifiers, and int32 maximum. The typeless cases assert the STAB modify call is skipped.
+
+```sh
+node reference/stab-oracle.cjs fixture > reference/fixtures/stab-v1.json
+JAX_PLATFORMS=cpu .venv-jax/bin/python -m unittest test.test_stab -v
+node test/stab-oracle.test.cjs
+```
+
+Task015 is accepted and complete for scheduled run 3. The focused Python tests pass 4/4 on CPU and the Node fixture/restoration tests pass 2/2. This environment exposes only a CPU device; GPU validation is unavailable. See `docs/TASKS.md` for the exact fixture boundary and evidence.
+
 ## Current task and next work
 
-Tasks 001–013 are accepted and complete. Task 003's deterministic request-to-request random-policy baseline passed 15 targeted tests and contributed to the 29-test suite at that milestone; evidence includes the 102-turn default game, fresh-process transcript equality, and a real Shadow Tag unavailable-choice retry. Task 004's full suite passed 34/34, and a fresh CLI process replayed the complete 553-event, 102-turn trace with matching outcome. Task006's stored-stat derivation kernel passed 13 Python tests on CPU and GPU; the 34 Node tests pass. Task007's full Python suite passes 20/20 on both CPU and GPU, with 34/34 Node tests. Task008's full Python suite passes 27/27 on both CPU and GPU, with 34/34 Node tests. Task009's full Python suite passes 34/34 on CPU and GPU, with 34/34 Node tests. Task010's full Python suite passes 41/41 on CPU and GPU, with 34/34 Node tests. Task011's full Python suite passes 47/47 on CPU and GPU, with 34/34 Node tests. This work is a portion of G0/G1, not completion of either milestone in the larger [project plan](PROJECT_PLAN.md).
+Tasks 001–014 are accepted and complete. Task 003's deterministic request-to-request random-policy baseline passed 15 targeted tests and contributed to the 29-test suite at that milestone; evidence includes the 102-turn default game, fresh-process transcript equality, and a real Shadow Tag unavailable-choice retry. Task 004's full suite passed 34/34, and a fresh CLI process replayed the complete 553-event, 102-turn trace with matching outcome. Task006's stored-stat derivation kernel passed 13 Python tests on CPU and GPU; the 34 Node tests pass. Task007's full Python suite passes 20/20 on both CPU and GPU, with 34/34 Node tests. Task008's full Python suite passes 27/27 on both CPU and GPU, with 34/34 Node tests. Task009's full Python suite passes 34/34 on CPU and GPU, with 34/34 Node tests. Task010's full Python suite passes 41/41 on CPU and GPU, with 34/34 Node tests. Task011's full Python suite passes 47/47 on CPU and GPU, with 34/34 Node tests. This work is a portion of G0/G1, not completion of either milestone in the larger [project plan](PROJECT_PLAN.md).
 
 See [`docs/TASKS.md`](docs/TASKS.md) for acceptance state and handoff details.

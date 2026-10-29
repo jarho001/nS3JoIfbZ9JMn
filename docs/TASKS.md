@@ -520,3 +520,33 @@ git diff --check
 **Review:** Architect reviewed and accepted the implementation and evidence. The implementer ran the focused Python and Node tests above; the parent reviewed the diff and ordinary differential evidence. A local Task014 commit is being created; the parent handles pushing it to `main`.
 
 **Next bounded task proposal:** Task015 can implement the explicit Gen 5 STAB multiplier as one arithmetic slice before type effectiveness, with STAB and any applicable ability state supplied explicitly. Resolve its exact pinned multiplier/rounding boundary first; keep type lookup, burn, finalization, event dispatch, and the full damage calculator outside that task.
+
+## Task 015 — Gen 5 STAB arithmetic
+
+**Status:** Accepted and complete — scheduled run 3.
+
+**Scope:** Implement `apply_stab(damage, stab_eligible, adaptability, typeless)` as a pure arithmetic slice immediately after the randomizer and before type effectiveness. Inputs are strict int32 damage in `[0, 2147483647]` and strict boolean flags, broadcast normally. `typeless=True` bypasses STAB entirely and returns damage unchanged, even when the eligibility flags conflict. Otherwise use the pinned modifier: 1.5 (`6144`) for eligible non-Adaptability, 2 (`8192`) for eligible Adaptability, and identity (`4096`) for typed non-STAB. Typed identity still invokes fixed-point arithmetic and can wrap; reuse `apply_fixedpoint_modifier` rather than cloning it. The explicit eligibility flag already resolves native/force STAB, and Adaptability is supplied as effective state. Exclude type and ability lookup, event dispatch, Tera, other generations, type effectiveness, burn, finalization, and the full damage calculator.
+
+**Implementation plan:**
+
+1. Confirm the pinned `BattleActions.getDamage` STAB block and Adaptability handler; record any disagreement before coding. Generate the fixture through guarded actual `getDamage` calls, observing real modifying steps. Ordinary cases use real moves, including native STAB, non-STAB, Adaptability, and forceSTAB where feasible. Synthetic cases replace only randomizer output and inject explicit move/ability state as needed; a transparent wrapper records and delegates each applicable `Battle.modify` call. Assert that `???` skips the modifying call. Restore patched descriptors and temporary move fields on success and forced failure; source status and ability remain unchanged.
+2. Implement the strict-dtype JAX kernel using the existing fixed-point modifier for all typed cases and an unchanged branch for typeless damage.
+3. Cover actual oracle parity plus all eligibility/Adaptability/typeless combinations, broadcasting, eager/JIT/vmap, dtype rejection, synthetic outputs 0/1/2/3, fixed-point product-wrap boundaries for each of the three typed modifiers, and int32 maximum.
+4. Add a deterministic pinned fixture reproduction check; run focused CPU tests, report device availability, refresh/check Trail, and record exact validation evidence.
+
+**Acceptance criteria:**
+
+- [x] Pinned `sim/battle-actions.ts:1809-1847` confirms typed non-STAB executes the identity modifier and `???` skips the entire STAB block. `data/abilities.ts:43-54` confirms Adaptability resolves STAB to 2; ordinary STAB resolves to 1.5.
+- [x] Strict int32 damage and strict bool flags broadcast normally and return int32. `typeless` bypasses all typed modifier paths even with conflicting flags. Eligibility and effective Adaptability are explicit inputs; no simulator lookup or event logic is included.
+- [x] Reuse `apply_fixedpoint_modifier` for all three typed modifiers. Preserve its uint32 product wrap and half-down rounding behavior, including at int32 maximum.
+- [x] Guarded fixture uses the real pinned `getDamage`/`ModifySTAB`/Adaptability path; synthetic input control does not clone the formula. Five ordinary cases and 47 synthetic cases match eager/JIT/vmap tests.
+- [x] Oracle wrapper/state restoration passes on success and injected failures. The fixture reproduces deterministically with Node.
+- [x] Focused CPU tests, Trail build/check, and diff check pass. The JAX runtime reports only CPU; no GPU coverage is claimed.
+
+**Verification evidence:** On 2026-10-29, `JAX_PLATFORMS=cpu .venv-jax/bin/python -m unittest test.test_stab -v` passed 4/4; `node test/stab-oracle.test.cjs` passed 2/2. Two independent `node reference/stab-oracle.cjs fixture` runs produced byte-identical output. The fixture covers native STAB, typed non-STAB, Adaptability with and without STAB, forceSTAB, explicit synthetic damage 0/1/2/3, values immediately adjacent to `floor(2^32 / modifier)` for modifiers 4096/6144/8192, int32 maximum, and typeless conflicting flags. Tests cover eager/JIT/JIT-vmap, all eight eligibility/Adaptability/typeless combinations, 2D broadcasting, and strict dtype rejection. The oracle restores randomizer/modify/runEvent/target.runEffectiveness descriptors and move fields after successful and forced-failure captures. JAX reports `[CpuDevice(id=0)]`, backend `cpu`; `nvidia-smi` is unavailable. Trail build, Trail graph freshness check, and `git diff --check` pass. Scoped Trail check's remaining hit, if any, is recorded below after final run.
+
+**Trail review:** `trail build` and `trail build --check` pass. `trail check --base HEAD` reports no conflicts; its seven “worth a look” matches are existing unrelated guidance matches elsewhere in README/TASKS. `git diff --check` passes.
+
+**Review:** Architect reviewed the corrected native/forced eligibility distinction, live STAB capture boundary, oracle state coverage, and focused test evidence; accepted Task015. Task014 was pushed as `2b9b00e` before this scheduled run. This implementation is ready for the authorized local commit; the parent handles pushing.
+
+**Next bounded task:** Task016 should compose the already implemented randomizer, STAB, type-effectiveness, burn, and finalization slices only after Task015 review. Keep its scope to a bounded arithmetic composition with explicit intermediate inputs; do not add runtime type/ability lookup, event dispatch, or a full damage engine.
