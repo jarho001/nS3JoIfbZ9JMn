@@ -215,6 +215,20 @@ node test/damage-composition-oracle.test.cjs
 
 Task016 is accepted and complete for scheduled run 4. The final composition-focused rerun passed 4/4 Python tests on CPU and 2/2 direct Node oracle tests. A bounded Task017 proposal is to add the pre-roll prefix around this composition: compose `base_damage_core`, Gen 5 `+2`, and Task010's neutral `WeatherModifyDamage` fixed-point identity step, then pass that preroll into `damage_from_preroll` once. Keep effective Attack/Defense, flags, and roll explicit; end at final damage and exclude runtime event/type/ability lookup and RNG generation.
 
+## Neutral full damage composition
+
+Task017 adds `neutral_damage_before_roll(level, base_power, effective_attack, effective_defense)` and `damage_from_effective_stats_neutral(...)`. Their caller domains are level `[1, 100]`, base power `[1, 65535]`, effective Attack/Defense `[0, 65535]`, roll `[0, 15]`, signed-int32 type exponent, final modifier `[0, 65535]`, plus strict bool flags. The prefix composes the existing core, int32 `+2`, and neutral weather identity operation; `neutral_damage_after_roll` now delegates through that public prefix and applies one explicit roll. The full path then calls Task016's `damage_from_preroll` once with caller-supplied roll, STAB/type/burn flags, exponent, and final modifier. It derives no battle stats or runtime state. For the existing core domain, the prefix result is at most `1,048,575`, within Task016's pre-roll range.
+
+The guarded fixture observes actual `BasePower` and category-appropriate effective attack/defense event outputs before the pinned core, captures the actual core and `WeatherModifyDamage` values, then delegates through the real randomizer and final tail. Ordinary cases include typed STAB/non-STAB, Adaptability, physical burn with and without Guts, and Life Orb. Six synthetic cases mutate level, base power, and stored Attack/Defense to exercise uint32 core wrap, zero Defense, neutral 20-bit wrap values 1,048,575 through 1,048,577, and maximum inputs; downstream type exponent and final modifier controls are explicit. Every case covers rolls 0–15. Critical is forced false and checked. Spread, Parental Bond, bypassProtect, event/runtime lookup, and RNG generation remain outside the arithmetic composition.
+
+```sh
+node reference/neutral-full-damage-oracle.cjs fixture > reference/fixtures/neutral-full-damage-v1.json
+JAX_PLATFORMS=cpu .venv-jax/bin/python -m unittest test.test_neutral_damage test.test_neutral_damage_composition -v
+node --test test/damage-composition-oracle.test.cjs test/neutral-full-damage-oracle.test.cjs
+```
+
+Task017 is accepted and complete for scheduled run 5. See `docs/TASKS.md` for validation evidence and the next bounded proposal.
+
 ## Current task and next work
 
 Tasks 001–016 are accepted and complete. Task 003's deterministic request-to-request random-policy baseline passed 15 targeted tests and contributed to the 29-test suite at that milestone; evidence includes the 102-turn default game, fresh-process transcript equality, and a real Shadow Tag unavailable-choice retry. Task 004's full suite passed 34/34, and a fresh CLI process replayed the complete 553-event, 102-turn trace with matching outcome. Task006's stored-stat derivation kernel passed 13 Python tests on CPU and GPU; the 34 Node tests pass. Task007's full Python suite passes 20/20 on both CPU and GPU, with 34/34 Node tests. Task008's full Python suite passes 27/27 on both CPU and GPU, with 34/34 Node tests. Task009's full Python suite passes 34/34 on CPU and GPU, with 34/34 Node tests. Task010's full Python suite passes 41/41 on CPU and GPU, with 34/34 Node tests. Task011's full Python suite passes 47/47 on CPU and GPU, with 34/34 Node tests. This work is a portion of G0/G1, not completion of either milestone in the larger [project plan](PROJECT_PLAN.md).

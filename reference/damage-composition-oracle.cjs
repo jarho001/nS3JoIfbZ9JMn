@@ -33,18 +33,66 @@ function capture(battle, config) {
 	const battleKeys = ['randomizer', 'random', 'modify', 'runEvent', 'events'];
 	const battleDescriptors = battleKeys.map(key => Object.getOwnPropertyDescriptor(battle, key));
 	const effectivenessDescriptor = Object.getOwnPropertyDescriptor(target, 'runEffectiveness');
+	const modifyDamageDescriptor = Object.getOwnPropertyDescriptor(battle.actions, 'modifyDamage');
+	const priorityEventDescriptor = Object.getOwnPropertyDescriptor(battle, 'priorityEvent');
 	const previousStatus = source.status;
 	const move = config.typeless ? 50 : battle.dex.getActiveMove(config.move || 'Tackle');
-	const moveKeys = typeof move === 'number' ? [] : ['forceSTAB'];
+	if (config.captureEffectiveCore && typeof move === 'number') {
+		throw new TypeError('effective-core capture requires a real move object');
+	}
+	const moveKeys = typeof move === 'number' ? [] : ['forceSTAB', ...(config.captureEffectiveCore ? ['willCrit'] : [])];
 	const moveDescriptors = moveKeys.map(key => Object.getOwnPropertyDescriptor(move, key));
+	const inputDescriptors = config.captureEffectiveCore ? {
+		level: Object.getOwnPropertyDescriptor(source, 'level'),
+		attack: Object.getOwnPropertyDescriptor(source.storedStats, 'atk'),
+		defense: Object.getOwnPropertyDescriptor(target.storedStats, 'def'),
+		basePower: typeof move === 'number' ? undefined : Object.getOwnPropertyDescriptor(move, 'basePower'),
+	} : undefined;
 	const original = {
 		randomizer: battle.randomizer, random: battle.random, modify: battle.modify,
 		runEvent: battle.runEvent, runEffectiveness: target.runEffectiveness,
+		priorityEvent: battle.priorityEvent, modifyDamage: battle.actions.modifyDamage,
 	};
-	const trace = { randomizerCalls: 0, damageDraws: 0, modifyStabCalls: 0, effectivenessCalls: 0, burnCalls: 0, finalCalls: 0, finalModifierCalls: 0 };
+	const trace = {
+		randomizerCalls: 0, damageDraws: 0, modifyStabCalls: 0, effectivenessCalls: 0,
+		burnCalls: 0, finalCalls: 0, finalModifierCalls: 0,
+		...(config.captureEffectiveCore ? { baseCoreCalls: 0, weatherEventCalls: 0 } : {}),
+	};
 	let inRandomizer = false;
 	let pendingStab;
 	try {
+		if (config.captureEffectiveCore) {
+			move.willCrit = false;
+			if (config.level !== undefined) source.level = config.level;
+			if (config.attack !== undefined) source.storedStats.atk = config.attack;
+			if (config.defense !== undefined) target.storedStats.def = config.defense;
+			if (config.basePower !== undefined) move.basePower = config.basePower;
+			battle.actions.modifyDamage = function (baseDamage, ...args) {
+				trace.baseCoreCalls++;
+				assert.equal(trace.baseCoreCalls, 1, 'getDamage must reach the core exactly once');
+				trace.baseCore = baseDamage;
+				trace.coreMove = args[2];
+				assert.equal(args[0], source);
+				assert.equal(args[1], target);
+				assert.equal(target.getMoveHitData(trace.coreMove).crit, false, 'controlled composition path excludes critical hits');
+				assert.equal(Boolean(trace.coreMove.spreadHit), false, 'spread damage is outside this composition');
+				assert.notEqual(trace.coreMove.multihitType, 'parentalbond', 'Parental Bond is outside this composition');
+				return original.modifyDamage.apply(this, [baseDamage, ...args]);
+			};
+			battle.priorityEvent = function (event, ...args) {
+				const result = original.priorityEvent.call(this, event, ...args);
+				if (event === 'WeatherModifyDamage') {
+					trace.weatherEventCalls++;
+					assert.equal(trace.weatherEventCalls, 1, 'neutral modifyDamage must dispatch weather exactly once');
+					assert.equal(args[0], source);
+					assert.equal(args[1], target);
+					trace.weatherInput = args[args.length - 1];
+					trace.weatherOutput = result;
+					trace.weatherHandlerCount = this.findEventHandlers(args[0], event, args[1]).length;
+				}
+				return result;
+			};
+		}
 		if (config.status === 'brn') source.status = 'brn';
 		if (config.ability) assert.equal(source.hasAbility(config.ability), true, 'battle ability is resolved during initialization');
 		if (typeof move !== 'number' && config.forceSTAB !== undefined) move.forceSTAB = config.forceSTAB;
@@ -115,6 +163,9 @@ function capture(battle, config) {
 				);
 			}
 			const result = original.runEvent.call(this, event, ...args);
+			if (config.captureEffectiveCore && event === 'BasePower') trace.effectiveBasePower = result;
+			if (config.captureEffectiveCore && ['ModifyAtk', 'ModifySpA'].includes(event)) trace.effectiveAttack = result;
+			if (config.captureEffectiveCore && ['ModifyDef', 'ModifySpD'].includes(event)) trace.effectiveDefense = result;
 			if (event === 'ModifySTAB') pendingStab = result;
 			return result;
 		};
@@ -130,6 +181,14 @@ function capture(battle, config) {
 		};
 
 		trace.result = battle.actions.getDamage(source, target, move, true);
+		if (config.captureEffectiveCore) {
+			trace.effectiveLevel = source.level;
+			assert.equal(trace.baseCoreCalls, 1);
+			assert.equal(trace.weatherEventCalls, 1);
+			assert.equal(trace.weatherInput, trace.baseCore + 2, 'WeatherModifyDamage receives core plus two');
+			assert.equal(trace.randomizerInput, trace.weatherOutput, 'weather result feeds the original randomizer');
+			assert.equal(trace.weatherHandlerCount, 0, 'neutral format has no WeatherModifyDamage handlers');
+		}
 		assert.equal(trace.randomizerCalls, 1);
 		assert.equal(trace.damageDraws, 1, 'exactly one random(16) draw belongs to the randomizer');
 		assert.equal(trace.effectivenessCalls, 1, 'getDamage must resolve move effectiveness exactly once');
@@ -156,6 +215,12 @@ function capture(battle, config) {
 			hasGuts: source.hasAbility('guts'),
 			finalModifier: trace.finalModifierObserved,
 		};
+		if (config.captureEffectiveCore) {
+			trace.input.level = trace.effectiveLevel;
+			trace.input.basePower = trace.effectiveBasePower;
+			trace.input.effectiveAttack = trace.effectiveAttack;
+			trace.input.effectiveDefense = trace.effectiveDefense;
+		}
 		if (config.forceSTAB !== undefined) assert.equal(trace.input.stabEligible, config.forceSTAB);
 		if (config.ability) assert.equal(trace.input.adaptability, config.ability === 'Adaptability');
 		if (config.status) assert.equal(trace.input.burned, config.status === 'brn');
@@ -168,7 +233,15 @@ function capture(battle, config) {
 	} finally {
 		battleKeys.forEach((key, index) => restore(battle, key, battleDescriptors[index]));
 		restore(target, 'runEffectiveness', effectivenessDescriptor);
+		restore(battle.actions, 'modifyDamage', modifyDamageDescriptor);
+		restore(battle, 'priorityEvent', priorityEventDescriptor);
 		moveKeys.forEach((key, index) => restore(move, key, moveDescriptors[index]));
+		if (inputDescriptors) {
+			restore(source, 'level', inputDescriptors.level);
+			restore(source.storedStats, 'atk', inputDescriptors.attack);
+			restore(target.storedStats, 'def', inputDescriptors.defense);
+			restore(move, 'basePower', inputDescriptors.basePower);
+		}
 		source.status = previousStatus;
 	}
 }

@@ -22,9 +22,14 @@ def _neutral_weather_identity_damage(value):
 	return apply_fixedpoint_modifier(_as_int32(value, "value"), jnp.asarray(4096, dtype=jnp.int32))
 
 
+def neutral_damage_before_roll(level, base_power, effective_attack, effective_defense):
+	"""Return the neutral pre-roll damage after core, ``+2``, and weather."""
+	core = base_damage_core(level, base_power, effective_attack, effective_defense)
+	base_damage = core + jnp.asarray(2, dtype=jnp.int32)
+	return _neutral_weather_identity_damage(base_damage)
+
+
 def neutral_damage_after_roll(level, base_power, attack, defense, roll):
 	"""Apply core, ``+2``, neutral event wrap, then an explicit random roll."""
-	core = base_damage_core(level, base_power, attack, defense)
-	base_damage = core + jnp.asarray(2, dtype=jnp.int32)
-	weather_neutral = _neutral_weather_identity_damage(base_damage)
-	return apply_damage_roll(weather_neutral, _as_int32(roll, "roll"))
+	pre_roll_damage = neutral_damage_before_roll(level, base_power, attack, defense)
+	return apply_damage_roll(pre_roll_damage, _as_int32(roll, "roll"))
