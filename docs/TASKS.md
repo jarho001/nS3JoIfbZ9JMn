@@ -616,4 +616,32 @@ Restore patched descriptors, temporary event registry, and status after success 
 
 **Progress:** Scheduled run 5 is finalized. No unresolved behavior difference found.
 
-**Next bounded task proposal:** Task018 can produce the explicit mechanics coverage manifest called for by the G0 specification gate in `PROJECT_PLAN.md`. Map each implemented pure kernel and guarded pinned oracle to its observed operation, covered domains, exclusions, and remaining integration gaps. Keep it as a reviewable manifest audit; do not expose trusted oracle or simulator state through player views.
+**Next bounded task proposal:** Task018 completed the G0 mechanics coverage ledger below. Task019 should address the remaining G0 reuse decision by auditing the named candidate projects; its bounded scope and evidence requirements are recorded at the end of Task018.
+
+## Task 018 — G0 mechanics coverage ledger
+
+**Status:** Accepted and complete — 2026-10-30. Architect review accepted the coverage inventory, evidence links, and G0 boundary. Task017 base commit `b0635e8` was confirmed pushed.
+
+**Scope:** Documentation audit only. Create `docs/MECHANICS_COVERAGE.md` enumerating each public function in `mechanics/` exactly once, with source symbol, supported input/dtype/broadcast contract, observed operation, pinned oracle, fixture, Python test, evidence type, and explicit exclusions. Distinguish atomic kernels from compositions; ordinary initialized Showdown cases from controlled synthetic probes; historical GPU evidence for Tasks005–011 from CPU-only or deferred evidence for later tasks. Include the audit base commit and pinned upstream revision. Keep format metadata, protocol projection, random-policy baseline, and trusted trace infrastructure separate from JAX mechanics. Update README and this handoff before final audit evidence.
+
+**Acceptance criteria:**
+
+- [x] Every public mechanics function is inventoried once (or grouped only where the grouping is explicit), with exact linked code/evidence paths and accurate caller bounds.
+- [x] The ledger states the presently supported neutral full-damage path, including its limits, and does not imply arbitrary damage, complete battle support, or an inflated coverage percentage.
+- [x] Ordinary and synthetic evidence are labeled distinctly; current CPU evidence and historical GPU evidence are reported accurately.
+- [x] Reference-backed infrastructure is presented outside JAX mechanics coverage. The missing battle state, scheduler, coupled PRNG, rules/team-generation data, player-view/full-game transfer, and learning benchmarks are named as gaps.
+- [x] G0 is explicitly called partial, not complete; README and task progress link the ledger.
+- [x] Scoped link/inventory/reference checks, `trail check`, and `git diff --check` are reviewed. No mechanics source edits, full test suite, or committed validation tooling.
+
+**Plan:**
+
+1. Read the repo instructions and Trail graph, then use the public function skeletons and task evidence to enumerate the mechanics API.
+2. Cross-check each row against the pinned oracle's recorded source boundary, fixture schema/cases, and focused Python test; inspect linked source for uncertain bounds or sequencing.
+3. Write the mechanics ledger, then update README and this task handoff. Keep percentages and unsupported full-engine claims out.
+4. Run scratch link/inventory/reference checks plus Trail and diff checks. Review false positives as needed; record exact results below.
+
+**Progress:** Public inventory identified as 14 functions across stat arithmetic and damage arithmetic/compositions; underscored helpers are private and excluded. The ledger, README summary, and task plan are complete. No source or test files were changed.
+
+**Validation evidence:** A scratch Python AST inventory found exactly 14 public mechanics functions and 14 ledger rows; every source line anchor resolves to the named function definition, with no duplicate or missing functions. A scratch relative-link check found 69 Markdown links and all linked files exist. All 13 fixture JSON files with recorded upstream commits match `reference-lock.json`. `trail map`, `trail ask ... --source`, and `trail skeleton` informed the audit. `trail check --base HEAD` reports two blocking lexical false positives on the Task018 scope line: broad stat/input language matches an optional stat-cap learning, and oracle/test-evidence language matches a player-view learning. Architect review confirmed these do not describe the audit's arithmetic contracts or trusted fixture boundary; additional new-file hits are non-blocking lexical matches. `git diff --check` passes. No mechanics tests or current GPU probe were run because this task changes documentation only.
+
+**Next bounded task proposal:** The largest explicit remaining G0 item is the reuse decision in `PROJECT_PLAN.md`. Task019 should audit the named simulator/integration candidates (Showdown, Jaxcalibur, PokeJAX research and Gen4 repository, `poke-env`, Metamon, and Pgx) against source availability, license, Gen 5 mechanics fit, observation fidelity, tests, maintainability, and throughput evidence. Report measured throughput only with workload, date, and source provenance; otherwise mark it unknown. Do not add benchmarking to this documentation audit, implement an engine, or start training. This follows the ledger because it separates the small reusable arithmetic evidence from the much larger engine, data, and interface gaps.
