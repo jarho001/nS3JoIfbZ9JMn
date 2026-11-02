@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "accepted_project_task_count": 20,
+  "accepted_project_task_count": 21,
   "review_state": {
     "latest_task_review_baseline": 20,
     "bootstrap_review": {

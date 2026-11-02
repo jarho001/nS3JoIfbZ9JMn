@@ -39,26 +39,29 @@ The current default five-stream seed tuple may be used as a single smoke case an
 
 **Unresolved:** suite size, seed roots, and statistical power/resource budgets are not set. Choose them before a scored measurement, publish the manifest, and justify the number of independent battles from the desired interval precision and available compute. Do not choose or report a target speed from the PokeJAX or Jaxcalibur figures in [`REUSE_AUDIT.md`](REUSE_AUDIT.md); their workloads and hardware are not comparable.
 
-## Counters and result accounting
+## Per-battle counters and future result accounting
 
-Report counters separately and retain both completed-battle and attempted-work denominators:
+The runner now returns a separate schema-versioned `resultRecord` for each battle. Keep these counters distinct when a future aggregate report is implemented, and retain both completed-battle and attempted-work denominators:
 
 | Counter | Definition for the future report | Current implementation evidence |
 |---|---|---|
-| Decision attempts | One invocation of the policy for one actionable player request. Count each player separately and in total. | Runner `decisionCount` increments once before `choose`; wait requests are not decisions. It is an attempted decision count, not accepted choices. |
-| Choice submissions | Each command sent to Showdown for a request, including a later retry. | Runner keeps individual `attempts` and request resolution state. |
-| Accepted choices | Commands resolved as accepted by the harness after subsequent battle progress. Report accepted and rejected submissions separately. | Runner infers acceptance from progress evidence and records it in trusted records; there is no explicit Showdown acceptance counter. Its `actions.move/switch` summary increments at policy selection before acceptance, so these action counts are policy-selected submissions, not accepted choices. |
-| Turn index | Terminal `turns` value and latest numbered public `|turn|` marker. Treat this as the simulator's reported turn index; do not relabel it as completed policy decisions or infer decisions from it. | The terminal value is present at `summary.outcome.turns`. The runner also tracks the latest public `|turn|` marker internally as `turnCount`, but does not currently export that marker as a summary field. |
-| Events | Count each canonical public `event` record once from the spectator projection. Exclude packet envelopes, `|split|` markers, timestamps/heartbeats, requests, and private side updates. | Runner retains trusted records and packets; an event counter is not currently in the summary. |
-| Completed battles | Battles that reach validated public terminal output and agree with trusted end metadata. Report wins, losses, draws, and seat separately. | Runner returns outcome only after terminal checks. |
-| Rejections and retries | Report rejected submissions, corrected submissions, and exhausted retry limits independently. | Per-request retry bounds are implemented; a retry does not itself count as a new policy decision unless the policy is invoked again. |
-| Failures/timeouts | Report separately from wins/losses/draws: initialization/protocol errors, invalid policy choices, infrastructure/runtime errors, configured limit exhaustion, and wall-clock timeout. Include partial counters and elapsed time. | Packet, decision, retry, and timeout limits exist, but failures throw and are not written as aggregate result rows. The runner summary has no elapsed-time field. Infrastructure failure must never be scored as a battle loss. |
+| Decision attempts | One actual policy invocation for one actionable player request. Count each player separately and in total; wait requests and duplicate pending requests are not decisions. | `resultRecord.counters.policyInvocations`; `summary.decisions` remains the legacy total. Decision-limit guards are checked before invocation. |
+| Choice submissions | Each choice successfully sent to Showdown, including a retry submission. A policy result whose stream write fails is not a sent submission. | `resultRecord.counters.choiceSubmissions`, by player and total. |
+| Accepted, rejected, pending choices | Count each sent submission in exactly one state. Acceptance is inferred from subsequent public battle progress; unresolved sent choices remain pending. | `resultRecord.counters.choiceResolutions`; accepted + rejected + pending equals sent submissions. |
+| Selected and sent moves/switches | Keep policy selections separate from successfully sent choices, and report both move and switch counts by player and total. | `resultRecord.counters.actions.selected` and `.submitted`. Existing `summary.actions` keeps its policy-selection behavior. |
+| Turn index | Keep the latest numbered public `|turn|` marker separate from terminal metadata `turns`. Neither is a count of policy decisions. | `resultRecord.counters.latestPublicTurn` is derived from the spectator projection; `.terminalMetadataTurns` is copied from validated end metadata and `summary.outcome.turns` is unchanged. |
+| Events | Count each public `event` record once from the spectator projection. Exclude packet envelopes, `|split|` markers, timestamps/heartbeats, requests, and private side updates. | `resultRecord.counters.publicEvents`. Split secret branches never contribute. |
+| Completed battles | A completed battle reaches validated public terminal output that agrees with trusted end metadata. Report wins, losses, draws, and seat separately in a future aggregate. | `resultRecord.status: "completed"` and its validated `outcome`; failed runs have `status: "failed"` and `outcome: null`. |
+| Rejections, retries, exhaustion | Report unavailable-choice retry requests, successfully sent retry choices, and retry-limit exhaustion separately. A retry is not itself a policy invocation. | `retryRequests`, `retrySubmissions`, and `retryLimitExhaustions` are separate per-player counters. |
+| Failures/timeouts | Keep initialization/configuration, protocol/terminal validation, policy/invalid-choice, runtime/infrastructure, packet/decision/retry limits, and wall-clock timeout separate from battle outcomes. Preserve partial counters. | `resultRecord.failure` has a stable category and code; optional `cleanupFailure` records cleanup separately. Raw error and private packet text are omitted. `elapsedMs` is present on success and failure. |
 
-Use completed validated battles per wall-clock second as an end-to-end reference rate, with decisions/s and events/s as supplementary rates. Also report raw elapsed time, completed/attempted counts, retries, and failures. Do not divide by accepted choices alone or hide timeouts/retries. These are proposed reporting rules; the current harness does not yet emit every counter in a stable benchmark record.
+The existing smoke summary and trusted transcript remain unchanged; the timing and counters live only in `resultRecord`. Use completed validated battles per wall-clock second as an end-to-end reference rate, with decisions/s and events/s as supplementary rates, only in a future scored benchmark with reviewed suite and resource budgets. The current record's elapsed time is instrumentation and makes no throughput claim.
 
 ## Timing protocol
 
-**Proposed:** define and report two timing boundaries. End-to-end wall time starts before per-battle team generation and includes initialization, policy calls, packet handling, retries, and terminal validation. A separately labeled steady-state step measurement may exclude one-time process/setup and compilation only after an explicit warm-up phase; it must still include all work represented by the named unit. Report team-generation and startup time separately when excluded from a secondary rate.
+The current `resultRecord.elapsedMs` uses monotonic wall clock and covers runner setup/team generation through terminal validation, then includes stream cleanup. On a runner failure it covers work through the failure and cleanup attempt. `elapsedScope` is `battle_runner` for that boundary. If the CLI fails before `runBattle` starts, `elapsedScope` is `cli_initialization` and `elapsedMs` covers only CLI/reference initialization. It is per-battle instrumentation only.
+
+**Proposed:** define and report separate timing boundaries for a future aggregate benchmark. End-to-end wall time starts before per-battle team generation and includes initialization, policy calls, packet handling, retries, and terminal validation. A separately labeled steady-state step measurement may exclude one-time process/setup and compilation only after an explicit warm-up phase; it must still include all work represented by the named unit. Report team-generation and startup time separately when excluded from a secondary rate.
 
 For JAX, report compilation/first-call time separately from warmed execution. Synchronize asynchronous work before starting and after ending each timed interval (for example, block on returned arrays); say which buffers/results are synchronized. For CPU reference runs, state process reuse and concurrency. Record monotonic wall clock, device utilization where available, and peak host/device memory where available. Do not compare a JAX device rate with Showdown unless batch size, policy, transition boundary, concurrency, initialization, warm-up, and synchronization rules are all stated.
 
@@ -66,13 +69,13 @@ For JAX, report compilation/first-call time separately from warmed execution. Sy
 
 ## Reproducibility record and version changes
 
-A future result record should include:
+A future aggregate result should include:
 
 - charter version, date, command, source workspace revision, clean/dirty status, configuration, and benchmark harness revision;
 - Showdown repository and commit, resolved-format fixture hash, generator/source identity, and five expanded seed streams per battle;
 - Node/JAX/Python and package versions or lockfile hashes, compiler/runtime versions, OS, CPU model, accelerator model, driver/runtime versions, and device count;
 - workload definition, batch/concurrency settings, warm-up and compilation treatment, timing boundaries, synchronization rule, and resource limits;
-- decision/submission/accepted-choice, turn, event, completed-battle, retry, rejection, timeout, failure, elapsed-time, and memory counters with their definitions;
+- the per-battle records and definitions for decision/submission/resolution, selected/sent actions, public turn/events, retries, failures, and elapsed time, plus any aggregate memory counters;
 - result aggregation, uncertainty interval, excluded runs and reasons, and the complete per-run data needed to recompute summaries.
 
 Changing the Showdown revision, format rules, team generator, player projection, policy, or measurement boundary creates a new benchmark identity. Regenerate and review the format manifest and relevant oracle/trace fixtures; do not splice results across identities. The current repository has reference fixtures and replayable seeded traces, but it has no scored benchmark suite, no statistical seed manifest, and no stable aggregate timing record.
@@ -87,9 +90,9 @@ Report three workloads separately; they answer different efficiency questions an
 
 ## Current scope and remaining gaps
 
-Implemented today: pinned Showdown reference, format metadata export, seeded team/battle/policy streams, a deterministic legal-random reference runner with limits/retry accounting, player-view projection, and trusted trace replay. Narrow JAX mechanics kernels and their fixtures are listed in [`MECHANICS_COVERAGE.md`](MECHANICS_COVERAGE.md).
+Implemented today: pinned Showdown reference, format metadata export, seeded team/battle/policy streams, a deterministic legal-random reference runner with limits/retry accounting, player-view projection, trusted trace replay, and version 1 per-battle result records. `node environment/run-random.cjs --result PATH` writes the record for successful and failed runs; failures from `runBattle` also expose it as `error.resultRecord`. Records include only safe failure categories/codes, partial counters, and monotonic `elapsedMs`; timing and new counters stay out of the deterministic summary and trusted transcript. A result record is trusted engineering metadata and is never policy input; policy histories remain recipient-projected. Elapsed time is instrumentation, not a throughput claim. Narrow JAX mechanics kernels and their fixtures are listed in [`MECHANICS_COVERAGE.md`](MECHANICS_COVERAGE.md).
 
-Proposed here: workload pairing, published seed suites, benchmark counters/report schema, timing boundaries, device synchronization, warm-up treatment, resource/result reporting, and version-change procedure. These protocol choices require a later implementation and review.
+Proposed here: workload pairing, published seed suites, aggregate benchmark reporting, secondary timing boundaries, device synchronization, warm-up treatment, resource reporting, and version-change procedure. These protocol choices require a later implementation and review.
 
 Unresolved for future measurements: scored sample size and statistical budget; hardware, concurrency, memory and timeout budgets; exact warm-up/repetition settings; package/runtime/device lock completeness; and long-term seed-manifest policy. These operational choices must be settled before a scored measurement where they apply, but do not automatically gate G0.
 
@@ -97,4 +100,4 @@ G0 specification closure remains pending review. The necessary G0 review is to c
 
 Later implementation gaps remain at their project gates: G1 reference-environment integration and full request/visibility/action-path differential coverage; G3 battle/request state and event/turn scheduling, coupled PRNG consumption, and representative mechanics; G4 complete reachable rules/data and full-format differential transfer. The project also lacks a full JAX battle state/transition simulator, batched complete-battle workload, trajectory collection, recurrent policy learner, and training/evaluation benchmark. The arithmetic composition is not a full battle engine. G0 does not require those later implementations, and this charter does not claim G0 or G1 completion.
 
-**Next bounded deliverable proposal:** Implement a versioned per-battle result record in the Showdown harness for elapsed time, distinct decision/submission/resolution/event/turn counters, terminal outcomes, retries, and failures. Preserve the existing smoke command; do not select a statistical suite size, allocate benchmark hardware, or claim throughput until those budgets are reviewed.
+**Next bounded deliverable proposal:** Task022 should implement a deterministic paired-seed manifest generator that emits each five-stream tuple and its seat-swapped partner with stable pair identifiers, then verify both runs reuse the same generated teams. Keep suite size, aggregate throughput, and hardware allocation unresolved. Task022 has not started.

@@ -10,7 +10,7 @@ const test = require('node:test');
 const oracle = require('../reference/oracle.cjs');
 oracle.assertReady();
 const ps = require('../reference/vendor/pokemon-showdown/dist/sim');
-const { DEFAULT_SEEDS, parseTerminal, runBattle } = require('../environment/battle-runner.cjs');
+const { DEFAULT_LIMITS, DEFAULT_SEEDS, parseTerminal, runBattle } = require('../environment/battle-runner.cjs');
 const { candidateActions, createPolicyRng, policyInput, randomPolicy } = require('../environment/random-policy.cjs');
 
 const ROOT = path.resolve(__dirname, '..');
@@ -94,6 +94,15 @@ function runFake(packets, options = {}) {
 	return result.then(value => ({ ...value, stream }));
 }
 
+async function captureError(promise) {
+	try {
+		await promise;
+	} catch (error) {
+		return error;
+	}
+	assert.fail('Expected battle runner to fail.');
+}
+
 test('candidate actions follow only request fields for moves, switches, forced switches, waits and trapping', () => {
 	assert.deepEqual(candidateActions(moveRequest()), ['move 1', 'switch 2']);
 	assert.deepEqual(candidateActions(moveRequest(undefined, { active: [{ trapped: true, moves: [{ move: 'Tackle', pp: 10, disabled: false }] }] })), ['move 1']);
@@ -135,8 +144,45 @@ test('request episodes permit identical repeated requests after progress and mar
 	const result = await runBattle({ ps: fakePs(), streamFactory: () => stream, policies: { p1: () => 'move 1' } });
 	assert.deepEqual(stream.writes.filter(write => write.startsWith('>p1 ')), ['>p1 move 1', '>p1 move 1']);
 	assert.equal(result.summary.decisions, 2);
+	assert.equal(result.resultRecord.schemaVersion, 1);
+	assert.equal(result.resultRecord.kind, 'battle-run-result');
+	assert.equal(result.resultRecord.upstreamCommit, require('../reference-lock.json').commit);
+	assert.equal(result.resultRecord.formatId, 'gen5randombattle');
+	assert.deepEqual(result.resultRecord.seeds, DEFAULT_SEEDS);
+	assert.deepEqual(result.resultRecord.limits, DEFAULT_LIMITS);
+	assert.equal(result.resultRecord.status, 'completed');
+	assert.equal(result.resultRecord.elapsedScope, 'battle_runner');
+	assert.equal(result.resultRecord.outcome.winner, 'p1');
+	assert.ok(Number.isFinite(result.resultRecord.elapsedMs) && result.resultRecord.elapsedMs >= 0);
+	assert.deepEqual(result.resultRecord.counters.policyInvocations, { total: 2, byPlayer: { p1: 2, p2: 0 } });
+	assert.deepEqual(result.resultRecord.counters.choiceSubmissions, { total: 2, byPlayer: { p1: 2, p2: 0 } });
+	assert.deepEqual(result.resultRecord.counters.choiceResolutions.accepted, { total: 2, byPlayer: { p1: 2, p2: 0 } });
+	assert.deepEqual(result.resultRecord.counters.choiceResolutions.rejected, { total: 0, byPlayer: { p1: 0, p2: 0 } });
+	assert.deepEqual(result.resultRecord.counters.choiceResolutions.pending, { total: 0, byPlayer: { p1: 0, p2: 0 } });
+	assert.equal(result.resultRecord.counters.publicEvents, 6);
+	assert.equal(result.resultRecord.counters.latestPublicTurn, 2);
+	assert.equal(result.resultRecord.counters.terminalMetadataTurns, 2);
+	assert.deepEqual(result.resultRecord.counters.actions.selected.move, { total: 2, byPlayer: { p1: 2, p2: 0 } });
+	assert.deepEqual(result.resultRecord.counters.actions.submitted.move, { total: 2, byPlayer: { p1: 2, p2: 0 } });
 	assert.ok(result.transcript.records.some(record => record.type === 'choiceResolution' && record.status === 'accepted'));
+	assert.equal(Object.hasOwn(result.summary, 'resultRecord'), false);
+	assert.equal(Object.hasOwn(result.transcript, 'resultRecord'), false);
 	assert.equal(stream.destroyed, true);
+});
+
+test('public counters use one spectator projection and keep public turn separate from terminal turns', async () => {
+	const stream = new FakeStream([
+		`sideupdate\np1\n|request|${JSON.stringify(moveRequest())}`,
+		'update\n|t:|private clock\n|split|p1\n|turn|99\n|turn|3\n|split|p2\n|move|p2a: Hidden|Tackle|p1a: Own\n|move|p1a: Own|Tackle|p2a: Other\n|win|p1',
+		`end\n${metadata('p1', { turns: 17 })}`,
+	]);
+	const result = await runBattle({ ps: fakePs(), streamFactory: () => stream, policies: { p1: () => 'move 1' } });
+	assert.equal(result.resultRecord.counters.publicEvents, 3);
+	assert.equal(result.resultRecord.counters.latestPublicTurn, 3);
+	assert.equal(result.resultRecord.counters.terminalMetadataTurns, 17);
+	assert.equal(result.resultRecord.outcome.turns, 17);
+	assert.equal(JSON.stringify(result.resultRecord).includes('Hidden'), false);
+	assert.equal(JSON.stringify(result.resultRecord).includes('private clock'), false);
 });
 
 test('opponent-only retries cannot change later policy history or random actions', async () => {
@@ -277,6 +323,14 @@ test('unavailable choice reissues use own retry evidence and bounded episode ret
 	assert.deepEqual(stream.writes.filter(write => write.startsWith('>p1 ')), ['>p1 move 1', '>p1 move 2']);
 	assert.ok(result.transcript.records.some(record => record.type === 'choiceResolution' && record.status === 'rejected'));
 	assert.ok(result.transcript.records.some(record => record.type === 'choiceResolution' && record.status === 'accepted'));
+	assert.deepEqual(result.resultRecord.counters.policyInvocations, { total: 2, byPlayer: { p1: 2, p2: 0 } });
+	assert.deepEqual(result.resultRecord.counters.choiceSubmissions, { total: 2, byPlayer: { p1: 2, p2: 0 } });
+	assert.deepEqual(result.resultRecord.counters.choiceResolutions.accepted, { total: 1, byPlayer: { p1: 1, p2: 0 } });
+	assert.deepEqual(result.resultRecord.counters.choiceResolutions.rejected, { total: 1, byPlayer: { p1: 1, p2: 0 } });
+	assert.deepEqual(result.resultRecord.counters.choiceResolutions.pending, { total: 0, byPlayer: { p1: 0, p2: 0 } });
+	assert.deepEqual(result.resultRecord.counters.retryRequests, { total: 1, byPlayer: { p1: 1, p2: 0 } });
+	assert.deepEqual(result.resultRecord.counters.retrySubmissions, { total: 1, byPlayer: { p1: 1, p2: 0 } });
+	assert.equal(result.resultRecord.counters.publicEvents, 4);
 	assert.equal(stream.destroyed, true);
 });
 
@@ -295,7 +349,18 @@ test('unavailable-choice retry limit spans corrected request payloads and resets
 		'sideupdate\np1\n|error|[Unavailable choice] second correction',
 		`sideupdate\np1\n|request|${JSON.stringify(updated2)}`,
 	]);
-	await assert.rejects(runBattle({ ps: fakePs(), streamFactory: () => stream, policies: { p1: input => candidateActions(input.request, input.history.filter(record => record.type === 'ownChoiceResolution' && record.status === 'rejected').map(record => record.command))[0], p2: () => 'move 1' }, limits: { maxRetriesPerRequest: 1 } }), /exceeded 1 unavailable-choice retries/);
+	const error = await captureError(runBattle({ ps: fakePs(), streamFactory: () => stream, policies: { p1: input => candidateActions(input.request, input.history.filter(record => record.type === 'ownChoiceResolution' && record.status === 'rejected').map(record => record.command))[0], p2: () => 'move 1' }, limits: { maxRetriesPerRequest: 1 } }));
+	assert.match(error.message, /exceeded 1 unavailable-choice retries/);
+	assert.equal(error.resultRecord.status, 'failed');
+	assert.equal(error.resultRecord.failure.category, 'retry_limit');
+	assert.equal(error.resultRecord.failure.code, 'retry_limit_exhausted');
+	assert.deepEqual(error.resultRecord.counters.policyInvocations, { total: 2, byPlayer: { p1: 2, p2: 0 } });
+	assert.deepEqual(error.resultRecord.counters.choiceSubmissions, { total: 2, byPlayer: { p1: 2, p2: 0 } });
+	assert.deepEqual(error.resultRecord.counters.choiceResolutions.rejected, { total: 2, byPlayer: { p1: 2, p2: 0 } });
+	assert.deepEqual(error.resultRecord.counters.choiceResolutions.pending, { total: 0, byPlayer: { p1: 0, p2: 0 } });
+	assert.deepEqual(error.resultRecord.counters.retryRequests, { total: 2, byPlayer: { p1: 2, p2: 0 } });
+	assert.deepEqual(error.resultRecord.counters.retrySubmissions, { total: 1, byPlayer: { p1: 1, p2: 0 } });
+	assert.deepEqual(error.resultRecord.counters.retryLimitExhaustions, { total: 1, byPlayer: { p1: 1, p2: 0 } });
 	assert.equal(stream.destroyed, true);
 
 	const history = [
@@ -354,9 +419,14 @@ test('reference errors, premature end and timeout fail without fabricated outcom
 		[['error\nprivate reference diagnostic'], /reference stream error/],
 		[['update\n|gen|5'], /ended before terminal/],
 		[['end\n{"winner":"p1","turns":2,"p1":"p1","p2":"p2"}'], /without a public/],
+		[['update\n|win|p1', `end\n${metadata('p2')}`], /contradicts public outcome/],
 	]) {
 		const stream = new FakeStream(packets);
-		await assert.rejects(runBattle({ ps: fakePs(), streamFactory: () => stream }), pattern);
+		const error = await captureError(runBattle({ ps: fakePs(), streamFactory: () => stream }));
+		assert.match(error.message, pattern);
+		assert.equal(error.resultRecord.failure.category, 'protocol');
+		assert.equal(error.resultRecord.status, 'failed');
+		assert.equal(error.resultRecord.outcome, null);
 		assert.equal(stream.destroyed, true);
 	}
 	const never = {
@@ -365,7 +435,12 @@ test('reference errors, premature end and timeout fail without fabricated outcom
 		[Symbol.asyncIterator]() { return { next: () => new Promise(() => {}) }; },
 		async destroy() { this.destroyed = true; },
 	};
-	await assert.rejects(runBattle({ ps: fakePs(), streamFactory: () => never, limits: { timeoutMs: 10 } }), /wall-clock limit/);
+	const timeoutError = await captureError(runBattle({ ps: fakePs(), streamFactory: () => never, limits: { timeoutMs: 10 } }));
+	assert.match(timeoutError.message, /wall-clock limit/);
+	assert.equal(timeoutError.resultRecord.failure.category, 'timeout');
+	assert.equal(timeoutError.resultRecord.failure.code, 'wall_clock_timeout');
+	assert.equal(timeoutError.resultRecord.counters.objectPackets, 0);
+	assert.ok(Number.isFinite(timeoutError.resultRecord.elapsedMs) && timeoutError.resultRecord.elapsedMs >= 0);
 	assert.equal(never.destroyed, true);
 });
 
@@ -377,6 +452,113 @@ test('terminal evidence rejects conflicting public outcomes and metadata', () =>
 	assert.throws(() => parseTerminal('[]', { winners: ['p1'] }), /metadata is malformed/);
 	assert.throws(() => parseTerminal(JSON.stringify({ winner: 'bad', turns: 2, p1: 'p1', p2: 'p2' }), { winners: ['p1'] }), /invalid winner/);
 	assert.throws(() => parseTerminal(JSON.stringify({ winner: 'p1', turns: -1, p1: 'p1', p2: 'p2' }), { winners: ['p1'] }), /invalid turn count/);
+});
+
+test('policy and stream-write failures retain safe partial counters without counting unsent choices', async () => {
+	const policyStream = new FakeStream([`sideupdate\np1\n|request|${JSON.stringify(moveRequest())}`]);
+	const policyError = await captureError(runBattle({
+		ps: fakePs(), streamFactory: () => policyStream,
+		policies: { p1: () => { throw new Error('PRIVATE_POLICY_FAILURE_SENTINEL'); } },
+	}));
+	assert.equal(policyError.resultRecord.failure.category, 'policy');
+	assert.equal(policyError.resultRecord.failure.code, 'policy_invocation_failed');
+	assert.deepEqual(policyError.resultRecord.counters.policyInvocations, { total: 1, byPlayer: { p1: 1, p2: 0 } });
+	assert.deepEqual(policyError.resultRecord.counters.choiceSubmissions, { total: 0, byPlayer: { p1: 0, p2: 0 } });
+	assert.deepEqual(policyError.resultRecord.counters.choiceResolutions.pending, { total: 0, byPlayer: { p1: 0, p2: 0 } });
+	assert.equal(JSON.stringify(policyError.resultRecord).includes('PRIVATE_POLICY_FAILURE_SENTINEL'), false);
+	assert.equal(policyStream.destroyed, true);
+
+	const writeStream = new FakeStream([`sideupdate\np1\n|request|${JSON.stringify(moveRequest())}`]);
+	const originalWrite = writeStream.write.bind(writeStream);
+	writeStream.write = message => {
+		if (message.startsWith('>p1 ')) throw new Error('PRIVATE_WRITE_FAILURE_SENTINEL');
+		return originalWrite(message);
+	};
+	const writeError = await captureError(runBattle({ ps: fakePs(), streamFactory: () => writeStream, policies: { p1: () => 'move 1' } }));
+	assert.equal(writeError.resultRecord.failure.category, 'runtime');
+	assert.deepEqual(writeError.resultRecord.counters.policyInvocations, { total: 1, byPlayer: { p1: 1, p2: 0 } });
+	assert.deepEqual(writeError.resultRecord.counters.choiceSubmissions, { total: 0, byPlayer: { p1: 0, p2: 0 } });
+	assert.deepEqual(writeError.resultRecord.counters.actions.selected.move, { total: 1, byPlayer: { p1: 1, p2: 0 } });
+	assert.deepEqual(writeError.resultRecord.counters.actions.submitted.move, { total: 0, byPlayer: { p1: 0, p2: 0 } });
+	assert.equal(JSON.stringify(writeError.resultRecord).includes('PRIVATE_WRITE_FAILURE_SENTINEL'), false);
+	assert.equal(writeStream.destroyed, true);
+});
+
+test('decision guard and early initialization failures produce categorized records', async () => {
+	const decisionStream = new FakeStream([
+		`sideupdate\np1\n|request|${JSON.stringify(moveRequest())}`,
+		`sideupdate\np2\n|request|${JSON.stringify(moveRequest())}`,
+	]);
+	const decisionError = await captureError(runBattle({ ps: fakePs(), streamFactory: () => decisionStream, limits: { maxDecisions: 1 } }));
+	assert.equal(decisionError.resultRecord.failure.category, 'decision_limit');
+	assert.deepEqual(decisionError.resultRecord.counters.policyInvocations, { total: 1, byPlayer: { p1: 1, p2: 0 } });
+	assert.deepEqual(decisionError.resultRecord.counters.choiceSubmissions, { total: 1, byPlayer: { p1: 1, p2: 0 } });
+	assert.deepEqual(decisionError.resultRecord.counters.choiceResolutions.pending, { total: 1, byPlayer: { p1: 1, p2: 0 } });
+	assert.equal(decisionStream.destroyed, true);
+
+	const invalidSeeds = { ...DEFAULT_SEEDS, teamP1: { private: 'SEED_PRIVATE_SENTINEL' } };
+	const seedError = await captureError(runBattle({ ps: fakePs(), seeds: invalidSeeds }));
+	assert.equal(seedError.resultRecord.failure.category, 'initialization');
+	assert.equal(seedError.resultRecord.failure.code, 'invalid_seed_config');
+	assert.equal(seedError.resultRecord.seeds.teamP1, null);
+	assert.equal(JSON.stringify(seedError.resultRecord).includes('SEED_PRIVATE_SENTINEL'), false);
+
+	const failingPs = fakePs();
+	failingPs.Teams.generate = () => { throw new Error('TEAM_PRIVATE_SENTINEL'); };
+	let streamFactoryCalls = 0;
+	const teamError = await captureError(runBattle({ ps: failingPs, streamFactory: () => { streamFactoryCalls++; return new FakeStream([]); } }));
+	assert.equal(teamError.resultRecord.failure.category, 'initialization');
+	assert.equal(teamError.resultRecord.failure.code, 'team_generation_failed');
+	assert.equal(teamError.resultRecord.status, 'failed');
+	assert.equal(teamError.resultRecord.outcome, null);
+	assert.ok(Number.isFinite(teamError.resultRecord.elapsedMs) && teamError.resultRecord.elapsedMs >= 0);
+	assert.equal(JSON.stringify(teamError.resultRecord).includes('TEAM_PRIVATE_SENTINEL'), false);
+	assert.equal(streamFactoryCalls, 0);
+
+	const packetStream = new FakeStream(['update\n|gen|5', 'update\n|turn|1']);
+	const packetError = await captureError(runBattle({ ps: fakePs(), streamFactory: () => packetStream, limits: { maxPackets: 1 } }));
+	assert.equal(packetError.resultRecord.failure.category, 'packet_limit');
+	assert.equal(packetError.resultRecord.counters.objectPackets, 1);
+	assert.equal(packetStream.destroyed, true);
+});
+
+test('invalid policy choices are categorized separately from protocol failures', async () => {
+	const stream = new FakeStream([`sideupdate\np1\n|request|${JSON.stringify(moveRequest())}`]);
+	const error = await captureError(runBattle({ ps: fakePs(), streamFactory: () => stream, policies: { p1: () => 'move 99' } }));
+	assert.equal(error.resultRecord.failure.category, 'policy');
+	assert.equal(error.resultRecord.failure.code, 'invalid_choice');
+	assert.deepEqual(error.resultRecord.counters.policyInvocations, { total: 1, byPlayer: { p1: 1, p2: 0 } });
+	assert.equal(error.resultRecord.counters.choiceSubmissions.total, 0);
+	assert.equal(stream.destroyed, true);
+});
+
+test('cleanup failure is recorded separately without replacing a primary stream error', async () => {
+	const stream = new FakeStream(['error\nPRIVATE_STREAM_FAILURE_SENTINEL']);
+	stream.destroy = async () => { throw new Error('PRIVATE_CLEANUP_FAILURE_SENTINEL'); };
+	const error = await captureError(runBattle({ ps: fakePs(), streamFactory: () => stream }));
+	assert.equal(error.message, 'Showdown emitted a reference stream error.');
+	assert.equal(error.resultRecord.failure.category, 'protocol');
+	assert.deepEqual(error.resultRecord.cleanupFailure, { category: 'runtime', code: 'stream_cleanup_failed' });
+	assert.equal(JSON.stringify(error.resultRecord).includes('PRIVATE_STREAM_FAILURE_SENTINEL'), false);
+	assert.equal(JSON.stringify(error.resultRecord).includes('PRIVATE_CLEANUP_FAILURE_SENTINEL'), false);
+});
+
+test('untrusted stream errors cannot supply result failure category or code', async () => {
+	const maliciousError = Object.assign(new Error('PRIVATE_STREAM_READ_SENTINEL'), {
+		category: 'PRIVATE_CATEGORY_SENTINEL',
+		code: { private: 'PRIVATE_CODE_SENTINEL' },
+	});
+	const stream = {
+		write() {},
+		[Symbol.asyncIterator]() { return { next: async () => { throw maliciousError; } }; },
+		async destroy() {},
+	};
+	const error = await captureError(runBattle({ ps: fakePs(), streamFactory: () => stream }));
+	assert.equal(error.resultRecord.failure.category, 'runtime');
+	assert.equal(error.resultRecord.failure.code, 'stream_read_failed');
+	for (const sentinel of ['PRIVATE_STREAM_READ_SENTINEL', 'PRIVATE_CATEGORY_SENTINEL', 'PRIVATE_CODE_SENTINEL']) {
+		assert.equal(JSON.stringify(error.resultRecord).includes(sentinel), false);
+	}
 });
 
 test('random policy is seeded independently and uses its supplied policy RNG', () => {
@@ -397,6 +579,10 @@ test('real seeded battles terminate, include forced replacements and reproduce a
 	assert.ok(first.summary.actions.move > 0 && first.summary.actions.switch > 0);
 	assert.ok(first.transcript.records.some(record => record.type === 'request' && record.request.forceSwitch?.some(Boolean)));
 	assert.ok(first.transcript.records.some(record => record.type === 'terminal' && record.outcome.winner === first.summary.outcome.winner));
+	assert.ok(first.resultRecord.counters.actions.selected.move.total > 0);
+	assert.ok(first.resultRecord.counters.actions.selected.switch.total > 0);
+	assert.equal(first.resultRecord.counters.choiceSubmissions.total,
+		first.resultRecord.counters.choiceResolutions.accepted.total + first.resultRecord.counters.choiceResolutions.rejected.total + first.resultRecord.counters.choiceResolutions.pending.total);
 
 	const extraSeeds = structuredClone(DEFAULT_SEEDS);
 	extraSeeds.teamP1 = [101, 102, 103, 104];
@@ -412,11 +598,33 @@ test('real seeded battles terminate, include forced replacements and reproduce a
 	try {
 		const one = path.join(temp, 'one.json');
 		const two = path.join(temp, 'two.json');
-		for (const output of [one, two]) {
-			const child = spawnSync(process.execPath, [path.join(ROOT, 'environment/run-random.cjs'), '--output', output], { cwd: ROOT, encoding: 'utf8', timeout: 60_000 });
+		const resultOne = path.join(temp, 'result-one.json');
+		const resultTwo = path.join(temp, 'result-two.json');
+		const summaries = [];
+		for (const [output, resultPath] of [[one, resultOne], [two, resultTwo]]) {
+			const child = spawnSync(process.execPath, [path.join(ROOT, 'environment/run-random.cjs'), '--output', output, '--result', resultPath], { cwd: ROOT, encoding: 'utf8', timeout: 60_000 });
+			assert.equal(child.error, undefined, child.error?.message);
 			assert.equal(child.status, 0, child.stderr || child.stdout);
+			const summary = JSON.parse(child.stdout);
+			assert.equal(Object.hasOwn(summary, 'elapsedMs'), false);
+			summaries.push(summary);
+			const record = JSON.parse(fs.readFileSync(resultPath, 'utf8'));
+			assert.equal(record.schemaVersion, 1);
+			assert.equal(record.status, 'completed');
+			assert.equal(record.upstreamCommit, require('../reference-lock.json').commit);
+			assert.equal(Number.isFinite(record.elapsedMs) && record.elapsedMs >= 0, true);
 		}
 		assert.deepEqual(JSON.parse(fs.readFileSync(one, 'utf8')), JSON.parse(fs.readFileSync(two, 'utf8')));
+		assert.deepEqual(summaries[0], summaries[1]);
+
+		const failedResult = path.join(temp, 'failed-result.json');
+		const failed = spawnSync(process.execPath, [path.join(ROOT, 'environment/run-random.cjs'), '--battle-seed=invalid', '--result', failedResult], { cwd: ROOT, encoding: 'utf8', timeout: 60_000 });
+		assert.equal(failed.status, 1);
+		const failureRecord = JSON.parse(fs.readFileSync(failedResult, 'utf8'));
+		assert.equal(failureRecord.status, 'failed');
+		assert.equal(failureRecord.outcome, null);
+		assert.equal(failureRecord.failure.category, 'initialization');
+		assert.equal(failureRecord.elapsedScope, 'cli_initialization');
 	} finally {
 		fs.rmSync(temp, { recursive: true, force: true });
 	}
