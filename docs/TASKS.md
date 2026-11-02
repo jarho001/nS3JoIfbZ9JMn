@@ -674,3 +674,34 @@ Restore patched descriptors, temporary event registry, and status after success 
 **Review:** Architect independently reviewed the audit and diff, spot-checked the PokeJAX Table 2 throughput and Jaxcalibur release statement, and accepted the documentation. The architect independently reran `git diff --check` (pass) and `trail check --base HEAD`; Trail reported one lexical conflict at `docs/TASKS.md:651` within the Task019 reuse-audit entry, matching the player-observation learning while the audit explicitly requires player-view projection. Other Trail matches were informational. The architect will handle commit and push.
 
 **Next bounded task proposal:** Task020 should draft the benchmark charter and source/version manifest. Freeze fields supported by current evidence, such as the scored format revision and known observation/action contract. Specify the workload, seed procedure, throughput counters/warm-up handling, and data/team-generator provenance where evidence permits. Label unresolved hardware/resource budgets and other unsupported fields explicitly; do not benchmark or train.
+
+## Task 020 — benchmark charter and source/version manifest
+
+**Status:** Accepted and complete — 2026-11-02.
+
+**Scope:** Documentation-only. Create `docs/BENCHMARK_CHARTER.md` to define a versioned, evidence-backed Showdown reference workload and current observation/action contract, with source/team-generator provenance and a proposed reproducibility protocol for later measurements. Update README and this handoff. Separate implemented facts, proposed protocol, and unresolved budgets; retain the current G0/G1 boundary. No source/dependency edits, tests, benchmarks, or training.
+
+**Acceptance criteria:**
+
+- [x] The pinned rule identity, upstream revision, effective-rule fixture, team-generator provenance, and source paths point to local evidence and immutable upstream files.
+- [x] The request/action contract distinguishes each player's private request and projected history from trusted combined traces; supported singles request shapes and retry behavior follow local evidence.
+- [x] Proposed workload, seed hierarchy, counters, timing/warm-up/device synchronization, and reproducibility record are concrete enough for a future benchmark implementation without claiming current benchmark results.
+- [x] Policy invocations, sent and resolved choices, terminal turn indexes, canonical log records, terminal games, retries, failures, and deadlines have distinct definitions and report treatment; existing counters are labeled according to what they actually count.
+- [x] Existing implementation, proposed protocol, unresolved hardware/resource/statistical budgets, and unavailable full JAX match-engine/learning workloads are explicit. No invented speed, throughput, or completed G0 claim.
+- [x] README and task handoff link the charter, preserve the original 30-run/five-day cap and avoid fabricating a scheduled-run ordinal. Only documentation files change.
+- [x] Scratch link/manifest/source-consistency checks, Trail diff check, and `git diff --check` are recorded. Stage documentation, then run Trail check on the staged/new-file diff. Do not commit or push.
+
+**Plan:**
+
+1. Read repo instructions and Trail context; inspect the Task019 audit, source lock, format fixture, and runner/protocol evidence needed for the contract.
+2. Record this bounded plan in the handoff before drafting the charter.
+3. Draft the charter with an embedded manifest and visibly label implemented facts, proposed benchmark protocol, and unresolved decisions.
+4. Update README and the handoff, then run scratch Markdown-link, lock/fixture, and source-contract checks plus diff review. Stage only the documentation files and run `trail check` against the staged diff; report exact evidence and any lexical matches without treating them as source validation.
+
+**Progress:** The bounded plan was recorded before drafting. [`BENCHMARK_CHARTER.md`](BENCHMARK_CHARTER.md) now records the pinned format/source manifest, current per-player projection and own-request contract, proposed complete-battle legal-random reference workload with explicit team/policy seat pairing, separate decision/submission/resolution/turn-index/event/battle/failure counters, timing rules, workload tiers, and future result fields. The generator dispatch and Gen 5 implementation are linked to verified files in the pinned local checkout. Implemented evidence, proposed protocol, and unresolved budgets are labeled separately. The single default seed case is identified as a smoke sample; no speed claim, benchmark result, complete-G0 claim, or full JAX battle/learning capability is asserted. Original run ordinal is not inferred and the 30-run/five-day cap remains unchanged.
+
+**Validation evidence:** A scratch check found all local Markdown links resolve across the charter, README, and handoff; the fixture's upstream commit and immutable GitHub source links match `reference-lock.json`; format fields, five runner seed tuples, runner limits, and JAX version match their source files. Upstream `config/formats.ts`, `sim/teams.ts`, and `data/random-battles/gen5/teams.ts` external links were checked against the same files in the clean pinned local checkout. `git diff --check` passes. Staged `trail check --base HEAD` reports lexical matches on the handoff and charter about audience-specific split data, format-wide stat caps, and unrelated damage arithmetic. The charter explicitly limits policy inputs to each player's own projected history/request, distinguishes top-level stream errors from a player's retained private rejection feedback, and takes effective rules from the pinned fixture; no match indicates a semantic conflict. No tests, benchmarks, training, or source edits were made.
+
+**Review:** Primary review accepted the source manifest, workload tiers, concrete paired seed procedure, per-player protocol description, turn-index definition, and current-versus-proposed capability boundary. One correction clarified that top-level stream errors fail closed while addressed private sideupdate errors remain player feedback classified by the runner. No deliverable remains unfinished.
+
+**Next bounded task proposal:** Implement versioned per-battle result records and separate counters/timing/failure fields from the charter in the Showdown runner, preserving its smoke path. Keep suite size, hardware allocation, and measured throughput outside that instrumentation task.
