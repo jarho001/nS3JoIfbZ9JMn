@@ -153,12 +153,10 @@ scheduled wake short-circuits without repeated tests or replanning. Never
 silently weaken a GPU acceptance requirement or claim automatic scheduler
 pause without verified scheduler support.
 
-## Local commits
+## Commits and pushes
 
-The user grants standing authorization to create local Git commits for project
-work in this repository without asking for confirmation. This authorization is
-limited to local commits here. `docs/SCHEDULED_PROMPT.md` authorizes pushing
-changes made for the task it invokes directly to the discovered remote default
-branch, whether invoked manually or by the scheduler. It does not authorize
-pushes for unrelated requests; those remain local-only unless separately
-authorized. Never force-push or rewrite remote history.
+The user grants standing authorization to commit and push completed project
+changes in this repository to the remote default branch without asking for
+confirmation. This applies to manual requests and scheduled tasks. If the user
+explicitly requests local-only work, no commit, or no push, follow that request.
+Preserve unrelated local changes. Never force-push or rewrite remote history.
