@@ -738,6 +738,41 @@ Restore patched descriptors, temporary event registry, and status after success 
 
 **Next bounded task proposal:** Task022 should implement a deterministic paired-seed manifest generator that emits each five-stream tuple and its seat-swapped partner with stable pair identifiers, then verify both runs reuse the same generated teams. Leave suite size, aggregation, throughput, and hardware allocation unresolved. Task022 has not started.
 
+## Task 022 — deterministic paired-seed manifests
+
+**Status:** Accepted and complete — 2026-11-02. Primary `/root` accepted the implementation after focused diff and evidence review.
+
+**Scope:** Add a deterministic command-line manifest generator for explicitly requested paired battle seeds in the pinned `gen5randombattle` format. For each pair, emit initial and reversed seat arrangements as runner-compatible five-stream seed configurations, stable pair/run identifiers, seat identities, root seed, derivation metadata, and pinned format identity. Add strict input handling, a frozen known-vector test, prefix and fresh-process reproducibility checks, and a pinned Showdown integration check that observes packed team writes across both seat arrangements, confirming the same generated teams occupy exchanged seats while policy seeds follow their policy identities. Update README and this handoff with exact usage and boundaries.
+
+**Exclusions:** No suite-size or statistical-power decision, default scored manifest, batch runner/aggregation, throughput claims or benchmark results, hardware allocation, mechanics/JAX work, player visibility changes, or G0/G1 closure. The current runner continues generating teams independently for each battle; this task verifies that the two team seed streams regenerate the same packed teams across the paired runs and does not add team injection or a generate-once runner path. No commit or push by the implementation owner.
+
+**Acceptance criteria:**
+
+- [x] Generation requires a four-limb uint16 root seed and explicit positive pair count; there is no implicit suite size. Reject malformed CLI, root, and count input with clear errors.
+- [x] A documented versioned derivation hashes a frozen JSON tuple of domain, root seed, pair index, and stream name with SHA-256; the first eight digest bytes become four big-endian uint16 limbs. Team A, team B, battle, policy A, and policy B use separate named streams. Pair/run IDs are stable for the same root/index and independent of requested count.
+- [x] Every pair contains two expanded runner-compatible seed configs. The second swaps both team streams and policy streams, and keeps the battle seed. Stream arrays do not alias between runs. Manifest output includes schema/derivation versions, upstream commit, format, root, stable identifiers, and policy/team seat assignments.
+- [x] A frozen independently checked known vector, determinism, CLI fresh-process byte equality, stable-prefix identifiers, exact tuple exchange, strict invalid inputs, and upstream metadata checks pass.
+- [x] At least one paired real pinned-Showdown runner test validates both outcomes and observes each packed generated team in both seats across the two runs. It confirms policy seeds stay with their identities. Test data and transcripts remain trusted engineering/oracle evidence and never enter policy input.
+- [x] README, charter, and task handoff describe implemented manifest generation and exact team-regeneration verification separately from proposed workload rules. They do not imply teams are injected/generated once or claim benchmark results.
+- [x] Focused and relevant regression validation, Trail build, state JSON parsing, and diff inspection pass. Trail check was run; its unrelated lexical learning conflict is explained in the commit message per repository policy. Primary acceptance advances the count to 22; the review checkpoint remains 30. No GPU run is required.
+
+**Plan:**
+
+1. Read Trail cards for runner seed handling, pinned format identity, and trusted transcripts; persist this task scope, criteria, owner, and in-progress state before implementation.
+2. Implement the separate manifest derivation and CLI without changing the existing battle runner path.
+3. Add strict and deterministic unit/CLI checks plus one real pinned paired-battle test that records the runner's actual packed team writes.
+4. Update README, charter, and this handoff; run focused runner/trace/protocol regressions, Trail build/check, and inspect the final diff. Report evidence to the parent without accepting, committing, or pushing.
+
+**Progress:** The plan and active state were recorded before implementation. `environment/paired-seeds.cjs` emits deterministic version 1 manifests, requiring an explicit four-limb root and positive count. Each pair has five independently domain-separated SHA-256 streams, stable IDs, explicit team/policy identities, and two deep-copied runner seed configurations. The pinned integration test observes the actual packed-team writes and confirms each generated team returns in the opposite seat on the paired run. This is deterministic regeneration; the runner still creates teams independently per battle. Task022 is accepted and complete.
+
+**Primary review correction (addressed and accepted):** Focused primary review reproduced that `validateSeed` accepted sparse arrays because `Array.some` skips holes. `validateSeed` now inspects each indexed limb. Direct `generateManifest` coverage includes sparse/malformed roots, undefined/invalid/out-of-range counts, and valid boundary limbs `[0, 65535, 0, 65535]`. The charter's stale “Task022 has not started” text was removed; it now distinguishes manifest generation and team-regeneration evidence from proposed generate-once pair execution. README wording makes clear the manifest envelope changes with `pairCount`, while prior pair records and IDs stay stable.
+
+**Validation evidence:** On 2026-11-02, `node --check environment/paired-seeds.cjs`, `node --check test/paired-seeds.test.cjs`, and `node --test test/paired-seeds.test.cjs test/battle-runner.test.cjs test/trace.test.cjs test/protocol.test.cjs` passed; the combined suite passed 38/38, including two completed pinned paired battles with exchanged packed team writes. The known vector and pair ID were computed independently with Python's standard `hashlib`/JSON encoder and frozen in the test. `python3 -m json.tool docs/ORCHESTRATION_STATE.json` and `git diff --check` pass. `trail build` passed. `trail check --base HEAD` exits 1 with one lexical conflict at this scope description against Developer's nature-overflow learning; that learning concerns mechanics stat arithmetic and Task022 changes only seed derivation plus existing runner integration. The remaining match is unrelated to the changed behavior; record this rationale in the commit message as repository policy requires. Other Trail learning matches were informational. No GPU evidence is required. No learning was added.
+
+After the primary correction, `node --test test/paired-seeds.test.cjs` passed 5/5, including the sparse-array regression and live paired battles; `trail build` passed again. With both new files included via intent-to-add, `trail check --base HEAD` examined all six changed files and still exits 1 on one lexical conflict at `docs/TASKS.md:745`: the description of seed manifests and pinned-runner team verification overlaps a learning about optional stat caps across formats. That learning is exclusively about mechanics stat rules; Task022 adds no stat limits or mechanics behavior. Explain this false positive in the task commit message per repository policy. Trail's remaining matches are informational.
+
+**Review:** Primary `/root` accepted Task022 on 2026-11-02 after independently reviewing the focused diff and validation evidence, including the sparse-array correction. The accepted count is 22, the regular review checkpoint remains 30, and no milestone closure was recorded. The primary will include the unrelated Trail lexical-warning rationale in the commit message. The implementation owner did not commit or push.
+
 ## Workflow configuration update — not a project task
 
 The repository orchestration rules, role configuration, scheduled prompt, and

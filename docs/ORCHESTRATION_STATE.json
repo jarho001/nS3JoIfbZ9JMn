@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "accepted_project_task_count": 21,
+  "accepted_project_task_count": 22,
   "review_state": {
     "latest_task_review_baseline": 20,
     "bootstrap_review": {
@@ -19,7 +19,72 @@
       "last_reviewed_milestone": null,
       "last_review_commit": null,
       "recorded_approvals": []
-    }
+    },
+    "completed_task_history": [
+      {
+        "id": "Task022",
+        "title": "deterministic paired-seed manifests",
+        "owner": "/root/task022",
+        "status": "accepted_complete",
+        "accepted_at": "2026-11-02",
+        "accepted_by_agent": "/root",
+        "scope": "Add a versioned deterministic CLI manifest generator for explicit paired battle seed tuples for the pinned gen5randombattle format, with stable identifiers and pinned reference metadata; verify actual regenerated packed teams swap seats in real pinned runner battles.",
+        "exclusions": [
+          "suite-size or statistical-power choice",
+          "implicit scored suite",
+          "batch runner or aggregation",
+          "throughput claims or benchmark results",
+          "hardware allocation",
+          "mechanics/JAX",
+          "visibility changes",
+          "G0/G1 closure",
+          "generate-once injection into the runner",
+          "commit or push by the implementation owner"
+        ],
+        "acceptance_criteria": [
+          "Explicit four-limb uint16 root seed and positive pair count are required; no implicit suite size.",
+          "Versioned SHA-256 derivation over canonical [domain, root seed, pair index, stream name] JSON; digest bytes 0..7 become four big-endian uint16 limbs.",
+          "Stable pair/run identifiers are independent of requested count; base and swapped tuples exchange team and policy streams and retain battle seed.",
+          "Known vector, strict validation, byte reproducibility, prefix stability, and pinned metadata are tested.",
+          "Real pinned paired runner battles verify terminal records and exact packed-team seat exchange with policy seeds retained by identity.",
+          "Docs distinguish implemented seed manifests and team-regeneration verification from proposed benchmark workload; no throughput or generate-once claim.",
+          "Focused regressions, Trail build, state JSON parsing, and diff review pass; run Trail check and resolve substantive conflicts or document lexical false positives in the commit message per policy; no GPU required."
+        ],
+        "plan": [
+          "Read Trail context and persist Task022 plan/state before implementation.",
+          "Implement standalone deterministic seed derivation and CLI.",
+          "Add known-vector, strict validation, deterministic CLI, prefix, tuple exchange, and real paired runner checks.",
+          "Update README, charter, and handoff; run focused regressions, Trail build/check, and inspect diff; report to parent without acceptance or commit."
+        ],
+        "progress": "Primary accepted Task022 after focused diff/evidence re-review. The sparse-root correction is complete. Count advanced from 21 to 22; review checkpoint remains 30; no milestone closure.",
+        "validation": {
+          "node_check": "node --check environment/paired-seeds.cjs; node --check test/paired-seeds.test.cjs \u2014 passed",
+          "targeted_tests": "Initial combined node --test test/paired-seeds.test.cjs test/battle-runner.test.cjs test/trace.test.cjs test/protocol.test.cjs \u2014 38/38 passed. After sparse-array correction: node --test test/paired-seeds.test.cjs \u2014 5/5 passed, including paired pinned battles.",
+          "state_and_diff": "python3 -m json.tool docs/ORCHESTRATION_STATE.json; git diff --check \u2014 passed",
+          "trail_build": "trail build \u2014 passed before and after the correction.",
+          "trail_check": "trail check --base HEAD after git add -N inspected all six changed files; exit 1 with one lexical conflict at docs/TASKS.md:745 against the stat-cap-across-formats learning. The learning concerns mechanics stat rules, while Task022 changes seed derivation and runs existing pinned battles without changing stats. Explain this false positive in the task commit message per policy; other matches were informational.",
+          "gpu": "not required"
+        },
+        "review_correction": {
+          "task_id": "Task022",
+          "owner": "/root/task022",
+          "status": "resolved_accepted",
+          "finding": "validateSeed accepted sparse four-element arrays because Array.some skips holes.",
+          "reproducer": "node -e 'const {generateManifest}=require(\"./environment/paired-seeds.cjs\"); console.log(JSON.stringify(generateManifest(new Array(4),1).rootSeed));'",
+          "required_corrections": [
+            "Validate each of the four indexed seed limbs so sparse slots fail.",
+            "Add direct generateManifest tests for sparse roots, malformed counts, and valid boundary limbs [0, 65535, 0, 65535].",
+            "Remove the stale charter statement that Task022 has not started and clarify pair-record prefix stability.",
+            "Repeat the paired-seed suite and Trail build/check."
+          ],
+          "evidence_before_correction": "The initial Task022 focused and regression suites passed 38/38, but did not test sparse roots; primary review reproducer passed unexpectedly and confirmed a contract violation.",
+          "resolution": "validateSeed inspects every indexed limb; sparse and malformed roots/counts plus valid boundary limbs are tested. Charter status and pair-count prefix wording are corrected.",
+          "validation_after_correction": "node --test test/paired-seeds.test.cjs \u2014 5/5 passed; trail build passed; trail check --base HEAD inspected all six changed files and reported one lexical conflict at docs/TASKS.md:745 against the stat-cap learning. That learning concerns mechanics stat rules; Task022 changes no stats. Record the false-positive rationale in the commit message.",
+          "accepted_at": "2026-11-02",
+          "accepted_by_agent": "/root"
+        }
+      }
+    ]
   },
   "active_task": null,
   "gpu_block": null
