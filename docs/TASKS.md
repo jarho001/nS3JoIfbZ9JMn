@@ -718,3 +718,16 @@ accepted, the next regular review is due at task 30. Reconcile future counts
 with numbered task history and preserve newer durable state. Existing task
 history and the declared 30-run/five-day scheduler cap are preserved; actual
 cap start/count remain unknown and are not inferred.
+
+**Bootstrap review handoff:** The first T020 bootstrap review returned
+`NEEDS_CHANGES`. Root authorized a bounded correction handoff to the sole owner
+`/root/global_reviewer/t020_corrections`; parent-owned overlapping
+implementation is excluded. This initial `NEEDS_CHANGES`/pending state is now
+historical: the independent parent review accepted the corrections on
+2026-11-02. The bootstrap review baseline is 20 and the next regular checkpoint
+is 30; T020 remains accepted, the count remains 20, no milestone acceptance is
+recorded, and this handoff does not create Task021. The explicit Luna/max child
+route and requested Astra/medium review route were accepted, but there is no
+independent backend identity or automatic scheduler-role-loading proof. See
+[`reviews/T020-bootstrap.md`](reviews/T020-bootstrap.md) for findings and
+validation evidence.

@@ -31,21 +31,40 @@ assesses project direction and documented milestone progress, and returns
 compact durable project documentation when useful, not platform internals. The
 parent cannot bypass a blocking finding.
 
+For required corrections, Astra may translate findings into bounded acceptance
+criteria and route them to one explicitly named Luna/max implementer when the
+primary authorizes that handover. Reuse the existing owner for ordinary
+corrections; a handover names the new owner and confirms the prior owner has
+stopped. Do not overlap correction work with parent-owned implementation. The
+reviewer retains no implementation ownership, optional suggestions are not
+auto-implemented, and reviewers do not recursively spawn reviewers. The parent
+remains the final coordinator and commit owner.
+
 ## Review checkpoints
 
 Run the Astra gate after every 10 accepted numbered project tasks, at each
 documented milestone boundary, and when an architectural contradiction needs
 adjudication. One review covers coincident task-count and milestone
-checkpoints. A new deliverable waits while any gate is due. A scheduled run
-whose only work is a due review performs that review, records its disposition,
-and stops.
+checkpoints. A new deliverable waits while any gate is due.
 
-Persist `NEEDS_CHANGES` as actionable corrections. A later invocation may do
-only those reviewer-requested corrections under the existing owner, run
-affected validation, and request Astra re-review; it creates or counts no new
-project task. A `BLOCKED` review with no new evidence short-circuits without
-repeating review calls. Before a task commit, the parent also performs a
-focused acceptance review against the criteria and validation evidence.
+Persist `NEEDS_CHANGES` as actionable corrections with one active owner. The
+same invocation may complete the bounded corrections, run affected checks, and
+request independent Astra re-review when feasible; there is no later-run-only
+rule. The reviewer checks the focused diff/evidence once per meaningful
+revision. This correction loop creates or counts no project task. Do not start
+another task until Astra accepts. Allow at most two correction rounds (initial
+implementation plus one follow-up); after that, stop and report `BLOCKED` or a
+need for architectural authority. Stop sooner if external evidence, GPU/access,
+a decision beyond delegated authority, or execution limits are required. If the
+loop is unfinished, persist the owner, required finding, reproducer/evidence,
+and checks run. Optional suggestions are not auto-implemented, and no recursive
+reviewers are spawned. A `BLOCKED` review with no new evidence short-circuits
+without repeating review calls. After acceptance, the parent performs a
+focused acceptance review before commit.
+
+A scheduled invocation whose only work is a due review may perform that review
+and its authorized bounded correction loop, then stop at acceptance or a
+blocker. It must not start a new project deliverable in that invocation.
 
 On every wake, check `gpu_block` and any newly supplied user evidence before
 review. Do not certify a deliverable whose required GPU evidence is outstanding;
@@ -126,7 +145,8 @@ the evidence has been tied to unchanged source and accepted. Keep unknowns as
 `implementer` as `gpt-6-luna`/max, `advanced_implementer` as
 `gpt-6.1-sol`/medium, and `global_reviewer` as `gpt-6-astra`/medium. These repo
 files do not prove which model or role an external scheduler or web runtime
-actually selected. Verify runtime metadata when it is exposed. Model
-self-identification is not proof. If a required role is unavailable or cannot
-be verified, stop unattended development and report the limitation; do not
-silently substitute another role.
+actually selected. A requested route is not independent proof of backend
+identity or automatic scheduler role loading. Verify runtime metadata when it
+is exposed. Model self-identification is not proof. If a required role is
+unavailable or cannot be verified, stop unattended development and report the
+limitation; do not silently substitute another role.

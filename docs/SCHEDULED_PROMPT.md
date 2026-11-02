@@ -46,28 +46,44 @@ retain it and stop without tests/replanning; review cannot accept incomplete
 GPU work. Validate CPU first; optional GPU absence is deferred, not a blocker.
 Follow the evidence protocol in `ORCHESTRATION.md`.
 
-If `pending_review_corrections` is nonempty, do only those corrections under
-the existing owner, run affected checks, request Astra re-review, and stop; do
-not create/count a task. If a prior disposition is `BLOCKED` and no new
-evidence arrived, stop without repeating review. If Astra review is due, use
-`global_reviewer` to sample code, tests, and oracle
-evidence; assess direction/milestones and record disposition. One review
-covers coincident gates. `NEEDS_CHANGES` allows only recorded corrections,
-affected checks, and Astra re-review on a later run; persist corrections and
-stop. `BLOCKED` records needed evidence; wait for new input. No new task/count
-until accepted. Otherwise perform only the due review and stop; do not start
-Task021 or other work. Parent cannot bypass blocking findings. If gates permit
-work, resume the active/incomplete or planned deliverable. If none exists, use
-the project plan and task history to define and record one justified bounded deliverable before
-delegating one owner. Follow `ORCHESTRATION.md`; never narrow scope or weaken
-tests.
+If `pending_review_corrections` is nonempty, read the durable findings and
+perform only those corrections under the single named owner. Reuse the current
+owner unless the primary explicitly authorizes a handover; name the new owner
+and confirm the prior owner has stopped. Do not overlap corrections with
+parent-owned implementation. The Astra reviewer may turn required findings
+into bounded acceptance criteria and route them to one Luna/max implementer;
+the reviewer never owns implementation. Run affected checks and request an
+independent Astra re-review in the same invocation when feasible. There is no
+later-run-only correction rule. This loop creates/counts no project task and
+stops at acceptance or a blocker. Allow at most two correction rounds (initial
+implementation plus one follow-up), then report `BLOCKED` or request
+architectural authority. Stop sooner for external evidence, GPU/access, a
+decision beyond delegated authority, or execution limits. Persist owner,
+finding, reproducer/evidence, and checks if unfinished. Optional suggestions
+are not auto-implemented; do not spawn recursive reviewers. If a prior
+disposition is `BLOCKED` and no new evidence arrived, stop without repeating
+review. One review covers coincident gates. No new task/count until accepted.
+After the review/correction loop for any due Astra checkpoint, stop at
+acceptance or a blocker; do not begin another deliverable in that invocation.
+For the due bootstrap review, do not start Task021. Parent cannot bypass
+blocking findings.
+
+When no correction loop is pending and Astra review is due, use
+`global_reviewer` to sample code, tests, and oracle/reference evidence, assess
+project direction and milestones, and record the disposition. One review covers
+coincident gates. If no review is due and no corrections are pending, resume
+the active/incomplete or planned deliverable. If none exists, use the project
+plan and task history to define and record one justified bounded deliverable
+before delegating one owner. Follow `ORCHESTRATION.md`; never narrow scope or
+weaken tests.
 
 Use Trail before source search: `trail map`, then `trail ask "<question>"
 --source`; fallback to `/workspace/tools/trail/node_modules/.bin/trail`. Run
 relevant validation once per meaningful revision. Assess each Trail finding
 against evidence, fix real conflicts, explain lexical matches, and never bypass
-all findings. Stage only inspected task files if needed. Finish with
-`git diff --check`.
+all findings. Review only the focused diff/evidence once per meaningful
+revision; do not rerun unrelated mechanics checks. Stage only inspected task
+files if needed. Finish with `git diff --check`.
 
 Before handoff, inspect the diff, update the task/state, and get the parent's
 focused acceptance review before committing. Use a short subject and useful

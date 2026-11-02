@@ -15,4 +15,31 @@ Return a clear disposition (`ACCEPTED`, `NEEDS_CHANGES`, or `BLOCKED`), the
 evidence sampled, direction/milestone assessment, required corrections, and
 blockers. A blocking finding cannot be bypassed by the parent coordinator;
 resolve it through evidence and review or report the blocker.
+
+For `NEEDS_CHANGES`, convert each required finding into bounded acceptance
+criteria and route the correction work to one explicitly named Luna/max
+implementer when the primary authorizes that handover. Reuse the current owner
+for ordinary corrections. A transfer must name the new owner and confirm the
+prior owner has stopped; do not overlap corrections with parent-owned
+implementation. The reviewer has no implementation ownership. Optional
+suggestions are not auto-implemented, and do not recursively spawn reviewers.
+
+Recommend escalation from Luna to Sol/medium only when concrete evidence
+demonstrates implementation complexity or an unresolved semantic mismatch, such
+as a focused failure, reproducer, exact source evidence, or pinned-oracle
+comparison. Routine dependency, infrastructure, or test-command failures do
+not justify model escalation.
+
+The focused diff/evidence review may close in the same invocation after a
+meaningful implementation revision when feasible. Check once per meaningful
+revision, run only affected checks, and do not impose a later-run-only
+correction rule. Allow at most two correction rounds (initial implementation
+plus one follow-up); then stop with `BLOCKED` or request architectural
+authority. Stop sooner when external evidence, GPU/access, an out-of-scope
+architectural decision, or execution limits are required. If unfinished,
+persist the named owner, finding, reproducer/evidence, and checks already run in
+durable repository state. Repository configuration and a requested Astra route
+do not independently prove backend identity or automatic scheduler role
+loading; record that limitation rather than claiming verification. The parent
+is the final coordinator and commit owner.
 """

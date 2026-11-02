@@ -74,12 +74,29 @@ has stopped.
   contradiction needs adjudication. If a task-count checkpoint and milestone
   coincide, one review covers both. The primary cannot bypass a blocking Astra
   finding. A new project deliverable waits while a due review is pending. A
-  scheduled invocation may perform only the due review and then stop. Persist
-  `NEEDS_CHANGES` as actionable corrections; a later invocation may do only
-  those corrections under the existing owner, run affected checks, and request
-  Astra re-review. Do not create/count a new task until Astra accepts. A
-  `BLOCKED` review with no new evidence short-circuits without repeated review
-  calls.
+  scheduled invocation may perform the due review and its authorized bounded
+  correction loop, then stop at acceptance or a blocker. Persist `NEEDS_CHANGES`
+  as actionable corrections with one active owner. The Astra reviewer may turn
+  required findings into bounded acceptance criteria and route them to one
+  explicitly named Luna/max implementer when the primary authorizes that
+  handover. Reuse the current owner for ordinary corrections; a transfer must
+  name the new owner and confirm the prior owner has stopped. Do not overlap
+  corrections with parent-owned implementation. The reviewer may check the
+  focused diff and evidence once per meaningful revision and close the loop in
+  the same invocation when feasible; no later-run-only rule applies. Run only
+  affected checks, then request an independent Astra re-review. Optional
+  suggestions are not auto-implemented, and reviewers do not recursively spawn
+  reviewers. Do not create/count a new task until Astra accepts. A `BLOCKED`
+  review with no new evidence short-circuits without repeated review calls.
+- Allow at most two correction rounds for a review finding (the initial
+  implementation and one follow-up correction round). Stop after that and
+  report `BLOCKED` or the need for architectural authority. Also stop when
+  progress needs external evidence, GPU/access, a decision beyond the delegated
+  authority, or exceeds execution limits. If unfinished, persist the owner,
+  finding, reproducer/evidence, and checks already run. Keep durable summaries
+  in repository state and handoff documents; platform compaction is not durable
+  project memory. The primary remains final coordinator and owns commit
+  decisions.
 - Count only accepted numbered project tasks. Do not count workflow changes,
   scheduled attempts, or failed/incomplete tasks. The count of 20 and pending
   bootstrap review at task 20 are initialization snapshots; reconcile future
@@ -126,11 +143,12 @@ The configured parent is `gpt-6.1-sol` at high reasoning effort; the default
 implementer is `gpt-6-luna` at max effort; the advanced implementer is
 `gpt-6.1-sol` at medium effort; and the global reviewer is `gpt-6-astra` at
 medium effort. Repository configuration alone does not prove that an external
-scheduler or web runtime selected those roles. Verify exposed runtime role and
-model metadata when available. Do not accept model self-identification as
-proof. If metadata cannot verify a required role, flag that limitation and
-block unattended development until the scheduler is configured and verifiable;
-never silently substitute an unavailable role.
+scheduler or web runtime selected those roles. A requested route is not
+independent proof of backend identity or automatic scheduler role loading.
+Verify exposed runtime role and model metadata when available. Do not accept
+model self-identification as proof. If metadata cannot verify a required role,
+flag that limitation and block unattended development until the scheduler is
+configured and verifiable; never silently substitute an unavailable role.
 
 ## GPU evidence and blocked work
 

@@ -41,6 +41,16 @@ Task IDs in the mechanics table link each function to its implementation and val
 
 ## Explicitly outside present coverage
 
-This ledger covers arithmetic islands and their stated compositions. It does not establish a complete battle engine or full-format transfer. The pinned format metadata is already resolved in [`format-v1.json`](../reference/fixtures/format-v1.json); what remains is executable rule coverage and broader validation. The following G0/G1/G3/G4 work remains: reuse/license/maintainability/performance audit and decision; full battle state and event/turn scheduler; coupled Showdown PRNG state and exact cross-phase draw consumption; compiled/executable format rules, species/move/item/ability/team-generation data and validation of their inherited effects; all reachable move, ability, item, status, weather, field, and residual interactions; player-view state/memory and action execution integrated with battle state; full-game differential transfer over reachable interactions; GPU validation for later resumed kernels and credible simulator profiling; policy learning, algorithm comparison, and strength benchmarks.
+This ledger covers arithmetic islands and their stated compositions. It does not establish a complete battle engine or full-format transfer. The pinned format metadata is already resolved in [`format-v1.json`](../reference/fixtures/format-v1.json).
 
-Therefore this ledger is a **partial G0 deliverable**, not completion of G0. It makes known arithmetic coverage and gaps reviewable; reuse audit and decision, executable rules/data, player interface contracts, battle-level harness, and remaining G0 acceptance work still need explicit review.
+### G0 specification closure
+
+The existing G0 evidence consists of the pinned Showdown lock and resolved-format metadata, this mechanics ledger, the Task019 reuse audit and decision, and the Task020 draft charter with its source/version manifest. These artifacts do not by themselves record G0 acceptance. The necessary G0 closure review is to confirm that they jointly make the exact target, the rules/data source basis, the reuse decision, and known coverage gaps explicit and consistent. Any still-open specification decision that changes the scored target or rules/data scope must be resolved or explicitly bounded before G0 acceptance.
+
+Operational benchmark choices in the charter—such as suite size, seed roots, statistical precision, hardware, concurrency, and runtime/resource budgets—remain unresolved for future measurements. Their open status does not automatically make each choice a G0 acceptance prerequisite; fix them before a scored measurement when relevant.
+
+### Later implementation gaps
+
+These known gaps belong to later implementation gates and are not a requirement to build a full engine for G0: G1 reference-environment integration and full request/visibility/action-path differential coverage; G3 battle/request state and event/turn scheduling, coupled Showdown PRNG state with exact cross-phase draw consumption, and a declared representative mechanics slice; G4 executable coverage of all reachable rules and inherited species/move/item/ability/team-generation data, full interactions, and full-game differential transfer. GPU validation and simulator profiling apply when a later acceptance criterion requires them. Policy learning and strength benchmarks belong to learning and end-to-end evaluation gates.
+
+This ledger remains a **partial G0 deliverable**. G0 has not been recorded as accepted; its specification closure still needs the review above. The ledger records known arithmetic coverage and gaps without requiring later G1/G3/G4 implementation to be complete.
