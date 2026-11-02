@@ -731,3 +731,11 @@ route and requested Astra/medium review route were accepted, but there is no
 independent backend identity or automatic scheduler-role-loading proof. See
 [`reviews/T020-bootstrap.md`](reviews/T020-bootstrap.md) for findings and
 validation evidence.
+
+## Reusable task entry point — workflow update, not a project task
+
+[`SCHEDULED_PROMPT.md`](SCHEDULED_PROMPT.md) is now a short entry point for
+manual and scheduled work. Cadence, concurrency, and limits remain the
+invoking scheduler's responsibility; earlier 30-run/five-day references above
+are historical records, not repository execution gates. This update does not
+change the accepted task count or review history.

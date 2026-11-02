@@ -72,13 +72,11 @@ return `BLOCKED` if that evidence is part of the review scope. If no new evidenc
 arrived for an `awaiting_gpu` block, stop without rerunning tests or replanning.
 
 Only accepted numbered project tasks count. Workflow edits, scheduled
-invocations, and failed or incomplete tasks do not count. At this workflow
-setup, the accepted-task count is 20 and the bootstrap review is pending at
-task 20. These are initialization values, not permanent constants: on every
-later run, reconcile the durable state with accepted numbered entries in
-`TASKS.md`, and never overwrite a newer state with this snapshot. Do not infer
-approvals or review commits from silence. Milestones count only when recorded
-as such in the project handoff; do not invent milestone boundaries.
+invocations, and failed or incomplete tasks do not count. Use the current
+durable state and reconcile it with accepted numbered entries in `TASKS.md`;
+preserve newer state and do not infer approvals or review commits from silence.
+Milestones count only when recorded in the project handoff; do not invent
+milestone boundaries.
 
 ## Validation and GPU evidence
 
@@ -101,15 +99,8 @@ required GPU evidence; the block remains active until evidence is reviewed.
 
 ## Non-overlap and repository state
 
-Use a lock or lease associated with the actual Git common directory so all
-worktrees for the repository share it. Hold the lease for the whole scheduled
-run/task, not just one shell command. A local common-directory lock does not
-coordinate separate clones or cloud instances, so require scheduler-level
-single-invocation control or verified shared coordination across them; stop if
-overlap cannot be excluded. Inspect lock owner and lifetime before starting.
-Do not clear an active lock or stale lease without owner evidence. Preserve
-existing local edits and incomplete work; never reset or clean them to make a
-task convenient.
+Avoid known overlapping edits and preserve unrelated local work. The scheduler
+controls concurrency for automated invocations.
 
 ## Durable state update protocol
 
@@ -117,21 +108,13 @@ Before work, read this document, `ORCHESTRATION_STATE.json`, `TASKS.md`, and the
 Git status/history. Reconcile the accepted count from numbered task statuses
 against durable state; preserve newer state and recorded history. If they
 disagree, investigate recorded evidence and do not fabricate acceptance or
-review approvals. Verify the scheduler's existing recurrence and used-run
-count from scheduler configuration/history. The declared cap is 30 scheduled
-runs in five days, but its start time and count are currently unknown. Preserve
-the existing recurrence, end time, and count; do not manufacture a fresh
-budget, run ordinal, or start time. If actual cap use cannot be determined,
-block autonomous advancement until it is resolved. This workflow/configuration
-change itself is not a scheduled invocation and does not increment the cap.
+review approvals.
 
 When a project task starts, record its exact ID, scope, owner, and state in the
 top-level `active_task`. On acceptance, update `TASKS.md`, increment the
 accepted count, and clear `active_task`. Keep the next regular review checkpoint
-fixed until Astra accepts that due review: after the bootstrap review at 20,
-set the latest baseline to 20 and next checkpoint to 30; keep 30 due through
-acceptance of tasks 21 through 30, then after the task-30 review set baseline
-30 and next checkpoint 40. Record
+fixed until Astra accepts that due review; then set the next checkpoint ten
+accepted project tasks after the accepted review baseline. Record
 review dispositions and commits only when evidence exists; keep actionable
 Astra corrections in `review_state.pending_review_corrections` until accepted.
 For a failed, abandoned, or incomplete task, preserve its history without increasing
@@ -139,14 +122,10 @@ the accepted count. For a GPU block, populate `gpu_block`; clear it only after
 the evidence has been tied to unchanged source and accepted. Keep unknowns as
 `null` or explicitly `unknown`.
 
-## Runtime role verification
+## Role configuration
 
-`.codex/config.toml` declares the parent as `gpt-6.1-sol`/high,
-`implementer` as `gpt-6-luna`/max, `advanced_implementer` as
-`gpt-6.1-sol`/medium, and `global_reviewer` as `gpt-6-astra`/medium. These repo
-files do not prove which model or role an external scheduler or web runtime
-actually selected. A requested route is not independent proof of backend
-identity or automatic scheduler role loading. Verify runtime metadata when it
-is exposed. Model self-identification is not proof. If a required role is
-unavailable or cannot be verified, stop unattended development and report the
-limitation; do not silently substitute another role.
+Model/effort roles are selected through repository configuration and the
+execution surface. Check their setup when diagnosing routing or changing role
+configuration; independent backend metadata is not a per-task requirement. If
+a requested role is actually unavailable, report it and do not silently
+substitute another.

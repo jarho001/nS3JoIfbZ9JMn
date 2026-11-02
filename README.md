@@ -4,12 +4,12 @@ This repository is beginning a JAX self-play project against Pokémon Showdown's
 
 ## Development workflow
 
-The single-deliverable ownership, review checkpoints, GPU evidence rules, and
-scheduled run state are recorded in [`docs/ORCHESTRATION.md`](docs/ORCHESTRATION.md)
-and [`docs/ORCHESTRATION_STATE.json`](docs/ORCHESTRATION_STATE.json). The
-copy-pastable prompt for the existing scheduled workflow is
-[`docs/SCHEDULED_PROMPT.md`](docs/SCHEDULED_PROMPT.md); its push authorization
-applies only to that scheduled workflow.
+The single-deliverable ownership, review checkpoints, and GPU evidence rules
+are recorded in [`docs/ORCHESTRATION.md`](docs/ORCHESTRATION.md) and
+[`docs/ORCHESTRATION_STATE.json`](docs/ORCHESTRATION_STATE.json). The reusable
+manual or scheduled task entry point is [`docs/SCHEDULED_PROMPT.md`](docs/SCHEDULED_PROMPT.md).
+It authorizes direct-default-branch pushes for its task only; unrelated
+requests remain local-only unless separately authorized.
 
 ## Set up the pinned reference
 

@@ -97,14 +97,11 @@ has stopped.
   in repository state and handoff documents; platform compaction is not durable
   project memory. The primary remains final coordinator and owns commit
   decisions.
-- Count only accepted numbered project tasks. Do not count workflow changes,
-  scheduled attempts, or failed/incomplete tasks. The count of 20 and pending
-  bootstrap review at task 20 are initialization snapshots; reconcile future
-  counts with `docs/TASKS.md` and never overwrite newer durable state. Once the
-  bootstrap review is accepted, the next regular review is due at 30. Keep a
-  checkpoint fixed until Astra accepts it (for example, task 30 remains due
-  through acceptance of task 30); only then advance the next checkpoint to 40.
-  Never invent milestone approvals or a review commit.
+- Count only accepted numbered project tasks. Workflow changes, scheduled
+  attempts, and failed/incomplete tasks do not count. Use the current durable
+  state and reconcile it with accepted numbered task history; never overwrite
+  newer state or invent milestone approvals. Keep a due checkpoint fixed until
+  Astra accepts it, then set the next checkpoint ten accepted tasks later.
 - Escalate contradictions in requirements or reference behavior with a
   concrete reproducer or direct source/oracle evidence. Run relevant
   validation once per meaningful implementation revision; repeat only checks
@@ -114,13 +111,8 @@ has stopped.
   required GPU evidence is outstanding. On a blocked GPU wake with no new
   evidence, retain the block and stop without repeating tests or replanning.
   Do not claim the scheduler paused unless that capability has been verified.
-- Prevent overlapping work with a lock or lease scoped to the actual Git
-  common directory, shared by all worktrees, and held for the full task/run.
-  A shell-command-only lock or a per-worktree lock is insufficient. Do not
-  clear a live lock or stale lease without evidence from its owner.
-  A local common-directory lock does not coordinate separate clones or cloud
-  instances; require scheduler-level single-invocation control or verified
-  shared coordination across them. If overlap cannot be excluded, stop.
+- Avoid known overlapping edits and preserve unrelated local work. The
+  scheduler owns concurrency for automated invocations.
 - After acceptance and passing checks, update the handoff and stop at the task
   boundary. Follow the commit/push scope below.
 
@@ -139,16 +131,10 @@ decomposition, tradeoffs, reviewing diffs/evidence, and deciding completion.
 Do not use it for routine source edits, formatting, mechanical refactors, or
 ordinary tests.
 
-The configured parent is `gpt-6.1-sol` at high reasoning effort; the default
-implementer is `gpt-6-luna` at max effort; the advanced implementer is
-`gpt-6.1-sol` at medium effort; and the global reviewer is `gpt-6-astra` at
-medium effort. Repository configuration alone does not prove that an external
-scheduler or web runtime selected those roles. A requested route is not
-independent proof of backend identity or automatic scheduler role loading.
-Verify exposed runtime role and model metadata when available. Do not accept
-model self-identification as proof. If metadata cannot verify a required role,
-flag that limitation and block unattended development until the scheduler is
-configured and verifiable; never silently substitute an unavailable role.
+Role and model settings live in repository configuration and the execution
+surface. Check routing when diagnosing setup or changing role configuration;
+independent backend metadata is not required for each task. If a requested role
+is actually unavailable, report it and do not silently substitute another.
 
 ## GPU evidence and blocked work
 
@@ -171,7 +157,8 @@ pause without verified scheduler support.
 
 The user grants standing authorization to create local Git commits for project
 work in this repository without asking for confirmation. This authorization is
-limited to local commits here. The scheduled workflow's separate explicit push
-authorization is documented in `docs/SCHEDULED_PROMPT.md`. It applies only to
-that workflow; it does not authorize pushes from unrelated requests or
-sessions. Never force-push or rewrite remote history.
+limited to local commits here. `docs/SCHEDULED_PROMPT.md` authorizes pushing
+changes made for the task it invokes directly to the discovered remote default
+branch, whether invoked manually or by the scheduler. It does not authorize
+pushes for unrelated requests; those remain local-only unless separately
+authorized. Never force-push or rewrite remote history.
