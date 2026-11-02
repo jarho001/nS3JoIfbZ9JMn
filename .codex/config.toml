@@ -1,6 +1,18 @@
-model = "gpt-6-astra"
-model_reasoning_effort = "medium"
+model = "gpt-6.1-sol"
+model_reasoning_effort = "high"
 
 [agents]
 enabled = true
 max_concurrent_threads_per_session = 3
+
+[agents.implementer]
+description = "Bounded implementation owner for one delegated deliverable and its targeted checks."
+config_file = "agents/implementer.toml"
+
+[agents.advanced_implementer]
+description = "Escalated implementation owner for demonstrated complexity or unresolved semantic mismatches."
+config_file = "agents/advanced_implementer.toml"
+
+[agents.global_reviewer]
+description = "Independent Astra review gate for accepted task and milestone checkpoints."
+config_file = "agents/global_reviewer.toml"

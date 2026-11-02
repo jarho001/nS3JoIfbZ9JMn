@@ -2,6 +2,15 @@
 
 This repository is beginning a JAX self-play project against Pokémon Showdown's `[Gen 5] Random Battle` (`gen5randombattle`). The current foundation pins an upstream Showdown revision and provides a deterministic oracle fixture for its format rules, team generation, and first player requests.
 
+## Development workflow
+
+The single-deliverable ownership, review checkpoints, GPU evidence rules, and
+scheduled run state are recorded in [`docs/ORCHESTRATION.md`](docs/ORCHESTRATION.md)
+and [`docs/ORCHESTRATION_STATE.json`](docs/ORCHESTRATION_STATE.json). The
+copy-pastable prompt for the existing scheduled workflow is
+[`docs/SCHEDULED_PROMPT.md`](docs/SCHEDULED_PROMPT.md); its push authorization
+applies only to that scheduled workflow.
+
 ## Set up the pinned reference
 
 Use Node.js 22.18 or newer and npm. From the repository root, run:

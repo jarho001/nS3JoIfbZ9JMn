@@ -705,3 +705,16 @@ Restore patched descriptors, temporary event registry, and status after success 
 **Review:** Primary review accepted the source manifest, workload tiers, concrete paired seed procedure, per-player protocol description, turn-index definition, and current-versus-proposed capability boundary. One correction clarified that top-level stream errors fail closed while addressed private sideupdate errors remain player feedback classified by the runner. No deliverable remains unfinished.
 
 **Next bounded task proposal:** Implement versioned per-battle result records and separate counters/timing/failure fields from the charter in the Showdown runner, preserving its smoke path. Keep suite size, hardware allocation, and measured throughput outside that instrumentation task.
+
+## Workflow configuration update — not a project task
+
+The repository orchestration rules, role configuration, scheduled prompt, and
+durable state are documented in [`ORCHESTRATION.md`](ORCHESTRATION.md),
+[`ORCHESTRATION_STATE.json`](ORCHESTRATION_STATE.json), and
+[`SCHEDULED_PROMPT.md`](SCHEDULED_PROMPT.md). This workflow-only update does not
+create Task021 or change the accepted project-task count (20 at setup). The
+bootstrap Astra review at task 20 is due and pending at setup; after it is
+accepted, the next regular review is due at task 30. Reconcile future counts
+with numbered task history and preserve newer durable state. Existing task
+history and the declared 30-run/five-day scheduler cap are preserved; actual
+cap start/count remain unknown and are not inferred.

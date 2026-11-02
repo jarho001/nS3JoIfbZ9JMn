@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "accepted_project_task_count": 20,
+  "review_state": {
+    "latest_task_review_baseline": null,
+    "bootstrap_review": {
+      "status": "pending",
+      "due_at_accepted_project_task": 20
+    },
+    "pending_review_corrections": [],
+    "next_regular_review_due_at_accepted_project_task": 30,
+    "milestone_review": {
+      "required_at_documented_boundaries": true,
+      "last_reviewed_milestone": null,
+      "last_review_commit": null,
+      "recorded_approvals": []
+    }
+  },
+  "active_task": null,
+  "gpu_block": null,
+  "scheduled_run_cap": {
+    "maximum_runs": 30,
+    "window_days": 5,
+    "source": "existing scheduler recurrence and history",
+    "status": "declared; actual start and usage unknown",
+    "window_start_utc": null,
+    "runs_used": null,
+    "run_ordinal": null,
+    "preserve_existing_recurrence_end_and_count": true,
+    "block_autonomous_advancement_until_usage_is_verified": true,
+    "this_workflow_change_counts_as_a_scheduled_run": false
+  }
+}
