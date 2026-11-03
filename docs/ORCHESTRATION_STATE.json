@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "accepted_project_task_count": 30,
+  "accepted_project_task_count": 31,
   "review_state": {
     "latest_task_review_baseline": 30,
     "bootstrap_review": {
@@ -702,6 +702,91 @@
         "accepted_at": "2026-11-03",
         "accepted_by_agent": "/root",
         "acceptance_review": "Primary /root accepted Task030 after its focused source/test review and independent Astra T030Global ACCEPTED disposition. The separate stateless move-first-v1 callback composes current masks/decoder, prioritizes enabled moves including Struggle, handles waits with zero RNG draws and actionable calls with one, scopes rejections to the current episode, and emits fixed diagnostics. Exact unit expectations and two real exchanged-seat pinned battles establish seed/identity mapping, mask priority, terminal targets and cleanup. The only implementation iteration corrected a wrong new test expectation (switch2 maps to slot5); final affected validation passed71/71. Independent checkpoint source sampling and tests passed57/57 plus23/23 pair/manifest. No required finding or blocker remained. Existing product APIs/defaults are unchanged. Task029 headline was reconciled to its established b0f9961 acceptance/delivery with original wording retained historically. G0-only milestone acceptance, optional historical GPU evidence and open G1+ boundaries remain. Count advances29 to30; accepted checkpoint sets baseline30 and next40. No Task031 starts."
+      },
+      {
+        "id": "Task031",
+        "title": "named baseline paired matchup execution",
+        "owner": "/root/task031",
+        "status": "accepted_complete",
+        "source_commit": "3c7286492c4e4e4c199dcedd000cb60a7cc30359",
+        "scope": "Add a separate CommonJS API for one completed paired matchup using caller-selected allowlisted baseline IDs legal-random-v1 and move-first-v1. Compose generatePair, prepareTeam and actual runBattle calls; prepare each team once, run both seat assignments sequentially with policy identity and RNG seed mapped together, and emit a distinct versioned engineering artifact with canonical configuration and safe per-battle results. This promotes the Task030 paired integration procedure into a reproducible named-matchup building block for G1.",
+        "exclusions": [
+          "changes to existing runner, default pair/manifest executors, callback/action/protocol contracts or existing journal/report schemas",
+          "arbitrary policy callbacks or caller-declared custom version names",
+          "CLI, file persistence, journal/resume or tournament aggregation",
+          "partial failed-matchup artifacts or fabricated unattempted results",
+          "scored suite selection, rates, uncertainty, performance or policy-strength claims",
+          "trajectory collection in the new output, training or new mechanics",
+          "GPU or milestone acceptance",
+          "implementation-owner commit/push",
+          "optional charter cleanup deferred by T030Global"
+        ],
+        "acceptance_criteria": [
+          "Expose a documented version-1 completed-matchup library API with required rootSeed, zero-based pairIndex, policyA and policyB IDs and explicit pinned ps API; forward supported limits and streamFactory. Accept only legal-random-v1 (the current unchanged randomPolicy) and move-first-v1 (the existing versioned policy). Both roles may use the same ID for self-play. Snapshot/validate selection and IDs before any team generation or stream creation; unknown IDs/config getters fail safely, never silently default or inspect arbitrary exception fields.",
+          "Select the requested pair directly using generatePair without materializing earlier indices. Prepare team A/B once each with existing opaque seed/API-bound handles, reuse them in two separate sequential actual runBattle calls, and exchange team seats exactly as the generated pair specifies. Map callbacks through each run.policySeats so a policy identity retains its policy RNG seed across seats; no extra RNG draws or regenerated teams.",
+          "Emit a distinct allowlisted schema/kind for named baseline matchups, separate from Task024/025 legacy pair/journal shapes. Include pinned format/upstream, root/pair identity and exact canonical paired run metadata/seeds, explicit policy IDs by role and by run seat, prepared-team digests, and the two actual completed nested safe resultRecord objects. No raw transcript, packets, packed-team strings/handles, policy input/history, raw errors, arbitrary config fields or forged foreign result-shaped metadata leave the API. Artifact metadata does not authenticate execution after serialization.",
+          "Return an artifact only after both battles complete with validated terminal outcomes and cleanup. Fail with a fixed safe diagnostic and no partial artifact on malformed configuration, team/packing, first/second battle or cleanup failure. If the first battle fails no second stream starts; each attempted stream receives existing runner cleanup. Do not infer or claim zero/unattempted work from a failed call with no artifact. Existing legacy pair/manifest behavior and schemas remain unchanged.",
+          "Add independent controlled tests for exact policy identity/seed/seat/team-digest metadata, both policy orderings and same-ID self-play, current request-based command behavior, two preparations/packings, exclusive sequential fresh streams, safe output allowlisting and detached configuration/metadata. Guard invalid roots/indices/IDs, hostile getters and thrown foreign result metadata before work; preparation and first/second/cleanup failures; and no artifact after failure. Compare concrete expected commands and counters rather than merely calling implementation helpers for expectations.",
+          "Execute a real guarded pinned mixed-baseline pair, observe actual packed-team writes exchange seats and hashes recur, verify each baseline is attached to its intended seat/policy seed, both terminal result records have prepared source and match canonical run seeds/outcomes, and both streams are destroyed. Use trusted stream instrumentation only in tests; policy inputs stay the existing recipient-scoped API. No strength estimate or performance result is reported.",
+          "Document named baseline version semantics, required configuration, schema distinction, generate-once/reuse and identity-seed mapping, completion-only/error boundary, safe metadata and timing/attestation limits in README. Update only Task031 handoff/current state; preserve Task001-030, G0/T030Global and optional GPU evidence. Existing default policy APIs and legacy output schemas stay unchanged; G1 remains open.",
+          "Run focused matchup tests and justified affected baseline, runner, prepared-team, paired-seed, legacy pair/manifest, trajectory, protocol and reference tests once per meaningful revision; syntax, JSON/diff, Trail build/check and own diff review are required. GPU is not required. Report exact changed paths/checks/results/concerns to primary, stop edits for acceptance and retain ownership through bounded corrections. No Astra gate is due at count30/checkpoint40 unless a real architectural contradiction arises."
+        ],
+        "plan": [
+          "Read current task/state/orchestration, project-plan G1 pairing/tournament goal and Trail/learning context; verify tools and reference pin.",
+          "Implement a separate strict named completed-pair wrapper over existing pairing, opaque team preparation and battle execution primitives, leaving legacy executors unchanged.",
+          "Add controlled validation/failure/metadata/sequence tests and a real pinned mixed-baseline seat-exchange check.",
+          "Update README and Task031 evidence, refresh/check Trail, run affected checks and inspect the diff; add a learning only for a justified non-obvious decision/finding using trail note.",
+          "Stop for independent primary criteria review; primary records acceptance/count31 and delivers only this unit without advancing review checkpoint40 or starting Task032."
+        ],
+        "progress": "Accepted by primary /root after focused independent criteria/diff/evidence review. Owner stopped all edits; parent owns delivery. Count31/baseline30/checkpoint40; no new review gate or GPU blocker.",
+        "gpu_required": false,
+        "validation": [
+          {
+            "command": "node --check environment/baseline-matchup.cjs && node --check test/baseline-matchup.test.cjs",
+            "result": "passed"
+          },
+          {
+            "command": "node --test test/baseline-matchup.test.cjs",
+            "result": "passed 7/7, including the guarded pinned mixed-baseline pair"
+          },
+          {
+            "command": "node --test test/baseline-matchup.test.cjs test/move-first-policy.test.cjs test/action-space.test.cjs test/battle-runner.test.cjs test/prepared-teams.test.cjs test/paired-seeds.test.cjs test/pair-runner.test.cjs test/manifest-runner.test.cjs test/summarize-results.test.cjs test/summarize-work.test.cjs test/decision-trajectories.test.cjs test/protocol.test.cjs test/reference.test.cjs",
+            "result": "passed 115/115"
+          },
+          {
+            "command": "trail build",
+            "result": "passed: 710 nodes, 1,533 edges, 77 cards; run once at frozen source/test revision"
+          },
+          {
+            "command": "trail check --base HEAD --json",
+            "result": "exit 1: 8 lexical conflicts, 9 leads, no overlaps; inspected and documented in Task031 handoff with no source contradiction"
+          },
+          {
+            "command": "Primary final coordination checks",
+            "result": "Passed final JSON/history/count/scope, unchanged implementation blob identity, CLI learning replacement, staged diff and graph-current checks. Earlier task/review/milestone values and exact optional GPU evidence are preserved. Final staged Trail lexical documentation findings were reviewed and their rationale is retained in the task commit body."
+          }
+        ],
+        "accepted_at": "2026-11-03",
+        "accepted_by_agent": "/root",
+        "acceptance_review": "Primary /root independently reviewed the complete new module, controlled and guarded pinned test source, README contract and exact validation evidence, and accepted Task031 with no source/test correction. Strict data/ID/limit snapshots occur before work; the requested canonical pair is selected directly; each team is prepared/packed once and opaque handles reused in sequential fresh battles. Policy versions, roles, seats and RNG streams remain mapped together, including reverse order and self-play. A distinct allowlisted completion-only artifact carries copied actual safe records and no transcripts, packed teams or exception metadata. Failure stages return a fixed error without a partial artifact, and the legacy summarizer rejects the new envelope. Handwritten command/seed/counter expectations, detachment, no-work-invalid-config cases, cleanup and real packed seat/hash exchange support the criteria. Focused7/7 and affected115/115 passed after test-only instrumentation/prototype expectation corrections; syntax, JSON/diff and Trail evidence passed or was semantically reviewed. Existing product modules/defaults and all earlier task/milestone/GPU history are unchanged. Count advances30 to31; review baseline30 and checkpoint40 stay fixed. No GPU, performance/strength or G1 acceptance claim; no Task032 starts.",
+        "primary_review": {
+          "disposition": "ACCEPTED",
+          "reviewer": "/root",
+          "accepted_at": "2026-11-03",
+          "required_source_corrections": [],
+          "note": "Initial test instrumentation corrections preceded final7/7 and115/115. Learning headings were corrected via CLI replacement, preserving predecessor. No acceptance criteria were waived."
+        },
+        "implementation_source_blobs": {
+          "environment/baseline-matchup.cjs": "762e780da18addca521b54ec0a72cd18fa0f7c9b",
+          "test/baseline-matchup.test.cjs": "da2bd48a7bdd9894604671a32520e1eb71fa6e78"
+        },
+        "trail_learning": {
+          "id": "l-ed326324",
+          "path": ".trail/learnings/2026-11-03-keep-named-matchup-semantics-separate-from-jarho001.md",
+          "replaces": "l-30da8511",
+          "predecessor_path": ".trail/learnings/2026-11-03-keep-named-matchup-semantics-out-of-jarho001.md",
+          "reason": "CLI-managed formatting replacement uses required Decided/Tried/Watch-out sections and code evidence; original same-unit note remains as history."
+        }
       }
     ],
     "active_regular_review": null,
