@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "accepted_project_task_count": 34,
+  "accepted_project_task_count": 35,
   "project_direction_decision": {
     "status": "adopted",
     "date": "2026-11-03",
@@ -1082,6 +1082,107 @@
           {
             "command": "Primary coordination checks",
             "result": "Passed final JSON/history/count/review/decision/GPU-byte preservation, exact Task001-033 handoff prefix, six frozen code/test blob IDs, sixteen-file staged scope, learning replacement, diff and graph-current checks (833 nodes). No blockers."
+          }
+        ]
+      },
+      {
+        "id": "Task035",
+        "title": "bounded compiled restricted Tackle duels",
+        "owner": "/root/task035",
+        "status": "accepted_complete",
+        "source_commit": "5d55d7266456c25c3fd2c88b88326f0b7655263b",
+        "scope": "Add a pure bounded JAX duel executor composing the accepted Task034 neutral Tackle transition entirely inside compiled control flow, and validate complete native restricted battles rather than short turn prefixes. Preserve the named gen5-neutral-tackle-mew-1v1-v1 mechanics and initial normal-request boundary. A finite execution budget yields a resumable state with honest diagnostics; no synthetic battle result.",
+        "exclusions": [
+          "new mechanics, speed ties, switching/rosters, items/status/weather/passives, other moves or Struggle",
+          "changing accepted Task034 turn/PRNG/player-view semantics or default oracle output",
+          "random teams/stat construction, full gen5randombattle or G1/G3 acceptance",
+          "policy training, tournaments/scoring/reporting infrastructure, CLI persistence/journals/resume storage",
+          "raw protocol byte equality, actor access to privileged full traces",
+          "GPU requirement, throughput/speedup/strength claims or owner commit/push"
+        ],
+        "acceptance_criteria": [
+          "Expose a documented pure fixed-PyTree run_duel-like API taking the existing typed BattleState and an explicit static positive bounded max_turns capacity. Use actual accepted transition with both sole legal Tackle choices committed each step, entirely within JAX compiled control flow with no host callbacks or Python battle loop. Keep existing transition/PRNG/view APIs and gen5-neutral-tackle-mew-1v1-v1 support boundary unchanged. Structural bad capacities/types reject before simulation; record the concrete capacity bound and trace shapes.",
+          "Return detached trusted final state, execution disposition, successful-turn count, final diagnostic/cause and a fixed-capacity trace with an explicit successful-prefix validity mask. Only successfully executed turns occupy valid rows. Padding after terminal/stop/budget never counts turns or emits fake draws, events, requests or outcomes. Initial terminal state completes with zero executed turns/draws; unsupported/pending initial state stops without advance and preserves its original diagnostic. Reaching capacity while nonterminal is budget exhaustion with a continuing state/winner, never a draw, loss or completed battle. Completion at the exact last slot takes precedence over budget exhaustion.",
+          "Support resuming the pure executor from a budget-stopped final state without resetting HP, PP, RNG, turn or request phase. Compare concatenated valid traces and final state/outcome with a single larger-capacity run and native full battle. If execution reaches the unchanged turn kernel unsupported boundary, stop honestly at that state; never add an unsupported fallback or claim completion.",
+          "Extend the guarded native oracle with an explicit separate full-duel mode/helper that starts at actual normal requests, repeatedly submits simultaneous native move1/move1 choices and records every turn until real termination. Reuse native PRNG/context/recipient projection capture with unchanged random returns; preserve the original default eight-turn fixture byte-for-byte semantically. Bound the oracle loop and fail if the selected native scenario fails to complete within it or leaves the supported variant; do not truncate and label complete. Capture initial boundary, all turn state/draw/request/views and actual terminal outcome.",
+          "Validate at least three actual complete native restricted duels with distinct seeds, both speed orderings, a genuine critical and terminal KO/skip; include a nontrivial surviving multi-turn duel. Feed each JAX output into the next transition/executor state. Compare every valid trace row and final native HP/PP/order/turn/phase/winner, all draw bounds/context/values/pre/post limbs, and both recipient semantic request/event histories using existing project_view. Retain independent known invariants, trace/count consistency and no hidden opponent/overkill data in actor projections.",
+          "Test empty/terminal, pending, unsupported, small-budget stop/resume, exact-capacity completion and invalid static-capacity boundaries, valid-prefix/padding behavior and no input mutation. Run CPU eager/JIT parity and JIT/vmap mixed lanes with different episode lengths, diagnostic states and budgets (common static capacity), including lane permutation/independence; inactive lanes preserve final state/RNG and padding is never executed experience. Record one small synchronized compile/warm probe with exact reproducible configuration and source identity, measurement only. No GPU acceptance is imposed.",
+          "Document API/control-flow, capacity/mask/stop/resume/outcome/visibility boundaries and complete restricted-native evidence in the existing variant doc/README and focused coverage/project-status sections. Preserve old Task001-034 history and all review/direction/GPU records; count34/baseline30/checkpoint40 until primary acceptance. Use Trail context/callers before affected existing symbols, focused new and justified affected Task034/PRNG/reference checks once per meaningful revision, syntax/JSON/diff and Trail refresh/check; inspect diff and freeze with exact commands/results/source blobs for primary review. No Astra gate is due absent a concrete contradiction."
+        ],
+        "plan": [
+          "Inspect accepted kernel dependencies and native capture boundaries via Trail; persist scope and feasible complete-duel scenarios before implementation.",
+          "Implement a separate bounded compiled duel module and explicit native full-duel oracle mode while preserving current default fixtures/APIs.",
+          "Add full-trajectory/state/RNG/view differential, budget/resumption and heterogeneous compiled-lane tests; record one reproducible synchronized CPU probe.",
+          "Update only current relevant docs/task evidence, refresh/check Trail and inspect diff; freeze for primary criteria review and one-unit delivery or concrete blocker."
+        ],
+        "progress": "Accepted by primary after implementation freeze and independent criteria/source/evidence review. Owner-stage progress retained: Clean synchronized main5d55d72 with34 accepted tasks; baseline30/checkpoint40, no pending review/GPU block, no milestone acceptance. Task035 implementation is complete pending primary acceptance. It composes the unchanged Task034 transition with static capacity56, per-lane int32 turn_budget, successful-prefix masks, honest stop causes, and pure resumption; invalid runtime budget values fail closed without advancing, while valid terminal state completes at zero budget. Native --duels mode generated four complete battles (8/8/8/1 turns, four seeds, both speed orders, real criticals, terminal KO); every full JAX row matches state/events/draws/both recipient views and outcome. Node tests5/5; duel Python4/4 before diagnostic-lane expansion plus final affected vmap method1/1; unchanged Task034 JAX6/6. No-argument oracle output remains byte-identical, 124744 bytes SHA-256 d1a219a9483d8d1c0859338089a8d980372e79987c796f155e5c210395828157. CPU probe: jit(vmap(run_duel)), 4 lanes, capacity8, budgets[8,8,8,8], counts[8,8,8,1], first1.121906s/warm0.000532s; measurement only. Probe blobs: neutral_duel 81d290fbd60179a559667df9d2ad84463f90dbc8, neutral_tackle 67b707d8b089fc7e2173d17497cbf1a62b10bf2f, gen5_rng ed8c8cddd8f001d2c7da63ff2bd2ef3c4cf060d7. Runtime status tool/policy snapshot unavailable; no readiness claim. RTX3060Ti optional, GPU not required. Parent owns acceptance and delivery; no commit/push/count change.",
+        "gpu_required": false,
+        "accepted_at": "2026-11-03",
+        "accepted_by_agent": "/root",
+        "acceptance_review": "Primary /root independently reviewed the complete bounded executor, native full-duel oracle diff, new tests, API documentation and exact evidence, and accepted Task035 after implementation freeze. Static capacity1..56 and optional signed-int32 per-lane budgets drive pure scan/conditional execution of unchanged Task034 transitions. Only successful turns occupy the masked prefix; terminal, stopped, invalid-budget and budget-exhausted dispositions preserve honest causes and state. Four complete native battles across four seeds (8/8/8/1 turns,25 total) match every state, order/event, draw bound/context/value/pre/post limb, recipient request/history projection and actual outcome, with independent damage and privacy assertions. Budget-stop resumption matches uninterrupted traces; PP exhaustion is diagnosed only when a subsequent kernel step is attempted. Primary corrected eager/JIT invalid-budget consistency and expanded mixed-lane evidence to terminal/pending/invalid-budget cases. New duel suite4/4 passed before that test-only extension, then its affected eight-lane method1/1 passed; new/default Node tests5/5 and unchanged Task034 JAX6/6 passed. The original no-argument oracle remains byte-identical124744 bytes with SHA256 d1a219a9483d8d1c0859338089a8d980372e79987c796f155e5c210395828157. CPU four-lane capacity8 probe measured first1.121906s/warm0.000532s, counts8/8/8/1, with reproducer and measured blob recorded; one final EOF newline removal is verified as the sole difference from tested/probed executor bytes, so tests were not repeated for formatting. Existing turn/PRNG mechanics are unchanged. Earlier histories/reviews/direction/GPU evidence remain; count34 becomes35, baseline30/next40 unchanged. No GPU, throughput/strength, full-format or G1/G3 acceptance claim; no Task036 starts.",
+        "primary_review": {
+          "disposition": "ACCEPTED",
+          "reviewer": "/root",
+          "remaining_findings": [],
+          "verified_corrections": [
+            "Uniform eager/JIT/vmap invalid runtime budget diagnostic with no advance.",
+            "Eight-lane terminal, pending, unsupported, invalid-budget and varied-budget equivalence.",
+            "Whitespace-only EOF cleanup; executable source unchanged."
+          ]
+        },
+        "implementation_source_blobs": {
+          "simulator/neutral_duel.py": "38efee781f8dc711931669eb0e202c90fca4e870",
+          "simulator/__init__.py": "01cbbd6ae7e712807674fb7d97e306eb34b55a25",
+          "reference/neutral-turn-oracle.cjs": "39494d2a9e667906fc3762cfcca5cc849a48b5c4",
+          "test/test_neutral_duel.py": "935109104f6e382d19e210a862ef0d92738afd32",
+          "test/neutral-duel-oracle.test.cjs": "ca16656de2aff403eb0886f91e09d878aa9bef04"
+        },
+        "probe_identity": {
+          "measured_executor_blob": "81d290fbd60179a559667df9d2ad84463f90dbc8",
+          "delivered_executor_blob": "38efee781f8dc711931669eb0e202c90fca4e870",
+          "difference": "Exactly one trailing EOF newline removed; adding it back reproduces measured/tested Git blob. No executable change.",
+          "first_seconds": 1.121906,
+          "warmed_seconds": 0.000532,
+          "reproducer": "docs/neutral-tackle-variant.md Task035 full-duel evidence"
+        },
+        "trail_learning": {
+          "id": "l-582fd216",
+          "path": ".trail/learnings/2026-11-03-static-duel-capacity-with-per-lane-root.md",
+          "title": "Static duel capacity with per-lane budgets",
+          "new_note_count": 1
+        },
+        "validation": [
+          {
+            "command": "node --test test/neutral-duel-oracle.test.cjs test/neutral-turn-oracle.test.cjs",
+            "result": "passed5/5 new and default oracle tests"
+          },
+          {
+            "command": "JAX_PLATFORMS=cpu python -m unittest discover -s test -p test_neutral_tackle.py",
+            "result": "unchanged Task034 suite passed6/6"
+          },
+          {
+            "command": "JAX_PLATFORMS=cpu python -m unittest discover -s test -p test_neutral_duel.py",
+            "result": "passed4/4 after fixing test compiled-function descriptor binding; complete25-turn native parity, budgets/resumption, structural/diagnostic and initial vmap checks"
+          },
+          {
+            "command": "PYTHONPATH=test JAX_PLATFORMS=cpu python -m unittest test_neutral_duel.NeutralDuelTests.test_jit_vmap_mixed_lengths_diagnostics_budgets_and_lane_order",
+            "result": "passed1/1 after final test-only extension to eight mixed lanes; no runtime changes afterward except one EOF newline"
+          },
+          {
+            "command": "Original no-argument oracle before/after SHA256 comparison",
+            "result": "identical124744 bytes; SHA256 d1a219a9483d8d1c0859338089a8d980372e79987c796f155e5c210395828157"
+          },
+          {
+            "command": "CPU synchronized jit(vmap(run_duel)) probe documented in variant contract",
+            "result": "Python3.13.18/JAX/JAXLIB0.12.0.1/cpu:0,4 lanes,cap8,budgets8/8/8/8,counts8/8/8/1; first1.121906s/warm0.000532s; measured blob81d290f and exact final EOF-only difference verified"
+          },
+          {
+            "command": "Primary final coordination checks",
+            "result": "Passed final JSON/history/count/review/direction/GPU-byte preservation, exact Task001-034 handoff prefix, unchanged prior mechanics, five frozen code/test blobs, twelve-file staged scope, EOF-only measured identity proof, learning sections and diff checks. Graph check found stale EOF-byte identity, then trail build/build--check refreshed862 nodes/1897 edges/90 cards. No blocker."
+          },
+          {
+            "command": "trail check --base HEAD --json",
+            "result": "Final staged exit1:13 lexical conflicts/7 leads across11 checked files/20 active notes, zero overlaps. Includes one source hit at the critical-full-duel scenario, not altered RNG observation. Primary reviewed exact findings and retains semantic rationale in commit body."
           }
         ]
       }

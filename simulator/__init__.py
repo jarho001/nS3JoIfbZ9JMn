@@ -16,6 +16,18 @@ from .neutral_tackle import (
 	project_view,
 	transition,
 )
+from .neutral_duel import (
+	DIAGNOSTIC_INVALID_BUDGET,
+	DIAGNOSTIC_NONE,
+	DISPOSITION_BUDGET_EXHAUSTED,
+	DISPOSITION_COMPLETED,
+	DISPOSITION_INVALID_BUDGET,
+	DISPOSITION_STOPPED,
+	MAX_DUEL_TURNS,
+	DuelResult,
+	DuelTrace,
+	run_duel,
+)
 
 __all__ = [
 	"ACTION_TACKLE",
@@ -29,7 +41,17 @@ __all__ = [
 	"STATUS_UNSUPPORTED",
 	"BattleState",
 	"Transition",
+	"DIAGNOSTIC_INVALID_BUDGET",
+	"DIAGNOSTIC_NONE",
+	"DISPOSITION_BUDGET_EXHAUSTED",
+	"DISPOSITION_COMPLETED",
+	"DISPOSITION_INVALID_BUDGET",
+	"DISPOSITION_STOPPED",
+	"MAX_DUEL_TURNS",
+	"DuelResult",
+	"DuelTrace",
 	"make_state",
 	"project_view",
+	"run_duel",
 	"transition",
 ]

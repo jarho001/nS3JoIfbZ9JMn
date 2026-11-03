@@ -1,6 +1,6 @@
-# Restricted seeded JAX Tackle turn
+# Restricted seeded JAX Tackle duel
 
-**Status:** Task034 accepted after primary review. This restricted turn slice does not constitute a complete battle engine or close G1, G3 or any implementation milestone.
+**Status:** Task034 was accepted after primary review. Task035 bounded duel execution is accepted after primary review. This restricted slice does not constitute a complete battle engine or close G1, G3 or any implementation milestone.
 
 ## Variant and initialization boundary
 
@@ -35,6 +35,16 @@ p1_view = jax.jit(project_view, static_argnums=2)(state, result, 0)
 ```
 
 `jax.vmap(transition)` batches independent p1/p2 lanes. `project_view` accepts only a static audience ID (`0` for p1, `1` for p2); compile it with `static_argnums=2`. Unsupported or dynamic audience values fail closed.
+
+## Bounded duel API (Task035)
+
+[`simulator/neutral_duel.py`](../simulator/neutral_duel.py) exposes `run_duel(initial_state, *, max_turns, turn_budget=None)`. It composes the unchanged `transition` with a fixed-shape `jax.lax.scan` and conditional turn execution. Both sole legal Tackle choices are submitted on each attempted turn. The explicit static trace capacity `max_turns` must be a Python integer from 1 through 56, the accepted maximum PP. Compile with `jax.jit(run_duel, static_argnames=("max_turns",))`; for `vmap`, close over one common static capacity and pass a per-lane scalar `int32` `turn_budget`.
+
+`turn_budget` defaults to the capacity and accepts scalar integers from 0 through that capacity. Zero budget returns the unchanged nonterminal state with `DISPOSITION_BUDGET_EXHAUSTED`, zero turns, and an empty valid prefix. A structurally malformed capacity, state PyTree, or budget type/shape raises before simulation. A representable signed `int32` budget outside `[0, max_turns]` returns `DISPOSITION_INVALID_BUDGET` with `DIAGNOSTIC_INVALID_BUDGET`, unchanged state, zero turns, and an empty prefix in eager, JIT, and vmapped execution. A valid initially terminal state completes with zero turns and `STATUS_TERMINAL`, including at zero budget.
+
+`DuelResult` returns the trusted final `BattleState`, disposition, successful-turn count, final `diagnostic_status`, and fixed-capacity `DuelTrace`. `trace.valid` is the only turn-validity signal and is a contiguous successful prefix. Each valid row contains its before state, accepted `Transition` (after state, events, and draws), and both recipient projections from the existing `project_view`. False rows are zero placeholders; their enum-like fields are not requests or outcomes and must never be consumed. Select only one valid recipient view for a given actor. The pair of player views is trusted combined trace data and is not a joint actor observation.
+
+If the capacity/budget ends while the state is nonterminal, the result is budget-exhausted with no synthetic draw, event, winner, loss, or tie; `diagnostic_status` is the last successful `STATUS_OK`, or `DIAGNOSTIC_NONE` if no transition ran. Completion on the final slot takes precedence over budget exhaustion. Resumption passes the returned state to a new call and concatenates only rows selected by each call's valid prefix. At the existing last-PP boundary, a one-slot run can finish one valid turn and report budget exhaustion at the continuing state; a larger budget attempts the next kernel step, stops as `STATUS_UNSUPPORTED`, and adds no row for that failed attempt. Struggle remains unsupported.
 
 ## Damage and random state
 
@@ -132,3 +142,60 @@ PY
 ```
 
 The first synchronized call was 0.536254 seconds and the warmed synchronized call was 0.000157 seconds; all eight statuses were `0`. The code files in this run are identified by their Git blob IDs in the handoff, alongside the source base. GPU is optional and is not an acceptance criterion. Full `gen5randombattle`, random-team generation, switching, speed ties, Struggle, other moves, effects, full request/protocol encoding, PPO, and G1/G3 milestone acceptance remain out of scope.
+
+## Task035 full-duel evidence (accepted)
+
+The guarded `--duels` mode generated four complete actual native Battles from normal move requests: `p2-first-full-duel` seed `[1,2,3,4]` (8 turns), `p1-first-full-duel` seed `[31,41,59,26]` (8), `critical-full-duel` seed `[9,2,3,4]` (8), and `one-action-ko-full-duel` seed `[2718,2818,2845,9045]` (1, p2 wins on its first action). Each has a pinned terminal winner; the surviving cases cover both speed orders and true criticals. The JAX differential compares every row's before/after state, event order, critical/damage, draw bounds/context/value/pre/post limbs, and both recipient-specific `project_view` projections. It also checks independent Tackle damage, exact outcome state, resume concatenation, PP=1 unsupported behavior, terminal/pending/unsupported/invalid-budget states, and mixed-lane JIT/vmap independence.
+
+The original no-argument oracle output is byte-identical before and after adding the explicit mode: 124744 bytes, SHA-256 `d1a219a9483d8d1c0859338089a8d980372e79987c796f155e5c210395828157`. Focused results were: new duel Python module 4/4 before the final three-lane diagnostic-case extension, that changed mixed-lane method 1/1 afterward, new full-duel plus unchanged default Node oracle tests 5/5, and unchanged Task034 JAX tests 6/6. The newly added diagnostic lanes cover initial terminal/zero budget, pending phase, and a runtime budget outside capacity; each stays unchanged with an empty prefix.
+
+One synchronized CPU compile/warm probe measured the four native initial states above with `jax.jit(jax.vmap(run_duel))`, static capacity 8, and per-lane budgets `[8,8,8,8]`. It ran on Python 3.13.18, JAX/JAXLIB 0.12.0.1, backend `cpu`, device `cpu:0`; counts were `[8,8,8,1]`. The first synchronized call took 1.121906 seconds and one warmed synchronized call took 0.000532 seconds. These are measurements for this exact configuration, not a performance or throughput claim. Source Git blobs: `simulator/neutral_duel.py` `81d290fbd60179a559667df9d2ad84463f90dbc8`, unchanged `simulator/neutral_tackle.py` `67b707d8b089fc7e2173d17497cbf1a62b10bf2f`, and `simulator/gen5_rng.py` `ed8c8cddd8f001d2c7da63ff2bd2ef3c4cf060d7`.
+
+The probe can be reproduced with:
+
+```sh
+JAX_PLATFORMS=cpu python - <<'PY'
+import sys
+import time
+import jax
+import jaxlib
+import jax.numpy as jnp
+from simulator import make_state, run_duel
+
+assert jax.default_backend() == 'cpu'
+rows = [
+    ((175, 175), (175, 175), (56, 56), (50, 50), (120, 120), (120, 120), (120, 152), (1, 2, 3, 4)),
+    ((175, 175), (175, 175), (56, 56), (50, 50), (120, 120), (120, 120), (152, 120), (31, 41, 59, 26)),
+    ((175, 175), (175, 175), (56, 56), (50, 50), (120, 120), (120, 120), (120, 152), (9, 2, 3, 4)),
+    ((13, 341), (13, 341), (56, 56), (1, 100), (7, 236), (7, 236), (7, 236), (2718, 2818, 2845, 9045)),
+]
+states = [make_state(hp=r[0], max_hp=r[1], pp=r[2], level=r[3], attack=r[4], defense=r[5], speed=r[6], rng=r[7]) for r in rows]
+batch = jax.tree_util.tree_map(lambda *values: jnp.stack(values), *states)
+budgets = jnp.asarray([8, 8, 8, 8], dtype=jnp.int32)
+compiled = jax.jit(jax.vmap(lambda state, budget: run_duel(state, max_turns=8, turn_budget=budget)))
+def synchronize(value):
+    return jax.tree_util.tree_map(lambda leaf: leaf.block_until_ready(), value)
+start = time.perf_counter()
+first = synchronize(compiled(batch, budgets))
+first_seconds = time.perf_counter() - start
+start = time.perf_counter()
+second = synchronize(compiled(batch, budgets))
+warm_seconds = time.perf_counter() - start
+assert first.disposition.tolist() == [0, 0, 0, 0]
+assert first.turn_count.tolist() == [8, 8, 8, 1]
+assert first.trace.valid.sum(axis=1).tolist() == [8, 8, 8, 1]
+assert (first.state.hp == second.state.hp).all()
+assert (first.state.rng == second.state.rng).all()
+print('python', sys.version.split()[0], 'jax', jax.__version__, 'jaxlib', jaxlib.__version__)
+print('backend', jax.default_backend(), 'device', jax.devices()[0])
+print('configuration', 'jit(vmap(run_duel))', 'lanes=4', 'static capacity=8', 'turn budgets=[8,8,8,8]', 'int32 state / uint16 rng limbs')
+print('initial seeds', [[1, 2, 3, 4], [31, 41, 59, 26], [9, 2, 3, 4], [2718, 2818, 2845, 9045]])
+print('result turn counts', first.turn_count.tolist())
+print('first_synchronized_call_seconds', f'{first_seconds:.6f}')
+print('warmed_synchronized_call_seconds', f'{warm_seconds:.6f}')
+PY
+```
+
+Primary accepted Task035 with count35; this does not require GPU, claim performance, or close G1/G3 or a milestone.
+
+The delivered executor blob `38efee781f8dc711931669eb0e202c90fca4e870` differs from the measured/tested blob `81d290fbd60179a559667df9d2ad84463f90dbc8` only by removal of one blank EOF line. Adding that newline back reproduces the measured hash; executable code is unchanged, and tests/probe were not repeated for this formatting correction.

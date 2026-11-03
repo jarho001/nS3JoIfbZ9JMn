@@ -309,10 +309,90 @@ function generateFixture(ps) {
 function main() {
 	assertReady();
 	const ps = require(API);
-	const fixture = generateFixture(ps);
+	const args = process.argv.slice(2);
+	assert.ok(args.length === 0 || (args.length === 1 && args[0] === '--duels'), 'Usage: neutral-turn-oracle.cjs [--duels]');
+	const fixture = args[0] === '--duels' ? generateFullDuelFixture(ps) : generateFixture(ps);
 	process.stdout.write(`${JSON.stringify(fixture, null, 2)}\n`);
 }
 
-if (require.main === module) main();
+module.exports = { generateFixture, generateFullDuelFixture, main };
 
-module.exports = { generateFixture };
+const FULL_DUEL_TURN_LIMIT = 56;
+const FULL_DUEL_SCENARIOS = [
+	{
+		id: 'p2-first-full-duel',
+		seed: [1, 2, 3, 4],
+		p1: { level: 50, speedEvs: 0 },
+		p2: { level: 50, speedEvs: 252 },
+		turnLimit: FULL_DUEL_TURN_LIMIT,
+	},
+	{
+		id: 'p1-first-full-duel',
+		seed: [31, 41, 59, 26],
+		p1: { level: 50, speedEvs: 252 },
+		p2: { level: 50, speedEvs: 0 },
+		turnLimit: FULL_DUEL_TURN_LIMIT,
+	},
+	{
+		id: 'critical-full-duel',
+		seed: [9, 2, 3, 4],
+		p1: { level: 50, speedEvs: 0 },
+		p2: { level: 50, speedEvs: 252 },
+		turnLimit: FULL_DUEL_TURN_LIMIT,
+	},
+	{
+		id: 'one-action-ko-full-duel',
+		seed: [2718, 2818, 2845, 9045],
+		p1: { level: 1, speedEvs: 0 },
+		p2: { level: 100, speedEvs: 0 },
+		turnLimit: FULL_DUEL_TURN_LIMIT,
+	},
+];
+
+function fullDuelScenarioFixture(ps, scenario) {
+	const battle = createBattle(ps, scenario);
+	try {
+		const initial = {
+			state: snapshot(battle),
+			requests: { p1: projectRequest(battle.p1), p2: projectRequest(battle.p2) },
+		};
+		const turns = [];
+		for (let index = 0; index < scenario.turnLimit && !battle.ended; index++) {
+			turns.push(captureTurn(ps, battle));
+		}
+		assert.equal(battle.ended, true, `${scenario.id} did not complete within ${scenario.turnLimit} native turns`);
+		assert.ok(['p1', 'p2'].includes(battle.winner), `${scenario.id} must end with an actual winner`);
+		return {
+			id: scenario.id,
+			seed: [...scenario.seed],
+			initial,
+			turns,
+			outcome: {
+				terminal: battle.ended,
+				winner: battle.winner,
+				sideWinner: sideWinner(battle),
+				turn: battle.turn,
+				state: snapshot(battle),
+			},
+		};
+	} finally {
+		battle.destroy();
+	}
+}
+
+function generateFullDuelFixture(ps) {
+	return {
+		schemaVersion: 1,
+		kind: 'gen5-restricted-neutral-tackle-full-duel-oracle',
+		upstream: { repository: LOCK.repository, commit: LOCK.commit },
+		formatId: FORMAT_ID,
+		generation: 5,
+		variant: 'gen5-neutral-tackle-mew-1v1-v1',
+		turnLimit: FULL_DUEL_TURN_LIMIT,
+		initialBoundary: 'Each scenario starts from a live pinned Battle normal activeRequest for both players; both submit move 1 through Battle.makeChoices on every captured turn.',
+		captureContract: 'Every complete turn records pre/post trusted state, request projections, PRNG.prototype.random draws with unchanged return values, action order, split-recipient semantic events, and both recipient views. The actual terminal winner and state come from the ended native Battle.',
+		scenarios: FULL_DUEL_SCENARIOS.map(scenario => fullDuelScenarioFixture(ps, scenario)),
+	};
+}
+
+if (require.main === module) main();

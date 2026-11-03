@@ -423,9 +423,11 @@ Task017 is accepted and complete for scheduled run 5. See `docs/TASKS.md` for va
 
 ## Restricted seeded JAX turn slice (Task034)
 
-Task034 adds the accepted restricted variant `gen5-neutral-tackle-mew-1v1-v1`: one Mew per side, one Tackle each, distinct speeds, neutral non-STAB damage, exact Gen 5 RNG, normal critical/HP/faint handling, and recipient-specific request/event projections. Its pinned oracle uses the unmodified Gen 5 Random Battle rules with directly supplied Mew sets, then captures both real move requests and submits both Tackle choices together. It does not generate random teams, support the full format, or close G1/G3. Primary review accepted Task034; the accepted task count is34.
+Task034 adds the accepted restricted variant `gen5-neutral-tackle-mew-1v1-v1`: one Mew per side, one Tackle each, distinct speeds, neutral non-STAB damage, exact Gen 5 RNG, normal critical/HP/faint handling, and recipient-specific request/event projections. Its pinned oracle uses the unmodified Gen 5 Random Battle rules with directly supplied Mew sets, then captures both real move requests and submits both Tackle choices together. It does not generate random teams, support the full format, or close G1/G3. Primary review accepted Task034 at task count34.
 
 See [`docs/neutral-tackle-variant.md`](docs/neutral-tackle-variant.md) for the state and API bounds, initialization and RNG boundary, player-view privacy rules, validation commands, and current limitations. The guarded actual-turn oracle is [`reference/neutral-turn-oracle.cjs`](reference/neutral-turn-oracle.cjs); its tests are [`test/neutral-turn-oracle.test.cjs`](test/neutral-turn-oracle.test.cjs) and [`test/test_neutral_tackle.py`](test/test_neutral_tackle.py). Current focused evidence is 3/3 Node oracle tests and 6/6 CPU JAX tests. One synchronized CPU `jit(vmap(transition))` probe (batch8) recorded 0.536254s for the first compile-and-execute call and 0.000157s for the warmed synchronized call. These durations are configuration-specific and make no performance or throughput claim; GPU is optional.
+
+Task035 adds a pure bounded compiled `run_duel` over the unchanged Task034 turn, fixed-capacity successful-prefix traces, resumable budgets, and a separate `node reference/neutral-turn-oracle.cjs --duels` mode. Four complete native battles (8/8/8/1 turns) match every JAX state, draw, event/order, and both recipient views; the existing no-argument oracle output remains byte-for-byte unchanged. The new CPU duel tests passed 4/4 plus the updated mixed-lane case 1/1; the full-duel and default Node oracle tests passed 5/5. Primary accepted Task035; accepted count35 is recorded and G1/G3 remain open. No GPU or performance claim is made.
 
 ## Mechanics coverage ledger and current validation boundary
 
@@ -439,7 +441,7 @@ GPU claims are historical and task-scoped: Tasks005–011 recorded GPU validatio
 
 ## Current task and next work
 
-Tasks001–034 are accepted and complete.
+Tasks001–035 are accepted and complete. Task035 implementation evidence is complete pending primary acceptance; it does not yet increment the accepted task count.
 
 Project direction is simulator-first: prioritize integrated JAX battle execution and parity validation; G1 reference-environment work and G2 learning remain open and do not gate G3 simulator implementation. The request, legal-action, simultaneous-choice, player-view/history, and outcome contract remains part of simulator correctness. Defer PPO, tournaments, and further baseline/reporting infrastructure unless needed for simulator parity or validation.
 
