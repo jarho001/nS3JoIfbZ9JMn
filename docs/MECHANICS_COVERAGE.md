@@ -39,6 +39,10 @@ These artifacts support reproducibility and the player interface; they are not J
 
 Task IDs in the mechanics table link each function to its implementation and validation record in [`docs/TASKS.md`](TASKS.md). For the historical task reports, Tasks005–011 recorded CPU and available-GPU runs in their original environments. Task012 records CPU validation with GPU deferred; Tasks013–017 record CPU-only validation and no GPU availability. This documentation audit did not rerun mechanics tests, probe current accelerator availability, or change those historical results. Read the linked task entries for the exact commands, dates, counts, and environment notes.
 
+### Optional current backend recheck
+
+On 2026-11-03, the existing Python mechanics suite passed 73/73 on CPU and 73/73 on the NVIDIA RTX 3060 Ti under source commit `6bc48b3edd7ea0a96cdbf4f877d1e889c13e3289` (source tree `00a02cdea11018026fefc8c20b3fb690ce0f1260`). The run used Python 3.13.18 and JAX/JAXLIB 0.12.0.1. With `JAX_PLATFORMS=cuda`, JAX reported backend `gpu`, eager inputs and JIT outputs were on `CudaDevice(id=0)`, and all 73 existing tests passed. The CPU suite passed first, also 73/73. See the unnumbered entry in [`docs/TASKS.md`](TASKS.md) for commands and runtime details. This supplements current backend confidence while leaving the historical task-scoped GPU records unchanged; it is not evidence of additional mechanics coverage, a full battle simulator, throughput, or milestone acceptance.
+
 ## Explicitly outside present coverage
 
 This ledger covers arithmetic islands and their stated compositions. It does not establish a complete battle engine or full-format transfer. The pinned format metadata is already resolved in [`format-v1.json`](../reference/fixtures/format-v1.json).

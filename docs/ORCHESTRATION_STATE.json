@@ -541,5 +541,48 @@
     ]
   },
   "active_task": null,
+  "optional_gpu_validation_history": [
+    {
+      "id": "GPUValidation20261103",
+      "title": "Preliminary JAX mechanics CPU and GPU correctness run",
+      "unit_type": "unnumbered_optional_validation",
+      "status": "accepted_complete",
+      "owner": "/root/gpu_validation",
+      "source_commit": "6bc48b3edd7ea0a96cdbf4f877d1e889c13e3289",
+      "source_tree": "00a02cdea11018026fefc8c20b3fb690ce0f1260",
+      "scope": "Run the existing Python mechanics oracle suite in the existing /opt/jax-env on CPU first and CUDA second, verify actual device placement, and record reproducible environment metadata and outcomes.",
+      "exclusions": [
+        "numbered project task or accepted-task count change",
+        "source, fixture, or test changes",
+        "performance or throughput measurement",
+        "G1 or later milestone acceptance"
+      ],
+      "acceptance_criteria": [
+        "Record source commit/tree identity, Python/JAX/JAXLIB versions, accelerator and driver/runtime, exact commands, test counts, and failures.",
+        "Run the full existing test/test_*.py unittest suite with JAX_PLATFORMS=cpu and require it to pass before GPU validation.",
+        "Run the same suite with JAX_PLATFORMS=cuda and verify the backend and representative eager/JIT outputs reside on the NVIDIA device; do not claim a GPU run if any selection silently falls back to CPU.",
+        "Record results as optional current backend evidence; preserve historical task-scoped GPU statements and make no performance or milestone claim."
+      ],
+      "commands": [
+        "XLA_PYTHON_CLIENT_PREALLOCATE=false JAX_PLATFORMS=cpu /opt/jax-env/bin/python -m unittest discover -s test -p 'test_*.py' -v",
+        "XLA_PYTHON_CLIENT_PREALLOCATE=false JAX_PLATFORMS=cuda /opt/jax-env/bin/python -m unittest discover -s test -p 'test_*.py' -v"
+      ],
+      "hardware_requirement": "Optional evidence on NVIDIA GeForce RTX 3060 Ti (8 GiB). `nvidia-smi` reports utility 610.57.01, KMD/driver 610.88, and CUDA UMD 13.3.",
+      "progress": "Existing full Python mechanics suite passed on CPU before the CUDA run. Explicit CUDA backend and eager/JIT array placement were verified. Both backend suites passed and primary /root accepted the recorded optional validation.",
+      "readiness_probe": "XLA_PYTHON_CLIENT_PREALLOCATE=false JAX_PLATFORMS=cuda /opt/jax-env/bin/python - <<'PY'\nimport jax\nimport jaxlib\nimport numpy as np\nimport jax.numpy as jnp\nprint('python/imported_jax', __import__('sys').version.split()[0], jax.__version__, jaxlib.__version__)\nprint('backend', jax.default_backend())\nprint('devices', jax.devices())\nx = jnp.arange(8, dtype=jnp.int32)\ny = jax.jit(lambda value: value * value + 1)(x)\ny.block_until_ready()\nprint('array_device', x.devices())\nprint('jit_device', y.devices())\nprint('jit_result', np.asarray(y).tolist())\nassert jax.default_backend() == 'gpu', f'expected GPU backend, got {jax.default_backend()}'\nassert any(device.platform == 'gpu' for device in x.devices()), f'input array placed on {x.devices()}'\nassert any(device.platform == 'gpu' for device in y.devices()), f'compiled result placed on {y.devices()}'\nPY",
+      "validation": [
+        "CPU readiness probe (`XLA_PYTHON_CLIENT_PREALLOCATE=false JAX_PLATFORMS=cpu` with the same eager/JIT sample): Python 3.13.18, JAX/JAXLIB 0.12.0.1, backend cpu, input and JIT result on CpuDevice(id=0), expected output [1,2,5,10,17,26,37,50].",
+        "XLA_PYTHON_CLIENT_PREALLOCATE=false JAX_PLATFORMS=cpu /opt/jax-env/bin/python -m unittest discover -s test -p 'test_*.py' -v — 73 tests passed in 36.376s.",
+        "CUDA readiness probe above: backend gpu, devices [CudaDevice(id=0)], eager input and JIT output on CudaDevice(id=0), expected output [1,2,5,10,17,26,37,50].",
+        "XLA_PYTHON_CLIENT_PREALLOCATE=false JAX_PLATFORMS=cuda /opt/jax-env/bin/python -m unittest discover -s test -p 'test_*.py' -v — 73 tests passed in 43.251s; output log /tmp/gpu-validation-cuda.log.",
+        "CPU output log: /tmp/gpu-validation-cpu.log. Test files remain unchanged. Trail exhaustive searches of indexed code found no jax.devices, platform, JAX_PLATFORMS, or jax_platform_name overrides in the suite.",
+        "CUDA runtime packages: jax-cuda13-pjrt and jax-cuda13-plugin 0.12.0.1; nvidia-cuda-runtime 13.4.92. nvidia-smi identified the RTX 3060 Ti, 8192 MiB, utility 610.57.01, KMD/driver 610.88, CUDA UMD 13.3."
+      ],
+      "accepted_at": "2026-11-03",
+      "accepted_by": "/root",
+      "acceptance_review": "Primary /root reviewed all three documentation/state diffs and both verbose test logs. Accepted the 73/73 CPU run followed by 73/73 CUDA run, the exercised mechanics/composition edge cases, explicit CUDA placement, unchanged source/tests/dependencies, and the recorded source identity and historical boundaries. No required Astra gate or milestone is due. JSON/state invariants, git diff --check, and trail check --base HEAD pass after final metadata synchronization. No test reruns were needed.",
+      "unresolved_concerns": []
+    }
+  ],
   "gpu_block": null
 }

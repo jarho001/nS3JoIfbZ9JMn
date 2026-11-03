@@ -1039,3 +1039,47 @@ Validation evidence: the original combined pair, seed, prepared-team, battle-run
 **Trail review rationale:** The source changes implement current-request action mapping and one pinned Struggle parser exception. They do not change arithmetic/stat domains, prepared-team provenance, mutable battle-state separation, player visibility, or offline execution-attestation boundaries. Documentation of acceptance and test results is validation evidence for this unit, not authentication of serialized battle journals. Mentions of the prepared-team regression suite do not introduce arbitrary packed-team input. Lexical findings on these phrases do not contradict the cited learnings; include this explanation in the commit body.
 
 **Final staging review:** `trail check --base HEAD --json` exited 1 after checking 7 files against 14 learnings, with 8 lexical documentation conflicts and no overlaps. Primary reviewed each finding against the source diff: README current-history synopsis (two matches), state scope exclusions and validation summary, and handoff scope, action criteria, validation criteria and regression-suite listing. The rationale above applies to every finding and is retained in the commit body. No blocking source conflict remains. `trail build --check` and focused final state/history/diff checks follow acceptance metadata only; source tests are not repeated.
+
+## Unnumbered optional GPU validation — preliminary JAX mechanics correctness
+
+**Status:** Accepted complete by primary `/root` on 2026-11-03. This unnumbered optional check does not change the accepted-task count. It ran the existing Python mechanics suite against CPU then CUDA, without changing kernels, fixtures, or tests. The run verifies backend parity and actual device placement; it does not measure performance or close a milestone.
+
+**Source identity:** Commit `6bc48b3edd7ea0a96cdbf4f877d1e889c13e3289`, tree `00a02cdea11018026fefc8c20b3fb690ce0f1260`, captured before the validation record was added. The tracked worktree was clean. The validation uses the existing `/opt/jax-env` installation without dependency changes.
+
+**Exact suite commands and results:**
+
+```sh
+XLA_PYTHON_CLIENT_PREALLOCATE=false JAX_PLATFORMS=cpu /opt/jax-env/bin/python -m unittest discover -s test -p 'test_*.py' -v
+# Ran 73 tests in 36.376s — OK
+XLA_PYTHON_CLIENT_PREALLOCATE=false JAX_PLATFORMS=cuda /opt/jax-env/bin/python -m unittest discover -s test -p 'test_*.py' -v
+# Ran 73 tests in 43.251s — OK
+```
+
+Both runs used Python 3.13.18, JAX 0.12.0.1, and JAXLIB 0.12.0.1 from the existing `/opt/jax-env`. CUDA plugin packages were `jax-cuda13-pjrt` and `jax-cuda13-plugin` 0.12.0.1; `nvidia-cuda-runtime` was 13.4.92. `nvidia-smi` reported an NVIDIA GeForce RTX 3060 Ti with 8192 MiB, utility 610.57.01, KMD/driver 610.88, and CUDA UMD 13.3. The selected CUDA backend was `gpu`, device `[CudaDevice(id=0)]`; eager input and compiled output were each placed on that device. CPU selection used `CpuDevice(id=0)`. The expected eager/JIT probe result was `[1, 2, 5, 10, 17, 26, 37, 50]` for both.
+
+The readiness probe was:
+
+```sh
+XLA_PYTHON_CLIENT_PREALLOCATE=false JAX_PLATFORMS=cuda /opt/jax-env/bin/python - <<'PY'
+import jax
+import jaxlib
+import numpy as np
+import jax.numpy as jnp
+print('python/imported_jax', __import__('sys').version.split()[0], jax.__version__, jaxlib.__version__)
+print('backend', jax.default_backend())
+print('devices', jax.devices())
+x = jnp.arange(8, dtype=jnp.int32)
+y = jax.jit(lambda value: value * value + 1)(x)
+y.block_until_ready()
+print('array_device', x.devices())
+print('jit_device', y.devices())
+print('jit_result', np.asarray(y).tolist())
+assert jax.default_backend() == 'gpu', f'expected GPU backend, got {jax.default_backend()}'
+assert any(device.platform == 'gpu' for device in x.devices()), f'input array placed on {x.devices()}'
+assert any(device.platform == 'gpu' for device in y.devices()), f'compiled result placed on {y.devices()}'
+PY
+```
+
+Trail exhaustive searches over indexed code returned no hits for `jax.devices`, `platform`, `JAX_PLATFORMS`, or `jax_platform_name` in the test suite, so tests do not explicitly force CPU placement. Both verbose logs remain at `/tmp/gpu-validation-cpu.log` and `/tmp/gpu-validation-cuda.log`. Source commit/tree are the identities above; only documentation/state files changed after that snapshot. This current optional run supplements but does not rewrite historical task-scoped GPU statements. No failures or unresolved concerns; there is no performance claim, full-battle GPU claim, milestone acceptance, or accepted-task count change.
+
+**Primary acceptance:** `/root` reviewed all three documentation/state diffs and both verbose logs and accepted the 73/73 CPU run followed by the 73/73 CUDA run, exercised mechanics/composition edge cases, explicit CUDA placement, unchanged source/tests/dependencies, and the recorded source identity and historical boundaries. No required Astra gate or milestone is due. Final JSON/state invariants, `git diff --check`, and `trail check --base HEAD` pass after metadata synchronization; test suites were not rerun. No failure or unresolved concern remains.
