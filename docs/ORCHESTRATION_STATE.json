@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "accepted_project_task_count": 29,
+  "accepted_project_task_count": 30,
   "review_state": {
-    "latest_task_review_baseline": 20,
+    "latest_task_review_baseline": 30,
     "bootstrap_review": {
       "status": "accepted",
       "due_at_accepted_project_task": 20,
@@ -13,7 +13,7 @@
       "review_note": "Independent focused review of required documentation corrections and policy diff accepted with the recorded static validation evidence."
     },
     "pending_review_corrections": [],
-    "next_regular_review_due_at_accepted_project_task": 30,
+    "next_regular_review_due_at_accepted_project_task": 40,
     "milestone_review": {
       "required_at_documented_boundaries": true,
       "last_reviewed_milestone": "G0",
@@ -611,6 +611,131 @@
           "predecessor_path": ".trail/learnings/2026-11-03-capture-trajectory-observations-from-policy-callbacks-developer.md",
           "reason": "CLI-managed replacement clarifies standard JSON omission of optional undefined fields; predecessor retained as same-unit learning history."
         }
+      },
+      {
+        "id": "Task030",
+        "title": "versioned move-first reference baseline policy",
+        "owner": "/root/task030",
+        "status": "accepted_complete",
+        "source_commit": "b0f996104f028306886f0326ba241dc27718ce70",
+        "scope": "Add a stateless move-first-v1 reference baseline callback composing Task028 action masks: uniformly choose among available move commands when any exist, otherwise uniformly among available switches. Honor current-request-episode rejections and supplied policy RNG. Verify through completed paired-seat pinned battles and trajectory observations; document the baseline without changing existing defaults. Reconcile the stale Task029 handoff headline with its recorded acceptance and delivered b0f9961 commit.",
+        "exclusions": [
+          "existing runner, protocol, action-space, default policy, pair/manifest execution or output-schema changes",
+          "damage/type/dex lookups, concealed state access or strength claims",
+          "tournament execution, policy registry or statistical/scored-suite design",
+          "observation features, training, learned models or likelihood labels",
+          "CLI, persistence or new mechanics",
+          "GPU or G1 milestone acceptance",
+          "implementation-owner commit/push"
+        ],
+        "acceptance_criteria": [
+          "Add a separate CommonJS module exposing a documented stable policy identity move-first-v1 and a synchronous callback compatible with existing {history,request,random}. It is stateless across calls and uses only current own request, own episode-scoped rejected commands and supplied RNG. Existing source modules/defaults remain unchanged unless a concrete mismatch is approved by primary.",
+          "Use the existing actionSpace/decodeAction contract to prefer every enabled move-row slot or explicit Struggle slot over switches. Uniformly select within the preferred set by one supplied RNG draw for each actionable call, including sole-choice calls; use enabled switches only when no move command remains. Non-actionable wait/forceSwitch false returns null without a draw; an actionable exhausted/invalid mask fails with a fixed diagnostic rather than a fallback.",
+          "Keep retry exclusions local to the latest requestEpisode in own history, so earlier rejections stop suppressing a command after progress. Preserve current-request reduced locked/recharge rows, Struggle, disabled/zero-PP moves, active/fainted replacement rules, trapped/maybeTrapped visibility and forced replacement. Reject invalid RNG values outside finite [0,1) safely; do not mutate callback input or leak private exception/request data through diagnostics.",
+          "Add independent exact-choice unit cases for move preference despite switches, random bucket endpoints, forced-switch fallback, sole-choice RNG use, wait/no-choice zero draws, episode rejection and reset, all-move rejection fallback, malformed/exhausted requests, reduced rows/Struggle and invalid RNG/input failures. Use concrete expected commands; prove inputs unchanged and seeded reproducibility without module-global state.",
+          "Complete two actual pinned battles in exchanged team seats against existing randomPolicy, keeping team/policy identities and policy seeds mapped through an existing generated pair and opaque prepared handles. Use actual Task029 callback trajectories to verify every baseline selection has an enabled slot and is a move whenever its recorded mask offers one; otherwise it is a switch. Verify terminal outcomes/reward mapping and cleanup without making scored or strength claims.",
+          "Document move-first-v1 semantics, request-only permissions, retry responsibility, RNG contract and direct runner/collector usage in README. Correct only the stale Task029 headline using its existing primary acceptance and actual delivery commit; retain its original stale wording as explicitly historical context or a dated reconciliation note. Preserve other task/milestone/GPU history.",
+          "Run focused baseline plus affected action-space, collector, runner, prepared-team, paired-seed, protocol, trace and reference checks as justified; syntax, JSON/diff, Trail build/check and inspected diff evidence are required. CPU suffices. Report exact commands/results/changed paths/concerns; stop edits for primary review and retain ownership through requested corrections.",
+          "Required independent Astra Task030 global checkpoint review covers accepted Tasks021-029 and the Task030 candidate, actual code/tests/pinned evidence, G0 and open downstream milestones, direction toward the reference environment and full JAX goal, and honest benchmark/GPU boundaries. No task count or review baseline advances until primary acceptance and the genuine independent gate ACCEPTED disposition; retain checkpoint30 while pending. After acceptance record count30/baseline30/next40 and stop, with no Task031."
+        ],
+        "plan": [
+          "Read task handoff/state, applicable AGENTS/orchestration, project-plan G1 baseline goals and scoped Trail/learning context; verify tools/reference readiness.",
+          "Implement only the separate versioned baseline and focused contract tests, then paired-seat pinned collector integration.",
+          "Update README, Task030 evidence and the explicitly reconciled Task029 headline; preserve history and add a Trail learning only for a justified new decision/finding.",
+          "Run relevant checks once per meaningful revision, refresh/check Trail, inspect diff, and stop edits for primary acceptance review.",
+          "Primary records the candidate and invokes independent Astra checkpoint review before final counting/delivery; the same implementer owns any required bounded corrections; no further deliverable is started."
+        ],
+        "required_global_review": {
+          "id": "T030Global",
+          "reviewer_role": "global_reviewer",
+          "status": "accepted",
+          "report": "docs/reviews/T030-global.md",
+          "scope": "Tasks021-029 plus Task030 candidate and current project direction; no automatic milestone closure.",
+          "accepted_task_count_at_start": 29,
+          "checkpoint": 30,
+          "reviewer": "/root/t030_global",
+          "candidate_tree": "0c01e302feee05d40e9ae92356473a6309f698f2",
+          "disposition": "ACCEPTED",
+          "accepted_at": "2026-11-03"
+        },
+        "progress": "Accepted by primary after independent T030Global gate acceptance. Implementation owner and reviewer stopped edits; primary owns final delivery. No source correction, new milestone approval or additional task was created.",
+        "gpu_required": false,
+        "validation": [
+          {
+            "command": "node --check environment/move-first-policy.cjs && node --check test/move-first-policy.test.cjs",
+            "result": "passed"
+          },
+          {
+            "command": "node --test test/move-first-policy.test.cjs test/action-space.test.cjs test/decision-trajectories.test.cjs test/battle-runner.test.cjs test/prepared-teams.test.cjs test/paired-seeds.test.cjs test/protocol.test.cjs test/trace.test.cjs test/reference.test.cjs",
+            "result": "passed 71/71 after a test-only slot expectation correction; the initial run was 70/71"
+          },
+          {
+            "command": "trail build",
+            "result": "passed; 667 nodes, 1442 edges, 75 cards"
+          },
+          {
+            "command": "trail check --base HEAD --json",
+            "result": "exit 1 with 10 reviewed lexical conflicts, additional non-failing leads/follows, and no overlaps; rationale is in docs/TASKS.md"
+          },
+          {
+            "command": "python3 -m json.tool docs/ORCHESTRATION_STATE.json >/dev/null && git diff --check",
+            "result": "passed"
+          },
+          {
+            "command": "T030Global independent checkpoint review",
+            "result": "ACCEPTED, no required findings/blockers. Independent tests57/57 plus23/23 pair/manifest; pinned provenance and diff checks passed. See docs/reviews/T030-global.md."
+          },
+          {
+            "command": "Primary final coordination checks",
+            "result": "Passed JSON/history/count/checkpoint, staged scope, unchanged candidate source identity, optional GPU byte preservation, staged diff and graph-current checks. Final staged Trail lexical findings were reviewed; semantic rationale is in the task commit body."
+          }
+        ],
+        "primary_review": {
+          "disposition": "ACCEPTED",
+          "reviewer": "/root",
+          "reviewed_at": "2026-11-03",
+          "note": "Source and complete focused tests inspected; existing APIs untouched; criteria satisfied with 71/71 tests and Task029 headline reconciliation. No source correction requested; no acceptance count advance before independent gate.",
+          "original_disposition": "CRITERIA_SATISFIED_PENDING_GLOBAL_REVIEW",
+          "accepted_at": "2026-11-03",
+          "accepted_note": "Independent T030Global gate accepted the candidate; all bounded criteria now accepted by primary."
+        },
+        "accepted_at": "2026-11-03",
+        "accepted_by_agent": "/root",
+        "acceptance_review": "Primary /root accepted Task030 after its focused source/test review and independent Astra T030Global ACCEPTED disposition. The separate stateless move-first-v1 callback composes current masks/decoder, prioritizes enabled moves including Struggle, handles waits with zero RNG draws and actionable calls with one, scopes rejections to the current episode, and emits fixed diagnostics. Exact unit expectations and two real exchanged-seat pinned battles establish seed/identity mapping, mask priority, terminal targets and cleanup. The only implementation iteration corrected a wrong new test expectation (switch2 maps to slot5); final affected validation passed71/71. Independent checkpoint source sampling and tests passed57/57 plus23/23 pair/manifest. No required finding or blocker remained. Existing product APIs/defaults are unchanged. Task029 headline was reconciled to its established b0f9961 acceptance/delivery with original wording retained historically. G0-only milestone acceptance, optional historical GPU evidence and open G1+ boundaries remain. Count advances29 to30; accepted checkpoint sets baseline30 and next40. No Task031 starts."
+      }
+    ],
+    "active_regular_review": null,
+    "regular_review_history": [
+      {
+        "id": "T030Global",
+        "status": "accepted",
+        "reviewer_role": "global_reviewer",
+        "reviewer": "/root/t030_global",
+        "report": "docs/reviews/T030-global.md",
+        "accepted_count_at_review_start": 29,
+        "candidate_task": "Task030",
+        "checkpoint": 30,
+        "reviewed_base_commit": "b0f996104f028306886f0326ba241dc27718ce70",
+        "candidate_tree": "0c01e302feee05d40e9ae92356473a6309f698f2",
+        "candidate_tree_note": "Staged tree captured before this review-request metadata; product source/test blobs remain unchanged during review.",
+        "scope": "Independent checkpoint assessment of Tasks021-029 and primary-reviewed Task030 candidate: actual source/tests/pinned evidence, project direction, G0/open downstream gates, benchmark/provenance/privacy/GPU boundaries. No G1 closure proposed.",
+        "required_findings": [],
+        "disposition": "ACCEPTED",
+        "accepted_at": "2026-11-03",
+        "accepted_task_review_baseline": 30,
+        "next_checkpoint": 40,
+        "optional_observations": [
+          {
+            "finding": "Benchmark charter later-gap paragraph still lists trajectory collection as absent although Task029 provides a bounded completed-battle collector.",
+            "status": "deferred_optional",
+            "note": "Reviewer explicitly found no blocker and requested no optional edit in this unit."
+          }
+        ],
+        "validation": [
+          "Independent source/evidence sampling and candidate source/tree identity verified.",
+          "Independent tests57/57 plus corrected pair/manifest23/23 passed; pinned provenance and diff checks passed.",
+          "Owner71/71 and syntax/graph evidence reviewed; no new GPU/benchmark or milestone claim."
+        ]
       }
     ]
   },
