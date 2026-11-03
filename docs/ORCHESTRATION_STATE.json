@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "accepted_project_task_count": 32,
+  "accepted_project_task_count": 33,
   "review_state": {
     "latest_task_review_baseline": 30,
     "bootstrap_review": {
@@ -874,6 +874,96 @@
             "result": "Passed final JSON/history/count/review/GPU preservation, exact Task001-031 handoff prefix, unchanged implementation blob identity, seven-file staged scope, learning replacement, diff and graph-current checks (738 nodes). No blockers."
           }
         ]
+      },
+      {
+        "id": "Task033",
+        "title": "offline named baseline outcome report",
+        "owner": "/root/task033",
+        "status": "accepted_complete",
+        "source_commit": "a671f15266bb49e634bce2677008963c1284c938",
+        "scope": "Add a separate pure CommonJS outcome-report API for a contiguous recorded prefix of Task031/032 named completed paired matchups, bound to explicit root seed, expected pair count, policy IDs and complete expected limits. Validate canonical identities and outcome topology, then count completed outcomes by seat and policy role. This provides named-baseline accounting for the G1 tournament path without changing legacy accounting.",
+        "exclusions": [
+          "execution, Showdown bootstrap or new battle run orchestration in the report API",
+          "CLI, filesystem I/O, persistence, journal/resume or failed/partial-matchup accounting",
+          "changing accepted named/legacy library, executor, policy or report schemas",
+          "rates, confidence intervals, suite/power/stopping-rule selection, strength/performance claims",
+          "authentication or execution attestation from serialized metadata; packed-team regeneration or hash attestation",
+          "new mechanics, training, GPU or milestone acceptance",
+          "unrelated optional documentation cleanup and owner commit/push"
+        ],
+        "acceptance_criteria": [
+          "Expose a documented version1 pure synchronous named report API with required rootSeed, positive bounded pairCount, policyA, policyB, complete expected limits and matchups array. Only legal-random-v1 and move-first-v1 are accepted, including same-ID self-play. Strictly snapshot own plain JSON data, reject unknown config/envelope/nested schema keys, accessors, sparse/non-JSON/cyclic inputs and malformed values with one fixed safe diagnostic; never read foreign exception fields or mutate inputs.",
+          "Validate each artifact as the exact Task031 named completed kind/schema/pin/format, rootSeed, pairIndex equal its array index, canonical pairId, policy-role IDs, complete expected limits, policy seeds, team seeds and lowercase SHA256-shaped digests. Require both canonical runs in order with generated run IDs/seats/policySeats/seed tuples and matching IDs by seat. Use generatePair directly for recorded indices, not earlier/whole configured manifests. Reject duplicate, out-of-order, skipped, oversized or legacy-artifact prefixes and mixed policies/limits/pins.",
+          "Validate both nested safe battle-result envelopes: exact required keys, schema/kind/pin/format/seeds/limits, completed status, prepared team source, null failure/cleanupFailure, finite nonnegative battle_runner elapsed time, valid win/p1-or-p2 or tie/null outcome and nonnegative safe turns. Counters remain finite JSON data as accepted by the named producer; do not claim validation of their mechanics/arithmetic or re-emit them. No raw transcripts, packed teams, handles, callback inputs or foreign error/result metadata enter the report.",
+          "Return a distinct allowlisted report kind/schema with detached pinned configuration and coverage counting recorded completed pairs/battles and unrecorded suffix pairs/run slots. Empty/short/full prefixes are supported. Missing suffix artifacts disclose no execution, failure or attempted-work status; do not label them failed, unattempted, successful workload completion or zero work. Serialized structural validation never attests who ran the battles.",
+          "Count wins/losses/ties by p1/p2 seat and policyA/policyB role, each role carrying its explicit version ID and separate by-seat tally. Keep roles distinct for same-ID self-play. Include nonduplicated overall win-by-seat/tie totals and completed battle denominator; test handwritten all-win/loss/tie and swapped-seat cases and arithmetic consistency. No rate/strength statistic.",
+          "Add independent controlled valid artifacts and mutation/hostile-input rejection tests for all identity/config/topology boundaries, exact output allowlisting, no input mutation, output detachment, empty/partial/full prefixes, same-ID role accounting and missing-record semantics. Obtain real guarded pinned named mixed-policy artifacts, JSON-roundtrip and report them with expected outcomes/counts independently checked; keep test-only execution outside report API. Existing legacy reporter rejects named artifacts and new reporter rejects legacy ones.",
+          "Document API/schema and prefix, role, limits, digest/attestation and omitted-work boundaries. Run focused and justified affected named/report/paired-seed/reference checks once per meaningful revision; syntax/JSON/diff, Trail refresh/check and own diff inspection. Preserve all prior task/review/GPU history and count32/baseline30/checkpoint40 until primary acceptance; no GPU or Astra gate required absent a concrete contradiction. Report exact evidence and stop edits for primary review."
+        ],
+        "plan": [
+          "Read applicable instructions, relevant Trail learnings and scoped dependency/source context.",
+          "Implement a separate strict pure named accounting module and independent controlled tests; leave accepted modules unchanged.",
+          "Run real pinned roundtrip integration and affected tests, document boundaries and update Task033 progress; refresh/check Trail and inspect diff.",
+          "Freeze for primary criteria review; primary alone accepts/counts/delivers and stops after Task033."
+        ],
+        "progress": "Primary accepted after the owner froze edits. Added only the separate pure report module, its controlled/pinned tests, README documentation and this Task033 evidence. Final affected47/47 passes; no GPU or external evidence needed. Owner has not accepted/count-incremented/committed; primary owns review/corrections and delivery.\n\nInitial implementation debugging findings (all fixed before primary review): 1) Valid controlled and pinned records were rejected because `copyArray` initially called its run mapper without the index, so `validateRun` could not select a canonical run. Passing the index fixed that. 2) That callback change initially passed the numeric index as `copyJson`'s `ancestors` argument (`TypeError: ancestors.has is not a function`); wrapping it in an explicit item callback fixed it. Initial test-only issues are distinct: after removing unused imports a stale `ROOT` constant caused `ReferenceError: path is not defined`, fixed by deleting the unused constant; a detachment assertion expected two p1 wins despite a one-win/one-tie vector, corrected to one; and a same-ID vector expected policyA to win at p1 in both runs even though the generated swapped run seats policyA at p2, so outcomes now derive from canonical `generatePair` role seats and tallies stay handwritten.\n\nPrimary correction revision 1 (not two rounds): `/root` found canonical validation compared `JSON.stringify` directly, rejecting valid records whose object keys were reordered. Replaced it with recursively sorted object-key comparison while retaining array/run order; a JSON-roundtrip/reversed-keys regression now expects an identical report. The same review pass requested stronger validation evidence: mutation table, report top-level allowlist, by-seat same-ID counts, accessor read counters, a reflection-trap foreign error with an unread get trap, and exact fixed error message checks. These are implemented and pass the final affected suite. A nested upstream getter regression also protects against reading caller-controlled properties during stringification.\n\nFinal validation and graph are current; implementation and tests are frozen after independent primary re-review. Owner has not accepted or counted Task033, committed, or pushed. No unresolved source concerns or external/GPU requirements. Final Trail check:10 lexical documentation conflicts and0 overlaps. Owner-stage remaining matches were README:231 canonical metadata language; state scope at920; nested safe result semantics at933; TASKS criteria at1274/1276/1282. The module requires generated identity and digest shape, counts valid result shapes, omits raw/packed data, and does not attest execution or expose player observations. One non-conflict source lead is on the stated exclusion of packed-team re-attestation.",
+        "gpu_required": false,
+        "validation": [
+          {
+            "command": "node --check environment/summarize-baseline-matchups.cjs && node --check test/summarize-baseline-matchups.test.cjs && node --test test/summarize-baseline-matchups.test.cjs",
+            "result": "final7/7 passed, including key-order equivalence and pinned JSON-roundtrip integration."
+          },
+          {
+            "command": "node --check environment/summarize-baseline-matchups.cjs && node --check test/summarize-baseline-matchups.test.cjs && node --test test/summarize-baseline-matchups.test.cjs test/baseline-matchup.test.cjs test/run-baseline-matchup.test.cjs test/paired-seeds.test.cjs test/summarize-results.test.cjs test/reference.test.cjs",
+            "result": "final47/47 passed after primary correction revision1."
+          },
+          {
+            "command": "trail build",
+            "result": "passed; final graph769 nodes/1662 edges/81 cards; cache is gitignored."
+          },
+          {
+            "command": "trail build --check",
+            "result": "passed; wiring graph current at769 nodes."
+          },
+          {
+            "command": "node --check environment/summarize-baseline-matchups.cjs && node --check test/summarize-baseline-matchups.test.cjs && python -m json.tool docs/ORCHESTRATION_STATE.json && git diff --check",
+            "result": "passed."
+          },
+          {
+            "command": "trail check --base HEAD --json",
+            "result": "Owner-stage exit1 with10 lexical documentation conflicts/zero overlaps; primary final staged check also has10 lexical documentation conflicts across5 checked files/17 active notes, no source conflict/overlap. Exact current findings and semantic rationale are recorded in delivery commit body."
+          },
+          {
+            "command": "Primary final coordination checks",
+            "result": "Passed final JSON/history/count/review/GPU preservation, exact Task001-032 handoff prefix, frozen source/test blobs, five-file staged scope, diff and graph-current checks (769 nodes). No blockers."
+          }
+        ],
+        "implementation_source_blobs": {
+          "environment/summarize-baseline-matchups.cjs": "ef564a4e5ed3c1c8bf4109b83ffe2da034a8cca4",
+          "test/summarize-baseline-matchups.test.cjs": "0423e240bb16dab1ded41d82fb449ecac826ff9e"
+        },
+        "primary_correction_revision": {
+          "round": 1,
+          "owner": "/root/task033",
+          "reviewer": "/root",
+          "disposition": "accepted_after_primary_re_review",
+          "findings": [
+            "Order-insensitive object key validation: compare descriptor-snapshotted records canonically while preserving run/array order; add reversed-key JSON-roundtrip equivalence regression.",
+            "Strengthen independent acceptance evidence: labeled mismatch mutations for identity/topology/nested outcome safety, exact top-level output allowlist, same-ID per-seat tallies, zero-read accessor counters, plain foreign Error thrown from an input proxy ownKeys trap with the input get trap unread, and exact fixed diagnostic assertion."
+          ],
+          "validation": "Final affected47/47, including the corrected schema/key-order and malicious-input cases. No runtime-scope change or criterion reduction."
+        },
+        "accepted_at": "2026-11-03",
+        "accepted_by_agent": "/root",
+        "acceptance_review": "Primary /root independently reviewed the full report module, corrected tests, README API contract and owner validation evidence. Accepted Task033 after the owner froze all edits. Strict data snapshots precede canonical prefix/config/run/result validation; role/seat tallies count only structurally valid completed named artifacts and retain distinct roles for same-ID self-play. Explicit complete expected limits prevent mixed-budget pooling. Output is detached configuration, recorded/unrecorded coverage and integer outcomes only, with no raw data, counters, execution/attempt claims or attestation. Primary correction revision1 fixed object-key-order sensitivity while preserving array/run ordering and strengthened identity/topology, exact-output, same-ID by-seat and zero-read accessor tests. Corrected focused7/7 and affected47/47 pass, including real guarded pinned JSON roundtrip. The reflection test throws a plain Error from an input proxy ownKeys trap and verifies the input get trap is unread; independently, source catch has no exception binding and never inspects thrown fields. Initial copyArray mapper/index defects and test-vector mistakes are retained as history, not hidden. Source/test blobs match the frozen owner revision, and existing producer/CLI/legacy/policy schemas are unchanged. No criteria waived, new GPU run, strength/performance claim or G1 closure. Count32 becomes33; review baseline30/checkpoint40 unchanged; no Task034 starts.",
+        "primary_review": {
+          "disposition": "ACCEPTED",
+          "reviewer": "/root",
+          "accepted_at": "2026-11-03",
+          "correction_revisions": 1,
+          "corrections_verified": true,
+          "remaining_findings": []
+        }
       }
     ],
     "active_regular_review": null,

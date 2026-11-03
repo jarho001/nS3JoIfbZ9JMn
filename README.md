@@ -226,6 +226,30 @@ After the pinned reference check, the CLI exclusively creates the requested outp
 
 The success line contains only the artifact kind, pair ID, completion status, and resolved output path. The saved artifact retains the library's per-battle timing scope, excludes earlier setup and output writing, and is reproducibility metadata rather than proof of execution or tamper resistance. No aggregate score, tournament result, strength estimate, or performance claim is produced.
 
+### Summarize a recorded named-matchup prefix
+
+The pure `environment/summarize-baseline-matchups.cjs` API validates completed named-matchup artifacts against an explicit root seed, configured pair count, policy IDs, and all four battle limits. Pass a contiguous array beginning at pair index zero; each artifact must match the canonical paired run IDs, seat assignments, team and policy seeds, and pinned result records.
+
+```js
+const { summarizeBaselineMatchups } = require('./environment/summarize-baseline-matchups.cjs');
+
+const report = summarizeBaselineMatchups({
+  rootSeed: [1, 2, 3, 4],
+  pairCount: 100,
+  policyA: 'legal-random-v1',
+  policyB: 'move-first-v1',
+  limits: {
+    timeoutMs: 60_000,
+    maxPackets: 50_000,
+    maxDecisions: 20_000,
+    maxRetriesPerRequest: 8,
+  },
+  matchups: recordedArtifacts,
+});
+```
+
+The versioned `gen5-named-baseline-outcome-report` reports configured, recorded, and unrecorded pairs/run slots, completed outcomes by seat and by policy role, and overall win counts by seat plus ties. `policyA` and `policyB` remain separate roles when both name the same policy version. Limits and policy IDs must match across every recorded artifact. The reporter is an accounting view: an unrecorded suffix says nothing about battles that may have run without a saved artifact. Even a full prefix only says every configured artifact position was supplied; artifact fields do not prove that execution occurred or remained unchanged. Digests are checked for shape, not reverified against packed teams. The report does not repeat counters or transcripts and makes no rates, uncertainty, strength, or performance claim. The legacy `summarizeResults` reporter remains bound to its own manifest and pair schema.
+
 ## Trusted trace capture and replay
 
 [`reference/trace.cjs`](reference/trace.cjs) captures and replays the full BattleStream input/output sequence:
