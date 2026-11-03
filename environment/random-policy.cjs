@@ -83,6 +83,12 @@ function candidateActions(request, excluded = []) {
 				candidates.push('move 1');
 				continue;
 			}
+			// Gen 5 Showdown synthesizes Struggle without a pp field.
+			if (active.moves.length === 1 && move?.move === 'Struggle' && move.id === 'struggle' &&
+				move.target === 'randomNormal' && move.disabled === false && move.pp === undefined) {
+				candidates.push('move 1');
+				continue;
+			}
 			if (!move || typeof move !== 'object' || typeof move.disabled !== 'boolean' || !Number.isFinite(move.pp) || move.pp < 0) {
 				throw new Error('Malformed move request: move slot is incomplete.');
 			}

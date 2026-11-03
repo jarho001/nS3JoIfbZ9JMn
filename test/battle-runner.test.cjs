@@ -12,6 +12,7 @@ oracle.assertReady();
 const ps = require('../reference/vendor/pokemon-showdown/dist/sim');
 const { DEFAULT_LIMITS, DEFAULT_SEEDS, parseTerminal, runBattle } = require('../environment/battle-runner.cjs');
 const { candidateActions, createPolicyRng, policyInput, randomPolicy } = require('../environment/random-policy.cjs');
+const { actionSpace, decodeAction } = require('../environment/action-space.cjs');
 
 const ROOT = path.resolve(__dirname, '..');
 
@@ -404,8 +405,13 @@ test('pinned Gen 5 Showdown emits and recovers from a real unavailable trapping 
 	const p1 = input => {
 		const episode = [...input.history].reverse().find(record => record.type === 'requestEpisode')?.id;
 		const hadUnavailable = input.history.some(record => record.type === 'ownChoiceResolution' && record.episodeId === episode && record.status === 'rejected');
-		if (!hadUnavailable && input.request.active?.[0]?.maybeTrapped) return 'switch 2';
-		return randomPolicy(input);
+		const rejected = input.history
+			.filter(record => record.type === 'ownChoiceResolution' && record.status === 'rejected' && record.episodeId === episode)
+			.map(record => record.command);
+		const { mask } = actionSpace(input.request, rejected);
+		if (!hadUnavailable && input.request.active?.[0]?.maybeTrapped && mask[5]) return decodeAction(input.request, 5, rejected);
+		const available = mask.flatMap((enabled, slot) => enabled ? [slot] : []);
+		return decodeAction(input.request, available[Math.floor(input.random() * available.length)], rejected);
 	};
 	const result = await runBattle({ ps: trappingPs, policies: { p1 } });
 	assert.equal(result.transcript.kind.startsWith('trusted omniscient'), true);
