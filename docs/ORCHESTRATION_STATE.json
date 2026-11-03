@@ -16,9 +16,85 @@
     "next_regular_review_due_at_accepted_project_task": 30,
     "milestone_review": {
       "required_at_documented_boundaries": true,
-      "last_reviewed_milestone": null,
+      "last_reviewed_milestone": "G0",
       "last_review_commit": null,
-      "recorded_approvals": []
+      "recorded_approvals": [
+        {
+          "milestone": "G0",
+          "review_id": "G0Review",
+          "disposition": "ACCEPTED",
+          "reviewer": "/root/g0_reviewer",
+          "accepted_at": "2026-11-03",
+          "report": "docs/reviews/G0-specification.md",
+          "reviewed_source_commit": "b4fed94964ff8185c0fc8d9a67c4d77c2f5f4cf2",
+          "scope_note": "G0 specification closure only; exact pinned game target and known gaps accepted. G1 and later implementations, benchmark validity, and GPU evidence remain outside this approval."
+        }
+      ],
+      "active_review": null,
+      "review_history": [
+        {
+          "id": "G0Review",
+          "title": "G0 specification milestone review",
+          "unit_type": "unnumbered_milestone_review",
+          "status": "accepted",
+          "owner": "/root/task027",
+          "reviewer": "/root/g0_reviewer",
+          "reviewer_status": "ACCEPTED",
+          "source_commit": "b4fed94964ff8185c0fc8d9a67c4d77c2f5f4cf2",
+          "scope": "Independently review the existing G0 specification-closure boundary at the G0 row of PROJECT_PLAN.md, the G0 section of docs/MECHANICS_COVERAGE.md, the G0 boundary of docs/REUSE_AUDIT.md, the closing G0 statements of docs/BENCHMARK_CHARTER.md, and applicable bootstrap-review required findings. Assess whether the pinned target, rules/data authority and source manifest, reuse decision, mechanics inventory, and known gaps are explicit and consistent. Identify any remaining G0 decision that changes the target or rules/data scope, or explicitly bound operational benchmark questions to later measurements.",
+          "exclusions": [
+            "G1 integration or full-engine acceptance",
+            "new engine features",
+            "policy learning or end-to-end learning benchmarks",
+            "GPU acceptance",
+            "candidate-project re-audit or newest external research",
+            "operational budgets that do not change the game target",
+            "a numbered development task",
+            "claiming G0 acceptance before independent Astra disposition"
+          ],
+          "acceptance_criteria": [
+            "Regenerate or verify the pinned resolved gen5randombattle fixture identity and its rule, mod, and generator facts from the pinned local source/runtime; check the data authority and source-manifest commit.",
+            "Check that the accepted reuse decision and mechanics ledger distinguish implemented arithmetic from known target, rules/data, visibility, PRNG, event, full-engine, and learning gaps. Confirm there is no implied coverage percentage or downstream milestone acceptance.",
+            "Explicitly identify remaining G0 target/scope decisions, if any, or bound operational benchmark questions to future measurements. G0 does not require later implementations.",
+            "Provide an independent report naming the reviewed source identity, actual evidence and check commands, disposition (ACCEPTED, NEEDS_CHANGES, or BLOCKED), project direction, and scope limitations.",
+            "Only after a genuine ACCEPTED disposition, update the current G0 status consistently while retaining G1-and-later gaps and historical task language. Preserve accepted-task count 27 and regular checkpoint 30; create no numbered task.",
+            "Run focused documentation, JSON, link, pin, diff, and Trail checks as appropriate. Do not claim GPU, benchmark, or new-mechanic validation."
+          ],
+          "plan": [
+            "Persist scope, owner, planned reviewer, source identity, and acceptance criteria in docs/TASKS.md and this state record.",
+            "Stop for independent Astra review of the pinned source/fixture, existing specification artifacts, and applicable bootstrap-review findings.",
+            "If required, apply only bounded documentation corrections as the sole owner for at most one follow-up round; optional suggestions are not auto-implemented.",
+            "After genuine acceptance only, update G0 status consistently, preserve later-gate limitations and task history, run affected documentation/state checks, and report disposition to the primary."
+          ],
+          "progress": "Independent Astra review accepted G0 specification closure on 2026-11-03. Primary /root accepted the full G0Review unit and final documentation/state synchronization after the final focused Astra review. The report records 119 resolved local links, preserved task history/count 27/baseline 20/checkpoint 30, and no required corrections or blockers. This unnumbered review does not change accepted task count 27, baseline 20, or next checkpoint 30; G1 and later implementation, benchmark validity, and GPU evidence remain open/out of scope.",
+          "gpu_required": false,
+          "disposition": "ACCEPTED",
+          "accepted_at": "2026-11-03",
+          "report": "docs/reviews/G0-specification.md",
+          "reviewed_source_commit": "b4fed94964ff8185c0fc8d9a67c4d77c2f5f4cf2",
+          "completed_plan": true,
+          "status_sync_validation": {
+            "date": "2026-11-03",
+            "state_history_and_count": "passed focused Python assertions: completed task history unchanged, accepted count 27, active_task null, baseline 20, next checkpoint 30, no pending corrections, gpu_block null, last_review_commit null.",
+            "json_links_and_pin": "passed python3 -m json.tool docs/ORCHESTRATION_STATE.json and focused assertions; local Markdown links resolved across README.md, the G0 documentation, task handoff, state, and docs/reviews/G0-specification.md; reviewed source base and pinned format commit agree with the accepted report.",
+            "diff": "git diff --check passed.",
+            "trail_graph": "trail build --check passed: wiring graph current, 604/604 nodes.",
+            "trail_diff": "Latest trail check --base HEAD --json included seven changed files and exited 1 with six lexical conflicts: README.md:99 (two matches), docs/ORCHESTRATION_STATE.json:60 and docs/TASKS.md:978 (the same satisfied plan condition that status updates follow Astra acceptance), docs/TASKS.md:964, and docs/TASKS.md:983. The README matches concern seed-bound prepared teams and offline reporting; the other matches are status/report language, the post-acceptance gate condition, and the pinned target plus future seed-publication protocol. These are cross-domain lexical matches, not contradictions. Additional findings were non-conflicting lead/follows results. Detailed rationale is in docs/TASKS.md.",
+            "source_checks": "No source tests or benchmark were rerun. The independent Astra report records reference tests 7/7, sampled arithmetic-oracle tests 2/2, and provenance checks.",
+            "gpu": "not required; no GPU run claimed.",
+            "new_learning": "none"
+          },
+          "final_documentation_review": {
+            "disposition": "ACCEPTED",
+            "reviewed_at": "2026-11-03",
+            "independent_reviewer": "/root/g0_reviewer",
+            "primary_acceptance_by": "/root",
+            "report": "docs/reviews/G0-specification.md",
+            "evidence": "Final focused documentation/state re-review; 119 local links resolved; task history and accepted count 27, review baseline 20, and next checkpoint 30 preserved; no required corrections or blockers.",
+            "last_review_commit": null
+          }
+        }
+      ]
     },
     "completed_task_history": [
       {
