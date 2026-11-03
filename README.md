@@ -107,6 +107,15 @@ node --test test/pair-runner.test.cjs
 
 The command prepares team A and B once, runs both seat assignments sequentially in separate battles, and writes their status and nested per-battle result records in a versioned pair record. On a battle failure it preserves any earlier completed run, records the attempted failed run, and leaves a remaining run marked `not_attempted`; preparation and configuration failures leave both runs unattempted. The pair `elapsedMs` starts before team preparation and covers both battles and their cleanup; nested prepared-battle times start when each `runBattle` begins, after the shared preparation. Pair results and per-battle results contain no raw transcript, packed team, policy input, or exception text. If parsing or pinned-reference initialization fails before the pair starts, an optional result file records `elapsedScope: "cli_initialization"` and the CLI exits nonzero. A result-file write error produces a concise nonzero error; no result file can be written when its own destination is unavailable. Task024 runs one explicitly selected pair; Task025 adds sequential execution across an explicit manifest.
 
+Task026 adds a read-only offline report over Task025's `manifest.json` and `results.jsonl`:
+
+```sh
+node environment/summarize-results.cjs --manifest results/manifest.json --results results/results.jsonl
+node --test test/summarize-results.test.cjs
+```
+
+The report validates the complete generated manifest and the journal's contiguous pair prefix, then counts recorded pair/run statuses and completed battle outcomes by player seat and policy identity. An empty journal is valid; each non-empty JSONL record must occupy a newline-terminated line, and blank lines are invalid. The command does not read or reconcile Task025's `summary.json`. A missing suffix is `unrecorded`: a write failure can leave a pair result absent after its battle was attempted. A full recorded prefix describes journal coverage only; it does not prove that the records came from an authentic runner process or make a scored benchmark claim. Offline checks validate serialized format, IDs, seeds, statuses, and terminal outcome shape. They cannot prove which process produced a result record; the report is accounting metadata without execution attestation. This report does not aggregate counters, timing, rates, or uncertainty intervals.
+
 Task025 provides a full-manifest library and pinned CLI. The caller chooses the root, pair count, and a path for a new output directory:
 
 ```sh

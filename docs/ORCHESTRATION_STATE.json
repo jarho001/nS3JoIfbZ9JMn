@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "accepted_project_task_count": 25,
+  "accepted_project_task_count": 26,
   "review_state": {
     "latest_task_review_baseline": 20,
     "bootstrap_review": {
@@ -267,6 +267,59 @@
         "accepted_by_agent": "/root",
         "status_note": "Accepted and complete by /root on 2026-11-03 after independent source, diff, and evidence review. Implementation owner /root/task025 did not commit or push.",
         "acceptance_review": "Primary /root independently reviewed the source, diff, and evidence and accepted Task025. Acceptance covered the explicit root/count/output configuration; validation before artifact/team work; exclusive new-directory artifacts; exact manifest/hash; actual sequential runPair calls with journaling before next-pair preparation; ownership-proven partial results; safe fail-fast behavior; honest completed/failed/unattempted/recorded counts; packet_limit and retry_limit category reconciliation; pinned two-pair packed-team seat exchange, policy seeds, terminal records, and stream cleanup; CLI success and safe nonzero parse/bootstrap/I/O failures; and documented schemas/failure/timing boundaries without benchmark or milestone claims. The combined regressions passed 65/65 and the strengthened manifest suite passed 13/13. Syntax, state JSON, diff checks, and Trail build passed. Trail check exited 1 with four reviewed lexical false positives; rationale is recorded and no blocking implementation finding remained. No Astra review or milestone gate was due; count advances to 25, baseline stays 20, and the next regular checkpoint remains 30."
+      },
+      {
+        "id": "Task026",
+        "title": "offline recorded-pair outcome accounting",
+        "owner": "/root/task026",
+        "status": "accepted_complete",
+        "scope": "Add a read-only CommonJS library and explicit CLI to validate Task025 canonical paired manifests and contiguous recorded result prefixes, then report safe recorded pair/run outcomes by seat and policy identity.",
+        "exclusions": [
+          "battle simulation or runner changes",
+          "Task025 summary reconciliation or authenticity",
+          "verification of packedTeamSha256 values, counters, and timing",
+          "claims that absent records were unattempted",
+          "rates, confidence intervals, performance or scored benchmark claims",
+          "suite size/statistical power choices",
+          "resume/concurrency",
+          "GPU",
+          "G0/G1 closure"
+        ],
+        "acceptance_criteria": [
+          "Validate the complete version-1 manifest against generateManifest(rootSeed,pairCount), including all generated metadata and pair/run seeds.",
+          "Accept only contiguous recorded pair prefixes and validate schema, pinned identity, IDs, seats, policy identities, seeds, statuses and outcome topology; support authentic preparation and partial battle failure record shapes.",
+          "Emit versioned safe counts for recorded/unrecorded pair and run slots and completed outcomes by seat and policy identity; failures and missing suffixes are never outcomes or unattempted claims.",
+          "Do not mutate inputs; CLI supports explicit manifest/results paths, validates JSON/JSONL, and reports safe nonzero failures without arbitrary input details.",
+          "Test hand-calculated win/loss/tie identity exchange, empty/full/partial prefixes, preparation/battle failures, hostile/malformed/tampered records, CLI and I/O errors, unchanged artifacts, and actual pinned runner output with a genuine partial failure.",
+          "Update README and benchmark charter on implemented accounting and limitations; no milestone closure.",
+          "Run affected regressions, syntax, state JSON, diff, Trail build and Trail check; report evidence to primary. GPU not required."
+        ],
+        "plan": [
+          "Inspect Trail and existing manifest/pair/battle contracts.",
+          "Persist this plan before implementation.",
+          "Implement offline validator/accountant and explicit read-only CLI.",
+          "Add controlled and pinned record-validation tests.",
+          "Update README and benchmark charter.",
+          "Run affected checks, refresh/check Trail, inspect diff, report for primary review without commit."
+        ],
+        "progress": "Accepted by primary /root after independent focused source, diff, and validation review. Count advances 25 to 26; review baseline remains 20 and next checkpoint remains 30. No GPU evidence or milestone closure was required.",
+        "validation": [
+          "node --check environment/summarize-results.cjs; node --check test/summarize-results.test.cjs \u2014 passed.",
+          "node --test test/summarize-results.test.cjs \u2014 10/10 passed after final changes, including schema/upstream/format/status tampering, throwing property getters, pinned complete/partial records, and early failed initialization before teamSource.",
+          "Combined affected regression command covering summarize-results, manifest-runner, pair-runner, paired-seeds, prepared-teams, battle-runner, protocol, trace \u2014 73/73 passed before final bounded early-initialization and invalid-input test additions; final new suite passed 10/10 afterward.",
+          "python3 -m json.tool docs/ORCHESTRATION_STATE.json; git diff --check \u2014 passed.",
+          "trail build \u2014 passed with 570 nodes and 1225 edges.",
+          "trail check --base HEAD \u2014 exit 1 with four reviewed lexical conflicts: charter description, packedTeamSha256-verification exclusions in handoff/state, and checking all fields of this versioned manifest. This implementation rejects arbitrary team artifacts and compares run seeds to generated canonical entries; \u201call\u201d is limited to manifest fields and says nothing about all game formats. Include rationale in commit body.",
+          "GPU not required."
+        ],
+        "trail_learning": {
+          "id": "l-86fd14c5",
+          "path": ".trail/learnings/2026-11-03-offline-outcome-reports-cannot-attest-who-jarho001.md"
+        },
+        "accepted_at": "2026-11-03",
+        "accepted_by_agent": "/root",
+        "acceptance_review": "Primary independently reviewed canonical manifest equality; contiguous pair identity, seed and seat mappings; sequential completed/failed/not_attempted topology and rejection of records following a failure; hand-calculated outcome tallies by seat and policy identity; safe CLI errors and report allowlisting; pinned success, packet-limit partial failure, early initialization failure before teamSource; and unchanged offline input artifacts. All delegated criteria were accepted with no blocking findings. No Astra review or milestone gate was due. Validation: final summarize-results suite 10/10; requested combined affected regression suites 73/73 before final bounded compatibility and invalid-input test additions, followed by focused suite 10/10; syntax, JSON, diff, and Trail build passed. Trail check exited 1 with four reviewed lexical conflicts whose rationale is recorded in docs/TASKS.md and belongs in the task commit body.",
+        "status_note": "Accepted complete by /root on 2026-11-03. No commit or push is recorded in this task state update."
       }
     ]
   },
