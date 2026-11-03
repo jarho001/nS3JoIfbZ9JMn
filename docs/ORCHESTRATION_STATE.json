@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "accepted_project_task_count": 33,
+  "accepted_project_task_count": 34,
   "project_direction_decision": {
     "status": "adopted",
     "date": "2026-11-03",
@@ -983,6 +983,107 @@
           "corrections_verified": true,
           "remaining_findings": []
         }
+      },
+      {
+        "id": "Task034",
+        "title": "restricted seeded JAX neutral Tackle turn",
+        "owner": "/root/task034",
+        "status": "accepted_complete",
+        "source_commit": "19616d6c0a5f0401ceca28bf2928f0dcc06f22b2",
+        "scope": "Implement one integrated runnable simultaneous-choice turn for a named restricted Gen5 one-versus-one neutral Tackle development variant, with fixed typed JAX battle/request state, exact pinned Gen5 PRNG evolution, ordinary hit/critical/KO handling and differential state/request/event projections against an actual pinned Showdown turn. This advances simulator-first G3 work while G1 and all implementation milestones remain open.",
+        "exclusions": [
+          "full gen5randombattle support or G1/G3 acceptance",
+          "random teams, multiple roster members, switching/replacements, speed ties, non-Tackle moves or Struggle",
+          "items, weather, statuses, stat boosts, hazards, relevant abilities or other passive/secondary effects",
+          "full raw Showdown protocol byte equality, full observation feature encoder or existing runner/schema changes",
+          "learning/PPO, tournament/reporting expansion, throughput claims or GPU acceptance",
+          "weakening required parity evidence or replacing actual execution with a mocked damage calculator",
+          "owner commit/push"
+        ],
+        "acceptance_criteria": [
+          "Declare a concrete named restricted variant and validated boundary before implementation: one active Pokemon per side, Tackle only, neutral non-STAB physical damage, distinct effective speeds, positive HP/PP and ordinary bounded level/stats, no effects beyond supported Tackle accuracy/critical/damage/faint mechanics. Use pinned Showdown sets/data for oracle initialization; document any custom-format/rule overrides and initialization boundary. Reject unsupported inputs explicitly without state/RNG progression; do not claim exact full-format support. Stop/report concrete feasibility or oracle contradictions rather than silently narrow these criteria.",
+          "Expose a fixed-shape typed JAX PyTree state and pure compiled-capable simultaneous-choice transition; both sides commit from the same request boundary before execution. Include HP/max HP, PP, ordinary effective stats/speeds, turn/request phase, terminal winner/status and exact Gen5 four-limb RNG state. Account for move order, Tackle PP use, accuracy/critical/damage RNG consumption, HP clamp, KO and skipping a fainted actor; terminal inputs absorb without draws. Pending/invalid/unsupported choices produce explicit diagnostics and no concealed-choice disclosure or partial advance.",
+          "Implement exact pinned Gen5 LCG/upper32/bounded sampling using verified integer limb arithmetic compatible with default JAX32, not JAX-native randomness or prerecorded result replay. Validate known vectors and multiple high/low/carry seeds against live pinned PRNG; instrument actual turn random calls including bounds/context/state before/after so accidental extra/missing/reordered calls fail. Scope draw operations to concrete bounded calls needed by the variant and declare their supported range.",
+          "Build a guarded pinned reference oracle that executes actual submitted Tackle choices from a captured normal-request boundary (not isolated getDamage calls or replacement RNG values). Compare exact pre/post RNG limbs and draw consumption, internal HP/PP, action order, next turn, terminal outcome and declared minimal request/legal-action plus both-recipient visible event/history projections. Projections may normalize protocol into an explicit semantic schema but cannot erase relevant critical/damage/faint/turn or recipient HP visibility differences. Keep trusted internal state and unprojected packets out of actor-facing views.",
+          "Cover both speed orderings, multiple seeds including a genuine critical hit, normal surviving exchanges, first-action KO with skipped second move and terminal absorption, plus unsupported/invalid input no-advance and simultaneous-choice boundaries. Retain multiple-turn continuations through at least a short supported sequence to establish state/RNG handoff, without claiming full battle coverage. Use independently computed/handwritten invariants alongside actual oracle outputs; no self-generated expected-output identity tests.",
+          "Run CPU-first eager/JIT exact parity and JIT/vmap batch lane equivalence with heterogeneous supported states/seeds and invalid/terminal lanes; demonstrate no cross-lane state/RNG coupling. Record one synchronized representative compile/warmed execution probe (configuration and measured durations only, no speedup/strength claim). GPU is optional and no GPU criterion is imposed.",
+          "Document APIs, variant limitations, state/request/history projection, initialization/RNG boundaries, actual checks and measured CPU probe. Update relevant mechanics coverage/current handoff and state while preserving all historical task/review/GPU data and simulator-first decision. Run focused and justified affected tests, syntax/JSON/diff, Trail build/check and own diff inspection; freeze/report exact commands, results, changed files and concerns for primary acceptance. Count33/baseline30/checkpoint40 remain until primary accepts; no milestone/global review is due absent a concrete contradiction."
+        ],
+        "plan": [
+          "Read current simulator-first plan/learning and scoped Trail/source context; perform bounded oracle feasibility inspection before source implementation and report contradictions.",
+          "Implement the explicitly restricted fixed-state JAX turn and exact PRNG alongside actual pinned turn oracle/fixtures and focused differential tests.",
+          "Validate CPU eager/JIT/vmap and short continuations, record a synchronized probe, document strict exclusions and update task evidence; refresh/check graph and inspect diff.",
+          "Freeze for primary review; primary accepts/counts/commits/pushes only this unit or records a concrete blocker and stops."
+        ],
+        "progress": "Accepted by primary after full source/criteria/evidence review; owner stopped edits. Prior owner-stage evidence follows for history: Task034 remains in_progress under /root/task034 pending primary acceptance. Startup/setup: clean main at base 19616d6c0a5f0401ceca28bf2928f0dcc06f22b2; planning-only simulator-first decision delivered; count33, review baseline30, next checkpoint40; no pending correction, review, or GPU block. Trail0.28.0, Git2.39.5, Node24.22.1, npm11.19.1, Python3.13.18 and pinned oracle provenance functional. JAX initially absent; pip install -r requirements-jax-cpu.txt succeeded and CPU JAX/JAXLIB0.12.0.1 plus JIT were verified. RTX3060Ti is optional; no GPU run required or claimed. Feasibility resolved without format/move overrides: direct one-Mew sets in unmodified Gen5 Random Battle, normal p1/p2 active requests, actual simultaneous makeChoices, native Tackle critical ratio1 and draw order100/16/16; seed [9,2,3,4] critically hits; L1-vs-L100 KO skips the second move and PP draw, terminal turn remains1. Parent corrections completed: strict scalar/choice typing; fail-closed static audiences; recipient-specific HP and hidden theoretical opponent damage; continuation carries prior JAX output into next input and checks request phase; int32 turn-overflow guard. Native random wrapper records bound/context/four-limb pre/post while returning original values. Final validation: Node syntax and focused oracle tests3/3; CPU py_compile and focused JAX unittest6/6; Python JSON parse valid; git diff --check clean after two trailing-blank-line removals. Earlier harness/setup errors and fixes are recorded in Task034 handoff. Final synchronized CPU JIT(vmap) probe: Python3.13.18/JAX/JAXLIB0.12.0.1/cpu:0, 8 lanes with exact seeds and state construction in docs/neutral-tackle-variant.md; synchronized first call0.536254s, warmed0.000157s, all statuses0, no performance claim. Frozen source base 19616d6c0a5f0401ceca28bf2928f0dcc06f22b2; blobs: simulator/__init__.py=4e196b53297262368ce50e0c8e26b5449de2547f; gen5_rng.py=ed8c8cddd8f001d2c7da63ff2bd2ef3c4cf060d7; neutral_tackle.py=67b707d8b089fc7e2173d17497cbf1a62b10bf2f; oracle=e87d8f433252380f46436746b40f146e4266d55a; Node test=6fd98adb28d0837f307bf43e2195849bd5b45273; Python test=183f82977a3956b41cfe8d4e3ceaec97dee81c87; variant doc=78ec29e064432a2e7a90b0d20868246338461073. Trail build/check current at833 nodes/1812 edges/87 cards. Stage-aware trail check after intent-to-add reports9 conflicts,11 leads,12 changed files,19 notes, no overlaps; manual review found documentation/history-only false positives and no source conflict (itemized in owner report). Task034 stays in_progress and unaccepted; accepted count33, baseline30, checkpoint40, milestone history, optional GPU history, and simulator-first decision remain unchanged. No commit or push; primary acceptance pending.",
+        "gpu_required": false,
+        "accepted_at": "2026-11-03",
+        "accepted_by_agent": "/root",
+        "acceptance_review": "Primary /root independently reviewed the complete JAX PRNG/turn/view source, guarded native oracle, focused tests and variant contract; accepted Task034 after the owner stopped edits. The explicitly restricted one-Mew-per-side neutral Tackle variant uses initialized pinned values, unequal speeds and no relevant passive effects. Exact JAX32 limb RNG, simultaneous commitments, order/PP/HP/critical/KO/skip/terminal behavior match eight actual native turns, including JAX-output-to-JAX-input continuations and both recipient semantic request/history projections. Primary corrections prevent raw opponent/overkill damage disclosure, reject invalid/static audience and nonintegral input types, prove chained request/state handoff, and guard turn overflow. Existing arithmetic modules remain unchanged. Final Node oracle3/3 and CPU JAX6/6 pass, with live six-seed/five-bound RNG vectors, independent damage arithmetic, eager/JIT and heterogeneous vmap lane equivalence. A CPU eight-lane synchronized probe recorded first0.536254s/warm0.000157s with exact reproducer and source blobs; no throughput, GPU or full-format claim. Native Tackle critical ratio1 and PRNG-level instrumentation resolved an initial metadata-reading mistake without changing the move or format. Unrelated suites were not rerun; focused tests exercise all new integration paths and unchanged arithmetic dependencies against actual Showdown. All accepted histories, simulator-first decision and exact optional GPU evidence remain. Count33 becomes34; review baseline30/checkpoint40 and open G1/G3 remain. No Task035 starts.",
+        "primary_review": {
+          "disposition": "ACCEPTED",
+          "reviewer": "/root",
+          "remaining_findings": [],
+          "required_corrections_verified": [
+            "Recipient-specific HP/damage redaction and overkill clamping.",
+            "Strict scalar/choice typing and static audience validation.",
+            "JAX-output continuation and next-request phase parity.",
+            "Int32 turn-overflow no-advance guard."
+          ]
+        },
+        "implementation_source_blobs": {
+          "simulator/__init__.py": "4e196b53297262368ce50e0c8e26b5449de2547f",
+          "simulator/gen5_rng.py": "ed8c8cddd8f001d2c7da63ff2bd2ef3c4cf060d7",
+          "simulator/neutral_tackle.py": "67b707d8b089fc7e2173d17497cbf1a62b10bf2f",
+          "reference/neutral-turn-oracle.cjs": "e87d8f433252380f46436746b40f146e4266d55a",
+          "test/neutral-turn-oracle.test.cjs": "6fd98adb28d0837f307bf43e2195849bd5b45273",
+          "test/test_neutral_tackle.py": "183f82977a3956b41cfe8d4e3ceaec97dee81c87"
+        },
+        "trail_learning": {
+          "id": "l-a0f44bbc",
+          "path": ".trail/learnings/2026-11-03-observe-native-gen-5-turn-draws-jarho001-4.md",
+          "replaces": "l-3c4d8fd1",
+          "predecessor_ids": [
+            "l-3c4d8fd1",
+            "l-59ee07aa"
+          ],
+          "predecessor_paths": [
+            ".trail/learnings/2026-11-03-observe-native-gen-5-turn-draws-jarho001.md",
+            ".trail/learnings/2026-11-03-observe-native-gen-5-turn-draws-jarho001-2.md",
+            ".trail/learnings/2026-11-03-observe-native-gen-5-turn-draws-jarho001-3.md"
+          ],
+          "reason": "CLI-managed same-unit replacements preserve initial notes; final note includes required sections and explicit In the code references; earlier committed learnings unchanged."
+        },
+        "validation": [
+          {
+            "command": "node --check reference/neutral-turn-oracle.cjs && node --check test/neutral-turn-oracle.test.cjs && node --test test/neutral-turn-oracle.test.cjs",
+            "result": "passed3/3; initial wording-only test regex was corrected"
+          },
+          {
+            "command": "JAX_PLATFORMS=cpu python -m unittest test.test_neutral_tackle -v",
+            "result": "final6/6 passed; eager/JIT/vmap, eight native turns and chained state/request parity; initial uint32 draw-to-int32 mechanics boundary corrected with safe cast"
+          },
+          {
+            "command": "JAX_PLATFORMS=cpu python -m unittest test.test_neutral_tackle.NeutralTackleTests.test_invalid_pending_unsupported_and_terminal_inputs_do_not_advance -v",
+            "result": "passed1/1 after overflow guard; final6/6 also includes guard"
+          },
+          {
+            "command": "python -m py_compile simulator/__init__.py simulator/gen5_rng.py simulator/neutral_tackle.py test/test_neutral_tackle.py; JSON parse; git diff --check",
+            "result": "passed after EOF whitespace cleanup; owner had already repeated final6/6/probe before primary instruction to avoid tests for whitespace arrived; no further tests repeated"
+          },
+          {
+            "command": "CPU synchronized jit(vmap(transition)) probe reproduced in docs/neutral-tackle-variant.md",
+            "result": "eight explicit heterogeneous seeded lanes, CPU device, JAX/JAXLIB0.12.0.1/Python3.13.18; first0.536254s/warm0.000157s, all STATUS_OK; measurement only"
+          },
+          {
+            "command": "trail build; trail build --check; trail check --base HEAD --json",
+            "result": "Graph833 nodes/1812 edges/87 cards current. Owner-stage lexical counts preserved in progress history; final primary staged check has11 lexical documentation conflicts across12 checked files/19 active learnings, no overlaps/source conflict. Exact final findings and semantic rationale are recorded in commit body."
+          },
+          {
+            "command": "Primary coordination checks",
+            "result": "Passed final JSON/history/count/review/decision/GPU-byte preservation, exact Task001-033 handoff prefix, six frozen code/test blob IDs, sixteen-file staged scope, learning replacement, diff and graph-current checks (833 nodes). No blockers."
+          }
+        ]
       }
     ],
     "active_regular_review": null,

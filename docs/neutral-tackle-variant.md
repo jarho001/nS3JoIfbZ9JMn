@@ -1,0 +1,134 @@
+# Restricted seeded JAX Tackle turn
+
+**Status:** Task034 accepted after primary review. This restricted turn slice does not constitute a complete battle engine or close G1, G3 or any implementation milestone.
+
+## Variant and initialization boundary
+
+The named variant is `gen5-neutral-tackle-mew-1v1-v1`. It has one active Mew per side, one enabled move (`Tackle`), neutral non-STAB physical damage, positive HP and PP, ordinary level/stat bounds, and distinct effective speeds. Only accuracy, critical, damage, HP clamp, faint, terminal outcome, and next-turn request behavior are modeled.
+
+The guarded oracle at [`reference/neutral-turn-oracle.cjs`](../reference/neutral-turn-oracle.cjs) checks the pinned Showdown checkout and initializes the unmodified `[Gen 5] Random Battle` rule table (`gen5randombattle`) with directly supplied one-Mew teams. It bypasses random team generation; it does not override any format rule. Each set has Synchronize, no item, Hardy nature, perfect IVs, and Tackle only. Ordinary cases use level 50 with either zero or 252 Speed EVs. The first-action-KO case uses level 1 versus level 100 with no Speed EVs. At each turn boundary, the oracle captures `battle.p1.activeRequest` and `battle.p2.activeRequest`, plus each side's own `getRequestData()` projection, then submits `move 1` for both players through actual `Battle.makeChoices`.
+
+The battle constructor receives the pinned sets and seed directly. The supported oracle boundary begins after Showdown initialization has produced the normal move requests and its live RNG state. JAX receives the initialized HP/max HP, PP, level, Attack, Defense, Speed, turn, phase, and four PRNG limbs. JAX does not implement team generation, species stat derivation, request parsing, or full format validation.
+
+## Python API and bounds
+
+[`simulator/neutral_tackle.py`](../simulator/neutral_tackle.py) exposes a `BattleState` `NamedTuple` PyTree, `make_state(...)`, `transition(state, choices)`, and `project_view(before, result, audience)`. State arrays are fixed p1/p2 vectors of `int32`; RNG is four big-endian `uint16` limbs; turn, phase, winner, species, move, and variant IDs are scalar integer leaves. `Transition` contains the new trusted state, a diagnostic status, at most two action-event rows, and six fixed draw slots.
+
+`make_state` checks structure and exact integer types. The compiled transition returns `STATUS_UNSUPPORTED` without advancing for value-level boundary violations. Its declared value bounds are: variant ID 1, species ID 151 (Mew), move ID 33 (Tackle), level `[1,100]`, HP `[1,maxHP]`, max HP `[1,404]`, Attack/Defense/Speed `[1,299]`, PP `[1,56]`, turn `[1,2^31-2]`, and unequal speeds. The HP/stat maxima match level-100 Hardy Mew with legal 31 IVs and 252 EVs; the turn ceiling prevents a continuing transition from overflowing int32. The state boundary does not prove arbitrary HP/stat values came from a legal set; the differential scenarios use pinned initialized Pokemon values.
+
+Both sides choose from the same captured request boundary using a p1/p2 `int32` vector: `1` is the sole legal Tackle action, `0` means a choice is still pending, negative values are malformed, and unknown positive action IDs are unsupported. Pending, invalid, unsupported, and terminal results leave state and RNG unchanged and return fixed-shape empty event/draw data. Terminal input is absorbing. If a surviving side spends its last Tackle PP, the returned phase is unsupported because Showdown would next request Struggle, which is outside this variant.
+
+The following uses default JAX32 arithmetic and does not enable x64:
+
+```python
+import jax
+import jax.numpy as jnp
+from simulator.neutral_tackle import make_state, project_view, transition
+
+state = make_state(
+    hp=(175, 175), max_hp=(175, 175), pp=(56, 56),
+    level=(50, 50), attack=(120, 120), defense=(120, 120),
+    speed=(120, 152), rng=(1, 2, 3, 4),
+)
+result = jax.jit(transition)(state, jnp.asarray([1, 1], dtype=jnp.int32))
+p1_view = jax.jit(project_view, static_argnums=2)(state, result, 0)
+```
+
+`jax.vmap(transition)` batches independent p1/p2 lanes. `project_view` accepts only a static audience ID (`0` for p1, `1` for p2); compile it with `static_argnums=2`. Unsupported or dynamic audience values fail closed.
+
+## Damage and random state
+
+Pinned Gen 5 move data resolves Tackle to base power 50 and accuracy 100. The pinned move constructor defaults its critical ratio to 1; Gen 5's ratio table makes that a `1/16` critical chance. Each executed Tackle consumes exactly three live calls in this order:
+
+1. `random(100)` for accuracy, even though Tackle cannot miss in this variant.
+2. `random(16)` for critical.
+3. `random(16)` for the Gen 5 damage randomizer.
+
+The transition uses the existing arithmetic kernels for the neutral base damage and final non-critical stages. On a critical it doubles neutral pre-roll damage before the explicit random roll. Mew is Psychic, so Normal Tackle has no STAB and neutral type effectiveness. No boosts, status, weather, held item, or relevant passive ability is active.
+
+[`simulator/gen5_rng.py`](../simulator/gen5_rng.py) implements the pinned 64-bit LCG with four big-endian 16-bit limbs:
+
+```text
+x' = (0x5D588B656C078965 * x + 0x00269EC3) mod 2^64
+```
+
+After advancing, Showdown returns the upper 32 bits. For bounds `[1,65535]`, JAX computes `floor(output32 * bound / 2^32)` by splitting the multiply into 16-bit halves. The state multiply uses base-256 limbs, so each JAX uint32 intermediate stays within range with x64 disabled. The transition uses only the concrete bounds 100 and 16.
+
+The oracle observes `PRNG.prototype.random` after normal request initialization, captures actual bound/context and pre/post four-limb state, delegates to the original implementation, and returns its original result unchanged. It does not replace PRNG values, patch `getDamage`, or replay a random tape. The current seeded fixture includes six seeds across bounds 1, 2, 16, 100, and 65535, including high/low and carry patterns. The turn fixtures include both speed orders, an actual critical, three surviving turns, and a first-action KO.
+
+## Player views
+
+`Transition.state`, `Transition.events`, and `Transition.draws` are trusted simulator data. Actors receive the narrower `PlayerView` returned by `project_view`:
+
+- The request projection has only that side's exact HP/max HP, PP, level, relevant stats, one legal-action mask, and Tackle row.
+- Each action projection retains move order, critical occurrence, damage-event HP condition, faint, next turn, and winner.
+- The damaged owner sees its exact HP condition. The opponent sees the pinned HP Percentage Mod condition (`ceil(100 * hp / maxHP) / 100`, with a non-full 100 clamped to 99).
+- Exact theoretical damage is never exposed to the attacking opponent. The damaged owner receives only observed HP loss, clamped to HP actually removed; overkill damage stays in trusted `Transition.events`.
+
+The oracle normalizes only relevant semantic records from the actual recipient-selected split branch. It does not claim byte-for-byte protocol parity and does not put raw packets or trusted state in a player view. A caller must pass only `PlayerView` to an actor; the transition result remains privileged engineering data.
+
+## Current validation
+
+The current focused checks are:
+
+```sh
+node --check reference/neutral-turn-oracle.cjs
+node --check test/neutral-turn-oracle.test.cjs
+node --test test/neutral-turn-oracle.test.cjs
+JAX_PLATFORMS=cpu python -m unittest test.test_neutral_tackle -v
+```
+
+The guarded Node oracle tests pass 3/3 and the focused CPU JAX differential tests pass 6/6. They compare live PRNG vectors and every turn's internal HP/PP/order/turn/winner, draw bounds/context/pre/post state, and both semantic player views. A separate handwritten arithmetic check computes nested-truncation Tackle damage, critical doubling, and randomization. The tests also cover invalid/pending/unsupported/terminal no-advance, hidden overkill, eager/JIT parity, and heterogeneous JIT/vmap lanes.
+
+One synchronized CPU compile/warm probe ran `jax.jit(jax.vmap(transition))` for eight heterogeneous battle lanes on Python 3.13.18, JAX/JAXLIB 0.12.0.1, backend `cpu`, device `cpu:0`. The first synchronized call took 0.536254 seconds, including compilation; one warmed synchronized call took 0.000157 seconds. Every lane returned `STATUS_OK`. These are measurements of that exact probe configuration only, not a performance or throughput claim. The measured source was based on `19616d6c0a5f0401ceca28bf2928f0dcc06f22b2`; current source blob IDs are recorded in the Task034 handoff. The exact command, including each seed and initialized state, was:
+
+```sh
+JAX_PLATFORMS=cpu python - <<'PY'
+import platform
+import sys
+import time
+import jax
+import jaxlib
+import jax.numpy as jnp
+from simulator.neutral_tackle import make_state, transition
+
+assert jax.default_backend() == 'cpu'
+seeds = [
+    [1, 2, 3, 4], [9, 2, 3, 4], [31, 41, 59, 26], [65535, 0, 65535, 0],
+    [0, 65535, 0, 65535], [65535, 65535, 65535, 65535], [4, 3, 2, 1], [101, 202, 303, 404],
+]
+states = [
+    make_state(
+        hp=(175 - 3 * i, 175 - 2 * i), max_hp=(175, 175), pp=(56 - i, 56 - i),
+        level=(50, 50), attack=(120, 120), defense=(120, 120),
+        speed=(120 + (20 if i % 2 == 0 else 0), 120 + (20 if i % 2 else 0)),
+        rng=seed,
+    )
+    for i, seed in enumerate(seeds)
+]
+batch = jax.tree_util.tree_map(lambda *values: jnp.stack(values), *states)
+choices = jnp.ones((8, 2), dtype=jnp.int32)
+compiled = jax.jit(jax.vmap(transition))
+
+def synchronize(value):
+    return jax.tree_util.tree_map(lambda leaf: leaf.block_until_ready(), value)
+
+start = time.perf_counter()
+first = synchronize(compiled(batch, choices))
+compile_warmup = time.perf_counter() - start
+start = time.perf_counter()
+second = synchronize(compiled(batch, choices))
+warmed = time.perf_counter() - start
+assert first.status.tolist() == [0] * 8
+assert (first.state.hp == second.state.hp).all()
+assert (first.state.rng == second.state.rng).all()
+print('python', sys.version.split()[0], 'jax', jax.__version__, 'jaxlib', jaxlib.__version__)
+print('backend', jax.default_backend(), 'device', jax.devices()[0])
+print('configuration', 'jit(vmap(transition))', 'batch=8', 'two one-active Mew lanes per battle', 'int32 arrays / uint16 rng limbs')
+print('first_synchronized_call_seconds', f'{compile_warmup:.6f}')
+print('warmed_synchronized_call_seconds', f'{warmed:.6f}')
+print('result_statuses', first.status.tolist())
+PY
+```
+
+The first synchronized call was 0.536254 seconds and the warmed synchronized call was 0.000157 seconds; all eight statuses were `0`. The code files in this run are identified by their Git blob IDs in the handoff, alongside the source base. GPU is optional and is not an acceptance criterion. Full `gen5randombattle`, random-team generation, switching, speed ties, Struggle, other moves, effects, full request/protocol encoding, PPO, and G1/G3 milestone acceptance remain out of scope.
