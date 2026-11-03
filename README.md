@@ -96,7 +96,16 @@ async function main() {
 main();
 ```
 
-Each handle is immutable and tied to its generating Showdown object, pinned format revision, and team seed. Its packed data lives in a process-local `WeakMap`; the visible seed and digest metadata cannot restore a handle after serialization. The runner rejects copied, mismatched, or missing handles before opening a battle stream and records `teamSource: "prepared"` in that run’s result record. Preparing teams calls the generator and packer once per team; reusing handles does not repeat either call. Preparation metadata and handles are engineering data, never policy inputs. Task023 provides the reuse API and real paired-run coverage; automatic pair execution and aggregation remain proposed.
+Each handle is immutable and tied to its generating Showdown object, pinned format revision, and team seed. Its packed data lives in a process-local `WeakMap`; the visible seed and digest metadata cannot restore a handle after serialization. The runner rejects copied, mismatched, or missing handles before opening a battle stream and records `teamSource: "prepared"` in that run’s result record. Preparing teams calls the generator and packer once per team; reusing handles does not repeat either call. Preparation metadata and handles are engineering data, never policy inputs. Task023 provides the reuse API and real paired-run coverage; Task024 adds explicit single-pair execution. Full-manifest execution and aggregation remain proposed.
+
+Task024 adds a single-pair library function and CLI. Both the root and zero-based pair index are required; the direct selector does not materialize earlier pairs:
+
+```sh
+node environment/run-pair.cjs --root-seed=1,2,3,4 --pair-index=0 --result pair-result.json
+node --test test/pair-runner.test.cjs
+```
+
+The command prepares team A and B once, runs both seat assignments sequentially in separate battles, and writes their status and nested per-battle result records in a versioned pair record. On a battle failure it preserves any earlier completed run, records the attempted failed run, and leaves a remaining run marked `not_attempted`; preparation and configuration failures leave both runs unattempted. The pair `elapsedMs` starts before team preparation and covers both battles and their cleanup; nested prepared-battle times start when each `runBattle` begins, after the shared preparation. Pair results and per-battle results contain no raw transcript, packed team, policy input, or exception text. If parsing or pinned-reference initialization fails before the pair starts, an optional result file records `elapsedScope: "cli_initialization"` and the CLI exits nonzero. A result-file write error produces a concise nonzero error; no result file can be written when its own destination is unavailable. This command runs one explicitly selected pair; full-manifest execution and aggregation remain proposed.
 
 This is a deliberately small baseline. It does not provide a learned policy, observation features, a full game-memory contract, or JAX mechanics.
 

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "accepted_project_task_count": 23,
+  "accepted_project_task_count": 24,
   "review_state": {
     "latest_task_review_baseline": 20,
     "bootstrap_review": {
@@ -129,6 +129,85 @@
         "accepted_at": "2026-11-02",
         "accepted_by_agent": "/root",
         "acceptance_review": "Primary focused diff/evidence review accepted WeakMap-bound handles, dense seed validation, pre-stream authenticity/API/seed checks, unchanged generated default, prepared result provenance, documentation, and 41/41 affected regressions."
+      },
+      {
+        "id": "Task024",
+        "title": "execute one paired seed case",
+        "owner": "/root/task024",
+        "status": "accepted_complete",
+        "scope": "Add a validated direct single-pair seed selector and a library/CLI path that prepares teams once and runs the base and seat-swapped battles sequentially, returning safe partial run records on failure.",
+        "exclusions": [
+          "multi-pair or full-manifest execution",
+          "concurrency, aggregation, or win-rate summaries",
+          "implicit root seed, pair index, suite size, or scored defaults",
+          "benchmark or throughput claims",
+          "hardware allocation",
+          "mechanics/JAX",
+          "visibility changes",
+          "G0/G1 closure",
+          "commit/push by implementation owner"
+        ],
+        "acceptance_criteria": [
+          "generatePair validates and copies a dense four-limb uint16 root and zero-based pair index 0..99999 without materializing earlier cases; result equals the corresponding existing manifest entry and existing manifest behavior stays byte-compatible.",
+          "runPair prepares A/B once, runs base then swapped seats through existing runBattle with correct team/policy identities and battle seed, and returns a versioned trusted pair record with both validated records on success and safe honest partial states on failure.",
+          "Pair envelope includes pin, format, root, pair index/ID, team hashes/seeds, run IDs/seats/policy identities/statuses, monotonic elapsed scope covering preparation and both battles, and no raw exceptions, packets, transcripts, packed teams, or handles.",
+          "Preparation, first-run, and second-run failures stop dependent runs; preserve earlier successful record and actual safe runner failure record; never fabricate outcomes or trust foreign error metadata.",
+          "CLI requires explicit root and pair index, writes JSON success output, nonzero safe errors, and optional success/failure pair-result file; CLI parse/load/write behavior is explicit and tested.",
+          "Pinned real integration proves exactly two generation and pack calls, exchanged packed-team hashes, policy seed identity, valid outcomes, and projected policy inputs remain normal; fake tests cover partial failures and no extra runs.",
+          "README, charter and handoff distinguish one-pair execution from proposed suite execution/aggregation; affected suites, syntax, state/JSON, diff checks, Trail build/check pass; no GPU required."
+        ],
+        "plan": [
+          "Read Trail context, learnings and pinned runner/prepared-team interfaces; persist scope/state before source edits.",
+          "Add validated O(1) direct pair selection while preserving manifest schema and existing output.",
+          "Implement sequential runPair result/failure envelope and explicit CLI over prepared teams and existing runner.",
+          "Add direct selection, controlled partial failure, CLI and real pinned pair tests.",
+          "Update README, charter, and handoff; run affected checks, refresh/check Trail, inspect diff and report evidence without accepting or committing."
+        ],
+        "review_corrections": [
+          {
+            "finding": "The library accepts a root seed array, but runPair used the CLI text parser, which accepts only comma-separated strings.",
+            "evidence": "Parent review reproduced valid programmatic runPair input failing validation; CLI parseArgs also produces a root array.",
+            "correction": "Validate and copy the API array with validateSeed; keep text parsing at the CLI boundary.",
+            "status": "applied"
+          },
+          {
+            "finding": "CLI bootstrap accepted arbitrary error.pairResult metadata when its kind matched, allowing foreign code to forge completed status and inject output fields.",
+            "evidence": "Patched oracle.assertReady to throw an Error with pairResult.kind=gen5-paired-battle-result, status=completed, failure.code=INJECTED_PAIR_CODE, and foreignData=INJECTED_PAIR_DATA; prior main serialized the injected result.",
+            "correction": "Use private pair-error branding and accept its record only after the actual runPair stage has started. Regression asserts safe nonzero CLI failure with injected metadata absent.",
+            "status": "applied"
+          },
+          {
+            "finding": "Parse/bootstrap failures were labeled paired_runner with zero elapsed time although runPair had not begun.",
+            "evidence": "Invalid-root CLI result had elapsedScope=paired_runner and elapsedMs=0.",
+            "correction": "Measure CLI initialization monotonically and label it cli_initialization; preserve paired_runner timing for errors after invocation.",
+            "status": "applied"
+          },
+          {
+            "finding": "Caller option getters and runBattle argument construction shared the catch that trusted error.resultRecord, so a throwing limits getter could forge a completed nested result and arbitrary failure category/code before runBattle was called.",
+            "evidence": "A limits getter threw an Error with resultRecord={status:completed,failure:{category:INJECTED_CATEGORY,code:INJECTED_CODE},foreignData:INJECTED_RECORD}; prior output included the injected fields although runBattle was never invoked.",
+            "correction": "Snapshot root/index/ps/limits/streamFactory in a configuration boundary, copy enumerable limits values into a plain object, and build plain battle args before a catch containing only the actual runBattle invocation. Throwing option getters produce safe configuration failures with both runs not_attempted and no nested result.",
+            "status": "applied"
+          }
+        ],
+        "validation": [
+          "Before the two CLI boundary corrections: node --test test/pair-runner.test.cjs test/paired-seeds.test.cjs test/prepared-teams.test.cjs test/battle-runner.test.cjs test/protocol.test.cjs test/trace.test.cjs \u2014 50/50 passed.",
+          "After the CLI boundary corrections: node --test test/pair-runner.test.cjs \u2014 9/9 passed.",
+          "After the final configuration provenance correction: node --test test/pair-runner.test.cjs \u2014 10/10 passed.",
+          "Final syntax checks passed: node --check environment/paired-seeds.cjs; node --check environment/run-pair.cjs; node --check test/paired-seeds.test.cjs; node --check test/pair-runner.test.cjs.",
+          "python3 -m json.tool docs/ORCHESTRATION_STATE.json and git diff --check passed.",
+          "trail build passed: 63 indexed source/test files, 512 nodes, and 1095 edges. trail check --base HEAD exited 1 with six lexical false positives: README/charter/state/task passages describe opaque prepared-team handles or exclude raw packed-team strings, while two Task024 criteria were matched to unrelated format-specific stat and player-observation learnings. No substantive conflict found; explain these in commit/PR text.",
+          "Trail learning l-d998d91c records why CLI result-shaped foreign metadata requires private branding and stage gating.",
+          "Primary acceptance review accepted Task024 on 2026-11-03; implementation owner did not commit or push."
+        ],
+        "status_note": "Accepted complete by /root on 2026-11-03. Implementation owner /root/task024 did not commit or push.",
+        "accepted_at": "2026-11-03",
+        "accepted_by_agent": "/root",
+        "progress": "Accepted after primary focused source/diff/evidence review. Direct pair selection, prepared-team reuse, sequential battles, safe partial failures, and CLI/configuration provenance boundaries satisfy the delegated criteria. No source correction remains.",
+        "acceptance_review": "Primary review accepted the direct selector and manifest compatibility, prepared handles and seed identity seat exchange, real pair write/call-count and terminal evidence, honest preparation/first/second-run failures, CLI private branding/stage/timing, option snapshots, and recorded false-positive Trail findings. No due Astra review or milestone gate; accepted count advances from 23 to 24 and next regular review remains 30.",
+        "trail_learning": {
+          "id": "l-d998d91c",
+          "path": ".trail/learnings/2026-11-03-trust-pair-results-only-from-owned-jarho001.md"
+        }
       }
     ]
   },

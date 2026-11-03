@@ -83,6 +83,14 @@ function makePair(rootSeed, pairIndex) {
 	};
 }
 
+function generatePair(rootSeed, pairIndex) {
+	const root = validateSeed(rootSeed);
+	if (!Number.isSafeInteger(pairIndex) || pairIndex < 0 || pairIndex >= MAX_PAIRS) {
+		throw new RangeError(`pair index must be an integer in the range 0..${MAX_PAIRS - 1}.`);
+	}
+	return makePair(root, pairIndex);
+}
+
 function generateManifest(rootSeed, pairCount) {
 	const root = validateSeed(rootSeed);
 	const count = validatePairCount(pairCount);
@@ -173,6 +181,7 @@ module.exports = {
 	DERIVATION_ID,
 	MAX_PAIRS,
 	generateManifest,
+	generatePair,
 	main,
 	parseArgs,
 	parseRootSeed,

@@ -9,7 +9,7 @@ const oracle = require('../reference/oracle.cjs');
 oracle.assertReady();
 const ps = require('../reference/vendor/pokemon-showdown/dist/sim');
 const referenceLock = require('../reference-lock.json');
-const { generateManifest, parseArgs, parseRootSeed } = require('../environment/paired-seeds.cjs');
+const { generateManifest, generatePair, parseArgs, parseRootSeed } = require('../environment/paired-seeds.cjs');
 const { runBattle } = require('../environment/battle-runner.cjs');
 
 const ROOT = path.resolve(__dirname, '..');
@@ -52,6 +52,22 @@ test('manifest emits expanded base and swapped tuples with independent seed arra
 	assert.deepEqual(longManifest.upstream, { repository: referenceLock.repository, commit: referenceLock.commit });
 	assert.equal(longManifest.formatId, 'gen5randombattle');
 	assert.equal(longManifest.pairCount, 3);
+});
+
+test('single-pair selection matches the manifest without sharing the caller root seed', () => {
+	for (const pairIndex of [0, 4, 9]) {
+		const rootSeed = [0, 65_535, pairIndex + 1, 19];
+		const originalRootSeed = [...rootSeed];
+		const direct = generatePair(rootSeed, pairIndex);
+		assert.deepEqual(direct, generateManifest(originalRootSeed, pairIndex + 1).pairs[pairIndex]);
+		assert.notEqual(direct.teams.A.seed, rootSeed);
+		rootSeed[0] = 1;
+		assert.notDeepEqual(direct.teams.A.seed, generatePair(rootSeed, pairIndex).teams.A.seed);
+	}
+	for (const rootSeed of [new Array(4), [0, , 2, 3], [1, 2, 3], [1, 2, 3, 65_536]]) {
+		assert.throws(() => generatePair(rootSeed, 0));
+	}
+	for (const pairIndex of [-1, 1.5, Number.NaN, 100_000]) assert.throws(() => generatePair([1, 2, 3, 4], pairIndex));
 });
 
 test('CLI output is byte-reproducible across fresh processes and agrees with the library', () => {

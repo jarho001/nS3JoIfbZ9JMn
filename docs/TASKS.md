@@ -839,3 +839,39 @@ manual and scheduled work. Cadence, concurrency, and limits remain the
 invoking scheduler's responsibility; earlier 30-run/five-day references above
 are historical records, not repository execution gates. This update does not
 change the accepted task count or review history.
+
+
+## Task 024 — execute one paired seed case
+
+**Status:** Accepted and complete — 2026-11-03. Primary `/root` accepted the deliverable after focused source, diff, and evidence review. The accepted project-task count is 24; the next regular review remains due at 30.
+
+**Scope:** Add validated direct selection of one deterministic seed pair by explicit root and zero-based pair index. Implement a library function and CLI that prepare both teams once, then run the base and swapped seat configurations sequentially through existing `runBattle`. Return a versioned trusted pair result with both nested battle records and bounded failure details. Update README and benchmark charter.
+
+**Exclusions:** No multi-pair/full-manifest execution, concurrency, aggregation, win-rate summary, implicit root/index/count, scored suite, benchmark/throughput claim, hardware allocation, mechanics/JAX, visibility change, or G0/G1 closure. No commit or push by the implementation owner.
+
+**Acceptance criteria:**
+
+- [x] A direct `generatePair(rootSeed, pairIndex)` validates a dense four-limb uint16 seed and index 0..99,999, copies the root, and yields exactly the existing manifest pair without building earlier pairs. Existing `generateManifest` and CLI output remain unchanged.
+- [x] A run succeeds only after both base and swapped battles reach existing validated terminal records. It prepares team A/B once and preserves team seeds, shared battle seed, and each policy identity/seed across seat exchange.
+- [x] The schema-versioned pair record carries upstream/format identity, copied root/index/pair ID, team identities and hashes, run IDs/seats/policy identities/statuses, nested safe per-battle result records, and finite nonnegative monotonic elapsed milliseconds spanning preparation and both battle cleanups. No raw exception, packet transcript, packed team, or handle enters pair result or policy input.
+- [x] Preparation or battle failure stops later work, records `failed` and `not_attempted` honestly, retains a prior completed run where applicable and the actual safe runner failure record, and never invents an outcome or trusts metadata attached by a foreign preparation exception.
+- [x] CLI requires explicit root and pair index, emits JSON on success and nonzero safe error on failure, and optional `--result` writes structured success and preparation/runner-failure output. Output file write errors are surfaced. Parse/load/write limitations are documented and covered as appropriate.
+- [x] Controlled tests exercise preparation, first-run, and second-run failure paths, no launch after failure, and safe result fields. Pinned real execution verifies two generator/packer calls total, actual packed team seat exchange, correct policy identities, both terminal records, and unchanged actor input boundary.
+- [x] README/charter/handoff distinguish one-pair execution from proposed manifest execution and aggregation. The combined regressions passed 50/50 before focused CLI corrections, and the affected pair-runner suite passed 10/10 after the final correction. Syntax, JSON, and diff checks passed. Trail build passed; Trail check ran and its six lexical conflicts were reviewed and documented for the commit rationale. GPU is not required.
+
+**Plan:**
+
+1. Inspect seed manifest, prepared-team, runner and CLI Trail cards; persist this plan and `active_task` before implementation.
+2. Add O(1) direct seed-pair selection without changing the existing full manifest.
+3. Implement safe sequential paired execution and explicit root/index CLI.
+4. Add selection, failure, CLI, and pinned real-pair coverage.
+5. Update README, charter, and this handoff; run focused combined validation and Trail checks; report the diff/evidence for parent review.
+
+**Implementation progress and correction history (2026-11-03):** The direct selector, single-pair executor, CLI, README/charter updates, and focused tests are implemented and accepted. Parent review identified four corrections across the initial implementation and two focused correction rounds; the same owner applied them before acceptance:
+
+- The library root is an array while `parseRootSeed` accepts CLI comma-separated text. `runPair` now validates/copies the API array with `validateSeed`; CLI text continues through its parser.
+- A concrete bootstrap reproducer patched `oracle.assertReady` to throw an `Error` whose `pairResult` claimed `kind: "gen5-paired-battle-result"`, `status: "completed"`, and included injected code/data. The CLI previously trusted that foreign record. It now accepts a pair error only when it has the module-private brand and only after the actual `runPair` stage starts; the regression asserts nonzero exit and a safe failed initialization record with no injected fields.
+- Invalid-root/parse/bootstrap failures previously reported `elapsedScope: "paired_runner"` with zero elapsed time. CLI initialization now has its own monotonic timer and `elapsedScope: "cli_initialization"`; runner errors keep the pair runner's elapsed record.
+- A second concrete reproducer made the `limits` option getter throw an Error carrying `resultRecord: {status:"completed", failure:{category:"INJECTED_CATEGORY", code:"INJECTED_CODE"}, foreignData:"INJECTED_RECORD"}`. Because option reads and runBattle argument construction shared one catch, the foreign result was copied as if the actual runner had failed. `runPair` now snapshots root/index/Showdown API/limits/streamFactory in a configuration boundary before preparation, makes a plain copy of enumerable limits values, and builds each plain `runBattle` argument object before a catch that contains only the actual invocation. Configuration getter failures produce a safe `configuration/invalid_configuration` record with two null `not_attempted` runs. A second regression exercises a throwing `streamFactory` option getter through the same path.
+
+Validation evidence: the original combined pair, seed, prepared-team, battle-runner, protocol, and trace command passed 50/50 before the CLI boundary corrections. After the CLI corrections, `node --test test/pair-runner.test.cjs` passed 9/9. After the final configuration-provenance correction, the same focused command passed 10/10. The four final `node --check` commands, `python3 -m json.tool docs/ORCHESTRATION_STATE.json`, `git diff --check`, and `trail build` passed. `trail check --base HEAD` exited 1 with six lexical false positives: README/charter/state/task passages describe opaque prepared-team handles or explicitly exclude raw packed-team strings, not acceptance of arbitrary strings; `TASKS.md:856` describes safe pair result metadata and matched an unrelated format-specific stat rule, while `TASKS.md:857` preserves an actual runner record and matched an unrelated player-observation rule. The primary reviewed these conflicts and authorized their explanation in the commit rationale. Trail learning `l-d998d91c` records the CLI metadata provenance finding. Primary `/root` accepted Task024 on 2026-11-03; the accepted-task count is 24 and the next regular review remains due at 30.
