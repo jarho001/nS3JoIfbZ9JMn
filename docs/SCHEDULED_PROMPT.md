@@ -14,9 +14,17 @@ Read current `docs/ORCHESTRATION_STATE.json`, `docs/TASKS.md`, and
 preserving local and unrelated work.
 
 Resolve pending review corrections or a due global review first. Otherwise,
-resume unfinished work or choose exactly one justified bounded deliverable.
-State its scope and acceptance criteria before implementation. Follow the
-repository's delegation, focused validation, review, and acceptance policies.
+follow the current simulator-first direction in `PROJECT_PLAN.md` and
+`project_direction_decision` in the orchestration state. Resume unfinished
+work or choose exactly one bounded deliverable that advances the JAX battle
+simulator or its Showdown parity validation. Do not select additional PPO,
+tournament, scoring, trajectory, or baseline-reporting work unless it directly
+enables simulator semantics or validation. G1 remains open; this priority does
+not accept or waive any milestone. Keep the minimal request, legal-action,
+simultaneous-choice, player-view/history, and outcome contract needed for
+correctness. State scope and acceptance criteria before implementation. Follow
+the repository's delegation, focused validation, review, and acceptance
+policies. Measure compiling/batching on representative simulator slices early.
 
 If progress needs external evidence, including necessary GPU results, and none
 is available, preserve the blocker and stop.

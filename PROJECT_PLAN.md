@@ -2,9 +2,13 @@
 
 Build a research platform that can learn exceptional Pokémon battle play through large-scale self-play, reason about concealed information, and demonstrate its strength in the actual Pokémon Showdown simulator. The platform has three independently testable construction sites: **Algorithm**, **Environment**, and **Simulator**.
 
-The recommended destination is a JAX implementation of the complete training computation: batched battle simulation, player observations, recurrent policy inference, trajectory collection, and learning. Keep a pinned Showdown implementation as the reference that determines whether the platform is playing the right game. Use milestones and experimental evidence to choose increasingly ambitious methods; there is no calendar deadline.
+The destination is a JAX implementation of the complete training computation: batched battle simulation, player observations, recurrent policy inference, trajectory collection, and learning. The current execution priority is the JAX battle simulator. Keep pinned Showdown as the semantic oracle, source of generated teams and data, and differential test harness.
 
-This document is a proposed architecture and research program, not an implementation or a performance claim. Research was checked on October 27, 2026. The workspace currently has no indexed application code or local Showdown checkout, so implementation paths below are proposed. Hardware availability and desired deployment latency remain open configuration choices.
+As of 2026-11-03, the pinned reference, player-view protocol, battle runner, policy/trajectory interfaces, and reproducible baseline artifacts exist. JAX covers validated arithmetic components, but there is no executable JAX battle state machine or trained policy. G0 specification is accepted; G1 reference-environment milestone and all implementation milestones remain open. This plan records direction, not a performance claim. Hardware and deployment latency remain open configuration choices.
+
+**Direction decision — 2026-11-03:** Prioritize an integrated, progressively playable JAX simulator. Simulator work may begin without G1 tournament completion or G2 policy learning. Keep the user-facing contract needed for correctness from the start: request and legal-action semantics, simultaneous commitments, player-visible events and history, and outcomes/rewards. Defer neural observation encoding, trajectory expansion, PPO, tournaments, and additional baseline/reporting tools unless they directly enable simulator parity or its validation. Retain exact Showdown RNG/state/event/request comparisons, interaction and full-trace testing, and explicit unsupported-effect reporting. Compile and batch representative slices early, including JIT/vmap and measured performance probes. Progress is demonstrated by increasingly complete parity-tested playable battles, not task count.
+
+Development slices may be explicitly restricted variants while their supported mechanics are listed; they do not count as full-format support. Start validation on CPU. Require GPU runs only when a task criterion or device-specific property needs them; do not require a full GPU performance suite for every slice.
 
 **Define the game before optimizing it.** The target is Showdown's `gen5randombattle`, including its team generator, inherited mechanics, format clauses, requests, information disclosure, and terminal conditions. It is more specific than “Generation 5 Pokémon mechanics.” Pin a Showdown commit, export the resolved format, and assign a version to every benchmark and checkpoint. The currently inspected format specifies the Gen 5 mod, random teams, Sleep Clause Mod, HP Percentage Mod, Cancel Mod, and Illusion Level Mod. Its listed rules do not include Team Preview. Reconfirm the effective inherited rules at the pinned revision. [Showdown format definition](https://raw.githubusercontent.com/smogon/pokemon-showdown/master/config/formats.ts)
 
@@ -74,7 +78,7 @@ learn(train_state, trajectories) -> TrainState, Metrics
 
 These are semantic contracts, not final signatures. JAX implementations use fixed-shape PyTrees, arrays, enums, and explicit masks. The Showdown adapter produces the same observation contract through its protocol. Test equivalence of the adapters before sharing a checkpoint between them.
 
-**Construction site 1: Algorithm.** Build a strong learning baseline first, then investigate equilibrium-oriented learning and planning. A complicated solver should have to beat a well-trained simpler policy under controlled evaluation.
+**Construction site 1: Algorithm.** Once simulator coverage supports learning experiments, build a strong baseline before investigating equilibrium-oriented learning and planning. A complicated solver should have to beat a well-trained simpler policy under controlled evaluation.
 
 Treat a battle as a two-player, zero-sum, partially observed stochastic game with simultaneous decisions at some requests and single-player decisions at others. A policy acts on its own observation history, not the full battle state. Both players must commit normal-turn choices without seeing the other's selection. The system must retain stochastic policies: prediction, bluffing, and mixed strategies can matter.
 
@@ -178,7 +182,7 @@ Add targeted tests for exact versus rounded HP, undisclosed items, alternate hid
 
 Use curriculum tasks to isolate competence: simple damage races; switching and hazards; setup and recovery; status and weather; PP management; incomplete information; and full random teams. Smaller teams and restricted move pools are useful diagnostic environments. They must be explicitly named variants, never silently mixed into claims about full Gen 5 Random Battles. Sample rare mechanics deliberately for testing and curriculum, while retaining the natural generator distribution for the primary evaluation.
 
-The environment's concrete deliverables are a versioned schema, a Showdown adapter, a JAX adapter, an information-boundary suite, a replayable trajectory format, baseline agents, and a deterministic evaluation runner. This work can begin against Showdown before the JAX simulator is complete.
+The environment contract is small and simulator-facing: versioned requests, legal actions, player-visible events/history, simultaneous commitments, and terminal outcomes. The existing Showdown adapter and visibility tests remain the reference for these semantics. Defer expanding trajectory, baseline, and evaluation infrastructure until it is needed to validate the simulator or to begin the later learning phase.
 
 **Construction site 3: Simulator.** Reimplement the battle execution model for accelerators while preserving the reference's semantics. A literal line-by-line translation of Showdown's object model and callback machinery is unlikely to be the best GPU design. Preserve its observable behavior, arithmetic, random decisions, and ordering through a smaller explicit execution model.
 
@@ -252,7 +256,7 @@ Warm up compiled functions, synchronize device completion when timing, and repor
 
 Scale to multiple accelerators only after profiling a useful single-device configuration. Shard independent battles first; measure communication and opponent-parameter storage costs. Use population batching where each cohort can share a checkpoint instead of requiring a different huge model for every lane. Explore custom JAX kernels only for measured bottlenecks with an independent conformance suite.
 
-No headline speedup is promised. If exact JAX execution is slow, isolate whether the cause is branching, memory bandwidth, event scheduling, feature extraction, or network inference. A CPU reference plus JAX learner remains useful while the simulator matures. A compiled CPU engine is a comparison and possible engineering fallback, not a silent substitution for the stated full-JAX research track.
+No headline speedup is promised. Compile and batch representative simulator slices early; measure compilation, steady-state throughput, memory, and time spent in simulation and reset paths. If exact JAX execution is slow, isolate whether the cause is branching, memory bandwidth, or event scheduling before expanding the implementation. A compiled CPU engine is a comparison and possible engineering fallback, not a silent substitution for the stated full-JAX research track.
 
 **Evaluate strength on an engine the agent cannot redefine.** Promoted agents play their scored benchmark games on pinned Showdown through the same observation adapter used for deployment. Maintain the JAX benchmark for speed and debugging, but use reference-engine results for primary capability claims.
 
@@ -264,7 +268,7 @@ Measure win rate, cross-play stability, calibration, invalid submissions, timeou
 
 Optional human matches and public-server play come after local transfer and latency validation, following the service's rules at that time. Pin or record the actual server version when possible and distinguish live-server format drift from the frozen benchmark. Ladder placement is supplementary evidence, not a stable reproducible research metric.
 
-**Execute the project through acceptance gates, with no fixed dates.** Each milestone produces something useful even if a later research direction fails. The three sites can progress concurrently once their contracts are settled, but expensive training waits for the relevant correctness gates.
+**Execute the project through acceptance gates, with no fixed dates.** The next implementation priority is G3 simulator work; it is not gated on G1 tournament completion or G2 learning. G1 remains open, and its existing reference harness remains available for parity checks. G2 learning is deferred until the simulator trajectory warrants it. Each gate still requires its own evidence and acceptance; this sequencing decision does not claim any milestone closure.
 
 | Gate | Main work | Reviewable deliverables | Acceptance condition |
 |---|---|---|---|
@@ -278,7 +282,7 @@ Optional human matches and public-server play come after local transfer and late
 | G7: Strategic research | R-NaD, best responses, belief particles, simultaneous search | Controlled comparisons, small-game solver tests, exploitability probes | Benefits exceed complexity and resource costs under declared metrics |
 | G8: Moonshot system | Public-belief planning, search distillation, adaptive compute | Best agent, reproducible release, complete audit and benchmark report | Strongest verified Gen 5 performance achieved within the explored design space |
 
-G2 and G3 can proceed after G1 in parallel as engineering work. G4 and G5 inform one another: performance prototypes happen early, while full-format performance claims wait for coverage. G6 does not require successful G7/G8 research. The full-JAX generator can be pursued during G4/G5 without blocking faithful training using reference-generated teams.
+Proceed from G0 into G3 while G1 remains open. G1 work continues only where needed to support simulator validation; standalone tournament, scoring, or reporting expansion is deferred. G2 learning and G5 end-to-end training follow sufficient runnable simulator coverage. G4 and G5 inform one another: performance prototypes happen early, while full-format performance claims wait for coverage. Keep reference-generated teams available while the full-JAX generator is deferred. G6 does not require successful G7/G8 research.
 
 **Keep experiments discriminating.** Every expensive run should answer a question that changes the design. Begin with the following comparisons:
 

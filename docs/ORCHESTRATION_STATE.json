@@ -1,6 +1,25 @@
 {
   "schema_version": 1,
   "accepted_project_task_count": 33,
+  "project_direction_decision": {
+    "status": "adopted",
+    "date": "2026-11-03",
+    "priority": "simulator_first",
+    "decision": "Prioritize integrated JAX simulation and Showdown parity validation. G3 work may proceed while G1 reference-environment acceptance and G2 learning remain open; neither is waived or accepted by this decision.",
+    "preserve": [
+      "Pinned Showdown as semantic oracle, source of reference data and generated teams, and parity harness.",
+      "Request and legal-action semantics, simultaneous commitments, player-visible events/history, and terminal outcomes as simulator-facing correctness contracts.",
+      "Exact RNG/state/event/request comparison, interaction and full-trace tests, and explicit reporting of unsupported mechanics.",
+      "Early compile, batch, JIT/vmap, and representative throughput probes; no training or throughput claim is required.",
+      "CPU-first validation; GPU runs only when task acceptance or a device-specific property requires them, not a full GPU suite for every slice."
+    ],
+    "defer": "PPO, tournament/scoring, expanded trajectory collection, and additional baseline/reporting infrastructure unless they directly enable simulator semantics or parity validation.",
+    "next_candidate": "One bounded integrated runnable JAX turn slice for an explicitly named restricted development variant with declared ordinary move cases and exact RNG/state/request parity. Scope must be checked for feasibility at task kickoff; this candidate is not full-format support and is not an active or accepted task.",
+    "progress_measure": "Increasingly complete parity-tested playable battles, not accepted task count.",
+    "active_task": null,
+    "accepted_task_count_changed": false,
+    "milestones_accepted": []
+  },
   "review_state": {
     "latest_task_review_baseline": 30,
     "bootstrap_review": {
