@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "accepted_project_task_count": 28,
+  "accepted_project_task_count": 29,
   "review_state": {
     "latest_task_review_baseline": 20,
     "bootstrap_review": {
@@ -537,6 +537,80 @@
         "accepted_by_agent": "/root",
         "acceptance_review": "Primary /root independently inspected the adapter, parser correction, tests and diff. Accepted fixed slot mappings, request-relative decoding, request-only trapping masks, episode exclusions, non-actionable states, shape/bound checks, immutable inputs and fixed diagnostics. Pinned live locked/recharge/Struggle requests and Side.choose acceptance, shared-parser Struggle prevalidation, adapter-backed complete battle, own-side request histories and actual Shadow Tag rejection/retry evidence satisfy the declared scope. One follow-up correction resolved incompatible top-level fields and foreign-thrown-value normalization. The affected suite passed 97/97 before the module/test-only correction; the complete affected adapter suite then passed 7/7. Syntax, JSON, diff and Trail build passed. No blocking finding remains. No full runBattle Struggle battle, GPU, benchmark result or milestone closure is claimed. No Astra gate is due: count advances to 28, baseline stays 20 and checkpoint stays 30.",
         "status_note": "Primary accepted Task028; delivery belongs to primary. The acceptance record intentionally contains no self-referential delivery commit hash."
+      },
+      {
+        "id": "Task029",
+        "title": "completed-battle player decision trajectory collector",
+        "owner": "/root/task029",
+        "status": "accepted_complete",
+        "source_commit": "1382890aed1710ef14b56e719a3ffce800e63a28",
+        "scope": "Add a separate CommonJS completed-battle collector composing runBattle, its existing policy callback API, and the Task028 action adapter. Record actor-scoped policy invocation samples with append-only own-history deltas, current requests, masks, selected commands/slots and request-episode IDs; add fixed-player terminal reward targets only after validated completion. This is a bounded G1 trajectory-schema step.",
+        "exclusions": [
+          "changes to existing runner scheduling, retries, policies, protocol projection, action mappings or record contracts",
+          "partial failed-battle datasets or resume",
+          "submission/acceptance/execution labels for selected actions",
+          "next-state transition or complete post-final-decision history claims",
+          "behavior probabilities, PPO or learner-ready claims",
+          "observation feature encoders, recurrent models or learning",
+          "CLI, artifact persistence, manifests, tournament or benchmark implementation",
+          "GPU, new mechanics or milestone acceptance",
+          "implementation-owner commits or pushes"
+        ],
+        "acceptance_criteria": [
+          "Expose one documented version-1 library API for a single completed battle. Compose the actual existing runBattle and keep its explicit ps/seeds/limits/preparedTeams/streamFactory contract where supported; default policies remain the existing randomPolicy and optional callbacks retain exactly the existing history/request/random input API. No existing source module changes are planned; report concrete evidence to primary before any necessary scope adjustment.",
+          "Emit a serializable allowlisted artifact with pinned format/upstream identity, validated public terminal outcome and two separate player trajectories. Each per-player sample has contiguous decision index, positive current request-episode ID, request kind, own current request snapshot, eleven-slot mask, selected slot/command and an own-history delta captured before that policy selects an action. Do not store RNG functions, seeds, packed teams, raw packets, trusted transcript/end metadata, arbitrary result/config fields or opponent-private data in decision observations.",
+          "Use Task028 actionSpace/decodeAction and only current-episode rejection evidence when recording masks and validating the chosen command. Sampling must consume no additional policy RNG draws. Return only valid actionable decisions: wait/forceSwitch false and duplicate unresolved requests yield no extra samples. Identical request payloads in later episodes remain separate samples; retries remain distinguishable in their original episode.",
+          "Capture immutable or detached snapshots before user-policy invocation; per-player history deltas must reconstruct exactly the callback-visible history prefix at each successive decision, including non-actionable requests/events/resolutions received between callbacks. Do not truncate older knowledge or copy each complete history at every step. A final selected command has no invented submission/resolution status, and post-final-decision observations are explicitly outside this initial schema.",
+          "Store terminal reward targets separately per fixed seat: winner +1, loser -1, tie 0. No alternating-player sign convention and no reward/outcome/future-opponent field may be added to policy callback input or a pre-action observation. Mark behavior probability/log probability unavailable (null or explicitly omitted with documentation); do not fabricate training likelihoods.",
+          "Fail safely without returning a completed or partial dataset when runBattle, configuration, policy invocation or action validation fails. Use fixed diagnostics and do not copy arbitrary exception properties/result-shaped metadata into output. Do not expose a collector snapshot accessor that can masquerade as a successful dataset after failure.",
+          "Add independent scripted-stream tests for exact snapshots/history reconstruction, interleaved and consecutive own decisions, forced replacement, wait/no-choice, duplicate pending vs repeated later requests, unavailable-choice retry/exclusion reset, all three terminal reward cases, invalid selection/config/policy/runner failures, detached data and strict output allowlisting. Use concrete expected fields rather than only comparing the collector against its own helpers.",
+          "Enforce non-leakage with paired controlled streams that keep one actor callback history/current request identical while varying opponent private requests/split branches and pending choices or hidden end metadata. Require equal recorded actor observations/masks/selected actions under the same policy RNG. Explicitly keep post-game targets separate. Complete a real guarded pinned battle, verify masks/commands, own-side request histories and terminal target mapping, and compare policy command sequences with unwrapped runBattle under the same seeds to show recording changes no decisions.",
+          "Document API, JSON schema, privacy/target boundary, episode/retry responsibilities, delta reconstruction, unavailable likelihoods and completion-only/final-tail limitations in README. Preserve Task028, GPU validation and other prior history, task count/review baseline until independent primary acceptance; no G1 closure or performance claim.",
+          "Run focused collector tests and affected action-space/battle-runner/protocol/trace/reference regressions once per meaningful revision; syntax, JSON/diff, Trail build/check and inspected diff evidence are required. GPU is not required. Report changed paths, exact commands/results and concerns to primary; retain ownership through bounded corrections and do not accept or commit own work."
+        ],
+        "plan": [
+          "Read the scoped handoff, project-plan G1/input-target boundaries, applicable instructions, Trail graph and relevant learnings before source edits.",
+          "Implement only a separate completed-battle wrapper/collector over existing callback and action APIs, with per-player observation deltas and separately finalized targets.",
+          "Add exact controlled-stream, failure, privacy-equivalence and guarded pinned integration tests; verify unchanged random-policy command sequences.",
+          "Update README and Task029 handoff/current durable record, refresh/check Trail, validate focused changes and inspect diff.",
+          "Stop edits and return evidence to primary for independent acceptance and delivery; retain ownership for any authorized corrections."
+        ],
+        "progress": "Accepted by primary /root after independent focused review and one test-only correction. Owner stopped all edits before final coordination. Source identity stays at the pre-work revision; no self-referential delivery hash is recorded.",
+        "review_correction": {
+          "reviewer": "/root",
+          "status": "accepted_by_primary",
+          "finding": "Acceptance criterion 7 needed explicit detached-data and strict JSON allowlist evidence. The previous cloned callbackHistories could not prove emitted data was detached from actual callback inputs.",
+          "resolution": "Test-only change retains real callback input references, checks nested request/historyDelta non-aliasing and mutation isolation, asserts exact artifact/player/step/observation/action/target key sets, and validates parsed requests, masks, actions, and history deltas against independently JSON-normalized callback inputs. Runner-owned optional detail:undefined fields are omitted by JSON semantics; no production source changed.",
+          "validation": "node --check environment/decision-trajectories.cjs && node --check test/decision-trajectories.test.cjs passed; node --test test/decision-trajectories.test.cjs passed 5/5 after correction. /root reviewed and accepted the source with the JSON-projection distinction. The affected 55/55 regression run predates this test-only correction and was not repeated per primary instruction; final task acceptance metadata and delivery remain primary-owned."
+        },
+        "gpu_required": false,
+        "validation": [
+          "node --check environment/decision-trajectories.cjs && node --check test/decision-trajectories.test.cjs \u2014 passed after the test-only correction.",
+          "node --test test/decision-trajectories.test.cjs \u2014 5/5 passed after the test-only correction.",
+          "node --test test/decision-trajectories.test.cjs test/action-space.test.cjs test/battle-runner.test.cjs test/prepared-teams.test.cjs test/protocol.test.cjs test/trace.test.cjs test/reference.test.cjs \u2014 55/55 passed before the test-only correction; not repeated per primary instruction.",
+          "trail build after the test-only correction \u2014 passed: 651 nodes, 1,412 edges, 73 cards.",
+          "python3 -m json.tool docs/ORCHESTRATION_STATE.json >/dev/null \u2014 passed after final state update.",
+          "git diff --check \u2014 passed after final documentation updates.",
+          "trail check --base HEAD \u2014 exited 1 with 11 lexical findings; per-file counts and semantic rationale are recorded in docs/TASKS.md Task029. Additional leads were marked non-failing.",
+          "Primary final JSON/history/scope/diff and graph checks passed. Final staged trail check --base HEAD --json exited 1 with 11 reviewed lexical documentation conflicts (5 checked files, 15 learnings), no overlaps. Rationale is in the handoff and task commit body."
+        ],
+        "accepted_at": "2026-11-03",
+        "accepted_by_agent": "/root",
+        "acceptance_review": "Primary /root accepted Task029 after independently inspecting the new collector, complete focused tests, documentation, learning and validation evidence. The wrapper uses only live own-view callbacks, detached pre-selection request/history deltas and Task028 masks; it forwards opaque handles and preserves policy RNG/selection behavior. Selected actions carry no fabricated resolution or likelihood; completed public outcomes produce separate fixed-seat targets. Exact scripted histories cover waits, repeats, consecutive decisions and episode-scoped retries; paired hidden-data tests preserve actor observations/actions, and a guarded real battle matches unwrapped default command sequences with prepared-team forwarding. One test-only follow-up added actual-reference mutation isolation, strict nested keys and JSON-projection reconstruction. All criteria are satisfied by 55/55 affected tests before the test-only strengthening and 5/5 focused tests afterward, plus syntax/JSON/diff/Trail evidence. No source correction or further task was needed. No blocker remains. G1 and later milestones remain open; GPU, likelihoods, full final tails and partial failed datasets are outside this accepted unit. Count advances 28 to 29, baseline remains 20 and next checkpoint remains 30.",
+        "parent_review": {
+          "disposition": "ACCEPTED",
+          "reviewer": "/root",
+          "correction_rounds": 1,
+          "scope": "Detached snapshot proof, exact nested schema keys and JSON projection clarification; production source unchanged after initial focused validation.",
+          "blockers": []
+        },
+        "trail_learning": {
+          "id": "l-b9bd63dc",
+          "path": ".trail/learnings/2026-11-03-capture-trajectory-observations-from-policy-callbacks-developer-2.md",
+          "replaces": "l-11d377e9",
+          "predecessor_path": ".trail/learnings/2026-11-03-capture-trajectory-observations-from-policy-callbacks-developer.md",
+          "reason": "CLI-managed replacement clarifies standard JSON omission of optional undefined fields; predecessor retained as same-unit learning history."
+        }
       }
     ]
   },
