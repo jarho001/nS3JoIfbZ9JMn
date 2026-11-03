@@ -207,6 +207,25 @@ The returned `schemaVersion: 1`, `kind: "gen5-named-baseline-paired-matchup"` ar
 
 The function returns only when both battles have valid completed outcomes and the runner has completed cleanup. Configuration, preparation, battle, validation, or cleanup failures reject with the fixed diagnostic `Baseline paired matchup failed (baseline_matchup_failed).` No partial artifact is returned. A failed call may already have generated teams, opened a stream, or completed the first battle; the absence of an artifact says nothing about work attempted or completed. The per-battle `elapsedMs` values keep the runner's `battle_runner` timing scope and do not measure whole-matchup setup or claim performance. The serialized artifact is reproducibility metadata, not proof that these battles ran or that the metadata was not changed afterward. This API adds no CLI, persistence, journal, resume, aggregation, scored suite, rate, or strength claim.
 
+### Run and save one named matchup
+
+The CLI composes that library API with the pinned Showdown reference and saves its completed artifact:
+
+```sh
+node environment/run-baseline-matchup.cjs \
+  --root-seed 1,2,3,4 \
+  --pair-index 0 \
+  --policy-a legal-random-v1 \
+  --policy-b move-first-v1 \
+  --output /tmp/gen5-pair-0.json
+```
+
+All five options are required; the seed, zero-based pair index, and both versioned policy IDs are explicit. The parser accepts either a separate value or `--name=value`, and `--help` must be used alone. Unknown and repeated flags, unsupported IDs, malformed seeds, and pair indices outside `0..99999` fail before reference setup or battle execution. Only `legal-random-v1` and `move-first-v1` are supported.
+
+After the pinned reference check, the CLI exclusively creates the requested output file with owner-only permissions before running either battle. An existing file, symlink, or missing parent is left untouched and causes a safe error. While the pair runs, this reserved file is empty. The CLI writes the versioned artifact only after both battles complete and clean up, flushes the file, closes it, and then reports success. Ordinary execution and write failures return a fixed diagnostic, attempt to remove the reservation only when the output path still identifies the same file, and never emit a partial result or raw exception. Cleanup and filesystem failures can leave an empty or partial file; an abrupt process or machine failure can leave the reservation or interrupt a write. File flushing does not sync the containing directory entry. A failed invocation may have completed real battle work, and this CLI does not journal or resume it. Concurrent replacement or writing of the reserved output path is unsupported; identity checks avoid deleting a replacement that is observed at cleanup time.
+
+The success line contains only the artifact kind, pair ID, completion status, and resolved output path. The saved artifact retains the library's per-battle timing scope, excludes earlier setup and output writing, and is reproducibility metadata rather than proof of execution or tamper resistance. No aggregate score, tournament result, strength estimate, or performance claim is produced.
+
 ## Trusted trace capture and replay
 
 [`reference/trace.cjs`](reference/trace.cjs) captures and replays the full BattleStream input/output sequence:

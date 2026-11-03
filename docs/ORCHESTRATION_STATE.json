@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "accepted_project_task_count": 31,
+  "accepted_project_task_count": 32,
   "review_state": {
     "latest_task_review_baseline": 30,
     "bootstrap_review": {
@@ -787,6 +787,93 @@
           "predecessor_path": ".trail/learnings/2026-11-03-keep-named-matchup-semantics-out-of-jarho001.md",
           "reason": "CLI-managed formatting replacement uses required Decided/Tried/Watch-out sections and code evidence; original same-unit note remains as history."
         }
+      },
+      {
+        "id": "Task032",
+        "title": "single named baseline matchup CLI",
+        "owner": "/root/task032",
+        "status": "accepted_complete",
+        "source_commit": "b4ffdaa917c903654a5e30f0aaafc0a746e8f2ac",
+        "scope": "Add a separate CLI for exactly one named completed baseline pair, composing the accepted Task031 library and exclusively publishing its safe artifact to an explicit new file. This makes the G1 named evaluation building block runnable without custom JavaScript.",
+        "exclusions": [
+          "changes to existing runtime/library schemas or policy behavior",
+          "batch/tournament aggregation, scoring, confidence intervals or strength/performance claims",
+          "resume, partial results or failure journals",
+          "new mechanics, training or GPU validation",
+          "G1 acceptance",
+          "unrelated optional documentation cleanup",
+          "owner commit/push"
+        ],
+        "acceptance_criteria": [
+          "Require explicit --root-seed, zero-based --pair-index, --policy-a, --policy-b and --output; support strict flag/value and flag=value forms, sole help, reject missing/duplicate/unknown/malformed values and IDs before bootstrap or execution. No implicit seeds/IDs/pair index.",
+          "Use pinned oracle.assertReady and actual runBaselineMatchup; preserve its exact completed artifact and limits/defaults, opaque teams, role/seed mapping and cleanup contract. Leave existing library and legacy executors/schemas unchanged.",
+          "Create the explicit new output file exclusively before battle execution so existing files/symlinks or missing parents fail without a battle. Publish only after successful complete execution; safely remove the owned reservation on pre-publication failure. Never overwrite/delete unrelated paths. Document crash/write/close/cleanup failure limitations honestly, and never emit fabricated partial outcomes.",
+          "Print no raw exceptions, paths from exception text, packets, transcripts or failed result-shaped metadata. Fixed safe diagnostics and nonzero failure exit. Report success only after completed output write/close; no failed invocation claims zero attempted work.",
+          "Add controlled tests for parser, bootstrap/execution/order, exclusive-file preservation, invalid/no-work inputs, safe errors, owned reservation cleanup and write/close failures as practical. Run a subprocess real pinned mixed-policy pair and validate saved kind/config/pin/canonical seed/seat mapping and both completed prepared-team result records.",
+          "Document usage and success/failure/file/timing/attestation boundaries. Run focused and justified affected regressions, syntax, JSON/diff and Trail build/check; inspect own diff, report exact evidence and stop for primary acceptance. Preserve earlier history, count31/baseline30/checkpoint40 until primary acceptance; no GPU or Astra gate required."
+        ],
+        "plan": [
+          "Read applicable Trail and prior learnings and trace affected symbol dependencies before implementation.",
+          "Implement separate CLI and targeted tests, leaving accepted Task031 library unchanged.",
+          "Run meaningful focused and affected checks including a real pinned CLI subprocess; document boundaries, update only Task032 progress, refresh/check graph and inspect diff.",
+          "Stop edits for primary review; primary alone accepts/counts/delivers, then stop at this task boundary."
+        ],
+        "progress": "Accepted by primary after independent focused criteria/diff/evidence review; owner stopped edits. Parent owns final coordination and remote delivery. Count32/baseline30/checkpoint40; no blockers.",
+        "gpu_required": false,
+        "accepted_at": "2026-11-03",
+        "accepted_by_agent": "/root",
+        "acceptance_review": "Primary /root independently reviewed the complete CLI, corrected tests, README contract and exact owner validation evidence. Accepted Task032 after the owner stopped edits. Explicit arguments are validated before pinned bootstrap; output is exclusively reserved before actual runBaselineMatchup, and only its completed artifact is written through the retained descriptor, flushed and closed before success. Existing files/symlinks and missing parents stop before battle work; fixed diagnostics expose no foreign exception metadata. Ordinary failures attempt identity-checked reservation cleanup; documented crashes/filesystem failures can leave empty or partial files, and concurrent output replacement is unsupported. Controlled no-work, cleanup/write/sync/close/replacement tests and a real pinned subprocess with canonical pair/run metadata support all criteria. Primary requested only test evidence additions and corrected learning spans via CLI replacement; no runtime change or criterion waiver. Corrected focused10/10 passes after a test-only diagnostic-count fix; earlier affected36/36 and already-running full140/140 passed at the identical source revision. Existing Task031 library, legacy executors, policies and schemas remain unchanged. Count31 becomes32, baseline30/checkpoint40 stay fixed; G1 remains open and no GPU or strength/performance claim is made. Stop at Task032; no Task033 starts.",
+        "primary_review": {
+          "disposition": "ACCEPTED",
+          "reviewer": "/root",
+          "required_source_corrections": [],
+          "requested_test_corrections": [
+            "Add malformed-seed and successful-bootstrap/missing-parent no-work assertions.",
+            "Compare real saved pair/run metadata to canonical generatePair output."
+          ],
+          "corrections_verified": true
+        },
+        "implementation_source_blobs": {
+          "environment/run-baseline-matchup.cjs": "5c8622ab719c9fe9f565b3d9d2e8e126857d7a80",
+          "test/run-baseline-matchup.test.cjs": "3019ed2a1ccaf405548861495e651972ee894d47"
+        },
+        "trail_learning": {
+          "id": "l-e0423be3",
+          "path": ".trail/learnings/2026-11-03-reserve-output-files-before-long-running-jarho001-2.md",
+          "replaces": "l-7f54bde1",
+          "predecessor_path": ".trail/learnings/2026-11-03-reserve-output-files-before-long-running-jarho001.md",
+          "reason": "CLI-managed same-unit replacement corrects stale exact source spans while preserving predecessor; prior learnings unchanged."
+        },
+        "validation": [
+          {
+            "command": "node --check environment/run-baseline-matchup.cjs && node --check test/run-baseline-matchup.test.cjs && node --test test/run-baseline-matchup.test.cjs",
+            "result": "initial passed10/10; final syntax checks also passed"
+          },
+          {
+            "command": "node --test test/run-baseline-matchup.test.cjs test/baseline-matchup.test.cjs test/paired-seeds.test.cjs test/manifest-runner.test.cjs",
+            "result": "passed36/36 before final test-only additions; runtime source unchanged"
+          },
+          {
+            "command": "node --test test/*.test.cjs",
+            "result": "already-running suite passed140/140 before final test-only additions; not repeated"
+          },
+          {
+            "command": "node --check test/run-baseline-matchup.test.cjs && node --test test/run-baseline-matchup.test.cjs",
+            "result": "corrected final10/10 including real guarded pinned subprocess; first follow-up9/10 was an outdated test diagnostic-count expectation, corrected without runtime changes"
+          },
+          {
+            "command": "trail build; trail build --check",
+            "result": "passed current738 nodes/1574 edges/79 cards"
+          },
+          {
+            "command": "trail check --base HEAD --json",
+            "result": "Final staged exit1:8 lexical documentation conflicts across5 checked files/17 active notes, no overlaps or source conflicts; primary reviewed exact findings and records rationale in delivery commit body."
+          },
+          {
+            "command": "Primary coordination checks",
+            "result": "Passed final JSON/history/count/review/GPU preservation, exact Task001-031 handoff prefix, unchanged implementation blob identity, seven-file staged scope, learning replacement, diff and graph-current checks (738 nodes). No blockers."
+          }
+        ]
       }
     ],
     "active_regular_review": null,
