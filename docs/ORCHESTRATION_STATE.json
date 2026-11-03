@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "accepted_project_task_count": 26,
+  "accepted_project_task_count": 27,
   "review_state": {
     "latest_task_review_baseline": 20,
     "bootstrap_review": {
@@ -320,6 +320,55 @@
         "accepted_by_agent": "/root",
         "acceptance_review": "Primary independently reviewed canonical manifest equality; contiguous pair identity, seed and seat mappings; sequential completed/failed/not_attempted topology and rejection of records following a failure; hand-calculated outcome tallies by seat and policy identity; safe CLI errors and report allowlisting; pinned success, packet-limit partial failure, early initialization failure before teamSource; and unchanged offline input artifacts. All delegated criteria were accepted with no blocking findings. No Astra review or milestone gate was due. Validation: final summarize-results suite 10/10; requested combined affected regression suites 73/73 before final bounded compatibility and invalid-input test additions, followed by focused suite 10/10; syntax, JSON, diff, and Trail build passed. Trail check exited 1 with four reviewed lexical conflicts whose rationale is recorded in docs/TASKS.md and belongs in the task commit body.",
         "status_note": "Accepted complete by /root on 2026-11-03. No commit or push is recorded in this task state update."
+      },
+      {
+        "id": "Task027",
+        "title": "offline recorded-work counter accounting",
+        "owner": "/root/task027",
+        "status": "accepted_complete",
+        "scope": "Add a separate read-only offline CommonJS library and explicit CLI that compose Task026's canonical manifest/contiguous-prefix validator with checked additive counters from present nested battle resultRecord values. Emit allowlisted reports for completed runs, failed recorded attempts, and all recorded attempts, with values by seat and policy identity.",
+        "exclusions": [
+          "changes to the existing outcome-only reporter or battle/pair runners and record shapes",
+          "execution authenticity or Task025 summary.json reconciliation",
+          "treating absent slots as attempts or missing counters as zero work",
+          "summing turn indices, terminal metadata, timing, limits, or seeds",
+          "rates, uncertainty, scored-suite choice, performance claims, or G0/G1 closure",
+          "GPU",
+          "commit or push by implementation owner"
+        ],
+        "acceptance_criteria": [
+          "Reuse summarizeResults to validate the complete canonical manifest and contiguous recorded prefix; preserve unrecorded suffix and not_attempted slots separately; make no authenticity claim or summary.json reconciliation.",
+          "Require complete additive counters on every present nested resultRecord, validate nonnegative safe integers, byPlayer totals, per-record and aggregate safe arithmetic, and documented per-player invariants; preserve partial failed counters and count null failed resultRecords as missing coverage, not zero work.",
+          "Aggregate only objectPackets, publicEvents, policy invocations, choice submissions/resolutions, retry counters, and selected/submitted move/switch actions. Keep globals/seats/policies explicit; map policies through validated policySeats; exclude latestPublicTurn and terminalMetadataTurns.",
+          "Emit versioned gen5-paired-work-accounting with completed, failed-recorded, and all-recorded cohorts, counts, observedTotals, and honest counter coverage. Empty and preparation-only prefixes yield zero observed totals. Output no raw records/counters, hashes, transcripts, or arbitrary fields.",
+          "Test independent exact multi-pair swapped-seat sums, partial failures, empty/prefix/preparation/null-record coverage, malformed/missing/overflow/invariant cases, valid loose inequalities, throwing getters, immutability/allowlisting, and pinned actual success/failure records.",
+          "Test offline CLI success and malformed/truncated/blank/I/O/argument failures, unchanged input bytes and generic diagnostics without oracle bootstrap; keep existing outcome reporter/output unchanged under its tests.",
+          "Update README and charter for schema, cohorts, invariants, missing coverage, ignored metadata/timing, and separation from future rates/uncertainty/timing; preserve Task026 historical scope and make no scored-suite, performance, or G0/G1 claim.",
+          "Run focused and applicable summarize-results, manifest-runner, pair-runner, paired-seeds, prepared-teams, battle-runner, protocol, and trace suites, syntax/state/diff checks, Trail build/check, inspect diff, and report evidence. GPU is not required."
+        ],
+        "plan": [
+          "Read Task026, charter and relevant Trail cards; persist scope and plan before source edits.",
+          "Implement environment/summarize-work.cjs as a compositional pure API and explicit offline CLI.",
+          "Add independent hand-built, numeric/invariant, failure-coverage and pinned runner tests.",
+          "Update README, benchmark charter and Task027 handoff.",
+          "Run focused and affected checks, refresh/check Trail, inspect diff, and report for primary review without commit."
+        ],
+        "progress": "Primary /root accepted Task027 on 2026-11-03 after independent focused source, diff, and evidence review. Accepted count advances from 26 to 27; review baseline 20 and next checkpoint 30 remain unchanged. No GPU evidence or milestone closure was required.",
+        "validation": {
+          "node_check": "node --check environment/summarize-work.cjs && node --check test/summarize-work.test.cjs \u2014 passed.",
+          "focused_tests": "node --test test/summarize-work.test.cjs \u2014 9/9 passed after final test-only additions for partial prefix, switch inequality, getter non-invocation and custom prototype rejection.",
+          "regression_tests": "Combined summarize-work, summarize-results, manifest-runner, pair-runner, paired-seeds, prepared-teams, battle-runner, protocol and trace suites \u2014 84/84 passed before the final test-only additions; focused summarize-work suite passed 9/9 afterward.",
+          "state_and_diff": "python3 -m json.tool docs/ORCHESTRATION_STATE.json; git diff --check \u2014 passed.",
+          "trail_build": "trail build \u2014 passed with 604 nodes, 1311 edges and 69 indexed cards.",
+          "trail_check": "trail check --base HEAD \u2014 exit 1 with nine reviewed lexical false positives at README.md:122,128; docs/BENCHMARK_CHARTER.md:48; docs/ORCHESTRATION_STATE.json:331,336; and docs/TASKS.md:939,941,945,946. Full rationale is recorded in the Task027 handoff; no source contradiction was found.",
+          "trail_saved_tokens": "Approximately 195103 tokens across this turn's Trail ask/skeleton calls.",
+          "gpu": "not required"
+        },
+        "gpu_required": false,
+        "accepted_at": "2026-11-03",
+        "accepted_by_agent": "/root",
+        "acceptance_review": "Primary /root accepted after reviewing the detached finite-JSON snapshot, canonical manifest/prefix/status composition, full additive counter validation, per-player invariants and safe arithmetic including cross-cohort overflow, global/seat/policy totals, exact cohorts, partial/null failure coverage, offline CLI safety and unchanged artifacts, pinned success and genuine failure counters, excluded metadata/timing, and unchanged outcome reporter. The combined regression command passed 84/84 before final test-only additions, followed by focused 9/9; syntax, JSON, diff and Trail build passed. Nine lexical Trail findings were documented and do not contradict the implementation. No Astra checkpoint/milestone was due; GPU was not required.",
+        "status_note": "Accepted complete by /root on 2026-11-03. Count advances to 27; next regular review remains due at 30. No commit or push is recorded in this task state update."
       }
     ]
   },

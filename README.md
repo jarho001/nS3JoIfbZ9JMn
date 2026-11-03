@@ -116,6 +116,17 @@ node --test test/summarize-results.test.cjs
 
 The report validates the complete generated manifest and the journal's contiguous pair prefix, then counts recorded pair/run statuses and completed battle outcomes by player seat and policy identity. An empty journal is valid; each non-empty JSONL record must occupy a newline-terminated line, and blank lines are invalid. The command does not read or reconcile Task025's `summary.json`. A missing suffix is `unrecorded`: a write failure can leave a pair result absent after its battle was attempted. A full recorded prefix describes journal coverage only; it does not prove that the records came from an authentic runner process or make a scored benchmark claim. Offline checks validate serialized format, IDs, seeds, statuses, and terminal outcome shape. They cannot prove which process produced a result record; the report is accounting metadata without execution attestation. This report does not aggregate counters, timing, rates, or uncertainty intervals.
 
+Task027 adds a separate offline additive-work report over the same manifest and journal:
+
+```sh
+node environment/summarize-work.cjs --manifest results/manifest.json --results results/results.jsonl
+node --test test/summarize-work.test.cjs
+```
+
+The work report composes Task026's canonical-manifest and contiguous-prefix validation, then reports three run cohorts: completed runs, failed recorded attempts, and all recorded attempts. Each cohort contains its run count, counts of records with and without counters, and `observedTotals`. A failed attempted run with `resultRecord: null` is valid and increments `missingCounters`; it contributes no invented zero-work record. `not_attempted` runs and unrecorded suffix slots stay outside all work totals and remain visible in `coverage.runSlots`. A present nested result record must have every additive counter field. The report checks nonnegative safe integers, each `byPlayer` sum against its supplied total, overflow-safe arithmetic, and per-player choice-resolution, submission, and selection invariants. Failed-run counters remain included when present and may represent partial work.
+
+`observedTotals.global` contains `objectPackets` and `publicEvents`. Each player-counter field has a `total`, `bySeat` counts for p1/p2, and `byPolicy` counts for policyA/policyB mapped through the validated run's policy seats. Selected actions stay separate from submitted actions; rejections and retries stay separate from policy invocations and choice submissions. `latestPublicTurn` and `terminalMetadataTurns` are metadata, not additive work, and are excluded. The report also excludes elapsed time, limits, run seeds, hashes, transcripts, and arbitrary record fields. It does not read or reconcile `summary.json`, authenticate which process emitted records, compute rates or uncertainty, select a scored suite, or make a performance claim. The pure API accepts finite JSON data with enumerable own data properties; accessors and custom prototypes are rejected with a fixed safe error. The CLI reads only the supplied manifest and result journal and does not bootstrap the pinned oracle.
+
 Task025 provides a full-manifest library and pinned CLI. The caller chooses the root, pair count, and a path for a new output directory:
 
 ```sh
