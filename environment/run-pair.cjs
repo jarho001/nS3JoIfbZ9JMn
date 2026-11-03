@@ -291,4 +291,4 @@ if (require.main === module) {
 	});
 }
 
-module.exports = { createPairRecord, main, parseArgs, runPair };
+module.exports = { createPairRecord, main, ownsPairError, parseArgs, runPair };

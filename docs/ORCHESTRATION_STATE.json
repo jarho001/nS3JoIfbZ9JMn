@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "accepted_project_task_count": 24,
+  "accepted_project_task_count": 25,
   "review_state": {
     "latest_task_review_baseline": 20,
     "bootstrap_review": {
@@ -208,6 +208,65 @@
           "id": "l-d998d91c",
           "path": ".trail/learnings/2026-11-03-trust-pair-results-only-from-owned-jarho001.md"
         }
+      },
+      {
+        "id": "Task025",
+        "title": "sequential paired-manifest runner",
+        "owner": "/root/task025",
+        "status": "accepted_complete",
+        "scope": "Add a library and explicit CLI that execute every pair in an explicitly generated paired-seed manifest sequentially through the existing runPair API, writing the exact manifest, one safe JSONL result per attempted pair, and a final honest summary in a newly created output directory. Export only the existing ownsPairError predicate needed to recognize real runPair-owned errors. Add controlled and pinned integration coverage and update the handoff and benchmark charter.",
+        "exclusions": [
+          "concurrency, resume, retries, and crash-recovery/fsync guarantees",
+          "scored suite or sample-size recommendations",
+          "outcome aggregation, rates, confidence, win summaries, or benchmark/throughput claims",
+          "hardware allocation or GPU-specific acceptance",
+          "battle, prepared-team, seed derivation, policy, runner, or visibility redesign",
+          "mechanics/JAX and G0/G1 closure",
+          "commit or push by the implementation owner"
+        ],
+        "acceptance_criteria": [
+          "Library and CLI require an explicit four-limb uint16 root, explicit pair count within MAX_PAIRS, and explicit output directory; configuration is snapshotted and validated before artifact creation or battle execution.",
+          "The invocation creates only a new non-recursive output directory and exclusive owned artifacts; an existing destination is unchanged and no battle starts.",
+          "manifest.json exactly matches generateManifest(root,count); results.jsonl contains one safe actual pair record per attempted pair in stable order and each line is committed before the next pair starts; summary.json schemaVersion 1 reports identity, status, honest execution/recording counts, safe failure details, and finite manifest_runner elapsed time.",
+          "Failure is fail-fast. A real owned partial pair result is journaled when possible; prior lines survive; unattempted pairs receive no fabricated records; foreign pairResult/summary-shaped metadata from configuration, bootstrap, or I/O exceptions is never trusted.",
+          "Pinned integration executes at least two real pairs sequentially, validates terminal records and stable policy seeds while packed team writes/hashes exchange seats, observes two team generation and packing calls per pair, and confirms stream cleanup.",
+          "Controlled tests cover success, existing destination, invalid configuration, later and first-pair failures, append/summary initialization/write failures, journaling visibility before the next pair, CLI safe nonzero errors, bootstrap/config/I/O metadata spoofing, and no work after failure.",
+          "README/charter/task docs describe artifact schemas, required new destination, honest failure preservation and timing boundaries; full-manifest execution is implemented while scored suite design, aggregation, concurrency, and resume remain future; no benchmark claim or milestone closure is added.",
+          "Affected manifest, pair, seed, prepared-team, runner, protocol, and trace checks pass; syntax, state JSON, diff, Trail build, and Trail check are recorded. GPU is not required."
+        ],
+        "plan": [
+          "Read repository instructions, orchestration state, Task024 handoff, charter, and Trail context; verify tools and preserve the clean synchronized base.",
+          "Persist Task025 scope, exclusions, acceptance criteria, owner, and plan before source edits.",
+          "Implement the sequential manifest library and explicit CLI over existing generateManifest and real runPair; export the ownership predicate without exposing branding.",
+          "Add controlled failure/provenance/artifact tests and pinned multi-pair integration coverage.",
+          "Update README, charter, and task handoff; refresh Trail and add only a newly justified durable learning.",
+          "Run the exact affected regression suite, syntax/JSON/diff checks, Trail check; report evidence to the parent for focused acceptance review."
+        ],
+        "review_corrections": [
+          {
+            "finding": "Manifest summary mapping converted every non-runtime owned pair failure category to initialization, so category-specific runner failures were misreported.",
+            "evidence": "Parent reproduced maxPackets:1: the owned journal pair.failure.category was packet_limit while summary.failure.category was initialization (code packet_limit_exhausted). Parent follow-up noted retry_limit_exhausted is a supported category at battle-runner.cjs#runBattle and must also be included.",
+            "correction": "Preserve categories only from the actual privately branded runPair error record through an explicit allowlist (including retry_limit), use a fixed runtime fallback for unknown values, and do not read category from unowned error metadata. Add packet_limit and retry_limit journal/summary reconciliation tests.",
+            "status": "applied"
+          }
+        ],
+        "validation": [
+          "node --test test/manifest-runner.test.cjs test/pair-runner.test.cjs test/paired-seeds.test.cjs test/prepared-teams.test.cjs test/battle-runner.test.cjs test/protocol.test.cjs test/trace.test.cjs \u2014 65/65 passed, including pinned multi-pair and CLI cases plus packet_limit/retry_limit category reconciliation.",
+          "node --test test/manifest-runner.test.cjs \u2014 13/13 passed after strengthening checks that pair 0 is journaled before pair 1 team preparation and append failure leaves a later pair unattempted.",
+          "node --check environment/run-manifest.cjs; node --check environment/run-pair.cjs; node --check test/manifest-runner.test.cjs \u2014 passed.",
+          "python3 -m json.tool docs/ORCHESTRATION_STATE.json >/dev/null and git diff --check \u2014 passed after final documentation/state updates.",
+          "trail build \u2014 passed with 65 indexed source/test files, 548 nodes, and 1166 edges.",
+          "trail check --base HEAD, after git add -N for the new module, test, and Trail learning \u2014 checked 7 changed files against 12 learnings, exited 1 with four reviewed lexical false positives at README.md:99, docs/BENCHMARK_CHARTER.md:36, docs/ORCHESTRATION_STATE.json:219, and docs/TASKS.md:884. Those docs describe opaque seed-bound prepared-team handles or the existing runPair API; none accepts arbitrary packed-team strings. New runner/test matches about Teams.generate and BattleStream were advisory-only: Task025 generates each pair once through existing runPair and does not expose raw packets to policies. No blocking finding applied to the new implementation."
+        ],
+        "progress": "Accepted. The manifest executor and CLI compose the existing generateManifest and actual runPair path sequentially, preserve exclusive artifacts and owned partial records, distinguish executed from recorded counts, and report safe categorized failures with explicit elapsed boundaries. Primary review accepted all criteria. Task025 was counted as project task 25; no Task026 was started.",
+        "trail_learning": {
+          "id": "l-ec89ac92",
+          "path": ".trail/learnings/2026-11-03-preserve-owned-runner-failure-categories-in-jarho001.md"
+        },
+        "accepted_at": "2026-11-03",
+        "accepted_by_agent": "/root",
+        "status_note": "Accepted and complete by /root on 2026-11-03 after independent source, diff, and evidence review. Implementation owner /root/task025 did not commit or push.",
+        "acceptance_review": "Primary /root independently reviewed the source, diff, and evidence and accepted Task025. Acceptance covered the explicit root/count/output configuration; validation before artifact/team work; exclusive new-directory artifacts; exact manifest/hash; actual sequential runPair calls with journaling before next-pair preparation; ownership-proven partial results; safe fail-fast behavior; honest completed/failed/unattempted/recorded counts; packet_limit and retry_limit category reconciliation; pinned two-pair packed-team seat exchange, policy seeds, terminal records, and stream cleanup; CLI success and safe nonzero parse/bootstrap/I/O failures; and documented schemas/failure/timing boundaries without benchmark or milestone claims. The combined regressions passed 65/65 and the strengthened manifest suite passed 13/13. Syntax, state JSON, diff checks, and Trail build passed. Trail check exited 1 with four reviewed lexical false positives; rationale is recorded and no blocking implementation finding remained. No Astra review or milestone gate was due; count advances to 25, baseline stays 20, and the next regular checkpoint remains 30."
       }
     ]
   },
