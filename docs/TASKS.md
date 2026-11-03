@@ -773,6 +773,39 @@ After the primary correction, `node --test test/paired-seeds.test.cjs` passed 5/
 
 **Review:** Primary `/root` accepted Task022 on 2026-11-02 after independently reviewing the focused diff and validation evidence, including the sparse-array correction. The accepted count is 22, the regular review checkpoint remains 30, and no milestone closure was recorded. The primary will include the unrelated Trail lexical-warning rationale in the commit message. The implementation owner did not commit or push.
 
+## Task 023 — reuse seed-bound prepared teams
+
+**Status:** Accepted and complete — 2026-11-02. Primary `/root` accepted the implementation after focused diff and evidence review.
+
+**Scope:** Add an opaque prepared-team handle that generates and packs one pinned format team once for an explicit four-limb seed. Allow `runBattle` to consume two valid handles, bound to its Showdown API and matching `teamP1`/`teamP2` seeds, so a caller can reuse the exact teams across swapped seats. Mark prepared team provenance in the per-battle result record. Add fake and real pinned tests, and document usage and timing boundaries.
+
+**Exclusions:** No pair CLI or orchestration, default seed/root/count selection, batch execution or aggregation, scored suite, benchmark or throughput claims, hardware allocation, mechanics/JAX work, visibility changes, or G0/G1 closure. Do not change the existing generated-team default or commit/push as implementation owner.
+
+**Acceptance criteria:**
+
+- [x] Preparation accepts four indexed uint16 seed limbs, copies seed data, and calls the pinned generator and packer once. Its immutable opaque handle has internal WeakMap data binding API identity, format, pin, seed, and packed team. Only handles issued by the helper are accepted.
+- [x] `runBattle` requires both player handles when prepared teams are supplied and checks handle authenticity, shared Showdown API, format, pin, and exact player team seeds before creating a stream. Error records contain only safe categories/codes, not packed teams or raw/private data.
+- [x] Valid handles bypass generation/packing, can be reused and swapped, and carry `teamSource: "prepared"` in result records. Existing calls without prepared teams retain generated behavior, summary/transcript equality, and policy input boundary.
+- [x] Fake tests cover malformed/sparse seeds, immutability, forged/cloned/API-mismatched/seed-mismatched or missing-seat handles, rejection before stream creation, and reusable handles.
+- [x] Real paired pinned battles prepare A/B once, exercise both seat arrangements, count exactly two team generations and pack operations, compare captured packed player writes, validate both outcomes, and match normal-path same-seed summaries/transcripts excluding timing.
+- [x] README, charter, and handoff explain prepared reuse and per-battle timing scope; automatic pair execution, aggregation, suite sizing, and performance remain proposed/unresolved.
+- [x] Focused runner, paired-seed, protocol and trace regressions, Trail build/check, syntax checks, state JSON parsing, and diff review pass. No GPU run is required.
+
+**Plan:**
+
+1. Read Trail context for runner initialization/result records and persist this scope, owner, criteria, and active state before source edits.
+2. Implement opaque seed-bound preparation and integrate validation/use into the runner before stream initialization.
+3. Add focused fake cases and real pinned paired-run verification, including deterministic compatibility and exact generation/packing counts.
+4. Update README, charter, and this handoff; run focused validation, refresh/check Trail, inspect the diff, and report to the parent without accepting or committing.
+
+**Progress:** Plan and active state persisted before source changes. `environment/prepared-teams.cjs` creates immutable handles containing a seed snapshot and packed-team digest while keeping the Showdown object and packed string in a module-local `WeakMap`. `runBattle` authenticates both handles against API identity, pinned format/revision, and canonical player team seeds before stream creation. Prepared runs bypass both team generation and packing, add `resultRecord.teamSource: "prepared"`, and retain the original default generation and packing call sites. Handles and hashes do not enter the policy callback input.
+
+**Validation evidence:** `node --check environment/prepared-teams.cjs`, `node --check environment/battle-runner.cjs`, and `node --check test/prepared-teams.test.cjs` passed. `node --test test/prepared-teams.test.cjs test/battle-runner.test.cjs test/paired-seeds.test.cjs test/protocol.test.cjs test/trace.test.cjs` passed 41/41. The real pinned test prepares exactly two teams (two generation and two pack calls total), reuses them across both seat assignments, verifies packed-team hashes in actual player writes and both completed outcomes, checks recipient policy input keys, and matches the generated-path summary/trusted transcript for identical seeds. Fake tests reject sparse/out-of-range seeds, invalid packed output, forged/cloned/API-mismatched/seed-mismatched/missing-seat handles before stream creation. CPU only; no GPU requirement.
+
+`trail build` passed and refreshed the wiring graph. `trail check --base HEAD` inspected seven source/docs files and returned no conflicts; remaining “worth a look” notices were informational. The eighth changed file is the new repo learning `l-e9a39748`, which records the seed-provenance rationale. `python3 -m json.tool docs/ORCHESTRATION_STATE.json` and `git diff --check` passed.
+
+**Review:** Primary `/root` accepted Task023 on 2026-11-02 after independently reviewing the focused diff and validation evidence. The accepted count is 23, the regular review checkpoint remains 30, and no milestone closure was recorded. The owner did not commit or push.
+
 ## Workflow configuration update — not a project task
 
 The repository orchestration rules, role configuration, scheduled prompt, and

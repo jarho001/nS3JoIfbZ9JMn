@@ -5,6 +5,7 @@ const path = require('node:path');
 const { performance } = require('node:perf_hooks');
 const { projectPackets } = require('./protocol.cjs');
 const { candidateActions, createPolicyRng, deepFreeze, policyInput, randomPolicy } = require('./random-policy.cjs');
+const { resolvePreparedTeams } = require('./prepared-teams.cjs');
 
 const FORMAT_ID = 'gen5randombattle';
 const UPSTREAM_COMMIT = require('../reference-lock.json').commit;
@@ -251,6 +252,7 @@ async function runBattle(options = {}) {
 	let policies = {};
 	let streamFactory;
 	let seedConfig;
+	let packedPreparedTeams;
 	let bounds;
 	let stream;
 	let output;
@@ -373,6 +375,14 @@ async function runBattle(options = {}) {
 		} catch (error) {
 			fail('initialization', 'invalid_seed_config', error.message, error);
 		}
+		if (options.preparedTeams !== undefined) {
+			try {
+				packedPreparedTeams = resolvePreparedTeams(ps, options.preparedTeams, seedConfig, FORMAT_ID, UPSTREAM_COMMIT);
+			} catch (error) {
+				fail('initialization', 'invalid_prepared_teams', 'Prepared team handles must be authentic and match the pinned format, Showdown API, and configured player seeds.', error);
+			}
+			resultRecord.teamSource = 'prepared';
+		}
 		try {
 			bounds = { ...DEFAULT_LIMITS, ...limits };
 		} catch (error) {
@@ -387,13 +397,15 @@ async function runBattle(options = {}) {
 		}
 		deadline = started + bounds.timeoutMs;
 		let teams;
-		try {
-			teams = [
-				ps.Teams.generate(FORMAT_ID, { seed: seedConfig.teamP1 }),
-				ps.Teams.generate(FORMAT_ID, { seed: seedConfig.teamP2 }),
-			];
-		} catch (error) {
-			fail('initialization', 'team_generation_failed', 'Showdown team generation failed.', error);
+		if (!packedPreparedTeams) {
+			try {
+				teams = [
+					ps.Teams.generate(FORMAT_ID, { seed: seedConfig.teamP1 }),
+					ps.Teams.generate(FORMAT_ID, { seed: seedConfig.teamP2 }),
+				];
+			} catch (error) {
+				fail('initialization', 'team_generation_failed', 'Showdown team generation failed.', error);
+			}
 		}
 		try {
 			stream = streamFactory ? streamFactory() : new ps.BattleStream({ keepAlive: true });
@@ -414,7 +426,8 @@ async function runBattle(options = {}) {
 			await stream.write(`>start ${JSON.stringify({ formatid: FORMAT_ID, seed: seedConfig.battle })}`);
 			for (let index = 0; index < PLAYERS.length; index++) {
 				const player = PLAYERS[index];
-				await stream.write(`>player ${player} ${JSON.stringify({ name: player, team: ps.Teams.pack(teams[index]) })}`);
+				const packedTeam = packedPreparedTeams ? packedPreparedTeams[player] : ps.Teams.pack(teams[index]);
+				await stream.write(`>player ${player} ${JSON.stringify({ name: player, team: packedTeam })}`);
 			}
 			output = stream[Symbol.asyncIterator]();
 		} catch (error) {

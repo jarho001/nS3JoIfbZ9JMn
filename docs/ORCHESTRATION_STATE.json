@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "accepted_project_task_count": 22,
+  "accepted_project_task_count": 23,
   "review_state": {
     "latest_task_review_baseline": 20,
     "bootstrap_review": {
@@ -83,6 +83,52 @@
           "accepted_at": "2026-11-02",
           "accepted_by_agent": "/root"
         }
+      },
+      {
+        "id": "Task023",
+        "title": "reuse seed-bound prepared teams",
+        "owner": "/root/task023",
+        "status": "accepted_complete",
+        "scope": "Prepare immutable opaque team handles bound to the pinned Showdown API and explicit seed; let runBattle reuse two matching handles across swapped seats and label result provenance.",
+        "exclusions": [
+          "pair CLI/orchestration",
+          "implicit seed/root/count selection",
+          "batch execution/aggregation/scored suite",
+          "benchmark or throughput claims",
+          "hardware allocation",
+          "mechanics/JAX",
+          "visibility changes",
+          "G0/G1 closure",
+          "commit/push by implementation owner"
+        ],
+        "acceptance_criteria": [
+          "Preparation validates all four indexed uint16 seed limbs, copies seed data, calls pinned generator and packer once, and returns an immutable opaque WeakMap-backed handle bound to API identity, format, pin, seed and packed team.",
+          "runBattle requires both handles together and validates authenticity, shared Showdown API and exact canonical player team seeds before stream creation; safe failures omit packed teams and private/raw data.",
+          "Valid handles bypass generation/packing, are reusable and swappable, and mark resultRecord.teamSource as prepared; the default generated path retains legacy summary/transcript behavior and policy input boundary.",
+          "Fake tests cover malformed/sparse seeds, immutability, forged/cloned/API-mismatched/seed-mismatched/missing-seat handles and failure before stream creation.",
+          "Real pinned paired battles prepare A/B once, run both seat arrangements, count exactly two team generations and packs, verify actual packed player writes and outcomes, and compare generated-path summaries/transcripts excluding timing.",
+          "README/charter/handoff document prepared reuse and timing; pair orchestration, benchmark and scored suite remain unresolved.",
+          "Focused Node regressions, syntax, Trail build/check, state JSON parsing and diff review pass; GPU not required."
+        ],
+        "plan": [
+          "Inspect Trail context and persist scope, criteria, owner and state before source edits.",
+          "Implement opaque seed-bound preparation and runner validation/use before stream creation.",
+          "Add fake failure/reuse tests and real pinned paired-run compatibility and call-count tests.",
+          "Update docs; run focused validation, Trail build/check, JSON/diff review and report evidence without self-acceptance or commit."
+        ],
+        "progress": "Implementation, real paired-run tests, and docs are complete; pending parent acceptance. Prepared handles bind immutable packed data to copied seed, exact Showdown object, format and pin in a process-local WeakMap. Both seats validate before stream creation. No automatic pair executor was added. The seed-provenance learning was added.",
+        "validation": {
+          "node_check": "node --check environment/prepared-teams.cjs; node --check environment/battle-runner.cjs; node --check test/prepared-teams.test.cjs \u2014 passed.",
+          "targeted_tests": "node --test test/prepared-teams.test.cjs test/battle-runner.test.cjs test/paired-seeds.test.cjs test/protocol.test.cjs test/trace.test.cjs \u2014 41/41 passed; real paired battles, exactly two prepare-time generate+pack calls, actual seat-swapped writes, normal/prepared summary and trusted-transcript equality, and policy-key boundary verified.",
+          "docs_and_state": "README and benchmark charter describe process-local handles, separate mutable battle state, and elapsed-time scope; orchestration state JSON parses.",
+          "trail_build": "trail build \u2014 passed; graph refreshed for 2 added source/test files.",
+          "trail_check": "trail check --base HEAD \u2014 7 changed files, 10 learnings, 0 skills; no conflicts. Fifteen remaining \u201cworth a look\u201d matches were informational and are unrelated to the seed-bound prepared-team changes.",
+          "learning": "trail note l-e9a39748 added to the repo: .trail/learnings/2026-11-02-bind-prepared-teams-to-their-seed-jarho001.md; preserve it in the Task023 commit.",
+          "gpu": "not required."
+        },
+        "accepted_at": "2026-11-02",
+        "accepted_by_agent": "/root",
+        "acceptance_review": "Primary focused diff/evidence review accepted WeakMap-bound handles, dense seed validation, pre-stream authenticity/API/seed checks, unchanged generated default, prepared result provenance, documentation, and 41/41 affected regressions."
       }
     ]
   },
