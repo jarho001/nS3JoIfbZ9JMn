@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "accepted_project_task_count": 37,
   "project_direction_decision": {
     "status": "adopted",
@@ -119,1263 +119,156 @@
       {
         "id": "Task022",
         "title": "deterministic paired-seed manifests",
-        "owner": "/root/task022",
         "status": "accepted_complete",
+        "owner": "/root/task022",
         "accepted_at": "2026-11-02",
         "accepted_by_agent": "/root",
-        "scope": "Add a versioned deterministic CLI manifest generator for explicit paired battle seed tuples for the pinned gen5randombattle format, with stable identifiers and pinned reference metadata; verify actual regenerated packed teams swap seats in real pinned runner battles.",
-        "exclusions": [
-          "suite-size or statistical-power choice",
-          "implicit scored suite",
-          "batch runner or aggregation",
-          "throughput claims or benchmark results",
-          "hardware allocation",
-          "mechanics/JAX",
-          "visibility changes",
-          "G0/G1 closure",
-          "generate-once injection into the runner",
-          "commit or push by the implementation owner"
-        ],
-        "acceptance_criteria": [
-          "Explicit four-limb uint16 root seed and positive pair count are required; no implicit suite size.",
-          "Versioned SHA-256 derivation over canonical [domain, root seed, pair index, stream name] JSON; digest bytes 0..7 become four big-endian uint16 limbs.",
-          "Stable pair/run identifiers are independent of requested count; base and swapped tuples exchange team and policy streams and retain battle seed.",
-          "Known vector, strict validation, byte reproducibility, prefix stability, and pinned metadata are tested.",
-          "Real pinned paired runner battles verify terminal records and exact packed-team seat exchange with policy seeds retained by identity.",
-          "Docs distinguish implemented seed manifests and team-regeneration verification from proposed benchmark workload; no throughput or generate-once claim.",
-          "Focused regressions, Trail build, state JSON parsing, and diff review pass; run Trail check and resolve substantive conflicts or document lexical false positives in the commit message per policy; no GPU required."
-        ],
-        "plan": [
-          "Read Trail context and persist Task022 plan/state before implementation.",
-          "Implement standalone deterministic seed derivation and CLI.",
-          "Add known-vector, strict validation, deterministic CLI, prefix, tuple exchange, and real paired runner checks.",
-          "Update README, charter, and handoff; run focused regressions, Trail build/check, and inspect diff; report to parent without acceptance or commit."
-        ],
-        "progress": "Primary accepted Task022 after focused diff/evidence re-review. The sparse-root correction is complete. Count advanced from 21 to 22; review checkpoint remains 30; no milestone closure.",
-        "validation": {
-          "node_check": "node --check environment/paired-seeds.cjs; node --check test/paired-seeds.test.cjs \u2014 passed",
-          "targeted_tests": "Initial combined node --test test/paired-seeds.test.cjs test/battle-runner.test.cjs test/trace.test.cjs test/protocol.test.cjs \u2014 38/38 passed. After sparse-array correction: node --test test/paired-seeds.test.cjs \u2014 5/5 passed, including paired pinned battles.",
-          "state_and_diff": "python3 -m json.tool docs/ORCHESTRATION_STATE.json; git diff --check \u2014 passed",
-          "trail_build": "trail build \u2014 passed before and after the correction.",
-          "trail_check": "trail check --base HEAD after git add -N inspected all six changed files; exit 1 with one lexical conflict at docs/TASKS.md:745 against the stat-cap-across-formats learning. The learning concerns mechanics stat rules, while Task022 changes seed derivation and runs existing pinned battles without changing stats. Explain this false positive in the task commit message per policy; other matches were informational.",
-          "gpu": "not required"
-        },
-        "review_correction": {
-          "task_id": "Task022",
-          "owner": "/root/task022",
-          "status": "resolved_accepted",
-          "finding": "validateSeed accepted sparse four-element arrays because Array.some skips holes.",
-          "reproducer": "node -e 'const {generateManifest}=require(\"./environment/paired-seeds.cjs\"); console.log(JSON.stringify(generateManifest(new Array(4),1).rootSeed));'",
-          "required_corrections": [
-            "Validate each of the four indexed seed limbs so sparse slots fail.",
-            "Add direct generateManifest tests for sparse roots, malformed counts, and valid boundary limbs [0, 65535, 0, 65535].",
-            "Remove the stale charter statement that Task022 has not started and clarify pair-record prefix stability.",
-            "Repeat the paired-seed suite and Trail build/check."
-          ],
-          "evidence_before_correction": "The initial Task022 focused and regression suites passed 38/38, but did not test sparse roots; primary review reproducer passed unexpectedly and confirmed a contract violation.",
-          "resolution": "validateSeed inspects every indexed limb; sparse and malformed roots/counts plus valid boundary limbs are tested. Charter status and pair-count prefix wording are corrected.",
-          "validation_after_correction": "node --test test/paired-seeds.test.cjs \u2014 5/5 passed; trail build passed; trail check --base HEAD inspected all six changed files and reported one lexical conflict at docs/TASKS.md:745 against the stat-cap learning. That learning concerns mechanics stat rules; Task022 changes no stats. Record the false-positive rationale in the commit message.",
-          "accepted_at": "2026-11-02",
-          "accepted_by_agent": "/root"
-        }
+        "history_ref": "ORCHESTRATION_STATE_ARCHIVE_037.json#/review_state/completed_task_history/0"
       },
       {
         "id": "Task023",
         "title": "reuse seed-bound prepared teams",
-        "owner": "/root/task023",
         "status": "accepted_complete",
-        "scope": "Prepare immutable opaque team handles bound to the pinned Showdown API and explicit seed; let runBattle reuse two matching handles across swapped seats and label result provenance.",
-        "exclusions": [
-          "pair CLI/orchestration",
-          "implicit seed/root/count selection",
-          "batch execution/aggregation/scored suite",
-          "benchmark or throughput claims",
-          "hardware allocation",
-          "mechanics/JAX",
-          "visibility changes",
-          "G0/G1 closure",
-          "commit/push by implementation owner"
-        ],
-        "acceptance_criteria": [
-          "Preparation validates all four indexed uint16 seed limbs, copies seed data, calls pinned generator and packer once, and returns an immutable opaque WeakMap-backed handle bound to API identity, format, pin, seed and packed team.",
-          "runBattle requires both handles together and validates authenticity, shared Showdown API and exact canonical player team seeds before stream creation; safe failures omit packed teams and private/raw data.",
-          "Valid handles bypass generation/packing, are reusable and swappable, and mark resultRecord.teamSource as prepared; the default generated path retains legacy summary/transcript behavior and policy input boundary.",
-          "Fake tests cover malformed/sparse seeds, immutability, forged/cloned/API-mismatched/seed-mismatched/missing-seat handles and failure before stream creation.",
-          "Real pinned paired battles prepare A/B once, run both seat arrangements, count exactly two team generations and packs, verify actual packed player writes and outcomes, and compare generated-path summaries/transcripts excluding timing.",
-          "README/charter/handoff document prepared reuse and timing; pair orchestration, benchmark and scored suite remain unresolved.",
-          "Focused Node regressions, syntax, Trail build/check, state JSON parsing and diff review pass; GPU not required."
-        ],
-        "plan": [
-          "Inspect Trail context and persist scope, criteria, owner and state before source edits.",
-          "Implement opaque seed-bound preparation and runner validation/use before stream creation.",
-          "Add fake failure/reuse tests and real pinned paired-run compatibility and call-count tests.",
-          "Update docs; run focused validation, Trail build/check, JSON/diff review and report evidence without self-acceptance or commit."
-        ],
-        "progress": "Implementation, real paired-run tests, and docs are complete; pending parent acceptance. Prepared handles bind immutable packed data to copied seed, exact Showdown object, format and pin in a process-local WeakMap. Both seats validate before stream creation. No automatic pair executor was added. The seed-provenance learning was added.",
-        "validation": {
-          "node_check": "node --check environment/prepared-teams.cjs; node --check environment/battle-runner.cjs; node --check test/prepared-teams.test.cjs \u2014 passed.",
-          "targeted_tests": "node --test test/prepared-teams.test.cjs test/battle-runner.test.cjs test/paired-seeds.test.cjs test/protocol.test.cjs test/trace.test.cjs \u2014 41/41 passed; real paired battles, exactly two prepare-time generate+pack calls, actual seat-swapped writes, normal/prepared summary and trusted-transcript equality, and policy-key boundary verified.",
-          "docs_and_state": "README and benchmark charter describe process-local handles, separate mutable battle state, and elapsed-time scope; orchestration state JSON parses.",
-          "trail_build": "trail build \u2014 passed; graph refreshed for 2 added source/test files.",
-          "trail_check": "trail check --base HEAD \u2014 7 changed files, 10 learnings, 0 skills; no conflicts. Fifteen remaining \u201cworth a look\u201d matches were informational and are unrelated to the seed-bound prepared-team changes.",
-          "learning": "trail note l-e9a39748 added to the repo: .trail/learnings/2026-11-02-bind-prepared-teams-to-their-seed-jarho001.md; preserve it in the Task023 commit.",
-          "gpu": "not required."
-        },
+        "owner": "/root/task023",
         "accepted_at": "2026-11-02",
         "accepted_by_agent": "/root",
-        "acceptance_review": "Primary focused diff/evidence review accepted WeakMap-bound handles, dense seed validation, pre-stream authenticity/API/seed checks, unchanged generated default, prepared result provenance, documentation, and 41/41 affected regressions."
+        "history_ref": "ORCHESTRATION_STATE_ARCHIVE_037.json#/review_state/completed_task_history/1"
       },
       {
         "id": "Task024",
         "title": "execute one paired seed case",
-        "owner": "/root/task024",
         "status": "accepted_complete",
-        "scope": "Add a validated direct single-pair seed selector and a library/CLI path that prepares teams once and runs the base and seat-swapped battles sequentially, returning safe partial run records on failure.",
-        "exclusions": [
-          "multi-pair or full-manifest execution",
-          "concurrency, aggregation, or win-rate summaries",
-          "implicit root seed, pair index, suite size, or scored defaults",
-          "benchmark or throughput claims",
-          "hardware allocation",
-          "mechanics/JAX",
-          "visibility changes",
-          "G0/G1 closure",
-          "commit/push by implementation owner"
-        ],
-        "acceptance_criteria": [
-          "generatePair validates and copies a dense four-limb uint16 root and zero-based pair index 0..99999 without materializing earlier cases; result equals the corresponding existing manifest entry and existing manifest behavior stays byte-compatible.",
-          "runPair prepares A/B once, runs base then swapped seats through existing runBattle with correct team/policy identities and battle seed, and returns a versioned trusted pair record with both validated records on success and safe honest partial states on failure.",
-          "Pair envelope includes pin, format, root, pair index/ID, team hashes/seeds, run IDs/seats/policy identities/statuses, monotonic elapsed scope covering preparation and both battles, and no raw exceptions, packets, transcripts, packed teams, or handles.",
-          "Preparation, first-run, and second-run failures stop dependent runs; preserve earlier successful record and actual safe runner failure record; never fabricate outcomes or trust foreign error metadata.",
-          "CLI requires explicit root and pair index, writes JSON success output, nonzero safe errors, and optional success/failure pair-result file; CLI parse/load/write behavior is explicit and tested.",
-          "Pinned real integration proves exactly two generation and pack calls, exchanged packed-team hashes, policy seed identity, valid outcomes, and projected policy inputs remain normal; fake tests cover partial failures and no extra runs.",
-          "README, charter and handoff distinguish one-pair execution from proposed suite execution/aggregation; affected suites, syntax, state/JSON, diff checks, Trail build/check pass; no GPU required."
-        ],
-        "plan": [
-          "Read Trail context, learnings and pinned runner/prepared-team interfaces; persist scope/state before source edits.",
-          "Add validated O(1) direct pair selection while preserving manifest schema and existing output.",
-          "Implement sequential runPair result/failure envelope and explicit CLI over prepared teams and existing runner.",
-          "Add direct selection, controlled partial failure, CLI and real pinned pair tests.",
-          "Update README, charter, and handoff; run affected checks, refresh/check Trail, inspect diff and report evidence without accepting or committing."
-        ],
-        "review_corrections": [
-          {
-            "finding": "The library accepts a root seed array, but runPair used the CLI text parser, which accepts only comma-separated strings.",
-            "evidence": "Parent review reproduced valid programmatic runPair input failing validation; CLI parseArgs also produces a root array.",
-            "correction": "Validate and copy the API array with validateSeed; keep text parsing at the CLI boundary.",
-            "status": "applied"
-          },
-          {
-            "finding": "CLI bootstrap accepted arbitrary error.pairResult metadata when its kind matched, allowing foreign code to forge completed status and inject output fields.",
-            "evidence": "Patched oracle.assertReady to throw an Error with pairResult.kind=gen5-paired-battle-result, status=completed, failure.code=INJECTED_PAIR_CODE, and foreignData=INJECTED_PAIR_DATA; prior main serialized the injected result.",
-            "correction": "Use private pair-error branding and accept its record only after the actual runPair stage has started. Regression asserts safe nonzero CLI failure with injected metadata absent.",
-            "status": "applied"
-          },
-          {
-            "finding": "Parse/bootstrap failures were labeled paired_runner with zero elapsed time although runPair had not begun.",
-            "evidence": "Invalid-root CLI result had elapsedScope=paired_runner and elapsedMs=0.",
-            "correction": "Measure CLI initialization monotonically and label it cli_initialization; preserve paired_runner timing for errors after invocation.",
-            "status": "applied"
-          },
-          {
-            "finding": "Caller option getters and runBattle argument construction shared the catch that trusted error.resultRecord, so a throwing limits getter could forge a completed nested result and arbitrary failure category/code before runBattle was called.",
-            "evidence": "A limits getter threw an Error with resultRecord={status:completed,failure:{category:INJECTED_CATEGORY,code:INJECTED_CODE},foreignData:INJECTED_RECORD}; prior output included the injected fields although runBattle was never invoked.",
-            "correction": "Snapshot root/index/ps/limits/streamFactory in a configuration boundary, copy enumerable limits values into a plain object, and build plain battle args before a catch containing only the actual runBattle invocation. Throwing option getters produce safe configuration failures with both runs not_attempted and no nested result.",
-            "status": "applied"
-          }
-        ],
-        "validation": [
-          "Before the two CLI boundary corrections: node --test test/pair-runner.test.cjs test/paired-seeds.test.cjs test/prepared-teams.test.cjs test/battle-runner.test.cjs test/protocol.test.cjs test/trace.test.cjs \u2014 50/50 passed.",
-          "After the CLI boundary corrections: node --test test/pair-runner.test.cjs \u2014 9/9 passed.",
-          "After the final configuration provenance correction: node --test test/pair-runner.test.cjs \u2014 10/10 passed.",
-          "Final syntax checks passed: node --check environment/paired-seeds.cjs; node --check environment/run-pair.cjs; node --check test/paired-seeds.test.cjs; node --check test/pair-runner.test.cjs.",
-          "python3 -m json.tool docs/ORCHESTRATION_STATE.json and git diff --check passed.",
-          "trail build passed: 63 indexed source/test files, 512 nodes, and 1095 edges. trail check --base HEAD exited 1 with six lexical false positives: README/charter/state/task passages describe opaque prepared-team handles or exclude raw packed-team strings, while two Task024 criteria were matched to unrelated format-specific stat and player-observation learnings. No substantive conflict found; explain these in commit/PR text.",
-          "Trail learning l-d998d91c records why CLI result-shaped foreign metadata requires private branding and stage gating.",
-          "Primary acceptance review accepted Task024 on 2026-11-03; implementation owner did not commit or push."
-        ],
-        "status_note": "Accepted complete by /root on 2026-11-03. Implementation owner /root/task024 did not commit or push.",
+        "owner": "/root/task024",
         "accepted_at": "2026-11-03",
         "accepted_by_agent": "/root",
-        "progress": "Accepted after primary focused source/diff/evidence review. Direct pair selection, prepared-team reuse, sequential battles, safe partial failures, and CLI/configuration provenance boundaries satisfy the delegated criteria. No source correction remains.",
-        "acceptance_review": "Primary review accepted the direct selector and manifest compatibility, prepared handles and seed identity seat exchange, real pair write/call-count and terminal evidence, honest preparation/first/second-run failures, CLI private branding/stage/timing, option snapshots, and recorded false-positive Trail findings. No due Astra review or milestone gate; accepted count advances from 23 to 24 and next regular review remains 30.",
-        "trail_learning": {
-          "id": "l-d998d91c",
-          "path": ".trail/learnings/2026-11-03-trust-pair-results-only-from-owned-jarho001.md"
-        }
+        "history_ref": "ORCHESTRATION_STATE_ARCHIVE_037.json#/review_state/completed_task_history/2"
       },
       {
         "id": "Task025",
         "title": "sequential paired-manifest runner",
-        "owner": "/root/task025",
         "status": "accepted_complete",
-        "scope": "Add a library and explicit CLI that execute every pair in an explicitly generated paired-seed manifest sequentially through the existing runPair API, writing the exact manifest, one safe JSONL result per attempted pair, and a final honest summary in a newly created output directory. Export only the existing ownsPairError predicate needed to recognize real runPair-owned errors. Add controlled and pinned integration coverage and update the handoff and benchmark charter.",
-        "exclusions": [
-          "concurrency, resume, retries, and crash-recovery/fsync guarantees",
-          "scored suite or sample-size recommendations",
-          "outcome aggregation, rates, confidence, win summaries, or benchmark/throughput claims",
-          "hardware allocation or GPU-specific acceptance",
-          "battle, prepared-team, seed derivation, policy, runner, or visibility redesign",
-          "mechanics/JAX and G0/G1 closure",
-          "commit or push by the implementation owner"
-        ],
-        "acceptance_criteria": [
-          "Library and CLI require an explicit four-limb uint16 root, explicit pair count within MAX_PAIRS, and explicit output directory; configuration is snapshotted and validated before artifact creation or battle execution.",
-          "The invocation creates only a new non-recursive output directory and exclusive owned artifacts; an existing destination is unchanged and no battle starts.",
-          "manifest.json exactly matches generateManifest(root,count); results.jsonl contains one safe actual pair record per attempted pair in stable order and each line is committed before the next pair starts; summary.json schemaVersion 1 reports identity, status, honest execution/recording counts, safe failure details, and finite manifest_runner elapsed time.",
-          "Failure is fail-fast. A real owned partial pair result is journaled when possible; prior lines survive; unattempted pairs receive no fabricated records; foreign pairResult/summary-shaped metadata from configuration, bootstrap, or I/O exceptions is never trusted.",
-          "Pinned integration executes at least two real pairs sequentially, validates terminal records and stable policy seeds while packed team writes/hashes exchange seats, observes two team generation and packing calls per pair, and confirms stream cleanup.",
-          "Controlled tests cover success, existing destination, invalid configuration, later and first-pair failures, append/summary initialization/write failures, journaling visibility before the next pair, CLI safe nonzero errors, bootstrap/config/I/O metadata spoofing, and no work after failure.",
-          "README/charter/task docs describe artifact schemas, required new destination, honest failure preservation and timing boundaries; full-manifest execution is implemented while scored suite design, aggregation, concurrency, and resume remain future; no benchmark claim or milestone closure is added.",
-          "Affected manifest, pair, seed, prepared-team, runner, protocol, and trace checks pass; syntax, state JSON, diff, Trail build, and Trail check are recorded. GPU is not required."
-        ],
-        "plan": [
-          "Read repository instructions, orchestration state, Task024 handoff, charter, and Trail context; verify tools and preserve the clean synchronized base.",
-          "Persist Task025 scope, exclusions, acceptance criteria, owner, and plan before source edits.",
-          "Implement the sequential manifest library and explicit CLI over existing generateManifest and real runPair; export the ownership predicate without exposing branding.",
-          "Add controlled failure/provenance/artifact tests and pinned multi-pair integration coverage.",
-          "Update README, charter, and task handoff; refresh Trail and add only a newly justified durable learning.",
-          "Run the exact affected regression suite, syntax/JSON/diff checks, Trail check; report evidence to the parent for focused acceptance review."
-        ],
-        "review_corrections": [
-          {
-            "finding": "Manifest summary mapping converted every non-runtime owned pair failure category to initialization, so category-specific runner failures were misreported.",
-            "evidence": "Parent reproduced maxPackets:1: the owned journal pair.failure.category was packet_limit while summary.failure.category was initialization (code packet_limit_exhausted). Parent follow-up noted retry_limit_exhausted is a supported category at battle-runner.cjs#runBattle and must also be included.",
-            "correction": "Preserve categories only from the actual privately branded runPair error record through an explicit allowlist (including retry_limit), use a fixed runtime fallback for unknown values, and do not read category from unowned error metadata. Add packet_limit and retry_limit journal/summary reconciliation tests.",
-            "status": "applied"
-          }
-        ],
-        "validation": [
-          "node --test test/manifest-runner.test.cjs test/pair-runner.test.cjs test/paired-seeds.test.cjs test/prepared-teams.test.cjs test/battle-runner.test.cjs test/protocol.test.cjs test/trace.test.cjs \u2014 65/65 passed, including pinned multi-pair and CLI cases plus packet_limit/retry_limit category reconciliation.",
-          "node --test test/manifest-runner.test.cjs \u2014 13/13 passed after strengthening checks that pair 0 is journaled before pair 1 team preparation and append failure leaves a later pair unattempted.",
-          "node --check environment/run-manifest.cjs; node --check environment/run-pair.cjs; node --check test/manifest-runner.test.cjs \u2014 passed.",
-          "python3 -m json.tool docs/ORCHESTRATION_STATE.json >/dev/null and git diff --check \u2014 passed after final documentation/state updates.",
-          "trail build \u2014 passed with 65 indexed source/test files, 548 nodes, and 1166 edges.",
-          "trail check --base HEAD, after git add -N for the new module, test, and Trail learning \u2014 checked 7 changed files against 12 learnings, exited 1 with four reviewed lexical false positives at README.md:99, docs/BENCHMARK_CHARTER.md:36, docs/ORCHESTRATION_STATE.json:219, and docs/TASKS.md:884. Those docs describe opaque seed-bound prepared-team handles or the existing runPair API; none accepts arbitrary packed-team strings. New runner/test matches about Teams.generate and BattleStream were advisory-only: Task025 generates each pair once through existing runPair and does not expose raw packets to policies. No blocking finding applied to the new implementation."
-        ],
-        "progress": "Accepted. The manifest executor and CLI compose the existing generateManifest and actual runPair path sequentially, preserve exclusive artifacts and owned partial records, distinguish executed from recorded counts, and report safe categorized failures with explicit elapsed boundaries. Primary review accepted all criteria. Task025 was counted as project task 25; no Task026 was started.",
-        "trail_learning": {
-          "id": "l-ec89ac92",
-          "path": ".trail/learnings/2026-11-03-preserve-owned-runner-failure-categories-in-jarho001.md"
-        },
+        "owner": "/root/task025",
         "accepted_at": "2026-11-03",
         "accepted_by_agent": "/root",
-        "status_note": "Accepted and complete by /root on 2026-11-03 after independent source, diff, and evidence review. Implementation owner /root/task025 did not commit or push.",
-        "acceptance_review": "Primary /root independently reviewed the source, diff, and evidence and accepted Task025. Acceptance covered the explicit root/count/output configuration; validation before artifact/team work; exclusive new-directory artifacts; exact manifest/hash; actual sequential runPair calls with journaling before next-pair preparation; ownership-proven partial results; safe fail-fast behavior; honest completed/failed/unattempted/recorded counts; packet_limit and retry_limit category reconciliation; pinned two-pair packed-team seat exchange, policy seeds, terminal records, and stream cleanup; CLI success and safe nonzero parse/bootstrap/I/O failures; and documented schemas/failure/timing boundaries without benchmark or milestone claims. The combined regressions passed 65/65 and the strengthened manifest suite passed 13/13. Syntax, state JSON, diff checks, and Trail build passed. Trail check exited 1 with four reviewed lexical false positives; rationale is recorded and no blocking implementation finding remained. No Astra review or milestone gate was due; count advances to 25, baseline stays 20, and the next regular checkpoint remains 30."
+        "history_ref": "ORCHESTRATION_STATE_ARCHIVE_037.json#/review_state/completed_task_history/3"
       },
       {
         "id": "Task026",
         "title": "offline recorded-pair outcome accounting",
-        "owner": "/root/task026",
         "status": "accepted_complete",
-        "scope": "Add a read-only CommonJS library and explicit CLI to validate Task025 canonical paired manifests and contiguous recorded result prefixes, then report safe recorded pair/run outcomes by seat and policy identity.",
-        "exclusions": [
-          "battle simulation or runner changes",
-          "Task025 summary reconciliation or authenticity",
-          "verification of packedTeamSha256 values, counters, and timing",
-          "claims that absent records were unattempted",
-          "rates, confidence intervals, performance or scored benchmark claims",
-          "suite size/statistical power choices",
-          "resume/concurrency",
-          "GPU",
-          "G0/G1 closure"
-        ],
-        "acceptance_criteria": [
-          "Validate the complete version-1 manifest against generateManifest(rootSeed,pairCount), including all generated metadata and pair/run seeds.",
-          "Accept only contiguous recorded pair prefixes and validate schema, pinned identity, IDs, seats, policy identities, seeds, statuses and outcome topology; support authentic preparation and partial battle failure record shapes.",
-          "Emit versioned safe counts for recorded/unrecorded pair and run slots and completed outcomes by seat and policy identity; failures and missing suffixes are never outcomes or unattempted claims.",
-          "Do not mutate inputs; CLI supports explicit manifest/results paths, validates JSON/JSONL, and reports safe nonzero failures without arbitrary input details.",
-          "Test hand-calculated win/loss/tie identity exchange, empty/full/partial prefixes, preparation/battle failures, hostile/malformed/tampered records, CLI and I/O errors, unchanged artifacts, and actual pinned runner output with a genuine partial failure.",
-          "Update README and benchmark charter on implemented accounting and limitations; no milestone closure.",
-          "Run affected regressions, syntax, state JSON, diff, Trail build and Trail check; report evidence to primary. GPU not required."
-        ],
-        "plan": [
-          "Inspect Trail and existing manifest/pair/battle contracts.",
-          "Persist this plan before implementation.",
-          "Implement offline validator/accountant and explicit read-only CLI.",
-          "Add controlled and pinned record-validation tests.",
-          "Update README and benchmark charter.",
-          "Run affected checks, refresh/check Trail, inspect diff, report for primary review without commit."
-        ],
-        "progress": "Accepted by primary /root after independent focused source, diff, and validation review. Count advances 25 to 26; review baseline remains 20 and next checkpoint remains 30. No GPU evidence or milestone closure was required.",
-        "validation": [
-          "node --check environment/summarize-results.cjs; node --check test/summarize-results.test.cjs \u2014 passed.",
-          "node --test test/summarize-results.test.cjs \u2014 10/10 passed after final changes, including schema/upstream/format/status tampering, throwing property getters, pinned complete/partial records, and early failed initialization before teamSource.",
-          "Combined affected regression command covering summarize-results, manifest-runner, pair-runner, paired-seeds, prepared-teams, battle-runner, protocol, trace \u2014 73/73 passed before final bounded early-initialization and invalid-input test additions; final new suite passed 10/10 afterward.",
-          "python3 -m json.tool docs/ORCHESTRATION_STATE.json; git diff --check \u2014 passed.",
-          "trail build \u2014 passed with 570 nodes and 1225 edges.",
-          "trail check --base HEAD \u2014 exit 1 with four reviewed lexical conflicts: charter description, packedTeamSha256-verification exclusions in handoff/state, and checking all fields of this versioned manifest. This implementation rejects arbitrary team artifacts and compares run seeds to generated canonical entries; \u201call\u201d is limited to manifest fields and says nothing about all game formats. Include rationale in commit body.",
-          "GPU not required."
-        ],
-        "trail_learning": {
-          "id": "l-86fd14c5",
-          "path": ".trail/learnings/2026-11-03-offline-outcome-reports-cannot-attest-who-jarho001.md"
-        },
+        "owner": "/root/task026",
         "accepted_at": "2026-11-03",
         "accepted_by_agent": "/root",
-        "acceptance_review": "Primary independently reviewed canonical manifest equality; contiguous pair identity, seed and seat mappings; sequential completed/failed/not_attempted topology and rejection of records following a failure; hand-calculated outcome tallies by seat and policy identity; safe CLI errors and report allowlisting; pinned success, packet-limit partial failure, early initialization failure before teamSource; and unchanged offline input artifacts. All delegated criteria were accepted with no blocking findings. No Astra review or milestone gate was due. Validation: final summarize-results suite 10/10; requested combined affected regression suites 73/73 before final bounded compatibility and invalid-input test additions, followed by focused suite 10/10; syntax, JSON, diff, and Trail build passed. Trail check exited 1 with four reviewed lexical conflicts whose rationale is recorded in docs/TASKS.md and belongs in the task commit body.",
-        "status_note": "Accepted complete by /root on 2026-11-03. No commit or push is recorded in this task state update."
+        "history_ref": "ORCHESTRATION_STATE_ARCHIVE_037.json#/review_state/completed_task_history/4"
       },
       {
         "id": "Task027",
         "title": "offline recorded-work counter accounting",
-        "owner": "/root/task027",
         "status": "accepted_complete",
-        "scope": "Add a separate read-only offline CommonJS library and explicit CLI that compose Task026's canonical manifest/contiguous-prefix validator with checked additive counters from present nested battle resultRecord values. Emit allowlisted reports for completed runs, failed recorded attempts, and all recorded attempts, with values by seat and policy identity.",
-        "exclusions": [
-          "changes to the existing outcome-only reporter or battle/pair runners and record shapes",
-          "execution authenticity or Task025 summary.json reconciliation",
-          "treating absent slots as attempts or missing counters as zero work",
-          "summing turn indices, terminal metadata, timing, limits, or seeds",
-          "rates, uncertainty, scored-suite choice, performance claims, or G0/G1 closure",
-          "GPU",
-          "commit or push by implementation owner"
-        ],
-        "acceptance_criteria": [
-          "Reuse summarizeResults to validate the complete canonical manifest and contiguous recorded prefix; preserve unrecorded suffix and not_attempted slots separately; make no authenticity claim or summary.json reconciliation.",
-          "Require complete additive counters on every present nested resultRecord, validate nonnegative safe integers, byPlayer totals, per-record and aggregate safe arithmetic, and documented per-player invariants; preserve partial failed counters and count null failed resultRecords as missing coverage, not zero work.",
-          "Aggregate only objectPackets, publicEvents, policy invocations, choice submissions/resolutions, retry counters, and selected/submitted move/switch actions. Keep globals/seats/policies explicit; map policies through validated policySeats; exclude latestPublicTurn and terminalMetadataTurns.",
-          "Emit versioned gen5-paired-work-accounting with completed, failed-recorded, and all-recorded cohorts, counts, observedTotals, and honest counter coverage. Empty and preparation-only prefixes yield zero observed totals. Output no raw records/counters, hashes, transcripts, or arbitrary fields.",
-          "Test independent exact multi-pair swapped-seat sums, partial failures, empty/prefix/preparation/null-record coverage, malformed/missing/overflow/invariant cases, valid loose inequalities, throwing getters, immutability/allowlisting, and pinned actual success/failure records.",
-          "Test offline CLI success and malformed/truncated/blank/I/O/argument failures, unchanged input bytes and generic diagnostics without oracle bootstrap; keep existing outcome reporter/output unchanged under its tests.",
-          "Update README and charter for schema, cohorts, invariants, missing coverage, ignored metadata/timing, and separation from future rates/uncertainty/timing; preserve Task026 historical scope and make no scored-suite, performance, or G0/G1 claim.",
-          "Run focused and applicable summarize-results, manifest-runner, pair-runner, paired-seeds, prepared-teams, battle-runner, protocol, and trace suites, syntax/state/diff checks, Trail build/check, inspect diff, and report evidence. GPU is not required."
-        ],
-        "plan": [
-          "Read Task026, charter and relevant Trail cards; persist scope and plan before source edits.",
-          "Implement environment/summarize-work.cjs as a compositional pure API and explicit offline CLI.",
-          "Add independent hand-built, numeric/invariant, failure-coverage and pinned runner tests.",
-          "Update README, benchmark charter and Task027 handoff.",
-          "Run focused and affected checks, refresh/check Trail, inspect diff, and report for primary review without commit."
-        ],
-        "progress": "Primary /root accepted Task027 on 2026-11-03 after independent focused source, diff, and evidence review. Accepted count advances from 26 to 27; review baseline 20 and next checkpoint 30 remain unchanged. No GPU evidence or milestone closure was required.",
-        "validation": {
-          "node_check": "node --check environment/summarize-work.cjs && node --check test/summarize-work.test.cjs \u2014 passed.",
-          "focused_tests": "node --test test/summarize-work.test.cjs \u2014 9/9 passed after final test-only additions for partial prefix, switch inequality, getter non-invocation and custom prototype rejection.",
-          "regression_tests": "Combined summarize-work, summarize-results, manifest-runner, pair-runner, paired-seeds, prepared-teams, battle-runner, protocol and trace suites \u2014 84/84 passed before the final test-only additions; focused summarize-work suite passed 9/9 afterward.",
-          "state_and_diff": "python3 -m json.tool docs/ORCHESTRATION_STATE.json; git diff --check \u2014 passed.",
-          "trail_build": "trail build \u2014 passed with 604 nodes, 1311 edges and 69 indexed cards.",
-          "trail_check": "trail check --base HEAD \u2014 exit 1 with nine reviewed lexical false positives at README.md:122,128; docs/BENCHMARK_CHARTER.md:48; docs/ORCHESTRATION_STATE.json:331,336; and docs/TASKS.md:939,941,945,946. Full rationale is recorded in the Task027 handoff; no source contradiction was found.",
-          "trail_saved_tokens": "Approximately 195103 tokens across this turn's Trail ask/skeleton calls.",
-          "gpu": "not required"
-        },
-        "gpu_required": false,
+        "owner": "/root/task027",
         "accepted_at": "2026-11-03",
         "accepted_by_agent": "/root",
-        "acceptance_review": "Primary /root accepted after reviewing the detached finite-JSON snapshot, canonical manifest/prefix/status composition, full additive counter validation, per-player invariants and safe arithmetic including cross-cohort overflow, global/seat/policy totals, exact cohorts, partial/null failure coverage, offline CLI safety and unchanged artifacts, pinned success and genuine failure counters, excluded metadata/timing, and unchanged outcome reporter. The combined regression command passed 84/84 before final test-only additions, followed by focused 9/9; syntax, JSON, diff and Trail build passed. Nine lexical Trail findings were documented and do not contradict the implementation. No Astra checkpoint/milestone was due; GPU was not required.",
-        "status_note": "Accepted complete by /root on 2026-11-03. Count advances to 27; next regular review remains due at 30. No commit or push is recorded in this task state update."
+        "history_ref": "ORCHESTRATION_STATE_ARCHIVE_037.json#/review_state/completed_task_history/5"
       },
       {
         "id": "Task028",
         "title": "request-aware eleven-slot singles action adapter",
-        "owner": "/root/task028",
         "status": "accepted_complete",
+        "owner": "/root/task028",
         "source_commit": "cbf6c8fe736d437c878cac9796f7cf6f772f8f70",
-        "scope": "Add a pure CommonJS request-to-action-space adapter and checked command decoder for the PROJECT_PLAN.md Gen 5 singles eleven-slot representation, composing existing candidateActions semantics. Include the primary-authorized minimal parser fix for the pinned sole-Struggle request shape. Acceptance requires controlled pinned requests and choices plus a complete adapter-driven terminal test.",
-        "exclusions": [
-          "runner coordination, retry episode management, stream tuple derivation, or the default random selection algorithm",
-          "the only random-policy.cjs change is a parser branch for the exact pinned sole-Struggle row (id=struggle, move=Struggle, disabled=false, pp omitted)",
-          "policy feature encoding or trajectory collection",
-          "learning or learned policies",
-          "new battle mechanics",
-          "timing/rates/uncertainty reports",
-          "scored-suite selection",
-          "G1 or later milestone closure",
-          "GPU evidence",
-          "implementation-owner commits or pushes"
-        ],
-        "acceptance_criteria": [
-          "Export a documented version-1 pure adapter with an eleven-element boolean mask and command mapping: zero-based slots 0..3 are current request move rows 1..4, 4..9 are own current roster positions 1..6, and 10 is explicit Struggle when offered as the sole struggle request row (command move 1). Reduced locked/recharge requests map their current row to slot 0; do not infer original move indices.",
-          "Compose candidateActions(request,excluded) so only own request-visible permission and current-episode rejected commands determine available actions. Preserve maybeTrapped switches, suppress trapped switches, exclude active/fainted replacements, handle forced switching, and expose non-actionable wait/forceSwitch:[false] states with no learnable WAIT slot. An actionable all-masked request fails; unavailable choices remain retryable in the existing coordinator.",
-          "Apply only the authorized parser correction for the actual pinned sole-Struggle request `{move:\"Struggle\",id:\"struggle\",target:\"randomNormal\",disabled:false}` with omitted PP; preserve all other validation and selection behavior. Do not alter battle-runner or retry/default policy algorithms.",
-          "Validate singles shape and finite slot bounds, reject unsupported over-four move rows or over-six rosters and malformed requests without mutating inputs. Decode only enabled integer slots against the supplied current request and exclusion list; fixed generic diagnostics exclude caller-supplied values. Output no roster/private metadata beyond own command mask and mapping.",
-          "Test independent expected masks/commands and enabled-slot round trips for normal/disabled/zero-PP moves, replacements, fainted/active slots, trapped/maybeTrapped, forced replacement/wait, locked/recharge/Struggle, exclusions and exhaustion, invalid slot/shape errors, and input immutability. Reject malformed Struggle variants and keep sole-Struggle slot mapping unique.",
-          "Obtain actual requests from guarded pinned Showdown runtime for ordinary moves, forced replacement, wait, locked/recharge and Struggle as feasible through controlled local battle fixtures; demonstrate command acceptance by pinned Battle choice handling rather than shape equality alone. Exercise hidden trap request/rejection semantics with exact pinned runtime evidence. Complete a seeded reference battle with adapter-backed policy and assert terminal validation and recipient visibility remain intact.",
-          "Document action indices, reduced-request and Struggle mapping, non-actionable masks, retry episode responsibility, request-relative decoder semantics and provisional versioned scope in README. Include the pinned Struggle parser scope adjustment and source evidence in this handoff/state; preserve historical tasks and all milestone limitations.",
-          "Run targeted adapter and affected runner/protocol/trace regressions plus syntax, state JSON, diff, Trail build and Trail check. Inspect diff and report changed files, exact commands/results and unresolved concerns to primary before acceptance. GPU is not required.",
-          "Reject request shapes that incompatibly combine wait, active, and forceSwitch, including active plus forceSwitch:[false]; preserve standalone wait:true and forceSwitch:[false] behavior.",
-          "Normalize all foreign thrown values from request or exclusion access to a fixed diagnostic without reading properties from the thrown value; preserve safe fixed diagnostics for adapter-owned errors. Cover Proxy objects and primitive throws."
-        ],
-        "plan": [
-          "Confirm tools and pinned reference readiness; read Trail context, exact relevant spans, prior learning and orchestration guidance.",
-          "Implement only the separate action adapter with documented fixed slot layout and checked decoder; retain the existing runner and random-policy behavior.",
-          "Add controlled independent contract cases and pinned request/command fixtures, then complete a reference battle with adapter-backed policies.",
-          "Update README and Task028 handoff; refresh Trail, run focused checks and inspect the final diff.",
-          "Return evidence to primary for independent acceptance; keep ownership through requested corrections and do not commit or push."
-        ],
-        "progress": "Accepted by primary /root after focused independent diff and evidence review and one correction round. Implementation owner stopped edits before acceptance. No second project deliverable was started.",
-        "gpu_required": false,
-        "validation": [
-          "node --test test/action-space.test.cjs test/battle-runner.test.cjs test/prepared-teams.test.cjs test/pair-runner.test.cjs test/manifest-runner.test.cjs test/paired-seeds.test.cjs test/summarize-results.test.cjs test/summarize-work.test.cjs test/protocol.test.cjs test/trace.test.cjs test/reference.test.cjs \u2014 97/97 passed before the final module/test-only review corrections.",
-          "node --test test/action-space.test.cjs \u2014 7/7 passed after both corrections, including incompatible request fields and proxy/primitive exceptions. Unchanged dependency suites were not repeated.",
-          "node --check for both source modules and both affected tests passed on initial revision; node --check environment/action-space.cjs and test/action-space.test.cjs passed after corrections. State JSON parsing and git diff --check passed; final acceptance metadata receives focused checks.",
-          "trail build \u2014 passed with 624 nodes, 1355 edges and 71 indexed cards after source/test correction; documentation-only acceptance updates do not change graph inputs.",
-          "Final staged trail check --base HEAD --json exited 1: 7 checked files, 14 learnings, 8 lexical documentation conflicts. Primary inspected each finding; all refer to unrelated preserved boundaries. Rationale is in the handoff and task commit body.",
-          "GPU and benchmark evidence not required."
-        ],
-        "scope_adjustments": [
-          {
-            "authorized_by": "/root",
-            "recorded_at": "2026-11-03",
-            "finding": "The pinned Pokemon.getMoveRequestData() creates the sole Struggle request row as {move:\"Struggle\", id:\"struggle\", target:\"randomNormal\", disabled:false} with no pp (reference/vendor/pokemon-showdown/sim/pokemon.ts:1104-1126; exact synthesized row at 1125). Existing candidateActions requires finite pp when disabled is present (environment/random-policy.cjs:80-89). A direct request derived from the pinned live Pokemon was rejected as \"Malformed move request: move slot is incomplete.\" runBattle.submit calls candidateActions before the policy callback (environment/battle-runner.cjs:303-325), so adapter-only normalization cannot handle a real Struggle request.",
-            "adjustment": "Permit exactly this pinned sole-Struggle row in candidateActions as move 1 and map that sole row to action slot 10. No battle-runner or default policy algorithm change. Test exact request, malformed variants, and command acceptance through pinned Battle choice handling.",
-            "prior_scope_preserved": true
-          }
-        ],
-        "trail_learning": {
-          "id": "l-f186e3b6",
-          "path": ".trail/learnings/2026-11-03-handle-the-pinned-struggle-request-without-jarho001.md"
-        },
-        "unresolved_concerns": [
-          "No full runBattle Struggle scenario is claimed. The synthesized row is tested through candidateActions pre-validation and pinned Side.choose acceptance; the complete adapter-backed run exercises ordinary, forced-switch and wait requests."
-        ],
-        "parent_review": {
-          "disposition": "ACCEPTED",
-          "reviewer": "/root",
-          "correction_round": 1,
-          "status": "ACCEPTED",
-          "findings": [
-            {
-              "finding": "Reject incompatible top-level wait/active/forceSwitch request shapes; `candidateActions` ignored an active row when forceSwitch was also present, returning switch2 for the concrete malformed request.",
-              "correction": "Fail closed on incompatible wait/active/forced combinations, including forceSwitch:[false] mixed with active, and retain standalone valid wait and false forced-switch requests.",
-              "test": "test/action-space.test.cjs now covers active+forceSwitch true/false, active+wait true/false, wait+force true/false, wait false alone, and the valid standalone cases.",
-              "status": "resolved_and_accepted"
-            },
-            {
-              "finding": "The actionSpace catch block read `error[SAFE_ERROR]`; a thrown Proxy with a get trap leaked arbitrary error text before candidateActions.",
-              "correction": "Identify adapter-owned errors with a private WeakSet and check only object identity/type before WeakSet.has, without property access on foreign thrown values.",
-              "test": "test/action-space.test.cjs covers a Proxy thrown from side, a primitive thrown from active, and a Proxy thrown during rejected-command-list access; each returns the fixed generic diagnostic.",
-              "status": "resolved_and_accepted"
-            }
-          ],
-          "original_disposition": "NEEDS_CHANGES",
-          "original_disposition_status": "historical",
-          "accepted_at": "2026-11-03"
-        },
         "accepted_at": "2026-11-03",
         "accepted_by_agent": "/root",
-        "acceptance_review": "Primary /root independently inspected the adapter, parser correction, tests and diff. Accepted fixed slot mappings, request-relative decoding, request-only trapping masks, episode exclusions, non-actionable states, shape/bound checks, immutable inputs and fixed diagnostics. Pinned live locked/recharge/Struggle requests and Side.choose acceptance, shared-parser Struggle prevalidation, adapter-backed complete battle, own-side request histories and actual Shadow Tag rejection/retry evidence satisfy the declared scope. One follow-up correction resolved incompatible top-level fields and foreign-thrown-value normalization. The affected suite passed 97/97 before the module/test-only correction; the complete affected adapter suite then passed 7/7. Syntax, JSON, diff and Trail build passed. No blocking finding remains. No full runBattle Struggle battle, GPU, benchmark result or milestone closure is claimed. No Astra gate is due: count advances to 28, baseline stays 20 and checkpoint stays 30.",
-        "status_note": "Primary accepted Task028; delivery belongs to primary. The acceptance record intentionally contains no self-referential delivery commit hash."
+        "history_ref": "ORCHESTRATION_STATE_ARCHIVE_037.json#/review_state/completed_task_history/6"
       },
       {
         "id": "Task029",
         "title": "completed-battle player decision trajectory collector",
-        "owner": "/root/task029",
         "status": "accepted_complete",
+        "owner": "/root/task029",
         "source_commit": "1382890aed1710ef14b56e719a3ffce800e63a28",
-        "scope": "Add a separate CommonJS completed-battle collector composing runBattle, its existing policy callback API, and the Task028 action adapter. Record actor-scoped policy invocation samples with append-only own-history deltas, current requests, masks, selected commands/slots and request-episode IDs; add fixed-player terminal reward targets only after validated completion. This is a bounded G1 trajectory-schema step.",
-        "exclusions": [
-          "changes to existing runner scheduling, retries, policies, protocol projection, action mappings or record contracts",
-          "partial failed-battle datasets or resume",
-          "submission/acceptance/execution labels for selected actions",
-          "next-state transition or complete post-final-decision history claims",
-          "behavior probabilities, PPO or learner-ready claims",
-          "observation feature encoders, recurrent models or learning",
-          "CLI, artifact persistence, manifests, tournament or benchmark implementation",
-          "GPU, new mechanics or milestone acceptance",
-          "implementation-owner commits or pushes"
-        ],
-        "acceptance_criteria": [
-          "Expose one documented version-1 library API for a single completed battle. Compose the actual existing runBattle and keep its explicit ps/seeds/limits/preparedTeams/streamFactory contract where supported; default policies remain the existing randomPolicy and optional callbacks retain exactly the existing history/request/random input API. No existing source module changes are planned; report concrete evidence to primary before any necessary scope adjustment.",
-          "Emit a serializable allowlisted artifact with pinned format/upstream identity, validated public terminal outcome and two separate player trajectories. Each per-player sample has contiguous decision index, positive current request-episode ID, request kind, own current request snapshot, eleven-slot mask, selected slot/command and an own-history delta captured before that policy selects an action. Do not store RNG functions, seeds, packed teams, raw packets, trusted transcript/end metadata, arbitrary result/config fields or opponent-private data in decision observations.",
-          "Use Task028 actionSpace/decodeAction and only current-episode rejection evidence when recording masks and validating the chosen command. Sampling must consume no additional policy RNG draws. Return only valid actionable decisions: wait/forceSwitch false and duplicate unresolved requests yield no extra samples. Identical request payloads in later episodes remain separate samples; retries remain distinguishable in their original episode.",
-          "Capture immutable or detached snapshots before user-policy invocation; per-player history deltas must reconstruct exactly the callback-visible history prefix at each successive decision, including non-actionable requests/events/resolutions received between callbacks. Do not truncate older knowledge or copy each complete history at every step. A final selected command has no invented submission/resolution status, and post-final-decision observations are explicitly outside this initial schema.",
-          "Store terminal reward targets separately per fixed seat: winner +1, loser -1, tie 0. No alternating-player sign convention and no reward/outcome/future-opponent field may be added to policy callback input or a pre-action observation. Mark behavior probability/log probability unavailable (null or explicitly omitted with documentation); do not fabricate training likelihoods.",
-          "Fail safely without returning a completed or partial dataset when runBattle, configuration, policy invocation or action validation fails. Use fixed diagnostics and do not copy arbitrary exception properties/result-shaped metadata into output. Do not expose a collector snapshot accessor that can masquerade as a successful dataset after failure.",
-          "Add independent scripted-stream tests for exact snapshots/history reconstruction, interleaved and consecutive own decisions, forced replacement, wait/no-choice, duplicate pending vs repeated later requests, unavailable-choice retry/exclusion reset, all three terminal reward cases, invalid selection/config/policy/runner failures, detached data and strict output allowlisting. Use concrete expected fields rather than only comparing the collector against its own helpers.",
-          "Enforce non-leakage with paired controlled streams that keep one actor callback history/current request identical while varying opponent private requests/split branches and pending choices or hidden end metadata. Require equal recorded actor observations/masks/selected actions under the same policy RNG. Explicitly keep post-game targets separate. Complete a real guarded pinned battle, verify masks/commands, own-side request histories and terminal target mapping, and compare policy command sequences with unwrapped runBattle under the same seeds to show recording changes no decisions.",
-          "Document API, JSON schema, privacy/target boundary, episode/retry responsibilities, delta reconstruction, unavailable likelihoods and completion-only/final-tail limitations in README. Preserve Task028, GPU validation and other prior history, task count/review baseline until independent primary acceptance; no G1 closure or performance claim.",
-          "Run focused collector tests and affected action-space/battle-runner/protocol/trace/reference regressions once per meaningful revision; syntax, JSON/diff, Trail build/check and inspected diff evidence are required. GPU is not required. Report changed paths, exact commands/results and concerns to primary; retain ownership through bounded corrections and do not accept or commit own work."
-        ],
-        "plan": [
-          "Read the scoped handoff, project-plan G1/input-target boundaries, applicable instructions, Trail graph and relevant learnings before source edits.",
-          "Implement only a separate completed-battle wrapper/collector over existing callback and action APIs, with per-player observation deltas and separately finalized targets.",
-          "Add exact controlled-stream, failure, privacy-equivalence and guarded pinned integration tests; verify unchanged random-policy command sequences.",
-          "Update README and Task029 handoff/current durable record, refresh/check Trail, validate focused changes and inspect diff.",
-          "Stop edits and return evidence to primary for independent acceptance and delivery; retain ownership for any authorized corrections."
-        ],
-        "progress": "Accepted by primary /root after independent focused review and one test-only correction. Owner stopped all edits before final coordination. Source identity stays at the pre-work revision; no self-referential delivery hash is recorded.",
-        "review_correction": {
-          "reviewer": "/root",
-          "status": "accepted_by_primary",
-          "finding": "Acceptance criterion 7 needed explicit detached-data and strict JSON allowlist evidence. The previous cloned callbackHistories could not prove emitted data was detached from actual callback inputs.",
-          "resolution": "Test-only change retains real callback input references, checks nested request/historyDelta non-aliasing and mutation isolation, asserts exact artifact/player/step/observation/action/target key sets, and validates parsed requests, masks, actions, and history deltas against independently JSON-normalized callback inputs. Runner-owned optional detail:undefined fields are omitted by JSON semantics; no production source changed.",
-          "validation": "node --check environment/decision-trajectories.cjs && node --check test/decision-trajectories.test.cjs passed; node --test test/decision-trajectories.test.cjs passed 5/5 after correction. /root reviewed and accepted the source with the JSON-projection distinction. The affected 55/55 regression run predates this test-only correction and was not repeated per primary instruction; final task acceptance metadata and delivery remain primary-owned."
-        },
-        "gpu_required": false,
-        "validation": [
-          "node --check environment/decision-trajectories.cjs && node --check test/decision-trajectories.test.cjs \u2014 passed after the test-only correction.",
-          "node --test test/decision-trajectories.test.cjs \u2014 5/5 passed after the test-only correction.",
-          "node --test test/decision-trajectories.test.cjs test/action-space.test.cjs test/battle-runner.test.cjs test/prepared-teams.test.cjs test/protocol.test.cjs test/trace.test.cjs test/reference.test.cjs \u2014 55/55 passed before the test-only correction; not repeated per primary instruction.",
-          "trail build after the test-only correction \u2014 passed: 651 nodes, 1,412 edges, 73 cards.",
-          "python3 -m json.tool docs/ORCHESTRATION_STATE.json >/dev/null \u2014 passed after final state update.",
-          "git diff --check \u2014 passed after final documentation updates.",
-          "trail check --base HEAD \u2014 exited 1 with 11 lexical findings; per-file counts and semantic rationale are recorded in docs/TASKS.md Task029. Additional leads were marked non-failing.",
-          "Primary final JSON/history/scope/diff and graph checks passed. Final staged trail check --base HEAD --json exited 1 with 11 reviewed lexical documentation conflicts (5 checked files, 15 learnings), no overlaps. Rationale is in the handoff and task commit body."
-        ],
         "accepted_at": "2026-11-03",
         "accepted_by_agent": "/root",
-        "acceptance_review": "Primary /root accepted Task029 after independently inspecting the new collector, complete focused tests, documentation, learning and validation evidence. The wrapper uses only live own-view callbacks, detached pre-selection request/history deltas and Task028 masks; it forwards opaque handles and preserves policy RNG/selection behavior. Selected actions carry no fabricated resolution or likelihood; completed public outcomes produce separate fixed-seat targets. Exact scripted histories cover waits, repeats, consecutive decisions and episode-scoped retries; paired hidden-data tests preserve actor observations/actions, and a guarded real battle matches unwrapped default command sequences with prepared-team forwarding. One test-only follow-up added actual-reference mutation isolation, strict nested keys and JSON-projection reconstruction. All criteria are satisfied by 55/55 affected tests before the test-only strengthening and 5/5 focused tests afterward, plus syntax/JSON/diff/Trail evidence. No source correction or further task was needed. No blocker remains. G1 and later milestones remain open; GPU, likelihoods, full final tails and partial failed datasets are outside this accepted unit. Count advances 28 to 29, baseline remains 20 and next checkpoint remains 30.",
-        "parent_review": {
-          "disposition": "ACCEPTED",
-          "reviewer": "/root",
-          "correction_rounds": 1,
-          "scope": "Detached snapshot proof, exact nested schema keys and JSON projection clarification; production source unchanged after initial focused validation.",
-          "blockers": []
-        },
-        "trail_learning": {
-          "id": "l-b9bd63dc",
-          "path": ".trail/learnings/2026-11-03-capture-trajectory-observations-from-policy-callbacks-developer-2.md",
-          "replaces": "l-11d377e9",
-          "predecessor_path": ".trail/learnings/2026-11-03-capture-trajectory-observations-from-policy-callbacks-developer.md",
-          "reason": "CLI-managed replacement clarifies standard JSON omission of optional undefined fields; predecessor retained as same-unit learning history."
-        }
+        "history_ref": "ORCHESTRATION_STATE_ARCHIVE_037.json#/review_state/completed_task_history/7"
       },
       {
         "id": "Task030",
         "title": "versioned move-first reference baseline policy",
-        "owner": "/root/task030",
         "status": "accepted_complete",
+        "owner": "/root/task030",
         "source_commit": "b0f996104f028306886f0326ba241dc27718ce70",
-        "scope": "Add a stateless move-first-v1 reference baseline callback composing Task028 action masks: uniformly choose among available move commands when any exist, otherwise uniformly among available switches. Honor current-request-episode rejections and supplied policy RNG. Verify through completed paired-seat pinned battles and trajectory observations; document the baseline without changing existing defaults. Reconcile the stale Task029 handoff headline with its recorded acceptance and delivered b0f9961 commit.",
-        "exclusions": [
-          "existing runner, protocol, action-space, default policy, pair/manifest execution or output-schema changes",
-          "damage/type/dex lookups, concealed state access or strength claims",
-          "tournament execution, policy registry or statistical/scored-suite design",
-          "observation features, training, learned models or likelihood labels",
-          "CLI, persistence or new mechanics",
-          "GPU or G1 milestone acceptance",
-          "implementation-owner commit/push"
-        ],
-        "acceptance_criteria": [
-          "Add a separate CommonJS module exposing a documented stable policy identity move-first-v1 and a synchronous callback compatible with existing {history,request,random}. It is stateless across calls and uses only current own request, own episode-scoped rejected commands and supplied RNG. Existing source modules/defaults remain unchanged unless a concrete mismatch is approved by primary.",
-          "Use the existing actionSpace/decodeAction contract to prefer every enabled move-row slot or explicit Struggle slot over switches. Uniformly select within the preferred set by one supplied RNG draw for each actionable call, including sole-choice calls; use enabled switches only when no move command remains. Non-actionable wait/forceSwitch false returns null without a draw; an actionable exhausted/invalid mask fails with a fixed diagnostic rather than a fallback.",
-          "Keep retry exclusions local to the latest requestEpisode in own history, so earlier rejections stop suppressing a command after progress. Preserve current-request reduced locked/recharge rows, Struggle, disabled/zero-PP moves, active/fainted replacement rules, trapped/maybeTrapped visibility and forced replacement. Reject invalid RNG values outside finite [0,1) safely; do not mutate callback input or leak private exception/request data through diagnostics.",
-          "Add independent exact-choice unit cases for move preference despite switches, random bucket endpoints, forced-switch fallback, sole-choice RNG use, wait/no-choice zero draws, episode rejection and reset, all-move rejection fallback, malformed/exhausted requests, reduced rows/Struggle and invalid RNG/input failures. Use concrete expected commands; prove inputs unchanged and seeded reproducibility without module-global state.",
-          "Complete two actual pinned battles in exchanged team seats against existing randomPolicy, keeping team/policy identities and policy seeds mapped through an existing generated pair and opaque prepared handles. Use actual Task029 callback trajectories to verify every baseline selection has an enabled slot and is a move whenever its recorded mask offers one; otherwise it is a switch. Verify terminal outcomes/reward mapping and cleanup without making scored or strength claims.",
-          "Document move-first-v1 semantics, request-only permissions, retry responsibility, RNG contract and direct runner/collector usage in README. Correct only the stale Task029 headline using its existing primary acceptance and actual delivery commit; retain its original stale wording as explicitly historical context or a dated reconciliation note. Preserve other task/milestone/GPU history.",
-          "Run focused baseline plus affected action-space, collector, runner, prepared-team, paired-seed, protocol, trace and reference checks as justified; syntax, JSON/diff, Trail build/check and inspected diff evidence are required. CPU suffices. Report exact commands/results/changed paths/concerns; stop edits for primary review and retain ownership through requested corrections.",
-          "Required independent Astra Task030 global checkpoint review covers accepted Tasks021-029 and the Task030 candidate, actual code/tests/pinned evidence, G0 and open downstream milestones, direction toward the reference environment and full JAX goal, and honest benchmark/GPU boundaries. No task count or review baseline advances until primary acceptance and the genuine independent gate ACCEPTED disposition; retain checkpoint30 while pending. After acceptance record count30/baseline30/next40 and stop, with no Task031."
-        ],
-        "plan": [
-          "Read task handoff/state, applicable AGENTS/orchestration, project-plan G1 baseline goals and scoped Trail/learning context; verify tools/reference readiness.",
-          "Implement only the separate versioned baseline and focused contract tests, then paired-seat pinned collector integration.",
-          "Update README, Task030 evidence and the explicitly reconciled Task029 headline; preserve history and add a Trail learning only for a justified new decision/finding.",
-          "Run relevant checks once per meaningful revision, refresh/check Trail, inspect diff, and stop edits for primary acceptance review.",
-          "Primary records the candidate and invokes independent Astra checkpoint review before final counting/delivery; the same implementer owns any required bounded corrections; no further deliverable is started."
-        ],
-        "required_global_review": {
-          "id": "T030Global",
-          "reviewer_role": "global_reviewer",
-          "status": "accepted",
-          "report": "docs/reviews/T030-global.md",
-          "scope": "Tasks021-029 plus Task030 candidate and current project direction; no automatic milestone closure.",
-          "accepted_task_count_at_start": 29,
-          "checkpoint": 30,
-          "reviewer": "/root/t030_global",
-          "candidate_tree": "0c01e302feee05d40e9ae92356473a6309f698f2",
-          "disposition": "ACCEPTED",
-          "accepted_at": "2026-11-03"
-        },
-        "progress": "Accepted by primary after independent T030Global gate acceptance. Implementation owner and reviewer stopped edits; primary owns final delivery. No source correction, new milestone approval or additional task was created.",
-        "gpu_required": false,
-        "validation": [
-          {
-            "command": "node --check environment/move-first-policy.cjs && node --check test/move-first-policy.test.cjs",
-            "result": "passed"
-          },
-          {
-            "command": "node --test test/move-first-policy.test.cjs test/action-space.test.cjs test/decision-trajectories.test.cjs test/battle-runner.test.cjs test/prepared-teams.test.cjs test/paired-seeds.test.cjs test/protocol.test.cjs test/trace.test.cjs test/reference.test.cjs",
-            "result": "passed 71/71 after a test-only slot expectation correction; the initial run was 70/71"
-          },
-          {
-            "command": "trail build",
-            "result": "passed; 667 nodes, 1442 edges, 75 cards"
-          },
-          {
-            "command": "trail check --base HEAD --json",
-            "result": "exit 1 with 10 reviewed lexical conflicts, additional non-failing leads/follows, and no overlaps; rationale is in docs/TASKS.md"
-          },
-          {
-            "command": "python3 -m json.tool docs/ORCHESTRATION_STATE.json >/dev/null && git diff --check",
-            "result": "passed"
-          },
-          {
-            "command": "T030Global independent checkpoint review",
-            "result": "ACCEPTED, no required findings/blockers. Independent tests57/57 plus23/23 pair/manifest; pinned provenance and diff checks passed. See docs/reviews/T030-global.md."
-          },
-          {
-            "command": "Primary final coordination checks",
-            "result": "Passed JSON/history/count/checkpoint, staged scope, unchanged candidate source identity, optional GPU byte preservation, staged diff and graph-current checks. Final staged Trail lexical findings were reviewed; semantic rationale is in the task commit body."
-          }
-        ],
-        "primary_review": {
-          "disposition": "ACCEPTED",
-          "reviewer": "/root",
-          "reviewed_at": "2026-11-03",
-          "note": "Source and complete focused tests inspected; existing APIs untouched; criteria satisfied with 71/71 tests and Task029 headline reconciliation. No source correction requested; no acceptance count advance before independent gate.",
-          "original_disposition": "CRITERIA_SATISFIED_PENDING_GLOBAL_REVIEW",
-          "accepted_at": "2026-11-03",
-          "accepted_note": "Independent T030Global gate accepted the candidate; all bounded criteria now accepted by primary."
-        },
         "accepted_at": "2026-11-03",
         "accepted_by_agent": "/root",
-        "acceptance_review": "Primary /root accepted Task030 after its focused source/test review and independent Astra T030Global ACCEPTED disposition. The separate stateless move-first-v1 callback composes current masks/decoder, prioritizes enabled moves including Struggle, handles waits with zero RNG draws and actionable calls with one, scopes rejections to the current episode, and emits fixed diagnostics. Exact unit expectations and two real exchanged-seat pinned battles establish seed/identity mapping, mask priority, terminal targets and cleanup. The only implementation iteration corrected a wrong new test expectation (switch2 maps to slot5); final affected validation passed71/71. Independent checkpoint source sampling and tests passed57/57 plus23/23 pair/manifest. No required finding or blocker remained. Existing product APIs/defaults are unchanged. Task029 headline was reconciled to its established b0f9961 acceptance/delivery with original wording retained historically. G0-only milestone acceptance, optional historical GPU evidence and open G1+ boundaries remain. Count advances29 to30; accepted checkpoint sets baseline30 and next40. No Task031 starts."
+        "history_ref": "ORCHESTRATION_STATE_ARCHIVE_037.json#/review_state/completed_task_history/8"
       },
       {
         "id": "Task031",
         "title": "named baseline paired matchup execution",
-        "owner": "/root/task031",
         "status": "accepted_complete",
+        "owner": "/root/task031",
         "source_commit": "3c7286492c4e4e4c199dcedd000cb60a7cc30359",
-        "scope": "Add a separate CommonJS API for one completed paired matchup using caller-selected allowlisted baseline IDs legal-random-v1 and move-first-v1. Compose generatePair, prepareTeam and actual runBattle calls; prepare each team once, run both seat assignments sequentially with policy identity and RNG seed mapped together, and emit a distinct versioned engineering artifact with canonical configuration and safe per-battle results. This promotes the Task030 paired integration procedure into a reproducible named-matchup building block for G1.",
-        "exclusions": [
-          "changes to existing runner, default pair/manifest executors, callback/action/protocol contracts or existing journal/report schemas",
-          "arbitrary policy callbacks or caller-declared custom version names",
-          "CLI, file persistence, journal/resume or tournament aggregation",
-          "partial failed-matchup artifacts or fabricated unattempted results",
-          "scored suite selection, rates, uncertainty, performance or policy-strength claims",
-          "trajectory collection in the new output, training or new mechanics",
-          "GPU or milestone acceptance",
-          "implementation-owner commit/push",
-          "optional charter cleanup deferred by T030Global"
-        ],
-        "acceptance_criteria": [
-          "Expose a documented version-1 completed-matchup library API with required rootSeed, zero-based pairIndex, policyA and policyB IDs and explicit pinned ps API; forward supported limits and streamFactory. Accept only legal-random-v1 (the current unchanged randomPolicy) and move-first-v1 (the existing versioned policy). Both roles may use the same ID for self-play. Snapshot/validate selection and IDs before any team generation or stream creation; unknown IDs/config getters fail safely, never silently default or inspect arbitrary exception fields.",
-          "Select the requested pair directly using generatePair without materializing earlier indices. Prepare team A/B once each with existing opaque seed/API-bound handles, reuse them in two separate sequential actual runBattle calls, and exchange team seats exactly as the generated pair specifies. Map callbacks through each run.policySeats so a policy identity retains its policy RNG seed across seats; no extra RNG draws or regenerated teams.",
-          "Emit a distinct allowlisted schema/kind for named baseline matchups, separate from Task024/025 legacy pair/journal shapes. Include pinned format/upstream, root/pair identity and exact canonical paired run metadata/seeds, explicit policy IDs by role and by run seat, prepared-team digests, and the two actual completed nested safe resultRecord objects. No raw transcript, packets, packed-team strings/handles, policy input/history, raw errors, arbitrary config fields or forged foreign result-shaped metadata leave the API. Artifact metadata does not authenticate execution after serialization.",
-          "Return an artifact only after both battles complete with validated terminal outcomes and cleanup. Fail with a fixed safe diagnostic and no partial artifact on malformed configuration, team/packing, first/second battle or cleanup failure. If the first battle fails no second stream starts; each attempted stream receives existing runner cleanup. Do not infer or claim zero/unattempted work from a failed call with no artifact. Existing legacy pair/manifest behavior and schemas remain unchanged.",
-          "Add independent controlled tests for exact policy identity/seed/seat/team-digest metadata, both policy orderings and same-ID self-play, current request-based command behavior, two preparations/packings, exclusive sequential fresh streams, safe output allowlisting and detached configuration/metadata. Guard invalid roots/indices/IDs, hostile getters and thrown foreign result metadata before work; preparation and first/second/cleanup failures; and no artifact after failure. Compare concrete expected commands and counters rather than merely calling implementation helpers for expectations.",
-          "Execute a real guarded pinned mixed-baseline pair, observe actual packed-team writes exchange seats and hashes recur, verify each baseline is attached to its intended seat/policy seed, both terminal result records have prepared source and match canonical run seeds/outcomes, and both streams are destroyed. Use trusted stream instrumentation only in tests; policy inputs stay the existing recipient-scoped API. No strength estimate or performance result is reported.",
-          "Document named baseline version semantics, required configuration, schema distinction, generate-once/reuse and identity-seed mapping, completion-only/error boundary, safe metadata and timing/attestation limits in README. Update only Task031 handoff/current state; preserve Task001-030, G0/T030Global and optional GPU evidence. Existing default policy APIs and legacy output schemas stay unchanged; G1 remains open.",
-          "Run focused matchup tests and justified affected baseline, runner, prepared-team, paired-seed, legacy pair/manifest, trajectory, protocol and reference tests once per meaningful revision; syntax, JSON/diff, Trail build/check and own diff review are required. GPU is not required. Report exact changed paths/checks/results/concerns to primary, stop edits for acceptance and retain ownership through bounded corrections. No Astra gate is due at count30/checkpoint40 unless a real architectural contradiction arises."
-        ],
-        "plan": [
-          "Read current task/state/orchestration, project-plan G1 pairing/tournament goal and Trail/learning context; verify tools and reference pin.",
-          "Implement a separate strict named completed-pair wrapper over existing pairing, opaque team preparation and battle execution primitives, leaving legacy executors unchanged.",
-          "Add controlled validation/failure/metadata/sequence tests and a real pinned mixed-baseline seat-exchange check.",
-          "Update README and Task031 evidence, refresh/check Trail, run affected checks and inspect the diff; add a learning only for a justified non-obvious decision/finding using trail note.",
-          "Stop for independent primary criteria review; primary records acceptance/count31 and delivers only this unit without advancing review checkpoint40 or starting Task032."
-        ],
-        "progress": "Accepted by primary /root after focused independent criteria/diff/evidence review. Owner stopped all edits; parent owns delivery. Count31/baseline30/checkpoint40; no new review gate or GPU blocker.",
-        "gpu_required": false,
-        "validation": [
-          {
-            "command": "node --check environment/baseline-matchup.cjs && node --check test/baseline-matchup.test.cjs",
-            "result": "passed"
-          },
-          {
-            "command": "node --test test/baseline-matchup.test.cjs",
-            "result": "passed 7/7, including the guarded pinned mixed-baseline pair"
-          },
-          {
-            "command": "node --test test/baseline-matchup.test.cjs test/move-first-policy.test.cjs test/action-space.test.cjs test/battle-runner.test.cjs test/prepared-teams.test.cjs test/paired-seeds.test.cjs test/pair-runner.test.cjs test/manifest-runner.test.cjs test/summarize-results.test.cjs test/summarize-work.test.cjs test/decision-trajectories.test.cjs test/protocol.test.cjs test/reference.test.cjs",
-            "result": "passed 115/115"
-          },
-          {
-            "command": "trail build",
-            "result": "passed: 710 nodes, 1,533 edges, 77 cards; run once at frozen source/test revision"
-          },
-          {
-            "command": "trail check --base HEAD --json",
-            "result": "exit 1: 8 lexical conflicts, 9 leads, no overlaps; inspected and documented in Task031 handoff with no source contradiction"
-          },
-          {
-            "command": "Primary final coordination checks",
-            "result": "Passed final JSON/history/count/scope, unchanged implementation blob identity, CLI learning replacement, staged diff and graph-current checks. Earlier task/review/milestone values and exact optional GPU evidence are preserved. Final staged Trail lexical documentation findings were reviewed and their rationale is retained in the task commit body."
-          }
-        ],
         "accepted_at": "2026-11-03",
         "accepted_by_agent": "/root",
-        "acceptance_review": "Primary /root independently reviewed the complete new module, controlled and guarded pinned test source, README contract and exact validation evidence, and accepted Task031 with no source/test correction. Strict data/ID/limit snapshots occur before work; the requested canonical pair is selected directly; each team is prepared/packed once and opaque handles reused in sequential fresh battles. Policy versions, roles, seats and RNG streams remain mapped together, including reverse order and self-play. A distinct allowlisted completion-only artifact carries copied actual safe records and no transcripts, packed teams or exception metadata. Failure stages return a fixed error without a partial artifact, and the legacy summarizer rejects the new envelope. Handwritten command/seed/counter expectations, detachment, no-work-invalid-config cases, cleanup and real packed seat/hash exchange support the criteria. Focused7/7 and affected115/115 passed after test-only instrumentation/prototype expectation corrections; syntax, JSON/diff and Trail evidence passed or was semantically reviewed. Existing product modules/defaults and all earlier task/milestone/GPU history are unchanged. Count advances30 to31; review baseline30 and checkpoint40 stay fixed. No GPU, performance/strength or G1 acceptance claim; no Task032 starts.",
-        "primary_review": {
-          "disposition": "ACCEPTED",
-          "reviewer": "/root",
-          "accepted_at": "2026-11-03",
-          "required_source_corrections": [],
-          "note": "Initial test instrumentation corrections preceded final7/7 and115/115. Learning headings were corrected via CLI replacement, preserving predecessor. No acceptance criteria were waived."
-        },
-        "implementation_source_blobs": {
-          "environment/baseline-matchup.cjs": "762e780da18addca521b54ec0a72cd18fa0f7c9b",
-          "test/baseline-matchup.test.cjs": "da2bd48a7bdd9894604671a32520e1eb71fa6e78"
-        },
-        "trail_learning": {
-          "id": "l-ed326324",
-          "path": ".trail/learnings/2026-11-03-keep-named-matchup-semantics-separate-from-jarho001.md",
-          "replaces": "l-30da8511",
-          "predecessor_path": ".trail/learnings/2026-11-03-keep-named-matchup-semantics-out-of-jarho001.md",
-          "reason": "CLI-managed formatting replacement uses required Decided/Tried/Watch-out sections and code evidence; original same-unit note remains as history."
-        }
+        "history_ref": "ORCHESTRATION_STATE_ARCHIVE_037.json#/review_state/completed_task_history/9"
       },
       {
         "id": "Task032",
         "title": "single named baseline matchup CLI",
-        "owner": "/root/task032",
         "status": "accepted_complete",
+        "owner": "/root/task032",
         "source_commit": "b4ffdaa917c903654a5e30f0aaafc0a746e8f2ac",
-        "scope": "Add a separate CLI for exactly one named completed baseline pair, composing the accepted Task031 library and exclusively publishing its safe artifact to an explicit new file. This makes the G1 named evaluation building block runnable without custom JavaScript.",
-        "exclusions": [
-          "changes to existing runtime/library schemas or policy behavior",
-          "batch/tournament aggregation, scoring, confidence intervals or strength/performance claims",
-          "resume, partial results or failure journals",
-          "new mechanics, training or GPU validation",
-          "G1 acceptance",
-          "unrelated optional documentation cleanup",
-          "owner commit/push"
-        ],
-        "acceptance_criteria": [
-          "Require explicit --root-seed, zero-based --pair-index, --policy-a, --policy-b and --output; support strict flag/value and flag=value forms, sole help, reject missing/duplicate/unknown/malformed values and IDs before bootstrap or execution. No implicit seeds/IDs/pair index.",
-          "Use pinned oracle.assertReady and actual runBaselineMatchup; preserve its exact completed artifact and limits/defaults, opaque teams, role/seed mapping and cleanup contract. Leave existing library and legacy executors/schemas unchanged.",
-          "Create the explicit new output file exclusively before battle execution so existing files/symlinks or missing parents fail without a battle. Publish only after successful complete execution; safely remove the owned reservation on pre-publication failure. Never overwrite/delete unrelated paths. Document crash/write/close/cleanup failure limitations honestly, and never emit fabricated partial outcomes.",
-          "Print no raw exceptions, paths from exception text, packets, transcripts or failed result-shaped metadata. Fixed safe diagnostics and nonzero failure exit. Report success only after completed output write/close; no failed invocation claims zero attempted work.",
-          "Add controlled tests for parser, bootstrap/execution/order, exclusive-file preservation, invalid/no-work inputs, safe errors, owned reservation cleanup and write/close failures as practical. Run a subprocess real pinned mixed-policy pair and validate saved kind/config/pin/canonical seed/seat mapping and both completed prepared-team result records.",
-          "Document usage and success/failure/file/timing/attestation boundaries. Run focused and justified affected regressions, syntax, JSON/diff and Trail build/check; inspect own diff, report exact evidence and stop for primary acceptance. Preserve earlier history, count31/baseline30/checkpoint40 until primary acceptance; no GPU or Astra gate required."
-        ],
-        "plan": [
-          "Read applicable Trail and prior learnings and trace affected symbol dependencies before implementation.",
-          "Implement separate CLI and targeted tests, leaving accepted Task031 library unchanged.",
-          "Run meaningful focused and affected checks including a real pinned CLI subprocess; document boundaries, update only Task032 progress, refresh/check graph and inspect diff.",
-          "Stop edits for primary review; primary alone accepts/counts/delivers, then stop at this task boundary."
-        ],
-        "progress": "Accepted by primary after independent focused criteria/diff/evidence review; owner stopped edits. Parent owns final coordination and remote delivery. Count32/baseline30/checkpoint40; no blockers.",
-        "gpu_required": false,
         "accepted_at": "2026-11-03",
         "accepted_by_agent": "/root",
-        "acceptance_review": "Primary /root independently reviewed the complete CLI, corrected tests, README contract and exact owner validation evidence. Accepted Task032 after the owner stopped edits. Explicit arguments are validated before pinned bootstrap; output is exclusively reserved before actual runBaselineMatchup, and only its completed artifact is written through the retained descriptor, flushed and closed before success. Existing files/symlinks and missing parents stop before battle work; fixed diagnostics expose no foreign exception metadata. Ordinary failures attempt identity-checked reservation cleanup; documented crashes/filesystem failures can leave empty or partial files, and concurrent output replacement is unsupported. Controlled no-work, cleanup/write/sync/close/replacement tests and a real pinned subprocess with canonical pair/run metadata support all criteria. Primary requested only test evidence additions and corrected learning spans via CLI replacement; no runtime change or criterion waiver. Corrected focused10/10 passes after a test-only diagnostic-count fix; earlier affected36/36 and already-running full140/140 passed at the identical source revision. Existing Task031 library, legacy executors, policies and schemas remain unchanged. Count31 becomes32, baseline30/checkpoint40 stay fixed; G1 remains open and no GPU or strength/performance claim is made. Stop at Task032; no Task033 starts.",
-        "primary_review": {
-          "disposition": "ACCEPTED",
-          "reviewer": "/root",
-          "required_source_corrections": [],
-          "requested_test_corrections": [
-            "Add malformed-seed and successful-bootstrap/missing-parent no-work assertions.",
-            "Compare real saved pair/run metadata to canonical generatePair output."
-          ],
-          "corrections_verified": true
-        },
-        "implementation_source_blobs": {
-          "environment/run-baseline-matchup.cjs": "5c8622ab719c9fe9f565b3d9d2e8e126857d7a80",
-          "test/run-baseline-matchup.test.cjs": "3019ed2a1ccaf405548861495e651972ee894d47"
-        },
-        "trail_learning": {
-          "id": "l-e0423be3",
-          "path": ".trail/learnings/2026-11-03-reserve-output-files-before-long-running-jarho001-2.md",
-          "replaces": "l-7f54bde1",
-          "predecessor_path": ".trail/learnings/2026-11-03-reserve-output-files-before-long-running-jarho001.md",
-          "reason": "CLI-managed same-unit replacement corrects stale exact source spans while preserving predecessor; prior learnings unchanged."
-        },
-        "validation": [
-          {
-            "command": "node --check environment/run-baseline-matchup.cjs && node --check test/run-baseline-matchup.test.cjs && node --test test/run-baseline-matchup.test.cjs",
-            "result": "initial passed10/10; final syntax checks also passed"
-          },
-          {
-            "command": "node --test test/run-baseline-matchup.test.cjs test/baseline-matchup.test.cjs test/paired-seeds.test.cjs test/manifest-runner.test.cjs",
-            "result": "passed36/36 before final test-only additions; runtime source unchanged"
-          },
-          {
-            "command": "node --test test/*.test.cjs",
-            "result": "already-running suite passed140/140 before final test-only additions; not repeated"
-          },
-          {
-            "command": "node --check test/run-baseline-matchup.test.cjs && node --test test/run-baseline-matchup.test.cjs",
-            "result": "corrected final10/10 including real guarded pinned subprocess; first follow-up9/10 was an outdated test diagnostic-count expectation, corrected without runtime changes"
-          },
-          {
-            "command": "trail build; trail build --check",
-            "result": "passed current738 nodes/1574 edges/79 cards"
-          },
-          {
-            "command": "trail check --base HEAD --json",
-            "result": "Final staged exit1:8 lexical documentation conflicts across5 checked files/17 active notes, no overlaps or source conflicts; primary reviewed exact findings and records rationale in delivery commit body."
-          },
-          {
-            "command": "Primary coordination checks",
-            "result": "Passed final JSON/history/count/review/GPU preservation, exact Task001-031 handoff prefix, unchanged implementation blob identity, seven-file staged scope, learning replacement, diff and graph-current checks (738 nodes). No blockers."
-          }
-        ]
+        "history_ref": "ORCHESTRATION_STATE_ARCHIVE_037.json#/review_state/completed_task_history/10"
       },
       {
         "id": "Task033",
         "title": "offline named baseline outcome report",
-        "owner": "/root/task033",
         "status": "accepted_complete",
+        "owner": "/root/task033",
         "source_commit": "a671f15266bb49e634bce2677008963c1284c938",
-        "scope": "Add a separate pure CommonJS outcome-report API for a contiguous recorded prefix of Task031/032 named completed paired matchups, bound to explicit root seed, expected pair count, policy IDs and complete expected limits. Validate canonical identities and outcome topology, then count completed outcomes by seat and policy role. This provides named-baseline accounting for the G1 tournament path without changing legacy accounting.",
-        "exclusions": [
-          "execution, Showdown bootstrap or new battle run orchestration in the report API",
-          "CLI, filesystem I/O, persistence, journal/resume or failed/partial-matchup accounting",
-          "changing accepted named/legacy library, executor, policy or report schemas",
-          "rates, confidence intervals, suite/power/stopping-rule selection, strength/performance claims",
-          "authentication or execution attestation from serialized metadata; packed-team regeneration or hash attestation",
-          "new mechanics, training, GPU or milestone acceptance",
-          "unrelated optional documentation cleanup and owner commit/push"
-        ],
-        "acceptance_criteria": [
-          "Expose a documented version1 pure synchronous named report API with required rootSeed, positive bounded pairCount, policyA, policyB, complete expected limits and matchups array. Only legal-random-v1 and move-first-v1 are accepted, including same-ID self-play. Strictly snapshot own plain JSON data, reject unknown config/envelope/nested schema keys, accessors, sparse/non-JSON/cyclic inputs and malformed values with one fixed safe diagnostic; never read foreign exception fields or mutate inputs.",
-          "Validate each artifact as the exact Task031 named completed kind/schema/pin/format, rootSeed, pairIndex equal its array index, canonical pairId, policy-role IDs, complete expected limits, policy seeds, team seeds and lowercase SHA256-shaped digests. Require both canonical runs in order with generated run IDs/seats/policySeats/seed tuples and matching IDs by seat. Use generatePair directly for recorded indices, not earlier/whole configured manifests. Reject duplicate, out-of-order, skipped, oversized or legacy-artifact prefixes and mixed policies/limits/pins.",
-          "Validate both nested safe battle-result envelopes: exact required keys, schema/kind/pin/format/seeds/limits, completed status, prepared team source, null failure/cleanupFailure, finite nonnegative battle_runner elapsed time, valid win/p1-or-p2 or tie/null outcome and nonnegative safe turns. Counters remain finite JSON data as accepted by the named producer; do not claim validation of their mechanics/arithmetic or re-emit them. No raw transcripts, packed teams, handles, callback inputs or foreign error/result metadata enter the report.",
-          "Return a distinct allowlisted report kind/schema with detached pinned configuration and coverage counting recorded completed pairs/battles and unrecorded suffix pairs/run slots. Empty/short/full prefixes are supported. Missing suffix artifacts disclose no execution, failure or attempted-work status; do not label them failed, unattempted, successful workload completion or zero work. Serialized structural validation never attests who ran the battles.",
-          "Count wins/losses/ties by p1/p2 seat and policyA/policyB role, each role carrying its explicit version ID and separate by-seat tally. Keep roles distinct for same-ID self-play. Include nonduplicated overall win-by-seat/tie totals and completed battle denominator; test handwritten all-win/loss/tie and swapped-seat cases and arithmetic consistency. No rate/strength statistic.",
-          "Add independent controlled valid artifacts and mutation/hostile-input rejection tests for all identity/config/topology boundaries, exact output allowlisting, no input mutation, output detachment, empty/partial/full prefixes, same-ID role accounting and missing-record semantics. Obtain real guarded pinned named mixed-policy artifacts, JSON-roundtrip and report them with expected outcomes/counts independently checked; keep test-only execution outside report API. Existing legacy reporter rejects named artifacts and new reporter rejects legacy ones.",
-          "Document API/schema and prefix, role, limits, digest/attestation and omitted-work boundaries. Run focused and justified affected named/report/paired-seed/reference checks once per meaningful revision; syntax/JSON/diff, Trail refresh/check and own diff inspection. Preserve all prior task/review/GPU history and count32/baseline30/checkpoint40 until primary acceptance; no GPU or Astra gate required absent a concrete contradiction. Report exact evidence and stop edits for primary review."
-        ],
-        "plan": [
-          "Read applicable instructions, relevant Trail learnings and scoped dependency/source context.",
-          "Implement a separate strict pure named accounting module and independent controlled tests; leave accepted modules unchanged.",
-          "Run real pinned roundtrip integration and affected tests, document boundaries and update Task033 progress; refresh/check Trail and inspect diff.",
-          "Freeze for primary criteria review; primary alone accepts/counts/delivers and stops after Task033."
-        ],
-        "progress": "Primary accepted after the owner froze edits. Added only the separate pure report module, its controlled/pinned tests, README documentation and this Task033 evidence. Final affected47/47 passes; no GPU or external evidence needed. Owner has not accepted/count-incremented/committed; primary owns review/corrections and delivery.\n\nInitial implementation debugging findings (all fixed before primary review): 1) Valid controlled and pinned records were rejected because `copyArray` initially called its run mapper without the index, so `validateRun` could not select a canonical run. Passing the index fixed that. 2) That callback change initially passed the numeric index as `copyJson`'s `ancestors` argument (`TypeError: ancestors.has is not a function`); wrapping it in an explicit item callback fixed it. Initial test-only issues are distinct: after removing unused imports a stale `ROOT` constant caused `ReferenceError: path is not defined`, fixed by deleting the unused constant; a detachment assertion expected two p1 wins despite a one-win/one-tie vector, corrected to one; and a same-ID vector expected policyA to win at p1 in both runs even though the generated swapped run seats policyA at p2, so outcomes now derive from canonical `generatePair` role seats and tallies stay handwritten.\n\nPrimary correction revision 1 (not two rounds): `/root` found canonical validation compared `JSON.stringify` directly, rejecting valid records whose object keys were reordered. Replaced it with recursively sorted object-key comparison while retaining array/run order; a JSON-roundtrip/reversed-keys regression now expects an identical report. The same review pass requested stronger validation evidence: mutation table, report top-level allowlist, by-seat same-ID counts, accessor read counters, a reflection-trap foreign error with an unread get trap, and exact fixed error message checks. These are implemented and pass the final affected suite. A nested upstream getter regression also protects against reading caller-controlled properties during stringification.\n\nFinal validation and graph are current; implementation and tests are frozen after independent primary re-review. Owner has not accepted or counted Task033, committed, or pushed. No unresolved source concerns or external/GPU requirements. Final Trail check:10 lexical documentation conflicts and0 overlaps. Owner-stage remaining matches were README:231 canonical metadata language; state scope at920; nested safe result semantics at933; TASKS criteria at1274/1276/1282. The module requires generated identity and digest shape, counts valid result shapes, omits raw/packed data, and does not attest execution or expose player observations. One non-conflict source lead is on the stated exclusion of packed-team re-attestation.",
-        "gpu_required": false,
-        "validation": [
-          {
-            "command": "node --check environment/summarize-baseline-matchups.cjs && node --check test/summarize-baseline-matchups.test.cjs && node --test test/summarize-baseline-matchups.test.cjs",
-            "result": "final7/7 passed, including key-order equivalence and pinned JSON-roundtrip integration."
-          },
-          {
-            "command": "node --check environment/summarize-baseline-matchups.cjs && node --check test/summarize-baseline-matchups.test.cjs && node --test test/summarize-baseline-matchups.test.cjs test/baseline-matchup.test.cjs test/run-baseline-matchup.test.cjs test/paired-seeds.test.cjs test/summarize-results.test.cjs test/reference.test.cjs",
-            "result": "final47/47 passed after primary correction revision1."
-          },
-          {
-            "command": "trail build",
-            "result": "passed; final graph769 nodes/1662 edges/81 cards; cache is gitignored."
-          },
-          {
-            "command": "trail build --check",
-            "result": "passed; wiring graph current at769 nodes."
-          },
-          {
-            "command": "node --check environment/summarize-baseline-matchups.cjs && node --check test/summarize-baseline-matchups.test.cjs && python -m json.tool docs/ORCHESTRATION_STATE.json && git diff --check",
-            "result": "passed."
-          },
-          {
-            "command": "trail check --base HEAD --json",
-            "result": "Owner-stage exit1 with10 lexical documentation conflicts/zero overlaps; primary final staged check also has10 lexical documentation conflicts across5 checked files/17 active notes, no source conflict/overlap. Exact current findings and semantic rationale are recorded in delivery commit body."
-          },
-          {
-            "command": "Primary final coordination checks",
-            "result": "Passed final JSON/history/count/review/GPU preservation, exact Task001-032 handoff prefix, frozen source/test blobs, five-file staged scope, diff and graph-current checks (769 nodes). No blockers."
-          }
-        ],
-        "implementation_source_blobs": {
-          "environment/summarize-baseline-matchups.cjs": "ef564a4e5ed3c1c8bf4109b83ffe2da034a8cca4",
-          "test/summarize-baseline-matchups.test.cjs": "0423e240bb16dab1ded41d82fb449ecac826ff9e"
-        },
-        "primary_correction_revision": {
-          "round": 1,
-          "owner": "/root/task033",
-          "reviewer": "/root",
-          "disposition": "accepted_after_primary_re_review",
-          "findings": [
-            "Order-insensitive object key validation: compare descriptor-snapshotted records canonically while preserving run/array order; add reversed-key JSON-roundtrip equivalence regression.",
-            "Strengthen independent acceptance evidence: labeled mismatch mutations for identity/topology/nested outcome safety, exact top-level output allowlist, same-ID per-seat tallies, zero-read accessor counters, plain foreign Error thrown from an input proxy ownKeys trap with the input get trap unread, and exact fixed diagnostic assertion."
-          ],
-          "validation": "Final affected47/47, including the corrected schema/key-order and malicious-input cases. No runtime-scope change or criterion reduction."
-        },
         "accepted_at": "2026-11-03",
         "accepted_by_agent": "/root",
-        "acceptance_review": "Primary /root independently reviewed the full report module, corrected tests, README API contract and owner validation evidence. Accepted Task033 after the owner froze all edits. Strict data snapshots precede canonical prefix/config/run/result validation; role/seat tallies count only structurally valid completed named artifacts and retain distinct roles for same-ID self-play. Explicit complete expected limits prevent mixed-budget pooling. Output is detached configuration, recorded/unrecorded coverage and integer outcomes only, with no raw data, counters, execution/attempt claims or attestation. Primary correction revision1 fixed object-key-order sensitivity while preserving array/run ordering and strengthened identity/topology, exact-output, same-ID by-seat and zero-read accessor tests. Corrected focused7/7 and affected47/47 pass, including real guarded pinned JSON roundtrip. The reflection test throws a plain Error from an input proxy ownKeys trap and verifies the input get trap is unread; independently, source catch has no exception binding and never inspects thrown fields. Initial copyArray mapper/index defects and test-vector mistakes are retained as history, not hidden. Source/test blobs match the frozen owner revision, and existing producer/CLI/legacy/policy schemas are unchanged. No criteria waived, new GPU run, strength/performance claim or G1 closure. Count32 becomes33; review baseline30/checkpoint40 unchanged; no Task034 starts.",
-        "primary_review": {
-          "disposition": "ACCEPTED",
-          "reviewer": "/root",
-          "accepted_at": "2026-11-03",
-          "correction_revisions": 1,
-          "corrections_verified": true,
-          "remaining_findings": []
-        }
+        "history_ref": "ORCHESTRATION_STATE_ARCHIVE_037.json#/review_state/completed_task_history/11"
       },
       {
         "id": "Task034",
         "title": "restricted seeded JAX neutral Tackle turn",
-        "owner": "/root/task034",
         "status": "accepted_complete",
+        "owner": "/root/task034",
         "source_commit": "19616d6c0a5f0401ceca28bf2928f0dcc06f22b2",
-        "scope": "Implement one integrated runnable simultaneous-choice turn for a named restricted Gen5 one-versus-one neutral Tackle development variant, with fixed typed JAX battle/request state, exact pinned Gen5 PRNG evolution, ordinary hit/critical/KO handling and differential state/request/event projections against an actual pinned Showdown turn. This advances simulator-first G3 work while G1 and all implementation milestones remain open.",
-        "exclusions": [
-          "full gen5randombattle support or G1/G3 acceptance",
-          "random teams, multiple roster members, switching/replacements, speed ties, non-Tackle moves or Struggle",
-          "items, weather, statuses, stat boosts, hazards, relevant abilities or other passive/secondary effects",
-          "full raw Showdown protocol byte equality, full observation feature encoder or existing runner/schema changes",
-          "learning/PPO, tournament/reporting expansion, throughput claims or GPU acceptance",
-          "weakening required parity evidence or replacing actual execution with a mocked damage calculator",
-          "owner commit/push"
-        ],
-        "acceptance_criteria": [
-          "Declare a concrete named restricted variant and validated boundary before implementation: one active Pokemon per side, Tackle only, neutral non-STAB physical damage, distinct effective speeds, positive HP/PP and ordinary bounded level/stats, no effects beyond supported Tackle accuracy/critical/damage/faint mechanics. Use pinned Showdown sets/data for oracle initialization; document any custom-format/rule overrides and initialization boundary. Reject unsupported inputs explicitly without state/RNG progression; do not claim exact full-format support. Stop/report concrete feasibility or oracle contradictions rather than silently narrow these criteria.",
-          "Expose a fixed-shape typed JAX PyTree state and pure compiled-capable simultaneous-choice transition; both sides commit from the same request boundary before execution. Include HP/max HP, PP, ordinary effective stats/speeds, turn/request phase, terminal winner/status and exact Gen5 four-limb RNG state. Account for move order, Tackle PP use, accuracy/critical/damage RNG consumption, HP clamp, KO and skipping a fainted actor; terminal inputs absorb without draws. Pending/invalid/unsupported choices produce explicit diagnostics and no concealed-choice disclosure or partial advance.",
-          "Implement exact pinned Gen5 LCG/upper32/bounded sampling using verified integer limb arithmetic compatible with default JAX32, not JAX-native randomness or prerecorded result replay. Validate known vectors and multiple high/low/carry seeds against live pinned PRNG; instrument actual turn random calls including bounds/context/state before/after so accidental extra/missing/reordered calls fail. Scope draw operations to concrete bounded calls needed by the variant and declare their supported range.",
-          "Build a guarded pinned reference oracle that executes actual submitted Tackle choices from a captured normal-request boundary (not isolated getDamage calls or replacement RNG values). Compare exact pre/post RNG limbs and draw consumption, internal HP/PP, action order, next turn, terminal outcome and declared minimal request/legal-action plus both-recipient visible event/history projections. Projections may normalize protocol into an explicit semantic schema but cannot erase relevant critical/damage/faint/turn or recipient HP visibility differences. Keep trusted internal state and unprojected packets out of actor-facing views.",
-          "Cover both speed orderings, multiple seeds including a genuine critical hit, normal surviving exchanges, first-action KO with skipped second move and terminal absorption, plus unsupported/invalid input no-advance and simultaneous-choice boundaries. Retain multiple-turn continuations through at least a short supported sequence to establish state/RNG handoff, without claiming full battle coverage. Use independently computed/handwritten invariants alongside actual oracle outputs; no self-generated expected-output identity tests.",
-          "Run CPU-first eager/JIT exact parity and JIT/vmap batch lane equivalence with heterogeneous supported states/seeds and invalid/terminal lanes; demonstrate no cross-lane state/RNG coupling. Record one synchronized representative compile/warmed execution probe (configuration and measured durations only, no speedup/strength claim). GPU is optional and no GPU criterion is imposed.",
-          "Document APIs, variant limitations, state/request/history projection, initialization/RNG boundaries, actual checks and measured CPU probe. Update relevant mechanics coverage/current handoff and state while preserving all historical task/review/GPU data and simulator-first decision. Run focused and justified affected tests, syntax/JSON/diff, Trail build/check and own diff inspection; freeze/report exact commands, results, changed files and concerns for primary acceptance. Count33/baseline30/checkpoint40 remain until primary accepts; no milestone/global review is due absent a concrete contradiction."
-        ],
-        "plan": [
-          "Read current simulator-first plan/learning and scoped Trail/source context; perform bounded oracle feasibility inspection before source implementation and report contradictions.",
-          "Implement the explicitly restricted fixed-state JAX turn and exact PRNG alongside actual pinned turn oracle/fixtures and focused differential tests.",
-          "Validate CPU eager/JIT/vmap and short continuations, record a synchronized probe, document strict exclusions and update task evidence; refresh/check graph and inspect diff.",
-          "Freeze for primary review; primary accepts/counts/commits/pushes only this unit or records a concrete blocker and stops."
-        ],
-        "progress": "Accepted by primary after full source/criteria/evidence review; owner stopped edits. Prior owner-stage evidence follows for history: Task034 remains in_progress under /root/task034 pending primary acceptance. Startup/setup: clean main at base 19616d6c0a5f0401ceca28bf2928f0dcc06f22b2; planning-only simulator-first decision delivered; count33, review baseline30, next checkpoint40; no pending correction, review, or GPU block. Trail0.28.0, Git2.39.5, Node24.22.1, npm11.19.1, Python3.13.18 and pinned oracle provenance functional. JAX initially absent; pip install -r requirements-jax-cpu.txt succeeded and CPU JAX/JAXLIB0.12.0.1 plus JIT were verified. RTX3060Ti is optional; no GPU run required or claimed. Feasibility resolved without format/move overrides: direct one-Mew sets in unmodified Gen5 Random Battle, normal p1/p2 active requests, actual simultaneous makeChoices, native Tackle critical ratio1 and draw order100/16/16; seed [9,2,3,4] critically hits; L1-vs-L100 KO skips the second move and PP draw, terminal turn remains1. Parent corrections completed: strict scalar/choice typing; fail-closed static audiences; recipient-specific HP and hidden theoretical opponent damage; continuation carries prior JAX output into next input and checks request phase; int32 turn-overflow guard. Native random wrapper records bound/context/four-limb pre/post while returning original values. Final validation: Node syntax and focused oracle tests3/3; CPU py_compile and focused JAX unittest6/6; Python JSON parse valid; git diff --check clean after two trailing-blank-line removals. Earlier harness/setup errors and fixes are recorded in Task034 handoff. Final synchronized CPU JIT(vmap) probe: Python3.13.18/JAX/JAXLIB0.12.0.1/cpu:0, 8 lanes with exact seeds and state construction in docs/neutral-tackle-variant.md; synchronized first call0.536254s, warmed0.000157s, all statuses0, no performance claim. Frozen source base 19616d6c0a5f0401ceca28bf2928f0dcc06f22b2; blobs: simulator/__init__.py=4e196b53297262368ce50e0c8e26b5449de2547f; gen5_rng.py=ed8c8cddd8f001d2c7da63ff2bd2ef3c4cf060d7; neutral_tackle.py=67b707d8b089fc7e2173d17497cbf1a62b10bf2f; oracle=e87d8f433252380f46436746b40f146e4266d55a; Node test=6fd98adb28d0837f307bf43e2195849bd5b45273; Python test=183f82977a3956b41cfe8d4e3ceaec97dee81c87; variant doc=78ec29e064432a2e7a90b0d20868246338461073. Trail build/check current at833 nodes/1812 edges/87 cards. Stage-aware trail check after intent-to-add reports9 conflicts,11 leads,12 changed files,19 notes, no overlaps; manual review found documentation/history-only false positives and no source conflict (itemized in owner report). Task034 stays in_progress and unaccepted; accepted count33, baseline30, checkpoint40, milestone history, optional GPU history, and simulator-first decision remain unchanged. No commit or push; primary acceptance pending.",
-        "gpu_required": false,
         "accepted_at": "2026-11-03",
         "accepted_by_agent": "/root",
-        "acceptance_review": "Primary /root independently reviewed the complete JAX PRNG/turn/view source, guarded native oracle, focused tests and variant contract; accepted Task034 after the owner stopped edits. The explicitly restricted one-Mew-per-side neutral Tackle variant uses initialized pinned values, unequal speeds and no relevant passive effects. Exact JAX32 limb RNG, simultaneous commitments, order/PP/HP/critical/KO/skip/terminal behavior match eight actual native turns, including JAX-output-to-JAX-input continuations and both recipient semantic request/history projections. Primary corrections prevent raw opponent/overkill damage disclosure, reject invalid/static audience and nonintegral input types, prove chained request/state handoff, and guard turn overflow. Existing arithmetic modules remain unchanged. Final Node oracle3/3 and CPU JAX6/6 pass, with live six-seed/five-bound RNG vectors, independent damage arithmetic, eager/JIT and heterogeneous vmap lane equivalence. A CPU eight-lane synchronized probe recorded first0.536254s/warm0.000157s with exact reproducer and source blobs; no throughput, GPU or full-format claim. Native Tackle critical ratio1 and PRNG-level instrumentation resolved an initial metadata-reading mistake without changing the move or format. Unrelated suites were not rerun; focused tests exercise all new integration paths and unchanged arithmetic dependencies against actual Showdown. All accepted histories, simulator-first decision and exact optional GPU evidence remain. Count33 becomes34; review baseline30/checkpoint40 and open G1/G3 remain. No Task035 starts.",
-        "primary_review": {
-          "disposition": "ACCEPTED",
-          "reviewer": "/root",
-          "remaining_findings": [],
-          "required_corrections_verified": [
-            "Recipient-specific HP/damage redaction and overkill clamping.",
-            "Strict scalar/choice typing and static audience validation.",
-            "JAX-output continuation and next-request phase parity.",
-            "Int32 turn-overflow no-advance guard."
-          ]
-        },
-        "implementation_source_blobs": {
-          "simulator/__init__.py": "4e196b53297262368ce50e0c8e26b5449de2547f",
-          "simulator/gen5_rng.py": "ed8c8cddd8f001d2c7da63ff2bd2ef3c4cf060d7",
-          "simulator/neutral_tackle.py": "67b707d8b089fc7e2173d17497cbf1a62b10bf2f",
-          "reference/neutral-turn-oracle.cjs": "e87d8f433252380f46436746b40f146e4266d55a",
-          "test/neutral-turn-oracle.test.cjs": "6fd98adb28d0837f307bf43e2195849bd5b45273",
-          "test/test_neutral_tackle.py": "183f82977a3956b41cfe8d4e3ceaec97dee81c87"
-        },
-        "trail_learning": {
-          "id": "l-a0f44bbc",
-          "path": ".trail/learnings/2026-11-03-observe-native-gen-5-turn-draws-jarho001-4.md",
-          "replaces": "l-3c4d8fd1",
-          "predecessor_ids": [
-            "l-3c4d8fd1",
-            "l-59ee07aa"
-          ],
-          "predecessor_paths": [
-            ".trail/learnings/2026-11-03-observe-native-gen-5-turn-draws-jarho001.md",
-            ".trail/learnings/2026-11-03-observe-native-gen-5-turn-draws-jarho001-2.md",
-            ".trail/learnings/2026-11-03-observe-native-gen-5-turn-draws-jarho001-3.md"
-          ],
-          "reason": "CLI-managed same-unit replacements preserve initial notes; final note includes required sections and explicit In the code references; earlier committed learnings unchanged."
-        },
-        "validation": [
-          {
-            "command": "node --check reference/neutral-turn-oracle.cjs && node --check test/neutral-turn-oracle.test.cjs && node --test test/neutral-turn-oracle.test.cjs",
-            "result": "passed3/3; initial wording-only test regex was corrected"
-          },
-          {
-            "command": "JAX_PLATFORMS=cpu python -m unittest test.test_neutral_tackle -v",
-            "result": "final6/6 passed; eager/JIT/vmap, eight native turns and chained state/request parity; initial uint32 draw-to-int32 mechanics boundary corrected with safe cast"
-          },
-          {
-            "command": "JAX_PLATFORMS=cpu python -m unittest test.test_neutral_tackle.NeutralTackleTests.test_invalid_pending_unsupported_and_terminal_inputs_do_not_advance -v",
-            "result": "passed1/1 after overflow guard; final6/6 also includes guard"
-          },
-          {
-            "command": "python -m py_compile simulator/__init__.py simulator/gen5_rng.py simulator/neutral_tackle.py test/test_neutral_tackle.py; JSON parse; git diff --check",
-            "result": "passed after EOF whitespace cleanup; owner had already repeated final6/6/probe before primary instruction to avoid tests for whitespace arrived; no further tests repeated"
-          },
-          {
-            "command": "CPU synchronized jit(vmap(transition)) probe reproduced in docs/neutral-tackle-variant.md",
-            "result": "eight explicit heterogeneous seeded lanes, CPU device, JAX/JAXLIB0.12.0.1/Python3.13.18; first0.536254s/warm0.000157s, all STATUS_OK; measurement only"
-          },
-          {
-            "command": "trail build; trail build --check; trail check --base HEAD --json",
-            "result": "Graph833 nodes/1812 edges/87 cards current. Owner-stage lexical counts preserved in progress history; final primary staged check has11 lexical documentation conflicts across12 checked files/19 active learnings, no overlaps/source conflict. Exact final findings and semantic rationale are recorded in commit body."
-          },
-          {
-            "command": "Primary coordination checks",
-            "result": "Passed final JSON/history/count/review/decision/GPU-byte preservation, exact Task001-033 handoff prefix, six frozen code/test blob IDs, sixteen-file staged scope, learning replacement, diff and graph-current checks (833 nodes). No blockers."
-          }
-        ]
+        "history_ref": "ORCHESTRATION_STATE_ARCHIVE_037.json#/review_state/completed_task_history/12"
       },
       {
         "id": "Task035",
         "title": "bounded compiled restricted Tackle duels",
-        "owner": "/root/task035",
         "status": "accepted_complete",
+        "owner": "/root/task035",
         "source_commit": "5d55d7266456c25c3fd2c88b88326f0b7655263b",
-        "scope": "Add a pure bounded JAX duel executor composing the accepted Task034 neutral Tackle transition entirely inside compiled control flow, and validate complete native restricted battles rather than short turn prefixes. Preserve the named gen5-neutral-tackle-mew-1v1-v1 mechanics and initial normal-request boundary. A finite execution budget yields a resumable state with honest diagnostics; no synthetic battle result.",
-        "exclusions": [
-          "new mechanics, speed ties, switching/rosters, items/status/weather/passives, other moves or Struggle",
-          "changing accepted Task034 turn/PRNG/player-view semantics or default oracle output",
-          "random teams/stat construction, full gen5randombattle or G1/G3 acceptance",
-          "policy training, tournaments/scoring/reporting infrastructure, CLI persistence/journals/resume storage",
-          "raw protocol byte equality, actor access to privileged full traces",
-          "GPU requirement, throughput/speedup/strength claims or owner commit/push"
-        ],
-        "acceptance_criteria": [
-          "Expose a documented pure fixed-PyTree run_duel-like API taking the existing typed BattleState and an explicit static positive bounded max_turns capacity. Use actual accepted transition with both sole legal Tackle choices committed each step, entirely within JAX compiled control flow with no host callbacks or Python battle loop. Keep existing transition/PRNG/view APIs and gen5-neutral-tackle-mew-1v1-v1 support boundary unchanged. Structural bad capacities/types reject before simulation; record the concrete capacity bound and trace shapes.",
-          "Return detached trusted final state, execution disposition, successful-turn count, final diagnostic/cause and a fixed-capacity trace with an explicit successful-prefix validity mask. Only successfully executed turns occupy valid rows. Padding after terminal/stop/budget never counts turns or emits fake draws, events, requests or outcomes. Initial terminal state completes with zero executed turns/draws; unsupported/pending initial state stops without advance and preserves its original diagnostic. Reaching capacity while nonterminal is budget exhaustion with a continuing state/winner, never a draw, loss or completed battle. Completion at the exact last slot takes precedence over budget exhaustion.",
-          "Support resuming the pure executor from a budget-stopped final state without resetting HP, PP, RNG, turn or request phase. Compare concatenated valid traces and final state/outcome with a single larger-capacity run and native full battle. If execution reaches the unchanged turn kernel unsupported boundary, stop honestly at that state; never add an unsupported fallback or claim completion.",
-          "Extend the guarded native oracle with an explicit separate full-duel mode/helper that starts at actual normal requests, repeatedly submits simultaneous native move1/move1 choices and records every turn until real termination. Reuse native PRNG/context/recipient projection capture with unchanged random returns; preserve the original default eight-turn fixture byte-for-byte semantically. Bound the oracle loop and fail if the selected native scenario fails to complete within it or leaves the supported variant; do not truncate and label complete. Capture initial boundary, all turn state/draw/request/views and actual terminal outcome.",
-          "Validate at least three actual complete native restricted duels with distinct seeds, both speed orderings, a genuine critical and terminal KO/skip; include a nontrivial surviving multi-turn duel. Feed each JAX output into the next transition/executor state. Compare every valid trace row and final native HP/PP/order/turn/phase/winner, all draw bounds/context/values/pre/post limbs, and both recipient semantic request/event histories using existing project_view. Retain independent known invariants, trace/count consistency and no hidden opponent/overkill data in actor projections.",
-          "Test empty/terminal, pending, unsupported, small-budget stop/resume, exact-capacity completion and invalid static-capacity boundaries, valid-prefix/padding behavior and no input mutation. Run CPU eager/JIT parity and JIT/vmap mixed lanes with different episode lengths, diagnostic states and budgets (common static capacity), including lane permutation/independence; inactive lanes preserve final state/RNG and padding is never executed experience. Record one small synchronized compile/warm probe with exact reproducible configuration and source identity, measurement only. No GPU acceptance is imposed.",
-          "Document API/control-flow, capacity/mask/stop/resume/outcome/visibility boundaries and complete restricted-native evidence in the existing variant doc/README and focused coverage/project-status sections. Preserve old Task001-034 history and all review/direction/GPU records; count34/baseline30/checkpoint40 until primary acceptance. Use Trail context/callers before affected existing symbols, focused new and justified affected Task034/PRNG/reference checks once per meaningful revision, syntax/JSON/diff and Trail refresh/check; inspect diff and freeze with exact commands/results/source blobs for primary review. No Astra gate is due absent a concrete contradiction."
-        ],
-        "plan": [
-          "Inspect accepted kernel dependencies and native capture boundaries via Trail; persist scope and feasible complete-duel scenarios before implementation.",
-          "Implement a separate bounded compiled duel module and explicit native full-duel oracle mode while preserving current default fixtures/APIs.",
-          "Add full-trajectory/state/RNG/view differential, budget/resumption and heterogeneous compiled-lane tests; record one reproducible synchronized CPU probe.",
-          "Update only current relevant docs/task evidence, refresh/check Trail and inspect diff; freeze for primary criteria review and one-unit delivery or concrete blocker."
-        ],
-        "progress": "Accepted by primary after implementation freeze and independent criteria/source/evidence review. Owner-stage progress retained: Clean synchronized main5d55d72 with34 accepted tasks; baseline30/checkpoint40, no pending review/GPU block, no milestone acceptance. Task035 implementation is complete pending primary acceptance. It composes the unchanged Task034 transition with static capacity56, per-lane int32 turn_budget, successful-prefix masks, honest stop causes, and pure resumption; invalid runtime budget values fail closed without advancing, while valid terminal state completes at zero budget. Native --duels mode generated four complete battles (8/8/8/1 turns, four seeds, both speed orders, real criticals, terminal KO); every full JAX row matches state/events/draws/both recipient views and outcome. Node tests5/5; duel Python4/4 before diagnostic-lane expansion plus final affected vmap method1/1; unchanged Task034 JAX6/6. No-argument oracle output remains byte-identical, 124744 bytes SHA-256 d1a219a9483d8d1c0859338089a8d980372e79987c796f155e5c210395828157. CPU probe: jit(vmap(run_duel)), 4 lanes, capacity8, budgets[8,8,8,8], counts[8,8,8,1], first1.121906s/warm0.000532s; measurement only. Probe blobs: neutral_duel 81d290fbd60179a559667df9d2ad84463f90dbc8, neutral_tackle 67b707d8b089fc7e2173d17497cbf1a62b10bf2f, gen5_rng ed8c8cddd8f001d2c7da63ff2bd2ef3c4cf060d7. Runtime status tool/policy snapshot unavailable; no readiness claim. RTX3060Ti optional, GPU not required. Parent owns acceptance and delivery; no commit/push/count change.",
-        "gpu_required": false,
         "accepted_at": "2026-11-03",
         "accepted_by_agent": "/root",
-        "acceptance_review": "Primary /root independently reviewed the complete bounded executor, native full-duel oracle diff, new tests, API documentation and exact evidence, and accepted Task035 after implementation freeze. Static capacity1..56 and optional signed-int32 per-lane budgets drive pure scan/conditional execution of unchanged Task034 transitions. Only successful turns occupy the masked prefix; terminal, stopped, invalid-budget and budget-exhausted dispositions preserve honest causes and state. Four complete native battles across four seeds (8/8/8/1 turns,25 total) match every state, order/event, draw bound/context/value/pre/post limb, recipient request/history projection and actual outcome, with independent damage and privacy assertions. Budget-stop resumption matches uninterrupted traces; PP exhaustion is diagnosed only when a subsequent kernel step is attempted. Primary corrected eager/JIT invalid-budget consistency and expanded mixed-lane evidence to terminal/pending/invalid-budget cases. New duel suite4/4 passed before that test-only extension, then its affected eight-lane method1/1 passed; new/default Node tests5/5 and unchanged Task034 JAX6/6 passed. The original no-argument oracle remains byte-identical124744 bytes with SHA256 d1a219a9483d8d1c0859338089a8d980372e79987c796f155e5c210395828157. CPU four-lane capacity8 probe measured first1.121906s/warm0.000532s, counts8/8/8/1, with reproducer and measured blob recorded; one final EOF newline removal is verified as the sole difference from tested/probed executor bytes, so tests were not repeated for formatting. Existing turn/PRNG mechanics are unchanged. Earlier histories/reviews/direction/GPU evidence remain; count34 becomes35, baseline30/next40 unchanged. No GPU, throughput/strength, full-format or G1/G3 acceptance claim; no Task036 starts.",
-        "primary_review": {
-          "disposition": "ACCEPTED",
-          "reviewer": "/root",
-          "remaining_findings": [],
-          "verified_corrections": [
-            "Uniform eager/JIT/vmap invalid runtime budget diagnostic with no advance.",
-            "Eight-lane terminal, pending, unsupported, invalid-budget and varied-budget equivalence.",
-            "Whitespace-only EOF cleanup; executable source unchanged."
-          ]
-        },
-        "implementation_source_blobs": {
-          "simulator/neutral_duel.py": "38efee781f8dc711931669eb0e202c90fca4e870",
-          "simulator/__init__.py": "01cbbd6ae7e712807674fb7d97e306eb34b55a25",
-          "reference/neutral-turn-oracle.cjs": "39494d2a9e667906fc3762cfcca5cc849a48b5c4",
-          "test/test_neutral_duel.py": "935109104f6e382d19e210a862ef0d92738afd32",
-          "test/neutral-duel-oracle.test.cjs": "ca16656de2aff403eb0886f91e09d878aa9bef04"
-        },
-        "probe_identity": {
-          "measured_executor_blob": "81d290fbd60179a559667df9d2ad84463f90dbc8",
-          "delivered_executor_blob": "38efee781f8dc711931669eb0e202c90fca4e870",
-          "difference": "Exactly one trailing EOF newline removed; adding it back reproduces measured/tested Git blob. No executable change.",
-          "first_seconds": 1.121906,
-          "warmed_seconds": 0.000532,
-          "reproducer": "docs/neutral-tackle-variant.md Task035 full-duel evidence"
-        },
-        "trail_learning": {
-          "id": "l-582fd216",
-          "path": ".trail/learnings/2026-11-03-static-duel-capacity-with-per-lane-root.md",
-          "title": "Static duel capacity with per-lane budgets",
-          "new_note_count": 1
-        },
-        "validation": [
-          {
-            "command": "node --test test/neutral-duel-oracle.test.cjs test/neutral-turn-oracle.test.cjs",
-            "result": "passed5/5 new and default oracle tests"
-          },
-          {
-            "command": "JAX_PLATFORMS=cpu python -m unittest discover -s test -p test_neutral_tackle.py",
-            "result": "unchanged Task034 suite passed6/6"
-          },
-          {
-            "command": "JAX_PLATFORMS=cpu python -m unittest discover -s test -p test_neutral_duel.py",
-            "result": "passed4/4 after fixing test compiled-function descriptor binding; complete25-turn native parity, budgets/resumption, structural/diagnostic and initial vmap checks"
-          },
-          {
-            "command": "PYTHONPATH=test JAX_PLATFORMS=cpu python -m unittest test_neutral_duel.NeutralDuelTests.test_jit_vmap_mixed_lengths_diagnostics_budgets_and_lane_order",
-            "result": "passed1/1 after final test-only extension to eight mixed lanes; no runtime changes afterward except one EOF newline"
-          },
-          {
-            "command": "Original no-argument oracle before/after SHA256 comparison",
-            "result": "identical124744 bytes; SHA256 d1a219a9483d8d1c0859338089a8d980372e79987c796f155e5c210395828157"
-          },
-          {
-            "command": "CPU synchronized jit(vmap(run_duel)) probe documented in variant contract",
-            "result": "Python3.13.18/JAX/JAXLIB0.12.0.1/cpu:0,4 lanes,cap8,budgets8/8/8/8,counts8/8/8/1; first1.121906s/warm0.000532s; measured blob81d290f and exact final EOF-only difference verified"
-          },
-          {
-            "command": "Primary final coordination checks",
-            "result": "Passed final JSON/history/count/review/direction/GPU-byte preservation, exact Task001-034 handoff prefix, unchanged prior mechanics, five frozen code/test blobs, twelve-file staged scope, EOF-only measured identity proof, learning sections and diff checks. Graph check found stale EOF-byte identity, then trail build/build--check refreshed862 nodes/1897 edges/90 cards. No blocker."
-          },
-          {
-            "command": "trail check --base HEAD --json",
-            "result": "Final staged exit1:13 lexical conflicts/7 leads across11 checked files/20 active notes, zero overlaps. Includes one source hit at the critical-full-duel scenario, not altered RNG observation. Primary reviewed exact findings and retains semantic rationale in commit body."
-          }
-        ]
+        "history_ref": "ORCHESTRATION_STATE_ARCHIVE_037.json#/review_state/completed_task_history/13"
       },
       {
         "id": "Task036",
         "title": "Seeded speed ties in restricted JAX Tackle duels",
-        "owner": "/root/task036",
         "status": "accepted",
+        "owner": "/root/task036",
         "source_commit": "3fdf97eb491c45a4b7dc9737ae2b125e1ffcfa35",
-        "scope": "Add native seeded speed-tie resolution to a separately named restricted one-Mew-per-side neutral Tackle variant, including bounded compiled complete duels and exact state/RNG/recipient parity, while preserving accepted v1 public APIs and fixtures.",
-        "exclusions": [
-          "switching or rosters",
-          "other moves or Struggle",
-          "items, status, weather, boosts or passive effects",
-          "random teams or stat construction",
-          "changes to accepted v1 public API shapes or default oracle fixtures",
-          "training, tournament or reporting expansion",
-          "full-format, G1 or G3 acceptance",
-          "required GPU execution or performance claims",
-          "owner commit/push"
-        ],
-        "acceptance_criteria": [
-          "Establish the actual pinned native speed-tie draw sequence from normal request boundaries without replacing RNG values or overriding mechanics. Observe every relevant shuffle/phase draw, including draws with no visible event; record context, bounds and pre/post limbs. Propose and justify fixed trace capacity and ordering before implementation; stop if external evidence or an unresolved architectural contradiction is required.",
-          "Expose a documented separately named/id restricted tie-capable variant with fixed-shape pure JAX transition and bounded resumable duel API. Preserve accepted v1 public APIs, trace shapes and deterministic fixture bytes; any internal refactor must preserve their semantics. Reuse accepted RNG/arithmetic/view semantics rather than duplicating unsupported effects. Detect unsupported states and diagnostic/pending/terminal/budget boundaries without RNG advance or fabricated experience.",
-          "Compare at least three complete native tied-speed duels with distinct seeds and both realized initiative outcomes, a surviving multi-turn case and a terminal first-action KO/skip. Chain actual JAX outputs. Compare every state, event/order, draw context/bounds/value/pre/post limb, both recipient requests/history and actual terminal result; independently assert tie-to-order mapping and privacy/HP/PP invariants. Include an unequal-speed control in the new variant.",
-          "Validate CPU eager/JIT equivalence and heterogeneous JIT/vmap lanes for ties, unequal speeds, completion, stop/budget/resume and no-advance diagnostics, including lane permutation and valid-prefix/padding semantics. Preserve terminal precedence, PP unsupported boundary and no actor access to privileged RNG or combined views. Record a small reproducible synchronized compile/warm probe with exact configuration and source identities, measurement only.",
-          "Update focused variant/API/coverage/project status documentation and append Task036 handoff. Preserve Task001-035 history, prior review/direction/GPU records and count35/baseline30/checkpoint40 until primary acceptance. Use Trail context/callers, focused affected validation once per meaningful revision, diff/syntax/JSON checks and graph refresh/check. Save any non-obvious design learning using trail note. Inspect diff and freeze with exact changed files/commands/results/source blobs for independent primary acceptance."
-        ],
-        "plan": [
-          "Capture pinned tied-speed native draw/phase evidence and propose fixed-shape integration while preserving v1.",
-          "Implement exactly the approved tie-capable variant and bounded executor, plus native fixtures.",
-          "Validate complete differential traces and compiled heterogeneous/resumable execution, record small CPU probe.",
-          "Update focused docs/handoff/state, refresh/check Trail, inspect diff and freeze for primary review; stop at acceptance/delivery or concrete blocker."
-        ],
-        "progress": "Accepted by primary after owner freeze and focused acceptance review; all delegated criteria met. Delivery coordinated by primary, with exact source identities and validation below. Earlier owner in-progress/count35 wording is historical.",
-        "gpu_required": false,
         "accepted_at": "2026-11-04",
         "accepted_by_agent": "/root",
-        "acceptance_review": "Primary /root independently reviewed the native phase evidence, all new simulator/oracle/test code, shared v1 refactors, focused documentation and validation. Accepted separate variantID2 with sixteen chronological draw slots and exact native queue/BeforeTurn/Update/residual phase sampling. Three distinct-seed complete tied duels (21 turns) and one complete native unequal-speed control (8 turns) match every state, event/order, draw bound/context/value/pre/post limb, both recipient views and terminal result. Shared v1 action/view/choice and bounded-executor refactors preserve public APIs, six-slot traces and original oracle bytes. The owner corrected a typed JAX cond carry and test-import/probe-expectation harness mistakes. Primary initial test review required returned diagnostic-state freeze, independent tie initiative mapping, native unequal control, individual-vmap equivalence, inactive padding, exact-capacity and PP1 follow-up checks; all are now covered. Final tie suite3/3, affected v1 duel4/4, v1 Tackle6/6 and Node6/6 pass; source bytes are frozen and identified. The four-lane CPU probe is measurement only (3.185057s first synchronized/warm0.000741s, counts7/7/7/8). No GPU, throughput, full-format, G1/G3 or implementation-milestone acceptance. No pending findings or external-evidence block; owner stopped. Count35 becomes36; review baseline30/next40 remain. No Task037 starts.",
-        "implementation_source_blobs": {
-          "reference/neutral-turn-oracle.cjs": "b9b9277a366db29d73024dafebc11d0dfd4c9eb4",
-          "simulator/__init__.py": "17153d391343768b0964147ef80e625f786aae85",
-          "simulator/neutral_duel.py": "a358dc7fa3901566c893254c9118931abb3e76f2",
-          "simulator/neutral_tackle.py": "71a7186b4f2572618a8f08c91fd8fa8aa32d7704",
-          "simulator/neutral_tackle_ties.py": "a7c1aae754e1b45ea92078421753d623342b1e7e",
-          "test/neutral-tie-duel-oracle.test.cjs": "7781f5dc598d3f077d0b7f14b69a88b9e1ebbdaf",
-          "test/test_neutral_tackle_ties.py": "d6c5847c0f9efa0c6fa5e88625736bed00d162f3"
-        },
-        "trail_learning": "l-0172a92e",
-        "validation": {
-          "node": {
-            "command": "node --test test/neutral-tie-duel-oracle.test.cjs test/neutral-duel-oracle.test.cjs test/neutral-turn-oracle.test.cjs",
-            "result": "6/6 passed"
-          },
-          "cpu_ties": {
-            "command": "JAX_PLATFORMS=cpu python -m unittest discover -s test -p test_neutral_tackle_ties.py",
-            "result": "3/3 passed"
-          },
-          "cpu_v1_duels": {
-            "command": "JAX_PLATFORMS=cpu python -m unittest discover -s test -p test_neutral_duel.py",
-            "result": "4/4 passed after private executor refactor"
-          },
-          "cpu_v1_turn": {
-            "command": "JAX_PLATFORMS=cpu python -m unittest discover -s test -p test_neutral_tackle.py",
-            "result": "6/6 passed after shared action/view/choice refactor"
-          },
-          "compatibility": {
-            "default_sha256": "d1a219a9483d8d1c0859338089a8d980372e79987c796f155e5c210395828157",
-            "duels_sha256": "baeb3b3bd3f1eccf35f59f2d4fa4e9f23f933ec8cefb4fd7f6f60b2ead2eaf51",
-            "result": "Both byte-identical to pre-Task036 captures; primary independently verified artifacts."
-          },
-          "other": "Owner syntax/JSON/diff checks passed; graph refresh/current passed915nodes/2035edges/93cards. Primary exact history/GPU bytes/source identities/scope/diff/state checks before delivery; final staged learning findings reviewed with rationale in commit body."
-        },
-        "probe_identity": {
-          "source_base": "3fdf97eb491c45a4b7dc9737ae2b125e1ffcfa35",
-          "source_blobs": {
-            "reference/neutral-turn-oracle.cjs": "b9b9277a366db29d73024dafebc11d0dfd4c9eb4",
-            "simulator/__init__.py": "17153d391343768b0964147ef80e625f786aae85",
-            "simulator/neutral_duel.py": "a358dc7fa3901566c893254c9118931abb3e76f2",
-            "simulator/neutral_tackle.py": "71a7186b4f2572618a8f08c91fd8fa8aa32d7704",
-            "simulator/neutral_tackle_ties.py": "a7c1aae754e1b45ea92078421753d623342b1e7e",
-            "test/neutral-tie-duel-oracle.test.cjs": "7781f5dc598d3f077d0b7f14b69a88b9e1ebbdaf",
-            "test/test_neutral_tackle_ties.py": "d6c5847c0f9efa0c6fa5e88625736bed00d162f3"
-          },
-          "python": "3.13.18",
-          "jax": "0.12.0.1",
-          "jaxlib": "0.12.0.1",
-          "backend": "cpu",
-          "device": "cpu:0",
-          "configuration": "jit(vmap(run_tie_duel)), three native tied initial states and original p2-first-full-duel unequal native control, capacity8/budgets[8,8,8,8]",
-          "turn_counts": [
-            7,
-            7,
-            7,
-            8
-          ],
-          "first_synchronized_seconds": 3.185057,
-          "warmed_synchronized_seconds": 0.000741,
-          "reproducer": "docs/neutral-tackle-variant.md Task036 section",
-          "limitation": "Configuration-specific measurement only. Initial harness expected four7-turn lanes; actual unequal control8 led to corrected expectation and one successful rerun. No source/test change after freeze."
-        }
+        "history_ref": "ORCHESTRATION_STATE_ARCHIVE_037.json#/review_state/completed_task_history/14"
       },
       {
         "id": "Task037",
         "title": "Staged simultaneous submissions for restricted JAX turns",
-        "owner": "/root/task037",
         "status": "accepted",
+        "owner": "/root/task037",
         "source_commit": "7efd40cf1f0a468c8eb7e583abb63c0e2c5b0dc9",
-        "scope": "Add a pure fixed-shape staged player-submission API around the accepted v2 restricted Tackle transition, preserving simultaneous private commitments and resolving exactly one turn only after both players commit.",
-        "exclusions": [
-          "new combat mechanics, moves, variants or changes to accepted kernels",
-          "networking, protocol parsing, asynchronous hosts or policy/training integration",
-          "choice retraction/replacement, general retry machinery or full native text-error parity",
-          "new duel executors, tournaments, reporting or persistence tools",
-          "full-format or G1/G3 milestone acceptance",
-          "required GPU runs or throughput claims",
-          "owner commit/push"
-        ],
-        "acceptance_criteria": [
-          "Expose a documented typed request-session PyTree and submission result around the existing v2 BattleState, with trusted per-player pending choices and a bounded local request-episode identifier. submit accepts an explicitly identified player/action/current episode. A first accepted commitment changes only pending metadata, with unchanged battle HP/PP/RNG/turn and no executed events/draws; the second valid commitment calls the unchanged v2 transition exactly once. Clear commitments after successful resolution and advance the local episode at the documented next-request boundary. Preserve all accepted public kernel/duel APIs and fixture outputs.",
-          "Use explicit statuses for accepted/waiting, resolved, stale episode, duplicate submission, invalid player/choice, terminal and unsupported/overflow boundaries. Malformed structural types/shapes fail before simulation; runtime rejection leaves session, battle, RNG and the other valid commitment unchanged. A local episode token is an adapter identifier, not a claimed native rqid. Declare integer bounds and precedence; do not silently wrap or simulate unavailable requests.",
-          "Project per-player session views containing only that player's permitted request data and own commitment status. Never expose the other pending choice/commit flag, trusted RNG/full state or combined views to an actor. Test view invariance under a changed opponent commitment. Keep resolved recipient events available through existing project_tie_view semantics, with trusted-versus-actor boundaries explicit.",
-          "Validate live pinned native partial submissions from actual normal requests in both player orders: first Battle.choose submission consumes no battle draws/HP/PP/turn, second resolves native actions. Chain at least two request episodes, including speed ties and an unequal-speed control, and compare resolved state/RNG/draw/events and both recipient projections to the existing native turn capture. Test stale/duplicate/invalid submissions preserve an already accepted other commitment, terminal/unsupported handling and overflow. Run focused CPU eager/JIT and heterogeneous vmap equivalence (waiting/resolved/rejected lanes, individual/permutation and no-advance); reuse existing trusted fixtures/helpers rather than reconstructing expected RNG. No new performance probe is required because the battle kernel is unchanged.",
-          "Use Trail context/callers before affected symbols, targeted new and affected existing checks once per meaningful revision, diff/JSON and graph refresh/check. Update focused API documentation, Task037 handoff and active progress; preserve exact Task001-036 history and old state/review/direction/GPU evidence. Freeze with changed files, exact validation/results and source blobs for one complete primary review package. Count36/baseline30/next40 until primary acceptance; no Astra gate due absent a concrete contradiction."
-        ],
-        "plan": [
-          "Implement the scoped session and player projection, using current kernels and bounded local episode tokens.",
-          "Add native staged-submission evidence and focused privacy/diagnostic/JIT-vmap tests; run only affected validation.",
-          "Update focused docs/handoff/state, save any non-obvious learning, refresh/check Trail and freeze one complete review package."
-        ],
-        "progress": "Accepted by primary after owner freeze and focused review. Owner pending-acceptance/count36 package above is historical; current count37, baseline30/next40. Final delivery is coordinated by primary.",
-        "owner_review_package": {
-          "status": "owner_frozen_pending_primary_acceptance",
-          "changed_paths": [
-            ".trail/learnings/2026-11-04-keep-staged-requests-aligned-with-their-root.md",
-            "docs/neutral-tackle-variant.md",
-            "docs/TASKS.md",
-            "docs/ORCHESTRATION_STATE.json",
-            "reference/neutral-turn-oracle.cjs",
-            "simulator/__init__.py",
-            "simulator/request_session.py",
-            "test/test_request_session.py"
-          ],
-          "validation": [
-            "JAX_PLATFORMS=cpu python -m unittest test.test_request_session -v \u2014 4 tests passed in 62.103s before final fixture-only revision.",
-            "JAX_PLATFORMS=cpu python -m unittest test.test_request_session.RequestSessionTests.test_live_native_partial_and_second_commits_match_chained_tied_and_unequal_turns -v \u2014 1 test passed in 64.052s after final independent-order revision.",
-            "node reference/neutral-turn-oracle.cjs --sessions > /tmp/task037-sessions-final.json \u2014 exit 0.",
-            "JAX_PLATFORMS=cpu python -m unittest test.test_neutral_tackle test.test_neutral_tackle_ties -v \u2014 9 tests passed in 67.125s.",
-            "node --check reference/neutral-turn-oracle.cjs; python -m py_compile simulator/request_session.py test/test_request_session.py; git diff --check \u2014 all passed.",
-            "default, --duels, and --ties oracle output each compared byte-for-byte with HEAD source; all identical."
-          ],
-          "existing_oracle_sha256": {
-            "default": "d1a219a9483d8d1c0859338089a8d980372e79987c796f155e5c210395828157",
-            "--duels": "baeb3b3bd3f1eccf35f59f2d4fa4e9f23f933ec8cefb4fd7f6f60b2ead2eaf51",
-            "--ties": "f333fa2129218c17da1011fef818009a15e8a6677ef7b55c4dc36d2e6a805906"
-          },
-          "source_blobs": {
-            ".trail/learnings/2026-11-04-keep-staged-requests-aligned-with-their-root.md": "fb0cac6dc8476d05d441dd28dc6404218f7778e7",
-            "docs/neutral-tackle-variant.md": "d8a8329fe276c76b8da1fd93950b73abca92f549",
-            "reference/neutral-turn-oracle.cjs": "a6c4bb95502b25b022000da932f9d23c80ea8b13",
-            "simulator/__init__.py": "a97e42cf2ea41ceaf32e5a1ac17684a295623212",
-            "simulator/request_session.py": "1f3e1695d636187cb476301a5e974e4709be2267",
-            "test/test_request_session.py": "b9b9eb65816229b3bf40a55ef3fecd326b06c9cd"
-          },
-          "trail_check_json": "/tmp/task037-trail-check.json",
-          "trail_check": {
-            "command": "trail check --base HEAD --json > /tmp/task037-trail-check.json",
-            "exit_code": 1,
-            "result": "Lexical conflict/lead findings and exact counts are saved in the JSON artifact. Direct conflicts were reviewed as phrase overlap in task scope/exclusions or native oracle names; none reinstates a ruled-out system or exposes trusted updates. Lead findings say they are not about this file. No learning contradiction remains."
-          },
-          "trail_build": "trail build \u2014 parsed 95 files; 955 nodes and 2153 edges; cache at /workspace/.trail/cache (git-ignored).",
-          "unresolved_concerns": []
-        },
-        "gpu_required": false,
         "accepted_at": "2026-11-04",
         "accepted_by_agent": "/root",
-        "acceptance_review": "Primary /root independently reviewed the complete session/oracle/test code, focused API documentation, native evidence and validation. Accepted the typed staged-submission API around unchanged v2 kernels: first commitment changes private pending metadata only; second valid commitment resolves once, clears choices and advances the bounded local token. Rejections preserve accepted commitments and battle/RNG; actor views reveal only own commitment, current episode-aligned request and separate prior recipient events. Four independent same-seed native Battles (both submission orders for tied and unequal speeds), each with two chained episodes, match state, ordered events, every draw and both current/previous recipient projections. Native partial commits draw0; resolving tied/unequal turns draw16/6. The initial fixture-count assumption was corrected, idle branches now construct empty transitions directly, and stale-request/new-token projection was repaired. Corrected full session suite4/4 passed before final fixture-only revision, final affected native method1/1 afterward, and legacy v1/v2 suites9/9; syntax/JSON/diff checks passed. All three existing oracle modes are byte-identical to base. Primary verified executable source blobs, unchanged accepted kernels, exact old handoff/state/review/direction/GPU history, graph freshness and learning findings. No source/test change after freeze; no GPU requirement, benchmark/full-format/milestone acceptance or unresolved blocker. Count36 becomes37; baseline30/next40 remain. Owner stopped; no Task038 starts.",
-        "implementation_source_blobs": {
-          "reference/neutral-turn-oracle.cjs": "a6c4bb95502b25b022000da932f9d23c80ea8b13",
-          "simulator/__init__.py": "a97e42cf2ea41ceaf32e5a1ac17684a295623212",
-          "simulator/request_session.py": "1f3e1695d636187cb476301a5e974e4709be2267",
-          "test/test_request_session.py": "b9b9eb65816229b3bf40a55ef3fecd326b06c9cd"
-        },
-        "trail_learning": "l-75b4d172",
-        "validation": [
-          "JAX_PLATFORMS=cpu python -m unittest test.test_request_session -v \u2014 4 tests passed in 62.103s before final fixture-only revision.",
-          "JAX_PLATFORMS=cpu python -m unittest test.test_request_session.RequestSessionTests.test_live_native_partial_and_second_commits_match_chained_tied_and_unequal_turns -v \u2014 1 test passed in 64.052s after final independent-order revision.",
-          "node reference/neutral-turn-oracle.cjs --sessions > /tmp/task037-sessions-final.json \u2014 exit 0.",
-          "JAX_PLATFORMS=cpu python -m unittest test.test_neutral_tackle test.test_neutral_tackle_ties -v \u2014 9 tests passed in 67.125s.",
-          "node --check reference/neutral-turn-oracle.cjs; python -m py_compile simulator/request_session.py test/test_request_session.py; git diff --check \u2014 all passed.",
-          "default, --duels, and --ties oracle output each compared byte-for-byte with HEAD source; all identical.",
-          "Primary exact old history/state/review/direction/GPU bytes, frozen source/test identities, unchanged accepted kernels and final staged scope/diff/learning/graph checks passed. Final learning findings and rationale accompany commit."
-        ]
+        "history_ref": "ORCHESTRATION_STATE_ARCHIVE_037.json#/review_state/completed_task_history/15"
       }
     ],
     "active_regular_review": null,
@@ -1457,5 +350,14 @@
       "unresolved_concerns": []
     }
   ],
-  "gpu_block": null
+  "gpu_block": null,
+  "history_archives": [
+    {
+      "through_task": "Task037",
+      "handoff": "TASKS_ARCHIVE_001_037.md",
+      "state": "ORCHESTRATION_STATE_ARCHIVE_037.json",
+      "preservation": "Exact pre-compaction bytes; full completed records, reviews, source identities, and GPU evidence remain authoritative there."
+    }
+  ],
+  "deferred_validation": []
 }

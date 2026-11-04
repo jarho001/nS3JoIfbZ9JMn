@@ -15,9 +15,11 @@ dependency, command, or infrastructure failure is not a reason to reinterpret
 semantics or discard coverage; diagnose it and report the blocker with exact
 evidence.
 
-Run relevant validation once per meaningful revision and return the changed
-files, exact commands/results, and unresolved concerns. Be honest about CPU and
-GPU evidence: do not claim unavailable hardware ran, silently replace a
+Run only relevant fast checks once per meaningful revision (30 seconds per
+command, 90 seconds total per ordinary task). Long suites/probes require an
+explicit user test session; return deferred commands/source identity separately
+from actual results. Return changed files and unresolved concerns. Be honest
+about CPU and GPU evidence: do not claim unavailable hardware ran, silently replace a
 required GPU check, or treat optional GPU absence as a blocker. A required GPU
 check creates durable `awaiting_gpu` state with task, source revision/tree
 identity, commands, versions/hardware needs, expected acceptance, and existing

@@ -10,8 +10,8 @@ are not project tasks and do not affect the accepted-task counter.
 
 The parent agent is the architect and final coordinator. It defines one
 deliverable, exclusions, and acceptance criteria, then assigns one active
-implementation owner. The Luna `implementer` owns ordinary edits and focused
-validation. It retains ownership through corrections. A different owner may
+implementation owner. The Luna/medium `implementer` owns ordinary edits and
+focused validation. It retains ownership through corrections. A different owner may
 start only after an explicit handover that names the new owner and stops the
 prior owner.
 
@@ -20,6 +20,17 @@ unresolved architecture or evidence, and one complete review package plus
 required corrections. Batch bookkeeping and affected checks; avoid repeated
 status polling and interim reviews. Preserve required validation and review
 gates.
+
+Use a fresh scoped worker context (`fork_turns="none"`), with task/owned-path
+references and the validation budget. Do not copy the parent's conversation or
+full historical handoff. Default Luna effort is medium; if a built-in role is
+pinned to max, select an explicit configurable Luna/medium route with the same
+owner contract. Do not claim a repository edit changes an already running agent.
+Raise effort only for a concrete unresolved reasoning problem, not by default.
+Use completion notifications/passive waits; do not repeatedly ask for status or
+inspect in-progress diffs. Report useful milestones/blockers without idle chatter.
+Return one concise evidence package; record implementation/check elapsed times
+when available, without extra measurement runs.
 
 Hand off from Luna to the Sol `advanced_implementer` only when concrete
 evidence demonstrates implementation complexity or an unresolved semantic
@@ -38,7 +49,7 @@ compact durable project documentation when useful, not platform internals. The
 parent cannot bypass a blocking finding.
 
 For required corrections, Astra may translate findings into bounded acceptance
-criteria and route them to one explicitly named Luna/max implementer when the
+criteria and route them to one explicitly named Luna/medium implementer when the
 primary authorizes that handover. Reuse the existing owner for ordinary
 corrections; a handover names the new owner and confirms the prior owner has
 stopped. Do not overlap correction work with parent-owned implementation. The
@@ -86,6 +97,27 @@ milestone boundaries.
 
 ## Validation and GPU evidence
 
+### Ordinary fast checks and explicit long sessions
+
+Use at most 30 seconds per test command and 90 seconds total test execution per
+ordinary task. Bound unknown runtime with
+`timeout --signal=TERM --kill-after=5s 30s ...`; skip checks already known to
+exceed the budget. Do not extend timeouts or automatically retry a slow check.
+Choose the smallest changed-behavior checks; rerun an old suite only for a
+specific affected dependency or regression risk. Do not accumulate a growing
+all-prior-tests gate, an eager/JIT/vmap matrix, or a new timing probe per task.
+Preserve useful tests; move long integration, exhaustive, GPU and performance
+runs to an explicitly requested long-test session.
+
+Record deferred checks separately from executed checks with exact commands,
+source revision/blobs, reason and acceptance dependency. Include a useful
+long-session recommendation in the final summary and leave execution to the
+user. Scope routine acceptance around fast evidence where defensible. If a
+required correctness/milestone/GPU criterion genuinely needs deferred evidence,
+preserve unaccepted work as `awaiting_validation` (or `awaiting_gpu`) and stop;
+never invent a pass, waive a known mismatch, or call missing evidence optional.
+A due global review does not authorize a long session by itself.
+
 Validate on CPU first. GPU execution is required only when an acceptance
 criterion or a specific device behavior makes it necessary. Optional GPU
 absence is recorded as deferred, without making it a blocker. If required GPU
@@ -110,11 +142,12 @@ controls concurrency for automated invocations.
 
 ## Durable state update protocol
 
-Before work, read this document, `ORCHESTRATION_STATE.json`, `TASKS.md`, and the
-Git status/history. Reconcile the accepted count from numbered task statuses
-against durable state; preserve newer state and recorded history. If they
-disagree, investigate recorded evidence and do not fabricate acceptance or
-review approvals.
+Before work, read this document, the compact `ORCHESTRATION_STATE.json`, current
+`TASKS.md`, relevant project-plan sections and Git status/history. Reconcile the
+accepted count against the current task index. Completed record details live in
+the referenced immutable archives: open only the relevant task/JSON pointer
+when needed, not the entire archive on every wake. Preserve newer state and
+recorded history; investigate disagreements rather than fabricating approval.
 
 When a project task starts, record its exact ID, scope, owner, and state in the
 top-level `active_task`. On acceptance, update `TASKS.md`, increment the
@@ -127,6 +160,13 @@ For a failed, abandoned, or incomplete task, preserve its history without increa
 the accepted count. For a GPU block, populate `gpu_block`; clear it only after
 the evidence has been tied to unchanged source and accepted. Keep unknowns as
 `null` or explicitly `unknown`.
+
+Keep completed handoffs compact: one accepted index row and a short state
+record linking to archived contract/evidence. Archive full detail once instead
+of repeating narratives in the handoff, state and acceptance prose. Preserve
+archive bytes, milestone approvals, review checkpoints and GPU evidence. The
+schema-2 state uses `history_ref` pointers for compact completed records;
+`history_archives` identifies the authoritative pre-compaction snapshots.
 
 ## Role configuration
 

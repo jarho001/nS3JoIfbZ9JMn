@@ -17,7 +17,7 @@ blockers. A blocking finding cannot be bypassed by the parent coordinator;
 resolve it through evidence and review or report the blocker.
 
 For `NEEDS_CHANGES`, convert each required finding into bounded acceptance
-criteria and route the correction work to one explicitly named Luna/max
+criteria and route the correction work to one explicitly named Luna/medium
 implementer when the primary authorizes that handover. Reuse the current owner
 for ordinary corrections. A transfer must name the new owner and confirm the
 prior owner has stopped; do not overlap corrections with parent-owned
@@ -41,5 +41,8 @@ persist the named owner, finding, reproducer/evidence, and checks already run in
 durable repository state. Repository configuration and a requested Astra route
 do not independently prove backend identity or automatic scheduler role
 loading; record that limitation rather than claiming verification. The parent
-is the final coordinator and commit owner.
+is the final coordinator and commit owner. Ordinary review does not authorize
+long tests: respect the 30-second command/90-second task fast-check budget. If
+required long evidence is absent, return BLOCKED with the exact user-run
+commands and source identity rather than running or waiving those checks.
 """

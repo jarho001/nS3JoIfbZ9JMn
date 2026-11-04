@@ -53,6 +53,13 @@ has stopped.
 
 ## Bounded task execution
 
+Routine execution uses Luna/medium and a scoped context packet, not the full
+parent conversation. Run only affected fast checks (30 seconds per command,
+90 seconds total per task). Known-long checks require an explicit user test
+session: record exact deferred commands/source identity and mention them in the
+final summary. Missing required evidence is pending, never implicitly passed.
+Read the compact current handoff/state; open archived history only as needed.
+
 - When asked for a project task, consult `docs/TASKS.md` and choose one
   independently reviewable deliverable. State scope, exclusions, and
   acceptance criteria before delegation. Workflow/configuration changes do not
@@ -78,7 +85,7 @@ has stopped.
   correction loop, then stop at acceptance or a blocker. Persist `NEEDS_CHANGES`
   as actionable corrections with one active owner. The Astra reviewer may turn
   required findings into bounded acceptance criteria and route them to one
-  explicitly named Luna/max implementer when the primary authorizes that
+  explicitly named Luna/medium implementer when the primary authorizes that
   handover. Reuse the current owner for ordinary corrections; a transfer must
   name the new owner and confirm the prior owner has stopped. Do not overlap
   corrections with parent-owned implementation. The reviewer may check the
@@ -130,6 +137,13 @@ Use the primary model for resolving ambiguous requirements, architecture and
 decomposition, tradeoffs, reviewing diffs/evidence, and deciding completion.
 Do not use it for routine source edits, formatting, mechanical refactors, or
 ordinary tests.
+
+The default implementation effort is medium, not max. If the execution
+surface's built-in implementer role is pinned to max, use a configurable route
+with explicit `gpt-6-luna` / `medium`, the implementer contract, and
+`fork_turns="none"`; do not silently use the pinned max route. Send only the
+bounded task, owned paths, relevant context references and check budget.
+Increase effort only for a concrete unresolved reasoning problem and record why.
 
 Role and model settings live in repository configuration and the execution
 surface. Check routing when diagnosing setup or changing role configuration;
