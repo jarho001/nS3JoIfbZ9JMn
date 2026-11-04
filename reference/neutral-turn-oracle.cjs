@@ -205,21 +205,51 @@ function withObservedBattleDraws(ps, battle, action) {
 	const descriptor = Object.getOwnPropertyDescriptor(ps.PRNG.prototype, 'random');
 	assert.ok(descriptor && typeof descriptor.value === 'function');
 	const original = descriptor.value;
+	const ownRunAction = Object.getOwnPropertyDescriptor(battle, 'runAction');
+	const ownEachEvent = Object.getOwnPropertyDescriptor(battle, 'eachEvent');
+	const originalRunAction = battle.runAction;
+	const originalEachEvent = battle.eachEvent;
+	const runActionChoices = [];
+	const eventIds = [];
 	const draws = [];
+	battle.runAction = function (action, ...args) {
+		runActionChoices.push(action?.choice ?? null);
+		try {
+			return originalRunAction.call(this, action, ...args);
+		} finally {
+			runActionChoices.pop();
+		}
+	};
+	battle.eachEvent = function (eventid, ...args) {
+		eventIds.push(eventid);
+		try {
+			return originalEachEvent.call(this, eventid, ...args);
+		} finally {
+			eventIds.pop();
+		}
+	};
 	ps.PRNG.prototype.random = function (bound, to) {
 		const isBattleRng = this === battle.prng;
 		const before = isBattleRng ? seedArray(this) : null;
 		const value = original.call(this, bound, to);
 		if (isBattleRng) {
 			const stack = new Error().stack.split('\n').slice(2, 8).map(frame => frame.trim());
-			const context = stack.some(frame => frame.includes('hitStepAccuracy'))
-				? 'accuracy'
-				: stack.some(frame => frame.includes('randomizer'))
-					? 'damage'
-					: stack.some(frame => frame.includes('getDamage'))
-						? 'critical'
-						: 'unsupported';
-			draws.push({ bound, value, before, after: seedArray(this), context, stack });
+			const context = to !== undefined
+				? 'speed-sort'
+				: stack.some(frame => frame.includes('hitStepAccuracy'))
+					? 'accuracy'
+					: stack.some(frame => frame.includes('randomizer'))
+						? 'damage'
+						: stack.some(frame => frame.includes('getDamage'))
+							? 'critical'
+							: 'unsupported';
+			const range = to === undefined ? {} : { to };
+			const phase = to === undefined ? {} : {
+				phase: tieShufflePhase(bound, to, runActionChoices.at(-1), eventIds.at(-1), stack),
+				runActionChoice: runActionChoices.at(-1) ?? null,
+				eventId: eventIds.at(-1) ?? null,
+			};
+			draws.push({ bound, ...range, value, before, after: seedArray(this), context, stack, ...phase });
 		}
 		return value;
 	};
@@ -227,7 +257,23 @@ function withObservedBattleDraws(ps, battle, action) {
 		return { result: action(), draws };
 	} finally {
 		Object.defineProperty(ps.PRNG.prototype, 'random', descriptor);
+		if (ownRunAction) Object.defineProperty(battle, 'runAction', ownRunAction);
+		else delete battle.runAction;
+		if (ownEachEvent) Object.defineProperty(battle, 'eachEvent', ownEachEvent);
+		else delete battle.eachEvent;
 	}
+}
+
+function tieShufflePhase(bound, to, actionChoice, eventId, stack) {
+	if (bound !== 0 || to !== 2) return 'unsupported';
+	if (stack.some(frame => frame.includes('BattleQueue.sort'))) return 'queue-sort';
+	if (eventId === 'BeforeTurn') return 'before-turn';
+	if (eventId === 'Update' && actionChoice === 'beforeTurn') return 'turn-start-update';
+	if (eventId === 'Update' && actionChoice === 'move') {
+		return stack.some(frame => frame.includes('hitStepMoveHitLoop')) ? 'move-hit-update' : 'action-update';
+	}
+	if (eventId === 'Update' && actionChoice === 'residual') return 'residual-update';
+	return 'unsupported';
 }
 
 function captureTurn(ps, battle) {
@@ -310,8 +356,12 @@ function main() {
 	assertReady();
 	const ps = require(API);
 	const args = process.argv.slice(2);
-	assert.ok(args.length === 0 || (args.length === 1 && args[0] === '--duels'), 'Usage: neutral-turn-oracle.cjs [--duels]');
-	const fixture = args[0] === '--duels' ? generateFullDuelFixture(ps) : generateFixture(ps);
+	assert.ok(args.length === 0 || (args.length === 1 && ['--duels', '--ties'].includes(args[0])), 'Usage: neutral-turn-oracle.cjs [--duels|--ties]');
+	const fixture = args[0] === '--duels'
+		? generateFullDuelFixture(ps)
+		: args[0] === '--ties'
+			? generateTieDuelFixture(ps)
+			: generateFixture(ps);
 	process.stdout.write(`${JSON.stringify(fixture, null, 2)}\n`);
 }
 
@@ -392,6 +442,107 @@ function generateFullDuelFixture(ps) {
 		initialBoundary: 'Each scenario starts from a live pinned Battle normal activeRequest for both players; both submit move 1 through Battle.makeChoices on every captured turn.',
 		captureContract: 'Every complete turn records pre/post trusted state, request projections, PRNG.prototype.random draws with unchanged return values, action order, split-recipient semantic events, and both recipient views. The actual terminal winner and state come from the ended native Battle.',
 		scenarios: FULL_DUEL_SCENARIOS.map(scenario => fullDuelScenarioFixture(ps, scenario)),
+	};
+}
+
+const TIE_DUEL_SCENARIOS = [
+	{ id: 'equal-speed-p1-initial-order-and-first-action-ko', seed: [1, 2, 3, 4], p1: { level: 50, speedEvs: 0 }, p2: { level: 50, speedEvs: 0 }, turnLimit: FULL_DUEL_TURN_LIMIT },
+	{ id: 'equal-speed-p2-initial-order', seed: [31, 41, 59, 26], p1: { level: 50, speedEvs: 0 }, p2: { level: 50, speedEvs: 0 }, turnLimit: FULL_DUEL_TURN_LIMIT },
+	{ id: 'equal-speed-critical', seed: [9, 2, 3, 4], p1: { level: 50, speedEvs: 0 }, p2: { level: 50, speedEvs: 0 }, turnLimit: FULL_DUEL_TURN_LIMIT },
+];
+
+function captureTieTurn(ps, battle) {
+	assert.equal(battle.ended, false);
+	const before = snapshot(battle);
+	const requests = { p1: projectRequest(battle.p1), p2: projectRequest(battle.p2) };
+	const logStart = battle.log.length;
+	const { draws } = withObservedBattleDraws(ps, battle, () => battle.makeChoices('move 1', 'move 1'));
+	const logDelta = battle.log.slice(logStart);
+	const events = { p1: projectEvents(logDelta, 'p1'), p2: projectEvents(logDelta, 'p2') };
+	const after = snapshot(battle);
+	const actionOrder = events.p1.filter(event => event.type === 'move').map(event => event.actor);
+	assert.ok(actionOrder.length >= 1 && actionOrder.length <= 2);
+	assert.equal(draws[0].to, 2, 'the first tied queue sort must use native random(0, 2)');
+	assert.ok(draws.length <= 16, 'a supported tied turn must fit the fixed sixteen-call trace');
+	for (let index = 0; index < draws.length; index++) {
+		const draw = draws[index];
+		if (draw.to === undefined) draw.phase = draw.context;
+		assert.notEqual(draw.phase, 'unsupported', `unexpected tied-turn random call at index ${index}`);
+		if (draw.to !== undefined) {
+			assert.equal(draw.bound, 0);
+			assert.equal(draw.to, 2);
+			assert.equal(draw.context, 'speed-sort');
+			if (draw.phase === 'queue-sort') {
+				assert.equal(draw.runActionChoice, null);
+				assert.equal(draw.eventId, null);
+			} else if (draw.phase === 'before-turn') {
+				assert.equal(draw.runActionChoice, 'beforeTurn');
+				assert.equal(draw.eventId, 'BeforeTurn');
+			} else {
+				assert.equal(draw.eventId, 'Update', `event:${draw.phase}`);
+			}
+		} else {
+			assert.deepEqual(draw.bound, { accuracy: 100, critical: 16, damage: 16 }[draw.context]);
+		}
+	}
+	assert.deepEqual(draws[0].before, before.rng);
+	assert.deepEqual(draws.at(-1).after, after.rng);
+	return {
+		before,
+		requests,
+		choices: { p1: 'move 1', p2: 'move 1' },
+		actionOrder,
+		draws,
+		events,
+		after,
+		views: { p1: { request: requests.p1, events: events.p1 }, p2: { request: requests.p2, events: events.p2 } },
+	};
+}
+
+function fullTieDuelScenarioFixture(ps, scenario) {
+	const battle = createBattle(ps, scenario);
+	try {
+		const initial = {
+			state: snapshot(battle),
+			requests: { p1: projectRequest(battle.p1), p2: projectRequest(battle.p2) },
+		};
+		assert.equal(initial.state.speed[0], initial.state.speed[1]);
+		const turns = [];
+		for (let index = 0; index < scenario.turnLimit && !battle.ended; index++) {
+			turns.push(captureTieTurn(ps, battle));
+		}
+		assert.equal(battle.ended, true, `${scenario.id} did not complete within ${scenario.turnLimit} native turns`);
+		assert.ok(['p1', 'p2'].includes(battle.winner), `${scenario.id} must end with an actual winner`);
+		return {
+			id: scenario.id,
+			seed: [...scenario.seed],
+			initial,
+			turns,
+			outcome: {
+				terminal: battle.ended,
+				winner: battle.winner,
+				sideWinner: sideWinner(battle),
+				turn: battle.turn,
+				state: snapshot(battle),
+			},
+		};
+	} finally {
+		battle.destroy();
+	}
+}
+
+function generateTieDuelFixture(ps) {
+	return {
+		schemaVersion: 1,
+		kind: 'gen5-restricted-neutral-tackle-speed-tie-full-duel-oracle',
+		upstream: { repository: LOCK.repository, commit: LOCK.commit },
+		formatId: FORMAT_ID,
+		generation: 5,
+		variant: 'gen5-neutral-tackle-speed-ties-mew-1v1-v2',
+		turnLimit: FULL_DUEL_TURN_LIMIT,
+		initialBoundary: 'Each scenario starts from two actual normal activeRequest objects and the initialized live PRNG state; both submit move 1 through Battle.makeChoices every turn.',
+		captureContract: 'Observe PRNG.prototype.random and return each original value unchanged. Retain raw random(from,end) ranges, context stacks, pre/post limbs, actual tied queue order, subsequent speed-sort draws (including semantically silent Update events), every Tackle draw, both recipient views, and the real terminal result.',
+		scenarios: TIE_DUEL_SCENARIOS.map(scenario => fullTieDuelScenarioFixture(ps, scenario)),
 	};
 }
 

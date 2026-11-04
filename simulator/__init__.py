@@ -28,6 +28,23 @@ from .neutral_duel import (
 	DuelTrace,
 	run_duel,
 )
+from .neutral_tackle_ties import (
+	DRAW_ACTION_UPDATE,
+	DRAW_BEFORE_TURN,
+	DRAW_MOVE_HIT_UPDATE,
+	DRAW_QUEUE_SORT,
+	DRAW_RESIDUAL_UPDATE,
+	MAX_TIE_DRAWS_PER_TURN,
+	VARIANT_NAME as SPEED_TIE_VARIANT_NAME,
+	TieDrawTrace,
+	TieDuelResult,
+	TieDuelTrace,
+	TieTransition,
+	make_tie_state,
+	project_tie_view,
+	run_tie_duel,
+	transition_with_speed_ties,
+)
 
 __all__ = [
 	"ACTION_TACKLE",
@@ -54,4 +71,19 @@ __all__ = [
 	"project_view",
 	"run_duel",
 	"transition",
+	"DRAW_ACTION_UPDATE",
+	"DRAW_BEFORE_TURN",
+	"DRAW_MOVE_HIT_UPDATE",
+	"DRAW_QUEUE_SORT",
+	"DRAW_RESIDUAL_UPDATE",
+	"MAX_TIE_DRAWS_PER_TURN",
+	"SPEED_TIE_VARIANT_NAME",
+	"TieDrawTrace",
+	"TieDuelResult",
+	"TieDuelTrace",
+	"TieTransition",
+	"make_tie_state",
+	"project_tie_view",
+	"run_tie_duel",
+	"transition_with_speed_ties",
 ]

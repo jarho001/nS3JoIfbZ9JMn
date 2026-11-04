@@ -22,6 +22,7 @@ from .gen5_rng import sample_bounded
 
 
 VARIANT_ID = 1  # gen5-neutral-tackle-mew-1v1-v1
+SPEED_TIE_VARIANT_ID = 2  # gen5-neutral-tackle-speed-ties-mew-1v1-v2
 SPECIES_MEW = 151
 MOVE_TACKLE = 33
 TACKLE_BASE_POWER = 50  # Pinned Gen 5 move data.
@@ -129,6 +130,17 @@ class PlayerView(NamedTuple):
 	winner: jax.Array
 
 
+class _TackleActionResult(NamedTuple):
+	state: BattleState
+	critical: jax.Array
+	damage: jax.Array
+	target_hp: jax.Array
+	target_max_hp: jax.Array
+	values: jax.Array
+	before: jax.Array
+	after: jax.Array
+
+
 def _int_vector(name: str, value, length: int) -> jax.Array:
 	array = np.asarray(value)
 	if array.shape != (length,) or array.dtype.kind not in "iu":
@@ -222,12 +234,11 @@ def _empty_transition(state: BattleState, status: int) -> Transition:
 	return Transition(state, jnp.asarray(status, dtype=jnp.int32), _empty_events(), _empty_draws())
 
 
-def _supported_state(state: BattleState) -> jax.Array:
+def _supported_common(state: BattleState) -> jax.Array:
 	return (
 		(state.request_phase == PHASE_MOVE_REQUEST)
 		& (~state.terminal)
 		& (state.winner == -1)
-		& (state.variant_id == VARIANT_ID)
 		& jnp.all(state.species_id == SPECIES_MEW)
 		& (state.move_id == MOVE_TACKLE)
 		& jnp.all(state.max_hp > 0)
@@ -244,10 +255,17 @@ def _supported_state(state: BattleState) -> jax.Array:
 		& jnp.all(state.defense <= MEW_MAX_STAT)
 		& jnp.all(state.speed > 0)
 		& jnp.all(state.speed <= MEW_MAX_STAT)
-		& (state.speed[0] != state.speed[1])
 		& (state.turn >= 1)
 		& (state.turn < 0x7FFFFFFF)
 	)
+
+
+def _supported_state(state: BattleState) -> jax.Array:
+	return _supported_common(state) & (state.variant_id == VARIANT_ID) & (state.speed[0] != state.speed[1])
+
+
+def _supported_tie_state(state: BattleState) -> jax.Array:
+	return _supported_common(state) & (state.variant_id == SPEED_TIE_VARIANT_ID)
 
 
 def _record_draw(draws: DrawTrace, index, bound, value, context, before, after) -> DrawTrace:
@@ -258,6 +276,66 @@ def _record_draw(draws: DrawTrace, index, bound, value, context, before, after) 
 		draws.contexts.at[index].set(jnp.asarray(context, dtype=jnp.int32)),
 		draws.before.at[index].set(before),
 		draws.after.at[index].set(after),
+	)
+
+
+def _execute_tackle_action(state: BattleState, actor) -> _TackleActionResult:
+	target = 1 - actor
+	seed_before_accuracy = state.rng
+	seed_after_accuracy, accuracy_word = sample_bounded(seed_before_accuracy, 100)
+	seed_after_critical, critical_word = sample_bounded(seed_after_accuracy, 16)
+	seed_after_damage, damage_word = sample_bounded(seed_after_critical, 16)
+	accuracy_roll = accuracy_word.astype(jnp.int32)
+	critical_roll = critical_word.astype(jnp.int32)
+	damage_roll = damage_word.astype(jnp.int32)
+	critical = critical_roll == 0
+
+	pre_critical_damage = neutral_damage_before_roll(
+		state.level[actor],
+		jnp.asarray(TACKLE_BASE_POWER, dtype=jnp.int32),
+		state.attack[actor],
+		state.defense[target],
+	)
+	critical_product = pre_critical_damage.astype(jnp.uint32) * jnp.asarray(2, dtype=jnp.uint32)
+	critical_damage = jnp.where(critical, critical_product.astype(jnp.int32), pre_critical_damage)
+	damage = damage_from_preroll(
+		critical_damage,
+		damage_roll,
+		False,  # Mew is Psychic; Normal Tackle is never STAB.
+		False,
+		False,
+		jnp.asarray(0, dtype=jnp.int32),  # Normal-on-Psychic is neutral.
+		False,
+		False,
+		False,
+		jnp.asarray(4096, dtype=jnp.int32),  # Neutral final modifier.
+	)
+	hp_after = jnp.maximum(jnp.asarray(0, dtype=jnp.int32), state.hp[target] - damage)
+	new_state = state._replace(
+		hp=state.hp.at[target].set(hp_after),
+		pp=state.pp.at[actor].add(jnp.asarray(-1, dtype=jnp.int32)),
+		rng=seed_after_damage,
+	)
+	return _TackleActionResult(
+		new_state,
+		critical,
+		damage,
+		hp_after,
+		state.max_hp[target],
+		jnp.stack((accuracy_roll, critical_roll, damage_roll)),
+		jnp.stack((seed_before_accuracy, seed_after_accuracy, seed_after_critical)),
+		jnp.stack((seed_after_accuracy, seed_after_critical, seed_after_damage)),
+	)
+
+
+def _record_action_event(events: TurnEvents, slot, actor, action: _TackleActionResult) -> TurnEvents:
+	return TurnEvents(
+		events.executed.at[slot].set(jnp.asarray(True)),
+		events.actors.at[slot].set(jnp.asarray(actor, dtype=jnp.int32)),
+		events.critical.at[slot].set(action.critical),
+		events.damage.at[slot].set(action.damage),
+		events.target_hp.at[slot].set(action.target_hp),
+		events.target_max_hp.at[slot].set(action.target_max_hp),
 	)
 
 
@@ -274,66 +352,24 @@ def _run_turn(state: BattleState) -> Transition:
 
 		def execute(inner_carry):
 			inner_state, inner_events, inner_draws = inner_carry
-			seed_before_accuracy = inner_state.rng
-			seed_after_accuracy, accuracy_word = sample_bounded(seed_before_accuracy, 100)
-			seed_after_critical, critical_word = sample_bounded(seed_after_accuracy, 16)
-			seed_after_damage, damage_word = sample_bounded(seed_after_critical, 16)
-			accuracy_roll = accuracy_word.astype(jnp.int32)
-			critical_roll = critical_word.astype(jnp.int32)
-			damage_roll = damage_word.astype(jnp.int32)
-			critical = critical_roll == 0
-
-			pre_critical_damage = neutral_damage_before_roll(
-				inner_state.level[actor],
-				jnp.asarray(TACKLE_BASE_POWER, dtype=jnp.int32),
-				inner_state.attack[actor],
-				inner_state.defense[target],
-			)
-			critical_product = pre_critical_damage.astype(jnp.uint32) * jnp.asarray(2, dtype=jnp.uint32)
-			critical_damage = jnp.where(critical, critical_product.astype(jnp.int32), pre_critical_damage)
-			damage = damage_from_preroll(
-				critical_damage,
-				damage_roll,
-				False,  # Mew is Psychic; Normal Tackle is never STAB.
-				False,
-				False,
-				jnp.asarray(0, dtype=jnp.int32),  # Normal-on-Psychic is neutral.
-				False,
-				False,
-				False,
-				jnp.asarray(4096, dtype=jnp.int32),  # Neutral final modifier.
-			)
-			hp_after = jnp.maximum(jnp.asarray(0, dtype=jnp.int32), inner_state.hp[target] - damage)
-			new_state = inner_state._replace(
-				hp=inner_state.hp.at[target].set(hp_after),
-				pp=inner_state.pp.at[actor].add(jnp.asarray(-1, dtype=jnp.int32)),
-				rng=seed_after_damage,
-			)
-			new_events = TurnEvents(
-				inner_events.executed.at[step].set(True),
-				inner_events.actors.at[step].set(actor),
-				inner_events.critical.at[step].set(critical),
-				inner_events.damage.at[step].set(damage),
-				inner_events.target_hp.at[step].set(hp_after),
-				inner_events.target_max_hp.at[step].set(inner_state.max_hp[target]),
-			)
+			action = _execute_tackle_action(inner_state, actor)
+			new_events = _record_action_event(inner_events, step, actor, action)
 			first_draw = step * jnp.asarray(3, dtype=jnp.int32)
-			new_draws = _record_draw(
-				inner_draws, first_draw, 100, accuracy_roll, DRAW_ACCURACY,
-				seed_before_accuracy, seed_after_accuracy,
-			)
-			new_draws = _record_draw(
-				new_draws, first_draw + 1, 16, critical_roll, DRAW_CRITICAL,
-				seed_after_accuracy, seed_after_critical,
-			)
-			new_draws = _record_draw(
-				new_draws, first_draw + 2, 16, damage_roll, DRAW_DAMAGE,
-				seed_after_critical, seed_after_damage,
-			)
+			new_draws = inner_draws
+			for offset, bound, context in ((0, 100, DRAW_ACCURACY), (1, 16, DRAW_CRITICAL), (2, 16, DRAW_DAMAGE)):
+				new_draws = _record_draw(
+					new_draws,
+					first_draw + offset,
+					bound,
+					action.values[offset],
+					context,
+					action.before[offset],
+					action.after[offset],
+				)
 			# Accuracy is exactly 100 for the pinned Tackle data, but its bounded
 			# draw is still consumed and retained in the trace.
-			_ = accuracy_roll < 100
-			return new_state, new_events, new_draws
+			_ = action.values[0] < 100
+			return action.state, new_events, new_draws
 
 		return jax.lax.cond(can_act, execute, lambda value: value, carry)
 
@@ -358,16 +394,7 @@ def _run_turn(state: BattleState) -> Transition:
 	return Transition(state, jnp.asarray(STATUS_OK, dtype=jnp.int32), events, draws)
 
 
-def transition(state: BattleState, choices) -> Transition:
-	"""Resolve both simultaneous Tackle choices with exact Gen 5 RNG.
-
-	``choices`` is a two-element int32 vector ordered p1, p2. ``1`` means the
-	sole legal ``move 1`` action, ``0`` means that side has not submitted yet,
-	and negative values are malformed choices. Positive unknown action IDs are
-	unsupported. No non-success result changes state or RNG. The result has
-	fixed-size event and draw traces and is directly usable with ``jax.jit`` and
-	``jax.vmap``.
-	"""
+def _choice_array(choices):
 	if isinstance(choices, jax.core.Tracer):
 		choice_array = choices
 		if choice_array.dtype != jnp.int32:
@@ -379,30 +406,34 @@ def transition(state: BattleState, choices) -> Transition:
 		choice_array = jnp.asarray(raw_choices, dtype=jnp.int32)
 	if choice_array.shape != (2,):
 		raise ValueError("choices must be a length-two p1/p2 vector.")
+	return choice_array
+
+
+def _dispatch_transition(state, choice_array, supported_state, run_turn, empty_transition):
+	def empty(status):
+		return empty_transition(state, status)
 
 	def terminal_result(_):
-		return _empty_transition(state, STATUS_TERMINAL)
+		return empty(STATUS_TERMINAL)
 
 	def active_result(_):
 		negative = jnp.any(choice_array < 0)
 		unknown = jnp.any(choice_array > ACTION_TACKLE)
 		pending_choice = jnp.any(choice_array == CHOICE_PENDING)
-		state_supported = _supported_state(state)
-
 		def invalid_result(__):
-			return _empty_transition(state, STATUS_INVALID_CHOICE)
+			return empty(STATUS_INVALID_CHOICE)
 
 		def unsupported_result(__):
-			return _empty_transition(state, STATUS_UNSUPPORTED)
+			return empty(STATUS_UNSUPPORTED)
 
 		def pending_result(__):
-			return _empty_transition(state, STATUS_PENDING)
+			return empty(STATUS_PENDING)
 
 		def success_result(__):
-			return _run_turn(state)
+			return run_turn(state)
 
 		def success_or_unsupported(__):
-			return jax.lax.cond(state_supported, success_result, unsupported_result, None)
+			return jax.lax.cond(supported_state(state), success_result, unsupported_result, None)
 
 		return jax.lax.cond(
 			negative,
@@ -424,13 +455,22 @@ def transition(state: BattleState, choices) -> Transition:
 	return jax.lax.cond(state.terminal, terminal_result, active_result, None)
 
 
-def project_view(before: BattleState, result: Transition, audience) -> PlayerView:
-	"""Project a turn to static audience p1 (0) or p2 (1).
+def transition(state: BattleState, choices) -> Transition:
+	"""Resolve both simultaneous Tackle choices with exact Gen 5 RNG.
 
-	For compiled projection, pass ``audience`` as a static argument, for
-	example ``jax.jit(project_view, static_argnums=2)``. Dynamic or unsupported
-	audience values fail closed instead of indexing another side's private HP.
+	``choices`` is a two-element int32 vector ordered p1, p2. ``1`` means the
+	sole legal ``move 1`` action, ``0`` means that side has not submitted yet,
+	and negative values are malformed choices. Positive unknown action IDs are
+	unsupported. No non-success result changes state or RNG. The result has
+	fixed-size event and draw traces and is directly usable with ``jax.jit`` and
+	``jax.vmap``.
 	"""
+	return _dispatch_transition(state, _choice_array(choices), _supported_state, _run_turn, _empty_transition)
+
+
+def _project_view(before: BattleState, result, audience, supported_state) -> PlayerView:
+	"""Common recipient projection; each public variant supplies its own boundary."""
+
 	if isinstance(audience, jax.core.Tracer):
 		raise TypeError("audience must be a static p1/p2 integer.")
 	raw_audience = np.asarray(audience)
@@ -441,7 +481,7 @@ def project_view(before: BattleState, result: Transition, audience) -> PlayerVie
 	viewer = jnp.asarray(int(raw_audience), dtype=jnp.int32)
 	own_hp = before.hp[viewer]
 	own_max_hp = before.max_hp[viewer]
-	legal = _supported_state(before) & (before.hp[viewer] > 0) & (before.pp[viewer] > 0)
+	legal = supported_state(before) & (before.hp[viewer] > 0) & (before.pp[viewer] > 0)
 	actors = result.events.actors
 	valid = result.events.executed
 	targets = 1 - jnp.maximum(actors, 0)
@@ -483,3 +523,13 @@ def project_view(before: BattleState, result: Transition, audience) -> PlayerVie
 		result.state.terminal,
 		result.state.winner,
 	)
+
+
+def project_view(before: BattleState, result: Transition, audience) -> PlayerView:
+	"""Project a v1 turn to static audience p1 (0) or p2 (1).
+
+	For compiled projection, pass ``audience`` as a static argument, for
+	example ``jax.jit(project_view, static_argnums=2)``. Dynamic or unsupported
+	audience values fail closed instead of indexing another side's private HP.
+	"""
+	return _project_view(before, result, audience, _supported_state)

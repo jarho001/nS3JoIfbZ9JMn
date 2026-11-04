@@ -143,34 +143,23 @@ def _padding_row(state: BattleState) -> DuelTrace:
 	return DuelTrace(jnp.asarray(False), zero_state, result, zero_p1, zero_p2)
 
 
-def run_duel(initial_state: BattleState, *, max_turns: int, turn_budget=None) -> DuelResult:
-	"""Execute up to a static capacity of simultaneous sole-move Tackle turns.
-
-	The capacity is limited to the accepted move's maximum PP (56). The optional
-	dynamic budget defaults to that capacity and can be vmapped across lanes; zero
-	returns an immediate budget-exhausted result. A successful prefix has shape
-	``(max_turns,)``. Each valid row contains the trusted before/after transition,
-	fixed draw/event trace, and both recipient-specific projections. The returned
-	views are combined trusted output, not a joint actor observation: select only
-	p1 or p2 for a valid row.
-
-	An initially terminal state completes with no rows and diagnostic
-	``STATUS_TERMINAL``. A non-success transition stops at its unchanged state and
-	preserves that transition status. If the capacity or dynamic budget is spent
-	while nonterminal, the result is ``DISPOSITION_BUDGET_EXHAUSTED``; it never
-	invents a winner, loss, draw, or padded experience. Resume by passing the
-	returned state to another call and concatenating only valid trace rows.
-
-	Compile with ``jax.jit(run_duel, static_argnames=("max_turns",))``. ``max_turns``
-	must be a Python integer from 1 through 56. ``turn_budget`` is an integer scalar
-	from zero through the capacity; batched values must be int32 scalars per lane.
-	"""
+def _run_duel_core(
+	initial_state,
+	*,
+	max_turns,
+	turn_budget,
+	transition_fn,
+	view_fn,
+	padding_fn,
+	trace_type,
+	result_type,
+):
 	capacity = _capacity(max_turns)
 	_validate_state_structure(initial_state)
 	if turn_budget is None:
 		turn_budget = capacity
 	budget = _budget_array(turn_budget, capacity)
-	padding = _padding_row(initial_state)
+	padding = padding_fn(initial_state)
 
 	budget_valid = (budget >= 0) & (budget <= capacity)
 	initially_terminal = initial_state.terminal
@@ -195,7 +184,7 @@ def run_duel(initial_state: BattleState, *, max_turns: int, turn_budget=None) ->
 
 	def execute(carry):
 		state, _, count, _, _ = carry
-		result = transition(state, jnp.asarray([1, 1], dtype=jnp.int32))
+		result = transition_fn(state, jnp.asarray([1, 1], dtype=jnp.int32))
 		succeeded = result.status == STATUS_OK
 		finished = succeeded & result.state.terminal
 		disposition = jnp.where(
@@ -213,12 +202,12 @@ def run_duel(initial_state: BattleState, *, max_turns: int, turn_budget=None) ->
 		)
 
 		def successful_row(_):
-			return DuelTrace(
+			return trace_type(
 				jnp.asarray(True),
 				state,
 				result,
-				project_view(state, result, 0),
-				project_view(state, result, 1),
+				view_fn(state, result, 0),
+				view_fn(state, result, 1),
 			)
 
 		row = jax.lax.cond(succeeded, successful_row, lambda _: padding, operand=None)
@@ -238,4 +227,38 @@ def run_duel(initial_state: BattleState, *, max_turns: int, turn_budget=None) ->
 		DISPOSITION_BUDGET_EXHAUSTED,
 		disposition,
 	).astype(jnp.int32)
-	return DuelResult(final_state, disposition, turn_count, diagnostic_status, trace)
+	return result_type(final_state, disposition, turn_count, diagnostic_status, trace)
+
+
+def run_duel(initial_state: BattleState, *, max_turns: int, turn_budget=None) -> DuelResult:
+	"""Execute up to a static capacity of simultaneous sole-move Tackle turns.
+
+	The capacity is limited to the accepted move's maximum PP (56). The optional
+	dynamic budget defaults to that capacity and can be vmapped across lanes; zero
+	returns an immediate budget-exhausted result. A successful prefix has shape
+	``(max_turns,)``. Each valid row contains the trusted before/after transition,
+	fixed draw/event trace, and both recipient-specific projections. The returned
+	views are combined trusted output, not a joint actor observation: select only
+	p1 or p2 for a valid row.
+
+	An initially terminal state completes with no rows and diagnostic
+	``STATUS_TERMINAL``. A non-success transition stops at its unchanged state and
+	preserves that transition status. If the capacity or dynamic budget is spent
+	while nonterminal, the result is ``DISPOSITION_BUDGET_EXHAUSTED``; it never
+	invents a winner, loss, draw, or padded experience. Resume by passing the
+	returned state to another call and concatenating only valid trace rows.
+
+	Compile with ``jax.jit(run_duel, static_argnames=("max_turns",))``. ``max_turns``
+	must be a Python integer from 1 through 56. ``turn_budget`` is an integer scalar
+	from zero through the capacity; batched values must be int32 scalars per lane.
+	"""
+	return _run_duel_core(
+		initial_state,
+		max_turns=max_turns,
+		turn_budget=turn_budget,
+		transition_fn=transition,
+		view_fn=project_view,
+		padding_fn=_padding_row,
+		trace_type=DuelTrace,
+		result_type=DuelResult,
+	)

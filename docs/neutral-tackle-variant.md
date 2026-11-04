@@ -1,6 +1,6 @@
 # Restricted seeded JAX Tackle duel
 
-**Status:** Task034 was accepted after primary review. Task035 bounded duel execution is accepted after primary review. This restricted slice does not constitute a complete battle engine or close G1, G3 or any implementation milestone.
+**Status:** Task034 and Task035 were accepted after primary review. Task036's separate speed-tie v2 is accepted after primary review. This restricted slice does not constitute a complete battle engine or close G1, G3 or any implementation milestone.
 
 ## Variant and initialization boundary
 
@@ -141,7 +141,7 @@ print('result_statuses', first.status.tolist())
 PY
 ```
 
-The first synchronized call was 0.536254 seconds and the warmed synchronized call was 0.000157 seconds; all eight statuses were `0`. The code files in this run are identified by their Git blob IDs in the handoff, alongside the source base. GPU is optional and is not an acceptance criterion. Full `gen5randombattle`, random-team generation, switching, speed ties, Struggle, other moves, effects, full request/protocol encoding, PPO, and G1/G3 milestone acceptance remain out of scope.
+The first synchronized call was 0.536254 seconds and the warmed synchronized call was 0.000157 seconds; all eight statuses were `0`. The code files in this run are identified by their Git blob IDs in the handoff, alongside the source base. GPU is optional and is not an acceptance criterion. Full `gen5randombattle`, random-team generation, switching, speed ties, Struggle, other moves, effects, full request/protocol encoding, PPO, and G1/G3 milestone acceptance remain out of scope for v1.
 
 ## Task035 full-duel evidence (accepted)
 
@@ -199,3 +199,62 @@ PY
 Primary accepted Task035 with count35; this does not require GPU, claim performance, or close G1/G3 or a milestone.
 
 The delivered executor blob `38efee781f8dc711931669eb0e202c90fca4e870` differs from the measured/tested blob `81d290fbd60179a559667df9d2ad84463f90dbc8` only by removal of one blank EOF line. Adding that newline back reproduces the measured hash; executable code is unchanged, and tests/probe were not repeated for this formatting correction.
+
+## Task036 speed-tie variant (accepted)
+
+[`simulator/neutral_tackle_ties.py`](../simulator/neutral_tackle_ties.py) exports the separately named `gen5-neutral-tackle-speed-ties-mew-1v1-v2` variant (ID `2`) through `make_tie_state`, `transition_with_speed_ties`, `project_tie_view`, and `run_tie_duel`. It reuses the accepted `BattleState`, Tackle executor, recipient projection semantics, and bounded duel core while returning a separate `TieDrawTrace`; the v1 API and six-slot trace remain unchanged. Equal speeds take the pinned seeded queue-shuffle path. Unequal speeds use deterministic ordering and consume no scheduler shuffle draw.
+
+The per-turn draw trace has a fixed capacity of 16: six Tackle draws plus up to ten scheduler draws. Native scheduler calls are observed as raw `PRNG.random(0, 2)` ranges and delegated unchanged; the JAX trace stores the effective bound `2`, with context IDs 4–8 for queue sort, BeforeTurn, move-hit Update, action Update, and residual Update. The native observer separately identifies the turn-start Update and action Update using the delegated `runAction` choice and `eachEvent` event metadata. Scheduler draws remain interleaved with the two attacks. A surviving tied turn uses all 16 slots. A first-action KO ends at 7 calls and skips the second action; a second-action KO ends at 13. The native observer records actual phase names, raw ranges, values, and pre/post RNG limbs without replacing random returns.
+
+The `--ties` oracle fixture contains three distinct-seed, seven-turn complete tied battles: seeds `[1,2,3,4]`, `[31,41,59,26]`, and `[9,2,3,4]`. They cover both initial action orders, a surviving turn, a critical hit, and a first-action KO. The Python differential chains actual JAX results and checks every turn state, event/action order, draw bound/context/value/pre/post limbs, recipient-specific request/event projections, tie initiative mapping, and terminal result. Separate CPU tests cover eager/JIT equality; mixed tie/unequal/terminal/pending/unsupported/invalid-budget `jit(vmap)` lanes and individual-lane equivalence; valid-prefix padding, lane permutation, state/RNG freeze, budget resumption, exact-capacity completion, PP=1 stop behavior, and diagnostic no-advance. The unequal-speed v2 control uses the original native `--duels` scenario and matches its full state/draw/recipient trace.
+
+Focused validation on CPU: new tie Python suite 3/3; existing duel suite 4/4; existing v1 Tackle suite 6/6; tie, duel, and unchanged-default Node oracle suites 6/6. Python/Node syntax checks and `git diff --check` passed. Before/after output for both the default oracle and `--duels` is byte-identical to the saved pre-Task036 captures: default SHA-256 `d1a219a9483d8d1c0859338089a8d980372e79987c796f155e5c210395828157`; `--duels` SHA-256 `baeb3b3bd3f1eccf35f59f2d4fa4e9f23f933ec8cefb4fd7f6f60b2ead2eaf51`.
+
+One synchronized CPU compile/warm probe used `jax.jit(jax.vmap(run_tie_duel))`, four lanes, static capacity 8, and per-lane budget 8. Three tied native initial states completed in 7 turns each; the legacy unequal-speed native control completed in 8, producing counts `[7,7,7,8]`. On Python 3.13.18, JAX/JAXLIB 0.12.0.1, CPU backend/device `cpu:0`, compile plus synchronized execution took 3.185057 seconds and the warm call took 0.000741 seconds. This is a measurement of that configuration, not a speed or throughput claim. It used the frozen source blobs recorded in Task036's handoff; no source or test file changed after the probe.
+
+The probe can be reproduced from the native fixtures and frozen API:
+
+```sh
+node reference/neutral-turn-oracle.cjs --ties > /tmp/task036-ties.json
+node reference/neutral-turn-oracle.cjs --duels > /tmp/task036-duels.json
+JAX_PLATFORMS=cpu python - <<'PY'
+import json
+import time
+import jax
+import jaxlib
+import jax.numpy as jnp
+from simulator import make_tie_state, run_tie_duel
+
+def initial(path, scenario_id):
+    rows = json.load(open(path))['scenarios']
+    raw = next(row for row in rows if row['id'] == scenario_id)['initial']['state']
+    return make_tie_state(
+        hp=raw['hp'], max_hp=raw['maxHp'], pp=raw['pp'], level=raw['level'],
+        attack=raw['attack'], defense=raw['defense'], speed=raw['speed'],
+        rng=raw['rng'], turn=raw['turn'],
+    )
+
+states = [
+    initial('/tmp/task036-ties.json', 'equal-speed-p1-initial-order-and-first-action-ko'),
+    initial('/tmp/task036-ties.json', 'equal-speed-p2-initial-order'),
+    initial('/tmp/task036-ties.json', 'equal-speed-critical'),
+    initial('/tmp/task036-duels.json', 'p2-first-full-duel'),
+]
+batch = jax.tree_util.tree_map(lambda *xs: jnp.stack(xs), *states)
+budgets = jnp.full((4,), 8, dtype=jnp.int32)
+compiled = jax.jit(jax.vmap(lambda state, budget: run_tie_duel(state, max_turns=8, turn_budget=budget)))
+sync = lambda value: jax.tree_util.tree_map(lambda leaf: leaf.block_until_ready(), value)
+start = time.perf_counter(); first = sync(compiled(batch, budgets)); first_s = time.perf_counter() - start
+start = time.perf_counter(); second = sync(compiled(batch, budgets)); warm_s = time.perf_counter() - start
+assert first.turn_count.tolist() == [7, 7, 7, 8]
+assert first.trace.valid.sum(axis=1).tolist() == [7, 7, 7, 8]
+print('python', __import__('platform').python_version(), 'jax', jax.__version__, 'jaxlib', jaxlib.__version__)
+print('backend', jax.default_backend(), 'device', jax.devices()[0])
+print('configuration', 'jit(vmap(run_tie_duel))', 'lanes=4', 'capacity=8', 'budgets=[8,8,8,8]')
+print('turn_counts', first.turn_count.tolist())
+print('first_synchronized_call_seconds', f'{first_s:.6f}')
+print('warmed_synchronized_call_seconds', f'{warm_s:.6f}')
+PY
+```
+
+No GPU, throughput, full-format, G1/G3, or milestone acceptance claim is made. Primary accepted Task036 at count36; review baseline30/next40 remain unchanged.

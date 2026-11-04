@@ -441,7 +441,7 @@ GPU claims are historical and task-scoped: Tasks005–011 recorded GPU validatio
 
 ## Current task and next work
 
-Tasks001–035 are accepted and complete. Task035 implementation evidence is complete pending primary acceptance; it does not yet increment the accepted task count.
+Tasks001–036 are accepted and complete. Task036 adds exact seeded speed ties in a separately named restricted Tackle variant; accepted count is 36.
 
 Project direction is simulator-first: prioritize integrated JAX battle execution and parity validation; G1 reference-environment work and G2 learning remain open and do not gate G3 simulator implementation. The request, legal-action, simultaneous-choice, player-view/history, and outcome contract remains part of simulator correctness. Defer PPO, tournaments, and further baseline/reporting infrastructure unless needed for simulator parity or validation.
 

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "accepted_project_task_count": 35,
+  "accepted_project_task_count": 36,
   "project_direction_decision": {
     "status": "adopted",
     "date": "2026-11-03",
@@ -1185,6 +1185,105 @@
             "result": "Final staged exit1:13 lexical conflicts/7 leads across11 checked files/20 active notes, zero overlaps. Includes one source hit at the critical-full-duel scenario, not altered RNG observation. Primary reviewed exact findings and retains semantic rationale in commit body."
           }
         ]
+      },
+      {
+        "id": "Task036",
+        "title": "Seeded speed ties in restricted JAX Tackle duels",
+        "owner": "/root/task036",
+        "status": "accepted",
+        "source_commit": "3fdf97eb491c45a4b7dc9737ae2b125e1ffcfa35",
+        "scope": "Add native seeded speed-tie resolution to a separately named restricted one-Mew-per-side neutral Tackle variant, including bounded compiled complete duels and exact state/RNG/recipient parity, while preserving accepted v1 public APIs and fixtures.",
+        "exclusions": [
+          "switching or rosters",
+          "other moves or Struggle",
+          "items, status, weather, boosts or passive effects",
+          "random teams or stat construction",
+          "changes to accepted v1 public API shapes or default oracle fixtures",
+          "training, tournament or reporting expansion",
+          "full-format, G1 or G3 acceptance",
+          "required GPU execution or performance claims",
+          "owner commit/push"
+        ],
+        "acceptance_criteria": [
+          "Establish the actual pinned native speed-tie draw sequence from normal request boundaries without replacing RNG values or overriding mechanics. Observe every relevant shuffle/phase draw, including draws with no visible event; record context, bounds and pre/post limbs. Propose and justify fixed trace capacity and ordering before implementation; stop if external evidence or an unresolved architectural contradiction is required.",
+          "Expose a documented separately named/id restricted tie-capable variant with fixed-shape pure JAX transition and bounded resumable duel API. Preserve accepted v1 public APIs, trace shapes and deterministic fixture bytes; any internal refactor must preserve their semantics. Reuse accepted RNG/arithmetic/view semantics rather than duplicating unsupported effects. Detect unsupported states and diagnostic/pending/terminal/budget boundaries without RNG advance or fabricated experience.",
+          "Compare at least three complete native tied-speed duels with distinct seeds and both realized initiative outcomes, a surviving multi-turn case and a terminal first-action KO/skip. Chain actual JAX outputs. Compare every state, event/order, draw context/bounds/value/pre/post limb, both recipient requests/history and actual terminal result; independently assert tie-to-order mapping and privacy/HP/PP invariants. Include an unequal-speed control in the new variant.",
+          "Validate CPU eager/JIT equivalence and heterogeneous JIT/vmap lanes for ties, unequal speeds, completion, stop/budget/resume and no-advance diagnostics, including lane permutation and valid-prefix/padding semantics. Preserve terminal precedence, PP unsupported boundary and no actor access to privileged RNG or combined views. Record a small reproducible synchronized compile/warm probe with exact configuration and source identities, measurement only.",
+          "Update focused variant/API/coverage/project status documentation and append Task036 handoff. Preserve Task001-035 history, prior review/direction/GPU records and count35/baseline30/checkpoint40 until primary acceptance. Use Trail context/callers, focused affected validation once per meaningful revision, diff/syntax/JSON checks and graph refresh/check. Save any non-obvious design learning using trail note. Inspect diff and freeze with exact changed files/commands/results/source blobs for independent primary acceptance."
+        ],
+        "plan": [
+          "Capture pinned tied-speed native draw/phase evidence and propose fixed-shape integration while preserving v1.",
+          "Implement exactly the approved tie-capable variant and bounded executor, plus native fixtures.",
+          "Validate complete differential traces and compiled heterogeneous/resumable execution, record small CPU probe.",
+          "Update focused docs/handoff/state, refresh/check Trail, inspect diff and freeze for primary review; stop at acceptance/delivery or concrete blocker."
+        ],
+        "progress": "Accepted by primary after owner freeze and focused acceptance review; all delegated criteria met. Delivery coordinated by primary, with exact source identities and validation below. Earlier owner in-progress/count35 wording is historical.",
+        "gpu_required": false,
+        "accepted_at": "2026-11-04",
+        "accepted_by_agent": "/root",
+        "acceptance_review": "Primary /root independently reviewed the native phase evidence, all new simulator/oracle/test code, shared v1 refactors, focused documentation and validation. Accepted separate variantID2 with sixteen chronological draw slots and exact native queue/BeforeTurn/Update/residual phase sampling. Three distinct-seed complete tied duels (21 turns) and one complete native unequal-speed control (8 turns) match every state, event/order, draw bound/context/value/pre/post limb, both recipient views and terminal result. Shared v1 action/view/choice and bounded-executor refactors preserve public APIs, six-slot traces and original oracle bytes. The owner corrected a typed JAX cond carry and test-import/probe-expectation harness mistakes. Primary initial test review required returned diagnostic-state freeze, independent tie initiative mapping, native unequal control, individual-vmap equivalence, inactive padding, exact-capacity and PP1 follow-up checks; all are now covered. Final tie suite3/3, affected v1 duel4/4, v1 Tackle6/6 and Node6/6 pass; source bytes are frozen and identified. The four-lane CPU probe is measurement only (3.185057s first synchronized/warm0.000741s, counts7/7/7/8). No GPU, throughput, full-format, G1/G3 or implementation-milestone acceptance. No pending findings or external-evidence block; owner stopped. Count35 becomes36; review baseline30/next40 remain. No Task037 starts.",
+        "implementation_source_blobs": {
+          "reference/neutral-turn-oracle.cjs": "b9b9277a366db29d73024dafebc11d0dfd4c9eb4",
+          "simulator/__init__.py": "17153d391343768b0964147ef80e625f786aae85",
+          "simulator/neutral_duel.py": "a358dc7fa3901566c893254c9118931abb3e76f2",
+          "simulator/neutral_tackle.py": "71a7186b4f2572618a8f08c91fd8fa8aa32d7704",
+          "simulator/neutral_tackle_ties.py": "a7c1aae754e1b45ea92078421753d623342b1e7e",
+          "test/neutral-tie-duel-oracle.test.cjs": "7781f5dc598d3f077d0b7f14b69a88b9e1ebbdaf",
+          "test/test_neutral_tackle_ties.py": "d6c5847c0f9efa0c6fa5e88625736bed00d162f3"
+        },
+        "trail_learning": "l-0172a92e",
+        "validation": {
+          "node": {
+            "command": "node --test test/neutral-tie-duel-oracle.test.cjs test/neutral-duel-oracle.test.cjs test/neutral-turn-oracle.test.cjs",
+            "result": "6/6 passed"
+          },
+          "cpu_ties": {
+            "command": "JAX_PLATFORMS=cpu python -m unittest discover -s test -p test_neutral_tackle_ties.py",
+            "result": "3/3 passed"
+          },
+          "cpu_v1_duels": {
+            "command": "JAX_PLATFORMS=cpu python -m unittest discover -s test -p test_neutral_duel.py",
+            "result": "4/4 passed after private executor refactor"
+          },
+          "cpu_v1_turn": {
+            "command": "JAX_PLATFORMS=cpu python -m unittest discover -s test -p test_neutral_tackle.py",
+            "result": "6/6 passed after shared action/view/choice refactor"
+          },
+          "compatibility": {
+            "default_sha256": "d1a219a9483d8d1c0859338089a8d980372e79987c796f155e5c210395828157",
+            "duels_sha256": "baeb3b3bd3f1eccf35f59f2d4fa4e9f23f933ec8cefb4fd7f6f60b2ead2eaf51",
+            "result": "Both byte-identical to pre-Task036 captures; primary independently verified artifacts."
+          },
+          "other": "Owner syntax/JSON/diff checks passed; graph refresh/current passed915nodes/2035edges/93cards. Primary exact history/GPU bytes/source identities/scope/diff/state checks before delivery; final staged learning findings reviewed with rationale in commit body."
+        },
+        "probe_identity": {
+          "source_base": "3fdf97eb491c45a4b7dc9737ae2b125e1ffcfa35",
+          "source_blobs": {
+            "reference/neutral-turn-oracle.cjs": "b9b9277a366db29d73024dafebc11d0dfd4c9eb4",
+            "simulator/__init__.py": "17153d391343768b0964147ef80e625f786aae85",
+            "simulator/neutral_duel.py": "a358dc7fa3901566c893254c9118931abb3e76f2",
+            "simulator/neutral_tackle.py": "71a7186b4f2572618a8f08c91fd8fa8aa32d7704",
+            "simulator/neutral_tackle_ties.py": "a7c1aae754e1b45ea92078421753d623342b1e7e",
+            "test/neutral-tie-duel-oracle.test.cjs": "7781f5dc598d3f077d0b7f14b69a88b9e1ebbdaf",
+            "test/test_neutral_tackle_ties.py": "d6c5847c0f9efa0c6fa5e88625736bed00d162f3"
+          },
+          "python": "3.13.18",
+          "jax": "0.12.0.1",
+          "jaxlib": "0.12.0.1",
+          "backend": "cpu",
+          "device": "cpu:0",
+          "configuration": "jit(vmap(run_tie_duel)), three native tied initial states and original p2-first-full-duel unequal native control, capacity8/budgets[8,8,8,8]",
+          "turn_counts": [
+            7,
+            7,
+            7,
+            8
+          ],
+          "first_synchronized_seconds": 3.185057,
+          "warmed_synchronized_seconds": 0.000741,
+          "reproducer": "docs/neutral-tackle-variant.md Task036 section",
+          "limitation": "Configuration-specific measurement only. Initial harness expected four7-turn lanes; actual unequal control8 led to corrected expectation and one successful rerun. No source/test change after freeze."
+        }
       }
     ],
     "active_regular_review": null,
