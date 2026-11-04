@@ -17,7 +17,7 @@ blockers. A blocking finding cannot be bypassed by the parent coordinator;
 resolve it through evidence and review or report the blocker.
 
 For `NEEDS_CHANGES`, convert each required finding into bounded acceptance
-criteria and route the correction work to one explicitly named Luna/medium
+criteria and route the correction work to one explicitly named Luna/xhigh
 implementer when the primary authorizes that handover. Reuse the current owner
 for ordinary corrections. A transfer must name the new owner and confirm the
 prior owner has stopped; do not overlap corrections with parent-owned

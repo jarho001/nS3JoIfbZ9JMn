@@ -1,5 +1,5 @@
 model = "gpt-6-luna"
-model_reasoning_effort = "medium"
+model_reasoning_effort = "xhigh"
 
 developer_instructions = """
 Own exactly one bounded deliverable delegated by the parent agent. Work only in

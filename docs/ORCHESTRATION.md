@@ -10,7 +10,7 @@ are not project tasks and do not affect the accepted-task counter.
 
 The parent agent is the architect and final coordinator. It defines one
 deliverable, exclusions, and acceptance criteria, then assigns one active
-implementation owner. The Luna/medium `implementer` owns ordinary edits and
+implementation owner. The Luna/xhigh `implementer` owns ordinary edits and
 focused validation. It retains ownership through corrections. A different owner may
 start only after an explicit handover that names the new owner and stops the
 prior owner.
@@ -23,8 +23,8 @@ gates.
 
 Use a fresh scoped worker context (`fork_turns="none"`), with task/owned-path
 references and the validation budget. Do not copy the parent's conversation or
-full historical handoff. Default Luna effort is medium; if a built-in role is
-pinned to max, select an explicit configurable Luna/medium route with the same
+full historical handoff. Default Luna effort is xhigh; if a built-in role is
+pinned to max, select an explicit configurable Luna/xhigh route with the same
 owner contract. Do not claim a repository edit changes an already running agent.
 Raise effort only for a concrete unresolved reasoning problem, not by default.
 Use completion notifications/passive waits; do not repeatedly ask for status or
@@ -49,7 +49,7 @@ compact durable project documentation when useful, not platform internals. The
 parent cannot bypass a blocking finding.
 
 For required corrections, Astra may translate findings into bounded acceptance
-criteria and route them to one explicitly named Luna/medium implementer when the
+criteria and route them to one explicitly named Luna/xhigh implementer when the
 primary authorizes that handover. Reuse the existing owner for ordinary
 corrections; a handover names the new owner and confirms the prior owner has
 stopped. Do not overlap correction work with parent-owned implementation. The

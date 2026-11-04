@@ -19,7 +19,7 @@ Continue one justified simulator deliverable; no next task is prescoped here.
 
 ## Routine execution
 
-Use Luna/medium with a scoped context packet, not the parent's full conversation.
+Use Luna/xhigh with a scoped context packet, not the parent's full conversation.
 Run only relevant fast checks: at most 30 seconds per command and 90 seconds
 of test execution per task. Use `timeout --signal=TERM --kill-after=5s 30s ...`;
 skip known-long checks instead of starting them. Do not extend the limit or

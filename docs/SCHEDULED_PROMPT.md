@@ -24,7 +24,7 @@ not accept or waive any milestone. Keep the minimal request, legal-action,
 simultaneous-choice, player-view/history, and outcome contract needed for
 correctness. State scope and acceptance criteria before implementation. Follow
 the repository's delegation, focused validation, review, and acceptance
-policies. Use Luna/medium with a fresh scoped worker packet, not a full-history
+policies. Use Luna/xhigh with a fresh scoped worker packet, not a full-history
 fork; avoid repeated status polling and interim reviews.
 
 Run only relevant fast checks: 30 seconds per command, 90 seconds per task.
