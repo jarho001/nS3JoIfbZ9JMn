@@ -15,6 +15,12 @@ validation. It retains ownership through corrections. A different owner may
 start only after an explicit handover that names the new owner and stops the
 prior owner.
 
+Keep coordination proportional: one concise delegation, checkpoints only for
+unresolved architecture or evidence, and one complete review package plus
+required corrections. Batch bookkeeping and affected checks; avoid repeated
+status polling and interim reviews. Preserve required validation and review
+gates.
+
 Hand off from Luna to the Sol `advanced_implementer` only when concrete
 evidence demonstrates implementation complexity or an unresolved semantic
 mismatch. A reproducer, focused failure, exact source evidence, or pinned-oracle
