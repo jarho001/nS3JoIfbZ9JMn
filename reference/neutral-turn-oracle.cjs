@@ -356,16 +356,16 @@ function main() {
 	assertReady();
 	const ps = require(API);
 	const args = process.argv.slice(2);
-	assert.ok(args.length === 0 || (args.length === 1 && ['--duels', '--ties'].includes(args[0])), 'Usage: neutral-turn-oracle.cjs [--duels|--ties]');
+	assert.ok(args.length === 0 || (args.length === 1 && ['--duels', '--ties', '--sessions'].includes(args[0])), 'Usage: neutral-turn-oracle.cjs [--duels|--ties|--sessions]');
 	const fixture = args[0] === '--duels'
 		? generateFullDuelFixture(ps)
 		: args[0] === '--ties'
 			? generateTieDuelFixture(ps)
-			: generateFixture(ps);
+			: args[0] === '--sessions' ? generateStagedSessionFixture(ps) : generateFixture(ps);
 	process.stdout.write(`${JSON.stringify(fixture, null, 2)}\n`);
 }
 
-module.exports = { generateFixture, generateFullDuelFixture, main };
+module.exports = { generateFixture, generateFullDuelFixture, generateStagedSessionFixture, main };
 
 const FULL_DUEL_TURN_LIMIT = 56;
 const FULL_DUEL_SCENARIOS = [
@@ -543,6 +543,113 @@ function generateTieDuelFixture(ps) {
 		initialBoundary: 'Each scenario starts from two actual normal activeRequest objects and the initialized live PRNG state; both submit move 1 through Battle.makeChoices every turn.',
 		captureContract: 'Observe PRNG.prototype.random and return each original value unchanged. Retain raw random(from,end) ranges, context stacks, pre/post limbs, actual tied queue order, subsequent speed-sort draws (including semantically silent Update events), every Tackle draw, both recipient views, and the real terminal result.',
 		scenarios: TIE_DUEL_SCENARIOS.map(scenario => fullTieDuelScenarioFixture(ps, scenario)),
+	};
+}
+
+const STAGED_SESSION_SCENARIOS = [
+	{
+		id: 'tied-first-p1', seed: [1, 2, 3, 4],
+		p1: { level: 50, speedEvs: 0 }, p2: { level: 50, speedEvs: 0 },
+		firstPlayers: ['p1', 'p1'],
+	},
+	{
+		id: 'tied-first-p2', seed: [1, 2, 3, 4],
+		p1: { level: 50, speedEvs: 0 }, p2: { level: 50, speedEvs: 0 },
+		firstPlayers: ['p2', 'p2'],
+	},
+	{
+		id: 'unequal-first-p1', seed: [1, 2, 3, 4],
+		p1: { level: 50, speedEvs: 0 }, p2: { level: 50, speedEvs: 252 },
+		firstPlayers: ['p1', 'p1'],
+	},
+	{
+		id: 'unequal-first-p2', seed: [1, 2, 3, 4],
+		p1: { level: 50, speedEvs: 0 }, p2: { level: 50, speedEvs: 252 },
+		firstPlayers: ['p2', 'p2'],
+	},
+];
+
+function captureStagedSessionTurn(ps, battle, scenarioId, firstPlayer) {
+	assert.equal(battle.ended, false);
+	const before = snapshot(battle);
+	const requests = { p1: projectRequest(battle.p1), p2: projectRequest(battle.p2) };
+	const logStart = battle.log.length;
+	const firstCommitCapture = withObservedBattleDraws(
+		ps,
+		battle,
+		() => battle.choose(firstPlayer, 'move 1'),
+	);
+	const accepted = firstCommitCapture.result;
+	assert.equal(accepted, true, `${scenarioId} ${firstPlayer} first commitment must be accepted`);
+	assert.deepEqual(firstCommitCapture.draws, [], `${scenarioId} partial ${firstPlayer} commit must consume no RNG`);
+	const afterFirstCommit = snapshot(battle);
+	assert.deepEqual(afterFirstCommit, before, 'a partial Side.choose must not execute or advance the battle');
+	assert.equal(battle.ended, false);
+	assert.equal(battle.p1.choice.actions.length + battle.p2.choice.actions.length, 1, 'exactly one private choice is held');
+	const secondPlayer = firstPlayer === 'p1' ? 'p2' : 'p1';
+	const { result: secondAccepted, draws } = withObservedBattleDraws(
+		ps,
+		battle,
+		() => battle.choose(secondPlayer, 'move 1'),
+	);
+	assert.equal(secondAccepted, true, `${secondPlayer} second commitment must resolve the native turn`);
+	const logDelta = battle.log.slice(logStart);
+	const events = { p1: projectEvents(logDelta, 'p1'), p2: projectEvents(logDelta, 'p2') };
+	const after = snapshot(battle);
+	const nextRequests = battle.ended ? { p1: null, p2: null } : {
+		p1: projectRequest(battle.p1),
+		p2: projectRequest(battle.p2),
+	};
+	const actionOrder = events.p1.filter(event => event.type === 'move').map(event => event.actor);
+	assert.equal(actionOrder.length, 2, `${scenarioId} ${firstPlayer} then ${secondPlayer} must execute both Tackles`);
+	const expectedDrawCount = before.speed[0] === before.speed[1] ? 16 : 6;
+	assert.equal(
+		draws.length,
+		expectedDrawCount,
+		`${scenarioId} ${firstPlayer} then ${secondPlayer}, speeds ${before.speed.join('/')}: ${expectedDrawCount} native draws`,
+	);
+	assert.deepEqual(draws[0].before, before.rng);
+	assert.deepEqual(draws.at(-1).after, after.rng);
+	return {
+		before,
+		requests,
+		firstPlayer,
+		firstCommit: { accepted, draws: firstCommitCapture.draws, state: afterFirstCommit },
+		secondPlayer,
+		actionOrder,
+		draws,
+		totalDrawCount: firstCommitCapture.draws.length + draws.length,
+		events,
+		after,
+		nextRequests,
+		views: { p1: { request: requests.p1, events: events.p1 }, p2: { request: requests.p2, events: events.p2 } },
+	};
+}
+
+function stagedSessionScenario(ps, scenario) {
+	const battle = createBattle(ps, scenario);
+	try {
+		const initial = {
+			state: snapshot(battle),
+			requests: { p1: projectRequest(battle.p1), p2: projectRequest(battle.p2) },
+		};
+	const turns = scenario.firstPlayers.map(firstPlayer => captureStagedSessionTurn(ps, battle, scenario.id, firstPlayer));
+		return { id: scenario.id, seed: [...scenario.seed], initial, turns, outcome: snapshot(battle) };
+	} finally {
+		battle.destroy();
+	}
+}
+
+function generateStagedSessionFixture(ps) {
+	return {
+		schemaVersion: 1,
+		kind: 'gen5-restricted-neutral-tackle-staged-session-oracle',
+		upstream: { repository: LOCK.repository, commit: LOCK.commit },
+		formatId: FORMAT_ID,
+		generation: 5,
+		variant: 'gen5-neutral-tackle-speed-ties-mew-1v1-v2',
+		captureContract: 'Each fixture stage observes each Battle.choose separately and returns original PRNG values unchanged. The first partial commitment must produce no draws and leave state/requests unchanged; the second resolves and records the full draws/events/views and next normal requests when active. Each stage begins at actual normal requests.',
+		scenarios: STAGED_SESSION_SCENARIOS.map(scenario => stagedSessionScenario(ps, scenario)),
 	};
 }
 

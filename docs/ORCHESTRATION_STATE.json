@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "accepted_project_task_count": 36,
+  "accepted_project_task_count": 37,
   "project_direction_decision": {
     "status": "adopted",
     "date": "2026-11-03",
@@ -1284,6 +1284,98 @@
           "reproducer": "docs/neutral-tackle-variant.md Task036 section",
           "limitation": "Configuration-specific measurement only. Initial harness expected four7-turn lanes; actual unequal control8 led to corrected expectation and one successful rerun. No source/test change after freeze."
         }
+      },
+      {
+        "id": "Task037",
+        "title": "Staged simultaneous submissions for restricted JAX turns",
+        "owner": "/root/task037",
+        "status": "accepted",
+        "source_commit": "7efd40cf1f0a468c8eb7e583abb63c0e2c5b0dc9",
+        "scope": "Add a pure fixed-shape staged player-submission API around the accepted v2 restricted Tackle transition, preserving simultaneous private commitments and resolving exactly one turn only after both players commit.",
+        "exclusions": [
+          "new combat mechanics, moves, variants or changes to accepted kernels",
+          "networking, protocol parsing, asynchronous hosts or policy/training integration",
+          "choice retraction/replacement, general retry machinery or full native text-error parity",
+          "new duel executors, tournaments, reporting or persistence tools",
+          "full-format or G1/G3 milestone acceptance",
+          "required GPU runs or throughput claims",
+          "owner commit/push"
+        ],
+        "acceptance_criteria": [
+          "Expose a documented typed request-session PyTree and submission result around the existing v2 BattleState, with trusted per-player pending choices and a bounded local request-episode identifier. submit accepts an explicitly identified player/action/current episode. A first accepted commitment changes only pending metadata, with unchanged battle HP/PP/RNG/turn and no executed events/draws; the second valid commitment calls the unchanged v2 transition exactly once. Clear commitments after successful resolution and advance the local episode at the documented next-request boundary. Preserve all accepted public kernel/duel APIs and fixture outputs.",
+          "Use explicit statuses for accepted/waiting, resolved, stale episode, duplicate submission, invalid player/choice, terminal and unsupported/overflow boundaries. Malformed structural types/shapes fail before simulation; runtime rejection leaves session, battle, RNG and the other valid commitment unchanged. A local episode token is an adapter identifier, not a claimed native rqid. Declare integer bounds and precedence; do not silently wrap or simulate unavailable requests.",
+          "Project per-player session views containing only that player's permitted request data and own commitment status. Never expose the other pending choice/commit flag, trusted RNG/full state or combined views to an actor. Test view invariance under a changed opponent commitment. Keep resolved recipient events available through existing project_tie_view semantics, with trusted-versus-actor boundaries explicit.",
+          "Validate live pinned native partial submissions from actual normal requests in both player orders: first Battle.choose submission consumes no battle draws/HP/PP/turn, second resolves native actions. Chain at least two request episodes, including speed ties and an unequal-speed control, and compare resolved state/RNG/draw/events and both recipient projections to the existing native turn capture. Test stale/duplicate/invalid submissions preserve an already accepted other commitment, terminal/unsupported handling and overflow. Run focused CPU eager/JIT and heterogeneous vmap equivalence (waiting/resolved/rejected lanes, individual/permutation and no-advance); reuse existing trusted fixtures/helpers rather than reconstructing expected RNG. No new performance probe is required because the battle kernel is unchanged.",
+          "Use Trail context/callers before affected symbols, targeted new and affected existing checks once per meaningful revision, diff/JSON and graph refresh/check. Update focused API documentation, Task037 handoff and active progress; preserve exact Task001-036 history and old state/review/direction/GPU evidence. Freeze with changed files, exact validation/results and source blobs for one complete primary review package. Count36/baseline30/next40 until primary acceptance; no Astra gate due absent a concrete contradiction."
+        ],
+        "plan": [
+          "Implement the scoped session and player projection, using current kernels and bounded local episode tokens.",
+          "Add native staged-submission evidence and focused privacy/diagnostic/JIT-vmap tests; run only affected validation.",
+          "Update focused docs/handoff/state, save any non-obvious learning, refresh/check Trail and freeze one complete review package."
+        ],
+        "progress": "Accepted by primary after owner freeze and focused review. Owner pending-acceptance/count36 package above is historical; current count37, baseline30/next40. Final delivery is coordinated by primary.",
+        "owner_review_package": {
+          "status": "owner_frozen_pending_primary_acceptance",
+          "changed_paths": [
+            ".trail/learnings/2026-11-04-keep-staged-requests-aligned-with-their-root.md",
+            "docs/neutral-tackle-variant.md",
+            "docs/TASKS.md",
+            "docs/ORCHESTRATION_STATE.json",
+            "reference/neutral-turn-oracle.cjs",
+            "simulator/__init__.py",
+            "simulator/request_session.py",
+            "test/test_request_session.py"
+          ],
+          "validation": [
+            "JAX_PLATFORMS=cpu python -m unittest test.test_request_session -v \u2014 4 tests passed in 62.103s before final fixture-only revision.",
+            "JAX_PLATFORMS=cpu python -m unittest test.test_request_session.RequestSessionTests.test_live_native_partial_and_second_commits_match_chained_tied_and_unequal_turns -v \u2014 1 test passed in 64.052s after final independent-order revision.",
+            "node reference/neutral-turn-oracle.cjs --sessions > /tmp/task037-sessions-final.json \u2014 exit 0.",
+            "JAX_PLATFORMS=cpu python -m unittest test.test_neutral_tackle test.test_neutral_tackle_ties -v \u2014 9 tests passed in 67.125s.",
+            "node --check reference/neutral-turn-oracle.cjs; python -m py_compile simulator/request_session.py test/test_request_session.py; git diff --check \u2014 all passed.",
+            "default, --duels, and --ties oracle output each compared byte-for-byte with HEAD source; all identical."
+          ],
+          "existing_oracle_sha256": {
+            "default": "d1a219a9483d8d1c0859338089a8d980372e79987c796f155e5c210395828157",
+            "--duels": "baeb3b3bd3f1eccf35f59f2d4fa4e9f23f933ec8cefb4fd7f6f60b2ead2eaf51",
+            "--ties": "f333fa2129218c17da1011fef818009a15e8a6677ef7b55c4dc36d2e6a805906"
+          },
+          "source_blobs": {
+            ".trail/learnings/2026-11-04-keep-staged-requests-aligned-with-their-root.md": "fb0cac6dc8476d05d441dd28dc6404218f7778e7",
+            "docs/neutral-tackle-variant.md": "d8a8329fe276c76b8da1fd93950b73abca92f549",
+            "reference/neutral-turn-oracle.cjs": "a6c4bb95502b25b022000da932f9d23c80ea8b13",
+            "simulator/__init__.py": "a97e42cf2ea41ceaf32e5a1ac17684a295623212",
+            "simulator/request_session.py": "1f3e1695d636187cb476301a5e974e4709be2267",
+            "test/test_request_session.py": "b9b9eb65816229b3bf40a55ef3fecd326b06c9cd"
+          },
+          "trail_check_json": "/tmp/task037-trail-check.json",
+          "trail_check": {
+            "command": "trail check --base HEAD --json > /tmp/task037-trail-check.json",
+            "exit_code": 1,
+            "result": "Lexical conflict/lead findings and exact counts are saved in the JSON artifact. Direct conflicts were reviewed as phrase overlap in task scope/exclusions or native oracle names; none reinstates a ruled-out system or exposes trusted updates. Lead findings say they are not about this file. No learning contradiction remains."
+          },
+          "trail_build": "trail build \u2014 parsed 95 files; 955 nodes and 2153 edges; cache at /workspace/.trail/cache (git-ignored).",
+          "unresolved_concerns": []
+        },
+        "gpu_required": false,
+        "accepted_at": "2026-11-04",
+        "accepted_by_agent": "/root",
+        "acceptance_review": "Primary /root independently reviewed the complete session/oracle/test code, focused API documentation, native evidence and validation. Accepted the typed staged-submission API around unchanged v2 kernels: first commitment changes private pending metadata only; second valid commitment resolves once, clears choices and advances the bounded local token. Rejections preserve accepted commitments and battle/RNG; actor views reveal only own commitment, current episode-aligned request and separate prior recipient events. Four independent same-seed native Battles (both submission orders for tied and unequal speeds), each with two chained episodes, match state, ordered events, every draw and both current/previous recipient projections. Native partial commits draw0; resolving tied/unequal turns draw16/6. The initial fixture-count assumption was corrected, idle branches now construct empty transitions directly, and stale-request/new-token projection was repaired. Corrected full session suite4/4 passed before final fixture-only revision, final affected native method1/1 afterward, and legacy v1/v2 suites9/9; syntax/JSON/diff checks passed. All three existing oracle modes are byte-identical to base. Primary verified executable source blobs, unchanged accepted kernels, exact old handoff/state/review/direction/GPU history, graph freshness and learning findings. No source/test change after freeze; no GPU requirement, benchmark/full-format/milestone acceptance or unresolved blocker. Count36 becomes37; baseline30/next40 remain. Owner stopped; no Task038 starts.",
+        "implementation_source_blobs": {
+          "reference/neutral-turn-oracle.cjs": "a6c4bb95502b25b022000da932f9d23c80ea8b13",
+          "simulator/__init__.py": "a97e42cf2ea41ceaf32e5a1ac17684a295623212",
+          "simulator/request_session.py": "1f3e1695d636187cb476301a5e974e4709be2267",
+          "test/test_request_session.py": "b9b9eb65816229b3bf40a55ef3fecd326b06c9cd"
+        },
+        "trail_learning": "l-75b4d172",
+        "validation": [
+          "JAX_PLATFORMS=cpu python -m unittest test.test_request_session -v \u2014 4 tests passed in 62.103s before final fixture-only revision.",
+          "JAX_PLATFORMS=cpu python -m unittest test.test_request_session.RequestSessionTests.test_live_native_partial_and_second_commits_match_chained_tied_and_unequal_turns -v \u2014 1 test passed in 64.052s after final independent-order revision.",
+          "node reference/neutral-turn-oracle.cjs --sessions > /tmp/task037-sessions-final.json \u2014 exit 0.",
+          "JAX_PLATFORMS=cpu python -m unittest test.test_neutral_tackle test.test_neutral_tackle_ties -v \u2014 9 tests passed in 67.125s.",
+          "node --check reference/neutral-turn-oracle.cjs; python -m py_compile simulator/request_session.py test/test_request_session.py; git diff --check \u2014 all passed.",
+          "default, --duels, and --ties oracle output each compared byte-for-byte with HEAD source; all identical.",
+          "Primary exact old history/state/review/direction/GPU bytes, frozen source/test identities, unchanged accepted kernels and final staged scope/diff/learning/graph checks passed. Final learning findings and rationale accompany commit."
+        ]
       }
     ],
     "active_regular_review": null,
