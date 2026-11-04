@@ -1,6 +1,6 @@
 # Current task handoff
 
-Accepted numbered tasks: **37**. Active task: **none**. GPU block: **none**.
+Accepted numbered tasks: **38**. Active task: **none**. GPU block: **none**.
 Global review baseline: **30**; next checkpoint: **40**. No pending review corrections.
 G0 is accepted; G1/G3 and all implementation milestones remain open.
 
@@ -9,8 +9,8 @@ G0 is accepted; G1/G3 and all implementation milestones remain open.
 Prioritize integrated JAX simulation and pinned Showdown parity. Restricted
 Mew/Tackle v1 and speed-tie v2 turns/duels are accepted. Task037 adds staged
 private submissions, bounded local episode tokens, and separate current-request
-and previous-event projections around unchanged v2 kernels. Latest project
-commit: `a2510fa5e7186f1d5c0ad3317a4337b3b86e6184`.
+and previous-event projections around unchanged v2 kernels. Task038 adds a
+read-only initial session view; details: [TASK038.md](TASK038.md).
 
 Relevant APIs: `simulator/neutral_tackle.py`, `simulator/neutral_tackle_ties.py`,
 `simulator/neutral_duel.py`, `simulator/request_session.py`. API contract and
@@ -81,8 +81,9 @@ accepted-count ledger; archive records are its detail, not additional tasks.
 | 035 | Accepted | bounded compiled restricted Tackle duels |
 | 036 | Accepted | seeded speed ties in restricted JAX Tackle duels |
 | 037 | Accepted | staged simultaneous submissions for restricted JAX turns |
+| 038 | Accepted | initial actor view for a request session — [evidence](TASK038.md) |
 
 ## Active work
 
-None. Put the next bounded contract here. After acceptance, archive its detail
-once, add one index row, and keep only a short current-position summary.
+None. Optional long regression is recorded in `deferred_validation` in the state;
+it was not run and does not block Task038 acceptance.

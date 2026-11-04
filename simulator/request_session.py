@@ -61,6 +61,14 @@ class SessionView(NamedTuple):
 	own_choice_submitted: jax.Array
 
 
+class SessionRequestView(NamedTuple):
+	"""Read-only view of one player's current request in a request session."""
+
+	player_view: PlayerView
+	episode: jax.Array
+	own_choice_submitted: jax.Array
+
+
 def _integral_scalar(name: str, value) -> jax.Array:
 	if isinstance(value, jax.core.Tracer):
 		if value.shape != ():
@@ -113,6 +121,22 @@ def _idle_transition(battle: BattleState) -> TieTransition:
 		jnp.where(_supported_tie_state(battle), TURN_PENDING, TURN_UNSUPPORTED),
 	).astype(jnp.int32)
 	return _empty_tie_transition(battle, status)
+
+
+def project_request_view(session: RequestSession, audience: int) -> SessionRequestView:
+	"""Project one player's current request without advancing the session.
+
+	The view is available immediately after ``make_request_session``. It contains
+	only the recipient's projected request, local episode and own commit bit.
+	Compile with ``jax.jit(project_request_view, static_argnums=1)``.
+	"""
+	_validate_session_structure(session)
+	player_view = project_tie_view(session.battle, _idle_transition(session.battle), audience)
+	return SessionRequestView(
+		player_view,
+		session.episode,
+		session.pending_choices[player_view.audience] == ACTION_TACKLE,
+	)
 
 
 def submit_choice(session: RequestSession, player, choice, expected_episode) -> SessionSubmission:
@@ -254,13 +278,11 @@ def project_submission_view(result: SessionSubmission, audience: int) -> Session
 
 	Compile with ``jax.jit(project_submission_view, static_argnums=1)``.
 	"""
-	request_transition = _idle_transition(result.session.battle)
-	view = project_tie_view(result.session.battle, request_transition, audience)
+	request_view = project_request_view(result.session, audience)
 	resolved_events = project_tie_view(result.before, result.transition, audience)
-	player = int(audience)
 	return SessionView(
-		view,
+		request_view.player_view,
 		resolved_events,
-		result.session.episode,
-		result.session.pending_choices[player] == ACTION_TACKLE,
+		request_view.episode,
+		request_view.own_choice_submitted,
 	)

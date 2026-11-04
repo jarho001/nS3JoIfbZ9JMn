@@ -58,9 +58,11 @@ from .request_session import (
 	SESSION_UNSUPPORTED,
 	SESSION_WAITING,
 	RequestSession,
+	SessionRequestView,
 	SessionSubmission,
 	SessionView,
 	make_request_session,
+	project_request_view,
 	project_submission_view,
 	submit_choice,
 )
@@ -117,9 +119,11 @@ __all__ = [
 	"SESSION_UNSUPPORTED",
 	"SESSION_WAITING",
 	"RequestSession",
+	"SessionRequestView",
 	"SessionSubmission",
 	"SessionView",
 	"make_request_session",
+	"project_request_view",
 	"project_submission_view",
 	"submit_choice",
 ]

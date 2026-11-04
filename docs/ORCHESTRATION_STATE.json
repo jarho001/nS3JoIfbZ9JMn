@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "accepted_project_task_count": 37,
+  "accepted_project_task_count": 38,
   "project_direction_decision": {
     "status": "adopted",
     "date": "2026-11-03",
@@ -269,6 +269,16 @@
         "accepted_at": "2026-11-04",
         "accepted_by_agent": "/root",
         "history_ref": "ORCHESTRATION_STATE_ARCHIVE_037.json#/review_state/completed_task_history/15"
+      },
+      {
+        "id": "Task038",
+        "title": "Initial actor view for a request session",
+        "status": "accepted",
+        "owner": "/root/task038",
+        "source_commit": "9bc3bf0594449709adc213409c0ff6d3896971ad",
+        "accepted_at": "2026-11-04",
+        "accepted_by_agent": "/root",
+        "history_ref": "TASK038.md"
       }
     ],
     "active_regular_review": null,
@@ -359,5 +369,19 @@
       "preservation": "Exact pre-compaction bytes; full completed records, reviews, source identities, and GPU evidence remain authoritative there."
     }
   ],
-  "deferred_validation": []
+  "deferred_validation": [
+    {
+      "task": "Task038",
+      "status": "deferred_optional_regression",
+      "command": "JAX_PLATFORMS=cpu python -m unittest test.test_request_session test.test_neutral_tackle test.test_neutral_duel test.test_neutral_tackle_ties -v",
+      "source_base": "9bc3bf0594449709adc213409c0ff6d3896971ad",
+      "changed_source_blobs": {
+        "simulator/request_session.py": "4a94e7a4eaec59d574dab5a5274a7875c4ba1e0e",
+        "simulator/__init__.py": "162da03469955fa7088fc034c44de39e21a4314e",
+        "test/test_request_view.py": "a6611019117f52f1306bd92ad85d1c5811d2e96b"
+      },
+      "reason": "Known-long integration suite; explicit user-run test session only. Fast projection acceptance checks passed.",
+      "acceptance_dependency": false
+    }
+  ]
 }
