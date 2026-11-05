@@ -33,6 +33,8 @@ SESSION_TERMINAL = 6
 SESSION_UNSUPPORTED = 7
 SESSION_OVERFLOW = 8
 SESSION_STOPPED = 9
+SESSION_RESET = 10
+SESSION_NOT_TERMINAL = 11
 
 
 class RequestSession(NamedTuple):
@@ -50,6 +52,13 @@ class SessionSubmission(NamedTuple):
 	status: jax.Array
 	before: BattleState
 	transition: TieTransition
+
+
+class SessionReset(NamedTuple):
+	"""Trusted coordinator result for a terminal-session reset."""
+
+	session: RequestSession
+	status: jax.Array
 
 
 class SessionView(NamedTuple):
@@ -268,6 +277,65 @@ def submit_choice(session: RequestSession, player, choice, expected_episode) -> 
 	return jax.lax.cond(
 		episode_id == session.episode,
 		check_player,
+		lambda _: rejected(SESSION_STALE_EPISODE),
+		operand=None,
+	)
+
+
+def reset_request_session(session: RequestSession, battle: BattleState, expected_episode) -> SessionReset:
+	"""Start a new local request episode from a trusted prepared battle.
+
+	The replacement must be a supported nonterminal restricted-v2 request
+	state. The old session must be structurally valid, terminal, have no pending
+	choices, and carry the matching local episode. A terminal session with a
+	held choice is unsupported; a valid live session returns
+	SESSION_NOT_TERMINAL. The replacement battle is copied verbatim, pending
+	choices are cleared, and the local episode advances once. Rejections retain
+	the full input session and do not transition or draw RNG.
+	"""
+	_validate_session_structure(session)
+	_validate_state_structure(battle)
+	episode_id = _integral_scalar("expected_episode", expected_episode)
+
+	def rejected(status):
+		return SessionReset(session, jnp.asarray(status, jnp.int32))
+
+	def check_reset_metadata(_):
+		valid_pending = jnp.all((session.pending_choices == 0) | (session.pending_choices == ACTION_TACKLE))
+		valid_episode = session.episode >= 0
+		terminal_commitments_clear = (~session.battle.terminal) | jnp.all(session.pending_choices == 0)
+		supported_replacement = _supported_tie_state(battle)
+
+		def check_terminal(__):
+			return jax.lax.cond(
+				session.battle.terminal,
+				lambda ___: jax.lax.cond(
+					session.episode == MAX_REQUEST_EPISODE,
+					lambda ____: rejected(SESSION_OVERFLOW),
+					lambda ____: SessionReset(
+						session._replace(
+							battle=battle,
+							pending_choices=jnp.zeros((2,), dtype=jnp.int32),
+							episode=session.episode + jnp.asarray(1, jnp.int32),
+						),
+						jnp.asarray(SESSION_RESET, jnp.int32),
+					),
+					operand=None,
+				),
+				lambda ___: rejected(SESSION_NOT_TERMINAL),
+				operand=None,
+			)
+
+		return jax.lax.cond(
+			valid_pending & valid_episode & terminal_commitments_clear & supported_replacement,
+			check_terminal,
+			lambda __: rejected(SESSION_UNSUPPORTED),
+			operand=None,
+		)
+
+	return jax.lax.cond(
+		episode_id == session.episode,
+		check_reset_metadata,
 		lambda _: rejected(SESSION_STALE_EPISODE),
 		operand=None,
 	)

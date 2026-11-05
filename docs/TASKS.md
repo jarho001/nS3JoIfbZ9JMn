@@ -1,6 +1,6 @@
 # Current task handoff
 
-Accepted numbered tasks: **40**. Active task: **none**. GPU block: **none**.
+Accepted numbered tasks: **41**. Active task: **none**. GPU block: **none**.
 Global review baseline: **40**; next checkpoint: **50**. No pending review corrections.
 G0 is accepted; G1/G3 and all implementation milestones remain open.
 
@@ -14,7 +14,9 @@ read-only initial session view; details: [TASK038.md](TASK038.md). Task039
 validates complete staged-session battles to terminal against pinned Showdown
 in both submission orders: [TASK039.md](TASK039.md). Task040 validates those
 sessions across a heterogeneous `jit(vmap(submit_choice))` batch:
-[TASK040.md](TASK040.md).
+[TASK040.md](TASK040.md). Task041 adds a trusted terminal-session reset that
+requires cleared commitments and accepts a supplied supported v2 request
+state: [TASK041.md](TASK041.md).
 
 Relevant APIs: `simulator/neutral_tackle.py`, `simulator/neutral_tackle_ties.py`,
 `simulator/neutral_duel.py`, `simulator/request_session.py`. API contract and
@@ -88,8 +90,10 @@ accepted-count ledger; archive records are its detail, not additional tasks.
 | 038 | Accepted | initial actor view for a request session — [evidence](TASK038.md) |
 | 039 | Accepted | complete staged-session battle parity — [evidence](TASK039.md) |
 | 040 | Accepted | heterogeneous batched staged request sessions — [evidence](TASK040.md) |
+| 041 | Accepted | trusted terminal request-session reset — [evidence](TASK041.md) |
 
 ## Active work
 
-None. Optional long regressions are recorded in `deferred_validation` in the
-state; they remain unrun and did not block the focused Task038–040 acceptance.
+None. Task041 was accepted by primary review on 2026-11-05. Optional long
+regressions are recorded in `deferred_validation` in the state; they remain
+unrun and are not acceptance dependencies.

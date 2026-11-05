@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "accepted_project_task_count": 40,
+  "accepted_project_task_count": 41,
   "project_direction_decision": {
     "status": "adopted",
     "date": "2026-11-03",
@@ -299,6 +299,16 @@
         "accepted_at": "2026-11-05",
         "accepted_by_agent": "/root",
         "history_ref": "TASK040.md"
+      },
+      {
+        "id": "Task041",
+        "title": "trusted terminal request-session reset",
+        "status": "accepted",
+        "owner": "/root/task041",
+        "source_base": "019b601f23cc35777889b24329173adada045545",
+        "accepted_at": "2026-11-05",
+        "accepted_by_agent": "/root",
+        "history_ref": "TASK041.md"
       }
     ],
     "active_regular_review": null,
@@ -467,6 +477,19 @@
         "test/test_neutral_tackle_ties.py": "d6c5847c0f9efa0c6fa5e88625736bed00d162f3"
       },
       "reason": "Known-long integration/mechanics regression exceeds the per-command 30-second routine cap. It is optional after focused Task040 parity; deferred to an explicit user-run long-test session and not part of this acceptance dependency.",
+      "acceptance_dependency": false
+    },
+    {
+      "task": "Task041",
+      "status": "deferred_optional_regression",
+      "command": "JAX_PLATFORMS=cpu python -m unittest test.test_request_session test.test_neutral_tackle test.test_neutral_duel test.test_neutral_tackle_ties -v",
+      "source_base": "019b601f23cc35777889b24329173adada045545",
+      "source_blobs": {
+        "simulator/request_session.py": "ffdae56f4c8a0495b64324ff7a0e10631c97dcc2",
+        "simulator/__init__.py": "563ad9ac7ce6f346798b2f2757bc177267ed5249",
+        "test/test_request_session_reset.py": "549d164b0548db229a3f69251db9a79a750f6780"
+      },
+      "reason": "Known-long request-session/mechanics regression exceeds the 30-second per-command routine cap. The focused Task041 reset test passed; this optional regression is not an acceptance dependency.",
       "acceptance_dependency": false
     }
   ]
