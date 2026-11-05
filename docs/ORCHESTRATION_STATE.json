@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "accepted_project_task_count": 39,
+  "accepted_project_task_count": 40,
   "project_direction_decision": {
     "status": "adopted",
     "date": "2026-11-03",
@@ -21,7 +21,7 @@
     "milestones_accepted": []
   },
   "review_state": {
-    "latest_task_review_baseline": 30,
+    "latest_task_review_baseline": 40,
     "bootstrap_review": {
       "status": "accepted",
       "due_at_accepted_project_task": 20,
@@ -32,7 +32,7 @@
       "review_note": "Independent focused review of required documentation corrections and policy diff accepted with the recorded static validation evidence."
     },
     "pending_review_corrections": [],
-    "next_regular_review_due_at_accepted_project_task": 40,
+    "next_regular_review_due_at_accepted_project_task": 50,
     "milestone_review": {
       "required_at_documented_boundaries": true,
       "last_reviewed_milestone": "G0",
@@ -289,6 +289,16 @@
         "accepted_at": "2026-11-04",
         "accepted_by_agent": "/root",
         "history_ref": "TASK039.md"
+      },
+      {
+        "id": "Task040",
+        "title": "heterogeneous batched staged request sessions",
+        "status": "accepted",
+        "owner": "/root/task040",
+        "source_base": "b30bd77dff9e304d154988e5610838858e277356",
+        "accepted_at": "2026-11-05",
+        "accepted_by_agent": "/root",
+        "history_ref": "TASK040.md"
       }
     ],
     "active_regular_review": null,
@@ -322,6 +332,32 @@
           "Independent source/evidence sampling and candidate source/tree identity verified.",
           "Independent tests57/57 plus corrected pair/manifest23/23 passed; pinned provenance and diff checks passed.",
           "Owner71/71 and syntax/graph evidence reviewed; no new GPU/benchmark or milestone claim."
+        ]
+      },
+      {
+        "id": "T040Global",
+        "status": "accepted",
+        "reviewer_role": "global_reviewer",
+        "reviewer": "/root/t040_global",
+        "report": "docs/reviews/T040-global.md",
+        "accepted_count_at_review_start": 39,
+        "candidate_task": "Task040",
+        "checkpoint": 40,
+        "reviewed_base_commit": "b30bd77dff9e304d154988e5610838858e277356",
+        "candidate_tree": null,
+        "candidate_tree_note": "The review report identifies the source base and candidate source blob hashes; it records no final candidate tree or commit hash.",
+        "scope": "Prospective checkpoint review of accepted Tasks031\u2013039 and Task040: candidate parity, simulator-first direction, pinned reference, privacy, deferred scope, and open milestone boundaries.",
+        "required_findings": [],
+        "disposition": "ACCEPTED",
+        "accepted_at": "2026-11-05",
+        "accepted_by": "/root",
+        "accepted_task_review_baseline": 40,
+        "next_checkpoint": 50,
+        "validation": [
+          "Independent CPU batch parity test passed 1/1 in 6.770s (outer command 7.183s); the owner recorded 1/1 in 6.725s and native fixture generation produced four terminal lanes.",
+          "Independent source review and blob checks verified the candidate test, request-session API, unchanged native oracle, exact state/RNG/request/event comparisons, actor projection privacy, and no simulator/oracle source changes.",
+          "Pinned provenance command passed; JSON parsing and git diff --check passed.",
+          "No Trail, GPU, performance, full-format, G1/G3 milestone, training, or policy-strength claim was made. Optional long-session request-session/mechanics regression remains deferred and non-blocking."
         ]
       }
     ]
@@ -411,6 +447,26 @@
         "test/test_neutral_tackle_ties.py": "d6c5847c0f9efa0c6fa5e88625736bed00d162f3"
       },
       "reason": "Includes known-long request-session/mechanics suites exceeding the 30s per-command routine cap; deferred to an explicit user-run long-test session. Focused Task039 complete-session parity passed.",
+      "acceptance_dependency": false
+    },
+    {
+      "task": "Task040",
+      "status": "deferred_optional_regression",
+      "command": "JAX_PLATFORMS=cpu python -m unittest test.test_request_session test.test_neutral_tackle test.test_neutral_duel test.test_neutral_tackle_ties -v",
+      "source_base": "b30bd77dff9e304d154988e5610838858e277356",
+      "source_blobs": {
+        "reference/neutral-turn-oracle.cjs": "da3a9c5f0166e006da8bbf1cf676eedabb234700",
+        "simulator/request_session.py": "4a94e7a4eaec59d574dab5a5274a7875c4ba1e0e",
+        "simulator/neutral_tackle.py": "71a7186b4f2572618a8f08c91fd8fa8aa32d7704",
+        "simulator/neutral_tackle_ties.py": "a7c1aae754e1b45ea92078421753d623342b1e7e",
+        "simulator/neutral_duel.py": "a358dc7fa3901566c893254c9118931abb3e76f2",
+        "test/test_request_session.py": "b9b9eb65816229b3bf40a55ef3fecd326b06c9cd",
+        "test/test_request_session_duel.py": "fa3cb5bb17742b42c95f22dccbf919d7aa7e4270",
+        "test/test_neutral_tackle.py": "183f82977a3956b41cfe8d4e3ceaec97dee81c87",
+        "test/test_neutral_duel.py": "935109104f6e382d19e210a862ef0d92738afd32",
+        "test/test_neutral_tackle_ties.py": "d6c5847c0f9efa0c6fa5e88625736bed00d162f3"
+      },
+      "reason": "Known-long integration/mechanics regression exceeds the per-command 30-second routine cap. It is optional after focused Task040 parity; deferred to an explicit user-run long-test session and not part of this acceptance dependency.",
       "acceptance_dependency": false
     }
   ]

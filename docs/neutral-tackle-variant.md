@@ -288,3 +288,13 @@ The known-long existing request-session/mechanics regression command remains def
 ```sh
 JAX_PLATFORMS=cpu python -m unittest test.test_request_session test.test_neutral_tackle test.test_neutral_duel test.test_neutral_tackle_ties -v
 ```
+
+## Heterogeneous batched staged-session parity (Task040)
+
+`test/test_request_session_batch.py` drives all four complete `--session-duels` fixture lanes through one shared `jax.jit(jax.vmap(submit_choice))` function. The batch combines tied and unequal speeds and both first-submitter orders. Its schedule overlaps `SESSION_WAITING`, `SESSION_RESOLVED`, duplicate and stale rejections, and terminal submissions while other lanes continue. A waiting lane retains its exact battle and RNG, updates only its own commitment, and emits no transition draws or action events. Rejected and terminal lanes retain the full session with no transition draws or action events. Each resolved lane is checked against its native state, exact RNG trace, recipient event projections, next requests and terminal outcome. Commit bits and episode counters stay lane-local, and actor views contain only the audience's request and projected events. This is batch parity evidence for the existing v2 API; it introduces no mechanic or variant and makes no GPU, performance or milestone claim.
+
+From a shell with the CPU JAX environment activated, run the focused test with:
+
+```sh
+JAX_PLATFORMS=cpu python -m unittest test.test_request_session_batch -v
+```
