@@ -1,7 +1,7 @@
 # Current task handoff
 
-Accepted numbered tasks: **49**. Active task: **none**. GPU block: **none**.
-Global review baseline: **40**; next checkpoint: **50**. No pending review corrections.
+Accepted numbered tasks: **50**. Active task: **none**. GPU block: **none**.
+Global review baseline: **50**; next checkpoint: **60**. No pending review corrections.
 G0 is accepted; G1/G3 and all implementation milestones remain open.
 
 ## Current position
@@ -9,7 +9,11 @@ G0 is accepted; G1/G3 and all implementation milestones remain open.
 Prioritize integrated JAX simulation and pinned Showdown parity. Tasks 048–049
 add the restricted Mega Punch-only v5 turn and validate complete native battles
 through terminal outcomes: [TASK048.md](TASK048.md), [TASK049.md](TASK049.md).
-Task049 was accepted by primary `/root` on 2026-11-05. Earlier bounded simulator
+Task049 was accepted by primary `/root` on 2026-11-05. Task050 adds the
+restricted Tackle/Mega Punch simultaneous-choice turn with real accuracy misses
+and was accepted by primary `/root` and independent Astra T050Global on
+2026-11-05; see [TASK050.md](TASK050.md) and the [T050Global review report](reviews/T050-global.md).
+Earlier bounded simulator
 variants and staged request sessions remain documented in [TASKS_ARCHIVE_001_037.md](TASKS_ARCHIVE_001_037.md)
 and the Task038–047 handoffs. Full-format support, the team generator, training,
 and later milestones remain open; G0 is the only accepted milestone.
@@ -90,3 +94,4 @@ accepted-count ledger; archive records are its detail, not additional tasks.
 | 047 | Accepted | trusted terminal reset for v4 request sessions — [evidence](TASK047.md) |
 | 048 | Accepted | restricted neutral Mega Punch Mew turn with native misses — [evidence](TASK048.md) |
 | 049 | Accepted | exact complete-battle parity for Mega Punch Mew — [evidence](TASK049.md) |
+| 050 | Accepted | restricted simultaneous Tackle/Mega Punch accuracy-choice turn — [evidence](TASK050.md), [T050Global review](reviews/T050-global.md) |

@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "accepted_project_task_count": 49,
+  "accepted_project_task_count": 50,
   "project_direction_decision": {
     "status": "adopted",
     "date": "2026-11-03",
@@ -21,7 +21,7 @@
     "milestones_accepted": []
   },
   "review_state": {
-    "latest_task_review_baseline": 40,
+    "latest_task_review_baseline": 50,
     "bootstrap_review": {
       "status": "accepted",
       "due_at_accepted_project_task": 20,
@@ -32,7 +32,7 @@
       "review_note": "Independent focused review of required documentation corrections and policy diff accepted with the recorded static validation evidence."
     },
     "pending_review_corrections": [],
-    "next_regular_review_due_at_accepted_project_task": 50,
+    "next_regular_review_due_at_accepted_project_task": 60,
     "milestone_review": {
       "required_at_documented_boundaries": true,
       "last_reviewed_milestone": "G0",
@@ -389,6 +389,16 @@
         "accepted_at": "2026-11-05",
         "accepted_by_agent": "/root",
         "history_ref": "TASK049.md"
+      },
+      {
+        "id": "Task050",
+        "title": "restricted simultaneous Tackle/Mega Punch accuracy-choice turn",
+        "status": "accepted",
+        "owner": "/root/task050_resume",
+        "source_base": "e5f4b21e52da78d7bcef37a1b4551808adec0b50",
+        "accepted_at": "2026-11-05",
+        "accepted_by_agent": "/root",
+        "history_ref": "TASK050.md"
       }
     ],
     "active_regular_review": null,
@@ -448,6 +458,38 @@
           "Independent source review and blob checks verified the candidate test, request-session API, unchanged native oracle, exact state/RNG/request/event comparisons, actor projection privacy, and no simulator/oracle source changes.",
           "Pinned provenance command passed; JSON parsing and git diff --check passed.",
           "No Trail, GPU, performance, full-format, G1/G3 milestone, training, or policy-strength claim was made. Optional long-session request-session/mechanics regression remains deferred and non-blocking."
+        ]
+      },
+      {
+        "id": "T050Global",
+        "status": "accepted",
+        "reviewer_role": "global_reviewer",
+        "reviewer": "/root/t050_global",
+        "report": "docs/reviews/T050-global.md",
+        "accepted_count_at_review_start": 49,
+        "candidate_task": "Task050",
+        "checkpoint": 50,
+        "reviewed_base_commit": "cf11f44b6afd1ae671266c354a052c521d8ef669",
+        "implementation_source_base": "e5f4b21e52da78d7bcef37a1b4551808adec0b50",
+        "source_blobs": {
+          "simulator/accuracy_choice.py": "2480a85c574c604a06a705d39ebbf5ab38dbca19",
+          "simulator/neutral_mega_punch.py": "44bac3dae2a4a6ef8fb7b7cc0519412ea5037098",
+          "simulator/__init__.py": "fe5d497a96b36ef7fa3c078a916d461560c7f3f3",
+          "reference/accuracy-choice-oracle.cjs": "901d14cc35c234e72cb46238452c7e44e9a70f8b",
+          "reference/neutral-mega-punch-oracle.cjs": "698d668f67ba44e55186b0f5adc87760d6c2109e",
+          "test/test_accuracy_choice.py": "f97b747dceae9572af7df65f8612048b027c957e"
+        },
+        "scope": "Independent checkpoint review of accepted Tasks041-049 and Task050: source identity, pinned native evidence, bounded CPU parity, project direction, and open milestones.",
+        "required_findings": [],
+        "disposition": "ACCEPTED",
+        "accepted_at": "2026-11-05",
+        "accepted_by": "/root",
+        "accepted_task_review_baseline": 50,
+        "next_checkpoint": 60,
+        "validation": [
+          "Independent CPU test passed 4/4 in 5.516 s (5.95 s outer); the six candidate source blobs were verified, with no required corrections or blockers.",
+          "Owner CPU checks passed: Task050 focused native/JAX parity 4/4 and fast v5 Mega Punch regression 2/2. No GPU or milestone claim was made.",
+          "Supplied legacy logs cover accepted base e5f4b21e52da78d7bcef37a1b4551808adec0b50 only (21 tests, 511.757 s combined); JAX/device provenance is absent, so they are not GPU evidence and were not rerun."
         ]
       }
     ]

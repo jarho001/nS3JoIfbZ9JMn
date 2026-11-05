@@ -399,4 +399,4 @@ function main(args = process.argv.slice(2)) {
 
 if (require.main === module) main();
 
-module.exports = { generateFixture, generateDuels, main };
+module.exports = { generateFixture, generateDuels, main, projectMegaPunchEvents };

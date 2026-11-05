@@ -192,7 +192,16 @@ def _record_draw(
 	)
 
 
-def _execute_action(state: BattleState, actor, slot, events, draws):
+def _execute_action(
+	state: BattleState,
+	actor,
+	slot,
+	events,
+	draws,
+	*,
+	base_power=MEGA_PUNCH_BASE_POWER,
+	accuracy=MEGA_PUNCH_ACCURACY,
+):
 	target = 1 - actor
 	seed_before_accuracy = state.rng
 	seed_after_accuracy, accuracy_word = sample_bounded(seed_before_accuracy, 100)
@@ -244,7 +253,7 @@ def _execute_action(state: BattleState, actor, slot, events, draws):
 		critical = critical_roll == 0
 		pre_critical_damage = neutral_damage_before_roll(
 			after_accuracy.level[actor],
-			jnp.asarray(MEGA_PUNCH_BASE_POWER, dtype=jnp.int32),
+			jnp.asarray(base_power, dtype=jnp.int32),
 			after_accuracy.attack[actor],
 			after_accuracy.defense[target],
 		)
@@ -299,14 +308,14 @@ def _execute_action(state: BattleState, actor, slot, events, draws):
 		)
 
 	return jax.lax.cond(
-		accuracy_roll < MEGA_PUNCH_ACCURACY,
+		accuracy_roll < accuracy,
 		hit_branch,
 		miss_branch,
 		operand=None,
 	)
 
 
-def _run_turn(state: BattleState) -> MegaPunchTransition:
+def _run_turn(state: BattleState, action_fn=_execute_action) -> MegaPunchTransition:
 	first_actor = jnp.where(state.speed[0] > state.speed[1], 0, 1).astype(jnp.int32)
 	events = _empty_events()
 	draws = _empty_draws()
@@ -317,7 +326,7 @@ def _run_turn(state: BattleState) -> MegaPunchTransition:
 		can_act = (current_state.hp[actor] > 0) & (current_state.hp[1 - actor] > 0)
 		return jax.lax.cond(
 			can_act,
-			lambda value: _execute_action(value[0], actor, step, value[1], value[2]),
+			lambda value: action_fn(value[0], actor, step, value[1], value[2]),
 			lambda value: value,
 			(current_state, current_events, current_draws),
 		)
@@ -418,7 +427,13 @@ def project_mega_punch_view(
 	_validate_state_structure(result.state)
 	base = _project_view(before, result, audience, _supported_mega_punch_state)
 	missed = result.events.missed
-	base = base._replace(
+	base = _mask_missed_projection(base, missed)
+	return MegaPunchPlayerView(base, missed)
+
+
+def _mask_missed_projection(base: PlayerView, missed: jax.Array) -> PlayerView:
+	"""Hide hit-only projection fields on rows whose selected move missed."""
+	return base._replace(
 		critical=base.critical & (~missed),
 		damage_value=jnp.where(missed, -1, base.damage_value).astype(jnp.int32),
 		damage_visible=base.damage_visible & (~missed),
@@ -426,7 +441,6 @@ def project_mega_punch_view(
 		target_hp_is_percent=base.target_hp_is_percent & (~missed),
 		fainted=base.fainted & (~missed),
 	)
-	return MegaPunchPlayerView(base, missed)
 
 
 __all__ = [
