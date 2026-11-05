@@ -144,13 +144,18 @@ def _empty_result(state: TwoMoveState, status: int) -> AccuracyChoiceTransition:
 	)
 
 
-def _run_accuracy_choice_turn(state: TwoMoveState, choices: jax.Array) -> AccuracyChoiceTransition:
+def _run_accuracy_choice_turn(
+	state: TwoMoveState,
+	choices: jax.Array,
+	burned: jax.Array | None = None,
+) -> AccuracyChoiceTransition:
 	internal = _adapt_state(state)
 
 	def execute(current, actor, slot, events, draws):
 		action = choices[actor]
 		base_power = jnp.where(action == ACTION_TACKLE, TACKLE_BASE_POWER, MEGA_PUNCH_BASE_POWER)
 		accuracy = jnp.where(action == ACTION_TACKLE, TACKLE_ACCURACY, MEGA_PUNCH_ACCURACY)
+		actor_burned = jnp.asarray(False, dtype=jnp.bool_) if burned is None else burned[actor]
 		return _execute_action(
 			current,
 			actor,
@@ -159,6 +164,7 @@ def _run_accuracy_choice_turn(state: TwoMoveState, choices: jax.Array) -> Accura
 			draws,
 			base_power=base_power,
 			accuracy=accuracy,
+			burned=actor_burned,
 		)
 
 	internal_result = _run_turn(internal, action_fn=execute)

@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "accepted_project_task_count": 51,
+  "accepted_project_task_count": 52,
   "project_direction_decision": {
     "status": "adopted",
     "date": "2026-11-03",
@@ -409,6 +409,16 @@
         "accepted_at": "2026-11-05",
         "accepted_by_agent": "/root",
         "history_ref": "TASK051.md"
+      },
+      {
+        "id": "Task052",
+        "title": "restricted single-burn Tackle/Mega Punch Mew turn",
+        "status": "accepted",
+        "owner": "/root/task052",
+        "source_base": "24997e4a7117897e18c6c78b04533ed6d0ddd612",
+        "accepted_at": "2026-11-05",
+        "accepted_by_agent": "/root",
+        "history_ref": "TASK052.md"
       }
     ],
     "active_regular_review": null,

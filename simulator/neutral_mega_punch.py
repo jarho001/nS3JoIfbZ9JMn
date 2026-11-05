@@ -201,6 +201,7 @@ def _execute_action(
 	*,
 	base_power=MEGA_PUNCH_BASE_POWER,
 	accuracy=MEGA_PUNCH_ACCURACY,
+	burned=False,
 ):
 	target = 1 - actor
 	seed_before_accuracy = state.rng
@@ -269,8 +270,8 @@ def _execute_action(
 			False,
 			False,
 			jnp.asarray(0, dtype=jnp.int32),
-			False,
-			False,
+			burned,
+			True,
 			False,
 			jnp.asarray(4096, dtype=jnp.int32),
 		)

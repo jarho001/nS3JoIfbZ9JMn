@@ -1,6 +1,6 @@
 # Current task handoff
 
-Accepted numbered tasks: **51**. Active task: **none**. GPU block: **none**.
+Accepted numbered tasks: **52**. Active task: **none**. GPU block: **none**.
 Global review baseline: **50**; next checkpoint: **60**. No pending review corrections.
 G0 is accepted; G1/G3 and all implementation milestones remain open.
 
@@ -16,6 +16,9 @@ and was accepted by primary `/root` and independent Astra T050Global on
 Task051 extends native/JAX parity for that unchanged API through successive
 turns to genuine terminal outcomes and was accepted by primary `/root` on
 2026-11-05; see [TASK051.md](TASK051.md).
+Task052 adds one pre-existing public burn flag and burn residual to the
+restricted Tackle/Mega Punch Mew turn and was accepted by primary `/root` on
+2026-11-05 ([evidence](TASK052.md)).
 Earlier bounded simulator
 variants and staged request sessions remain documented in [TASKS_ARCHIVE_001_037.md](TASKS_ARCHIVE_001_037.md)
 and the Task038–047 handoffs. Full-format support, the team generator, training,
@@ -99,3 +102,4 @@ accepted-count ledger; archive records are its detail, not additional tasks.
 | 049 | Accepted | exact complete-battle parity for Mega Punch Mew — [evidence](TASK049.md) |
 | 050 | Accepted | restricted simultaneous Tackle/Mega Punch accuracy-choice turn — [evidence](TASK050.md), [T050Global review](reviews/T050-global.md) |
 | 051 | Accepted | complete-battle parity through accuracy-choice v6 — [evidence](TASK051.md) |
+| 052 | Accepted | restricted single-burn Tackle/Mega Punch Mew turn — [evidence](TASK052.md) |
