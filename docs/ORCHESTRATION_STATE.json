@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "accepted_project_task_count": 47,
+  "accepted_project_task_count": 48,
   "project_direction_decision": {
     "status": "adopted",
     "date": "2026-11-03",
@@ -369,6 +369,16 @@
         "accepted_at": "2026-11-05",
         "accepted_by_agent": "/root",
         "history_ref": "TASK047.md"
+      },
+      {
+        "id": "Task048",
+        "title": "restricted neutral Mega Punch Mew turn",
+        "status": "accepted",
+        "owner": "/root/task048",
+        "source_base": "c88334ceaab3e794db615643789050914c4aceb3",
+        "accepted_at": "2026-11-05",
+        "accepted_by_agent": "/root",
+        "history_ref": "TASK048.md"
       }
     ],
     "active_regular_review": null,
@@ -631,6 +641,20 @@
         "test/test_two_move_session_reset.py": "96c525cbe3f88cafa881ea10b6af4c7addda5b76"
       },
       "reason": "Known-slow full v4 boundary module; deferred to an explicit user-run long-test session under the 30-second per-command routine cap. The focused Task047 native-reset test passed, and Task046 already validated complete staged-session native battles. This optional old regression is not an acceptance dependency.",
+      "acceptance_dependency": false
+    },
+    {
+      "task": "Task048",
+      "status": "deferred_optional_regression",
+      "command": "JAX_PLATFORMS=cpu /tmp/task040-jax-env/bin/python -m unittest test.test_neutral_two_move -v",
+      "source_base": "c88334ceaab3e794db615643789050914c4aceb3",
+      "source_blobs": {
+        "simulator/neutral_mega_punch.py": "e0956cbb79485e98080f363a3bdf4683073705e8",
+        "simulator/__init__.py": "204fadd359d053a285615ce937d5eca49a95c00b",
+        "reference/neutral-mega-punch-oracle.cjs": "6352db941d9ab392462aa60541ea42fbe0965ec6",
+        "test/test_neutral_mega_punch.py": "9bc6c31333f14930e504d95e67beeb775ea70178"
+      },
+      "reason": "Known-slow existing v4 boundary module explicitly excluded by the Task048 bounded validation contract. The focused v5 native/JAX parity test passed; this optional old regression is deferred to an explicit user-run long-test session.",
       "acceptance_dependency": false
     }
   ]

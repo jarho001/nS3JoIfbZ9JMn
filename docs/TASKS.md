@@ -1,6 +1,6 @@
 # Current task handoff
 
-Accepted numbered tasks: **47**. Active task: **none**. GPU block: **none**.
+Accepted numbered tasks: **48**. Active task: **none**. GPU block: **none**.
 Global review baseline: **40**; next checkpoint: **50**. No pending review corrections.
 G0 is accepted; G1/G3 and all implementation milestones remain open.
 
@@ -49,7 +49,10 @@ Relevant APIs: `simulator/neutral_tackle.py`, `simulator/neutral_tackle_ties.py`
 `simulator/two_move_session.py`, `simulator/neutral_duel.py`,
 `simulator/request_session.py`. API contract and
 supported boundaries: [neutral-tackle-variant.md](neutral-tackle-variant.md).
-Continue one justified simulator deliverable; no next task is prescoped here.
+Task048 adds a restricted pure-JAX Mega Punch-only Mew turn with native
+accuracy misses and recipient-view parity; primary `/root` accepted it on
+2026-11-05. The accepted count is 48 and no task is active. Full-format,
+generator, and later-milestone support remain open.
 
 ## Routine execution
 
@@ -125,14 +128,4 @@ accepted-count ledger; archive records are its detail, not additional tasks.
 | 045 | Accepted | private staged submissions for two-move Tackle/Pound turns — [evidence](TASK045.md) |
 | 046 | Accepted | complete-battle parity through staged two-move request sessions — [evidence](TASK046.md) |
 | 047 | Accepted | trusted terminal reset for v4 request sessions — [evidence](TASK047.md) |
-
-## Active work
-
-Task046 was accepted by primary `/root` on 2026-11-05; this does not claim an
-Astra review or milestone acceptance. Task047 adds a trusted v4 terminal
-session reset that copies a caller-supplied supported fresh state, clears
-commitments and advances the local episode once. Primary `/root` accepted it on
-2026-11-05; its contract and evidence are recorded in [TASK047.md](TASK047.md).
-The accepted count is 47; review baseline 40, next checkpoint 50, G0 only
-accepted milestone, and GPU block null. No task is active. Optional regressions
-remain recorded in `deferred_validation` and are not acceptance dependencies.
+| 048 | Accepted | restricted neutral Mega Punch Mew turn with native misses — [evidence](TASK048.md) |
