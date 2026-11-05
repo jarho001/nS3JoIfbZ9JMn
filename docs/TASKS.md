@@ -1,58 +1,18 @@
 # Current task handoff
 
-Accepted numbered tasks: **48**. Active task: **none**. GPU block: **none**.
+Accepted numbered tasks: **49**. Active task: **none**. GPU block: **none**.
 Global review baseline: **40**; next checkpoint: **50**. No pending review corrections.
 G0 is accepted; G1/G3 and all implementation milestones remain open.
 
 ## Current position
 
-Prioritize integrated JAX simulation and pinned Showdown parity. Restricted
-Mew/Tackle v1 and speed-tie v2 turns/duels are accepted. Task037 adds staged
-private submissions, bounded local episode tokens, and separate current-request
-and previous-event projections around unchanged v2 kernels. Task038 adds a
-read-only initial session view; details: [TASK038.md](TASK038.md). Task039
-validates complete staged-session battles to terminal against pinned Showdown
-in both submission orders: [TASK039.md](TASK039.md). Task040 validates those
-sessions across a heterogeneous `jit(vmap(submit_choice))` batch:
-[TASK040.md](TASK040.md). Task041 adds a trusted terminal-session reset that
-requires cleared commitments and accepts a supplied supported v2 request
-state: [TASK041.md](TASK041.md).
-
-Task042 adds the separately versioned Pound-only Gen 5 Mew v3 turn slice with
-native ordinary-turn, draw, and recipient-view parity: [TASK042.md](TASK042.md).
-It expands one playable move case without accepting a project milestone.
-
-Task043 adds the separately versioned Gen 5 two-move Tackle/Pound Mew v4 turn
-API with simultaneous choice, per-slot PP, native request/event/RNG parity,
-and isolated recipient views: [TASK043.md](TASK043.md). Task044 validates that
-API through real native terminal outcomes with dynamic Tackle/Pound choices
-and last-Tackle-PP continuation: [TASK044.md](TASK044.md). Struggle and the
-broader format boundary remain unsupported. Task044 was accepted by primary
-`/root` on 2026-11-05; this does not claim an Astra review or milestone
-acceptance.
-
-Task045 adds private staged request sessions for v4 two-move choices, keeping
-the current request separate from prior resolved events: [TASK045.md](TASK045.md).
-It was accepted by primary `/root` on 2026-11-05. This does not claim an Astra
-review or milestone acceptance.
-
-Task046 validates complete native battles through the staged v4 request-session
-API, including both first-submitter orders, per-turn privacy and episode
-progression, exact current/prior-event projections, and Pound continuation
-when Tackle PP runs out: [TASK046.md](TASK046.md). It was accepted by primary
-`/root` on 2026-11-05; this does not claim an Astra review or milestone
-acceptance.
-
-Relevant APIs: `simulator/neutral_tackle.py`, `simulator/neutral_tackle_ties.py`,
-`simulator/neutral_pound.py`,
-`simulator/neutral_two_move.py`,
-`simulator/two_move_session.py`, `simulator/neutral_duel.py`,
-`simulator/request_session.py`. API contract and
-supported boundaries: [neutral-tackle-variant.md](neutral-tackle-variant.md).
-Task048 adds a restricted pure-JAX Mega Punch-only Mew turn with native
-accuracy misses and recipient-view parity; primary `/root` accepted it on
-2026-11-05. The accepted count is 48 and no task is active. Full-format,
-generator, and later-milestone support remain open.
+Prioritize integrated JAX simulation and pinned Showdown parity. Tasks 048–049
+add the restricted Mega Punch-only v5 turn and validate complete native battles
+through terminal outcomes: [TASK048.md](TASK048.md), [TASK049.md](TASK049.md).
+Task049 was accepted by primary `/root` on 2026-11-05. Earlier bounded simulator
+variants and staged request sessions remain documented in [TASKS_ARCHIVE_001_037.md](TASKS_ARCHIVE_001_037.md)
+and the Task038–047 handoffs. Full-format support, the team generator, training,
+and later milestones remain open; G0 is the only accepted milestone.
 
 ## Routine execution
 
@@ -129,3 +89,4 @@ accepted-count ledger; archive records are its detail, not additional tasks.
 | 046 | Accepted | complete-battle parity through staged two-move request sessions — [evidence](TASK046.md) |
 | 047 | Accepted | trusted terminal reset for v4 request sessions — [evidence](TASK047.md) |
 | 048 | Accepted | restricted neutral Mega Punch Mew turn with native misses — [evidence](TASK048.md) |
+| 049 | Accepted | exact complete-battle parity for Mega Punch Mew — [evidence](TASK049.md) |

@@ -22,6 +22,15 @@ const SCENARIOS = [
 	{ id: 'first-action-ko-skips-p2', seed: [21, 2, 3, 4], p1: { level: 100, speedEvs: 0 }, p2: { level: 1, speedEvs: 0 } },
 	{ id: 'last-pp-miss-then-opponent-acts', seed: [0, 2, 3, 4], p1: { level: 50, speedEvs: 252, pp: 1 }, p2: { level: 50, speedEvs: 0 } },
 ];
+const DUEL_TURN_CAP = 32;
+const DUEL_SCENARIOS = [
+	{ id: 'duel-p1-faster-seed-0', seed: [0, 2, 3, 4], p1: { level: 50, speedEvs: 252 }, p2: { level: 50, speedEvs: 0 } },
+	{ id: 'duel-p2-faster-seed-0', seed: [0, 2, 3, 4], p1: { level: 50, speedEvs: 0 }, p2: { level: 50, speedEvs: 252 } },
+	{ id: 'duel-p1-faster-seed-1', seed: [1, 2, 3, 4], p1: { level: 50, speedEvs: 252 }, p2: { level: 50, speedEvs: 0 } },
+	{ id: 'duel-p2-faster-seed-21', seed: [21, 2, 3, 4], p1: { level: 50, speedEvs: 0 }, p2: { level: 50, speedEvs: 252 } },
+	{ id: 'duel-p1-faster-seed-21', seed: [21, 2, 3, 4], p1: { level: 50, speedEvs: 252 }, p2: { level: 50, speedEvs: 0 } },
+	{ id: 'duel-first-action-ko-seed-21', seed: [21, 2, 3, 4], p1: { level: 100, speedEvs: 0 }, p2: { level: 1, speedEvs: 0 } },
+];
 
 function assertMegaPunchFacts(ps) {
 	assert.equal(LOCK.commit, '1242c1e2d9763ba5b85d33f13aecb89bae19ae3d');
@@ -232,6 +241,122 @@ function scenarioFixture(ps, scenario) {
 	}
 }
 
+function captureDuel(ps, scenario) {
+	const battle = createBattle(ps, scenario);
+	try {
+		const initial = snapshot(battle);
+		assert.deepEqual(initial.pp, [32, 32], 'duels must start with ordinary maximum Mega Punch PP');
+		const turns = [];
+		while (!battle.ended) {
+			assert.ok(turns.length < DUEL_TURN_CAP, `${scenario.id} reached the ${DUEL_TURN_CAP}-turn cap before terminal`);
+			for (const side of [battle.p1, battle.p2]) {
+				assert.ok(side.activeRequest, `${scenario.id} must not reach an unsupported no-PP request before terminal`);
+				assert.equal(projectRequest(side).boundary, 'mega-punch', `${scenario.id} must not execute Struggle`);
+			}
+			const turn = captureTurn(ps, battle, scenario);
+			if (!turn.after.terminal) {
+				assert.ok(turn.after.pp.every(pp => pp > 0), `${scenario.id} reached the unsupported no-PP boundary before terminal`);
+				assert.equal(turn.after.requestPhase, 'move');
+				assert.equal(turn.nextRequests.p1.boundary, 'mega-punch');
+				assert.equal(turn.nextRequests.p2.boundary, 'mega-punch');
+			}
+			turns.push(turn);
+		}
+		const final = snapshot(battle);
+		assert.equal(final.terminal, true, `${scenario.id} must end through native battle resolution`);
+		assert.ok(final.winner === 1 || final.winner === 2, `${scenario.id} must have a native winning side`);
+		assert.deepEqual(final.requestsPresent, [false, false]);
+		assert.ok(turns.length > 0 && turns.length <= DUEL_TURN_CAP);
+		return {
+			id: scenario.id,
+			seed: [...scenario.seed],
+			sets: { p1: scenario.p1, p2: scenario.p2 },
+			initial,
+			turns,
+			final,
+			terminal: battle.ended,
+			winner: battle.winner,
+		};
+	} finally {
+		battle.destroy();
+	}
+}
+
+function duelCoverage(duels) {
+	const coverage = {
+		battles: duels.length,
+		turns: 0,
+		attempts: 0,
+		hits: 0,
+		misses: 0,
+		critical: 0,
+		firstActionKoSkips: 0,
+		secondActionTerminal: 0,
+		missByActor: { p1: 0, p2: 0 },
+		missBySecondActingSlot: 0,
+		normalHits: 0,
+		battlesWithMisses: 0,
+		battlesWithRepeatedMisses: 0,
+		doubleMissTurns: 0,
+		initiativeFirst: { p1: 0, p2: 0 },
+	};
+	for (const duel of duels) {
+		let battleMisses = 0;
+		for (const [turnIndex, turn] of duel.turns.entries()) {
+			coverage.turns++;
+			const moves = turn.events.p1.filter(event => event.type === 'move');
+			const misses = turn.events.p1.filter(event => event.type === 'miss');
+			const critical = turn.events.p1.filter(event => event.type === 'critical');
+			coverage.attempts += moves.length;
+			coverage.misses += misses.length;
+			coverage.hits += moves.length - misses.length;
+			coverage.critical += critical.length;
+			coverage.normalHits += moves.length - misses.length - critical.length;
+			battleMisses += misses.length;
+			if (misses.length === 2) coverage.doubleMissTurns++;
+			for (const miss of misses) {
+				coverage.missByActor[miss.actor]++;
+				if (turn.actionOrder.indexOf(miss.actor) === 1) coverage.missBySecondActingSlot++;
+			}
+			if (turn.actionOrder.length && turnIndex === 0) {
+				coverage.initiativeFirst[turn.actionOrder[0]]++;
+			}
+			if (turn.after.terminal && turn.actionOrder.length === 1) coverage.firstActionKoSkips++;
+			if (turn.after.terminal && turn.actionOrder.length === 2) coverage.secondActionTerminal++;
+		}
+		if (battleMisses > 0) coverage.battlesWithMisses++;
+		if (battleMisses > 1) coverage.battlesWithRepeatedMisses++;
+	}
+	return coverage;
+}
+
+function generateDuels(ps) {
+	const moveFacts = assertMegaPunchFacts(ps);
+	const duels = DUEL_SCENARIOS.map(scenario => captureDuel(ps, scenario));
+	const coverage = duelCoverage(duels);
+	assert.ok(coverage.battles >= 4 && coverage.battles <= 6);
+	assert.ok(coverage.initiativeFirst.p1 > 0 && coverage.initiativeFirst.p2 > 0);
+	assert.ok(coverage.missByActor.p1 > 0 && coverage.missByActor.p2 > 0);
+	assert.ok(coverage.missBySecondActingSlot > 0, 'selected native duels must include a second-slot miss');
+	assert.ok(coverage.normalHits > 0, 'selected native duels must include a non-critical hit');
+	assert.ok(coverage.critical > 0, 'selected native duels must include a native critical');
+	return {
+		schemaVersion: 1,
+		kind: 'gen5-restricted-neutral-mega-punch-complete-duel-oracle',
+		upstream: { repository: LOCK.repository, commit: LOCK.commit },
+		formatId: FORMAT_ID,
+		generation: 5,
+		variant: VARIANT,
+		moveFacts,
+		turnCap: DUEL_TURN_CAP,
+		initialization: 'Each duel is an unmodified pinned gen5randombattle built from directly supplied one-Mew Synchronize, Hardy, perfect-IV, itemless sets. The native format supplies ordinary maximum Mega Punch PP (three PP Ups, 32 PP); random team generation is bypassed. Each turn uses actual live move requests and battle.makeChoices(move 1, move 1). No native state, winner, or terminal flag is forged.',
+		drawContract: 'The imported withObservedBattleDraws helper wraps PRNG.prototype.random and returns every original value unchanged. Each turn retains the complete ordered random-call sequence with bounds, contexts, values, and four-limb before/after RNG states.',
+		turnContract: 'Every turn records before/after HP, PP, RNG, turn, winner, request phase and request-presence state; selected native events for both audiences; actual current requests and actual next requests. Each duel stops only after native battle.ended and a native winner; a turn cap or unsupported no-PP request fails generation and is never reported as terminal.',
+		coverage,
+		duels,
+	};
+}
+
 function generateFixture(ps) {
 	const moveFacts = assertMegaPunchFacts(ps);
 	const scenarios = SCENARIOS.map(scenario => scenarioFixture(ps, scenario));
@@ -261,12 +386,17 @@ function generateFixture(ps) {
 	};
 }
 
-function main() {
+function main(args = process.argv.slice(2)) {
 	assertReady();
 	const ps = require(API);
-	process.stdout.write(`${JSON.stringify(generateFixture(ps), null, 2)}\n`);
+	if (args.length === 0) {
+		process.stdout.write(`${JSON.stringify(generateFixture(ps), null, 2)}\n`);
+		return;
+	}
+	assert.deepEqual(args, ['--duels'], 'supported option is --duels');
+	process.stdout.write(`${JSON.stringify(generateDuels(ps), null, 2)}\n`);
 }
 
 if (require.main === module) main();
 
-module.exports = { generateFixture, main };
+module.exports = { generateFixture, generateDuels, main };

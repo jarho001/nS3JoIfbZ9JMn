@@ -55,7 +55,30 @@ native success lanes and a heterogeneous compiled `jit(vmap(...))` batch,
 including miss, hit, critical, KO, pending, invalid, unsupported, and terminal
 cases. This coverage makes no full-format or training claim.
 
+Task049 adds an opt-in `--duels` mode to the same oracle; invoking it without
+arguments retains the original one-turn fixture semantics. The bounded duel
+fixture contains six actual native battles, 28 turns, 53 attempted moves, 48
+hits, five misses, five criticals, 43 noncritical hits, three first-action KO
+skips, and three terminal second-action outcomes. It covers both faster
+players, misses by both actors, and one miss from the second acting slot. Three
+battles contain misses, one contains multiple misses across turns, and no turn
+contains two misses. All six begin with ordinary 32 PP and end through native
+battle resolution within the 32-turn cap.
+
+The separate focused duel test threads each compiled transition's actual
+returned state into the next native turn and compares the complete transition
+PyTree, draw prefix and unused slots, both recipient event views, current and
+next legal requests, and terminal state. Each finished state also rejects a
+post-terminal submission without changing state or RNG. The coverage is still
+limited to this direct-Mew Mega Punch variant and does not imply other move,
+format, session, Struggle, or milestone support.
+
 Task048 was accepted by primary `/root` on 2026-11-05 after focused review of
 the implementation, native oracle, tests, and documentation. The acceptance is
 limited to this declared v5 slice; G0 remains the only accepted project
+milestone.
+
+Task049's complete-battle parity deliverable was accepted by primary `/root` on
+2026-11-05. The accepted project-task count is 49; this does not expand the
+variant beyond its declared Mega Punch-only boundary or accept a later
 milestone.
