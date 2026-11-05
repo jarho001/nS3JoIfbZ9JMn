@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "accepted_project_task_count": 50,
+  "accepted_project_task_count": 51,
   "project_direction_decision": {
     "status": "adopted",
     "date": "2026-11-03",
@@ -399,6 +399,16 @@
         "accepted_at": "2026-11-05",
         "accepted_by_agent": "/root",
         "history_ref": "TASK050.md"
+      },
+      {
+        "id": "Task051",
+        "title": "complete-battle parity through accuracy-choice v6",
+        "status": "accepted",
+        "owner": "/root/task051",
+        "source_base": "24e9505773cb734959ab5f40f402894e92c1848b",
+        "accepted_at": "2026-11-05",
+        "accepted_by_agent": "/root",
+        "history_ref": "TASK051.md"
       }
     ],
     "active_regular_review": null,
@@ -446,7 +456,7 @@
         "reviewed_base_commit": "b30bd77dff9e304d154988e5610838858e277356",
         "candidate_tree": null,
         "candidate_tree_note": "The review report identifies the source base and candidate source blob hashes; it records no final candidate tree or commit hash.",
-        "scope": "Prospective checkpoint review of accepted Tasks031\u2013039 and Task040: candidate parity, simulator-first direction, pinned reference, privacy, deferred scope, and open milestone boundaries.",
+        "scope": "Prospective checkpoint review of accepted Tasks031–039 and Task040: candidate parity, simulator-first direction, pinned reference, privacy, deferred scope, and open milestone boundaries.",
         "required_findings": [],
         "disposition": "ACCEPTED",
         "accepted_at": "2026-11-05",
@@ -526,9 +536,9 @@
       "readiness_probe": "XLA_PYTHON_CLIENT_PREALLOCATE=false JAX_PLATFORMS=cuda /opt/jax-env/bin/python - <<'PY'\nimport jax\nimport jaxlib\nimport numpy as np\nimport jax.numpy as jnp\nprint('python/imported_jax', __import__('sys').version.split()[0], jax.__version__, jaxlib.__version__)\nprint('backend', jax.default_backend())\nprint('devices', jax.devices())\nx = jnp.arange(8, dtype=jnp.int32)\ny = jax.jit(lambda value: value * value + 1)(x)\ny.block_until_ready()\nprint('array_device', x.devices())\nprint('jit_device', y.devices())\nprint('jit_result', np.asarray(y).tolist())\nassert jax.default_backend() == 'gpu', f'expected GPU backend, got {jax.default_backend()}'\nassert any(device.platform == 'gpu' for device in x.devices()), f'input array placed on {x.devices()}'\nassert any(device.platform == 'gpu' for device in y.devices()), f'compiled result placed on {y.devices()}'\nPY",
       "validation": [
         "CPU readiness probe (`XLA_PYTHON_CLIENT_PREALLOCATE=false JAX_PLATFORMS=cpu` with the same eager/JIT sample): Python 3.13.18, JAX/JAXLIB 0.12.0.1, backend cpu, input and JIT result on CpuDevice(id=0), expected output [1,2,5,10,17,26,37,50].",
-        "XLA_PYTHON_CLIENT_PREALLOCATE=false JAX_PLATFORMS=cpu /opt/jax-env/bin/python -m unittest discover -s test -p 'test_*.py' -v \u2014 73 tests passed in 36.376s.",
+        "XLA_PYTHON_CLIENT_PREALLOCATE=false JAX_PLATFORMS=cpu /opt/jax-env/bin/python -m unittest discover -s test -p 'test_*.py' -v — 73 tests passed in 36.376s.",
         "CUDA readiness probe above: backend gpu, devices [CudaDevice(id=0)], eager input and JIT output on CudaDevice(id=0), expected output [1,2,5,10,17,26,37,50].",
-        "XLA_PYTHON_CLIENT_PREALLOCATE=false JAX_PLATFORMS=cuda /opt/jax-env/bin/python -m unittest discover -s test -p 'test_*.py' -v \u2014 73 tests passed in 43.251s; output log /tmp/gpu-validation-cuda.log.",
+        "XLA_PYTHON_CLIENT_PREALLOCATE=false JAX_PLATFORMS=cuda /opt/jax-env/bin/python -m unittest discover -s test -p 'test_*.py' -v — 73 tests passed in 43.251s; output log /tmp/gpu-validation-cuda.log.",
         "CPU output log: /tmp/gpu-validation-cpu.log. Test files remain unchanged. Trail exhaustive searches of indexed code found no jax.devices, platform, JAX_PLATFORMS, or jax_platform_name overrides in the suite.",
         "CUDA runtime packages: jax-cuda13-pjrt and jax-cuda13-plugin 0.12.0.1; nvidia-cuda-runtime 13.4.92. nvidia-smi identified the RTX 3060 Ti, 8192 MiB, utility 610.57.01, KMD/driver 610.88, CUDA UMD 13.3."
       ],

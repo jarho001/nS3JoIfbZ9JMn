@@ -21,6 +21,38 @@ const SCENARIOS = [
 	{ id: 'first-action-ko-skips-other-choice', seed: [21, 2, 3, 4], p1: { level: 100, speedEvs: 252 }, p2: { level: 1, speedEvs: 0 }, choices: { p1: 2, p2: 1 } },
 	{ id: 'last-tackle-pp-leaves-mega-punch', seed: [1, 2, 3, 4], p1: { level: 50, speedEvs: 252, pp: { tackle: 1 } }, p2: { level: 50, speedEvs: 0 }, choices: { p1: 1, p2: 2 } },
 ];
+const DUEL_SCENARIOS = [
+	{
+		id: 'complete-p1-faster-seed-0', seed: [0, 2, 3, 4],
+		p1: { level: 50, speedEvs: 252 }, p2: { level: 50, speedEvs: 0 },
+		choiceSchedule: [[1, 1], [1, 2], [2, 1], [2, 2]],
+	},
+	{
+		id: 'complete-p2-faster-seed-1', seed: [1, 2, 3, 4],
+		p1: { level: 50, speedEvs: 0 }, p2: { level: 50, speedEvs: 252 },
+		choiceSchedule: [[2, 2], [1, 2], [2, 1], [1, 1]],
+	},
+	{
+		id: 'complete-p2-faster-critical-seed-21', seed: [21, 2, 3, 4],
+		p1: { level: 50, speedEvs: 0 }, p2: { level: 50, speedEvs: 252 },
+		choiceSchedule: [[1, 2], [2, 1], [2, 2], [1, 1]],
+	},
+	{
+		id: 'complete-last-mega-punch-seed-0', seed: [0, 2, 3, 4],
+		p1: { level: 50, speedEvs: 252, pp: { megapunch: 1 } }, p2: { level: 50, speedEvs: 0 },
+		depletion: 'megaPunch', choiceSchedule: [[2, 1], [1, 2], [2, 2], [1, 1]],
+	},
+	{
+		id: 'complete-last-tackle-seed-1', seed: [1, 2, 3, 4],
+		p1: { level: 50, speedEvs: 252, pp: { tackle: 1 } }, p2: { level: 50, speedEvs: 0 },
+		depletion: 'tackle', choiceSchedule: [[1, 2], [2, 1], [2, 2], [1, 1]],
+	},
+	{
+		id: 'complete-first-action-ko-seed-21', seed: [21, 2, 3, 4],
+		p1: { level: 100, speedEvs: 252 }, p2: { level: 1, speedEvs: 0 },
+		choiceSchedule: [[2, 1]],
+	},
+];
 
 function assertMoveFacts(ps) {
 	assert.equal(LOCK.commit, '1242c1e2d9763ba5b85d33f13aecb89bae19ae3d');
@@ -178,6 +210,156 @@ function scenarioFixture(ps, scenario) {
 	}
 }
 
+function scheduledChoices(scenario, turnIndex, requests) {
+	const pair = scenario.choiceSchedule[turnIndex % scenario.choiceSchedule.length];
+	return Object.fromEntries(['p1', 'p2'].map((side, index) => {
+		const request = requests[side];
+		assert.equal(request.boundary, 'accuracy-choice', `${scenario.id} ${side} must have a supported live move request`);
+		const submitted = pair[index];
+		if (request.legalActions.includes(`move ${submitted}`)) return [side, submitted];
+		const fallback = request.legalActions.map(action => Number(action.slice('move '.length)))[0];
+		assert.ok(fallback === 1 || fallback === 2, `${scenario.id} ${side} must retain an actual legal move`);
+		return [side, fallback];
+	}));
+}
+
+function captureDuelTurn(ps, battle, choices, scenarioId) {
+	const turn = captureTurn(ps, battle, choices, scenarioId);
+	const moveIdsByName = { tackle: 33, 'mega punch': 5 };
+	const eventMoveIds = Object.fromEntries(['p1', 'p2'].map(side => [
+		side,
+		turn.events[side].map(event => event.type === 'move' ? moveIdsByName[event.move] : -1),
+	]));
+	for (const side of ['p1', 'p2']) {
+		const moveEvents = turn.events[side].filter(event => event.type === 'move');
+		assert.deepEqual(
+			moveEvents.map(event => moveIdsByName[event.move]),
+			moveEvents.map(event => choices[event.actor] === 1 ? 33 : 5),
+			`${scenarioId} ${side} split recipient selected move IDs follow actual submitted choices`,
+		);
+	}
+	return { ...turn, eventMoveIds };
+}
+
+function duelScenarioFixture(ps, scenario) {
+	const battle = createBattle(ps, scenario);
+	try {
+		applyPpSetup(battle, scenario);
+		const initial = snapshot(battle);
+		const turns = [];
+		while (!battle.ended) {
+			assert.ok(turns.length < 32, `${scenario.id} exceeded the 32-turn native battle cap`);
+			const requests = { p1: projectRequest(battle.p1), p2: projectRequest(battle.p2) };
+			const choices = scheduledChoices(scenario, turns.length, requests);
+			const turn = captureDuelTurn(ps, battle, choices, `${scenario.id}-turn-${turns.length + 1}`);
+			assert.ok(
+				turn.after.terminal || turn.after.pp.every(row => row.some(pp => pp > 0)),
+				`${scenario.id} reached unsupported all-PP-zero before native terminal`,
+			);
+			turns.push(turn);
+		}
+		assert.equal(battle.ended, true, `${scenario.id} must end natively, never by truncation`);
+		assert.ok(turns.length > 0 && turns.length <= 32);
+		return {
+			id: scenario.id,
+			seed: [...scenario.seed],
+			sets: { p1: scenario.p1, p2: scenario.p2 },
+			initial,
+			depletion: scenario.depletion || null,
+			choiceSchedule: scenario.choiceSchedule,
+			turns,
+			finalState: snapshot(battle),
+		};
+	} finally {
+		battle.destroy();
+	}
+}
+
+function summarizeDuels(battles) {
+	const summary = {
+		battles: battles.length,
+		turns: 0,
+		genuineTerminalOutcomes: 0,
+		terminalAfterSecondAction: 0,
+		firstActionKoSkips: 0,
+		submittedChoicePairs: { '1,1': 0, '1,2': 0, '2,1': 0, '2,2': 0 },
+		selectedMoveAttempts: { tackle: 0, megaPunch: 0 },
+		selectedMoveHits: { tackle: 0, megaPunch: 0 },
+		hits: 0,
+		missesByActorAndSelectedMove: { p1: { tackle: 0, megaPunch: 0 }, p2: { tackle: 0, megaPunch: 0 } },
+		criticalHits: 0,
+		criticalHitsBySelectedMove: { tackle: 0, megaPunch: 0 },
+		doubleMissTurns: 0,
+		repeatedSameActorMissesAcrossConsecutiveTurns: 0,
+		depletionContinuations: { megaPunchThenTackle: 0, tackleThenMegaPunch: 0 },
+	};
+	for (const battle of battles) {
+		summary.genuineTerminalOutcomes += Number(battle.finalState.terminal && battle.finalState.winner !== 0);
+		let previousMissActors = new Set();
+		for (const turn of battle.turns) {
+			summary.turns++;
+			summary.submittedChoicePairs[`${turn.choices.p1},${turn.choices.p2}`]++;
+			const missedActors = new Set(turn.events.p1.filter(event => event.type === 'miss').map(event => event.actor));
+			if (missedActors.size === 2) summary.doubleMissTurns++;
+			for (const actor of missedActors) {
+				if (previousMissActors.has(actor)) summary.repeatedSameActorMissesAcrossConsecutiveTurns++;
+				const moveKey = turn.choices[actor] === 1 ? 'tackle' : 'megaPunch';
+				summary.missesByActorAndSelectedMove[actor][moveKey]++;
+			}
+			previousMissActors = missedActors;
+			const attempts = turn.events.p1.filter(event => event.type === 'move');
+			for (const event of attempts) {
+				const moveKey = turn.choices[event.actor] === 1 ? 'tackle' : 'megaPunch';
+				summary.selectedMoveAttempts[moveKey]++;
+				if (!missedActors.has(event.actor)) summary.selectedMoveHits[moveKey]++;
+			}
+			summary.hits += attempts.length - missedActors.size;
+			for (const event of turn.events.p1.filter(event => event.type === 'critical')) {
+				const actor = event.target === 'p1' ? 'p2' : 'p1';
+				const moveKey = turn.choices[actor] === 1 ? 'tackle' : 'megaPunch';
+				summary.criticalHits++;
+				summary.criticalHitsBySelectedMove[moveKey]++;
+			}
+			if (turn.actionOrder.length === 1) summary.firstActionKoSkips++;
+			if (turn.after.terminal && turn.actionOrder.length === 2) summary.terminalAfterSecondAction++;
+		}
+		if (battle.depletion === 'megaPunch') {
+			assert.equal(battle.turns[0].after.pp[0][1], 0);
+			assert.equal(battle.turns[1].choices.p1, 1);
+			summary.depletionContinuations.megaPunchThenTackle++;
+		} else if (battle.depletion === 'tackle') {
+			assert.equal(battle.turns[0].after.pp[0][0], 0);
+			assert.equal(battle.turns[1].choices.p1, 2);
+			summary.depletionContinuations.tackleThenMegaPunch++;
+		}
+	}
+	return summary;
+}
+
+function generateDuelFixture(ps) {
+	assertMoveFacts(ps);
+	const battles = DUEL_SCENARIOS.map(scenario => duelScenarioFixture(ps, scenario));
+	const summary = summarizeDuels(battles);
+	assert.ok(summary.genuineTerminalOutcomes >= 4);
+	assert.ok(Object.values(summary.submittedChoicePairs).every(count => count > 0));
+	assert.ok(summary.selectedMoveAttempts.tackle > 0 && summary.selectedMoveAttempts.megaPunch > 0);
+	assert.ok(summary.selectedMoveHits.megaPunch > 0 && summary.criticalHitsBySelectedMove.megaPunch > 0);
+	assert.ok(summary.criticalHits > 0);
+	assert.deepEqual(summary.depletionContinuations, { megaPunchThenTackle: 1, tackleThenMegaPunch: 1 });
+	return {
+		schemaVersion: 1,
+		kind: 'gen5-restricted-accuracy-choice-duels-oracle',
+		upstream: { repository: LOCK.repository, commit: LOCK.commit },
+		formatId: FORMAT_ID,
+		generation: 5,
+		variant: VARIANT,
+		turnCap: 32,
+		policy: 'Fixture-local repeated move-pair schedules; when a scheduled slot is disabled, select the first currently legal native request slot.',
+		battles,
+		coverage: summary,
+	};
+}
+
 function allPpZeroBoundary(ps) {
 	const scenario = { seed: [1, 2, 3, 4], p1: { level: 50, speedEvs: 252 }, p2: { level: 50, speedEvs: 0 } };
 	const battle = createBattle(ps, scenario);
@@ -232,11 +414,16 @@ function generateFixture(ps) {
 	};
 }
 
-function main() {
+function main(args = process.argv.slice(2)) {
 	assertReady();
 	const ps = require(API);
-	process.stdout.write(`${JSON.stringify(generateFixture(ps), null, 2)}\n`);
+	if (args.length === 0) {
+		process.stdout.write(`${JSON.stringify(generateFixture(ps), null, 2)}\n`);
+		return;
+	}
+	assert.deepEqual(args, ['--duels'], 'supported usage: accuracy-choice-oracle.cjs [--duels]');
+	process.stdout.write(`${JSON.stringify(generateDuelFixture(ps), null, 2)}\n`);
 }
 
 if (require.main === module) main();
-module.exports = { generateFixture, main };
+module.exports = { generateFixture, generateDuelFixture, main };

@@ -1,6 +1,6 @@
 # Current task handoff
 
-Accepted numbered tasks: **50**. Active task: **none**. GPU block: **none**.
+Accepted numbered tasks: **51**. Active task: **none**. GPU block: **none**.
 Global review baseline: **50**; next checkpoint: **60**. No pending review corrections.
 G0 is accepted; G1/G3 and all implementation milestones remain open.
 
@@ -13,6 +13,9 @@ Task049 was accepted by primary `/root` on 2026-11-05. Task050 adds the
 restricted Tackle/Mega Punch simultaneous-choice turn with real accuracy misses
 and was accepted by primary `/root` and independent Astra T050Global on
 2026-11-05; see [TASK050.md](TASK050.md) and the [T050Global review report](reviews/T050-global.md).
+Task051 extends native/JAX parity for that unchanged API through successive
+turns to genuine terminal outcomes and was accepted by primary `/root` on
+2026-11-05; see [TASK051.md](TASK051.md).
 Earlier bounded simulator
 variants and staged request sessions remain documented in [TASKS_ARCHIVE_001_037.md](TASKS_ARCHIVE_001_037.md)
 and the Task038–047 handoffs. Full-format support, the team generator, training,
@@ -95,3 +98,4 @@ accepted-count ledger; archive records are its detail, not additional tasks.
 | 048 | Accepted | restricted neutral Mega Punch Mew turn with native misses — [evidence](TASK048.md) |
 | 049 | Accepted | exact complete-battle parity for Mega Punch Mew — [evidence](TASK049.md) |
 | 050 | Accepted | restricted simultaneous Tackle/Mega Punch accuracy-choice turn — [evidence](TASK050.md), [T050Global review](reviews/T050-global.md) |
+| 051 | Accepted | complete-battle parity through accuracy-choice v6 — [evidence](TASK051.md) |
