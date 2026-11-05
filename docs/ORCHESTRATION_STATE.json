@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "accepted_project_task_count": 45,
+  "accepted_project_task_count": 46,
   "project_direction_decision": {
     "status": "adopted",
     "date": "2026-11-03",
@@ -349,6 +349,16 @@
         "accepted_at": "2026-11-05",
         "accepted_by_agent": "/root",
         "history_ref": "TASK045.md"
+      },
+      {
+        "id": "Task046",
+        "title": "complete-battle parity through staged two-move request sessions",
+        "status": "accepted",
+        "owner": "/root/task046",
+        "source_base": "3abd881cd1105abd162c5d190cc28b129926550e",
+        "accepted_at": "2026-11-05",
+        "accepted_by_agent": "/root",
+        "history_ref": "TASK046.md"
       }
     ],
     "active_regular_review": null,
@@ -585,6 +595,19 @@
         "test/test_neutral_two_move.py": "6ba18e596c1a18761f9d42a7787b9e351a13b6ab"
       },
       "reason": "Optional full v4 boundary regression; this module contains known-slow boundary checks and was not rerun during bounded Task045 validation. Focused Task045 session parity passed.",
+      "acceptance_dependency": false
+    },
+    {
+      "task": "Task046",
+      "status": "deferred_optional_regression",
+      "command": "JAX_PLATFORMS=cpu /tmp/task040-jax-env/bin/python -m unittest test.test_neutral_two_move -v",
+      "source_base": "3abd881cd1105abd162c5d190cc28b129926550e",
+      "source_blobs": {
+        "reference/neutral-two-move-oracle.cjs": "2958da2ecdae8dff7e1f0a5f236208e3741bff84",
+        "simulator/neutral_two_move.py": "013dda42c232b47b2e5bd815b7c57a43d817199f",
+        "test/test_neutral_two_move.py": "6ba18e596c1a18761f9d42a7787b9e351a13b6ab"
+      },
+      "reason": "Known-slow full v4 boundary module; it was not run within the bounded Task046 session-duel validation. The focused Task046 complete-session parity check passed, and old oracle modes matched base semantics after normalizing diagnostic stack paths only.",
       "acceptance_dependency": false
     }
   ]

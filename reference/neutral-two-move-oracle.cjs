@@ -529,6 +529,38 @@ function captureStagedSessionTurn(ps, battle, scenario) {
 	};
 }
 
+function captureSessionDuelTurn(ps, battle, scenario, turnIndex) {
+	const before = snapshot(battle);
+	const requests = { p1: projectRequest(battle.p1), p2: projectRequest(battle.p2) };
+	const plannedSlot = 1 + (turnIndex % 2);
+	const plannedChoices = [plannedSlot, plannedSlot];
+	const choices = [
+		chooseRequestedSlot(requests.p1, plannedChoices[0], scenario.id, 'p1'),
+		chooseRequestedSlot(requests.p2, plannedChoices[1], scenario.id, 'p2'),
+	];
+	const commands = choices.map(choice => `move ${choice}`);
+	for (const [index, side] of [battle.p1, battle.p2].entries()) {
+		assert.ok(side.activeRequest, `${scenario.id} p${index + 1} uses its current native request`);
+		assert.ok(requests[`p${index + 1}`].legalActions.includes(commands[index]),
+			`${scenario.id} p${index + 1} command must be legal in its current native request`);
+	}
+	const turn = captureStagedSessionTurn(ps, battle, {
+		id: scenario.id,
+		firstPlayer: scenario.firstPlayer,
+		choices,
+	});
+	assert.deepEqual(turn.firstCommit.before, before);
+	assert.deepEqual(turn.firstCommit.requests, requests);
+	return {
+		...turn,
+		index: turnIndex,
+		plannedChoices,
+		commands,
+		before,
+		requests,
+	};
+}
+
 function sessionScenarioFixture(ps, scenario) {
 	const battle = createBattle(ps, scenario);
 	try {
@@ -586,6 +618,136 @@ function generateSessionFixture(ps) {
 	};
 }
 
+function sessionDuelScenarioFixture(ps, baseScenario, firstPlayer) {
+	const scenario = {
+		...baseScenario,
+		id: `${baseScenario.id}-first-${firstPlayer}`,
+		firstPlayer,
+	};
+	const battle = createBattle(ps, scenario);
+	try {
+		let setupEvidence = null;
+		if (scenario.setup) {
+			const rngBefore = [...snapshot(battle).rng];
+			battle[scenario.setup.player].active[0].moveSlots[scenario.setup.slot - 1].pp = scenario.setup.pp;
+			battle.makeRequest('move');
+			const rngAfter = [...snapshot(battle).rng];
+			assert.deepEqual(rngAfter, rngBefore, `${scenario.id} request regeneration must preserve RNG limbs`);
+			setupEvidence = {
+				player: scenario.setup.player,
+				slot: scenario.setup.slot,
+				pp: scenario.setup.pp,
+				engineApi: 'battle.makeRequest(\'move\')',
+				rngBefore,
+				rngAfter,
+			};
+		}
+		const initial = {
+			state: snapshot(battle),
+			requests: { p1: projectRequest(battle.p1), p2: projectRequest(battle.p2) },
+		};
+		const turns = [];
+		while (!battle.ended && turns.length < DUEL_TURN_LIMIT) {
+			turns.push(captureSessionDuelTurn(ps, battle, scenario, turns.length));
+		}
+		assert.equal(battle.ended, true, `${scenario.id} must reach a genuine winner within ${DUEL_TURN_LIMIT} turns`);
+		assert.ok(battle.winner === 'p1' || battle.winner === 'p2', `${scenario.id} must have a p1/p2 winner`);
+		assert.ok(turns.length <= DUEL_TURN_LIMIT);
+		const finalState = snapshot(battle);
+		assert.ok(finalState.pp.every(slots => slots.some(pp => pp > 0)), `${scenario.id} must retain a move slot for both actors`);
+		for (const player of [0, 1]) {
+			const sequence = turns.flatMap(turn => turn.events.p1
+				.filter(event => event.type === 'move' && event.actor === `p${player + 1}`)
+				.map(event => event.move));
+			assert.ok(sequence.indexOf('tackle') >= 0 && sequence.indexOf('pound') > sequence.indexOf('tackle'),
+				`${scenario.id} p${player + 1} must execute Tackle before Pound`);
+		}
+		if (baseScenario.id === 'complete-tied-speed') {
+			assert.equal(initial.state.speed[0], initial.state.speed[1]);
+			assert.ok(turns.some(turn => turn.secondCommit.draws.some(draw => draw.context === 'speed-sort')),
+				'tied native speeds must retain the native speed-sort draws');
+		}
+		if (baseScenario.id === 'complete-last-tackle-pp') {
+			assert.equal(setupEvidence.engineApi, 'battle.makeRequest(\'move\')');
+			assert.equal(initial.state.pp[0][0], 1);
+			assert.ok(initial.state.pp[0][1] > 1, 'Pound remains available after setup');
+			assert.equal(turns[0].choices[0], 1, 'p1 spends its final Tackle PP');
+			assert.equal(turns[0].after.pp[0][0], 0);
+			assert.equal(turns[0].nextRequests.p1.own.moves[0].disabled, true);
+			assert.equal(turns[0].nextRequests.p1.own.moves[1].disabled, false);
+			assert.equal(turns[1].choices[0], 2, 'p1 selects available Pound on the next turn');
+			assert.ok(turns[1].events.p1.some(event => event.type === 'move' && event.actor === 'p1' && event.move === 'pound'));
+		}
+		const terminal = {
+			ended: battle.ended,
+			winner: sideWinner(battle),
+			state: finalState,
+			requests: { p1: null, p2: null },
+		};
+		return {
+			id: scenario.id,
+			baseId: baseScenario.id,
+			firstPlayer,
+			seed: [...scenario.seed],
+			turnLimit: DUEL_TURN_LIMIT,
+			initial,
+			turns,
+			terminal,
+			setupEvidence,
+		};
+	} finally {
+		battle.destroy();
+	}
+}
+
+function sessionDuelSemanticTurn(turn) {
+	return {
+		before: turn.before,
+		requests: turn.requests,
+		plannedChoices: turn.plannedChoices,
+		choices: turn.choices,
+		commands: turn.commands,
+		firstCommit: turn.firstCommit,
+		secondCommit: turn.secondCommit,
+		actionOrder: turn.actionOrder,
+		events: turn.events,
+		after: turn.after,
+		nextRequests: turn.nextRequests,
+	};
+}
+
+function generateSessionDuelFixture(ps) {
+	const scenarios = DUEL_SCENARIOS.flatMap(base => ['p1', 'p2'].map(firstPlayer =>
+		sessionDuelScenarioFixture(ps, base, firstPlayer)));
+	for (const base of DUEL_SCENARIOS) {
+		const p1First = scenarios.find(scenario => scenario.id === `${base.id}-first-p1`);
+		const p2First = scenarios.find(scenario => scenario.id === `${base.id}-first-p2`);
+		assert.deepEqual(p1First.initial, p2First.initial, `${base.id} initial states and requests must pair`);
+		assert.deepEqual(p1First.terminal, p2First.terminal, `${base.id} terminal state must ignore first submitter`);
+		assert.equal(p1First.turns.length, p2First.turns.length);
+		for (let index = 0; index < p1First.turns.length; index++) {
+			assert.deepEqual(sessionDuelSemanticTurn(p1First.turns[index]), sessionDuelSemanticTurn(p2First.turns[index]),
+				`${base.id} turn ${index + 1} semantics must ignore first submitter`);
+		}
+	}
+	return {
+		schemaVersion: 1,
+		kind: 'gen5-restricted-neutral-two-move-complete-session-duel-oracle',
+		upstream: { repository: 'smogon/pokemon-showdown', commit: '1242c1e2d9763ba5b85d33f13aecb89bae19ae3d' },
+		formatId: FORMAT_ID,
+		generation: 5,
+		variant: VARIANT,
+		moveOrder: ['tackle', 'pound'],
+		moveFacts: assertMoveFacts(ps),
+		initialization: 'Each case uses the pinned Gen 5 Random Battle with direct one-Mew Synchronize/Hardy/perfect-IV/itemless sets. Each native turn is staged through two separate Battle.choose calls until its actual terminal winner. The last-Tackle-PP boundary edits the live Pokemon and regenerates normal requests through battle.makeRequest(\'move\') without changing RNG limbs.',
+		choiceContract: 'Both actors plan Tackle on odd-numbered turns and Pound on even-numbered turns, falling back only when the planned slot is disabled and the other current native request slot is legal.',
+		captureContract: 'The first accepted native commitment preserves full battle state, PP, RNG, requests, events and draws. The second resolves normally and records exact native state, PP, draw context/bounds/values/limbs, move order and identities, recipient events and next requests. Four initial states are paired across p1-first and p2-first submissions and compared per turn.',
+		terminalContract: `Every battle requires native Battle.ended with a p1/p2 winner within ${DUEL_TURN_LIMIT} turns and at least one positive-PP slot for each actor. Both actors execute Tackle then Pound; the PP-one case spends Tackle's final PP and executes Pound on a later turn.`,
+		turnLimit: DUEL_TURN_LIMIT,
+		scenarios,
+	};
+}
+
 function assertMoveFacts(ps) {
 	const facts = {};
 	for (const id of ['tackle', 'pound']) {
@@ -636,11 +798,15 @@ function main(argv = process.argv.slice(2)) {
 		process.stdout.write(`${JSON.stringify(generateSessionFixture(ps), null, 2)}\n`);
 		return;
 	}
+	if (argv.length === 1 && argv[0] === '--session-duels') {
+		process.stdout.write(`${JSON.stringify(generateSessionDuelFixture(ps), null, 2)}\n`);
+		return;
+	}
 	if (argv.length === 1 && argv[0] === '--duels') {
 		process.stdout.write(`${JSON.stringify(generateDuelFixture(ps), null, 2)}\n`);
 		return;
 	}
-	assert.deepEqual(argv, [], 'supported arguments: --duels or --sessions');
+	assert.deepEqual(argv, [], 'supported arguments: --duels, --sessions, or --session-duels');
 	process.stdout.write(`${JSON.stringify(generateFixture(ps), null, 2)}\n`);
 }
 

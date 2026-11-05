@@ -67,3 +67,12 @@ records the v4 turn contract and evidence; [Task044](TASK044.md) records the
 complete-battle parity validation. Task043 and Task044 were accepted by primary
 `/root` on 2026-11-05. Task045 was also accepted by primary `/root` on that
 date; none of these records claims Astra review or milestone approval.
+
+[Task046](TASK046.md) adds an opt-in `--session-duels` fixture and focused CPU parity test
+that thread the accepted staged session API through paired native battles to
+genuine terminal outcomes in both submission orders. It checks first-commit
+privacy, local episode progression, separate current-request and prior-event
+views, full state/RNG/draw parity, and Pound continuation after p1 spends its
+last Tackle PP. It was accepted by primary `/root` on 2026-11-05; this
+does not claim an Astra review or milestone acceptance. It changes no battle
+mechanics, simulator API, or numerical engine.
