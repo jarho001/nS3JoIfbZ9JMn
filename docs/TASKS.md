@@ -1,7 +1,8 @@
 # Current task handoff
 
 Accepted numbered tasks: **52**. Active task: **none**. GPU block: **none**.
-Global review baseline: **50**; next checkpoint: **60**. No pending review corrections.
+Automatic independent reviews: **disabled**. Baseline 50 is historical; no next checkpoint.
+No pending review corrections.
 G0 is accepted; G1/G3 and all implementation milestones remain open.
 
 ## Current position
@@ -24,23 +25,14 @@ variants and staged request sessions remain documented in [TASKS_ARCHIVE_001_037
 and the Task038–047 handoffs. Full-format support, the team generator, training,
 and later milestones remain open; G0 is the only accepted milestone.
 
-## Routine execution
+## Next step and workflow
 
-Use Luna/xhigh with a scoped context packet, not the parent's full conversation.
-Run only relevant fast checks: at most 30 seconds per command and 90 seconds
-of test execution per task. Use `timeout --signal=TERM --kill-after=5s 30s ...`;
-skip known-long checks instead of starting them. Do not extend the limit or
-rerun timed-out checks. Record exact deferred commands, source identity and
-reason, and recommend an explicit long-test session in the final summary.
-Long suites, exhaustive grids, GPU validation and performance probes require
-an explicit test-session request. Required missing acceptance evidence remains
-pending; do not describe a deferred check as passed.
-
-Useful dedicated integration session (not part of routine development):
-
-```sh
-JAX_PLATFORMS=cpu python -m unittest test.test_request_session test.test_neutral_tackle test.test_neutral_duel test.test_neutral_tackle_ties -v
-```
+Milestone preparation is pending; no Goal-mode implementation is active or
+approved. Use [MILESTONE_PREPARATION.md](MILESTONE_PREPARATION.md) to sharpen
+G0–G8 and prepare native behavior cases, then propose an integrated G3 goal.
+Sol 6.1/high owns execution directly under [ORCHESTRATION.md](ORCHESTRATION.md).
+Luna and Janitor require an explicit user request; automatic Astra gates and
+per-patch task/handoff cycles are retired. Historical acceptance remains intact.
 
 ## Accepted task index
 

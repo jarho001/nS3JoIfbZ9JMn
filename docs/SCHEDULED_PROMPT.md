@@ -1,43 +1,42 @@
 # Task entry point
 
-Use this entry point identically for manual or scheduled work. Select model and
-effort in the UI/role configuration; the scheduler owns cadence, concurrency,
-and limits. Do not edit the schedule.
+Use this prompt for manual or scheduled continuation. The execution surface
+selects model/effort, cadence, concurrency, and Goal mode; editing this file does
+not activate Goal mode or change a saved schedule.
 
 ```text
-Continue one bounded unit of development in the existing environment and
-repository: /workspace/nS3JoIfbZ9JMn.
+Use the existing cloud environment and repository /workspace/nS3JoIfbZ9JMn.
+Read AGENTS.md, applicable runtime guidance, docs/ORCHESTRATION.md, the compact
+current state in docs/ORCHESTRATION_STATE.json, and relevant PROJECT_PLAN.md
+sections. Inspect Git status and safely synchronize with the remote default
+branch while preserving local and unrelated work. Read archives only as needed.
 
-Read `AGENTS.md`, applicable runtime guidance, and `docs/ORCHESTRATION.md`.
-Read the compact current `docs/ORCHESTRATION_STATE.json`, `docs/TASKS.md`, and
-relevant `PROJECT_PLAN.md` sections. Open archived history only when needed.
-Synchronize safely with the remote while preserving local and unrelated work.
+Use GPT-6.1 Sol/high as the primary, configured in .codex/config.toml. If it is
+unavailable, report the blocker rather than substituting. Work directly; do not
+invoke Luna, Janitor, or another agent unless the user explicitly requested it.
+There are no automatic Astra or task-count/milestone independent-review gates.
 
-Resolve pending review corrections or a due global review first. Otherwise,
-follow the current simulator-first direction in `PROJECT_PLAN.md` and
-`project_direction_decision` in the orchestration state. Resume unfinished
-work or choose exactly one bounded deliverable that advances the JAX battle
-simulator or its Showdown parity validation. Do not select additional PPO,
-tournament, scoring, trajectory, or baseline-reporting work unless it directly
-enables simulator semantics or validation. G1 remains open; this priority does
-not accept or waive any milestone. Keep the minimal request, legal-action,
-simultaneous-choice, player-view/history, and outcome contract needed for
-correctness. State scope and acceptance criteria before implementation. Follow
-the repository's delegation, focused validation, review, and acceptance
-policies. Use Luna/xhigh with a fresh scoped worker packet, not a full-history
-fork; avoid repeated status polling and interim reviews.
+First inspect existing blockers and newly supplied evidence. If required
+external/GPU evidence is still absent, retain the block and stop without
+repeating tests or replanning.
 
-Run only relevant fast checks: 30 seconds per command, 90 seconds per task.
-Skip known-long suites/probes; do not extend timeouts or retry slow checks.
-Reserve long integration, exhaustive, GPU and performance checks for an explicit
-long-test session. Record deferred commands/source identity and recommend the
-useful long session in the final summary for the user to run. Required missing
-acceptance evidence remains pending; do not claim it passed.
+Resume only a user-approved goal recorded in active_task with scope, acceptance
+conditions, and validation scope. If milestone preparation is incomplete or no
+goal is approved, stop with that prerequisite and refer to
+docs/MILESTONE_PREPARATION.md. Do not select a tiny Task053, launch Goal mode,
+or treat this generic entry point as approval of a new milestone-sized goal.
 
-If progress needs external evidence, including necessary GPU results, and none
-is available, preserve the blocker and stop.
+For an approved goal, follow the simulator-first direction, prepared native
+behavior cases, and the documentation/validation policy. Implement directly
+through useful integrated checkpoints within that goal; do not stop after each
+mechanic merely to create another handoff. Stop when the goal is complete, a
+run limit requires a continuation checkpoint, or a concrete blocker prevents
+progress. Keep unsupported mechanics explicit and required missing evidence
+pending. Do not silently narrow scope, weaken tests, or infer milestone approval.
 
-Update the task handoff and durable state. Commit and push this entrypoint's
-task changes to the remote default branch, then stop with a brief result and
-any unresolved blocker.
+Inspect the final diff and actual checks. Update the existing compact goal
+record with progress, evidence pointers, next step or blocker. Commit and push
+only this goal's changes under AGENTS.md authorization; preserve unrelated work
+and label any unaccepted WIP clearly. Return a brief result. Never claim a
+schedule was paused or Goal mode activated unless independently verified.
 ```

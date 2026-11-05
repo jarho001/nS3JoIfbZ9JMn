@@ -4,12 +4,14 @@ This repository is beginning a JAX self-play project against Pokémon Showdown's
 
 ## Development workflow
 
-The single-deliverable ownership, review checkpoints, and GPU evidence rules
-are recorded in [`docs/ORCHESTRATION.md`](docs/ORCHESTRATION.md) and
-[`docs/ORCHESTRATION_STATE.json`](docs/ORCHESTRATION_STATE.json). The reusable
-manual or scheduled task entry point is [`docs/SCHEDULED_PROMPT.md`](docs/SCHEDULED_PROMPT.md).
-It authorizes direct-default-branch pushes for its task only; unrelated
-requests remain local-only unless separately authorized.
+Sol 6.1/high handles implementation and validation directly. Luna and Janitor
+are explicit-only roles; automatic Astra reviews are retired. See
+[AGENTS.md](AGENTS.md) and [the workflow](docs/ORCHESTRATION.md).
+Before starting Goal mode, use [the milestone preparation handoff](docs/MILESTONE_PREPARATION.md)
+to sharpen the goals and native behavior cases. Current progress is in
+[orchestration state](docs/ORCHESTRATION_STATE.json); the
+[manual/scheduled entry point](docs/SCHEDULED_PROMPT.md) resumes approved goals.
+Commit/push authorization is recorded in AGENTS.md.
 
 ## Set up the pinned reference
 

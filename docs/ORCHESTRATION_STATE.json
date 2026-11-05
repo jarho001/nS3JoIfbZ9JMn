@@ -14,7 +14,7 @@
       "CPU-first validation; GPU runs only when task acceptance or a device-specific property requires them, not a full GPU suite for every slice."
     ],
     "defer": "PPO, tournament/scoring, expanded trajectory collection, and additional baseline/reporting infrastructure unless they directly enable simulator semantics or parity validation.",
-    "next_candidate": "One bounded integrated runnable JAX turn slice for an explicitly named restricted development variant with declared ordinary move cases and exact RNG/state/request parity. Scope must be checked for feasibility at task kickoff; this candidate is not full-format support and is not an active or accepted task.",
+    "next_candidate": "Sharpen G0–G8 and prepare batched pinned-native behavior cases before proposing a coherent integrated G3 goal for user-approved Goal-mode execution. No new implementation goal is approved or active.",
     "progress_measure": "Increasingly complete parity-tested playable battles, not accepted task count.",
     "active_task": null,
     "accepted_task_count_changed": false,
@@ -32,9 +32,9 @@
       "review_note": "Independent focused review of required documentation corrections and policy diff accepted with the recorded static validation evidence."
     },
     "pending_review_corrections": [],
-    "next_regular_review_due_at_accepted_project_task": 60,
+    "next_regular_review_due_at_accepted_project_task": null,
     "milestone_review": {
-      "required_at_documented_boundaries": true,
+      "required_at_documented_boundaries": false,
       "last_reviewed_milestone": "G0",
       "last_review_commit": null,
       "recorded_approvals": [
@@ -512,7 +512,9 @@
           "Supplied legacy logs cover accepted base e5f4b21e52da78d7bcef37a1b4551808adec0b50 only (21 tests, 511.757 s combined); JAX/device provenance is absent, so they are not GPU evidence and were not rerun."
         ]
       }
-    ]
+    ],
+    "automatic_reviews_enabled": false,
+    "policy_note": "Automatic Astra, task-count, and independent milestone review gates retired by user instruction on 2026-11-05. Baselines and review histories below are historical evidence, not active gates. Milestone acceptance still requires its stated evidence."
   },
   "active_task": null,
   "optional_gpu_validation_history": [
@@ -743,5 +745,21 @@
       "reason": "Known-slow prior v4 boundary suite explicitly excluded by the Task049 bounded validation contract. The focused Task049 complete-battle native/JAX parity passed; this optional prior regression is outside the deliverable and is not an acceptance dependency. Recommend an explicitly requested long-test session.",
       "acceptance_dependency": false
     }
-  ]
+  ],
+  "workflow_policy": {
+    "primary_model": "gpt-6.1-sol",
+    "primary_reasoning_effort": "high",
+    "execution": "primary_owns_goal_directly",
+    "optional_roles": [
+      "implementer",
+      "janitor"
+    ],
+    "role_invocation": "explicit_user_request_only",
+    "automatic_independent_reviews": false,
+    "documentation": "current_plan_compact_progress_and_reproducible_evidence",
+    "milestone_preparation_status": "pending",
+    "preparation_handoff": "docs/MILESTONE_PREPARATION.md",
+    "goal_mode_status": "not_started",
+    "note": "2026-11-05 user-requested workflow experiment. Select Sol 6.1/high Goal mode on the execution surface after milestone preparation and approval of a goal. Existing historical acceptance records are unchanged."
+  }
 }
