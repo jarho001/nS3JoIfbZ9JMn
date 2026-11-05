@@ -441,7 +441,7 @@ GPU claims are historical and task-scoped: Tasks005–011 recorded GPU validatio
 
 ## Current task and next work
 
-Tasks001–038 are accepted and complete. Task038 adds a read-only initial actor view for restricted request sessions; accepted count is 38.
+Tasks001–039 are accepted and complete. Task039 validates complete restricted request-session battles against pinned Showdown through terminal in both submission orders; accepted count is 39.
 
 Project direction is simulator-first: prioritize integrated JAX battle execution and parity validation; G1 reference-environment work and G2 learning remain open and do not gate G3 simulator implementation. The request, legal-action, simultaneous-choice, player-view/history, and outcome contract remains part of simulator correctness. Defer PPO, tournaments, and further baseline/reporting infrastructure unless needed for simulator parity or validation.
 

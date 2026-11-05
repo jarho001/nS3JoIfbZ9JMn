@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "accepted_project_task_count": 38,
+  "accepted_project_task_count": 39,
   "project_direction_decision": {
     "status": "adopted",
     "date": "2026-11-03",
@@ -279,6 +279,16 @@
         "accepted_at": "2026-11-04",
         "accepted_by_agent": "/root",
         "history_ref": "TASK038.md"
+      },
+      {
+        "id": "Task039",
+        "title": "Complete staged-session battle parity",
+        "status": "accepted",
+        "owner": "/root/task039",
+        "source_base": "f88f2d7c24adb23628d9b316c2d9d2e1db1d026d",
+        "accepted_at": "2026-11-04",
+        "accepted_by_agent": "/root",
+        "history_ref": "TASK039.md"
       }
     ],
     "active_regular_review": null,
@@ -381,6 +391,26 @@
         "test/test_request_view.py": "a6611019117f52f1306bd92ad85d1c5811d2e96b"
       },
       "reason": "Known-long integration suite; explicit user-run test session only. Fast projection acceptance checks passed.",
+      "acceptance_dependency": false
+    },
+    {
+      "task": "Task039",
+      "status": "deferred_optional_regression",
+      "command": "JAX_PLATFORMS=cpu python -m unittest test.test_request_session test.test_neutral_tackle test.test_neutral_duel test.test_neutral_tackle_ties -v",
+      "source_base": "f88f2d7c24adb23628d9b316c2d9d2e1db1d026d",
+      "source_blobs": {
+        "reference/neutral-turn-oracle.cjs": "da3a9c5f0166e006da8bbf1cf676eedabb234700",
+        "simulator/request_session.py": "4a94e7a4eaec59d574dab5a5274a7875c4ba1e0e",
+        "simulator/neutral_tackle.py": "71a7186b4f2572618a8f08c91fd8fa8aa32d7704",
+        "simulator/neutral_tackle_ties.py": "a7c1aae754e1b45ea92078421753d623342b1e7e",
+        "simulator/neutral_duel.py": "a358dc7fa3901566c893254c9118931abb3e76f2",
+        "test/test_request_session.py": "b9b9eb65816229b3bf40a55ef3fecd326b06c9cd",
+        "test/test_request_session_duel.py": "fa3cb5bb17742b42c95f22dccbf919d7aa7e4270",
+        "test/test_neutral_tackle.py": "183f82977a3956b41cfe8d4e3ceaec97dee81c87",
+        "test/test_neutral_duel.py": "935109104f6e382d19e210a862ef0d92738afd32",
+        "test/test_neutral_tackle_ties.py": "d6c5847c0f9efa0c6fa5e88625736bed00d162f3"
+      },
+      "reason": "Includes known-long request-session/mechanics suites exceeding the 30s per-command routine cap; deferred to an explicit user-run long-test session. Focused Task039 complete-session parity passed.",
       "acceptance_dependency": false
     }
   ]

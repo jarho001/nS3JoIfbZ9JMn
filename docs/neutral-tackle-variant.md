@@ -270,3 +270,21 @@ Stale tokens, repeated submissions, invalid player/action values, terminal state
 Before either player submits, project an initial request with `project_request_view(session, audience)`, where `audience` is a static 0/1 integer (use `jax.jit(project_request_view, static_argnums=1)`). The typed `SessionRequestView` contains that player's `PlayerView`, local episode and own `own_choice_submitted` bit. It reads the unchanged battle state and does not run a transition. It exposes no opposing commitment, combined view, trusted RNG or full battle state.
 
 After a submission, `project_submission_view(result, audience)` keeps its `SessionView` return type and uses the same current-request projection for `player_view`; after resolution it reflects the next request's HP, PP, phase and legal-action mask. `resolved_events` separately contains the prior transition projected through the existing `project_tie_view` rules. The result includes the local episode and only the recipient's own `own_choice_submitted` bit. Terminal and exhausted-PP requests have no legal Tackle action.
+
+## Complete staged-session native differential (Task039)
+
+`node reference/neutral-turn-oracle.cjs --session-duels` is the guarded complete-session mode. It starts each case from actual pinned Showdown normal requests, calls `Battle.choose` separately for the first and second private choices, and records every resolved turn through the native terminal winner. The first choice is checked for zero draws and unchanged battle/request state. The second choice observes the pinned PRNG and returns its original values unchanged. Four cases cover tied and unequal speeds with p1 and p2 each submitting first; paired cases use identical initial battles so the submission-order differential can compare state, draws, events, requests and outcome.
+
+The focused differential in `test/test_request_session_duel.py` follows the same native fixture through the compiled `submit_choice` API. It compares initial and per-turn actor requests, local episodes, private commit bits, partial-commit freeze, exact state and PRNG bounds/values/context/limbs, action order, recipient events, next requests and the terminal outcome. Terminal requests expose an empty legal-action mask, and an extra terminal submission returns `SESSION_TERMINAL` without changing state or drawing RNG. Trusted choices, RNG state and draw traces stay outside actor projections. The native sample uses seed `[1, 2, 3, 4]`: tied cases end on turn 7, unequal-speed cases end on turn 8, and p2 wins each pair. Continuing turns in these cases consume 16 tied-speed draws or 6 unequal-speed draws; the terminal first-action KO turns consume 7 and 3 draws respectively.
+
+The focused CPU command is:
+
+```sh
+timeout --signal=TERM --kill-after=5s 30s env JAX_PLATFORMS=cpu /opt/jax-env/bin/python -m unittest test.test_request_session_duel -v
+```
+
+The known-long existing request-session/mechanics regression command remains deferred to an explicit user-run test session:
+
+```sh
+JAX_PLATFORMS=cpu python -m unittest test.test_request_session test.test_neutral_tackle test.test_neutral_duel test.test_neutral_tackle_ties -v
+```

@@ -1,6 +1,6 @@
 # Current task handoff
 
-Accepted numbered tasks: **38**. Active task: **none**. GPU block: **none**.
+Accepted numbered tasks: **39**. Active task: **none**. GPU block: **none**.
 Global review baseline: **30**; next checkpoint: **40**. No pending review corrections.
 G0 is accepted; G1/G3 and all implementation milestones remain open.
 
@@ -11,6 +11,8 @@ Mew/Tackle v1 and speed-tie v2 turns/duels are accepted. Task037 adds staged
 private submissions, bounded local episode tokens, and separate current-request
 and previous-event projections around unchanged v2 kernels. Task038 adds a
 read-only initial session view; details: [TASK038.md](TASK038.md).
+Task039 validates complete staged-session battles to terminal against pinned
+Showdown in both submission orders: [TASK039.md](TASK039.md).
 
 Relevant APIs: `simulator/neutral_tackle.py`, `simulator/neutral_tackle_ties.py`,
 `simulator/neutral_duel.py`, `simulator/request_session.py`. API contract and
@@ -83,7 +85,9 @@ accepted-count ledger; archive records are its detail, not additional tasks.
 | 037 | Accepted | staged simultaneous submissions for restricted JAX turns |
 | 038 | Accepted | initial actor view for a request session — [evidence](TASK038.md) |
 
+| 039 | Accepted | complete staged-session battle parity — [evidence](TASK039.md) |
+
 ## Active work
 
-None. Optional long regression is recorded in `deferred_validation` in the state;
-it was not run and does not block Task038 acceptance.
+None. Optional long regressions are recorded in `deferred_validation` in the
+state; they were not run and do not block the focused Task038/039 acceptance.

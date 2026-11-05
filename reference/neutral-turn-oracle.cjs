@@ -356,8 +356,8 @@ function main() {
 	assertReady();
 	const ps = require(API);
 	const args = process.argv.slice(2);
-	assert.ok(args.length === 0 || (args.length === 1 && ['--duels', '--ties', '--sessions'].includes(args[0])), 'Usage: neutral-turn-oracle.cjs [--duels|--ties|--sessions]');
-	const fixture = args[0] === '--duels'
+	assert.ok(args.length === 0 || (args.length === 1 && ['--duels', '--ties', '--sessions', '--session-duels'].includes(args[0])), 'Usage: neutral-turn-oracle.cjs [--duels|--ties|--sessions|--session-duels]');
+	const fixture = args[0] === '--session-duels' ? generateStagedSessionDuelFixture(ps) : args[0] === '--duels'
 		? generateFullDuelFixture(ps)
 		: args[0] === '--ties'
 			? generateTieDuelFixture(ps)
@@ -365,7 +365,7 @@ function main() {
 	process.stdout.write(`${JSON.stringify(fixture, null, 2)}\n`);
 }
 
-module.exports = { generateFixture, generateFullDuelFixture, generateStagedSessionFixture, main };
+module.exports = { generateFixture, generateFullDuelFixture, generateStagedSessionFixture, generateStagedSessionDuelFixture, main };
 
 const FULL_DUEL_TURN_LIMIT = 56;
 const FULL_DUEL_SCENARIOS = [
@@ -650,6 +650,130 @@ function generateStagedSessionFixture(ps) {
 		variant: 'gen5-neutral-tackle-speed-ties-mew-1v1-v2',
 		captureContract: 'Each fixture stage observes each Battle.choose separately and returns original PRNG values unchanged. The first partial commitment must produce no draws and leave state/requests unchanged; the second resolves and records the full draws/events/views and next normal requests when active. Each stage begins at actual normal requests.',
 		scenarios: STAGED_SESSION_SCENARIOS.map(scenario => stagedSessionScenario(ps, scenario)),
+	};
+}
+
+const SESSION_DUEL_SCENARIOS = [
+	{
+		id: 'tied-first-p1', firstPlayer: 'p1', seed: [1, 2, 3, 4],
+		p1: { level: 50, speedEvs: 0 }, p2: { level: 50, speedEvs: 0 },
+	},
+	{
+		id: 'tied-first-p2', firstPlayer: 'p2', seed: [1, 2, 3, 4],
+		p1: { level: 50, speedEvs: 0 }, p2: { level: 50, speedEvs: 0 },
+	},
+	{
+		id: 'unequal-first-p1', firstPlayer: 'p1', seed: [1, 2, 3, 4],
+		p1: { level: 50, speedEvs: 0 }, p2: { level: 50, speedEvs: 252 },
+	},
+	{
+		id: 'unequal-first-p2', firstPlayer: 'p2', seed: [1, 2, 3, 4],
+		p1: { level: 50, speedEvs: 0 }, p2: { level: 50, speedEvs: 252 },
+	},
+];
+
+function captureCompleteStagedSessionTurn(ps, battle, scenario, turnIndex) {
+	assert.equal(battle.ended, false);
+	const before = snapshot(battle);
+	const requests = { p1: projectRequest(battle.p1), p2: projectRequest(battle.p2) };
+	const logStart = battle.log.length;
+	const firstPlayer = scenario.firstPlayer;
+	const firstCommitCapture = withObservedBattleDraws(ps, battle, () => battle.choose(firstPlayer, 'move 1'));
+	assert.equal(firstCommitCapture.result, true, `${scenario.id} turn ${turnIndex} first commitment must be accepted`);
+	assert.deepEqual(firstCommitCapture.draws, [], `${scenario.id} turn ${turnIndex} partial commit must consume no RNG`);
+	const afterFirstCommit = snapshot(battle);
+	assert.deepEqual(afterFirstCommit, before, `${scenario.id} turn ${turnIndex} partial commit must leave battle state unchanged`);
+	const afterFirstRequests = { p1: projectRequest(battle.p1), p2: projectRequest(battle.p2) };
+	assert.deepEqual(afterFirstRequests, requests, `${scenario.id} turn ${turnIndex} partial commit must leave native requests unchanged`);
+	assert.equal(battle.p1.choice.actions.length + battle.p2.choice.actions.length, 1, 'exactly one private choice is held');
+
+	const secondPlayer = firstPlayer === 'p1' ? 'p2' : 'p1';
+	const secondCommitCapture = withObservedBattleDraws(ps, battle, () => battle.choose(secondPlayer, 'move 1'));
+	assert.equal(secondCommitCapture.result, true, `${scenario.id} turn ${turnIndex} second commitment must resolve the native turn`);
+	const logDelta = battle.log.slice(logStart);
+	const events = { p1: projectEvents(logDelta, 'p1'), p2: projectEvents(logDelta, 'p2') };
+	const after = snapshot(battle);
+	const nextRequests = battle.ended ? { p1: null, p2: null } : {
+		p1: projectRequest(battle.p1),
+		p2: projectRequest(battle.p2),
+	};
+	const actionOrder = events.p1.filter(event => event.type === 'move').map(event => event.actor);
+	assert.ok(actionOrder.length >= 1 && actionOrder.length <= 2, `${scenario.id} turn ${turnIndex} must execute one or two Tackles`);
+	assert.deepEqual(events.p2.filter(event => event.type === 'move').map(event => event.actor), actionOrder);
+	const pendingChoiceCount = battle.p1.choice.actions.length + battle.p2.choice.actions.length;
+	assert.equal(pendingChoiceCount, 0, `${scenario.id} turn ${turnIndex} must clear resolved native choices`);
+	assert.deepEqual(secondCommitCapture.draws[0].before, before.rng);
+	assert.deepEqual(secondCommitCapture.draws.at(-1).after, after.rng);
+	return {
+		before,
+		requests,
+		firstPlayer,
+		firstCommit: {
+			accepted: firstCommitCapture.result,
+			draws: firstCommitCapture.draws,
+			state: afterFirstCommit,
+			requests: afterFirstRequests,
+			privateChoicesHeld: 1,
+		},
+		secondPlayer,
+		actionOrder,
+		draws: secondCommitCapture.draws,
+		totalDrawCount: firstCommitCapture.draws.length + secondCommitCapture.draws.length,
+		events,
+		after,
+		nextRequests,
+		pendingChoiceCount,
+		views: { p1: { request: requests.p1, events: events.p1 }, p2: { request: requests.p2, events: events.p2 } },
+	};
+}
+
+function stagedSessionDuelScenario(ps, scenario) {
+	const battle = createBattle(ps, scenario);
+	try {
+		const initial = {
+			state: snapshot(battle),
+			requests: { p1: projectRequest(battle.p1), p2: projectRequest(battle.p2) },
+		};
+		const turns = [];
+		while (turns.length < FULL_DUEL_TURN_LIMIT && !battle.ended) {
+			turns.push(captureCompleteStagedSessionTurn(ps, battle, scenario, turns.length));
+		}
+		assert.equal(battle.ended, true, `${scenario.id} did not complete within ${FULL_DUEL_TURN_LIMIT} native turns`);
+		assert.ok(['p1', 'p2'].includes(battle.winner), `${scenario.id} must have an actual native winner`);
+		const pendingChoiceCount = battle.p1.choice.actions.length + battle.p2.choice.actions.length;
+		assert.equal(pendingChoiceCount, 0, `${scenario.id} terminal battle must have no pending native choices`);
+		return {
+			id: scenario.id,
+			firstPlayer: scenario.firstPlayer,
+			seed: [...scenario.seed],
+			initial,
+			turns,
+			outcome: {
+				terminal: battle.ended,
+				winner: battle.winner,
+				sideWinner: sideWinner(battle),
+				turn: battle.turn,
+				state: snapshot(battle),
+				pendingChoiceCount,
+			},
+		};
+	} finally {
+		battle.destroy();
+	}
+}
+
+function generateStagedSessionDuelFixture(ps) {
+	return {
+		schemaVersion: 1,
+		kind: 'gen5-restricted-neutral-tackle-staged-session-full-duel-oracle',
+		upstream: { repository: LOCK.repository, commit: LOCK.commit },
+		formatId: FORMAT_ID,
+		generation: 5,
+		variant: 'gen5-neutral-tackle-speed-ties-mew-1v1-v2',
+		turnLimit: FULL_DUEL_TURN_LIMIT,
+		initialBoundary: 'Each scenario starts from live pinned normal activeRequest values and the initialized PRNG; each player commits separately through Battle.choose once per turn.',
+		captureContract: 'The first private choice consumes no RNG and leaves trusted battle state and requests unchanged. The second choice resolves the turn, observing original native PRNG values unchanged, exact trusted state, recipient events and next requests through the actual terminal winner; choices clear after every resolution.',
+		scenarios: SESSION_DUEL_SCENARIOS.map(scenario => stagedSessionDuelScenario(ps, scenario)),
 	};
 }
 
