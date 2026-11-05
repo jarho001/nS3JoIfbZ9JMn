@@ -38,12 +38,19 @@ knockout, and the last Tackle PP boundary. That boundary sets slot 1 PP to 1
 through the live native Pokemon, regenerates normal requests with
 `battle.makeRequest('move')`, and asserts the original PRNG limbs do not
 change. Native requests retain both rows and mark an exhausted move disabled.
-The focused differential test is `test/test_neutral_two_move.py`.
+The focused one-turn differential test is `test/test_neutral_two_move.py`.
+Task044 adds an opt-in `--duels` native fixture mode and a separate
+`test/test_neutral_two_move_duel.py` check for exact traces through genuine
+battle outcomes, including alternating Tackle/Pound choices and continuation
+after the last Tackle PP is spent. Its result does not expand the move or
+effect boundary.
 
 This variant adds only Tackle/Pound choice for Mew. It does not add other
 moves, switches/teams, status, items, weather, Struggle execution, session or
-reset integration, policies/training/rollouts/tournaments/reporting, a duel
-runner, GPU/performance claims, or full-format support. [Task043](TASK043.md)
-records the contract and evidence. Task043 was accepted by primary `/root` on
-2026-11-05. This acceptance does not claim an Astra review or milestone
-approval.
+reset integration, policies/training/rollouts/tournaments/reporting, a
+production simulator duel runner, GPU/performance claims, or full-format
+support. [Task043](TASK043.md)
+records the v4 turn contract and evidence; [Task044](TASK044.md) records the
+complete-battle parity validation. Task043 was accepted by primary `/root` on
+2026-11-05 and Task044 was accepted by primary `/root` on 2026-11-05. Neither
+records Astra review or milestone approval.

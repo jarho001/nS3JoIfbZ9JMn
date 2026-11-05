@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "accepted_project_task_count": 43,
+  "accepted_project_task_count": 44,
   "project_direction_decision": {
     "status": "adopted",
     "date": "2026-11-03",
@@ -329,6 +329,16 @@
         "accepted_at": "2026-11-05",
         "accepted_by_agent": "/root",
         "history_ref": "TASK043.md"
+      },
+      {
+        "id": "Task044",
+        "title": "exact complete-battle parity for two-move Mew",
+        "status": "accepted",
+        "owner": "/root/task044",
+        "source_base": "1f46d378e2ea1352171164baf80b97a01a2e015b",
+        "accepted_at": "2026-11-05",
+        "accepted_by_agent": "/root",
+        "history_ref": "TASK044.md"
       }
     ],
     "active_regular_review": null,
@@ -537,6 +547,19 @@
         "test/test_neutral_two_move.py": "6ba18e596c1a18761f9d42a7787b9e351a13b6ab"
       },
       "reason": "Known-long prior request-session/Tackle regression was not run in the bounded Task043 validation. It is an optional old regression and is not an acceptance dependency.",
+      "acceptance_dependency": false
+    },
+    {
+      "task": "Task044",
+      "status": "deferred_optional_regression",
+      "command": "JAX_PLATFORMS=cpu /tmp/task040-jax-env/bin/python -m unittest test.test_neutral_two_move -v",
+      "source_base": "1f46d378e2ea1352171164baf80b97a01a2e015b",
+      "source_blobs": {
+        "reference/neutral-two-move-oracle.cjs": "31745d060126b9c8f9d259ab1169771f12be6cb4",
+        "simulator/neutral_two_move.py": "013dda42c232b47b2e5bd815b7c57a43d817199f",
+        "test/test_neutral_two_move.py": "6ba18e596c1a18761f9d42a7787b9e351a13b6ab"
+      },
+      "reason": "The existing full v4 module includes known-slow boundary checks. This optional old regression was not rerun because the dedicated Task044 complete-battle parity test passed within the bounded CPU budget.",
       "acceptance_dependency": false
     }
   ]
