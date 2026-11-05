@@ -105,11 +105,13 @@ from .request_session import (
 from .two_move_session import (
 	TwoMoveRequestSession,
 	TwoMoveRequestView,
+	TwoMoveSessionReset,
 	TwoMoveSessionSubmission,
 	TwoMoveSubmissionView,
 	make_two_move_request_session,
 	project_two_move_request_view,
 	project_two_move_submission_view,
+	reset_two_move_request_session,
 	submit_two_move_choice,
 )
 
@@ -206,10 +208,12 @@ __all__ = [
 	"submit_choice",
 	"TwoMoveRequestSession",
 	"TwoMoveRequestView",
+	"TwoMoveSessionReset",
 	"TwoMoveSessionSubmission",
 	"TwoMoveSubmissionView",
 	"make_two_move_request_session",
 	"project_two_move_request_view",
 	"project_two_move_submission_view",
+	"reset_two_move_request_session",
 	"submit_two_move_choice",
 ]

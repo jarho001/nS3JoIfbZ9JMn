@@ -43,6 +43,18 @@ adapter; native `Side.choose` can replace an earlier commitment. Task045 was
 accepted by primary `/root` on 2026-11-05; this adapter does not expand battle
 mechanics or claim a milestone.
 
+Task047 adds `reset_two_move_request_session` and its fixed-shape
+`TwoMoveSessionReset` result. This trusted coordinator operation accepts a
+supported caller-supplied nonterminal v4 state only after the local session is
+terminal with both pending choices clear. It copies that state exactly,
+clears commitments, and advances the local episode once. Stale tokens take
+precedence over unsupported metadata or replacement state; a valid live
+session reports not-terminal, and overflow is checked before reset. Rejections
+preserve the entire input session and run no turn or RNG draw. This remains a
+local trusted reset, not native `rqid` or global replay security. Primary
+`/root` accepted Task047 on 2026-11-05; it does not change the v2 reset or v4
+numerical engine, and does not claim an Astra review or milestone approval.
+
 `reference/neutral-two-move-oracle.cjs` initializes actual pinned Gen 5
 random battles from direct one-Mew Synchronize/Hardy/perfect-IV/itemless sets
 with both moves in order. It captures all four choice pairs, both unequal

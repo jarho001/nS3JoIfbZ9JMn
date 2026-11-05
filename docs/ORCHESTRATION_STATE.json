@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "accepted_project_task_count": 46,
+  "accepted_project_task_count": 47,
   "project_direction_decision": {
     "status": "adopted",
     "date": "2026-11-03",
@@ -359,6 +359,16 @@
         "accepted_at": "2026-11-05",
         "accepted_by_agent": "/root",
         "history_ref": "TASK046.md"
+      },
+      {
+        "id": "Task047",
+        "title": "trusted terminal reset for v4 request sessions",
+        "status": "accepted",
+        "owner": "/root/task047",
+        "source_base": "3589103a82e7f08e50577cf78796eb1e4f29a905",
+        "accepted_at": "2026-11-05",
+        "accepted_by_agent": "/root",
+        "history_ref": "TASK047.md"
       }
     ],
     "active_regular_review": null,
@@ -406,7 +416,7 @@
         "reviewed_base_commit": "b30bd77dff9e304d154988e5610838858e277356",
         "candidate_tree": null,
         "candidate_tree_note": "The review report identifies the source base and candidate source blob hashes; it records no final candidate tree or commit hash.",
-        "scope": "Prospective checkpoint review of accepted Tasks031\u2013039 and Task040: candidate parity, simulator-first direction, pinned reference, privacy, deferred scope, and open milestone boundaries.",
+        "scope": "Prospective checkpoint review of accepted Tasks031–039 and Task040: candidate parity, simulator-first direction, pinned reference, privacy, deferred scope, and open milestone boundaries.",
         "required_findings": [],
         "disposition": "ACCEPTED",
         "accepted_at": "2026-11-05",
@@ -608,6 +618,19 @@
         "test/test_neutral_two_move.py": "6ba18e596c1a18761f9d42a7787b9e351a13b6ab"
       },
       "reason": "Known-slow full v4 boundary module; it was not run within the bounded Task046 session-duel validation. The focused Task046 complete-session parity check passed, and old oracle modes matched base semantics after normalizing diagnostic stack paths only.",
+      "acceptance_dependency": false
+    },
+    {
+      "task": "Task047",
+      "status": "deferred_optional_regression",
+      "command": "JAX_PLATFORMS=cpu /tmp/task040-jax-env/bin/python -m unittest test.test_neutral_two_move -v",
+      "source_base": "3589103a82e7f08e50577cf78796eb1e4f29a905",
+      "source_blobs": {
+        "simulator/two_move_session.py": "c8c4c01ffa31934b17dfe65d56714cba18e27aa5",
+        "simulator/__init__.py": "2c317bb0084fb0d2774e02d118cfffc321a92e2a",
+        "test/test_two_move_session_reset.py": "96c525cbe3f88cafa881ea10b6af4c7addda5b76"
+      },
+      "reason": "Known-slow full v4 boundary module; deferred to an explicit user-run long-test session under the 30-second per-command routine cap. The focused Task047 native-reset test passed, and Task046 already validated complete staged-session native battles. This optional old regression is not an acceptance dependency.",
       "acceptance_dependency": false
     }
   ]

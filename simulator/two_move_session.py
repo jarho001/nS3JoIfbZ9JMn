@@ -28,8 +28,10 @@ from .request_session import (
 	SESSION_DUPLICATE,
 	SESSION_INVALID_ACTION,
 	SESSION_INVALID_PLAYER,
+	SESSION_NOT_TERMINAL,
 	SESSION_OVERFLOW,
 	SESSION_RESOLVED,
+	SESSION_RESET,
 	SESSION_STALE_EPISODE,
 	SESSION_STOPPED,
 	SESSION_TERMINAL,
@@ -54,6 +56,13 @@ class TwoMoveSessionSubmission(NamedTuple):
 	status: jax.Array
 	before: TwoMoveState
 	transition: TwoMoveTransition
+
+
+class TwoMoveSessionReset(NamedTuple):
+	"""Trusted coordinator result for a terminal v4-session reset."""
+
+	session: TwoMoveRequestSession
+	status: jax.Array
 
 
 class TwoMoveRequestView(NamedTuple):
@@ -100,6 +109,90 @@ def make_two_move_request_session(battle: TwoMoveState, *, episode: int = 0) -> 
 		battle,
 		jnp.zeros((2,), dtype=jnp.int32),
 		jnp.asarray(value, dtype=jnp.int32),
+	)
+
+
+def reset_two_move_request_session(
+	session: TwoMoveRequestSession,
+	battle: TwoMoveState,
+	expected_episode: int | jax.Array,
+) -> TwoMoveSessionReset:
+	"""Reset a terminal v4 session onto a trusted supplied request state.
+
+	The replacement must be a supported nonterminal v4 state. The old session
+	must be structurally valid, terminal, have no pending choices, and carry the
+	matching nonnegative local episode. A held choice must still have PP in its
+	selected slot. Rejections preserve the entire old session; an accepted reset
+	copies ``battle`` exactly, clears commitments, and increments the old local
+	episode once. No turn transition or RNG draw occurs.
+
+	Runtime precedence is stale episode, unsupported session metadata or
+	replacement, old session not terminal, episode overflow, then reset.
+	Compile with ``jax.jit(reset_two_move_request_session)`` and
+	``jax.jit(jax.vmap(reset_two_move_request_session))``.
+	"""
+	_validate_two_move_session_structure(session)
+	_validate_two_move_state_structure(battle)
+	episode_id = _integral_scalar("expected_episode", expected_episode)
+	old_battle = session.battle
+	choices = session.pending_choices
+
+	def rejected(status):
+		return TwoMoveSessionReset(session, jnp.asarray(status, dtype=jnp.int32))
+
+	def check_metadata(_):
+		valid_pending = jnp.all((choices == 0) | (choices == ACTION_TACKLE) | (choices == ACTION_POUND))
+		pending_slots = jnp.clip(choices - 1, 0, 1)
+		pending_pp = old_battle.pp[jnp.arange(2), pending_slots]
+		valid_held_pp = jnp.all((choices == 0) | (pending_pp > 0))
+		valid_episode = session.episode >= 0
+		terminal_commitments_clear = (~old_battle.terminal) | jnp.all(choices == 0)
+		replacement_supported = _supported_two_move_state(battle, _adapt_state(battle))
+
+		def check_terminal(__):
+			def overflow(___):
+				return rejected(SESSION_OVERFLOW)
+
+			def accept(___):
+				return TwoMoveSessionReset(
+					session._replace(
+						battle=battle,
+						pending_choices=jnp.zeros((2,), dtype=jnp.int32),
+						episode=session.episode + jnp.asarray(1, dtype=jnp.int32),
+					),
+					jnp.asarray(SESSION_RESET, dtype=jnp.int32),
+				)
+
+			return jax.lax.cond(
+				session.episode == MAX_REQUEST_EPISODE,
+				overflow,
+				accept,
+				operand=None,
+			)
+
+		def unsupported(__):
+			return rejected(SESSION_UNSUPPORTED)
+
+		def supported(__):
+			return jax.lax.cond(
+				old_battle.terminal,
+				check_terminal,
+				lambda ___: rejected(SESSION_NOT_TERMINAL),
+				operand=None,
+			)
+
+		return jax.lax.cond(
+			valid_pending & valid_held_pp & valid_episode & terminal_commitments_clear & replacement_supported,
+			supported,
+			unsupported,
+			operand=None,
+		)
+
+	return jax.lax.cond(
+		episode_id == session.episode,
+		check_metadata,
+		lambda _: rejected(SESSION_STALE_EPISODE),
+		operand=None,
 	)
 
 
@@ -301,10 +394,12 @@ def project_two_move_submission_view(
 
 __all__ = [
 	"TwoMoveRequestSession",
+	"TwoMoveSessionReset",
 	"TwoMoveRequestView",
 	"TwoMoveSessionSubmission",
 	"TwoMoveSubmissionView",
 	"make_two_move_request_session",
+	"reset_two_move_request_session",
 	"project_two_move_request_view",
 	"project_two_move_submission_view",
 	"submit_two_move_choice",

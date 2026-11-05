@@ -1,6 +1,6 @@
 # Current task handoff
 
-Accepted numbered tasks: **46**. Active task: **none**. GPU block: **none**.
+Accepted numbered tasks: **47**. Active task: **none**. GPU block: **none**.
 Global review baseline: **40**; next checkpoint: **50**. No pending review corrections.
 G0 is accepted; G1/G3 and all implementation milestones remain open.
 
@@ -124,11 +124,15 @@ accepted-count ledger; archive records are its detail, not additional tasks.
 | 044 | Accepted | exact complete-battle parity for two-move Mew — [evidence](TASK044.md) |
 | 045 | Accepted | private staged submissions for two-move Tackle/Pound turns — [evidence](TASK045.md) |
 | 046 | Accepted | complete-battle parity through staged two-move request sessions — [evidence](TASK046.md) |
+| 047 | Accepted | trusted terminal reset for v4 request sessions — [evidence](TASK047.md) |
 
 ## Active work
 
-None. Task046 was accepted by primary `/root` on 2026-11-05. This does not
-claim an Astra review or milestone acceptance. The accepted count is 46; the
-review baseline remains 40 and the next checkpoint remains 50. G0 remains the
-only accepted milestone and the GPU block is null. Optional regressions remain
-recorded in `deferred_validation` and are not acceptance dependencies.
+Task046 was accepted by primary `/root` on 2026-11-05; this does not claim an
+Astra review or milestone acceptance. Task047 adds a trusted v4 terminal
+session reset that copies a caller-supplied supported fresh state, clears
+commitments and advances the local episode once. Primary `/root` accepted it on
+2026-11-05; its contract and evidence are recorded in [TASK047.md](TASK047.md).
+The accepted count is 47; review baseline 40, next checkpoint 50, G0 only
+accepted milestone, and GPU block null. No task is active. Optional regressions
+remain recorded in `deferred_validation` and are not acceptance dependencies.
