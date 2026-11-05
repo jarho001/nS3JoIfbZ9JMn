@@ -1,0 +1,11 @@
+test_actual_normal_request_turns_match_state_rng_and_both_views (test.test_neutral_tackle.NeutralTackleTests.test_actual_normal_request_turns_match_state_rng_and_both_views) ... ok
+test_bad_types_and_audiences_fail_closed (test.test_neutral_tackle.NeutralTackleTests.test_bad_types_and_audiences_fail_closed) ... ok
+test_critical_order_ko_skip_and_recipient_hp_privacy (test.test_neutral_tackle.NeutralTackleTests.test_critical_order_ko_skip_and_recipient_hp_privacy) ... ok
+test_invalid_pending_unsupported_and_terminal_inputs_do_not_advance (test.test_neutral_tackle.NeutralTackleTests.test_invalid_pending_unsupported_and_terminal_inputs_do_not_advance) ... ok
+test_jit_vmap_lanes_match_individual_and_do_not_couple (test.test_neutral_tackle.NeutralTackleTests.test_jit_vmap_lanes_match_individual_and_do_not_couple) ... ok
+test_live_pinned_rng_vectors_and_bounded_sampling (test.test_neutral_tackle.NeutralTackleTests.test_live_pinned_rng_vectors_and_bounded_sampling) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 30.758s
+
+OK

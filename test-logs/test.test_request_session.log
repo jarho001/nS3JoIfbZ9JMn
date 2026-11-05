@@ -1,0 +1,9 @@
+test_actor_view_is_invariant_to_opponents_private_commit_bit (test.test_request_session.RequestSessionTests.test_actor_view_is_invariant_to_opponents_private_commit_bit) ... ok
+test_heterogeneous_jit_vmap_matches_individual_lanes_and_permutation (test.test_request_session.RequestSessionTests.test_heterogeneous_jit_vmap_matches_individual_lanes_and_permutation) ... ok
+test_live_native_partial_and_second_commits_match_chained_tied_and_unequal_turns (test.test_request_session.RequestSessionTests.test_live_native_partial_and_second_commits_match_chained_tied_and_unequal_turns) ... ok
+test_status_precedence_terminal_unsupported_and_bounded_episode (test.test_request_session.RequestSessionTests.test_status_precedence_terminal_unsupported_and_bounded_episode) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 252.194s
+
+OK

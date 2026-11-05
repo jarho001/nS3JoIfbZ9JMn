@@ -1,0 +1,9 @@
+test_actual_full_native_duels_match_every_compiled_state_draw_and_view (test.test_neutral_duel.NeutralDuelTests.test_actual_full_native_duels_match_every_compiled_state_draw_and_view) ... ok
+test_budget_resume_exact_capacity_and_pp_one_unsupported_boundary (test.test_neutral_duel.NeutralDuelTests.test_budget_resume_exact_capacity_and_pp_one_unsupported_boundary) ... ok
+test_jit_vmap_mixed_lengths_diagnostics_budgets_and_lane_order (test.test_neutral_duel.NeutralDuelTests.test_jit_vmap_mixed_lengths_diagnostics_budgets_and_lane_order) ... ok
+test_terminal_pending_unsupported_and_structural_boundaries (test.test_neutral_duel.NeutralDuelTests.test_terminal_pending_unsupported_and_structural_boundaries) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 52.655s
+
+OK

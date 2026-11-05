@@ -1,0 +1,8 @@
+test_complete_native_tied_duels_match_every_state_draw_and_view (test.test_neutral_tackle_ties.NeutralTackleSpeedTieTests.test_complete_native_tied_duels_match_every_state_draw_and_view) ... ok
+test_tie_variant_diagnostics_and_invalid_runtime_budget_do_not_advance (test.test_neutral_tackle_ties.NeutralTackleSpeedTieTests.test_tie_variant_diagnostics_and_invalid_runtime_budget_do_not_advance) ... ok
+test_unequal_speed_control_resume_and_mixed_vmap_lanes (test.test_neutral_tackle_ties.NeutralTackleSpeedTieTests.test_unequal_speed_control_resume_and_mixed_vmap_lanes) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 94.363s
+
+OK

@@ -1,0 +1,9 @@
+test_all_pp_exhaustion_is_unsupported_on_continuation (test.test_neutral_two_move.NeutralTwoMoveTests.test_all_pp_exhaustion_is_unsupported_on_continuation) ... ok
+test_boundaries_and_masking (test.test_neutral_two_move.NeutralTwoMoveTests.test_boundaries_and_masking) ... ok
+test_jitted_vmap_isolates_heterogeneous_lanes (test.test_neutral_two_move.NeutralTwoMoveTests.test_jitted_vmap_isolates_heterogeneous_lanes) ... ok
+test_native_turns_match_full_state_trace_move_identity_and_both_views (test.test_neutral_two_move.NeutralTwoMoveTests.test_native_turns_match_full_state_trace_move_identity_and_both_views) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 111.047s
+
+OK
