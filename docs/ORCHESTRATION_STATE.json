@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "accepted_project_task_count": 42,
+  "accepted_project_task_count": 43,
   "project_direction_decision": {
     "status": "adopted",
     "date": "2026-11-03",
@@ -319,6 +319,16 @@
         "accepted_at": "2026-11-05",
         "accepted_by_agent": "/root",
         "history_ref": "TASK042.md"
+      },
+      {
+        "id": "Task043",
+        "title": "two-move neutral Tackle/Pound Mew turn API",
+        "status": "accepted",
+        "owner": "/root/task043",
+        "source_base": "177b35a8b1a4a9c65368c9914149ec3d7e03c639",
+        "accepted_at": "2026-11-05",
+        "accepted_by_agent": "/root",
+        "history_ref": "TASK043.md"
       }
     ],
     "active_regular_review": null,
@@ -514,6 +524,19 @@
         "test/test_neutral_pound.py": "bd035ad681b94c27f6a14e8503397eb52ed8addd"
       },
       "reason": "Known-long request-session/Tackle mechanics regression exceeds the 30-second per-command routine limit. Task042 native Pound parity and the focused Tackle request-session-duel regression passed; this optional long run is not an acceptance dependency.",
+      "acceptance_dependency": false
+    },
+    {
+      "task": "Task043",
+      "status": "deferred_optional_regression",
+      "command": "JAX_PLATFORMS=cpu python -m unittest test.test_request_session test.test_neutral_tackle test.test_neutral_duel test.test_neutral_tackle_ties -v",
+      "source_base": "177b35a8b1a4a9c65368c9914149ec3d7e03c639",
+      "source_blobs": {
+        "simulator/__init__.py": "6188814abc05806503185d8ebfe18cc3de928bfd",
+        "simulator/neutral_two_move.py": "013dda42c232b47b2e5bd815b7c57a43d817199f",
+        "test/test_neutral_two_move.py": "6ba18e596c1a18761f9d42a7787b9e351a13b6ab"
+      },
+      "reason": "Known-long prior request-session/Tackle regression was not run in the bounded Task043 validation. It is an optional old regression and is not an acceptance dependency.",
       "acceptance_dependency": false
     }
   ]

@@ -1,6 +1,6 @@
 # Current task handoff
 
-Accepted numbered tasks: **42**. Active task: **none**. GPU block: **none**.
+Accepted numbered tasks: **43**. Active task: **none**. GPU block: **none**.
 Global review baseline: **40**; next checkpoint: **50**. No pending review corrections.
 G0 is accepted; G1/G3 and all implementation milestones remain open.
 
@@ -22,8 +22,14 @@ Task042 adds the separately versioned Pound-only Gen 5 Mew v3 turn slice with
 native ordinary-turn, draw, and recipient-view parity: [TASK042.md](TASK042.md).
 It expands one playable move case without accepting a project milestone.
 
+Task043 adds the separately versioned Gen 5 two-move Tackle/Pound Mew v4 turn
+API with simultaneous choice, per-slot PP, native request/event/RNG parity,
+and isolated recipient views: [TASK043.md](TASK043.md). It expands real move
+choice while leaving Struggle and the broader format boundary unsupported.
+
 Relevant APIs: `simulator/neutral_tackle.py`, `simulator/neutral_tackle_ties.py`,
 `simulator/neutral_pound.py`,
+`simulator/neutral_two_move.py`,
 `simulator/neutral_duel.py`, `simulator/request_session.py`. API contract and
 supported boundaries: [neutral-tackle-variant.md](neutral-tackle-variant.md).
 Continue one justified simulator deliverable; no next task is prescoped here.
@@ -97,10 +103,12 @@ accepted-count ledger; archive records are its detail, not additional tasks.
 | 040 | Accepted | heterogeneous batched staged request sessions — [evidence](TASK040.md) |
 | 041 | Accepted | trusted terminal request-session reset — [evidence](TASK041.md) |
 | 042 | Accepted | versioned neutral Pound Mew turn slice — [evidence](TASK042.md) |
+| 043 | Accepted | two-move neutral Tackle/Pound Mew turn API — [evidence](TASK043.md) |
 
 ## Active work
 
-None. Task042 was accepted by primary review on 2026-11-05. Optional long
-regressions are recorded in `deferred_validation` in the state; they remain
-unrun and are not acceptance dependencies. The review baseline remains 40 and
-the next checkpoint remains 50.
+None. Task043 was accepted by primary `/root` on 2026-11-05. This does not
+claim an Astra review or project milestone acceptance. The review baseline
+remains 40 and the next checkpoint remains 50. Optional long regressions are
+recorded in `deferred_validation` in the state; they remain unrun and are not
+acceptance dependencies.
