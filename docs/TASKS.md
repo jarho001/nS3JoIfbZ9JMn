@@ -1,6 +1,6 @@
 # Current task handoff
 
-Accepted numbered tasks: **44**. Active task: **none**. GPU block: **none**.
+Accepted numbered tasks: **45**. Active task: **none**. GPU block: **none**.
 Global review baseline: **40**; next checkpoint: **50**. No pending review corrections.
 G0 is accepted; G1/G3 and all implementation milestones remain open.
 
@@ -31,10 +31,16 @@ broader format boundary remain unsupported. Task044 was accepted by primary
 `/root` on 2026-11-05; this does not claim an Astra review or milestone
 acceptance.
 
+Task045 adds private staged request sessions for v4 two-move choices, keeping
+the current request separate from prior resolved events: [TASK045.md](TASK045.md).
+It was accepted by primary `/root` on 2026-11-05. This does not claim an Astra
+review or milestone acceptance.
+
 Relevant APIs: `simulator/neutral_tackle.py`, `simulator/neutral_tackle_ties.py`,
 `simulator/neutral_pound.py`,
 `simulator/neutral_two_move.py`,
-`simulator/neutral_duel.py`, `simulator/request_session.py`. API contract and
+`simulator/two_move_session.py`, `simulator/neutral_duel.py`,
+`simulator/request_session.py`. API contract and
 supported boundaries: [neutral-tackle-variant.md](neutral-tackle-variant.md).
 Continue one justified simulator deliverable; no next task is prescoped here.
 
@@ -109,11 +115,12 @@ accepted-count ledger; archive records are its detail, not additional tasks.
 | 042 | Accepted | versioned neutral Pound Mew turn slice — [evidence](TASK042.md) |
 | 043 | Accepted | two-move neutral Tackle/Pound Mew turn API — [evidence](TASK043.md) |
 | 044 | Accepted | exact complete-battle parity for two-move Mew — [evidence](TASK044.md) |
+| 045 | Accepted | private staged submissions for two-move Tackle/Pound turns — [evidence](TASK045.md) |
 
 ## Active work
 
-None. Task044 was accepted by primary `/root` on 2026-11-05. This does not
-claim an Astra review or project milestone acceptance. The review baseline
-remains 40 and the next checkpoint remains 50. Optional long regressions are
-recorded in `deferred_validation` in the state; they remain unrun and are not
-acceptance dependencies.
+None. Task045 was accepted by primary `/root` on 2026-11-05. This does not claim
+an Astra review or project milestone acceptance. The accepted count is 45; the
+review baseline remains 40 and the next checkpoint remains 50. Optional
+regressions are recorded in `deferred_validation` in the state; they remain
+unrun and are not acceptance dependencies.

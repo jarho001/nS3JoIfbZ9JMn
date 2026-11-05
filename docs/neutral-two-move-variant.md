@@ -30,6 +30,19 @@ common own HP/stats, and recipient-visible event projection. It does not
 contain the opponent's PP, an unexecuted choice, trusted full state, or RNG
 trace.
 
+Task045 adds the opt-in local session adapter in `simulator/two_move_session.py`:
+`make_two_move_request_session`, `submit_two_move_choice`,
+`project_two_move_request_view`, and `project_two_move_submission_view`. The
+first valid choice only changes that actor's private pending slot. The second
+accepted choice resolves the unchanged v4 transition once, clears both slots,
+and increments a bounded local episode. The actor view contains their current
+request and own submitted bit; the submission view carries prior resolved
+events in a separate projection. The episode is a local token, not a native
+Showdown request ID. Stale-token and duplicate-commit rejection belong to this
+adapter; native `Side.choose` can replace an earlier commitment. Task045 was
+accepted by primary `/root` on 2026-11-05; this adapter does not expand battle
+mechanics or claim a milestone.
+
 `reference/neutral-two-move-oracle.cjs` initializes actual pinned Gen 5
 random battles from direct one-Mew Synchronize/Hardy/perfect-IV/itemless sets
 with both moves in order. It captures all four choice pairs, both unequal
@@ -46,11 +59,11 @@ after the last Tackle PP is spent. Its result does not expand the move or
 effect boundary.
 
 This variant adds only Tackle/Pound choice for Mew. It does not add other
-moves, switches/teams, status, items, weather, Struggle execution, session or
-reset integration, policies/training/rollouts/tournaments/reporting, a
-production simulator duel runner, GPU/performance claims, or full-format
+moves, switches/teams, status, items, weather, Struggle execution, reset or
+networked session integration, policies/training/rollouts/tournaments/reporting,
+a production simulator duel runner, GPU/performance claims, or full-format
 support. [Task043](TASK043.md)
 records the v4 turn contract and evidence; [Task044](TASK044.md) records the
-complete-battle parity validation. Task043 was accepted by primary `/root` on
-2026-11-05 and Task044 was accepted by primary `/root` on 2026-11-05. Neither
-records Astra review or milestone approval.
+complete-battle parity validation. Task043 and Task044 were accepted by primary
+`/root` on 2026-11-05. Task045 was also accepted by primary `/root` on that
+date; none of these records claims Astra review or milestone approval.
