@@ -2,6 +2,10 @@
 
 **Status:** Task034 and Task035 were accepted after primary review. Task036's separate speed-tie v2 is accepted after primary review. This restricted slice does not constitute a complete battle engine or close G1, G3 or any implementation milestone.
 
+The separate Pound-only v3 turn boundary is documented in
+[`neutral-pound-variant.md`](neutral-pound-variant.md). Adding Pound does not
+change the v1/v2 Tackle move or variant checks described below.
+
 ## Variant and initialization boundary
 
 The named variant is `gen5-neutral-tackle-mew-1v1-v1`. It has one active Mew per side, one enabled move (`Tackle`), neutral non-STAB physical damage, positive HP and PP, ordinary level/stat bounds, and distinct effective speeds. Only accuracy, critical, damage, HP clamp, faint, terminal outcome, and next-turn request behavior are modeled.

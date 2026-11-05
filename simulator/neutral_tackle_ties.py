@@ -33,7 +33,6 @@ from .neutral_tackle import (
 	PlayerView,
 	Transition,
 	TurnEvents,
-	_TackleActionResult,
 	_dispatch_transition,
 	_empty_events,
 	_execute_tackle_action,
@@ -169,12 +168,12 @@ def _speed_sort_draw(state, draws, context):
 	return jax.lax.cond(state.speed[0] == state.speed[1], draw, skip, operand=None)
 
 
-def _execute_action(state, events, draws, actor, event_slot):
+def _execute_action(state, events, draws, actor, event_slot, action_fn=_execute_tackle_action):
 	target = 1 - actor
 	can_act = (state.hp[actor] > 0) & (state.hp[target] > 0)
 
 	def execute(_):
-		action = _execute_tackle_action(state, actor)
+		action = action_fn(state, actor)
 		new_events = _record_action_event(events, event_slot, actor, action)
 		new_draws = draws
 		for offset, bound, context in (
@@ -216,7 +215,7 @@ def _finish_turn(state, events, draws):
 	return TieTransition(state, jnp.asarray(STATUS_OK, dtype=jnp.int32), events, draws)
 
 
-def _run_tie_turn(state):
+def _run_tie_turn(state, action_fn=_execute_tackle_action):
 	events = _empty_events()
 	draws = _empty_tie_draws()
 	state, draws, queue_swap = _speed_sort_draw(state, draws, DRAW_QUEUE_SORT)
@@ -227,7 +226,7 @@ def _run_tie_turn(state):
 		jnp.where(queue_swap == 0, 0, 1),
 		jnp.where(state.speed[0] > state.speed[1], 0, 1),
 	).astype(jnp.int32)
-	state, events, draws = _execute_action(state, events, draws, first_actor, 0)
+	state, events, draws = _execute_action(state, events, draws, first_actor, 0, action_fn)
 	first_action_ended = jnp.any(state.hp == 0)
 	first_carry = (state, events, draws, first_actor)
 
@@ -243,7 +242,7 @@ def _run_tie_turn(state):
 		state, draws, _ = _speed_sort_draw(state, draws, DRAW_MOVE_HIT_UPDATE)
 		state, draws, _ = _speed_sort_draw(state, draws, DRAW_ACTION_UPDATE)
 		second_actor = 1 - first_actor
-		state, events, draws = _execute_action(state, events, draws, second_actor, 1)
+		state, events, draws = _execute_action(state, events, draws, second_actor, 1, action_fn)
 		second_action_ended = jnp.any(state.hp == 0)
 		second_carry = (state, events, draws)
 

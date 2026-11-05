@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "accepted_project_task_count": 41,
+  "accepted_project_task_count": 42,
   "project_direction_decision": {
     "status": "adopted",
     "date": "2026-11-03",
@@ -309,6 +309,16 @@
         "accepted_at": "2026-11-05",
         "accepted_by_agent": "/root",
         "history_ref": "TASK041.md"
+      },
+      {
+        "id": "Task042",
+        "title": "versioned neutral Pound turn slice",
+        "status": "accepted",
+        "owner": "/root/task042",
+        "source_base": "f56f575b9650ae5642bb41e9a49dec2b7852b8d4",
+        "accepted_at": "2026-11-05",
+        "accepted_by_agent": "/root",
+        "history_ref": "TASK042.md"
       }
     ],
     "active_regular_review": null,
@@ -490,6 +500,20 @@
         "test/test_request_session_reset.py": "549d164b0548db229a3f69251db9a79a750f6780"
       },
       "reason": "Known-long request-session/mechanics regression exceeds the 30-second per-command routine cap. The focused Task041 reset test passed; this optional regression is not an acceptance dependency.",
+      "acceptance_dependency": false
+    },
+    {
+      "task": "Task042",
+      "status": "deferred_optional_regression",
+      "command": "JAX_PLATFORMS=cpu python -m unittest test.test_request_session test.test_neutral_tackle test.test_neutral_duel test.test_neutral_tackle_ties -v",
+      "source_base": "f56f575b9650ae5642bb41e9a49dec2b7852b8d4",
+      "source_blobs": {
+        "simulator/neutral_tackle.py": "aecd2641c0e64481d5f54ec550d4a93831fa6fbf",
+        "simulator/neutral_tackle_ties.py": "efed081d1ca3e1e2bb93eed499155d93f98a9ced",
+        "simulator/neutral_pound.py": "2f7fc9f9b33afcd2a729ccf2ee25b47c4c754887",
+        "test/test_neutral_pound.py": "bd035ad681b94c27f6a14e8503397eb52ed8addd"
+      },
+      "reason": "Known-long request-session/Tackle mechanics regression exceeds the 30-second per-command routine limit. Task042 native Pound parity and the focused Tackle request-session-duel regression passed; this optional long run is not an acceptance dependency.",
       "acceptance_dependency": false
     }
   ]

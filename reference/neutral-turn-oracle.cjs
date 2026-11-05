@@ -778,3 +778,13 @@ function generateStagedSessionDuelFixture(ps) {
 }
 
 if (require.main === module) main();
+
+// Guarded low-level helpers for separately versioned move fixtures. Importing
+// this module does not invoke main or run an existing Tackle fixture.
+module.exports = {
+	...module.exports,
+	assertReady,
+	projectEvents,
+	snapshot,
+	withObservedBattleDraws,
+};

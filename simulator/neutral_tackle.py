@@ -130,7 +130,7 @@ class PlayerView(NamedTuple):
 	winner: jax.Array
 
 
-class _TackleActionResult(NamedTuple):
+class _NeutralActionResult(NamedTuple):
 	state: BattleState
 	critical: jax.Array
 	damage: jax.Array
@@ -234,19 +234,24 @@ def _empty_transition(state: BattleState, status: int) -> Transition:
 	return Transition(state, jnp.asarray(status, dtype=jnp.int32), _empty_events(), _empty_draws())
 
 
-def _supported_common(state: BattleState) -> jax.Array:
+def _supported_common(
+	state: BattleState,
+	*,
+	move_id: int = MOVE_TACKLE,
+	max_pp: int = TACKLE_MAX_PP,
+) -> jax.Array:
 	return (
 		(state.request_phase == PHASE_MOVE_REQUEST)
 		& (~state.terminal)
 		& (state.winner == -1)
 		& jnp.all(state.species_id == SPECIES_MEW)
-		& (state.move_id == MOVE_TACKLE)
+		& (state.move_id == move_id)
 		& jnp.all(state.max_hp > 0)
 		& jnp.all(state.max_hp <= MEW_MAX_HP)
 		& jnp.all(state.hp > 0)
 		& jnp.all(state.hp <= state.max_hp)
 		& jnp.all(state.pp > 0)
-		& jnp.all(state.pp <= TACKLE_MAX_PP)
+		& jnp.all(state.pp <= max_pp)
 		& jnp.all(state.level >= 1)
 		& jnp.all(state.level <= 100)
 		& jnp.all(state.attack > 0)
@@ -279,7 +284,8 @@ def _record_draw(draws: DrawTrace, index, bound, value, context, before, after) 
 	)
 
 
-def _execute_tackle_action(state: BattleState, actor) -> _TackleActionResult:
+def _execute_neutral_action(state: BattleState, actor, base_power: int) -> _NeutralActionResult:
+	"""Execute one pinned neutral Normal physical action with exact Gen 5 draws."""
 	target = 1 - actor
 	seed_before_accuracy = state.rng
 	seed_after_accuracy, accuracy_word = sample_bounded(seed_before_accuracy, 100)
@@ -292,7 +298,7 @@ def _execute_tackle_action(state: BattleState, actor) -> _TackleActionResult:
 
 	pre_critical_damage = neutral_damage_before_roll(
 		state.level[actor],
-		jnp.asarray(TACKLE_BASE_POWER, dtype=jnp.int32),
+		jnp.asarray(base_power, dtype=jnp.int32),
 		state.attack[actor],
 		state.defense[target],
 	)
@@ -301,7 +307,7 @@ def _execute_tackle_action(state: BattleState, actor) -> _TackleActionResult:
 	damage = damage_from_preroll(
 		critical_damage,
 		damage_roll,
-		False,  # Mew is Psychic; Normal Tackle is never STAB.
+		False,  # Psychic Mew gets no STAB on either Normal move.
 		False,
 		False,
 		jnp.asarray(0, dtype=jnp.int32),  # Normal-on-Psychic is neutral.
@@ -316,7 +322,7 @@ def _execute_tackle_action(state: BattleState, actor) -> _TackleActionResult:
 		pp=state.pp.at[actor].add(jnp.asarray(-1, dtype=jnp.int32)),
 		rng=seed_after_damage,
 	)
-	return _TackleActionResult(
+	return _NeutralActionResult(
 		new_state,
 		critical,
 		damage,
@@ -328,7 +334,11 @@ def _execute_tackle_action(state: BattleState, actor) -> _TackleActionResult:
 	)
 
 
-def _record_action_event(events: TurnEvents, slot, actor, action: _TackleActionResult) -> TurnEvents:
+def _execute_tackle_action(state: BattleState, actor) -> _NeutralActionResult:
+	return _execute_neutral_action(state, actor, TACKLE_BASE_POWER)
+
+
+def _record_action_event(events: TurnEvents, slot, actor, action: _NeutralActionResult) -> TurnEvents:
 	return TurnEvents(
 		events.executed.at[slot].set(jnp.asarray(True)),
 		events.actors.at[slot].set(jnp.asarray(actor, dtype=jnp.int32)),
@@ -366,8 +376,8 @@ def _run_turn(state: BattleState) -> Transition:
 					action.before[offset],
 					action.after[offset],
 				)
-			# Accuracy is exactly 100 for the pinned Tackle data, but its bounded
-			# draw is still consumed and retained in the trace.
+			# Accuracy is exactly 100 for both currently supported pinned moves,
+			# but its bounded draw is still consumed and retained in the trace.
 			_ = action.values[0] < 100
 			return action.state, new_events, new_draws
 
@@ -409,7 +419,15 @@ def _choice_array(choices):
 	return choice_array
 
 
-def _dispatch_transition(state, choice_array, supported_state, run_turn, empty_transition):
+def _dispatch_transition(
+	state,
+	choice_array,
+	supported_state,
+	run_turn,
+	empty_transition,
+	*,
+	sole_action_id: int = ACTION_TACKLE,
+):
 	def empty(status):
 		return empty_transition(state, status)
 
@@ -418,7 +436,7 @@ def _dispatch_transition(state, choice_array, supported_state, run_turn, empty_t
 
 	def active_result(_):
 		negative = jnp.any(choice_array < 0)
-		unknown = jnp.any(choice_array > ACTION_TACKLE)
+		unknown = jnp.any(choice_array > sole_action_id)
 		pending_choice = jnp.any(choice_array == CHOICE_PENDING)
 		def invalid_result(__):
 			return empty(STATUS_INVALID_CHOICE)

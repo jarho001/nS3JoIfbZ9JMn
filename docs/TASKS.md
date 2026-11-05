@@ -1,6 +1,6 @@
 # Current task handoff
 
-Accepted numbered tasks: **41**. Active task: **none**. GPU block: **none**.
+Accepted numbered tasks: **42**. Active task: **none**. GPU block: **none**.
 Global review baseline: **40**; next checkpoint: **50**. No pending review corrections.
 G0 is accepted; G1/G3 and all implementation milestones remain open.
 
@@ -18,7 +18,12 @@ sessions across a heterogeneous `jit(vmap(submit_choice))` batch:
 requires cleared commitments and accepts a supplied supported v2 request
 state: [TASK041.md](TASK041.md).
 
+Task042 adds the separately versioned Pound-only Gen 5 Mew v3 turn slice with
+native ordinary-turn, draw, and recipient-view parity: [TASK042.md](TASK042.md).
+It expands one playable move case without accepting a project milestone.
+
 Relevant APIs: `simulator/neutral_tackle.py`, `simulator/neutral_tackle_ties.py`,
+`simulator/neutral_pound.py`,
 `simulator/neutral_duel.py`, `simulator/request_session.py`. API contract and
 supported boundaries: [neutral-tackle-variant.md](neutral-tackle-variant.md).
 Continue one justified simulator deliverable; no next task is prescoped here.
@@ -91,9 +96,11 @@ accepted-count ledger; archive records are its detail, not additional tasks.
 | 039 | Accepted | complete staged-session battle parity — [evidence](TASK039.md) |
 | 040 | Accepted | heterogeneous batched staged request sessions — [evidence](TASK040.md) |
 | 041 | Accepted | trusted terminal request-session reset — [evidence](TASK041.md) |
+| 042 | Accepted | versioned neutral Pound Mew turn slice — [evidence](TASK042.md) |
 
 ## Active work
 
-None. Task041 was accepted by primary review on 2026-11-05. Optional long
+None. Task042 was accepted by primary review on 2026-11-05. Optional long
 regressions are recorded in `deferred_validation` in the state; they remain
-unrun and are not acceptance dependencies.
+unrun and are not acceptance dependencies. The review baseline remains 40 and
+the next checkpoint remains 50.
