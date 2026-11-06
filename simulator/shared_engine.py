@@ -37,6 +37,7 @@ ITEMS = ('','leftovers','lumberry')
 BLANK, EV_MOVE, DAMAGE, HEAL, CRIT, IMMUNE, MISS, FAINT, WIN, TURN, UPKEEP, SWITCH, STATUS, ABILITY, END_ITEM, CURE, FAIL, CANT, ACTIVATE, SINGLE = range(20)
 # Draw contexts; range form stores actual native arguments including offsets.
 INIT, QUEUE_SORT, BEFORE_TURN, UPDATE, HIT_UPDATE, SWITCH_SORT, FIELD_SORT, ACC, CRITICAL, ROLL, PARALYSIS, STALL = range(12)
+DRAW_CONTEXTS=('initialization','queue-sort','before-turn','update','hit-update','switch-order','residual-handlers','accuracy','critical','damage','paralysis','stall')
 # Queue kinds, order values mirror the pinned scheduler.
 BEFORE, ATTACK, SWAP, INSTANT, RUN_SWITCH, RESIDUAL = range(1,7)
 QORDER=jnp.array([999,4,200,103,3,101,300],jnp.int32)
@@ -142,6 +143,14 @@ def _speeds(s):
     return jnp.maximum(1,jnp.where(s.status==PAR,s.stats[:,:,5]//4,s.stats[:,:,5]))
 
 
+def _refresh_speed(s):
+    effective=_speeds(s)
+    for side in range(2):
+        mon=s.active[side]
+        s=s._replace(speed=s.speed.at[side,mon].set(jnp.where(s.fainted[side,mon],s.speed[side,mon],effective[side,mon])))
+    return s
+
+
 def _update(c,context=UPDATE,sort_all=False):
     s,t=c
     active_speed=s.speed[jnp.arange(2),s.active]
@@ -191,7 +200,7 @@ def _qsort(c):
 def _faint(c,side):
     s,t=c;m=s.active[side]
     c=_event(c,FAINT,side,m);s,t=c
-    return s._replace(fainted=s.fainted.at[side,m].set(True),status=s.status,
+    return s._replace(fainted=s.fainted.at[side,m].set(True),speed=s.speed.at[side,m].set(s.stats[side,m,5]),status=s.status,
                       stall=s.stall.at[side,m].set(0),stall_duration=s.stall_duration.at[side,m].set(0),
                       protected=s.protected.at[side,m].set(False)),t
 
@@ -278,8 +287,8 @@ def _hit(c,actor,move):
             c=_damage(c,actor,(s.stats[actor,mon,0]+2)//4,cause=3)
             return c
         c=_when(if_recoil,recoil,c)
-        # Native second Update is skipped after a terminal hit (win is checked
-        # between hit and after-move handling); recoil ending follows faint order.
+        # Recoil's faint is queued until after the second hit-loop Update;
+        # it must still participate in that speed sort before resolution.
         s,t=c
         c=_update(c,HIT_UPDATE)
         s,t=c
@@ -391,7 +400,7 @@ def _switch(c,row):
     s,t=c
     oldslot=jnp.argmax(s.order[side]==old)
     order=s.order.at[side,oldslot].set(incoming).at[side,slot].set(old)
-    s=s._replace(active=s.active.at[side].set(incoming),order=order,
+    s=s._replace(active=s.active.at[side].set(incoming),order=order,speed=s.speed.at[side,old].set(s.stats[side,old,5]),
                  protected=s.protected.at[side,old].set(False),stall=s.stall.at[side,old].set(0),
                  stall_duration=s.stall_duration.at[side,old].set(0),
                  status=s.status.at[side,old].set(jnp.where(s.status[side,old]==FNT,NONE,s.status[side,old])),
@@ -405,7 +414,7 @@ def _switch(c,row):
 
 
 def _residual(c):
-    c=_event(c,BLANK);s,t=c;s=s._replace(speed=_speeds(s));c=(s,t)
+    c=_event(c,BLANK);s,t=c;s=_refresh_speed(s);c=(s,t)
     # Native field handlers: status, protect, stall, item in insertion order.
     # Duration-only handlers sort last (false order), and still consume shuffle
     # draws even when their callback does nothing.
@@ -534,13 +543,36 @@ def legal_actions(s):
 
 def _supported(s):
     occupied=s.species>0
-    return (jnp.all((s.species>=0)&(s.species<=3))&jnp.all(jnp.sum(occupied,axis=1)<=3)&jnp.all(jnp.any(occupied,axis=1))
+    base=derive_stored_stats(BASE_STATS[jnp.clip(s.species,0,3)],s.level,jnp.full((2,6,6),31,jnp.int32),jnp.zeros((2,6,6),jnp.int32),jnp.full((2,6,6),10,jnp.int32))
+    speed_ev=((2*BASE_STATS[jnp.clip(s.species,0,3),5]+31+63)*s.level)//100+5
+    stat_ok=jnp.all(jnp.where(occupied[:,:,None],s.stats[:,:,:5]==base[:,:,:5],s.stats[:,:,:5]==0))
+    stat_ok=stat_ok&jnp.all(jnp.where(occupied,(s.stats[:,:,5]==base[:,:,5])|(s.stats[:,:,5]==speed_ev),s.stats[:,:,5]==0))
+    slots=jnp.arange(4)
+    duplicate=(s.moves[:,:,:,None]==s.moves[:,:,None,:])&(s.moves[:,:,:,None]>0)&(slots[:,None]<slots[None,:])
+    valid_order=jnp.all(jnp.sort(s.order,axis=1)==jnp.arange(ROSTER))
+    return (stat_ok&valid_order&(~jnp.any(duplicate))&jnp.all((s.hcount>=0)&(s.hcount<=HISTORY))
+            &jnp.all((s.qcount>=0)&(s.qcount<=QUEUE))&(s.episode>=0)&(s.generation>=0)
+            &jnp.all(jnp.where(occupied,jnp.any(s.moves>0,axis=-1),jnp.all(s.moves==0,axis=-1)))
+            &jnp.all((s.species>=0)&(s.species<=3))&jnp.all(jnp.sum(occupied,axis=1)<=3)&jnp.all(jnp.any(occupied,axis=1))
             &jnp.all((s.moves>=0)&(s.moves<=PROTECT))&jnp.all((s.item>=0)&(s.item<=2))
             &jnp.all((s.hp>=0)&(s.hp<=s.stats[:,:,0]))&jnp.all((s.pp>=0)&(s.pp<=PP[s.moves]))
             &jnp.all((s.status>=0)&(s.status<=FNT))&jnp.all((s.toxic>=0)&(s.toxic<=15))
-            &jnp.all((s.level[occupied] >= 1) if False else ((~occupied)|(s.level>=1)))
+            &jnp.all((~occupied)|(s.level>=1))
             &jnp.all((~occupied)|(s.level<=100))&jnp.all((s.request>=MOVE)&(s.request<=END))
             &jnp.all((s.active>=0)&(s.active<ROSTER))&jnp.all(s.species[jnp.arange(2),s.active]>0))
+
+
+
+def _validate_structure(s):
+    if not isinstance(s,State):raise ValueError('expected shared-engine State')
+    roster_fields={'species','level','speed','gender','hp','item','status','toxic','stall','stall_duration'}
+    vector_fields={'active','pending','request','pivot'}
+    bool_fields={'fainted','protected','pivot','midturn'}
+    for name,value in zip(State._fields,s):
+        shape=(2,6) if name in roster_fields or name in {'fainted','protected'} else (2,) if name in vector_fields else (2,6,6) if name=='stats' else (2,6,4) if name in {'moves','pp'} else (2,6) if name=='order' else (QUEUE,7) if name=='queue' else (4,) if name=='rng' else (HISTORY,10) if name=='history' else ()
+        dtype=jnp.bool_ if name in bool_fields else jnp.uint16 if name=='rng' else jnp.int32
+        if getattr(value,'shape',None)!=shape or getattr(value,'dtype',None)!=jnp.dtype(dtype):
+            raise ValueError(f'{name} must have shape {shape} and dtype {jnp.dtype(dtype)}')
 
 
 def advance(s,choices,token=None):
@@ -550,6 +582,7 @@ def advance(s,choices,token=None):
     request-episode numbers, never native rqid. Events/draws are successful
     prefixes only; any overflow rolls the entire advance back.
     """
+    _validate_structure(s)
     choices=jnp.asarray(choices)
     if choices.shape!=(2,) or choices.dtype!=jnp.int32:raise ValueError('choices must be int32[2]')
     if token is not None:
@@ -566,10 +599,10 @@ def advance(s,choices,token=None):
         s=s._replace(pending=pending)
         ready=jnp.all((s.request>=WAIT)|(pending>=0))
         def resolve(c):
-            s,t=c;c=_event(c,BLANK);s,t=c
+            s,t=c;c=_event(c,BLANK);s,t=c;s=_refresh_speed(s)
             normal=jnp.all(s.request==MOVE)
             def normal_queue(c):
-                s,t=c;s=s._replace(speed=_speeds(s),midturn=jnp.array(True))
+                s,t=c;s=s._replace(midturn=jnp.array(True))
                 return s,t
             c=_when(normal,normal_queue,(s,t));s,t=c
             for side in range(2):
@@ -615,10 +648,11 @@ def make_state(teams,seed=(1,2,3,4),generation=0):
     for side,team in enumerate(teams):
         for mon,desc in enumerate(team):
             if set(desc)-{'species','moves','level','speed_evs','item'}:raise ValueError('unsupported set field')
+            if type(desc.get('level',50)) is not int:raise ValueError('level must be an integer')
             species[side,mon]=SPECIES.index(desc['species']);level[side,mon]=desc.get('level',50)
             if species[side,mon]==0 or not 1<=level[side,mon]<=100:raise ValueError('unsupported species/level')
             speed=desc.get('speed_evs',0)
-            if speed not in (0,252):raise ValueError('unsupported Speed EVs')
+            if type(speed) is not int or speed not in (0,252):raise ValueError('unsupported Speed EVs')
             evs[side,mon,5]=speed
             if not 1<=len(desc['moves'])<=4 or len(set(desc['moves']))!=len(desc['moves']):raise ValueError('one to four distinct moves required')
             for slot,name in enumerate(desc['moves']):
@@ -653,16 +687,31 @@ def initialize(species,level,moves,item,evs,seed,generation):
     # Native startup: runSwitch all-active speed sort, then its Update, followed
     # by the residual action's Update. No battle RNG is re-seeded after setup.
     for _ in range(3):c=_update(c,INIT)
-    return Result(c[0],i32(OK),c[1])
+    for side in range(2):
+        s,t=c
+        c=_event(c,SWITCH,side,0,value=s.hp[side,0],aux=s.stats[side,0,0])
+    c=_event(c,TURN,value=1)
+    s,t=c
+    s=s._replace(history=s.history.at[:3].set(t.events[:3]),hcount=i32(3))
+    return Result(s,i32(OK),t)
 
 
 def reset(state,replacement,token):
     """Reset a terminal lane with a supplied initialized battle; live/stale reset
     is rejected atomically. No native reset-pool or throughput claim is implied.
     """
-    valid=(state.winner>=0)&jnp.all(token==jnp.stack((state.generation,state.episode)))&(state.generation<2**31-1)
+    _validate_structure(state)
+    _validate_structure(replacement)
+    if token.shape!=(2,) or token.dtype!=jnp.int32:raise ValueError('token must be int32[2]')
+    valid=_supported(replacement)&(replacement.winner<0)&(replacement.turn==1)&(~replacement.midturn)&jnp.all(replacement.pending==-1)&(replacement.qcount==0)&(state.winner>=0)&jnp.all(token==jnp.stack((state.generation,state.episode)))&(state.generation<2**31-1)
     def apply(_):
         s=replacement._replace(generation=state.generation+1,pending=jnp.full(2,-1,jnp.int32),
-                               episode=i32(0),history=jnp.zeros_like(state.history),hcount=i32(0))
+                               episode=i32(0))
         return Result(s,i32(OK),empty_trace())
     return jax.lax.cond(valid,apply,lambda _:Result(state,jnp.where(state.generation==2**31-1,CAPACITY,INVALID),empty_trace()),None)
+
+
+def rewards(state):
+    """Terminal zero-sum outcome; live/truncated work carries no invented win."""
+    winner=state.winner
+    return jnp.where(winner<=0,jnp.zeros(2,jnp.int32),jnp.where(jnp.arange(2)+1==winner,1,-1)).astype(jnp.int32)

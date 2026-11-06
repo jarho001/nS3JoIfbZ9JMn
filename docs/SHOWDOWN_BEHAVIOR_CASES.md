@@ -68,12 +68,43 @@ Every detailed case below inherits this assertion contract:
 
 The proposed common runner is
 `node reference/shared-engine-cases.cjs --batch all --output NEW_FILE`.
-It does not exist yet. Proposed consumers are `test.test_shared_engine_cases`
+Its implementation and coverage map are above. The consumers are `test.test_shared_engine_cases`
 (C), `test.test_shared_engine_battles` (F), and
-`test.test_shared_engine_lifecycle` (L), all absent. Select case batches in one
+`test.test_shared_engine_lifecycle` (L). Select case batches in one
 runner and independent fixture reader, rather than creating an oracle/state
 variant for each move. [V0–V11](../PROJECT_PLAN.md#validation-entry-points-and-remaining-decisions)
 lists existing entry points and clearly marks proposed commands.
+
+## Shared implementation and executable coverage
+
+The user approved the first G3 brief on 2026-11-06. The runner and three Python
+consumers proposed during preparation now exist, with one
+[manifest and usage contract](shared-engine.md). Executed commands, source
+identity and acceptance status live in [compact state](ORCHESTRATION_STATE.json).
+The H/N/S/P labels and appendix below retain the preparation evidence; they are
+not a substitute for that current execution record.
+
+| Required family | Shared runner cases / assertions |
+|---|---|
+| B0 M01–M04 | `M01-duel-*`, `legacy-pound-tied`, `M02-duel-two-move`, `M03-*`, `M04-*`; old APIs retained and V3 controls run separately. |
+| B1 A01/A06 | Legacy migration boundaries, `damage-level-1/50/100`, `last-pp`, `near-full-recover/switch`; native critical/miss/KO/full traces and PP exhaustion. |
+| B1 A02/A03 | `normal-ghost`, `levitate`, `toxic-immunity/type-immunity`, `struggle-double-ko`, `burned-struggle`, F04. |
+| B1 A04/A05 | `protect-repeat`, `protect-chain-*`, `protect-success-2/4/8/16/32/64/128/256`, `protect-counter-cap`, `protect-paralyzed`; native successful/failing counter and full-width draws, expiry/switch interactions. Large counters are explicitly synthetic; capped success uses a real inverse-recurrence seed, not a replaced random outcome. |
+| B2 S01–S09 | Original named appendix scenarios, `two-burn-reserves/swapped`, status/recovery/counter snapshots, both recipient streams. |
+| B2 S10 | `toxic-counter-cap`, `already-statused/same-status`, `lum-inflicted-brn/par/tox`, `lum-brn/par/tox`, `toxic-pivot`, `paralysis-pivot-refresh`, F02/F03. |
+| B3 W01–W06 | `voluntary-retarget`, `double-switch`, `forced-replacement`, `pivot-resume/protected/fast/slow/no-reserve/slower-resume/ko-resume/paralyzed/burn-last-pp`, `two-burn-reserves`, F01/F03; lifecycle tests split/reset these phases. |
+| B4 P01/P02 | `commit-replace/cancel`, exact masks/requests/private pending choices, both submission orders; `test/shared-engine.test.cjs` compares actual BattleStream packets, including silence on pending/undo, to direct snapshots. |
+| B4 P03 | Native `privacy-a/b` and `privacy-hp-a/b` paired histories plus lifecycle assertions; opposing reserve/item/PP/pending choices/exact HP do not enter p1's view. |
+| B4 P04 | Typed malformed/unsupported/stale/terminal inputs; history/episode/queue bounds; synthetic smaller physical event/draw buffers exercise atomic rollback and empty traces. |
+| B4 P05/P06 | NPZ round-trip at every ordinary/pending/pivot/forced boundary, terminal-only mixed reset; scalar/eager/JIT/full-battle `jit(vmap)` sizes 1/8/32; mixed active/pending/terminal/rejected/overflow lanes and lane-local RNG perturbation. CPU proof only. |
+| B5 F01–F04 | `F01/02/03/04-p1/p2`: eight complete three-member native scripts, two seeds, both seats; F04 explicitly starts with depleted PP. Each boundary compares state, queue, RNG context/range/value/pre/post state, requests/masks, both views and real outcome/rewards. |
+
+Initialization captures gender and speed-order draws, public reveals and private
+requests. Six roster slots and four move slots are padded/masked, with stable
+IDs distinct from command order. Draws have independent native phase labels;
+the 2**32 range has an explicit tag and uint32 value. HP percentages retain the
+native 99% cap for damaged HP. Only timing and diagnostic stack paths are omitted
+from semantic comparisons. No G3 GPU/profile or full-format claim follows.
 
 ## B0 — migrate accepted slices without changing their evidence
 
@@ -141,7 +172,8 @@ exercise timed effects inside this package.
 
 ## B5 — full traces make the package playable
 
-All F cases are **P: not generated or tested yet**. Supply the exact team/seed/
+The F rows below were **P during preparation**; shared execution now uses the
+eight named scripts in the coverage map above. Current proof is in compact state. Supply the exact team/seed/
 choice scripts before implementation assertions, using the shared runner. Four
 complete three-member scenarios must cover both acting seats and multiple seeds;
 mirror/swap controls preserve team, policy and RNG identities correctly. A turn

@@ -24,12 +24,13 @@ class SharedEngineBattlesTest(unittest.TestCase):
                     assert_step(self,before,r,step,f"{case['id']}/{n+1}");s=r.state;total+=1
                 self.assertGreaterEqual(int(s.winner),0,'a turn cap is not terminal evidence')
                 self.assertFalse(np.any(e.legal_actions(s)))
+                self.assertEqual(np.asarray(e.rewards(s)).tolist(),[1,-1] if int(s.winner)==1 else [-1,1] if int(s.winner)==2 else [0,0])
                 self.assertEqual(player_view(s,0)['request'],None)
                 # Absorbing terminal submissions cannot consume randomness.
                 r=COMPILED(s,e.i32([0,0]));self.assertEqual(int(r.code),e.TERMINAL)
                 for a,b in zip(jax.tree.leaves(s),jax.tree.leaves(r.state)):np.testing.assert_array_equal(a,b)
         self.assertEqual(families,{'direct','status','pivot','exhaustion'})
         self.assertGreaterEqual(len(seeds),2)
-        print(f'Native complete-battle coverage: {len(self.cases)} battles, {total} boundaries, families={sorted(families)}',flush=True)
+        print(f'Native complete-battle comparison: {len(self.cases)} battles, {total} boundaries, families={sorted(families)}',flush=True)
 
 if __name__=='__main__':unittest.main()

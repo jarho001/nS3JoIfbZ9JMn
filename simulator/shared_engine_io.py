@@ -4,6 +4,7 @@ No native oracle is imported. Only own roster information enters a request;
 opposing HP is rounded exactly as HP Percentage Mod. Trusted state and queued
 choices must never be passed to a policy.
 """
+import jax
 import numpy as np
 from . import shared_engine as e
 
@@ -11,6 +12,7 @@ from . import shared_engine as e
 def condition(hp,maxhp,status=0,public=False):
     if hp==0:return '0 fnt'
     shown=(hp*100+maxhp-1)//maxhp if public else hp
+    if public and shown==100 and hp<maxhp:shown=99
     base=100 if public else maxhp
     return f'{shown}/{base}'+(' '+('','brn','par','tox','fnt')[status] if status else '')
 
@@ -21,7 +23,7 @@ def details(s,side,mon):
 
 
 def project_request(state,side):
-    s=__import__('jax').device_get(state);kind=int(s.request[side])
+    s=jax.device_get(state);kind=int(s.request[side])
     if kind==e.END:return None
     order=s.order[side];roster=[]
     for mon in order:
@@ -52,7 +54,7 @@ def project_request(state,side):
 
 
 def project_events(state,trace,audience):
-    s=__import__('jax').device_get(state);t=__import__('jax').device_get(trace);out=[]
+    s=jax.device_get(state);t=jax.device_get(trace);out=[]
     for row in t.events[:int(t.ecount)]:
         kind,side,mon,move,target,tm,value,aux,status,_=map(int,row)
         ident=lambda side,mon:f'p{side+1}a: '+e.SPECIES[int(s.species[side,mon])]
@@ -89,14 +91,18 @@ def project_events(state,trace,audience):
 
 
 def draw_rows(trace):
-    t=__import__('jax').device_get(trace);out=[]
+    t=jax.device_get(trace);out=[]
     for k in range(int(t.dcount)):
         lo,hi,form=map(int,t.args[k]);args=[2**32] if form==3 else [hi] if form==1 else [lo,hi]
-        out.append({'args':args,'value':int(t.values[k]),'before':t.before[k].tolist(),'after':t.after[k].tolist()})
+        out.append({'args':args,'value':int(t.values[k]),'before':t.before[k].tolist(),'after':t.after[k].tolist(),'context':e.DRAW_CONTEXTS[int(t.context[k])]})
     return out
 
 
 def player_view(s,side):
     """Only a private request and recipient-rendered history leave the adapter."""
     trace=e.empty_trace()._replace(events=s.history,ecount=s.hcount)
-    return {'request':project_request(s,side),'events':project_events(s,trace,side)}
+    prefix=['|gametype|singles','|player|p1|p1||','|player|p2|p2||','|gen|5','|tier|[Gen 5] Random Battle',
+            '|rule|Sleep Clause Mod: Limit one foe put to sleep','|rule|HP Percentage Mod: HP is shown in percentages',
+            "|rule|Illusion Level Mod: Illusion disguises the Pokemon's true level",'|',
+            f'|teamsize|p1|{int(np.sum(np.asarray(s.species[0])>0))}',f'|teamsize|p2|{int(np.sum(np.asarray(s.species[1])>0))}','|start']
+    return {'request':project_request(s,side),'events':[{'type':'event','message':line} for line in prefix]+project_events(s,trace,side)}

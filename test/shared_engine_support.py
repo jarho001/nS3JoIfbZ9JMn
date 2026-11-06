@@ -23,17 +23,21 @@ def initialize_case(case):
     for key in ('p1','p2'):
         teams.append([{'species':d['species'],'moves':d['moves'],'level':d['level'],'speed_evs':d['evs']['spe'],
                        'item':{'':'','Leftovers':'leftovers','Lum Berry':'lumberry'}[d['item']]} for d in case['setup'][key]])
-    init=e.make_state(teams,[case['setup']['seed'],2,3,4]);s=init.state
+    init=e.make_state(teams,case['setup'].get('seedWords',[case['setup']['seed'],2,3,4]));s=init.state
     # Synthetic state installation is a trusted fixture, not ordinary reset.
     for setup in case['setup'].get('setup',[]):
         side=int(setup['side'][1])-1;mon=setup.get('mon',0)
         if 'status' in setup:
             status={'brn':e.BRN,'par':e.PAR,'tox':e.TOX}[setup['status']]
-            # Native setStatus immediately consumes Lum through an Update.
-            lum=int(s.item[side,mon])==2
-            s=s._replace(status=s.status.at[side,mon].set(0 if lum else status),item=s.item.at[side,mon].set(0 if lum else s.item[side,mon]))
+            s,trace=e._status((s,e.empty_trace()),side,side,e.i32(status))
+            count=int(trace.ecount)
+            s=s._replace(history=s.history.at[s.hcount:s.hcount+count].set(trace.events[:count]),hcount=s.hcount+count)
         if 'hp' in setup:s=s._replace(hp=s.hp.at[side,mon].set(setup['hp']))
         if 'pp' in setup:s=s._replace(pp=s.pp.at[side,mon].set(np.where(np.asarray(s.moves[side,mon])>0,setup['pp'],0)))
+        if 'ppByMove' in setup:
+            for slot,move in enumerate(s.moves[side,mon]):
+                key=e.MOVE_KEYS[int(move)]
+                if key in setup['ppByMove']:s=s._replace(pp=s.pp.at[side,mon,slot].set(setup['ppByMove'][key]))
         if 'toxicStage' in setup:s=s._replace(toxic=s.toxic.at[side,mon].set(setup['toxicStage']))
         if 'stall' in setup:s=s._replace(stall=s.stall.at[side,mon].set(setup['stall']),stall_duration=s.stall_duration.at[side,mon].set(2))
     return s,init.trace
@@ -73,9 +77,21 @@ def assert_state(test,s,native,label):
             stall=None if not int(s.stall_duration[side,m]) else {'counter':int(s.stall[side,m]),'duration':int(s.stall_duration[side,m])}
             test.assertEqual(stall,p['stall'],tag+' stall')
             test.assertEqual(bool(s.protected[side,m]),p['protect'],tag+' protect')
+            test.assertEqual(bool(s.active[side]==m and not s.fainted[side,m]),p['active'],tag+' active flag')
+            test.assertTrue(all(value==0 for value in p['boosts'].values()),tag+' supported zero boosts')
+            test.assertFalse(p['forceSwitchFlag'],tag+' no excluded phazing')
         expected=None if native['terminal'] else n['request']
         test.assertEqual(project_request(s,side),expected,prefix+' private request')
-        if not native['terminal']:test.assertEqual(np.asarray(e.legal_actions(s)[side]).tolist(),n['actions']['mask'],prefix+' mask')
+        if not native['terminal']:
+            test.assertEqual(np.asarray(e.legal_actions(s)[side]).tolist(),n['actions']['mask'],prefix+' mask')
+            action=int(s.pending[side]);mon=int(s.active[side]);pending=[]
+            if action>=0:
+                switch=4<=action<10
+                pending=[{'choice':'switch' if switch else 'move','actor':{'side':side,'mon':mon},
+                          'move':None if switch else e.MOVE_KEYS[e.STRUGGLE if action==10 else int(s.moves[side,mon,action])],
+                          'target':{'side':side,'mon':int(s.order[side,action-4])} if switch else None}]
+            test.assertEqual(pending,n['pending'],prefix+' private pending choice')
+            test.assertEqual(bool(s.request[side]>=e.WAIT or action>=0),n['choiceDone'],prefix+' ready')
     q=[]
     for row in s.queue[:int(s.qcount)]:
         kind,side,mon,action,priority,speed,source=map(int,row)
@@ -93,7 +109,7 @@ def assert_state(test,s,native,label):
 def assert_step(test,before,result,expected,label):
     test.assertIn(int(result.code),(e.OK,e.PENDING),label+' code')
     native_draws=[{'args':[d['bound'],d['to']] if 'to' in d else [d['bound']],
-                   'value':d['value'],'before':d['before'],'after':d['after']} for d in expected['draws']]
+                   'value':d['value'],'before':d['before'],'after':d['after'],'context':d['semanticContext']} for d in expected['draws']]
     test.assertEqual(draw_rows(result.trace),native_draws,label+' first divergent draw')
     assert_state(test,result.state,expected['after'],label)
     for side in range(2):test.assertEqual(project_events(result.state,result.trace,side),expected['events'][f'p{side+1}'],label+f' p{side+1} event stream')

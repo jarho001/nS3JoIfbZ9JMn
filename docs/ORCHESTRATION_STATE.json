@@ -524,23 +524,31 @@
     "brief": "PROJECT_PLAN.md#proposed-first-g3-goal-mode-brief",
     "behavior_catalog": "docs/SHOWDOWN_BEHAVIOR_CASES.md",
     "scope": "Entire proposed first G3 package, including potentially long affected CPU integration/regressions. Direct execution without delegation. G3 milestone remains open pending later GPU closure.",
-    "checkpoint": "Shared state/scheduler/status integration: native boundary and complete-battle parity passed; CPU lifecycle/batch acceptance pending",
+    "checkpoint": "Shared CPU lifecycle integration passed; final expanded acceptance matrix running",
     "completed_checkpoints": [
       "Shared roster/move/RNG/request/event schema and native initialization expectations",
       "Voluntary switch, forced replacement, pivot and choice replacement/cancel scheduler",
       "Allowlisted status/items, Protect/recovery, residuals and Struggle integrated with native boundaries"
     ],
-    "next": "Validate serialization/continuation, reset, information equivalence, atomic rejection/overflow and heterogeneous CPU JIT/vmap; expand remaining catalog companion boundaries and run affected legacy controls.",
+    "next": "Finish final B0\u2013B5 native/scalar/eager/JIT/heterogeneous-batch acceptance, inspect diff, record exact source identity and results; push safely.",
     "evidence": [
       {
         "command": "G3_NATIVE_CASES=/tmp/g3-shared-native-3.json JAX_PLATFORMS=cpu .venv-jax/bin/python -m unittest test.test_shared_engine_cases test.test_shared_engine_battles -v",
         "result": "Passed in 13.315s; all current native boundaries plus eight complete three-member battles / 293 full-battle boundaries.",
-        "log": "test-logs/g3-first-playable/scalar-native.log"
+        "log": "test-logs/g3-first-playable/scalar-native.log",
+        "source_commit": "ccbeb54"
       },
       {
         "command": "node --test test/reference.test.cjs test/protocol.test.cjs test/action-space.test.cjs test/battle-runner.test.cjs test/trace.test.cjs test/decision-trajectories.test.cjs test/baseline-matchup.test.cjs",
         "result": "59 passed, 0 failed",
-        "log": "test-logs/g3-first-playable/reference-contracts.log"
+        "log": "test-logs/g3-first-playable/reference-contracts.log",
+        "source_commit": "ccbeb54"
+      },
+      {
+        "source_base": "ccbeb54",
+        "command": "G3_NATIVE_CASES=/tmp/g3-shared-native-7.json JAX_PLATFORMS=cpu .venv-jax/bin/python -m unittest test.test_shared_engine_cases test.test_shared_engine_battles test.test_shared_engine_lifecycle -v",
+        "result": "7 checks passed in 164.317s after initialization history/context/schema additions; subsequent HP/speed/companion additions require final run.",
+        "note": "Intermediate evidence, not final goal completion."
       }
     ],
     "blockers": [],

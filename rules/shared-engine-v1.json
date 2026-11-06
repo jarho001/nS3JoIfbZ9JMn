@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "id": "gen5-shared-singles-v1",
+  "reference_commit": "1242c1e2d9763ba5b85d33f13aecb89bae19ae3d",
+  "native_format": "gen5randombattle",
+  "distribution": "restricted custom supplied sets; not the random-team generator distribution",
+  "species": {"Mew": "Synchronize", "Snorlax": "Immunity", "Gengar": "Levitate"},
+  "items": ["", "leftovers", "lumberry"],
+  "moves": ["Tackle", "Pound", "Mega Punch", "Earthquake", "U-turn", "Will-O-Wisp", "Toxic", "Thunder Wave", "Recover", "Protect"],
+  "forced_move": "Struggle",
+  "statuses": ["brn", "par", "tox"],
+  "sets": {"level": [1, 100], "nature": "Hardy", "ivs": 31, "evs": "zero except Speed 0 or 252", "boosts": "zero", "moves_per_mon": [1, 4], "distinct_moves": true},
+  "storage": {"sides": 2, "roster_slots": 6, "occupied_per_side": [1, 3], "move_slots": 4, "queue_rows": 8, "events_per_advance": 128, "draws_per_advance": 128, "history_events": 2048},
+  "action_space": {"count": 11, "moves": [0, 3], "switch_request_slots": [4, 9], "struggle": 10, "no_submission": -1, "undo": -2},
+  "trace": {"args": "uint32[lo, hi, form]: 1 = random(hi), 2 = random(lo,hi), 3 = random(2**32); form 3 has hi=0", "values": "uint32", "rng": "four big-endian uint16 limbs", "context": ["initialization", "queue-sort", "before-turn", "update", "hit-update", "switch-order", "residual-handlers", "accuracy", "critical", "damage", "paralysis", "stall"]},
+  "policies": {"identity": "stable mon IDs; separate native command-roster permutation", "simultaneous": "private replaceable commitments until all required sides submit", "token": "local generation/request episode, not native rqid", "rejection": "atomic state/RNG preservation and empty trace", "overflow": "atomic pre-advance rollback, no partial events or fabricated outcome", "history_limit": "explicit capacity diagnostic; no silent truncation", "terminal_rewards": "+1 winner, -1 loser, 0 tie", "step_limit": "harness truncation, never a draw", "reset": "terminal-only; supplied validated initialization, increment local generation once"},
+  "exclusions": ["more than three occupied mons per side", "arbitrary species, abilities, items, moves, natures, IVs, EVs or boosts", "sleep, freeze, confusion or ordinary poison infliction", "weather, hazards, trapping, transformation, called moves and unsupported effects", "generated-team membership or full-format conformance", "training, GPU correctness, memory/throughput or speedup claims"]
+}

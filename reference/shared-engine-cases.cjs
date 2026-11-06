@@ -60,6 +60,69 @@ cases.push(
  ...[0,1,9,21].map(seed=>({id:`tackle-tie-${seed}`,seed,p1:[mew(['Tackle'])],p2:[mew(['Tackle'])],steps:[{p1:'move 1',p2:'move 1'}]})),
 );
 
+// Migrate the accepted v6/v7 boundary inputs without modifying their old APIs.
+const legacyAccuracy=[
+ ['tackle-tackle',0,252,0,50,50,1,1],['tackle-mega',1,252,0,50,50,1,2],
+ ['mega-tackle',1,0,252,50,50,2,1],['mega-mega',1,0,252,50,50,2,2],
+ ['critical',21,0,252,50,50,1,2],['direct-ko',21,252,0,100,1,2,1],
+];
+for(const [id,seed,a,b,l1,l2,m1,m2] of legacyAccuracy)cases.push({id:`M03-${id}`,seed,
+ p1:[mew(attack,{level:l1,evs:{hp:0,atk:0,def:0,spa:0,spd:0,spe:a}})],
+ p2:[mew(attack,{level:l2,evs:{hp:0,atk:0,def:0,spa:0,spd:0,spe:b}})],steps:[{p1:`move ${m1}`,p2:`move ${m2}`} ]});
+for(const [id,seed,a,b,l1,l2,status,m1,m2,hp] of [
+ ['control',1,252,0,50,50,null,1,1],['critical',21,252,0,50,50,'p1',2,1],
+ ['p2-faster',1,0,252,50,50,'p2',2,1],['miss',0,252,0,50,50,'p1',2,1],
+ ['direct-ko',21,252,0,100,1,'p1',2,1],['residual-ko',0,0,252,50,50,'p1',1,2,1],
+])cases.push({id:`M04-${id}`,seed,
+ p1:[mew(attack,{level:l1,evs:{hp:0,atk:0,def:0,spa:0,spd:0,spe:a}})],
+ p2:[mew(attack,{level:l2,evs:{hp:0,atk:0,def:0,spa:0,spd:0,spe:b}})],
+ ...(status?{setup:[{side:status,status:'brn',...(hp?{hp}:{})}]}:{}),steps:[{p1:`move ${m1}`,p2:`move ${m2}`} ]});
+for(const move of ['tackle','megapunch'])cases.push({id:`M03-last-${move}`,seed:move==='tackle'?1:0,
+ p1:[mew(attack,{evs:{hp:0,atk:0,def:0,spa:0,spd:0,spe:252}})],p2:[mew(attack)],
+ setup:[{side:'p1',ppByMove:{[move]:1}}],steps:[{p1:`move ${move==='tackle'?1:2}`,p2:'move 2'},{p1:`move ${move==='tackle'?2:1}`,p2:'move 1'}]});
+cases.push(
+ ...[false,true].map(alt=>({id:`privacy-hp-${alt?'b':'a'}`,seed:1,p1:[lax(['Protect'])],p2:[mew(['Recover'])],setup:[{side:'p2',hp:alt?85:86}],steps:[{p1:'move 1',p2:'move 1'}]})),
+ {id:'near-full-recover',seed:1,p1:[mew(['Recover'])],p2:[lax(['Protect'])],setup:[{side:'p1',hp:86}],steps:[{p1:'move 1',p2:'move 1'}]},
+ {id:'near-full-switch',seed:1,p1:[lax(['Tackle']),mew(['Tackle'])],p2:[lax(['Protect'])],setup:[{side:'p1',mon:1,hp:174}],steps:[{p1:'switch 2',p2:'move 1'}]},
+ {id:'burned-struggle',seed:1,p1:[mew(['Tackle'])],p2:[lax(['Tackle'])],setup:[{side:'p1',status:'brn',pp:0}],steps:[{p1:'move 1',p2:'move 1'}]},
+ {id:'paralysis-pivot-refresh',seed:3,p1:[mew(['Thunder Wave'])],p2:[lax(['U-turn']),ghost(['Toxic'])],steps:[{p1:'move 1',p2:'move 1'},{p2:'switch 2'}]},
+ {id:'two-burn-swapped',seed:1,p1:[mew(['Protect'])],p2:[mew(['Protect'],{evs:{hp:0,atk:0,def:0,spa:0,spd:0,spe:252}})],setup:[{side:'p1',status:'brn',hp:1},{side:'p2',status:'brn',hp:1}],steps:[{p1:'move 1',p2:'move 1'}]},
+);
+
+// Companion boundaries for counters, pivot order, Lum cures and privacy.
+const allzero={hp:0,atk:0,def:0,spa:0,spd:0,spe:0};
+const fast={...allzero,spe:252};
+for(const stall of [2,4,8,16,32,64,128,256]) {
+ // Synthetic counter with a real PRNG seed whose next upper word is zero.
+ // This observes success at the otherwise extremely rare 2**32 boundary;
+ // no sampled value or native callback is overridden.
+ const mod=1n<<64n,A=0x5D588B656C078965n,C=0x269EC3n;
+ let inv=1n;for(let i=0;i<6;i++)inv=inv*(2n-A*inv)%mod;
+ const seedValue=((-C*inv)%mod+mod)%mod;
+ const seedWords=[48n,32n,16n,0n].map(shift=>Number((seedValue>>shift)&65535n));
+ cases.push({id:`protect-success-${stall}`,seed:1,seedWords,p1:[mew(['Protect'],{evs:fast})],p2:[mew(['Tackle'])],
+  setup:[{side:'p1',stall}],steps:[{p1:'move 1',p2:'move 1'}]});
+}
+for(const seed of [0,9,21])cases.push({id:`protect-chain-${seed}`,seed,p1:[mew(['Protect'],{evs:fast})],p2:[mew(['Tackle'])],
+ steps:Array.from({length:5},()=>({p1:'move 1',p2:'move 1'}))});
+for(const [move,status] of [['Will-O-Wisp','brn'],['Toxic','tox'],['Thunder Wave','par']])cases.push({
+ id:`lum-inflicted-${status}`,seed:0,p1:[ghost([move])],p2:[status==='tox'?mew(['Tackle'],{item:'Lum Berry'}):lax(['Tackle'],{item:'Lum Berry'})],steps:[{p1:'move 1',p2:'move 1'}]});
+cases.push(
+ {id:'already-same-status',seed:0,p1:[mew(['Will-O-Wisp'])],p2:[lax(['Tackle'])],setup:[{side:'p2',status:'brn'}],steps:[{p1:'move 1',p2:'move 1'}]},
+ {id:'pivot-slower-resume',seed:1,p1:[lax(['U-turn']),ghost(['Toxic'])],p2:[mew(['Tackle'])],steps:[{p1:'move 1',p2:'move 1'},{p1:'switch 2'}]},
+ {id:'pivot-ko-resume',seed:1,p1:[mew(['U-turn'],{level:100}),lax(['Tackle'])],p2:[lax(['Tackle'],{level:1}),ghost(['Toxic'])],steps:[{p1:'move 1',p2:'move 1'},{p1:'switch 2'},{p2:'switch 2'}]},
+ {id:'pivot-paralyzed',seed:21,p1:[mew(['U-turn']),ghost(['Toxic'])],p2:[lax(['Tackle'])],setup:[{side:'p1',status:'par'}],steps:[{p1:'move 1',p2:'move 1'}]},
+ {id:'pivot-burn-last-pp',seed:0,p1:[mew(['U-turn']),ghost(['Toxic'])],p2:[lax(['Tackle'])],setup:[{side:'p1',status:'brn',pp:1}],steps:[{p1:'move 1',p2:'move 1'},{p1:'switch 2'}]},
+ {id:'protect-paralyzed',seed:21,p1:[mew(['Protect'])],p2:[lax(['Tackle'])],setup:[{side:'p1',status:'par',stall:4}],steps:[{p1:'move 1',p2:'move 1'}]},
+ {id:'toxic-pivot',seed:1,p1:[mew(['U-turn']),ghost(['Toxic'])],p2:[lax(['Tackle'])],setup:[{side:'p1',status:'tox',toxicStage:3}],steps:[{p1:'move 1',p2:'move 1'},{p1:'switch 2'}]},
+ ...[false,true].map(alt=>({id:`privacy-${alt?'b':'a'}`,seed:1,p1:[mew(attack)],p2:[lax(attack),ghost(alt?['Recover']:['Protect'],{item:alt?'Lum Berry':'Leftovers'})],steps:[{p2:alt?'move 2':'move 1'}]})),
+);
+
+for(const [id,moves,tied,seed] of [
+ ['M01-duel-tied',['Tackle'],true,1],['M01-duel-unequal',['Tackle'],false,21],
+ ['M02-duel-two-move',['Tackle','Pound'],true,9],['M03-duel-accuracy',attack,false,0],
+])cases.push({id,seed,legacyDuel:true,family:'legacy',p1:[mew(moves,{evs:tied?allzero:fast})],p2:[mew(moves)],steps:[]});
+
 // Predeclared deterministic scripts. They use native requests only, never JAX.
 for (const [index,family] of ['direct','status','pivot','exhaustion'].entries()) {
  const physical=['Earthquake','U-turn','Mega Punch','Tackle'];
@@ -82,6 +145,7 @@ function scriptedChoices(battle,scenario,boundary) {
   const space=actionSpace(req);const commands=space.commands.filter(Boolean);
   if(req.forceSwitch){choices[side.id]=commands[0];continue;}
   if(commands.includes('move 1')&&req.active[0].moves[0].id==='struggle'){choices[side.id]='move 1';continue;}
+  if(scenario.legacyDuel){const available=commands.filter(c=>c.startsWith('move '));choices[side.id]=available[(battle.turn+side.n)%available.length];continue;}
   const pokemon=side.active[0],foe=side.foe.active[0];
   const moveCommand=id=>{const n=req.active[0].moves.findIndex(m=>m.id===id&&!m.disabled);return n<0?null:`move ${n+1}`;};
   if(scenario.family==='direct'&&battle.turn===1&&side.n===0&&commands.includes('switch 2')){choices[side.id]='switch 2';continue;}
@@ -102,7 +166,7 @@ function observeInitialization(ps, action) {
  const original=ps.PRNG.prototype.random;const draws=[];
  ps.PRNG.prototype.random=function(...args) {
   const before=this.getSeed().split(',').map(Number); const value=original.apply(this,args);
-  draws.push({args,value,before,after:this.getSeed().split(',').map(Number)}); return value;
+  draws.push({args,value,before,after:this.getSeed().split(',').map(Number),context:'initialization'}); return value;
  };
  try {return {battle:action(),draws};} finally {ps.PRNG.prototype.random=original;}
 }
@@ -133,8 +197,21 @@ function capture(battle, ids) {
 function events(battle,start=0) {
  return Object.fromEntries(['p1','p2'].map(side=>[side,projectPackets(['update\n'+battle.log.slice(start).join('\n')],side).records]));
 }
+function semanticContext(draw) {
+ const stack=draw.stack.join('\n');
+ if(draw.context==='accuracy'||draw.context==='critical'||draw.context==='damage')return draw.context;
+ if(stack.includes('onBeforeMove'))return 'paralysis';
+ if(stack.includes('onStallMove'))return 'stall';
+ if(stack.includes('BattleQueue.sort'))return 'queue-sort';
+ if(stack.includes('Battle.fieldEvent'))return 'residual-handlers';
+ if(stack.includes('BattleActions.runSwitch'))return 'switch-order';
+ if(draw.eventId==='BeforeTurn')return 'before-turn';
+ if(stack.includes('hitStepMoveHitLoop'))return 'hit-update';
+ if(draw.eventId==='Update'||stack.includes('runPursuitActivation'))return 'update';
+ throw Error('Unclassified native draw context: '+JSON.stringify(draw));
+}
 function runCase(ps, scenario) {
- const {battle,draws:initializationDraws}=observeInitialization(ps,()=>new ps.Battle({formatid:'gen5randombattle',seed:[scenario.seed,2,3,4],
+ const {battle,draws:initializationDraws}=observeInitialization(ps,()=>new ps.Battle({formatid:'gen5randombattle',seed:scenario.seedWords??[scenario.seed,2,3,4],
   p1:{name:'p1',team:scenario.p1},p2:{name:'p2',team:scenario.p2}}));
  try {
   const ids=new Map(battle.sides.flatMap(side=>side.pokemon.map((p,i)=>[p,i])));
@@ -144,6 +221,7 @@ function runCase(ps, scenario) {
    if(setup.status)p.setStatus(setup.status,p);
    if(setup.hp!==undefined)p.sethp(setup.hp);
    if(setup.pp!==undefined)for(const m of p.moveSlots)m.pp=setup.pp;
+   if(setup.ppByMove)for(const m of p.moveSlots)if(Object.hasOwn(setup.ppByMove,m.id))m.pp=setup.ppByMove[m.id];
    if(setup.toxicStage!==undefined)p.statusState.stage=setup.toxicStage;
    if(setup.stall!==undefined){p.addVolatile('stall');p.volatiles.stall.counter=setup.stall;}
   }
@@ -152,9 +230,9 @@ function runCase(ps, scenario) {
   const record={id:scenario.id,classification:scenario.setup?'synthetic':'native-constructed',setup:scenario,initializationDraws,
    initial:capture(battle,ids),initialEvents:events(battle),steps:[]};
   let boundary=0;
-  while(scenario.fullBattle?!battle.ended:boundary<scenario.steps.length) {
+  while((scenario.fullBattle||scenario.legacyDuel)?!battle.ended:boundary<scenario.steps.length) {
    if(boundary>=512)throw Error(`${scenario.id}: truncation at 512 request boundaries`);
-   const choices=scenario.fullBattle?scriptedChoices(battle,scenario,boundary):scenario.steps[boundary];
+   const choices=(scenario.fullBattle||scenario.legacyDuel)?scriptedChoices(battle,scenario,boundary):scenario.steps[boundary];
    boundary++;
    const before=capture(battle,ids), start=battle.log.length,acks=[];
    const oldSend=battle.send; battle.send=function(type,data){if(type==='sideupdate')acks.push(data);return oldSend.call(this,type,data);};
@@ -164,9 +242,9 @@ function runCase(ps, scenario) {
     return {side,choice,accepted:battle.choose(side,choice)};
    }));} finally {battle.send=oldSend;}
    record.steps.push({choices,accepted:observed.result,before,after:capture(battle,ids),
-    draws:observed.draws,events:events(battle,start),privatePackets:acks});
+    draws:observed.draws.map(draw=>({...draw,semanticContext:semanticContext(draw)})),events:events(battle,start),privatePackets:acks});
   }
-  if(scenario.fullBattle)assert.ok(battle.ended,scenario.id+': must reach real native terminal');
+  if(scenario.fullBattle||scenario.legacyDuel)assert.ok(battle.ended,scenario.id+': must reach real native terminal');
   return record;
  } finally {battle.destroy();}
 }
