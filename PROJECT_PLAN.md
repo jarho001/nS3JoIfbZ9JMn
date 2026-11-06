@@ -4,7 +4,7 @@ Build a research platform that can learn exceptional Pokémon battle play throug
 
 The destination is a JAX implementation of the complete training computation: batched battle simulation, player observations, recurrent policy inference, trajectory collection, and learning. The current execution priority is the JAX battle simulator. Keep pinned Showdown as the semantic oracle, source of generated teams and data, and differential test harness.
 
-As of 2026-11-06, 52 numbered tasks are accepted. The pinned reference, player-view protocol, battle runner, action/trajectory interfaces, and reproducible baseline artifacts exist. JAX has validated arithmetic, restricted one-Mew turns and complete duels, speed-tie handling, and private staged sessions with batched continuation/reset. Tasks050–051 combine Tackle/Mega Punch choices with accuracy and complete native battle traces; Task052 adds one pre-existing public burn and its residual. The accuracy/burn variants do not share the staged-session lifecycle or support rosters and switching. These are restricted development slices, not a complete engine or trained policy. G0 specification is accepted; G1–G8 remain open. The milestone packages and first G3 goal below are proposals, not implementation approval, GPU/performance results, or new milestone acceptance.
+As of 2026-11-06, 52 numbered tasks are accepted. The pinned reference, player-view protocol, battle runner, action/trajectory interfaces, and reproducible baseline artifacts exist. JAX has validated arithmetic, restricted one-Mew turns and complete duels, speed-tie handling, and private staged sessions with batched continuation/reset. Tasks050–051 combine Tackle/Mega Punch choices with accuracy and complete native battle traces; Task052 adds one pre-existing public burn and its residual. The accuracy/burn variants do not share the staged-session lifecycle or support rosters and switching. These are restricted development slices, not a complete engine or trained policy. G0 specification is accepted; G1–G8 remain open. The first G3 goal below was approved by the user on 2026-11-06, including its CPU validation scope. Execution progress is recorded in docs/ORCHESTRATION_STATE.json; approval establishes no GPU/performance result or milestone acceptance.
 
 **Direction decision — 2026-11-03:** Prioritize an integrated, progressively playable JAX simulator. Simulator work may begin without G1 tournament completion or G2 policy learning. Keep the user-facing contract needed for correctness from the start: request and legal-action semantics, simultaneous commitments, player-visible events and history, and outcomes/rewards. Defer neural observation encoding, trajectory expansion, PPO, tournaments, and additional baseline/reporting tools unless they directly enable simulator parity or its validation. Retain exact Showdown RNG/state/event/request comparisons, interaction and full-trace testing, and explicit unsupported-effect reporting. Compile and batch representative slices early, including JIT/vmap and measured performance probes. Progress is demonstrated by increasingly complete parity-tested playable battles, not task count.
 
@@ -480,8 +480,9 @@ G6 remains useful without positive G7/G8 research results.
 Gen 5 singles battles through one shared JAX engine, including voluntary switches,
 native forced replacements and U-turn interruptions, with both player views and
 exact pinned native differential traces. This is a restricted custom game, not
-the `gen5randombattle` team distribution. User approval and Goal-mode selection
-are still required before implementation.
+the `gen5randombattle` team distribution. The user approved this brief and its CPU validation scope on 2026-11-06.
+The active approved goal is `G3-first-playable` in
+[compact state](docs/ORCHESTRATION_STATE.json).
 
 **Declared package:** A versioned allowlist of Mew/Synchronize,
 Snorlax/Immunity and Gengar/Levitate; itemless, Leftovers and Lum Berry; up to
@@ -601,7 +602,7 @@ permission for ordinary implementation choices.
 
 | Decision | Proposed default and when user input is needed |
 |---|---|
-| D1 — first goal | Approve the integrated CPU-first G3 package above, then select Sol 6.1/high Goal mode on the execution surface. Preparation is complete; implementation is not approved or started. |
+| D1 — first goal | Approve the integrated CPU-first G3 package above, then select Sol 6.1/high Goal mode on the execution surface. Approved by the user on 2026-11-06, including CPU validation; direct execution is active. Execution-surface mode remains external to repository configuration. |
 | D2 — scored research protocol | Before G1 scored tournaments or G2/G5–G8 claims, agree opponents/metrics, suites/seed publication, sample precision, promotion/equivalence margins and statistical stopping rules. Does not reopen G0 or block G3 parity. |
 | D3 — accelerator/resources | Before required G3 device closure or later training/performance runs, select available GPU, memory/batch limits and measurement/training resources. Default first goal: CPU proof, G3 still open. |
 | D4 — strategic objective | At G7/G8 choose the research comparison and useful strength-versus-latency/cost target using G6 evidence, rather than committing to every speculative method now. |

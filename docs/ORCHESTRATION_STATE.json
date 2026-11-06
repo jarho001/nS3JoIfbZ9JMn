@@ -14,7 +14,7 @@
       "CPU-first validation; GPU runs only when task acceptance or a device-specific property requires them, not a full GPU suite for every slice."
     ],
     "defer": "PPO, tournament/scoring, expanded trajectory collection, and additional baseline/reporting infrastructure unless they directly enable simulator semantics or parity validation.",
-    "next_candidate": "Sharpen G0–G8 and prepare batched pinned-native behavior cases before proposing a coherent integrated G3 goal for user-approved Goal-mode execution. No new implementation goal is approved or active.",
+    "next_candidate": "Execute approved G3-first-playable goal in active_task.",
     "progress_measure": "Increasingly complete parity-tested playable battles, not accepted task count.",
     "active_task": null,
     "accepted_task_count_changed": false,
@@ -466,7 +466,7 @@
         "reviewed_base_commit": "b30bd77dff9e304d154988e5610838858e277356",
         "candidate_tree": null,
         "candidate_tree_note": "The review report identifies the source base and candidate source blob hashes; it records no final candidate tree or commit hash.",
-        "scope": "Prospective checkpoint review of accepted Tasks031–039 and Task040: candidate parity, simulator-first direction, pinned reference, privacy, deferred scope, and open milestone boundaries.",
+        "scope": "Prospective checkpoint review of accepted Tasks031\u2013039 and Task040: candidate parity, simulator-first direction, pinned reference, privacy, deferred scope, and open milestone boundaries.",
         "required_findings": [],
         "disposition": "ACCEPTED",
         "accepted_at": "2026-11-05",
@@ -516,7 +516,37 @@
     "automatic_reviews_enabled": false,
     "policy_note": "Automatic Astra, task-count, and independent milestone review gates retired by user instruction on 2026-11-05. Baselines and review histories below are historical evidence, not active gates. Milestone acceptance still requires its stated evidence."
   },
-  "active_task": null,
+  "active_task": {
+    "id": "G3-first-playable",
+    "status": "active_approved",
+    "approved_at": "2026-11-06",
+    "owner": "/root",
+    "brief": "PROJECT_PLAN.md#proposed-first-g3-goal-mode-brief",
+    "behavior_catalog": "docs/SHOWDOWN_BEHAVIOR_CASES.md",
+    "scope": "Entire proposed first G3 package, including potentially long affected CPU integration/regressions. Direct execution without delegation. G3 milestone remains open pending later GPU closure.",
+    "checkpoint": "Shared state/scheduler/status integration: native boundary and complete-battle parity passed; CPU lifecycle/batch acceptance pending",
+    "completed_checkpoints": [
+      "Shared roster/move/RNG/request/event schema and native initialization expectations",
+      "Voluntary switch, forced replacement, pivot and choice replacement/cancel scheduler",
+      "Allowlisted status/items, Protect/recovery, residuals and Struggle integrated with native boundaries"
+    ],
+    "next": "Validate serialization/continuation, reset, information equivalence, atomic rejection/overflow and heterogeneous CPU JIT/vmap; expand remaining catalog companion boundaries and run affected legacy controls.",
+    "evidence": [
+      {
+        "command": "G3_NATIVE_CASES=/tmp/g3-shared-native-3.json JAX_PLATFORMS=cpu .venv-jax/bin/python -m unittest test.test_shared_engine_cases test.test_shared_engine_battles -v",
+        "result": "Passed in 13.315s; all current native boundaries plus eight complete three-member battles / 293 full-battle boundaries.",
+        "log": "test-logs/g3-first-playable/scalar-native.log"
+      },
+      {
+        "command": "node --test test/reference.test.cjs test/protocol.test.cjs test/action-space.test.cjs test/battle-runner.test.cjs test/trace.test.cjs test/decision-trajectories.test.cjs test/baseline-matchup.test.cjs",
+        "result": "59 passed, 0 failed",
+        "log": "test-logs/g3-first-playable/reference-contracts.log"
+      }
+    ],
+    "blockers": [],
+    "source_base": "6255889",
+    "synchronization": "Clean work branch fast-forwarded to origin/main; live fetch succeeded via permitted execution route."
+  },
   "optional_gpu_validation_history": [
     {
       "id": "GPUValidation20261103",
@@ -548,9 +578,9 @@
       "readiness_probe": "XLA_PYTHON_CLIENT_PREALLOCATE=false JAX_PLATFORMS=cuda /opt/jax-env/bin/python - <<'PY'\nimport jax\nimport jaxlib\nimport numpy as np\nimport jax.numpy as jnp\nprint('python/imported_jax', __import__('sys').version.split()[0], jax.__version__, jaxlib.__version__)\nprint('backend', jax.default_backend())\nprint('devices', jax.devices())\nx = jnp.arange(8, dtype=jnp.int32)\ny = jax.jit(lambda value: value * value + 1)(x)\ny.block_until_ready()\nprint('array_device', x.devices())\nprint('jit_device', y.devices())\nprint('jit_result', np.asarray(y).tolist())\nassert jax.default_backend() == 'gpu', f'expected GPU backend, got {jax.default_backend()}'\nassert any(device.platform == 'gpu' for device in x.devices()), f'input array placed on {x.devices()}'\nassert any(device.platform == 'gpu' for device in y.devices()), f'compiled result placed on {y.devices()}'\nPY",
       "validation": [
         "CPU readiness probe (`XLA_PYTHON_CLIENT_PREALLOCATE=false JAX_PLATFORMS=cpu` with the same eager/JIT sample): Python 3.13.18, JAX/JAXLIB 0.12.0.1, backend cpu, input and JIT result on CpuDevice(id=0), expected output [1,2,5,10,17,26,37,50].",
-        "XLA_PYTHON_CLIENT_PREALLOCATE=false JAX_PLATFORMS=cpu /opt/jax-env/bin/python -m unittest discover -s test -p 'test_*.py' -v — 73 tests passed in 36.376s.",
+        "XLA_PYTHON_CLIENT_PREALLOCATE=false JAX_PLATFORMS=cpu /opt/jax-env/bin/python -m unittest discover -s test -p 'test_*.py' -v \u2014 73 tests passed in 36.376s.",
         "CUDA readiness probe above: backend gpu, devices [CudaDevice(id=0)], eager input and JIT output on CudaDevice(id=0), expected output [1,2,5,10,17,26,37,50].",
-        "XLA_PYTHON_CLIENT_PREALLOCATE=false JAX_PLATFORMS=cuda /opt/jax-env/bin/python -m unittest discover -s test -p 'test_*.py' -v — 73 tests passed in 43.251s; output log /tmp/gpu-validation-cuda.log.",
+        "XLA_PYTHON_CLIENT_PREALLOCATE=false JAX_PLATFORMS=cuda /opt/jax-env/bin/python -m unittest discover -s test -p 'test_*.py' -v \u2014 73 tests passed in 43.251s; output log /tmp/gpu-validation-cuda.log.",
         "CPU output log: /tmp/gpu-validation-cpu.log. Test files remain unchanged. Trail exhaustive searches of indexed code found no jax.devices, platform, JAX_PLATFORMS, or jax_platform_name overrides in the suite.",
         "CUDA runtime packages: jax-cuda13-pjrt and jax-cuda13-plugin 0.12.0.1; nvidia-cuda-runtime 13.4.92. nvidia-smi identified the RTX 3060 Ti, 8192 MiB, utility 610.57.01, KMD/driver 610.88, CUDA UMD 13.3."
       ],
@@ -768,7 +798,7 @@
       "decisions": "PROJECT_PLAN.md#validation-entry-points-and-remaining-decisions"
     },
     "preparation_handoff": "docs/MILESTONE_PREPARATION.md",
-    "goal_mode_status": "not_started",
-    "note": "2026-11-05 user-requested workflow experiment. Select Sol 6.1/high Goal mode on the execution surface after milestone preparation and approval of a goal. Existing historical acceptance records are unchanged."
+    "goal_mode_status": "approved_execution_active",
+    "note": "2026-11-06 user approved the proposed first G3 brief and its CPU validation scope; direct execution, no delegation. Execution-surface mode is external to repository configuration."
   }
 }
