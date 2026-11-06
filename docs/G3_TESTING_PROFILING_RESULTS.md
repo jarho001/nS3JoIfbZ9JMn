@@ -154,7 +154,7 @@ The evidence points to very fine kernel granularity, runtime synchronization and
 repeated data movement as issues to investigate. It does not establish that
 removing saved snapshots alone will resolve the GPU gap or predict a speedup.
 
-### What retention means for a future rollout API
+### Proposed leaner rollout API (recorded; unimplemented)
 
 The current benchmark asks `lax.scan` to return every full `Result`, including
 its state, plus legal masks. As a result it saves all intermediate states, each
@@ -181,6 +181,32 @@ outputs before accepting such a path. This could reduce storage and permit
 compiler elimination of unused work **while preserving forward prediction**;
 it has not been implemented or timed. It should not be described as a mode that
 sacrifices forward simulation capability.
+
+The proposed first increment is a wrapper around the existing transition logic:
+
+- Accept existing initial states and supplied choice plans, with explicit stopping
+  limits. Carry only the current state through the loop instead of returning a
+  full state snapshot at each transition.
+- Return final states, per-lane completion/status information and useful
+  transition counts. Preserve failure status and its location, so a later result
+  cannot hide an earlier invalid, unsupported or capacity-rejected submission.
+- Allow callers to request selected observations, events, rewards or sampled
+  states. Keep complete state/draw/event trajectories as an explicit diagnostic
+  output option. Policy-visible outputs must retain their existing visibility
+  rules; trusted simulator state is not a policy observation.
+- Preserve exact PRNG evolution, validation, atomic rejection, pending choices,
+  interrupted move queues, terminal outcomes and the current history/capacity
+  contract. The first increment changes returned data, not battle semantics.
+
+This is an output-retention proposal, not a second approximate simulator. Do not
+remove engine history, trace overflow accounting or other observable behavior as
+an incidental optimization. A later implementation should first demonstrate
+exact final-state/RNG/status and selected-output agreement on the same frozen
+three trajectories, plus relevant existing rejection/capacity fixtures. Only
+then would one matched 96-battle comparison quantify any benefit. Savings in
+memory are plausible from the retained-byte counts; runtime gains remain
+unmeasured because the capture also exposes substantial fine-grained execution
+and synchronization. Implementation and measurement remain future work.
 
 
 <details>

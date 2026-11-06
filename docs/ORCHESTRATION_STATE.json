@@ -531,7 +531,7 @@
       "Strengthened current CPU and GPU replay: 12 complete traces / 686 boundaries each, first/middle/last saved continuations and resets, including paired 174/177-boundary battles.",
       "Final-source CPU profiling complete: 28 kernel points, 72 full-output scan points, 12 conservative memory-headroom skips. Every primary measured boundary useful; no absorbing/rejected/pending primary work."
     ],
-    "next": "Stop. Explain retention versus forward prediction; optional final-state rollout is a proposed design, not implemented or measured. G3 remains open.",
+    "next": "Stop. Findings and leaner rollout output contract are recorded in the results report; implementation and performance benefit remain pending. G3 remains open.",
     "source_identity": {
       "baseline_record": "test-logs/g3-testing-profiling/source-identities.json (baseline-source)",
       "current_engine_sha256": "8fe364fd9e0b84d8e61daa717c27a0a4e4ce8f65b81b793ffd2fbb5198b3c599",
@@ -849,6 +849,15 @@
         "profiled_seconds": 2.8818899009929737
       },
       "limits": "Profiler perturbs timing; retention savings and exact sources of internal copies remain unmeasured. No engine optimization or output elision performed."
+    },
+    "lean_rollout_proposal": {
+      "status": "recorded_unimplemented",
+      "record": "docs/G3_TESTING_PROFILING_RESULTS.md#proposed-leaner-rollout-api-recorded-unimplemented",
+      "purpose": "Preserve exact forward prediction while avoiding default retention of every intermediate full state and draw/event trace.",
+      "initial_scope": "Wrapper over existing transition logic; current state carried forward; final state/status/useful counts returned; selected observations/events or full debug trajectories optional.",
+      "constraints": "Preserve RNG, validation, rejection/failure visibility, pending/queued actions, terminal outcomes, policy visibility and existing history/capacity semantics.",
+      "evidence": "364 MiB retained output, including 320 MiB repeated history; profile also shows fine-grained kernels and synchronization. Runtime benefit is unmeasured.",
+      "future_validation": "Same frozen three trajectories plus relevant existing rejection/capacity fixtures; only then a separately scoped matched 96-battle measurement."
     }
   },
   "optional_gpu_validation_history": [
