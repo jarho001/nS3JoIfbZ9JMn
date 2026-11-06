@@ -88,7 +88,7 @@ not a substitute for that current execution record.
 |---|---|
 | B0 M01–M04 | `M01-duel-*`, `legacy-pound-tied`, `M02-duel-two-move`, `M03-*`, `M04-*`; old APIs retained and V3 controls run separately. |
 | B1 A01/A06 | Legacy migration boundaries, `damage-level-1/50/100`, `last-pp`, `near-full-recover/switch`; native critical/miss/KO/full traces and PP exhaustion. |
-| B1 A02/A03 | `normal-ghost`, `levitate`, `toxic-immunity/type-immunity`, `struggle-double-ko`, `burned-struggle`, F04. |
+| B1 A02/A03 | `normal-ghost`, `levitate`, `toxic-immunity/type-immunity`, `struggle-double-ko/protected`, `burned-struggle`, F04. |
 | B1 A04/A05 | `protect-repeat`, `protect-chain-*`, `protect-success-2/4/8/16/32/64/128/256`, `protect-counter-cap`, `protect-paralyzed`; native successful/failing counter and full-width draws, expiry/switch interactions. Large counters are explicitly synthetic; capped success uses a real inverse-recurrence seed, not a replaced random outcome. |
 | B2 S01–S09 | Original named appendix scenarios, `two-burn-reserves/swapped`, status/recovery/counter snapshots, both recipient streams. |
 | B2 S10 | `toxic-counter-cap`, `already-statused/same-status`, `lum-inflicted-brn/par/tox`, `lum-brn/par/tox`, `toxic-pivot`, `paralysis-pivot-refresh`, F02/F03. |
@@ -96,7 +96,7 @@ not a substitute for that current execution record.
 | B4 P01/P02 | `commit-replace/cancel`, exact masks/requests/private pending choices, both submission orders; `test/shared-engine.test.cjs` compares actual BattleStream packets, including silence on pending/undo, to direct snapshots. |
 | B4 P03 | Native `privacy-a/b` and `privacy-hp-a/b` paired histories plus lifecycle assertions; opposing reserve/item/PP/pending choices/exact HP do not enter p1's view. |
 | B4 P04 | Typed malformed/unsupported/stale/terminal inputs; history/episode/queue bounds; synthetic smaller physical event/draw buffers exercise atomic rollback and empty traces. |
-| B4 P05/P06 | NPZ round-trip at every ordinary/pending/pivot/forced boundary, terminal-only mixed reset; scalar/eager/JIT/full-battle `jit(vmap)` sizes 1/8/32; mixed active/pending/terminal/rejected/overflow lanes and lane-local RNG perturbation. CPU proof only. |
+| B4 P05/P06 | NPZ round-trip at every ordinary/pending/pivot/forced boundary, terminal-only mixed reset; scalar/eager/JIT/full-battle `jit(vmap)` sizes 1/8/32; mixed active/pending/terminal/rejected/overflow lanes and lane-local RNG perturbation. All catalog boundaries also run eager/JIT and in 32-lane batches. CPU proof only. |
 | B5 F01–F04 | `F01/02/03/04-p1/p2`: eight complete three-member native scripts, two seeds, both seats; F04 explicitly starts with depleted PP. Each boundary compares state, queue, RNG context/range/value/pre/post state, requests/masks, both views and real outcome/rewards. |
 
 Initialization captures gender and speed-order draws, public reveals and private

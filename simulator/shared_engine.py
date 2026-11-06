@@ -366,7 +366,7 @@ def _attack(c,row):
                 s,t=c;ts=s.species[target,tm]
                 normal=(move==TACKLE)|(move==POUND)|(move==MEGA_PUNCH)
                 immune=(normal&(ts==GENGAR))|((move==EARTHQUAKE)&(ts==GENGAR))
-                blocked=s.protected[target,tm]&(move!=STRUGGLE)
+                blocked=s.protected[target,tm]
                 def block(c):return _event(c,ACTIVATE,target,tm,move=PROTECT)
                 def try_hit(c):
                     def immunity(c):return _event(c,IMMUNE,target,tm,aux=jnp.where(move==EARTHQUAKE,2,0))

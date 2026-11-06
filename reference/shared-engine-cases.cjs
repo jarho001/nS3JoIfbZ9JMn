@@ -84,6 +84,7 @@ cases.push(
  ...[false,true].map(alt=>({id:`privacy-hp-${alt?'b':'a'}`,seed:1,p1:[lax(['Protect'])],p2:[mew(['Recover'])],setup:[{side:'p2',hp:alt?85:86}],steps:[{p1:'move 1',p2:'move 1'}]})),
  {id:'near-full-recover',seed:1,p1:[mew(['Recover'])],p2:[lax(['Protect'])],setup:[{side:'p1',hp:86}],steps:[{p1:'move 1',p2:'move 1'}]},
  {id:'near-full-switch',seed:1,p1:[lax(['Tackle']),mew(['Tackle'])],p2:[lax(['Protect'])],setup:[{side:'p1',mon:1,hp:174}],steps:[{p1:'switch 2',p2:'move 1'}]},
+ {id:'struggle-protected',seed:1,p1:[mew(['Protect'],{evs:{hp:0,atk:0,def:0,spa:0,spd:0,spe:252}})],p2:[mew(['Tackle'])],setup:[{side:'p2',pp:0}],steps:[{p1:'move 1',p2:'move 1'}]},
  {id:'burned-struggle',seed:1,p1:[mew(['Tackle'])],p2:[lax(['Tackle'])],setup:[{side:'p1',status:'brn',pp:0}],steps:[{p1:'move 1',p2:'move 1'}]},
  {id:'paralysis-pivot-refresh',seed:3,p1:[mew(['Thunder Wave'])],p2:[lax(['U-turn']),ghost(['Toxic'])],steps:[{p1:'move 1',p2:'move 1'},{p2:'switch 2'}]},
  {id:'two-burn-swapped',seed:1,p1:[mew(['Protect'])],p2:[mew(['Protect'],{evs:{hp:0,atk:0,def:0,spa:0,spd:0,spe:252}})],setup:[{side:'p1',status:'brn',hp:1},{side:'p2',status:'brn',hp:1}],steps:[{p1:'move 1',p2:'move 1'}]},

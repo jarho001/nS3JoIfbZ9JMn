@@ -21,7 +21,7 @@ class SharedEngineCasesTest(unittest.TestCase):
         self.assertEqual([manifest['storage'][k] for k in ('queue_rows','events_per_advance','draws_per_advance','history_events')],[e.QUEUE,e.EVENTS,e.DRAWS,e.HISTORY])
         self.assertGreaterEqual(len(self.cases),80)
         ids={c['id'] for c in self.cases}
-        for name in ('legacy-pound-tied','wisp-hit','toxic-type-immunity','pivot-resume','forced-replacement','struggle-double-ko','protect-success-256','M03-last-tackle','M04-residual-ko','privacy-hp-a','privacy-b'):
+        for name in ('legacy-pound-tied','wisp-hit','toxic-type-immunity','pivot-resume','forced-replacement','struggle-double-ko','struggle-protected','protect-success-256','M03-last-tackle','M04-residual-ko','privacy-hp-a','privacy-b'):
             self.assertIn(name,ids)
         self.assertEqual(set().union(*(set(d['semanticContext'] for d in step['draws']) for c in self.cases for step in c['steps'])),set(e.DRAW_CONTEXTS[1:]))
 

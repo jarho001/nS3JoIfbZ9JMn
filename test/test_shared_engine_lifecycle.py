@@ -26,13 +26,30 @@ class SharedEngineLifecycleTest(unittest.TestCase):
         cls.cases=native_cases();cls.by_id={c['id']:c for c in cls.cases}
 
     def test_eager_and_compiled_boundary_equivalence(self):
-        for name in ('legacy-pound-tied','lum-synchronize','pivot-resume','forced-replacement','struggle-double-ko','protect-counter-cap'):
-            case=self.by_id[name];s,_=initialize_case(case)
+        for case in self.cases:
+            if case['setup'].get('fullBattle'):continue
+            name=case['id'];s,_=initialize_case(case)
             for step in case['steps']:
                 choices=choices_array(s,step['choices'])
                 with jax.disable_jit():result=e.advance(s,choices)
                 compiled=COMPILED(s,choices);equal(self,result,compiled)
                 assert_step(self,s,result,step,name+' eager');s=result.state
+
+    def test_catalog_boundaries_in_heterogeneous_batches(self):
+        inputs=[]
+        for case in self.cases:
+            if case['setup'].get('fullBattle'):continue
+            s,_=initialize_case(case)
+            for step in case['steps']:
+                action=choices_array(s,step['choices']);inputs.append((s,action))
+                s=COMPILED(s,action).state
+        self.assertGreater(len(inputs),100)
+        for offset in range(0,len(inputs),32):
+            chunk=inputs[offset:offset+32]
+            chunk+=chunk[-1:]*(32-len(chunk))
+            result=BATCH(stack([x[0] for x in chunk]),jnp.stack([x[1] for x in chunk]))
+            for k,(s,action) in enumerate(chunk):equal(self,lane(result,k),COMPILED(s,action))
+        print(f'CPU heterogeneous catalog agreement: {len(inputs)} native boundaries, 32 lanes',flush=True)
 
     def test_complete_battles_in_heterogeneous_batches(self):
         battles=[c for c in self.cases if c['setup'].get('fullBattle')]
