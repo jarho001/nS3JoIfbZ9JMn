@@ -4,7 +4,7 @@ Build a research platform that can learn exceptional Pokémon battle play throug
 
 The destination is a JAX implementation of the complete training computation: batched battle simulation, player observations, recurrent policy inference, trajectory collection, and learning. The current execution priority is the JAX battle simulator. Keep pinned Showdown as the semantic oracle, source of generated teams and data, and differential test harness.
 
-As of 2026-11-06, 52 numbered tasks are accepted. The pinned reference, player-view protocol, battle runner, action/trajectory interfaces, and reproducible baseline artifacts exist. JAX has validated arithmetic, restricted one-Mew turns and complete duels, speed-tie handling, and private staged sessions with batched continuation/reset. Tasks050–051 combine Tackle/Mega Punch choices with accuracy and complete native battle traces; Task052 adds one pre-existing public burn and its residual. The accuracy/burn variants do not share the staged-session lifecycle or support rosters and switching. These are restricted development slices, not a complete engine or trained policy. G0 specification is accepted; G1–G8 remain open. The first G3 goal below was approved by the user on 2026-11-06, including its CPU validation scope. Execution progress is recorded in docs/ORCHESTRATION_STATE.json; approval establishes no GPU/performance result or milestone acceptance.
+As of 2026-11-06, 52 numbered tasks are accepted. The pinned reference, player-view protocol, battle runner, action/trajectory interfaces, and reproducible baseline artifacts exist. JAX has validated arithmetic, restricted one-Mew turns and complete duels, speed-tie handling, and private staged sessions with batched continuation/reset. Tasks050–051 combine Tackle/Mega Punch choices with accuracy and complete native battle traces; Task052 adds one pre-existing public burn and its residual. The legacy accuracy/burn variants retain their APIs. The approved first G3 CPU goal now adds a shared bounded roster engine with switching/pivots, statuses/items, recipient histories and resumable batched lifecycle; its native/CPU acceptance evidence is in docs/ORCHESTRATION_STATE.json. These are restricted development slices, not a complete engine or trained policy. G0 specification is accepted; G1–G8 remain open. The first G3 goal below was approved by the user on 2026-11-06, including its CPU validation scope. Execution progress is recorded in docs/ORCHESTRATION_STATE.json; approval establishes no GPU/performance result or milestone acceptance.
 
 **Direction decision — 2026-11-03:** Prioritize an integrated, progressively playable JAX simulator. Simulator work may begin without G1 tournament completion or G2 policy learning. Keep the user-facing contract needed for correctness from the start: request and legal-action semantics, simultaneous commitments, player-visible events and history, and outcomes/rewards. Defer neural observation encoding, trajectory expansion, PPO, tournaments, and additional baseline/reporting tools unless they directly enable simulator parity or its validation. Retain exact Showdown RNG/state/event/request comparisons, interaction and full-trace testing, and explicit unsupported-effect reporting. Compile and batch representative slices early, including JIT/vmap and measured performance probes. Progress is demonstrated by increasingly complete parity-tested playable battles, not task count.
 
@@ -359,9 +359,11 @@ G6 remains useful without positive G7/G8 research results.
   execution/memory profiles for homogeneous and heterogeneous workloads. Report
   results without inventing a speed threshold. Historical arithmetic GPU evidence
   does not establish current engine execution.
-- **Demonstrated/missing:** Tasks034–052 establish restricted components, sessions
-  and full 1v1 traces. The catalog adds short native observations, not JAX support.
-  Shared roster/status/pivot integration and device/profile proof are missing.
+- **Demonstrated/missing:** Tasks034–052 establish the retained legacy controls.
+  The first approved G3 goal now passes the shared roster/status/pivot CPU
+  integration and native complete-trace/lifecycle acceptance recorded in
+  [compact state](docs/ORCHESTRATION_STATE.json). G3 device/profile proof remains
+  missing and requires the separately agreed D3 scope.
 - **Exclusions/decisions/stop:** No full-format, generated-team, training or
   speedup claim. First-goal CPU completion can leave G3 open pending D3 device
   proof. Stop on an unresolved minimized divergence, unsupported approved behavior,

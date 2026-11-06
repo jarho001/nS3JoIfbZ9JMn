@@ -1,0 +1,19 @@
+test_manifest_and_nonempty_family_coverage (test.test_shared_engine_cases.SharedEngineCasesTest.test_manifest_and_nonempty_family_coverage) ... ok
+test_native_initialization_and_boundaries (test.test_shared_engine_cases.SharedEngineCasesTest.test_native_initialization_and_boundaries) ... ok
+test_complete_three_member_native_battles (test.test_shared_engine_battles.SharedEngineBattlesTest.test_complete_three_member_native_battles) ... Native complete-battle comparison: 8 battles, 293 boundaries, families=['direct', 'exhaustion', 'pivot', 'status']
+ok
+test_atomic_invalid_unsupported_stale_and_capacity (test.test_shared_engine_lifecycle.SharedEngineLifecycleTest.test_atomic_invalid_unsupported_stale_and_capacity) ... ok
+test_catalog_boundaries_in_heterogeneous_batches (test.test_shared_engine_lifecycle.SharedEngineLifecycleTest.test_catalog_boundaries_in_heterogeneous_batches) ... CPU heterogeneous catalog agreement: 155 native boundaries, 32 lanes
+ok
+test_complete_battles_in_heterogeneous_batches (test.test_shared_engine_lifecycle.SharedEngineLifecycleTest.test_complete_battles_in_heterogeneous_batches) ... CPU heterogeneous complete-trace scalar/JIT/vmap agreement: batch sizes 1, 8, 32
+ok
+test_eager_and_compiled_boundary_equivalence (test.test_shared_engine_lifecycle.SharedEngineLifecycleTest.test_eager_and_compiled_boundary_equivalence) ... ok
+test_information_equivalence_and_submission_orders (test.test_shared_engine_lifecycle.SharedEngineLifecycleTest.test_information_equivalence_and_submission_orders) ... ok
+test_mixed_phases_rejections_and_independent_rng (test.test_shared_engine_lifecycle.SharedEngineLifecycleTest.test_mixed_phases_rejections_and_independent_rng) ... ok
+test_serialized_continuation_private_commit_and_reset (test.test_shared_engine_lifecycle.SharedEngineLifecycleTest.test_serialized_continuation_private_commit_and_reset) ... ok
+test_transient_buffer_overflow_rolls_back (test.test_shared_engine_lifecycle.SharedEngineLifecycleTest.test_transient_buffer_overflow_rolls_back) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 252.017s
+
+OK

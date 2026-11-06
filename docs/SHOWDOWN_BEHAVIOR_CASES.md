@@ -6,7 +6,8 @@ Source base: `7068c36975fbe713d55c52c2c07659cf0fcefcbb`.
 Every native case uses `gen5randombattle` from
 [`reference-lock.json`](../reference-lock.json), Showdown commit
 `1242c1e2d9763ba5b85d33f13aecb89bae19ae3d`, with its inherited Gen 5 rules.
-No case here establishes new JAX support, full-format coverage or milestone acceptance.
+Preparation observations alone establish no JAX support or milestone acceptance.
+Shared execution evidence is linked below; full-format and G3 GPU closure remain open.
 
 ## Evidence and shared record
 

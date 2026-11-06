@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "pin": "1242c1e2d9763ba5b85d33f13aecb89bae19ae3d",
+  "source_commit": "74a4fd48b7cef73affe430fd1bfe0e44944a920b",
+  "source_tree": "036c004f6cb296a7ac6ba0eb263e04688a344e2e",
+  "native_semantic_sha256": "f35b8d8a13d7cee1cf712202227f53cf56e62eee001d3d80582781bd608dbbf3",
+  "normalization": "Only diagnostic draw.stack removed; sorted JSON keys, UTF-8, compact separators. Protocol projection excludes only timing lines.",
+  "case_count": 102,
+  "boundary_count": 448,
+  "catalog_boundary_count": 155,
+  "complete_three_member_battles": [
+    {
+      "id": "F01-p1",
+      "classification": "native-constructed",
+      "boundaries": 34,
+      "winner": 1
+    },
+    {
+      "id": "F01-p2",
+      "classification": "native-constructed",
+      "boundaries": 48,
+      "winner": 1
+    },
+    {
+      "id": "F02-p1",
+      "classification": "native-constructed",
+      "boundaries": 33,
+      "winner": 1
+    },
+    {
+      "id": "F02-p2",
+      "classification": "native-constructed",
+      "boundaries": 34,
+      "winner": 2
+    },
+    {
+      "id": "F03-p1",
+      "classification": "native-constructed",
+      "boundaries": 61,
+      "winner": 1
+    },
+    {
+      "id": "F03-p2",
+      "classification": "native-constructed",
+      "boundaries": 55,
+      "winner": 2
+    },
+    {
+      "id": "F04-p1",
+      "classification": "synthetic",
+      "boundaries": 15,
+      "winner": 1
+    },
+    {
+      "id": "F04-p2",
+      "classification": "synthetic",
+      "boundaries": 13,
+      "winner": 1
+    }
+  ],
+  "legacy_complete_duels": [
+    {
+      "id": "M01-duel-tied",
+      "boundaries": 7,
+      "winner": 2
+    },
+    {
+      "id": "M01-duel-unequal",
+      "boundaries": 7,
+      "winner": 1
+    },
+    {
+      "id": "M02-duel-two-move",
+      "boundaries": 8,
+      "winner": 1
+    },
+    {
+      "id": "M03-duel-accuracy",
+      "boundaries": 7,
+      "winner": 2
+    }
+  ],
+  "contexts": [
+    "accuracy",
+    "before-turn",
+    "critical",
+    "damage",
+    "hit-update",
+    "paralysis",
+    "queue-sort",
+    "residual-handlers",
+    "stall",
+    "switch-order",
+    "update"
+  ],
+  "reproduce": "node reference/shared-engine-cases.cjs --batch all --output NEW_FILE",
+  "expected_data": "Independent native runner; no JAX import. Large raw snapshots are regenerated rather than duplicated in Git."
+}

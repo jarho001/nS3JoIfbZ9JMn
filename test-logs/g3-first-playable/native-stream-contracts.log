@@ -1,0 +1,10 @@
+✔ native BattleStream replacement/undo and direct snapshots share recipient boundaries (392.419092ms)
+✔ native paired histories hide reserves, items and pending opposing choice (2.206689ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 508.399464

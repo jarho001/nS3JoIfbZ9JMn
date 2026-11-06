@@ -1,0 +1,15 @@
+test_followup_is_native_chain_and_remaining_move_is_legal (test.test_accuracy_choice.AccuracyChoiceTest.test_followup_is_native_chain_and_remaining_move_is_legal) ... ok
+test_heterogeneous_native_and_rejection_batch (test.test_accuracy_choice.AccuracyChoiceTest.test_heterogeneous_native_and_rejection_batch) ... ok
+test_native_facts_and_fixed_scope (test.test_accuracy_choice.AccuracyChoiceTest.test_native_facts_and_fixed_scope) ... ok
+test_validation_types_shapes_old_variant_and_static_audience (test.test_accuracy_choice.AccuracyChoiceTest.test_validation_types_shapes_old_variant_and_static_audience) ... ok
+test_threaded_native_duels_reach_terminal_with_live_pp (test.test_accuracy_choice_duel.AccuracyChoiceDuelTest.test_threaded_native_duels_reach_terminal_with_live_pp) ... ok
+test_native_parity_batch_privacy_and_rejections (test.test_burn_choice.BurnChoiceTest.test_native_parity_batch_privacy_and_rejections) ... ok
+test_complete_native_battles_match_every_staged_session_turn (test.test_two_move_session_duel.TwoMoveSessionDuelTests.test_complete_native_battles_match_every_staged_session_turn) ... ok
+test_one_compiled_vmap_keeps_heterogeneous_full_duels_lane_local (test.test_request_session_batch.RequestSessionBatchTests.test_one_compiled_vmap_keeps_heterogeneous_full_duels_lane_local) ... ok
+test_compiled_heterogeneous_reset_precedence_and_boundaries (test.test_two_move_session_reset.TwoMoveSessionResetTests.test_compiled_heterogeneous_reset_precedence_and_boundaries) ... ok
+test_native_terminal_reset_and_fresh_local_token (test.test_two_move_session_reset.TwoMoveSessionResetTests.test_native_terminal_reset_and_fresh_local_token) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 59.334s
+
+OK

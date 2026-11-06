@@ -14,7 +14,7 @@
       "CPU-first validation; GPU runs only when task acceptance or a device-specific property requires them, not a full GPU suite for every slice."
     ],
     "defer": "PPO, tournament/scoring, expanded trajectory collection, and additional baseline/reporting infrastructure unless they directly enable simulator semantics or parity validation.",
-    "next_candidate": "Execute approved G3-first-playable goal in active_task.",
+    "next_candidate": "First approved G3 CPU goal complete. Later G3 closure requires separately agreed D3 GPU/resource/profile scope; G1 remains open and G2 learning remains deferred.",
     "progress_measure": "Increasingly complete parity-tested playable battles, not accepted task count.",
     "active_task": null,
     "accepted_task_count_changed": false,
@@ -518,42 +518,92 @@
   },
   "active_task": {
     "id": "G3-first-playable",
-    "status": "active_approved",
+    "status": "completed_cpu_goal",
     "approved_at": "2026-11-06",
     "owner": "/root",
     "brief": "PROJECT_PLAN.md#proposed-first-g3-goal-mode-brief",
     "behavior_catalog": "docs/SHOWDOWN_BEHAVIOR_CASES.md",
     "scope": "Entire proposed first G3 package, including potentially long affected CPU integration/regressions. Direct execution without delegation. G3 milestone remains open pending later GPU closure.",
-    "checkpoint": "Shared CPU lifecycle integration passed; final expanded acceptance matrix running",
+    "checkpoint": "All four approved integration checkpoints complete; CPU acceptance passed",
     "completed_checkpoints": [
-      "Shared roster/move/RNG/request/event schema and native initialization expectations",
-      "Voluntary switch, forced replacement, pivot and choice replacement/cancel scheduler",
-      "Allowlisted status/items, Protect/recovery, residuals and Struggle integrated with native boundaries"
+      "Shared roster/move/RNG/request/event schema, native initialization and legacy migrations",
+      "Voluntary switches, native faint replacements, U-turn queue suspension, private replace/cancel and stable command mapping",
+      "Allowlisted status/items/Protect/recovery/residual/Struggle interactions and atomic unsupported/capacity diagnostics",
+      "Complete native terminal traces, cumulative recipient histories, saved continuation/reset, eager/JIT and heterogeneous CPU batch acceptance"
     ],
-    "next": "Finish final B0\u2013B5 native/scalar/eager/JIT/heterogeneous-batch acceptance, inspect diff, record exact source identity and results; push safely.",
+    "next": "Stop at the approved first-goal CPU boundary. G3 remains open for separately scoped D3 GPU correctness/placement and compile/warm/memory profiles; no additional implementation goal is approved.",
     "evidence": [
       {
-        "command": "G3_NATIVE_CASES=/tmp/g3-shared-native-3.json JAX_PLATFORMS=cpu .venv-jax/bin/python -m unittest test.test_shared_engine_cases test.test_shared_engine_battles -v",
-        "result": "Passed in 13.315s; all current native boundaries plus eight complete three-member battles / 293 full-battle boundaries.",
-        "log": "test-logs/g3-first-playable/scalar-native.log",
-        "source_commit": "ccbeb54"
+        "source_commit": "74a4fd48b7cef73affe430fd1bfe0e44944a920b",
+        "command": "node reference/shared-engine-cases.cjs --batch all --output /tmp/g3-shared-native-acceptance.json",
+        "result": "102 independently observed native scenarios / 448 boundaries; eight complete three-member battles and four complete legacy duels. Semantic digest and replay recipe are in native-case-summary.json.",
+        "summary": "test-logs/g3-first-playable/native-case-summary.json"
       },
       {
+        "source_commit": "74a4fd48b7cef73affe430fd1bfe0e44944a920b",
+        "command": "G3_NATIVE_CASES=/tmp/g3-shared-native-acceptance.json JAX_PLATFORMS=cpu .venv-jax/bin/python -m unittest test.test_shared_engine_cases test.test_shared_engine_battles test.test_shared_engine_lifecycle -v",
+        "result": "11 composite checks passed in 252.017s. Every catalog boundary matched native and eager/JIT/32-lane execution; all eight full traces matched scalar/JIT/vmap sizes 1,8,32. Mixed phase/rejection/terminal lanes, lane RNG independence, saved continuation/reset, privacy and real event/draw/queue/history/episode capacity rollback passed.",
+        "log": "test-logs/g3-first-playable/cpu-acceptance.log"
+      },
+      {
+        "source_commit": "3b3b697cf79f3a130640f37c8e6ce7451a36549c",
+        "command": "G3_NATIVE_CASES=/tmp/g3-shared-native-acceptance.json JAX_PLATFORMS=cpu .venv-jax/bin/python -m unittest test.test_shared_engine_cases test.test_shared_engine_battles -v",
+        "result": "3 composite checks passed in 36.753s, adding exact cumulative recipient-history assertions at every boundary. Only these two test modules changed after the complete 74a4fd4 run.",
+        "log": "test-logs/g3-first-playable/history-acceptance.log"
+      },
+      {
+        "source_commit": "d7a7f5c29d8f7d7cae5344582847e04b97bc2c18",
+        "command": "node --test test/shared-engine.test.cjs",
+        "result": "2 passed: actual BattleStream packet parity for replacement/undo/pivot/forced boundaries, and independent native paired privacy histories. This test and its consumed native cases are unchanged in the final source.",
+        "log": "test-logs/g3-first-playable/native-stream-contracts.log"
+      },
+      {
+        "source_base": "6255889",
+        "command": "JAX_PLATFORMS=cpu .venv-jax/bin/python -m unittest test.test_accuracy_choice test.test_accuracy_choice_duel test.test_burn_choice test.test_two_move_session_duel test.test_request_session_batch test.test_two_move_session_reset -v",
+        "result": "10 affected legacy controls passed in 59.334s. All relevant legacy simulator/mechanics/oracle/test files are byte-identical between the synchronized base and final source (git diff --quiet verified).",
+        "log": "test-logs/g3-first-playable/legacy-controls.log"
+      },
+      {
+        "source_commit": "6255889",
         "command": "node --test test/reference.test.cjs test/protocol.test.cjs test/action-space.test.cjs test/battle-runner.test.cjs test/trace.test.cjs test/decision-trajectories.test.cjs test/baseline-matchup.test.cjs",
-        "result": "59 passed, 0 failed",
-        "log": "test-logs/g3-first-playable/reference-contracts.log",
-        "source_commit": "ccbeb54"
+        "result": "59 passed. These reference/environment sources and tests remain unchanged.",
+        "log": "test-logs/g3-first-playable/reference-contracts.log"
       },
       {
-        "source_base": "ccbeb54",
-        "command": "G3_NATIVE_CASES=/tmp/g3-shared-native-7.json JAX_PLATFORMS=cpu .venv-jax/bin/python -m unittest test.test_shared_engine_cases test.test_shared_engine_battles test.test_shared_engine_lifecycle -v",
-        "result": "7 checks passed in 164.317s after initialization history/context/schema additions; subsequent HP/speed/companion additions require final run.",
-        "note": "Intermediate evidence, not final goal completion."
+        "command": "node reference/oracle.cjs format; node reference/accuracy-choice-oracle.cjs; node reference/accuracy-choice-oracle.cjs --duels; node reference/burn-choice-oracle.cjs",
+        "result": "All completed successfully via permitted execution route; V0 format equality is covered by the reference suite. Pinned reference/legacy oracle sources remain unchanged.",
+        "reference_commit": "1242c1e2d9763ba5b85d33f13aecb89bae19ae3d"
       }
     ],
     "blockers": [],
     "source_base": "6255889",
-    "synchronization": "Clean work branch fast-forwarded to origin/main; live fetch succeeded via permitted execution route."
+    "synchronization": "Initial clean tree fast-forwarded from 7068c36 to live origin/main 6255889. Preserved all local work. Final fetch confirmed origin/main is an ancestor of the four implementation/test checkpoint commits; publish uses a normal fast-forward push.",
+    "completed_at": "2026-11-06",
+    "acceptance": "Primary inspected the diff and independent native/CPU evidence. The first G3 CPU goal is accepted; no milestone is closed, no task count is incremented, and no full-format/GPU/performance claim is made.",
+    "source_identity": {
+      "engine_and_lifecycle_commit": "74a4fd48b7cef73affe430fd1bfe0e44944a920b",
+      "engine_and_lifecycle_tree": "036c004f6cb296a7ac6ba0eb263e04688a344e2e",
+      "additional_history_assertions_commit": "3b3b697cf79f3a130640f37c8e6ce7451a36549c",
+      "additional_history_assertions_tree": "9174716895e712b0f408d3c13e0110c16279a1cf",
+      "note": "3b3b697 changes only cumulative-history assertions in the case/battle modules. Engine, native runner, manifest and lifecycle tests are byte-identical to 74a4fd4. Evidence records follow these source revisions."
+    },
+    "coverage": {
+      "native_scenarios": 102,
+      "native_boundaries": 448,
+      "catalog_boundaries": 155,
+      "complete_three_member_battles": 8,
+      "complete_battle_boundaries": 293,
+      "legacy_complete_duels": 4,
+      "cpu_batch_sizes": [
+        1,
+        8,
+        32
+      ],
+      "catalog_batch_size": 32,
+      "summary": "test-logs/g3-first-playable/native-case-summary.json"
+    },
+    "runtime": "test-logs/g3-first-playable/cpu-environment.json",
+    "reference_provenance": "test-logs/g3-first-playable/reference-provenance.json"
   },
   "optional_gpu_validation_history": [
     {
@@ -801,12 +851,12 @@
       "source_base": "7068c36975fbe713d55c52c2c07659cf0fcefcbb",
       "plan": "PROJECT_PLAN.md#milestone-contracts",
       "behavior_catalog": "docs/SHOWDOWN_BEHAVIOR_CASES.md",
-      "proposed_goal": "Integrated bounded three-member singles engine; CPU parity, shared state/harness, switching/pivots, statuses/items and lifecycle. Awaiting user approval and Goal-mode selection.",
+      "proposed_goal": "Prepared first G3 CPU goal was approved by the user and completed on 2026-11-06; current scope/evidence is in active_task.",
       "evidence": "Pinned provenance and 22 short native scenarios / 31 boundaries observed; recipe, semantic digest, cases and missing proof are in the catalog. No JAX, long-suite, GPU or performance run; no implementation or milestone acceptance.",
       "decisions": "PROJECT_PLAN.md#validation-entry-points-and-remaining-decisions"
     },
     "preparation_handoff": "docs/MILESTONE_PREPARATION.md",
-    "goal_mode_status": "approved_execution_active",
-    "note": "2026-11-06 user approved the proposed first G3 brief and its CPU validation scope; direct execution, no delegation. Execution-surface mode is external to repository configuration."
+    "goal_mode_status": "approved_goal_cpu_complete",
+    "note": "2026-11-06 approved first G3 brief executed directly without delegation. CPU goal accepted; G3 device/profile closure and all other open milestones remain open. Repository configuration does not select execution-surface mode."
   }
 }

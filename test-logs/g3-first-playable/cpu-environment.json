@@ -1,0 +1,12 @@
+{
+  "python": "3.12.14",
+  "jax": "0.12.0.1",
+  "jaxlib": "0.12.0.1",
+  "numpy": "2.5.4",
+  "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+  "backend": "cpu",
+  "devices": [
+    "cpu:0"
+  ],
+  "jax_x64_enabled": false
+}
