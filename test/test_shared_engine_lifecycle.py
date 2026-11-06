@@ -8,16 +8,21 @@ import jax.numpy as jnp
 import numpy as np
 from simulator import shared_engine as e
 from simulator.shared_engine_io import player_view
-from test.shared_engine_support import native_cases,initialize_case,choices_array,assert_step
+from test.shared_engine_support import native_cases,initialize_case,choices_array,assert_step,assert_placement
 from test.test_shared_engine_cases import COMPILED
 
 BATCH=jax.jit(jax.vmap(e.advance))
 RESET=jax.jit(e.reset)
 
 def equal(test,a,b):
+    assert_placement((a,b))
+    a,b=jax.device_get((a,b))
     for x,y in zip(jax.tree.leaves(a),jax.tree.leaves(b),strict=True):np.testing.assert_array_equal(x,y)
 
-def stack(items):return jax.tree.map(lambda *x:jnp.stack(x),*items)
+def stack(items):
+    result=jax.tree.map(lambda *x:jnp.stack(x),*items)
+    assert_placement(result)
+    return result
 def lane(tree,k):return jax.tree.map(lambda x:x[k],tree)
 
 class SharedEngineLifecycleTest(unittest.TestCase):
@@ -48,8 +53,8 @@ class SharedEngineLifecycleTest(unittest.TestCase):
             chunk=inputs[offset:offset+32]
             chunk+=chunk[-1:]*(32-len(chunk))
             result=BATCH(stack([x[0] for x in chunk]),jnp.stack([x[1] for x in chunk]))
-            for k,(s,action) in enumerate(chunk):equal(self,lane(result,k),COMPILED(s,action))
-        print(f'CPU heterogeneous catalog agreement: {len(inputs)} native boundaries, 32 lanes',flush=True)
+            equal(self,result,stack([COMPILED(s,action) for s,action in chunk]))
+        print(f'{jax.default_backend().upper()} heterogeneous catalog agreement: {len(inputs)} native boundaries, 32 lanes',flush=True)
 
     def test_complete_battles_in_heterogeneous_batches(self):
         battles=[c for c in self.cases if c['setup'].get('fullBattle')]
@@ -60,13 +65,12 @@ class SharedEngineLifecycleTest(unittest.TestCase):
             for boundary in range(max(len(c['steps']) for c in cases)):
                 choices=[choices_array(s,c['steps'][boundary]['choices']) if boundary<len(c['steps']) else e.i32([-1,-1]) for s,c in zip(scalars,cases)]
                 result=BATCH(batched,jnp.stack(choices))
-                for k,(s,action,c) in enumerate(zip(scalars,choices,cases)):
-                    expected=COMPILED(s,action);actual=lane(result,k)
-                    equal(self,actual,expected)
-                    scalars[k]=expected.state
+                expected=[COMPILED(s,action) for s,action in zip(scalars,choices)]
+                equal(self,result,stack(expected))
+                scalars=[r.state for r in expected]
                 batched=result.state
             self.assertTrue(np.all(np.asarray(batched.winner)>=0))
-        print('CPU heterogeneous complete-trace scalar/JIT/vmap agreement: batch sizes 1, 8, 32',flush=True)
+        print(f'{jax.default_backend().upper()} heterogeneous complete-trace scalar/JIT/vmap agreement: batch sizes 1, 8, 32',flush=True)
 
     def test_serialized_continuation_private_commit_and_reset(self):
         # Splits at all request boundaries, including pending, pivot and forced.
@@ -159,6 +163,32 @@ class SharedEngineLifecycleTest(unittest.TestCase):
                 self.assertEqual(int(result.code),e.CAPACITY);equal(self,result.state,s)
                 self.assertEqual(int(result.trace.ecount),0);self.assertEqual(int(result.trace.dcount),0)
                 self.assertFalse(np.any(np.asarray(result.trace.events)))
+
+    def test_fainted_status_regressions_continue_from_saved_states_and_reset(self):
+        inputs=[];expected=[]
+        for name in ('fainted-brn-handler-sort','fainted-tox-handler-sort'):
+            case=self.by_id[name];s,_=initialize_case(case);replacement=s
+            for step in case['steps']:
+                with tempfile.TemporaryDirectory() as directory:
+                    path=Path(directory)/'continuation.npz'
+                    np.savez(path,**dict(zip(e.State._fields,jax.device_get(s),strict=True)))
+                    with np.load(path,allow_pickle=False) as archive:
+                        restored=e.State(*(jnp.asarray(archive[field]) for field in e.State._fields))
+                equal(self,s,restored)
+                action=choices_array(s,step['choices']);result=COMPILED(restored,action)
+                assert_step(self,s,result,step,name)
+                with jax.disable_jit():eager=e.advance(s,action)
+                equal(self,eager,result)
+                inputs.append((s,action));expected.append(result);s=result.state
+            self.assertGreaterEqual(int(s.winner),0,'regression must reach native terminal')
+            out=RESET(s,replacement,jnp.stack((s.generation,s.episode)))
+            self.assertEqual(int(out.code),e.OK)
+            equal(self,out.state,replacement._replace(generation=s.generation+1))
+        for offset in range(0,len(inputs),32):
+            chunk=inputs[offset:offset+32];reference=expected[offset:offset+32]
+            reference+=reference[-1:]*(32-len(chunk));chunk+=chunk[-1:]*(32-len(chunk))
+            result=BATCH(stack([s for s,a in chunk]),jnp.stack([a for s,a in chunk]))
+            equal(self,result,stack(reference))
 
     def test_atomic_invalid_unsupported_stale_and_capacity(self):
         s,_=initialize_case(self.by_id['wisp-hit'])

@@ -1,0 +1,17 @@
+freeze existing native expectations and exact choices
+cpu initialize fixed pack
+cpu compile one pack
+cpu warm and validate one pack
+gpu initialize fixed pack
+gpu compile one pack
+gpu warm and validate one pack
+both correctness gates passed
+Showdown 1 pack(s), one warm plus three repetitions
+cpu 1 pack(s) prepare inputs
+gpu 1 pack(s) prepare inputs
+Showdown 32 pack(s), one warm plus three repetitions
+cpu 32 pack(s) prepare inputs
+cpu 32 pack(s) compile
+gpu 32 pack(s) prepare inputs
+gpu 32 pack(s) compile
+complete

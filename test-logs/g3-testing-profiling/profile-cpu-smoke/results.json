@@ -1,0 +1,317 @@
+{
+  "schemaVersion": 1,
+  "platform": "cpu",
+  "devices": [
+    "cpu:0"
+  ],
+  "started_utc": "2026-11-06T09:44:18.565549+00:00",
+  "python": "3.13.18",
+  "jaxlib": "0.12.0.1",
+  "numpy": "2.5.4",
+  "native_fixture_sha256": "2c3e60fa4232b3a89295bc7b0fe5977eb83fe6c72eb67782657a3500a482f734",
+  "native_pin": "1242c1e2d9763ba5b85d33f13aecb89bae19ae3d",
+  "commit": "51da7a941bcd301367e2c904f049c5a377248867",
+  "sha256": {
+    "simulator/shared_engine.py": "fef3e95c34a831814438a90b3166fc94369f6c75f6b6a7643e3a92a6321f5f13",
+    "simulator/shared_engine_io.py": "9863c05e38eba89735b587f6ba8aaffebfa5fe191c9783497b83d3da60e51291",
+    "benchmarks/shared_engine.py": "9b367109eba985d7b76eb4fdbd6adb1dabb0262e8c89370e264d3e93e30bc4e8",
+    "benchmarks/shared_engine_campaign.py": "d8d7cdbda37424eececd80a7442f270f916b273c8bc2a5c8b00e7807c7b7e44b",
+    "test/shared_engine_support.py": "ec0dc5dcf696073d3d97f70dd138f64fd84e81f25a8687f7f1ad899669a07459",
+    "rules/shared-engine-v1.json": "bb538a553940431ac39f37c0d39d4b01b210d084f92021d4e5179e35572daf1a",
+    "benchmarks/g3-profile.json": "88d9cc1d50aee57478a4826b9030df0989f7da89a65ba93980f0f7baa611d44f"
+  },
+  "affinity": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "config": {
+    "schemaVersion": 1,
+    "batches": [
+      1,
+      8,
+      32,
+      128,
+      512,
+      2048,
+      8192
+    ],
+    "chunks": [
+      1,
+      8,
+      32,
+      128
+    ],
+    "primary": [
+      "ordinary",
+      "mixed"
+    ],
+    "diagnostic": [
+      "tied",
+      "status",
+      "pivot",
+      "exhaustion",
+      "terminal",
+      "rejected"
+    ],
+    "diagnosticBatches": [
+      1,
+      32
+    ],
+    "diagnosticChunks": [
+      1,
+      8
+    ],
+    "repetitions": 10,
+    "targetSeconds": 0.2,
+    "memoryFraction": 0.8,
+    "allocationSafetyFactor": 4,
+    "compilerReserveBytes": 1073741824,
+    "profilerPoint": {
+      "cohort": "mixed",
+      "batch": 32,
+      "chunk": 8
+    },
+    "outputContract": "full Result for advance; final carry and full per-boundary Results for scan; all leaves synchronized; only latest call retained between repetitions"
+  },
+  "persistent_cache": "None",
+  "persistent_cache_enabled": false,
+  "selection": {
+    "cohorts": [
+      "ordinary"
+    ],
+    "batches": [
+      1
+    ],
+    "chunks": [
+      1
+    ]
+  },
+  "jax": "0.12.0.1",
+  "rows": [
+    {
+      "cohort": "ordinary",
+      "batch": 1,
+      "chunk": 1,
+      "kernel": {
+        "median_seconds": 0.0008361225399858086,
+        "min_seconds": 0.0008294059600302717,
+        "max_seconds": 0.000844632200023625,
+        "p10_seconds": 0.0008296039690030739,
+        "p90_seconds": 0.0008396144569851458,
+        "samples_seconds": [
+          0.000844632200023625,
+          0.0008390569299808703,
+          0.0008313995549542597,
+          0.0008386539099592482,
+          0.0008363457999803358,
+          0.000833896679978352,
+          0.0008294059600302717,
+          0.0008296259700000519,
+          0.0008358992799912812,
+          0.0008389449249807513
+        ],
+        "calls_per_repetition": 200,
+        "total_measured_calls": 2000,
+        "warm_calls": 2,
+        "warmup_seconds": 0.006666424989816733
+      },
+      "sustained": {
+        "median_seconds": 0.0009423182381735139,
+        "min_seconds": 0.000928939361288578,
+        "max_seconds": 0.0009542467905798469,
+        "p10_seconds": 0.0009348419335008238,
+        "p90_seconds": 0.0009503832084025593,
+        "samples_seconds": [
+          0.0009542467905798469,
+          0.00093549777485774,
+          0.0009445950418774097,
+          0.0009499539214939717,
+          0.000928939361288578,
+          0.000948452811516914,
+          0.0009440798376423565,
+          0.0009405566387046713,
+          0.0009405477434465008,
+          0.0009370800471134455
+        ],
+        "calls_per_repetition": 191,
+        "total_measured_calls": 1910,
+        "warm_calls": 8,
+        "warmup_seconds": 0.0178928089881083
+      },
+      "kernel_output_digest": "ea2bfaa793c58ef98f0a28d07d326f2c40ababdb34fb0a7ceac9ed6bdf29842a",
+      "single_chunk_output_digest": "00b52f9687c9a65cdbfc9459dedc177b72bc33539ed5bb8d215a90d15fd5e3b8",
+      "kernel_lower_seconds": 5.924136464993353,
+      "kernel_compile_seconds": 5.600688293998246,
+      "scan_lower_seconds": 6.19976271300402,
+      "scan_compile_seconds": 6.103031948994612,
+      "preparation_seconds": 3.6965003479999723,
+      "useful_boundaries_per_call": 1.0,
+      "cumulative_counts": {
+        "boundaries": 1910,
+        "decisions": 3820,
+        "completed_battles": 272,
+        "resets": 272,
+        "absorbing_or_rejected": 0,
+        "pending": 0,
+        "events": 15280,
+        "draws": 10370
+      },
+      "draws_per_call": 5.429319371727749,
+      "events_per_call": 8.0,
+      "boundaries_per_second": 1061.2126132019794,
+      "compiler_memory": {
+        "argument_size_in_bytes": 166950,
+        "output_size_in_bytes": 177207,
+        "temp_size_in_bytes": 173496,
+        "alias_size_in_bytes": 0
+      },
+      "host_maxrss_kib": 1727416,
+      "device_memory_stats": null,
+      "output_bytes": 176631,
+      "full_output_contract": "full Result for advance; final carry and full per-boundary Results for scan; all leaves synchronized; only latest call retained between repetitions",
+      "transfer_bytes": 93168,
+      "device_get_samples_seconds": [
+        0.00023571000201627612,
+        0.0003368150064488873,
+        0.00036571700184140354,
+        0.0002859130036085844,
+        0.0002933140058303252,
+        0.0003245140105718747,
+        0.0003224150132155046,
+        0.00030191299447324127,
+        0.00033111500670202076,
+        0.00027281300572212785
+      ],
+      "device_put_samples_seconds": [
+        0.0009595430019544438,
+        0.0009180419874610379,
+        0.0008724389917915687,
+        0.0008301380003103986,
+        0.0007470330019714311,
+        0.0008044370042625815,
+        0.0009775440121302381,
+        0.0008078370010480285,
+        0.000746132995118387,
+        0.0007254329975694418
+      ],
+      "projection_serialization": {
+        "median_seconds": 0.0042461305228326555,
+        "min_seconds": 0.004208224272588268,
+        "max_seconds": 0.004299317022907251,
+        "p10_seconds": 0.004213493608999257,
+        "p90_seconds": 0.004292311013606113,
+        "samples_seconds": [
+          0.0042786070000808895,
+          0.004239166568202729,
+          0.004291532568128208,
+          0.0042140790908227,
+          0.004247762409332526,
+          0.004208224272588268,
+          0.004299317022907251,
+          0.004244498636332785,
+          0.004221386204748837,
+          0.0042818685000053265
+        ],
+        "calls_per_repetition": 44,
+        "total_measured_calls": 440,
+        "warm_calls": 2,
+        "warmup_seconds": 0.09406395100813825
+      },
+      "serialized_bytes": 3671,
+      "host_submission": {
+        "median_seconds": 0.008395099240005949,
+        "min_seconds": 0.008336272719898261,
+        "max_seconds": 0.008480683240341022,
+        "p10_seconds": 0.008364342747605407,
+        "p90_seconds": 0.008469430936092976,
+        "samples_seconds": [
+          0.008372450359747746,
+          0.008387979040271602,
+          0.008381638759747147,
+          0.008336272719898261,
+          0.008463518479838967,
+          0.008480683240341022,
+          0.008468180680065416,
+          0.008367461639572867,
+          0.008413688000291585,
+          0.008402219439740293
+        ],
+        "calls_per_repetition": 25,
+        "total_measured_calls": 250,
+        "warm_calls": 2,
+        "warmup_seconds": 0.3943603209918365
+      },
+      "reset": {
+        "median_seconds": 0.00023973240934208084,
+        "min_seconds": 0.0002363858763731384,
+        "max_seconds": 0.00024396058104904803,
+        "p10_seconds": 0.00023718639916366487,
+        "p90_seconds": 0.00024267010219693554,
+        "samples_seconds": [
+          0.00024396058104904803,
+          0.00024252671565781194,
+          0.00024232230906228914,
+          0.0002377962513751949,
+          0.00024047345193269263,
+          0.00023976393544676734,
+          0.0002363858763731384,
+          0.0002397008832373943,
+          0.00023727534614039,
+          0.00023883380632908953
+        ],
+        "calls_per_repetition": 728,
+        "total_measured_calls": 7280,
+        "warm_calls": 2,
+        "warmup_seconds": 0.21896304699475877
+      }
+    }
+  ],
+  "kernels": [
+    {
+      "cohort": "ordinary",
+      "batch": 1,
+      "measurement": {
+        "median_seconds": 0.0008361225399858086,
+        "min_seconds": 0.0008294059600302717,
+        "max_seconds": 0.000844632200023625,
+        "p10_seconds": 0.0008296039690030739,
+        "p90_seconds": 0.0008396144569851458,
+        "samples_seconds": [
+          0.000844632200023625,
+          0.0008390569299808703,
+          0.0008313995549542597,
+          0.0008386539099592482,
+          0.0008363457999803358,
+          0.000833896679978352,
+          0.0008294059600302717,
+          0.0008296259700000519,
+          0.0008358992799912812,
+          0.0008389449249807513
+        ],
+        "calls_per_repetition": 200,
+        "total_measured_calls": 2000,
+        "warm_calls": 2,
+        "warmup_seconds": 0.006666424989816733
+      },
+      "lower_seconds": 5.924136464993353,
+      "compile_seconds": 5.600688293998246,
+      "compiler_memory": {
+        "argument_size_in_bytes": 83435,
+        "output_size_in_bytes": 93488,
+        "temp_size_in_bytes": 172344,
+        "alias_size_in_bytes": 0
+      },
+      "output_digest": "ea2bfaa793c58ef98f0a28d07d326f2c40ababdb34fb0a7ceac9ed6bdf29842a"
+    }
+  ],
+  "skipped": [],
+  "checkpoint": {
+    "phase": "complete requested selection"
+  }
+}

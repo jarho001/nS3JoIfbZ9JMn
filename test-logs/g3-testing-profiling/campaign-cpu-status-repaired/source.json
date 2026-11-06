@@ -1,0 +1,11 @@
+{
+  "commit": "51da7a941bcd301367e2c904f049c5a377248867",
+  "sha256": {
+    "simulator/shared_engine.py": "8fe364fd9e0b84d8e61daa717c27a0a4e4ce8f65b81b793ffd2fbb5198b3c599",
+    "simulator/shared_engine_io.py": "9863c05e38eba89735b587f6ba8aaffebfa5fe191c9783497b83d3da60e51291",
+    "reference/shared-engine-cases.cjs": "edc7c94fff67963a663bbe5a4e6573cd8bdf32b50a5ad4e3d292d68751ed546e",
+    "test/shared_engine_support.py": "ec0dc5dcf696073d3d97f70dd138f64fd84e81f25a8687f7f1ad899669a07459",
+    "benchmarks/shared_engine_campaign.py": "d8d7cdbda37424eececd80a7442f270f916b273c8bc2a5c8b00e7807c7b7e44b",
+    "benchmarks/g3-campaign.json": "a3ab66ce73c1b6ba73703057df34648a618fbabb1f4e941216a88f10778eb0af"
+  }
+}

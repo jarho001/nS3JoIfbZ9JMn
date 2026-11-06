@@ -1,0 +1,16 @@
+{
+  "starts": 1000,
+  "completed": 1000,
+  "boundaries": 30342,
+  "decisions": 57257,
+  "ordinary": 900,
+  "synthetic": 100,
+  "truncated": 0,
+  "capacity": 0,
+  "failing": 0,
+  "schemaVersion": 1,
+  "status": "complete_target",
+  "source": "campaign-cpu-status-repaired/source.json",
+  "full_summary": "campaign-cpu-status-repaired/summary.json",
+  "native_coverage": "native-campaign-coverage.json"
+}

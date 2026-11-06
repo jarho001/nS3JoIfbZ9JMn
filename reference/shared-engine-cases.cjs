@@ -19,6 +19,19 @@ const lax = (moves, o) => mon('Snorlax', moves, o);
 const ghost = (moves, o) => mon('Gengar', moves, o);
 const attack = ['Tackle','Mega Punch'];
 const cases = [
+ ...['Tackle','Earthquake','Toxic'].map(move=>({id:`protect-immunity-${move}`,seed:1,
+  p1:[lax([move])],p2:[ghost(['Protect'])],steps:[{p1:'move 1',p2:'move 1'}]})),
+ ...['Gengar','Snorlax'].map(species=>({id:`trusted-toxic-immune-${species}`,seed:1,
+  p1:[mon(species,['Protect'])],p2:[mew(['Tackle'])],setup:[{side:'p1',status:'tox'}],steps:[{p1:'move 1',p2:'move 1'}]})),
+ {id:'paralyzed-forced-return',seed:1,p1:[ghost(['Protect'],{level:1}),mew(['Tackle'],{level:1})],
+  p2:[lax(['Mega Punch'],{level:100})],setup:[{side:'p1',status:'par'}],steps:[{p1:'switch 2',p2:'move 1'},{p1:'switch 2'}]},
+ {id:'fainted-leftovers-handler-sort',seed:1,p1:[lax(['Tackle'],{item:'Leftovers'})],
+  p2:[lax(['Tackle'],{item:'Leftovers'}),lax(['Tackle'],{item:'Leftovers'})],
+  setup:[{side:'p1',hp:100},{side:'p2',hp:1}],steps:[{p1:'move 1',p2:'move 1'}]},
+ ...['brn','tox'].map(status=>({id:`fainted-${status}-handler-sort`,seed:1,
+  p1:[mew(['Tackle'])],p2:[mew(['Tackle']),mew(['Tackle'])],
+  setup:[{side:'p1',hp:100,status},{side:'p2',hp:1,status}],
+  campaign:true,policy:'tactical',policySeeds:[0,0],steps:[]})),
  {id:'wisp-hit',seed:0,p1:[mew(['Will-O-Wisp'])],p2:[lax(attack)],steps:[{p1:'move 1',p2:'move 1'}]},
  {id:'wisp-miss',seed:1,p1:[mew(['Will-O-Wisp'])],p2:[lax(attack)],steps:[{p1:'move 1',p2:'move 1'}]},
  {id:'toxic-immunity',seed:1,p1:[mew(['Toxic'])],p2:[lax(attack)],steps:[{p1:'move 1',p2:'move 1'}]},
@@ -163,6 +176,28 @@ function scriptedChoices(battle,scenario,boundary) {
  return choices;
 }
 
+// Campaign decisions depend only on public native requests and a separate,
+// predeclared policy seed. They never consume or replace the battle PRNG.
+function campaignChoices(battle,scenario,boundary) {
+ const choices={};
+ for(const side of battle.sides) {
+  const req=side.activeRequest;if(!req||req.wait)continue;
+  const commands=actionSpace(req).commands.filter(Boolean);
+  let word=(scenario.policySeeds[side.n] + Math.imul(boundary+1,0x9e3779b9))>>>0;
+  word=Math.imul(word^(word>>>16),0x21f0aaad)>>>0;
+  word=Math.imul(word^(word>>>15),0x735a2d97)>>>0;word=(word^(word>>>15))>>>0;
+  const random=()=>commands[word%commands.length];
+  if(req.forceSwitch||scenario.policy==='random'){choices[side.id]=random();continue;}
+  const moves=commands.filter(c=>c.startsWith('move '));
+  const byId=id=>moves.find(c=>req.active[0].moves[Number(c.split(' ')[1])-1].id===id);
+  const edge=scenario.policy==='edge'&&battle.turn<=8;
+  const priority=edge?['protect','thunderwave','willowisp','toxic','uturn','recover']:
+   battle.turn<=2?['thunderwave','willowisp','toxic']:['uturn','megapunch','earthquake','tackle','pound'];
+  choices[side.id]=priority.map(byId).find(Boolean)??moves[word%moves.length]??random();
+ }
+ return choices;
+}
+
 function observeInitialization(ps, action) {
  const original=ps.PRNG.prototype.random;const draws=[];
  ps.PRNG.prototype.random=function(...args) {
@@ -203,7 +238,7 @@ function semanticContext(draw) {
  if(draw.context==='accuracy'||draw.context==='critical'||draw.context==='damage')return draw.context;
  if(stack.includes('onBeforeMove'))return 'paralysis';
  if(stack.includes('onStallMove'))return 'stall';
- if(stack.includes('BattleQueue.sort'))return 'queue-sort';
+ if(stack.includes('BattleQueue.sort')||stack.includes('BattleQueue.insertChoice'))return 'queue-sort';
  if(stack.includes('Battle.fieldEvent'))return 'residual-handlers';
  if(stack.includes('BattleActions.runSwitch'))return 'switch-order';
  if(draw.eventId==='BeforeTurn')return 'before-turn';
@@ -231,9 +266,13 @@ function runCase(ps, scenario) {
   const record={id:scenario.id,classification:scenario.setup?'synthetic':'native-constructed',setup:scenario,initializationDraws,
    initial:capture(battle,ids),initialEvents:events(battle),steps:[]};
   let boundary=0;
-  while((scenario.fullBattle||scenario.legacyDuel)?!battle.ended:boundary<scenario.steps.length) {
-   if(boundary>=512)throw Error(`${scenario.id}: truncation at 512 request boundaries`);
-   const choices=(scenario.fullBattle||scenario.legacyDuel)?scriptedChoices(battle,scenario,boundary):scenario.steps[boundary];
+  while((scenario.fullBattle||scenario.legacyDuel||scenario.campaign)?!battle.ended:boundary<scenario.steps.length) {
+   if(boundary>=512) {
+    if(scenario.campaign){record.truncated=true;break;}
+    throw Error(`${scenario.id}: truncation at 512 request boundaries`);
+   }
+   const choices=scenario.campaign?campaignChoices(battle,scenario,boundary):
+    (scenario.fullBattle||scenario.legacyDuel)?scriptedChoices(battle,scenario,boundary):scenario.steps[boundary];
    boundary++;
    const before=capture(battle,ids), start=battle.log.length,acks=[];
    const oldSend=battle.send; battle.send=function(type,data){if(type==='sideupdate')acks.push(data);return oldSend.call(this,type,data);};
@@ -250,11 +289,50 @@ function runCase(ps, scenario) {
  } finally {battle.destroy();}
 }
 function main(argv) {
- let batch='all',output;
+ let batch='all',output,campaign,campaignStart=0,campaignIndices,coverageOutput;
  for(let i=0;i<argv.length;i++) {
-  if(argv[i]==='--batch')batch=argv[++i];else if(argv[i]==='--output')output=argv[++i];else throw Error('Unknown argument '+argv[i]);
+  if(argv[i]==='--batch')batch=argv[++i];else if(argv[i]==='--output')output=argv[++i];else if(argv[i]==='--campaign')campaign=argv[++i];else if(argv[i]==='--campaign-start')campaignStart=Number(argv[++i]);else if(argv[i]==='--campaign-indices')campaignIndices=argv[++i].split(',').map(Number);else if(argv[i]==='--coverage')coverageOutput=argv[++i];else throw Error('Unknown argument '+argv[i]);
  }
  assertReady(); const ps=require('./vendor/pokemon-showdown/dist/sim');
+ if(campaign) {
+  assert.equal(output,undefined,'campaign streams NDJSON on stdout');
+  const config=JSON.parse(fs.readFileSync(campaign,'utf8'));
+  assert.equal(config.schemaVersion,1);
+  assert.ok(Number.isInteger(campaignStart)&&campaignStart>=0&&campaignStart<config.cases.length);
+  if(campaignIndices)assert.ok(campaignIndices.every(i=>Number.isInteger(i)&&i>=0&&i<config.cases.length));
+  const selected=campaignIndices?campaignIndices.map(i=>config.cases[i]):config.cases.slice(campaignStart);
+  const coverage={schemaVersion:1,pin,config:campaign,starts:0,completed:0,truncated:0,boundaries:0,decisions:0,ordinary:0,synthetic:0,effects:{},interactions:{},drawContexts:{},perStart:[]};
+  const increment=(table,key)=>{table[key]=(table[key]??0)+1;};
+  for(const scenario of selected) {
+   const record=runCase(ps,scenario);
+   if(!coverageOutput){fs.writeSync(1,JSON.stringify(record)+'\n');continue;}
+   coverage.starts++;coverage[record.classification==='synthetic'?'synthetic':'ordinary']++;
+   const last=record.steps.at(-1)?.after??record.initial;
+   coverage[last.terminal?'completed':'truncated']++;
+   coverage.perStart.push({id:record.id,boundaries:record.steps.length,winner:last.winner,truncated:!!record.truncated});
+   for(const step of record.steps) {
+    coverage.boundaries++;coverage.decisions+=Object.keys(step.choices).length;
+    const names=new Set();
+    for(const event of step.events.p1) {
+     const parts=event.message.split('|'),kind=parts[1];if(!kind)continue;
+     if(kind==='move')names.add('move:'+parts[3]);
+     else if(kind==='-status'||kind==='-curestatus')names.add(kind+':'+parts[3]);
+     else if(kind==='-enditem')names.add('item:'+parts[3]);
+     else if(kind==='switch')names.add(event.message.includes('[from] U-turn')?'pivot-switch':'switch');
+     else if(kind==='-damage'&&parts[4])names.add(parts[4]);
+     else if(kind==='-heal'&&parts[4])names.add(parts[4]);
+     else if(kind==='-activate')names.add('activate:'+parts[3]);
+     else names.add(kind);
+    }
+    const sorted=[...names].sort();
+    for(const name of sorted)increment(coverage.effects,name);
+    for(let i=0;i<sorted.length;i++)for(let j=i+1;j<sorted.length;j++)increment(coverage.interactions,sorted[i]+' + '+sorted[j]);
+    for(const draw of step.draws)increment(coverage.drawContexts,draw.semanticContext);
+   }
+  }
+  if(coverageOutput)fs.writeFileSync(coverageOutput,JSON.stringify(coverage,null,2)+'\n',{flag:'wx'});
+  return;
+ }
  const selected=batch==='all'?cases:batch==='boundaries'?cases.filter(c=>!c.fullBattle):batch==='battles'?cases.filter(c=>c.fullBattle):cases.filter(c=>c.id===batch);
  if(!selected.length)throw Error('Empty native case selection: '+batch);
  const result={schemaVersion:1,pin,format:'gen5randombattle',caseSchema:'shared-engine-v1',cases:selected.map(c=>runCase(ps,c))};

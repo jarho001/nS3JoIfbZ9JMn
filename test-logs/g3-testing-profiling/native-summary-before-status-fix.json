@@ -1,0 +1,8 @@
+{
+  "scenarios": 109,
+  "boundaries": 456,
+  "semantic_sha256": "480368b33c391f1b1cb03e5fd4ea6c5a28f61e767aa80e11ea866308b2b1b18a",
+  "normalization": "Exclude only raw diagnostic stack field; preserve all other fields.",
+  "raw": "/tmp/g3-profile-final-native.json",
+  "replay": "node reference/shared-engine-cases.cjs --batch all --output NEW_FILE"
+}

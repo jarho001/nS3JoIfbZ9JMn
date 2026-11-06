@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "records": {
+    "baseline-source": {
+      "commit": "51da7a941bcd301367e2c904f049c5a377248867",
+      "tree": "c33096defe5eec347cee503cd8b14e9a5aaaaae3",
+      "reference_commit": "1242c1e2d9763ba5b85d33f13aecb89bae19ae3d",
+      "manifest_sha256": "bb538a553940431ac39f37c0d39d4b01b210d084f92021d4e5179e35572daf1a",
+      "cwd": "/workspace",
+      "cpu_affinity": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "thread_budget": 8,
+      "memory_fraction_limit": 0.8,
+      "jax_python": "/opt/jax-env/bin/python",
+      "persistent_compilation_cache": "disabled (no cache directory configured)",
+      "allocation": "XLA_PYTHON_CLIENT_PREALLOCATE=false"
+    },
+    "repair-source": {
+      "base_commit": "51da7a941bcd301367e2c904f049c5a377248867",
+      "sha256": {
+        "simulator/shared_engine.py": "c96f66268a604dbe1be73aa2bd70531a9eb0f0e305abfdbf6b1b386466fb58e9",
+        "simulator/shared_engine_io.py": "9863c05e38eba89735b587f6ba8aaffebfa5fe191c9783497b83d3da60e51291",
+        "reference/shared-engine-cases.cjs": "327f69c7a41e8ed76409acd13829c731372865360bd742eeb461bfd0ce375972",
+        "test/shared_engine_support.py": "14c5d3334bcbdffcac1d4e724a8aaec1fbffb906a56f92b265765ecda064a5f4",
+        "test/test_shared_engine_cases.py": "3aa57594d09e4b563217081ef8435d2f003d07fd772807075639f6bfe566f352",
+        "test/test_shared_engine_battles.py": "b4f1a10d9b325ce8da9d2acb6cb8ff8a46da565659fe756654c1dabd3cdcc55c",
+        "test/test_shared_engine_lifecycle.py": "9b74a9bd079260ce7ba1d84eaa1132e929ed9c54838713d242e82e08bf44e58e"
+      }
+    },
+    "switch-repair-source": {
+      "base_commit": "51da7a941bcd301367e2c904f049c5a377248867",
+      "sha256": {
+        "simulator/shared_engine.py": "8acffa13a3e36762eb7e4f7e75a515e82a61280a78348e7e63ff44152fa241b3",
+        "simulator/shared_engine_io.py": "9863c05e38eba89735b587f6ba8aaffebfa5fe191c9783497b83d3da60e51291",
+        "reference/shared-engine-cases.cjs": "35d0dec4b47455a859d1c8360a72326141779eb7c9c49a37ae583d88c473f9c4",
+        "test/shared_engine_support.py": "ec0dc5dcf696073d3d97f70dd138f64fd84e81f25a8687f7f1ad899669a07459",
+        "test/test_shared_engine_cases.py": "3aa57594d09e4b563217081ef8435d2f003d07fd772807075639f6bfe566f352",
+        "test/test_shared_engine_battles.py": "b4f1a10d9b325ce8da9d2acb6cb8ff8a46da565659fe756654c1dabd3cdcc55c",
+        "test/test_shared_engine_lifecycle.py": "9b74a9bd079260ce7ba1d84eaa1132e929ed9c54838713d242e82e08bf44e58e"
+      }
+    },
+    "residual-repair-source": {
+      "base_commit": "51da7a941bcd301367e2c904f049c5a377248867",
+      "sha256": {
+        "simulator/shared_engine.py": "fef3e95c34a831814438a90b3166fc94369f6c75f6b6a7643e3a92a6321f5f13",
+        "simulator/shared_engine_io.py": "9863c05e38eba89735b587f6ba8aaffebfa5fe191c9783497b83d3da60e51291",
+        "reference/shared-engine-cases.cjs": "9594c432110c385906b494c20726dc0a07016e6d03487c334b85eb138f6bcfa6",
+        "test/shared_engine_support.py": "ec0dc5dcf696073d3d97f70dd138f64fd84e81f25a8687f7f1ad899669a07459",
+        "test/test_shared_engine_cases.py": "3aa57594d09e4b563217081ef8435d2f003d07fd772807075639f6bfe566f352",
+        "test/test_shared_engine_battles.py": "b4f1a10d9b325ce8da9d2acb6cb8ff8a46da565659fe756654c1dabd3cdcc55c",
+        "test/test_shared_engine_lifecycle.py": "9b74a9bd079260ce7ba1d84eaa1132e929ed9c54838713d242e82e08bf44e58e",
+        "benchmarks/shared_engine_campaign.py": "b36ac5f1b26109ebc73482cdebd4fbf98b0aefe276b8a13c04a17b45693eaeed"
+      }
+    },
+    "correctness-source": {
+      "base_commit": "51da7a941bcd301367e2c904f049c5a377248867",
+      "sha256": {
+        "simulator/shared_engine.py": "fef3e95c34a831814438a90b3166fc94369f6c75f6b6a7643e3a92a6321f5f13",
+        "simulator/shared_engine_io.py": "9863c05e38eba89735b587f6ba8aaffebfa5fe191c9783497b83d3da60e51291",
+        "reference/shared-engine-cases.cjs": "5fb3a5f858cedeaf7a934ecb2ab0dc5534d5fdeac17fdfdc643ef08ea4702f10",
+        "test/shared_engine_support.py": "ec0dc5dcf696073d3d97f70dd138f64fd84e81f25a8687f7f1ad899669a07459",
+        "test/test_shared_engine_cases.py": "3aa57594d09e4b563217081ef8435d2f003d07fd772807075639f6bfe566f352",
+        "test/test_shared_engine_battles.py": "b4f1a10d9b325ce8da9d2acb6cb8ff8a46da565659fe756654c1dabd3cdcc55c",
+        "test/test_shared_engine_lifecycle.py": "a1e3a31ceb746584d757b232119df4210b431fce1b6702f46b748a35294f4086",
+        "test/test_shared_engine_benchmark.py": "8ed72ce7bc67ec6901bc6ed0664f659825f830847911260aaa1644352e6f420c",
+        "benchmarks/shared_engine.py": "dd39a889e9188e4ca17fe004bff758e8dc970b7c0438496c8b6012b06a281891",
+        "benchmarks/shared_engine_campaign.py": "ca2fa078c9f7e0f2e28822fca69ca942dea9ecc264dadfba713fcc10e4815993",
+        "benchmarks/g3-campaign.json": "a3ab66ce73c1b6ba73703057df34648a618fbabb1f4e941216a88f10778eb0af",
+        "benchmarks/g3-profile.json": "88d9cc1d50aee57478a4826b9030df0989f7da89a65ba93980f0f7baa611d44f"
+      },
+      "note": "Engine and fixture helper hashes match both successful campaign segments. Native CLI gained coverage-only aggregation; lifecycle print strings now report actual backend. No tested mechanics changed."
+    },
+    "gpu-acceptance-source": {
+      "base_commit": "51da7a941bcd301367e2c904f049c5a377248867",
+      "sha256": {
+        "simulator/shared_engine.py": "fef3e95c34a831814438a90b3166fc94369f6c75f6b6a7643e3a92a6321f5f13",
+        "simulator/shared_engine_io.py": "9863c05e38eba89735b587f6ba8aaffebfa5fe191c9783497b83d3da60e51291",
+        "test/shared_engine_support.py": "ec0dc5dcf696073d3d97f70dd138f64fd84e81f25a8687f7f1ad899669a07459",
+        "test/test_shared_engine_lifecycle.py": "85a7c5061afbf6692e1f7de6bc13a23604ad4c52281ec36224978e9364665c27",
+        "test/test_shared_engine_benchmark.py": "8ed72ce7bc67ec6901bc6ed0664f659825f830847911260aaa1644352e6f420c",
+        "benchmarks/shared_engine.py": "9b367109eba985d7b76eb4fdbd6adb1dabb0262e8c89370e264d3e93e30bc4e8"
+      },
+      "note": "Engine/fixture/lifecycle/rollout bytes tested on CUDA. Benchmark main timing/metadata code was subsequently extended; rollout function is unchanged."
+    },
+    "status-family-repair": {
+      "base_commit": "51da7a941bcd301367e2c904f049c5a377248867",
+      "sha256": {
+        "simulator/shared_engine.py": "8fe364fd9e0b84d8e61daa717c27a0a4e4ce8f65b81b793ffd2fbb5198b3c599",
+        "reference/shared-engine-cases.cjs": "edc7c94fff67963a663bbe5a4e6573cd8bdf32b50a5ad4e3d292d68751ed546e",
+        "test/shared_engine_support.py": "ec0dc5dcf696073d3d97f70dd138f64fd84e81f25a8687f7f1ad899669a07459",
+        "test/test_shared_engine_lifecycle.py": "85a7c5061afbf6692e1f7de6bc13a23604ad4c52281ec36224978e9364665c27",
+        "benchmarks/shared_engine.py": "2d9c7ba9629d43dacf503eb57a1d2d2ae82c456c153007c04e8e1b7a62ca6c64"
+      }
+    },
+    "final-status-family": {
+      "base_commit": "51da7a941bcd301367e2c904f049c5a377248867",
+      "sha256": {
+        "simulator/shared_engine.py": "8fe364fd9e0b84d8e61daa717c27a0a4e4ce8f65b81b793ffd2fbb5198b3c599",
+        "reference/shared-engine-cases.cjs": "cd38aefb0baa0fa7a48a5a3cf0676178b5002ab483ec444141b1f7259e05b5e6",
+        "test/shared_engine_support.py": "ec0dc5dcf696073d3d97f70dd138f64fd84e81f25a8687f7f1ad899669a07459",
+        "test/test_shared_engine_lifecycle.py": "ab3f68177001e52d3219642f262edcaacf76f83ecef8eb0edb829c5bbaec6829",
+        "test/test_shared_engine_benchmark.py": "8ed72ce7bc67ec6901bc6ed0664f659825f830847911260aaa1644352e6f420c",
+        "benchmarks/shared_engine.py": "4132971c2469467a8e83cba0c5a220e7f6c19a0fef7faf8ff3734f35d82eaa3c",
+        "benchmarks/shared_engine_campaign.py": "55aa85c1ef3c20b7c84d55e06cbe82b66f2387c34163a160520677284990fbd9"
+      },
+      "note": "Core status-family repair verified by 13 CPU and 13 GPU checks using first-boundary status fixtures, followed by focused complete-family eager/JIT/32-lane saved continuation/reset checks. Benchmark host stacking changes only preparation outside timers."
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "scenarios": 102,
+  "boundaries": 448,
+  "pin": "1242c1e2d9763ba5b85d33f13aecb89bae19ae3d",
+  "raw": "/tmp/g3-profile-baseline-native.json",
+  "command": "node reference/shared-engine-cases.cjs --batch all --output /tmp/g3-profile-baseline-native.json"
+}

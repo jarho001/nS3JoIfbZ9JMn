@@ -1,0 +1,48 @@
+{
+  "python": "3.13.18",
+  "jax": "0.12.0.1",
+  "jaxlib": "0.12.0.1",
+  "numpy": "2.5.4",
+  "platform": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.36",
+  "backend": "cpu",
+  "devices": [
+    "cpu:0"
+  ],
+  "affinity": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "state_bytes": 83427,
+  "trace_bytes": 9737,
+  "lscpu": "Architecture:                         x86_64\nCPU op-mode(s):                       32-bit, 64-bit\nAddress sizes:                        48 bits physical, 48 bits virtual\nByte Order:                           Little Endian\nCPU(s):                               16\nOn-line CPU(s) list:                  0-15\nVendor ID:                            AuthenticAMD\nModel name:                           AMD Ryzen 7 7800X3D 8-Core Processor\nCPU family:                           25\nModel:                                97\nThread(s) per core:                   2\nCore(s) per socket:                   8\nSocket(s):                            1\nStepping:                             2\nBogoMIPS:                             8399.74\nFlags:                                fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm rep_good nopl cpuid extd_apicid tsc_known_freq pni pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw topoext ibrs ibpb stibp vmmcall fsgsbase bmi1 avx2 smep bmi2 erms avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves avx512_bf16 clzero xsaveerptr arat avx512vbmi umip avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq rdpid fsrm\nHypervisor vendor:                    Microsoft\nVirtualization type:                  full\nL1d cache:                            256 KiB (8 instances)\nL1i cache:                            256 KiB (8 instances)\nL2 cache:                             8 MiB (8 instances)\nL3 cache:                             96 MiB (1 instance)\nNUMA node(s):                         1\nNUMA node0 CPU(s):                    0-15\nVulnerability Gather data sampling:   Not affected\nVulnerability Itlb multihit:          Not affected\nVulnerability L1tf:                   Not affected\nVulnerability Mds:                    Not affected\nVulnerability Meltdown:               Not affected\nVulnerability Mmio stale data:        Not affected\nVulnerability Reg file data sampling: Not affected\nVulnerability Retbleed:               Not affected\nVulnerability Spec rstack overflow:   Vulnerable: Safe RET, no microcode\nVulnerability Spec store bypass:      Vulnerable\nVulnerability Spectre v1:             Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:             Mitigation; Retpolines; IBPB conditional; IBRS_FW; STIBP conditional; RSB filling; PBRSB-eIBRS Not affected; BHI Not affected\nVulnerability Srbds:                  Not affected\nVulnerability Tsx async abort:        Not affected\n",
+  "memory": "MemTotal:       19964088 kB\nMemFree:        16928876 kB\nMemAvailable:   18153504 kB\nBuffers:            1424 kB\nCached:          1421960 kB\nSwapCached:            0 kB\nActive:           404396 kB\nInactive:        2168188 kB\nActive(anon):       2692 kB\nInactive(anon):  1173648 kB\nActive(file):     401704 kB\nInactive(file):   994540 kB\nUnevictable:           0 kB\nMlocked:               0 kB\nSwapTotal:       5242880 kB\nSwapFree:        5242880 kB\nDirty:               504 kB\nWriteback:           220 kB\nAnonPages:       1149500 kB\nMapped:           987336 kB\nShmem:             27096 kB\nKReclaimable:      81632 kB\nSlab:             180356 kB\nSReclaimable:      81632 kB\nSUnreclaim:        98724 kB\nKernelStack:        9676 kB\nPageTables:        16012 kB\nSecPageTables:         0 kB\nNFS_Unstable:          0 kB\nBounce:                0 kB\nWritebackTmp:          0 kB\nCommitLimit:    15224924 kB\nCommitted_AS:    4633536 kB\nVmallocTotal:   34359738367 kB\nVmallocUsed:       39316 kB\nVmallocChunk:          0 kB\nPercpu:             8896 kB\nHardwareCorrupted:     0 kB\nAnonHugePages:         0 kB\nShmemHugePages:        0 kB\nShmemPmdMapped:        0 kB\nFileHugePages:         0 kB\nFilePmdMapped:         0 kB\nUnaccepted:            0 kB\nHugePages_Total:       0\nHugePages_Free:        0\nHugePages_Rsvd:        0\nHugePages_Surp:        0\nHugepagesize:       2048 kB\nHugetlb:               0 kB\nDirectMap4k:      130048 kB\nDirectMap2M:     6684672 kB\nDirectMap1G:    22020096 kB\n",
+  "gpu": "Fri Nov  6 09:03:03 2026       \n+-----------------------------------------------------------------------------------------+\n| NVIDIA-SMI 610.57.01              KMD Version: 610.88        CUDA UMD Version: 13.3     |\n+-----------------------------------------+------------------------+----------------------+\n| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |\n| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |\n|                                         |                        |               MIG M. |\n|=========================================+========================+======================|\n|   0  NVIDIA GeForce RTX 3060 Ti     On  |   00000000:01:00.0  On |                  N/A |\n|  0%   47C    P8             17W /  200W |     891MiB /   8192MiB |     28%      Default |\n|                                         |                        |                  N/A |\n+-----------------------------------------+------------------------+----------------------+\n\n+-----------------------------------------------------------------------------------------+\n| Processes:                                                                              |\n|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |\n|        ID   ID                                                               Usage      |\n|=========================================================================================|\n|  No running processes found                                                             |\n+-----------------------------------------------------------------------------------------+\n",
+  "accelerator_packages": {
+    "jax": "0.12.0.1",
+    "nvidia-cublas": "13.8.2.12",
+    "jax-cuda13-plugin": "0.12.0.1",
+    "nvidia-cusolver": "12.3.5.3",
+    "nvidia-cusparse": "12.8.6.72",
+    "nvidia-nvvm": "13.4.92",
+    "nvidia-cuda-crt": "13.4.92",
+    "jaxlib": "0.12.0.1",
+    "jax-cuda13-pjrt": "0.12.0.1",
+    "nvidia-cuda-nvcc": "13.4.92",
+    "nvidia-nvjitlink": "13.4.92",
+    "nvidia-nccl-cu13": "2.32.3",
+    "nvidia-cuda-nvrtc": "13.4.92",
+    "nvidia-cuda-runtime": "13.4.92",
+    "nvidia-cuda-cupti": "13.4.92",
+    "nvidia-nvshmem-cu13": "3.8.0",
+    "nvidia-cuda-cccl": "13.3.4.3.1",
+    "nvidia-cudnn-cu13": "9.27.0.42",
+    "nvidia-cufft": "12.4.0.43"
+  },
+  "network_runtime": "No cloud environment_status tool or /etc/codex/network-policy.json available on this attached executor. Inherited git access worked; no network/infrastructure changes."
+}

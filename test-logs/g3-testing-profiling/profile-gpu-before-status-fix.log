@@ -1,0 +1,85 @@
+{"cohort": "ordinary", "batch": 1, "chunk": 1, "boundaries_per_second": 146.29844928624976, "compiler_memory": {"argument_size_in_bytes": 166950, "output_size_in_bytes": 177207, "temp_size_in_bytes": 125944, "alias_size_in_bytes": 0}}
+{"cohort": "ordinary", "batch": 1, "chunk": 8, "boundaries_per_second": 194.5531447371533, "compiler_memory": {"argument_size_in_bytes": 166950, "output_size_in_bytes": 829383, "temp_size_in_bytes": 175432, "alias_size_in_bytes": 0}}
+{"cohort": "ordinary", "batch": 1, "chunk": 32, "boundaries_per_second": 197.53629461734465, "compiler_memory": {"argument_size_in_bytes": 166950, "output_size_in_bytes": 3065415, "temp_size_in_bytes": 175432, "alias_size_in_bytes": 0}}
+{"cohort": "ordinary", "batch": 1, "chunk": 128, "boundaries_per_second": 210.27696828718842, "compiler_memory": {"argument_size_in_bytes": 166950, "output_size_in_bytes": 12009543, "temp_size_in_bytes": 176712, "alias_size_in_bytes": 0}}
+{"cohort": "ordinary", "batch": 8, "chunk": 1, "boundaries_per_second": 846.9066916616287, "compiler_memory": {"argument_size_in_bytes": 1335376, "output_size_in_bytes": 1413400, "temp_size_in_bytes": 1225816, "alias_size_in_bytes": 0}}
+{"cohort": "ordinary", "batch": 8, "chunk": 8, "boundaries_per_second": 1017.005952411726, "compiler_memory": {"argument_size_in_bytes": 1335376, "output_size_in_bytes": 6630808, "temp_size_in_bytes": 1433928, "alias_size_in_bytes": 0}}
+{"cohort": "ordinary", "batch": 8, "chunk": 32, "boundaries_per_second": 1019.6175715514951, "compiler_memory": {"argument_size_in_bytes": 1335376, "output_size_in_bytes": 24519064, "temp_size_in_bytes": 1468744, "alias_size_in_bytes": 0}}
+{"cohort": "ordinary", "batch": 8, "chunk": 128, "boundaries_per_second": 1060.4331610770773, "compiler_memory": {"argument_size_in_bytes": 1335376, "output_size_in_bytes": 96072088, "temp_size_in_bytes": 1422408, "alias_size_in_bytes": 0}}
+{"cohort": "ordinary", "batch": 32, "chunk": 1, "boundaries_per_second": 3121.2823853226464, "compiler_memory": {"argument_size_in_bytes": 5341408, "output_size_in_bytes": 5651776, "temp_size_in_bytes": 5273688, "alias_size_in_bytes": 0}}
+{"cohort": "ordinary", "batch": 32, "chunk": 8, "boundaries_per_second": 3715.855020907976, "compiler_memory": {"argument_size_in_bytes": 5341408, "output_size_in_bytes": 26521408, "temp_size_in_bytes": 5921864, "alias_size_in_bytes": 0}}
+{"cohort": "ordinary", "batch": 32, "chunk": 32, "boundaries_per_second": 3858.430608876046, "compiler_memory": {"argument_size_in_bytes": 5341408, "output_size_in_bytes": 98074432, "temp_size_in_bytes": 5745480, "alias_size_in_bytes": 0}}
+{"cohort": "ordinary", "batch": 32, "chunk": 128, "boundaries_per_second": 3899.305702267057, "compiler_memory": {"argument_size_in_bytes": 5341408, "output_size_in_bytes": 384286528, "temp_size_in_bytes": 5745480, "alias_size_in_bytes": 0}}
+{"cohort": "ordinary", "batch": 128, "chunk": 1, "boundaries_per_second": 10246.440037594117, "compiler_memory": {"argument_size_in_bytes": 21365536, "output_size_in_bytes": 22605280, "temp_size_in_bytes": 19176792, "alias_size_in_bytes": 0}}
+{"cohort": "ordinary", "batch": 128, "chunk": 8, "boundaries_per_second": 11630.648053850899, "compiler_memory": {"argument_size_in_bytes": 21365536, "output_size_in_bytes": 106083808, "temp_size_in_bytes": 22057544, "alias_size_in_bytes": 0}}
+{"cohort": "ordinary", "batch": 128, "chunk": 32, "boundaries_per_second": 11915.827814325055, "compiler_memory": {"argument_size_in_bytes": 21365536, "output_size_in_bytes": 392295904, "temp_size_in_bytes": 22490696, "alias_size_in_bytes": 0}}
+{"cohort": "ordinary", "batch": 512, "chunk": 1, "boundaries_per_second": 19725.611684998148, "compiler_memory": {"argument_size_in_bytes": 85462048, "output_size_in_bytes": 90419296, "temp_size_in_bytes": 89842776, "alias_size_in_bytes": 0}}
+{"cohort": "ordinary", "batch": 512, "chunk": 8, "boundaries_per_second": 20502.500109607514, "compiler_memory": {"argument_size_in_bytes": 85462048, "output_size_in_bytes": 424333408, "temp_size_in_bytes": 100958536, "alias_size_in_bytes": 0}}
+{"cohort": "ordinary", "batch": 2048, "chunk": 1, "boundaries_per_second": 25840.18897154359, "compiler_memory": {"argument_size_in_bytes": 341848096, "output_size_in_bytes": 361675360, "temp_size_in_bytes": 317954904, "alias_size_in_bytes": 0}}
+{"cohort": "mixed", "batch": 1, "chunk": 1, "boundaries_per_second": 154.6561216624878, "compiler_memory": {"argument_size_in_bytes": 167382, "output_size_in_bytes": 177207, "temp_size_in_bytes": 125944, "alias_size_in_bytes": 0}}
+{"cohort": "mixed", "batch": 1, "chunk": 8, "boundaries_per_second": 209.8583261539299, "compiler_memory": {"argument_size_in_bytes": 167382, "output_size_in_bytes": 829383, "temp_size_in_bytes": 175432, "alias_size_in_bytes": 0}}
+{"cohort": "mixed", "batch": 1, "chunk": 32, "boundaries_per_second": 214.6749490753812, "compiler_memory": {"argument_size_in_bytes": 167382, "output_size_in_bytes": 3065415, "temp_size_in_bytes": 175432, "alias_size_in_bytes": 0}}
+{"cohort": "mixed", "batch": 1, "chunk": 128, "boundaries_per_second": 231.60690107971655, "compiler_memory": {"argument_size_in_bytes": 167382, "output_size_in_bytes": 12009543, "temp_size_in_bytes": 176712, "alias_size_in_bytes": 0}}
+{"cohort": "mixed", "batch": 8, "chunk": 1, "boundaries_per_second": 784.3505464256369, "compiler_memory": {"argument_size_in_bytes": 1338832, "output_size_in_bytes": 1413400, "temp_size_in_bytes": 1225816, "alias_size_in_bytes": 0}}
+{"cohort": "mixed", "batch": 8, "chunk": 8, "boundaries_per_second": 948.4386467239049, "compiler_memory": {"argument_size_in_bytes": 1338832, "output_size_in_bytes": 6630808, "temp_size_in_bytes": 1433928, "alias_size_in_bytes": 0}}
+{"cohort": "mixed", "batch": 8, "chunk": 32, "boundaries_per_second": 955.9220550316641, "compiler_memory": {"argument_size_in_bytes": 1338832, "output_size_in_bytes": 24519064, "temp_size_in_bytes": 1468744, "alias_size_in_bytes": 0}}
+{"cohort": "mixed", "batch": 8, "chunk": 128, "boundaries_per_second": 966.6555878996566, "compiler_memory": {"argument_size_in_bytes": 1338832, "output_size_in_bytes": 96072088, "temp_size_in_bytes": 1422408, "alias_size_in_bytes": 0}}
+Traceback (most recent call last):
+  File "<frozen runpy>", line 203, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/workspace/benchmarks/shared_engine.py", line 289, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "/workspace/benchmarks/shared_engine.py", line 188, in main
+    single,_=initialize_case(cases[0]);bytes_lane=nbytes(single)+nbytes(e.empty_trace())+4
+             ~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/workspace/test/shared_engine_support.py", line 37, in initialize_case
+    init=e.make_state(teams,case['setup'].get('seedWords',[case['setup']['seed'],2,3,4]));s=init.state
+  File "/workspace/simulator/shared_engine.py", line 674, in make_state
+    return initialize(i32(species),i32(level),i32(moves),i32(item),i32(evs),jnp.asarray(seed,jnp.uint16),i32(generation))
+  File "/opt/jax-env/lib/python3.13/site-packages/jax/_src/traceback_util.py", line 194, in reraise_with_filtered_traceback
+    return fun(*args, **kwargs)  # pyrefly: ignore[not-callable]
+  File "/opt/jax-env/lib/python3.13/site-packages/jax/_src/pjit.py", line 272, in cache_miss
+    executable, pgle_profiler, const_args) = _run_python_pjit(
+                                             ~~~~~~~~~~~~~~~~^
+        p, args_flat, fun, args, kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/jax-env/lib/python3.13/site-packages/jax/_src/pjit.py", line 149, in _run_python_pjit
+    out_flat, compiled, profiler, const_args = _pjit_call_impl_python(
+                                               ~~~~~~~~~~~~~~~~~~~~~~^
+        *args_flat, **params)
+        ^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/jax-env/lib/python3.13/site-packages/jax/_src/pjit.py", line 1157, in _pjit_call_impl_python
+    compiled = computation.compile()
+  File "/opt/jax-env/lib/python3.13/site-packages/jax/_src/interpreters/pxla.py", line 1259, in compile
+    executable = UnloadedMeshExecutable.from_hlo(
+        self._name, self._hlo, **self.compile_args,
+        compiler_options_kvs=compiler_options_kvs,
+        device_list=compilation_device_list)
+  File "/opt/jax-env/lib/python3.13/site-packages/jax/_src/interpreters/pxla.py", line 1756, in from_hlo
+    xla_executable = _cached_compilation(
+        hlo, name, tuple_args, allow_prop_to_inputs, allow_prop_to_outputs,
+        tuple(host_callbacks), backend, device_list, compiler_options_kvs,
+        pgle_profiler)
+  File "/opt/jax-env/lib/python3.13/site-packages/jax/_src/interpreters/pxla.py", line 1536, in _cached_compilation
+    xla_executable = compiler.compile_or_get_cached(
+        backend, computation, dev, compile_options, host_callbacks,
+        da, pgle_profiler)
+  File "/opt/jax-env/lib/python3.13/site-packages/jax/_src/compiler.py", line 471, in compile_or_get_cached
+    return backend_compile_and_load(
+        backend, computation, executable_devices, compile_options,
+        host_callbacks)
+  File "/opt/jax-env/lib/python3.13/site-packages/jax/_src/profiler.py", line 588, in wrapper
+    return func(*args, **kwargs)
+  File "/opt/jax-env/lib/python3.13/site-packages/jax/_src/compiler.py", line 402, in backend_compile_and_load
+    return backend.compile_and_load(
+           ~~~~~~~~~~~~~~~~~~~~~~~~^
+        module,
+        ^^^^^^^
+        executable_devices=executable_devices,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        compile_options=options,
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+KeyboardInterrupt

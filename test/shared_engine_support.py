@@ -11,7 +11,18 @@ from simulator.shared_engine_io import project_events,project_request,draw_rows
 ROOT=Path(__file__).resolve().parents[1]
 
 
+def assert_placement(tree):
+    requested=os.environ.get('JAX_PLATFORMS','').split(',')[0]
+    expected={'cuda':'gpu','cpu':'cpu'}.get(requested)
+    if expected is None:return
+    assert jax.default_backend()==expected,(requested,jax.default_backend())
+    for leaf in jax.tree.leaves(tree):
+        assert isinstance(leaf,jax.Array),type(leaf)
+        assert all(d.platform==expected for d in leaf.devices()),leaf.devices()
+
+
 def native_cases():
+    assert_placement(())
     path=os.environ.get('G3_NATIVE_CASES')
     if path:return json.loads(Path(path).read_text())['cases']
     completed=subprocess.run(['node','reference/shared-engine-cases.cjs','--batch','all'],cwd=ROOT,capture_output=True,text=True,check=True,timeout=120)
@@ -29,9 +40,13 @@ def initialize_case(case):
         side=int(setup['side'][1])-1;mon=setup.get('mon',0)
         if 'status' in setup:
             status={'brn':e.BRN,'par':e.PAR,'tox':e.TOX}[setup['status']]
-            s,trace=e._status((s,e.empty_trace()),side,side,e.i32(status))
-            count=int(trace.ecount)
-            s=s._replace(history=s.history.at[s.hcount:s.hcount+count].set(trace.events[:count]),hcount=s.hcount+count)
+            # Native Pokemon.setStatus silently rejects an immune synthetic
+            # installation; it is not an attempted status move disclosure.
+            immune=status==e.TOX and int(s.species[side,mon]) in (e.SNORLAX,e.GENGAR)
+            if not immune:
+                s,trace=e._status((s,e.empty_trace()),side,side,e.i32(status))
+                count=int(trace.ecount)
+                s=s._replace(history=s.history.at[s.hcount:s.hcount+count].set(trace.events[:count]),hcount=s.hcount+count)
         if 'hp' in setup:s=s._replace(hp=s.hp.at[side,mon].set(setup['hp']))
         if 'pp' in setup:s=s._replace(pp=s.pp.at[side,mon].set(np.where(np.asarray(s.moves[side,mon])>0,setup['pp'],0)))
         if 'ppByMove' in setup:
@@ -40,6 +55,7 @@ def initialize_case(case):
                 if key in setup['ppByMove']:s=s._replace(pp=s.pp.at[side,mon,slot].set(setup['ppByMove'][key]))
         if 'toxicStage' in setup:s=s._replace(toxic=s.toxic.at[side,mon].set(setup['toxicStage']))
         if 'stall' in setup:s=s._replace(stall=s.stall.at[side,mon].set(setup['stall']),stall_duration=s.stall_duration.at[side,mon].set(2))
+    assert_placement((s,init.trace))
     return s,init.trace
 
 
@@ -57,6 +73,7 @@ def choices_array(s,choices):
 
 
 def assert_state(test,s,native,label):
+    assert_placement(s)
     s=jax.device_get(s)
     test.assertEqual(s.rng.tolist(),native['rng'],label+' RNG')
     test.assertEqual(int(s.turn),native['turn'],label+' turn')
@@ -107,6 +124,7 @@ def assert_state(test,s,native,label):
 
 
 def assert_step(test,before,result,expected,label):
+    assert_placement((before,result))
     test.assertIn(int(result.code),(e.OK,e.PENDING),label+' code')
     native_draws=[{'args':[d['bound'],d['to']] if 'to' in d else [d['bound']],
                    'value':d['value'],'before':d['before'],'after':d['after'],'context':d['semanticContext']} for d in expected['draws']]

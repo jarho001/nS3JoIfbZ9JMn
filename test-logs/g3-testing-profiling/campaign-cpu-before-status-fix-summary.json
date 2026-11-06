@@ -1,0 +1,25 @@
+{
+  "starts": 1000,
+  "completed": 1000,
+  "boundaries": 30342,
+  "decisions": 57257,
+  "ordinary": 900,
+  "synthetic": 100,
+  "truncated": 0,
+  "capacity": 0,
+  "failing": 0,
+  "schemaVersion": 1,
+  "segments": [
+    "campaign-cpu-residual-repaired/summary.json",
+    "campaign-cpu-tail/summary.json"
+  ],
+  "source_note": "Engine SHA256 identical in both segments. Native classifier learned queue insertion at start 479; no prior start encountered that unclassified path.",
+  "replayed_indices": [
+    0,
+    1,
+    19,
+    99,
+    499,
+    999
+  ]
+}

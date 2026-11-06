@@ -1,0 +1,9 @@
+test_catalog_boundaries_in_heterogeneous_batches (test.test_shared_engine_lifecycle.SharedEngineLifecycleTest.test_catalog_boundaries_in_heterogeneous_batches) ... CPU heterogeneous catalog agreement: 163 native boundaries, 32 lanes
+ok
+test_complete_battles_in_heterogeneous_batches (test.test_shared_engine_lifecycle.SharedEngineLifecycleTest.test_complete_battles_in_heterogeneous_batches) ... CPU heterogeneous complete-trace scalar/JIT/vmap agreement: batch sizes 1, 8, 32
+ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 47.625s
+
+OK

@@ -1,0 +1,3374 @@
+{
+  "schemaVersion": 1,
+  "source": "source.json",
+  "config": "benchmarks/g3-campaign.json",
+  "platform": "cpu",
+  "start_index": 479,
+  "starts": 521,
+  "completed": 521,
+  "truncated": 0,
+  "capacity": 0,
+  "failing": 0,
+  "boundaries": 15117,
+  "decisions": 28498,
+  "ordinary": 468,
+  "synthetic": 53,
+  "effects": {
+    "": 15117,
+    "-activate": 1895,
+    "-damage": 8335,
+    "upkeep": 12842,
+    "move": 13604,
+    "faint": 1295,
+    "turn": 12842,
+    "switch": 1754,
+    "-fail": 5153,
+    "-status": 590,
+    "cant": 1709,
+    "-supereffective": 767,
+    "win": 521,
+    "-singleturn": 1713,
+    "-resisted": 1322,
+    "-heal": 4532,
+    "-immune": 5520,
+    "-miss": 780,
+    "-curestatus": 210,
+    "-enditem": 210,
+    "-crit": 433
+  },
+  "pairs": {
+    "+-activate": 1895,
+    "+-damage": 8335,
+    "+faint": 1295,
+    "+move": 13604,
+    "+upkeep": 12842,
+    "-activate+-damage": 1057,
+    "-activate+faint": 287,
+    "-activate+move": 1895,
+    "-activate+upkeep": 1786,
+    "-damage+faint": 1295,
+    "-damage+move": 8301,
+    "-damage+upkeep": 6834,
+    "faint+move": 1292,
+    "faint+upkeep": 582,
+    "move+upkeep": 12103,
+    "+switch": 1754,
+    "+turn": 12842,
+    "switch+turn": 1412,
+    "+-fail": 5153,
+    "+-status": 590,
+    "-fail+-status": 243,
+    "-fail+move": 5153,
+    "-fail+turn": 4861,
+    "-fail+upkeep": 4974,
+    "-status+move": 590,
+    "-status+turn": 557,
+    "-status+upkeep": 564,
+    "move+turn": 11524,
+    "turn+upkeep": 12068,
+    "+cant": 1709,
+    "-fail+cant": 830,
+    "cant+move": 1573,
+    "cant+turn": 1657,
+    "cant+upkeep": 1672,
+    "cant+switch": 38,
+    "switch+upkeep": 850,
+    "-damage+turn": 6247,
+    "-damage+cant": 502,
+    "+-supereffective": 767,
+    "+win": 521,
+    "-damage+-supereffective": 767,
+    "-damage+win": 521,
+    "-supereffective+faint": 186,
+    "-supereffective+move": 767,
+    "-supereffective+win": 82,
+    "faint+win": 521,
+    "move+win": 521,
+    "+-singleturn": 1713,
+    "-activate+-singleturn": 974,
+    "-activate+turn": 1603,
+    "-singleturn+move": 1713,
+    "-singleturn+turn": 1695,
+    "-singleturn+upkeep": 1705,
+    "+-resisted": 1322,
+    "-damage+-resisted": 1322,
+    "-resisted+faint": 179,
+    "-resisted+move": 1322,
+    "-resisted+win": 92,
+    "+-heal": 4532,
+    "-heal+switch": 345,
+    "-heal+turn": 4338,
+    "-heal+upkeep": 4493,
+    "+-immune": 5520,
+    "-heal+-immune": 1701,
+    "-heal+move": 4311,
+    "-immune+move": 5520,
+    "-immune+turn": 5350,
+    "-immune+upkeep": 5436,
+    "-activate+-heal": 611,
+    "-damage+-heal": 3914,
+    "-heal+faint": 187,
+    "-activate+-resisted": 36,
+    "-heal+-resisted": 461,
+    "-resisted+turn": 673,
+    "-resisted+upkeep": 702,
+    "+-miss": 780,
+    "-damage+-miss": 422,
+    "-heal+-miss": 321,
+    "-miss+-resisted": 18,
+    "-miss+move": 780,
+    "-miss+turn": 746,
+    "-miss+upkeep": 757,
+    "-fail+-singleturn": 314,
+    "+-curestatus": 210,
+    "+-enditem": 210,
+    "-curestatus+-enditem": 210,
+    "-curestatus+-immune": 43,
+    "-curestatus+-status": 210,
+    "-curestatus+move": 210,
+    "-curestatus+turn": 196,
+    "-curestatus+upkeep": 202,
+    "-enditem+-immune": 43,
+    "-enditem+-status": 210,
+    "-enditem+move": 210,
+    "-enditem+turn": 196,
+    "-enditem+upkeep": 202,
+    "-immune+-status": 138,
+    "-fail+-immune": 1491,
+    "-immune+-miss": 274,
+    "-immune+-singleturn": 326,
+    "-singleturn+cant": 73,
+    "-fail+-miss": 190,
+    "-miss+cant": 60,
+    "-activate+-immune": 342,
+    "-damage+-immune": 2915,
+    "+-crit": 433,
+    "-activate+-crit": 52,
+    "-activate+cant": 54,
+    "-crit+-damage": 433,
+    "-crit+cant": 28,
+    "-crit+faint": 104,
+    "-crit+move": 433,
+    "-crit+upkeep": 329,
+    "cant+faint": 20,
+    "-immune+faint": 126,
+    "-damage+-status": 366,
+    "-damage+-fail": 2287,
+    "-fail+faint": 202,
+    "-fail+win": 72,
+    "-activate+-miss": 22,
+    "-activate+-fail": 267,
+    "-crit+-immune": 130,
+    "-crit+turn": 277,
+    "-immune+cant": 185,
+    "-immune+win": 39,
+    "-miss+-status": 30,
+    "-heal+-supereffective": 322,
+    "-immune+-supereffective": 268,
+    "-supereffective+turn": 462,
+    "-supereffective+upkeep": 501,
+    "-crit+-heal": 189,
+    "-crit+-supereffective": 49,
+    "-damage+switch": 295,
+    "-supereffective+switch": 32,
+    "move+switch": 339,
+    "faint+switch": 47,
+    "-resisted+-supereffective": 84,
+    "-crit+win": 43,
+    "-resisted+switch": 112,
+    "-activate+-curestatus": 105,
+    "-activate+-enditem": 105,
+    "-activate+-status": 259,
+    "-curestatus+-damage": 102,
+    "-curestatus+-fail": 77,
+    "-damage+-enditem": 102,
+    "-enditem+-fail": 77,
+    "-supereffective+cant": 49,
+    "-immune+switch": 38,
+    "-immune+-resisted": 201,
+    "-miss+switch": 5,
+    "-activate+win": 104,
+    "-crit+-resisted": 108,
+    "-heal+cant": 384,
+    "-crit+-fail": 63,
+    "-status+cant": 32,
+    "-damage+-singleturn": 349,
+    "-activate+-supereffective": 5,
+    "-curestatus+-supereffective": 6,
+    "-enditem+-supereffective": 6,
+    "-fail+-supereffective": 50,
+    "-status+-supereffective": 12,
+    "-heal+win": 37,
+    "-fail+-heal": 1418,
+    "-singleturn+faint": 18,
+    "-curestatus+-miss": 6,
+    "-enditem+-miss": 6,
+    "-heal+-singleturn": 384,
+    "-singleturn+win": 8,
+    "-status+faint": 14,
+    "-status+win": 7,
+    "-activate+switch": 12,
+    "-heal+-status": 110,
+    "-miss+faint": 28,
+    "-miss+win": 17,
+    "-curestatus+-heal": 31,
+    "-enditem+-heal": 31,
+    "-curestatus+cant": 3,
+    "-enditem+cant": 3,
+    "cant+win": 5,
+    "-crit+-status": 9,
+    "-curestatus+faint": 8,
+    "-curestatus+switch": 11,
+    "-enditem+faint": 8,
+    "-enditem+switch": 11,
+    "-status+switch": 21,
+    "-miss+-supereffective": 12,
+    "-fail+switch": 29,
+    "-crit+switch": 20,
+    "-fail+-resisted": 127,
+    "-resisted+cant": 56,
+    "-resisted+-status": 24,
+    "-curestatus+-resisted": 9,
+    "-enditem+-resisted": 9,
+    "-crit+-miss": 8,
+    "-curestatus+win": 2,
+    "-enditem+win": 2,
+    "-crit+-curestatus": 3,
+    "-crit+-enditem": 3
+  },
+  "per_start": [
+    {
+      "id": "campaign-239-seat1",
+      "status": "completed",
+      "boundaries": 20,
+      "native_boundaries": 20
+    },
+    {
+      "id": "campaign-240-seat0",
+      "status": "completed",
+      "boundaries": 2,
+      "native_boundaries": 2
+    },
+    {
+      "id": "campaign-240-seat1",
+      "status": "completed",
+      "boundaries": 1,
+      "native_boundaries": 1
+    },
+    {
+      "id": "campaign-241-seat0",
+      "status": "completed",
+      "boundaries": 25,
+      "native_boundaries": 25
+    },
+    {
+      "id": "campaign-241-seat1",
+      "status": "completed",
+      "boundaries": 26,
+      "native_boundaries": 26
+    },
+    {
+      "id": "campaign-242-seat0",
+      "status": "completed",
+      "boundaries": 151,
+      "native_boundaries": 151
+    },
+    {
+      "id": "campaign-242-seat1",
+      "status": "completed",
+      "boundaries": 154,
+      "native_boundaries": 154
+    },
+    {
+      "id": "campaign-243-seat0",
+      "status": "completed",
+      "boundaries": 2,
+      "native_boundaries": 2
+    },
+    {
+      "id": "campaign-243-seat1",
+      "status": "completed",
+      "boundaries": 1,
+      "native_boundaries": 1
+    },
+    {
+      "id": "campaign-244-seat0",
+      "status": "completed",
+      "boundaries": 24,
+      "native_boundaries": 24
+    },
+    {
+      "id": "campaign-244-seat1",
+      "status": "completed",
+      "boundaries": 22,
+      "native_boundaries": 22
+    },
+    {
+      "id": "campaign-245-seat0",
+      "status": "completed",
+      "boundaries": 25,
+      "native_boundaries": 25
+    },
+    {
+      "id": "campaign-245-seat1",
+      "status": "completed",
+      "boundaries": 27,
+      "native_boundaries": 27
+    },
+    {
+      "id": "campaign-246-seat0",
+      "status": "completed",
+      "boundaries": 5,
+      "native_boundaries": 5
+    },
+    {
+      "id": "campaign-246-seat1",
+      "status": "completed",
+      "boundaries": 5,
+      "native_boundaries": 5
+    },
+    {
+      "id": "campaign-247-seat0",
+      "status": "completed",
+      "boundaries": 9,
+      "native_boundaries": 9
+    },
+    {
+      "id": "campaign-247-seat1",
+      "status": "completed",
+      "boundaries": 9,
+      "native_boundaries": 9
+    },
+    {
+      "id": "campaign-248-seat0",
+      "status": "completed",
+      "boundaries": 28,
+      "native_boundaries": 28
+    },
+    {
+      "id": "campaign-248-seat1",
+      "status": "completed",
+      "boundaries": 35,
+      "native_boundaries": 35
+    },
+    {
+      "id": "campaign-249-seat0",
+      "status": "completed",
+      "boundaries": 1,
+      "native_boundaries": 1
+    },
+    {
+      "id": "campaign-249-seat1",
+      "status": "completed",
+      "boundaries": 1,
+      "native_boundaries": 1
+    },
+    {
+      "id": "campaign-250-seat0",
+      "status": "completed",
+      "boundaries": 14,
+      "native_boundaries": 14
+    },
+    {
+      "id": "campaign-250-seat1",
+      "status": "completed",
+      "boundaries": 10,
+      "native_boundaries": 10
+    },
+    {
+      "id": "campaign-251-seat0",
+      "status": "completed",
+      "boundaries": 88,
+      "native_boundaries": 88
+    },
+    {
+      "id": "campaign-251-seat1",
+      "status": "completed",
+      "boundaries": 108,
+      "native_boundaries": 108
+    },
+    {
+      "id": "campaign-252-seat0",
+      "status": "completed",
+      "boundaries": 2,
+      "native_boundaries": 2
+    },
+    {
+      "id": "campaign-252-seat1",
+      "status": "completed",
+      "boundaries": 3,
+      "native_boundaries": 3
+    },
+    {
+      "id": "campaign-253-seat0",
+      "status": "completed",
+      "boundaries": 19,
+      "native_boundaries": 19
+    },
+    {
+      "id": "campaign-253-seat1",
+      "status": "completed",
+      "boundaries": 19,
+      "native_boundaries": 19
+    },
+    {
+      "id": "campaign-254-seat0",
+      "status": "completed",
+      "boundaries": 76,
+      "native_boundaries": 76
+    },
+    {
+      "id": "campaign-254-seat1",
+      "status": "completed",
+      "boundaries": 75,
+      "native_boundaries": 75
+    },
+    {
+      "id": "campaign-255-seat0",
+      "status": "completed",
+      "boundaries": 2,
+      "native_boundaries": 2
+    },
+    {
+      "id": "campaign-255-seat1",
+      "status": "completed",
+      "boundaries": 4,
+      "native_boundaries": 4
+    },
+    {
+      "id": "campaign-256-seat0",
+      "status": "completed",
+      "boundaries": 13,
+      "native_boundaries": 13
+    },
+    {
+      "id": "campaign-256-seat1",
+      "status": "completed",
+      "boundaries": 16,
+      "native_boundaries": 16
+    },
+    {
+      "id": "campaign-257-seat0",
+      "status": "completed",
+      "boundaries": 13,
+      "native_boundaries": 13
+    },
+    {
+      "id": "campaign-257-seat1",
+      "status": "completed",
+      "boundaries": 13,
+      "native_boundaries": 13
+    },
+    {
+      "id": "campaign-258-seat0",
+      "status": "completed",
+      "boundaries": 1,
+      "native_boundaries": 1
+    },
+    {
+      "id": "campaign-258-seat1",
+      "status": "completed",
+      "boundaries": 1,
+      "native_boundaries": 1
+    },
+    {
+      "id": "campaign-259-seat0",
+      "status": "completed",
+      "boundaries": 38,
+      "native_boundaries": 38
+    },
+    {
+      "id": "campaign-259-seat1",
+      "status": "completed",
+      "boundaries": 8,
+      "native_boundaries": 8
+    },
+    {
+      "id": "campaign-260-seat0",
+      "status": "completed",
+      "boundaries": 32,
+      "native_boundaries": 32
+    },
+    {
+      "id": "campaign-260-seat1",
+      "status": "completed",
+      "boundaries": 34,
+      "native_boundaries": 34
+    },
+    {
+      "id": "campaign-261-seat0",
+      "status": "completed",
+      "boundaries": 5,
+      "native_boundaries": 5
+    },
+    {
+      "id": "campaign-261-seat1",
+      "status": "completed",
+      "boundaries": 10,
+      "native_boundaries": 10
+    },
+    {
+      "id": "campaign-262-seat0",
+      "status": "completed",
+      "boundaries": 72,
+      "native_boundaries": 72
+    },
+    {
+      "id": "campaign-262-seat1",
+      "status": "completed",
+      "boundaries": 74,
+      "native_boundaries": 74
+    },
+    {
+      "id": "campaign-263-seat0",
+      "status": "completed",
+      "boundaries": 21,
+      "native_boundaries": 21
+    },
+    {
+      "id": "campaign-263-seat1",
+      "status": "completed",
+      "boundaries": 21,
+      "native_boundaries": 21
+    },
+    {
+      "id": "campaign-264-seat0",
+      "status": "completed",
+      "boundaries": 20,
+      "native_boundaries": 20
+    },
+    {
+      "id": "campaign-264-seat1",
+      "status": "completed",
+      "boundaries": 18,
+      "native_boundaries": 18
+    },
+    {
+      "id": "campaign-265-seat0",
+      "status": "completed",
+      "boundaries": 6,
+      "native_boundaries": 6
+    },
+    {
+      "id": "campaign-265-seat1",
+      "status": "completed",
+      "boundaries": 5,
+      "native_boundaries": 5
+    },
+    {
+      "id": "campaign-266-seat0",
+      "status": "completed",
+      "boundaries": 30,
+      "native_boundaries": 30
+    },
+    {
+      "id": "campaign-266-seat1",
+      "status": "completed",
+      "boundaries": 31,
+      "native_boundaries": 31
+    },
+    {
+      "id": "campaign-267-seat0",
+      "status": "completed",
+      "boundaries": 10,
+      "native_boundaries": 10
+    },
+    {
+      "id": "campaign-267-seat1",
+      "status": "completed",
+      "boundaries": 7,
+      "native_boundaries": 7
+    },
+    {
+      "id": "campaign-268-seat0",
+      "status": "completed",
+      "boundaries": 12,
+      "native_boundaries": 12
+    },
+    {
+      "id": "campaign-268-seat1",
+      "status": "completed",
+      "boundaries": 11,
+      "native_boundaries": 11
+    },
+    {
+      "id": "campaign-269-seat0",
+      "status": "completed",
+      "boundaries": 20,
+      "native_boundaries": 20
+    },
+    {
+      "id": "campaign-269-seat1",
+      "status": "completed",
+      "boundaries": 11,
+      "native_boundaries": 11
+    },
+    {
+      "id": "campaign-270-seat0",
+      "status": "completed",
+      "boundaries": 1,
+      "native_boundaries": 1
+    },
+    {
+      "id": "campaign-270-seat1",
+      "status": "completed",
+      "boundaries": 1,
+      "native_boundaries": 1
+    },
+    {
+      "id": "campaign-271-seat0",
+      "status": "completed",
+      "boundaries": 91,
+      "native_boundaries": 91
+    },
+    {
+      "id": "campaign-271-seat1",
+      "status": "completed",
+      "boundaries": 91,
+      "native_boundaries": 91
+    },
+    {
+      "id": "campaign-272-seat0",
+      "status": "completed",
+      "boundaries": 104,
+      "native_boundaries": 104
+    },
+    {
+      "id": "campaign-272-seat1",
+      "status": "completed",
+      "boundaries": 52,
+      "native_boundaries": 52
+    },
+    {
+      "id": "campaign-273-seat0",
+      "status": "completed",
+      "boundaries": 16,
+      "native_boundaries": 16
+    },
+    {
+      "id": "campaign-273-seat1",
+      "status": "completed",
+      "boundaries": 78,
+      "native_boundaries": 78
+    },
+    {
+      "id": "campaign-274-seat0",
+      "status": "completed",
+      "boundaries": 7,
+      "native_boundaries": 7
+    },
+    {
+      "id": "campaign-274-seat1",
+      "status": "completed",
+      "boundaries": 6,
+      "native_boundaries": 6
+    },
+    {
+      "id": "campaign-275-seat0",
+      "status": "completed",
+      "boundaries": 21,
+      "native_boundaries": 21
+    },
+    {
+      "id": "campaign-275-seat1",
+      "status": "completed",
+      "boundaries": 21,
+      "native_boundaries": 21
+    },
+    {
+      "id": "campaign-276-seat0",
+      "status": "completed",
+      "boundaries": 1,
+      "native_boundaries": 1
+    },
+    {
+      "id": "campaign-276-seat1",
+      "status": "completed",
+      "boundaries": 1,
+      "native_boundaries": 1
+    },
+    {
+      "id": "campaign-277-seat0",
+      "status": "completed",
+      "boundaries": 46,
+      "native_boundaries": 46
+    },
+    {
+      "id": "campaign-277-seat1",
+      "status": "completed",
+      "boundaries": 50,
+      "native_boundaries": 50
+    },
+    {
+      "id": "campaign-278-seat0",
+      "status": "completed",
+      "boundaries": 44,
+      "native_boundaries": 44
+    },
+    {
+      "id": "campaign-278-seat1",
+      "status": "completed",
+      "boundaries": 35,
+      "native_boundaries": 35
+    },
+    {
+      "id": "campaign-279-seat0",
+      "status": "completed",
+      "boundaries": 1,
+      "native_boundaries": 1
+    },
+    {
+      "id": "campaign-279-seat1",
+      "status": "completed",
+      "boundaries": 2,
+      "native_boundaries": 2
+    },
+    {
+      "id": "campaign-280-seat0",
+      "status": "completed",
+      "boundaries": 4,
+      "native_boundaries": 4
+    },
+    {
+      "id": "campaign-280-seat1",
+      "status": "completed",
+      "boundaries": 4,
+      "native_boundaries": 4
+    },
+    {
+      "id": "campaign-281-seat0",
+      "status": "completed",
+      "boundaries": 93,
+      "native_boundaries": 93
+    },
+    {
+      "id": "campaign-281-seat1",
+      "status": "completed",
+      "boundaries": 90,
+      "native_boundaries": 90
+    },
+    {
+      "id": "campaign-282-seat0",
+      "status": "completed",
+      "boundaries": 34,
+      "native_boundaries": 34
+    },
+    {
+      "id": "campaign-282-seat1",
+      "status": "completed",
+      "boundaries": 17,
+      "native_boundaries": 17
+    },
+    {
+      "id": "campaign-283-seat0",
+      "status": "completed",
+      "boundaries": 6,
+      "native_boundaries": 6
+    },
+    {
+      "id": "campaign-283-seat1",
+      "status": "completed",
+      "boundaries": 6,
+      "native_boundaries": 6
+    },
+    {
+      "id": "campaign-284-seat0",
+      "status": "completed",
+      "boundaries": 105,
+      "native_boundaries": 105
+    },
+    {
+      "id": "campaign-284-seat1",
+      "status": "completed",
+      "boundaries": 127,
+      "native_boundaries": 127
+    },
+    {
+      "id": "campaign-285-seat0",
+      "status": "completed",
+      "boundaries": 1,
+      "native_boundaries": 1
+    },
+    {
+      "id": "campaign-285-seat1",
+      "status": "completed",
+      "boundaries": 1,
+      "native_boundaries": 1
+    },
+    {
+      "id": "campaign-286-seat0",
+      "status": "completed",
+      "boundaries": 62,
+      "native_boundaries": 62
+    },
+    {
+      "id": "campaign-286-seat1",
+      "status": "completed",
+      "boundaries": 118,
+      "native_boundaries": 118
+    },
+    {
+      "id": "campaign-287-seat0",
+      "status": "completed",
+      "boundaries": 41,
+      "native_boundaries": 41
+    },
+    {
+      "id": "campaign-287-seat1",
+      "status": "completed",
+      "boundaries": 44,
+      "native_boundaries": 44
+    },
+    {
+      "id": "campaign-288-seat0",
+      "status": "completed",
+      "boundaries": 8,
+      "native_boundaries": 8
+    },
+    {
+      "id": "campaign-288-seat1",
+      "status": "completed",
+      "boundaries": 11,
+      "native_boundaries": 11
+    },
+    {
+      "id": "campaign-289-seat0",
+      "status": "completed",
+      "boundaries": 3,
+      "native_boundaries": 3
+    },
+    {
+      "id": "campaign-289-seat1",
+      "status": "completed",
+      "boundaries": 6,
+      "native_boundaries": 6
+    },
+    {
+      "id": "campaign-290-seat0",
+      "status": "completed",
+      "boundaries": 68,
+      "native_boundaries": 68
+    },
+    {
+      "id": "campaign-290-seat1",
+      "status": "completed",
+      "boundaries": 65,
+      "native_boundaries": 65
+    },
+    {
+      "id": "campaign-291-seat0",
+      "status": "completed",
+      "boundaries": 2,
+      "native_boundaries": 2
+    },
+    {
+      "id": "campaign-291-seat1",
+      "status": "completed",
+      "boundaries": 4,
+      "native_boundaries": 4
+    },
+    {
+      "id": "campaign-292-seat0",
+      "status": "completed",
+      "boundaries": 19,
+      "native_boundaries": 19
+    },
+    {
+      "id": "campaign-292-seat1",
+      "status": "completed",
+      "boundaries": 20,
+      "native_boundaries": 20
+    },
+    {
+      "id": "campaign-293-seat0",
+      "status": "completed",
+      "boundaries": 73,
+      "native_boundaries": 73
+    },
+    {
+      "id": "campaign-293-seat1",
+      "status": "completed",
+      "boundaries": 55,
+      "native_boundaries": 55
+    },
+    {
+      "id": "campaign-294-seat0",
+      "status": "completed",
+      "boundaries": 3,
+      "native_boundaries": 3
+    },
+    {
+      "id": "campaign-294-seat1",
+      "status": "completed",
+      "boundaries": 6,
+      "native_boundaries": 6
+    },
+    {
+      "id": "campaign-295-seat0",
+      "status": "completed",
+      "boundaries": 6,
+      "native_boundaries": 6
+    },
+    {
+      "id": "campaign-295-seat1",
+      "status": "completed",
+      "boundaries": 9,
+      "native_boundaries": 9
+    },
+    {
+      "id": "campaign-296-seat0",
+      "status": "completed",
+      "boundaries": 21,
+      "native_boundaries": 21
+    },
+    {
+      "id": "campaign-296-seat1",
+      "status": "completed",
+      "boundaries": 33,
+      "native_boundaries": 33
+    },
+    {
+      "id": "campaign-297-seat0",
+      "status": "completed",
+      "boundaries": 20,
+      "native_boundaries": 20
+    },
+    {
+      "id": "campaign-297-seat1",
+      "status": "completed",
+      "boundaries": 16,
+      "native_boundaries": 16
+    },
+    {
+      "id": "campaign-298-seat0",
+      "status": "completed",
+      "boundaries": 68,
+      "native_boundaries": 68
+    },
+    {
+      "id": "campaign-298-seat1",
+      "status": "completed",
+      "boundaries": 68,
+      "native_boundaries": 68
+    },
+    {
+      "id": "campaign-299-seat0",
+      "status": "completed",
+      "boundaries": 134,
+      "native_boundaries": 134
+    },
+    {
+      "id": "campaign-299-seat1",
+      "status": "completed",
+      "boundaries": 54,
+      "native_boundaries": 54
+    },
+    {
+      "id": "campaign-300-seat0",
+      "status": "completed",
+      "boundaries": 3,
+      "native_boundaries": 3
+    },
+    {
+      "id": "campaign-300-seat1",
+      "status": "completed",
+      "boundaries": 2,
+      "native_boundaries": 2
+    },
+    {
+      "id": "campaign-301-seat0",
+      "status": "completed",
+      "boundaries": 60,
+      "native_boundaries": 60
+    },
+    {
+      "id": "campaign-301-seat1",
+      "status": "completed",
+      "boundaries": 60,
+      "native_boundaries": 60
+    },
+    {
+      "id": "campaign-302-seat0",
+      "status": "completed",
+      "boundaries": 26,
+      "native_boundaries": 26
+    },
+    {
+      "id": "campaign-302-seat1",
+      "status": "completed",
+      "boundaries": 28,
+      "native_boundaries": 28
+    },
+    {
+      "id": "campaign-303-seat0",
+      "status": "completed",
+      "boundaries": 17,
+      "native_boundaries": 17
+    },
+    {
+      "id": "campaign-303-seat1",
+      "status": "completed",
+      "boundaries": 14,
+      "native_boundaries": 14
+    },
+    {
+      "id": "campaign-304-seat0",
+      "status": "completed",
+      "boundaries": 14,
+      "native_boundaries": 14
+    },
+    {
+      "id": "campaign-304-seat1",
+      "status": "completed",
+      "boundaries": 13,
+      "native_boundaries": 13
+    },
+    {
+      "id": "campaign-305-seat0",
+      "status": "completed",
+      "boundaries": 19,
+      "native_boundaries": 19
+    },
+    {
+      "id": "campaign-305-seat1",
+      "status": "completed",
+      "boundaries": 19,
+      "native_boundaries": 19
+    },
+    {
+      "id": "campaign-306-seat0",
+      "status": "completed",
+      "boundaries": 5,
+      "native_boundaries": 5
+    },
+    {
+      "id": "campaign-306-seat1",
+      "status": "completed",
+      "boundaries": 4,
+      "native_boundaries": 4
+    },
+    {
+      "id": "campaign-307-seat0",
+      "status": "completed",
+      "boundaries": 10,
+      "native_boundaries": 10
+    },
+    {
+      "id": "campaign-307-seat1",
+      "status": "completed",
+      "boundaries": 11,
+      "native_boundaries": 11
+    },
+    {
+      "id": "campaign-308-seat0",
+      "status": "completed",
+      "boundaries": 18,
+      "native_boundaries": 18
+    },
+    {
+      "id": "campaign-308-seat1",
+      "status": "completed",
+      "boundaries": 18,
+      "native_boundaries": 18
+    },
+    {
+      "id": "campaign-309-seat0",
+      "status": "completed",
+      "boundaries": 1,
+      "native_boundaries": 1
+    },
+    {
+      "id": "campaign-309-seat1",
+      "status": "completed",
+      "boundaries": 1,
+      "native_boundaries": 1
+    },
+    {
+      "id": "campaign-310-seat0",
+      "status": "completed",
+      "boundaries": 12,
+      "native_boundaries": 12
+    },
+    {
+      "id": "campaign-310-seat1",
+      "status": "completed",
+      "boundaries": 13,
+      "native_boundaries": 13
+    },
+    {
+      "id": "campaign-311-seat0",
+      "status": "completed",
+      "boundaries": 24,
+      "native_boundaries": 24
+    },
+    {
+      "id": "campaign-311-seat1",
+      "status": "completed",
+      "boundaries": 25,
+      "native_boundaries": 25
+    },
+    {
+      "id": "campaign-312-seat0",
+      "status": "completed",
+      "boundaries": 54,
+      "native_boundaries": 54
+    },
+    {
+      "id": "campaign-312-seat1",
+      "status": "completed",
+      "boundaries": 54,
+      "native_boundaries": 54
+    },
+    {
+      "id": "campaign-313-seat0",
+      "status": "completed",
+      "boundaries": 9,
+      "native_boundaries": 9
+    },
+    {
+      "id": "campaign-313-seat1",
+      "status": "completed",
+      "boundaries": 9,
+      "native_boundaries": 9
+    },
+    {
+      "id": "campaign-314-seat0",
+      "status": "completed",
+      "boundaries": 36,
+      "native_boundaries": 36
+    },
+    {
+      "id": "campaign-314-seat1",
+      "status": "completed",
+      "boundaries": 37,
+      "native_boundaries": 37
+    },
+    {
+      "id": "campaign-315-seat0",
+      "status": "completed",
+      "boundaries": 2,
+      "native_boundaries": 2
+    },
+    {
+      "id": "campaign-315-seat1",
+      "status": "completed",
+      "boundaries": 2,
+      "native_boundaries": 2
+    },
+    {
+      "id": "campaign-316-seat0",
+      "status": "completed",
+      "boundaries": 9,
+      "native_boundaries": 9
+    },
+    {
+      "id": "campaign-316-seat1",
+      "status": "completed",
+      "boundaries": 9,
+      "native_boundaries": 9
+    },
+    {
+      "id": "campaign-317-seat0",
+      "status": "completed",
+      "boundaries": 138,
+      "native_boundaries": 138
+    },
+    {
+      "id": "campaign-317-seat1",
+      "status": "completed",
+      "boundaries": 140,
+      "native_boundaries": 140
+    },
+    {
+      "id": "campaign-318-seat0",
+      "status": "completed",
+      "boundaries": 11,
+      "native_boundaries": 11
+    },
+    {
+      "id": "campaign-318-seat1",
+      "status": "completed",
+      "boundaries": 8,
+      "native_boundaries": 8
+    },
+    {
+      "id": "campaign-319-seat0",
+      "status": "completed",
+      "boundaries": 5,
+      "native_boundaries": 5
+    },
+    {
+      "id": "campaign-319-seat1",
+      "status": "completed",
+      "boundaries": 10,
+      "native_boundaries": 10
+    },
+    {
+      "id": "campaign-320-seat0",
+      "status": "completed",
+      "boundaries": 25,
+      "native_boundaries": 25
+    },
+    {
+      "id": "campaign-320-seat1",
+      "status": "completed",
+      "boundaries": 25,
+      "native_boundaries": 25
+    },
+    {
+      "id": "campaign-321-seat0",
+      "status": "completed",
+      "boundaries": 17,
+      "native_boundaries": 17
+    },
+    {
+      "id": "campaign-321-seat1",
+      "status": "completed",
+      "boundaries": 28,
+      "native_boundaries": 28
+    },
+    {
+      "id": "campaign-322-seat0",
+      "status": "completed",
+      "boundaries": 50,
+      "native_boundaries": 50
+    },
+    {
+      "id": "campaign-322-seat1",
+      "status": "completed",
+      "boundaries": 45,
+      "native_boundaries": 45
+    },
+    {
+      "id": "campaign-323-seat0",
+      "status": "completed",
+      "boundaries": 15,
+      "native_boundaries": 15
+    },
+    {
+      "id": "campaign-323-seat1",
+      "status": "completed",
+      "boundaries": 15,
+      "native_boundaries": 15
+    },
+    {
+      "id": "campaign-324-seat0",
+      "status": "completed",
+      "boundaries": 46,
+      "native_boundaries": 46
+    },
+    {
+      "id": "campaign-324-seat1",
+      "status": "completed",
+      "boundaries": 28,
+      "native_boundaries": 28
+    },
+    {
+      "id": "campaign-325-seat0",
+      "status": "completed",
+      "boundaries": 22,
+      "native_boundaries": 22
+    },
+    {
+      "id": "campaign-325-seat1",
+      "status": "completed",
+      "boundaries": 25,
+      "native_boundaries": 25
+    },
+    {
+      "id": "campaign-326-seat0",
+      "status": "completed",
+      "boundaries": 59,
+      "native_boundaries": 59
+    },
+    {
+      "id": "campaign-326-seat1",
+      "status": "completed",
+      "boundaries": 54,
+      "native_boundaries": 54
+    },
+    {
+      "id": "campaign-327-seat0",
+      "status": "completed",
+      "boundaries": 65,
+      "native_boundaries": 65
+    },
+    {
+      "id": "campaign-327-seat1",
+      "status": "completed",
+      "boundaries": 67,
+      "native_boundaries": 67
+    },
+    {
+      "id": "campaign-328-seat0",
+      "status": "completed",
+      "boundaries": 9,
+      "native_boundaries": 9
+    },
+    {
+      "id": "campaign-328-seat1",
+      "status": "completed",
+      "boundaries": 8,
+      "native_boundaries": 8
+    },
+    {
+      "id": "campaign-329-seat0",
+      "status": "completed",
+      "boundaries": 25,
+      "native_boundaries": 25
+    },
+    {
+      "id": "campaign-329-seat1",
+      "status": "completed",
+      "boundaries": 37,
+      "native_boundaries": 37
+    },
+    {
+      "id": "campaign-330-seat0",
+      "status": "completed",
+      "boundaries": 1,
+      "native_boundaries": 1
+    },
+    {
+      "id": "campaign-330-seat1",
+      "status": "completed",
+      "boundaries": 1,
+      "native_boundaries": 1
+    },
+    {
+      "id": "campaign-331-seat0",
+      "status": "completed",
+      "boundaries": 23,
+      "native_boundaries": 23
+    },
+    {
+      "id": "campaign-331-seat1",
+      "status": "completed",
+      "boundaries": 23,
+      "native_boundaries": 23
+    },
+    {
+      "id": "campaign-332-seat0",
+      "status": "completed",
+      "boundaries": 80,
+      "native_boundaries": 80
+    },
+    {
+      "id": "campaign-332-seat1",
+      "status": "completed",
+      "boundaries": 76,
+      "native_boundaries": 76
+    },
+    {
+      "id": "campaign-333-seat0",
+      "status": "completed",
+      "boundaries": 1,
+      "native_boundaries": 1
+    },
+    {
+      "id": "campaign-333-seat1",
+      "status": "completed",
+      "boundaries": 1,
+      "native_boundaries": 1
+    },
+    {
+      "id": "campaign-334-seat0",
+      "status": "completed",
+      "boundaries": 27,
+      "native_boundaries": 27
+    },
+    {
+      "id": "campaign-334-seat1",
+      "status": "completed",
+      "boundaries": 30,
+      "native_boundaries": 30
+    },
+    {
+      "id": "campaign-335-seat0",
+      "status": "completed",
+      "boundaries": 24,
+      "native_boundaries": 24
+    },
+    {
+      "id": "campaign-335-seat1",
+      "status": "completed",
+      "boundaries": 24,
+      "native_boundaries": 24
+    },
+    {
+      "id": "campaign-336-seat0",
+      "status": "completed",
+      "boundaries": 32,
+      "native_boundaries": 32
+    },
+    {
+      "id": "campaign-336-seat1",
+      "status": "completed",
+      "boundaries": 17,
+      "native_boundaries": 17
+    },
+    {
+      "id": "campaign-337-seat0",
+      "status": "completed",
+      "boundaries": 72,
+      "native_boundaries": 72
+    },
+    {
+      "id": "campaign-337-seat1",
+      "status": "completed",
+      "boundaries": 74,
+      "native_boundaries": 74
+    },
+    {
+      "id": "campaign-338-seat0",
+      "status": "completed",
+      "boundaries": 99,
+      "native_boundaries": 99
+    },
+    {
+      "id": "campaign-338-seat1",
+      "status": "completed",
+      "boundaries": 120,
+      "native_boundaries": 120
+    },
+    {
+      "id": "campaign-339-seat0",
+      "status": "completed",
+      "boundaries": 1,
+      "native_boundaries": 1
+    },
+    {
+      "id": "campaign-339-seat1",
+      "status": "completed",
+      "boundaries": 1,
+      "native_boundaries": 1
+    },
+    {
+      "id": "campaign-340-seat0",
+      "status": "completed",
+      "boundaries": 9,
+      "native_boundaries": 9
+    },
+    {
+      "id": "campaign-340-seat1",
+      "status": "completed",
+      "boundaries": 9,
+      "native_boundaries": 9
+    },
+    {
+      "id": "campaign-341-seat0",
+      "status": "completed",
+      "boundaries": 47,
+      "native_boundaries": 47
+    },
+    {
+      "id": "campaign-341-seat1",
+      "status": "completed",
+      "boundaries": 50,
+      "native_boundaries": 50
+    },
+    {
+      "id": "campaign-342-seat0",
+      "status": "completed",
+      "boundaries": 1,
+      "native_boundaries": 1
+    },
+    {
+      "id": "campaign-342-seat1",
+      "status": "completed",
+      "boundaries": 4,
+      "native_boundaries": 4
+    },
+    {
+      "id": "campaign-343-seat0",
+      "status": "completed",
+      "boundaries": 13,
+      "native_boundaries": 13
+    },
+    {
+      "id": "campaign-343-seat1",
+      "status": "completed",
+      "boundaries": 9,
+      "native_boundaries": 9
+    },
+    {
+      "id": "campaign-344-seat0",
+      "status": "completed",
+      "boundaries": 29,
+      "native_boundaries": 29
+    },
+    {
+      "id": "campaign-344-seat1",
+      "status": "completed",
+      "boundaries": 29,
+      "native_boundaries": 29
+    },
+    {
+      "id": "campaign-345-seat0",
+      "status": "completed",
+      "boundaries": 2,
+      "native_boundaries": 2
+    },
+    {
+      "id": "campaign-345-seat1",
+      "status": "completed",
+      "boundaries": 2,
+      "native_boundaries": 2
+    },
+    {
+      "id": "campaign-346-seat0",
+      "status": "completed",
+      "boundaries": 21,
+      "native_boundaries": 21
+    },
+    {
+      "id": "campaign-346-seat1",
+      "status": "completed",
+      "boundaries": 20,
+      "native_boundaries": 20
+    },
+    {
+      "id": "campaign-347-seat0",
+      "status": "completed",
+      "boundaries": 13,
+      "native_boundaries": 13
+    },
+    {
+      "id": "campaign-347-seat1",
+      "status": "completed",
+      "boundaries": 45,
+      "native_boundaries": 45
+    },
+    {
+      "id": "campaign-348-seat0",
+      "status": "completed",
+      "boundaries": 2,
+      "native_boundaries": 2
+    },
+    {
+      "id": "campaign-348-seat1",
+      "status": "completed",
+      "boundaries": 2,
+      "native_boundaries": 2
+    },
+    {
+      "id": "campaign-349-seat0",
+      "status": "completed",
+      "boundaries": 75,
+      "native_boundaries": 75
+    },
+    {
+      "id": "campaign-349-seat1",
+      "status": "completed",
+      "boundaries": 69,
+      "native_boundaries": 69
+    },
+    {
+      "id": "campaign-350-seat0",
+      "status": "completed",
+      "boundaries": 12,
+      "native_boundaries": 12
+    },
+    {
+      "id": "campaign-350-seat1",
+      "status": "completed",
+      "boundaries": 12,
+      "native_boundaries": 12
+    },
+    {
+      "id": "campaign-351-seat0",
+      "status": "completed",
+      "boundaries": 5,
+      "native_boundaries": 5
+    },
+    {
+      "id": "campaign-351-seat1",
+      "status": "completed",
+      "boundaries": 3,
+      "native_boundaries": 3
+    },
+    {
+      "id": "campaign-352-seat0",
+      "status": "completed",
+      "boundaries": 26,
+      "native_boundaries": 26
+    },
+    {
+      "id": "campaign-352-seat1",
+      "status": "completed",
+      "boundaries": 22,
+      "native_boundaries": 22
+    },
+    {
+      "id": "campaign-353-seat0",
+      "status": "completed",
+      "boundaries": 36,
+      "native_boundaries": 36
+    },
+    {
+      "id": "campaign-353-seat1",
+      "status": "completed",
+      "boundaries": 39,
+      "native_boundaries": 39
+    },
+    {
+      "id": "campaign-354-seat0",
+      "status": "completed",
+      "boundaries": 26,
+      "native_boundaries": 26
+    },
+    {
+      "id": "campaign-354-seat1",
+      "status": "completed",
+      "boundaries": 30,
+      "native_boundaries": 30
+    },
+    {
+      "id": "campaign-355-seat0",
+      "status": "completed",
+      "boundaries": 13,
+      "native_boundaries": 13
+    },
+    {
+      "id": "campaign-355-seat1",
+      "status": "completed",
+      "boundaries": 15,
+      "native_boundaries": 15
+    },
+    {
+      "id": "campaign-356-seat0",
+      "status": "completed",
+      "boundaries": 44,
+      "native_boundaries": 44
+    },
+    {
+      "id": "campaign-356-seat1",
+      "status": "completed",
+      "boundaries": 45,
+      "native_boundaries": 45
+    },
+    {
+      "id": "campaign-357-seat0",
+      "status": "completed",
+      "boundaries": 9,
+      "native_boundaries": 9
+    },
+    {
+      "id": "campaign-357-seat1",
+      "status": "completed",
+      "boundaries": 1,
+      "native_boundaries": 1
+    },
+    {
+      "id": "campaign-358-seat0",
+      "status": "completed",
+      "boundaries": 46,
+      "native_boundaries": 46
+    },
+    {
+      "id": "campaign-358-seat1",
+      "status": "completed",
+      "boundaries": 48,
+      "native_boundaries": 48
+    },
+    {
+      "id": "campaign-359-seat0",
+      "status": "completed",
+      "boundaries": 14,
+      "native_boundaries": 14
+    },
+    {
+      "id": "campaign-359-seat1",
+      "status": "completed",
+      "boundaries": 12,
+      "native_boundaries": 12
+    },
+    {
+      "id": "campaign-360-seat0",
+      "status": "completed",
+      "boundaries": 40,
+      "native_boundaries": 40
+    },
+    {
+      "id": "campaign-360-seat1",
+      "status": "completed",
+      "boundaries": 45,
+      "native_boundaries": 45
+    },
+    {
+      "id": "campaign-361-seat0",
+      "status": "completed",
+      "boundaries": 67,
+      "native_boundaries": 67
+    },
+    {
+      "id": "campaign-361-seat1",
+      "status": "completed",
+      "boundaries": 65,
+      "native_boundaries": 65
+    },
+    {
+      "id": "campaign-362-seat0",
+      "status": "completed",
+      "boundaries": 31,
+      "native_boundaries": 31
+    },
+    {
+      "id": "campaign-362-seat1",
+      "status": "completed",
+      "boundaries": 30,
+      "native_boundaries": 30
+    },
+    {
+      "id": "campaign-363-seat0",
+      "status": "completed",
+      "boundaries": 16,
+      "native_boundaries": 16
+    },
+    {
+      "id": "campaign-363-seat1",
+      "status": "completed",
+      "boundaries": 16,
+      "native_boundaries": 16
+    },
+    {
+      "id": "campaign-364-seat0",
+      "status": "completed",
+      "boundaries": 71,
+      "native_boundaries": 71
+    },
+    {
+      "id": "campaign-364-seat1",
+      "status": "completed",
+      "boundaries": 64,
+      "native_boundaries": 64
+    },
+    {
+      "id": "campaign-365-seat0",
+      "status": "completed",
+      "boundaries": 29,
+      "native_boundaries": 29
+    },
+    {
+      "id": "campaign-365-seat1",
+      "status": "completed",
+      "boundaries": 29,
+      "native_boundaries": 29
+    },
+    {
+      "id": "campaign-366-seat0",
+      "status": "completed",
+      "boundaries": 8,
+      "native_boundaries": 8
+    },
+    {
+      "id": "campaign-366-seat1",
+      "status": "completed",
+      "boundaries": 10,
+      "native_boundaries": 10
+    },
+    {
+      "id": "campaign-367-seat0",
+      "status": "completed",
+      "boundaries": 8,
+      "native_boundaries": 8
+    },
+    {
+      "id": "campaign-367-seat1",
+      "status": "completed",
+      "boundaries": 8,
+      "native_boundaries": 8
+    },
+    {
+      "id": "campaign-368-seat0",
+      "status": "completed",
+      "boundaries": 103,
+      "native_boundaries": 103
+    },
+    {
+      "id": "campaign-368-seat1",
+      "status": "completed",
+      "boundaries": 100,
+      "native_boundaries": 100
+    },
+    {
+      "id": "campaign-369-seat0",
+      "status": "completed",
+      "boundaries": 1,
+      "native_boundaries": 1
+    },
+    {
+      "id": "campaign-369-seat1",
+      "status": "completed",
+      "boundaries": 2,
+      "native_boundaries": 2
+    },
+    {
+      "id": "campaign-370-seat0",
+      "status": "completed",
+      "boundaries": 10,
+      "native_boundaries": 10
+    },
+    {
+      "id": "campaign-370-seat1",
+      "status": "completed",
+      "boundaries": 12,
+      "native_boundaries": 12
+    },
+    {
+      "id": "campaign-371-seat0",
+      "status": "completed",
+      "boundaries": 25,
+      "native_boundaries": 25
+    },
+    {
+      "id": "campaign-371-seat1",
+      "status": "completed",
+      "boundaries": 26,
+      "native_boundaries": 26
+    },
+    {
+      "id": "campaign-372-seat0",
+      "status": "completed",
+      "boundaries": 9,
+      "native_boundaries": 9
+    },
+    {
+      "id": "campaign-372-seat1",
+      "status": "completed",
+      "boundaries": 10,
+      "native_boundaries": 10
+    },
+    {
+      "id": "campaign-373-seat0",
+      "status": "completed",
+      "boundaries": 111,
+      "native_boundaries": 111
+    },
+    {
+      "id": "campaign-373-seat1",
+      "status": "completed",
+      "boundaries": 111,
+      "native_boundaries": 111
+    },
+    {
+      "id": "campaign-374-seat0",
+      "status": "completed",
+      "boundaries": 37,
+      "native_boundaries": 37
+    },
+    {
+      "id": "campaign-374-seat1",
+      "status": "completed",
+      "boundaries": 32,
+      "native_boundaries": 32
+    },
+    {
+      "id": "campaign-375-seat0",
+      "status": "completed",
+      "boundaries": 9,
+      "native_boundaries": 9
+    },
+    {
+      "id": "campaign-375-seat1",
+      "status": "completed",
+      "boundaries": 9,
+      "native_boundaries": 9
+    },
+    {
+      "id": "campaign-376-seat0",
+      "status": "completed",
+      "boundaries": 10,
+      "native_boundaries": 10
+    },
+    {
+      "id": "campaign-376-seat1",
+      "status": "completed",
+      "boundaries": 11,
+      "native_boundaries": 11
+    },
+    {
+      "id": "campaign-377-seat0",
+      "status": "completed",
+      "boundaries": 80,
+      "native_boundaries": 80
+    },
+    {
+      "id": "campaign-377-seat1",
+      "status": "completed",
+      "boundaries": 104,
+      "native_boundaries": 104
+    },
+    {
+      "id": "campaign-378-seat0",
+      "status": "completed",
+      "boundaries": 81,
+      "native_boundaries": 81
+    },
+    {
+      "id": "campaign-378-seat1",
+      "status": "completed",
+      "boundaries": 74,
+      "native_boundaries": 74
+    },
+    {
+      "id": "campaign-379-seat0",
+      "status": "completed",
+      "boundaries": 10,
+      "native_boundaries": 10
+    },
+    {
+      "id": "campaign-379-seat1",
+      "status": "completed",
+      "boundaries": 14,
+      "native_boundaries": 14
+    },
+    {
+      "id": "campaign-380-seat0",
+      "status": "completed",
+      "boundaries": 15,
+      "native_boundaries": 15
+    },
+    {
+      "id": "campaign-380-seat1",
+      "status": "completed",
+      "boundaries": 17,
+      "native_boundaries": 17
+    },
+    {
+      "id": "campaign-381-seat0",
+      "status": "completed",
+      "boundaries": 57,
+      "native_boundaries": 57
+    },
+    {
+      "id": "campaign-381-seat1",
+      "status": "completed",
+      "boundaries": 57,
+      "native_boundaries": 57
+    },
+    {
+      "id": "campaign-382-seat0",
+      "status": "completed",
+      "boundaries": 29,
+      "native_boundaries": 29
+    },
+    {
+      "id": "campaign-382-seat1",
+      "status": "completed",
+      "boundaries": 26,
+      "native_boundaries": 26
+    },
+    {
+      "id": "campaign-383-seat0",
+      "status": "completed",
+      "boundaries": 38,
+      "native_boundaries": 38
+    },
+    {
+      "id": "campaign-383-seat1",
+      "status": "completed",
+      "boundaries": 41,
+      "native_boundaries": 41
+    },
+    {
+      "id": "campaign-384-seat0",
+      "status": "completed",
+      "boundaries": 73,
+      "native_boundaries": 73
+    },
+    {
+      "id": "campaign-384-seat1",
+      "status": "completed",
+      "boundaries": 73,
+      "native_boundaries": 73
+    },
+    {
+      "id": "campaign-385-seat0",
+      "status": "completed",
+      "boundaries": 7,
+      "native_boundaries": 7
+    },
+    {
+      "id": "campaign-385-seat1",
+      "status": "completed",
+      "boundaries": 8,
+      "native_boundaries": 8
+    },
+    {
+      "id": "campaign-386-seat0",
+      "status": "completed",
+      "boundaries": 40,
+      "native_boundaries": 40
+    },
+    {
+      "id": "campaign-386-seat1",
+      "status": "completed",
+      "boundaries": 24,
+      "native_boundaries": 24
+    },
+    {
+      "id": "campaign-387-seat0",
+      "status": "completed",
+      "boundaries": 7,
+      "native_boundaries": 7
+    },
+    {
+      "id": "campaign-387-seat1",
+      "status": "completed",
+      "boundaries": 8,
+      "native_boundaries": 8
+    },
+    {
+      "id": "campaign-388-seat0",
+      "status": "completed",
+      "boundaries": 113,
+      "native_boundaries": 113
+    },
+    {
+      "id": "campaign-388-seat1",
+      "status": "completed",
+      "boundaries": 110,
+      "native_boundaries": 110
+    },
+    {
+      "id": "campaign-389-seat0",
+      "status": "completed",
+      "boundaries": 35,
+      "native_boundaries": 35
+    },
+    {
+      "id": "campaign-389-seat1",
+      "status": "completed",
+      "boundaries": 43,
+      "native_boundaries": 43
+    },
+    {
+      "id": "campaign-390-seat0",
+      "status": "completed",
+      "boundaries": 5,
+      "native_boundaries": 5
+    },
+    {
+      "id": "campaign-390-seat1",
+      "status": "completed",
+      "boundaries": 5,
+      "native_boundaries": 5
+    },
+    {
+      "id": "campaign-391-seat0",
+      "status": "completed",
+      "boundaries": 46,
+      "native_boundaries": 46
+    },
+    {
+      "id": "campaign-391-seat1",
+      "status": "completed",
+      "boundaries": 47,
+      "native_boundaries": 47
+    },
+    {
+      "id": "campaign-392-seat0",
+      "status": "completed",
+      "boundaries": 28,
+      "native_boundaries": 28
+    },
+    {
+      "id": "campaign-392-seat1",
+      "status": "completed",
+      "boundaries": 107,
+      "native_boundaries": 107
+    },
+    {
+      "id": "campaign-393-seat0",
+      "status": "completed",
+      "boundaries": 7,
+      "native_boundaries": 7
+    },
+    {
+      "id": "campaign-393-seat1",
+      "status": "completed",
+      "boundaries": 7,
+      "native_boundaries": 7
+    },
+    {
+      "id": "campaign-394-seat0",
+      "status": "completed",
+      "boundaries": 21,
+      "native_boundaries": 21
+    },
+    {
+      "id": "campaign-394-seat1",
+      "status": "completed",
+      "boundaries": 20,
+      "native_boundaries": 20
+    },
+    {
+      "id": "campaign-395-seat0",
+      "status": "completed",
+      "boundaries": 16,
+      "native_boundaries": 16
+    },
+    {
+      "id": "campaign-395-seat1",
+      "status": "completed",
+      "boundaries": 17,
+      "native_boundaries": 17
+    },
+    {
+      "id": "campaign-396-seat0",
+      "status": "completed",
+      "boundaries": 26,
+      "native_boundaries": 26
+    },
+    {
+      "id": "campaign-396-seat1",
+      "status": "completed",
+      "boundaries": 19,
+      "native_boundaries": 19
+    },
+    {
+      "id": "campaign-397-seat0",
+      "status": "completed",
+      "boundaries": 60,
+      "native_boundaries": 60
+    },
+    {
+      "id": "campaign-397-seat1",
+      "status": "completed",
+      "boundaries": 60,
+      "native_boundaries": 60
+    },
+    {
+      "id": "campaign-398-seat0",
+      "status": "completed",
+      "boundaries": 107,
+      "native_boundaries": 107
+    },
+    {
+      "id": "campaign-398-seat1",
+      "status": "completed",
+      "boundaries": 109,
+      "native_boundaries": 109
+    },
+    {
+      "id": "campaign-399-seat0",
+      "status": "completed",
+      "boundaries": 1,
+      "native_boundaries": 1
+    },
+    {
+      "id": "campaign-399-seat1",
+      "status": "completed",
+      "boundaries": 1,
+      "native_boundaries": 1
+    },
+    {
+      "id": "campaign-400-seat0",
+      "status": "completed",
+      "boundaries": 18,
+      "native_boundaries": 18
+    },
+    {
+      "id": "campaign-400-seat1",
+      "status": "completed",
+      "boundaries": 18,
+      "native_boundaries": 18
+    },
+    {
+      "id": "campaign-401-seat0",
+      "status": "completed",
+      "boundaries": 22,
+      "native_boundaries": 22
+    },
+    {
+      "id": "campaign-401-seat1",
+      "status": "completed",
+      "boundaries": 22,
+      "native_boundaries": 22
+    },
+    {
+      "id": "campaign-402-seat0",
+      "status": "completed",
+      "boundaries": 23,
+      "native_boundaries": 23
+    },
+    {
+      "id": "campaign-402-seat1",
+      "status": "completed",
+      "boundaries": 22,
+      "native_boundaries": 22
+    },
+    {
+      "id": "campaign-403-seat0",
+      "status": "completed",
+      "boundaries": 13,
+      "native_boundaries": 13
+    },
+    {
+      "id": "campaign-403-seat1",
+      "status": "completed",
+      "boundaries": 10,
+      "native_boundaries": 10
+    },
+    {
+      "id": "campaign-404-seat0",
+      "status": "completed",
+      "boundaries": 45,
+      "native_boundaries": 45
+    },
+    {
+      "id": "campaign-404-seat1",
+      "status": "completed",
+      "boundaries": 47,
+      "native_boundaries": 47
+    },
+    {
+      "id": "campaign-405-seat0",
+      "status": "completed",
+      "boundaries": 2,
+      "native_boundaries": 2
+    },
+    {
+      "id": "campaign-405-seat1",
+      "status": "completed",
+      "boundaries": 8,
+      "native_boundaries": 8
+    },
+    {
+      "id": "campaign-406-seat0",
+      "status": "completed",
+      "boundaries": 14,
+      "native_boundaries": 14
+    },
+    {
+      "id": "campaign-406-seat1",
+      "status": "completed",
+      "boundaries": 18,
+      "native_boundaries": 18
+    },
+    {
+      "id": "campaign-407-seat0",
+      "status": "completed",
+      "boundaries": 36,
+      "native_boundaries": 36
+    },
+    {
+      "id": "campaign-407-seat1",
+      "status": "completed",
+      "boundaries": 35,
+      "native_boundaries": 35
+    },
+    {
+      "id": "campaign-408-seat0",
+      "status": "completed",
+      "boundaries": 13,
+      "native_boundaries": 13
+    },
+    {
+      "id": "campaign-408-seat1",
+      "status": "completed",
+      "boundaries": 7,
+      "native_boundaries": 7
+    },
+    {
+      "id": "campaign-409-seat0",
+      "status": "completed",
+      "boundaries": 6,
+      "native_boundaries": 6
+    },
+    {
+      "id": "campaign-409-seat1",
+      "status": "completed",
+      "boundaries": 5,
+      "native_boundaries": 5
+    },
+    {
+      "id": "campaign-410-seat0",
+      "status": "completed",
+      "boundaries": 40,
+      "native_boundaries": 40
+    },
+    {
+      "id": "campaign-410-seat1",
+      "status": "completed",
+      "boundaries": 46,
+      "native_boundaries": 46
+    },
+    {
+      "id": "campaign-411-seat0",
+      "status": "completed",
+      "boundaries": 10,
+      "native_boundaries": 10
+    },
+    {
+      "id": "campaign-411-seat1",
+      "status": "completed",
+      "boundaries": 16,
+      "native_boundaries": 16
+    },
+    {
+      "id": "campaign-412-seat0",
+      "status": "completed",
+      "boundaries": 8,
+      "native_boundaries": 8
+    },
+    {
+      "id": "campaign-412-seat1",
+      "status": "completed",
+      "boundaries": 9,
+      "native_boundaries": 9
+    },
+    {
+      "id": "campaign-413-seat0",
+      "status": "completed",
+      "boundaries": 129,
+      "native_boundaries": 129
+    },
+    {
+      "id": "campaign-413-seat1",
+      "status": "completed",
+      "boundaries": 136,
+      "native_boundaries": 136
+    },
+    {
+      "id": "campaign-414-seat0",
+      "status": "completed",
+      "boundaries": 33,
+      "native_boundaries": 33
+    },
+    {
+      "id": "campaign-414-seat1",
+      "status": "completed",
+      "boundaries": 33,
+      "native_boundaries": 33
+    },
+    {
+      "id": "campaign-415-seat0",
+      "status": "completed",
+      "boundaries": 30,
+      "native_boundaries": 30
+    },
+    {
+      "id": "campaign-415-seat1",
+      "status": "completed",
+      "boundaries": 29,
+      "native_boundaries": 29
+    },
+    {
+      "id": "campaign-416-seat0",
+      "status": "completed",
+      "boundaries": 57,
+      "native_boundaries": 57
+    },
+    {
+      "id": "campaign-416-seat1",
+      "status": "completed",
+      "boundaries": 57,
+      "native_boundaries": 57
+    },
+    {
+      "id": "campaign-417-seat0",
+      "status": "completed",
+      "boundaries": 38,
+      "native_boundaries": 38
+    },
+    {
+      "id": "campaign-417-seat1",
+      "status": "completed",
+      "boundaries": 43,
+      "native_boundaries": 43
+    },
+    {
+      "id": "campaign-418-seat0",
+      "status": "completed",
+      "boundaries": 114,
+      "native_boundaries": 114
+    },
+    {
+      "id": "campaign-418-seat1",
+      "status": "completed",
+      "boundaries": 84,
+      "native_boundaries": 84
+    },
+    {
+      "id": "campaign-419-seat0",
+      "status": "completed",
+      "boundaries": 14,
+      "native_boundaries": 14
+    },
+    {
+      "id": "campaign-419-seat1",
+      "status": "completed",
+      "boundaries": 14,
+      "native_boundaries": 14
+    },
+    {
+      "id": "campaign-420-seat0",
+      "status": "completed",
+      "boundaries": 1,
+      "native_boundaries": 1
+    },
+    {
+      "id": "campaign-420-seat1",
+      "status": "completed",
+      "boundaries": 2,
+      "native_boundaries": 2
+    },
+    {
+      "id": "campaign-421-seat0",
+      "status": "completed",
+      "boundaries": 59,
+      "native_boundaries": 59
+    },
+    {
+      "id": "campaign-421-seat1",
+      "status": "completed",
+      "boundaries": 59,
+      "native_boundaries": 59
+    },
+    {
+      "id": "campaign-422-seat0",
+      "status": "completed",
+      "boundaries": 39,
+      "native_boundaries": 39
+    },
+    {
+      "id": "campaign-422-seat1",
+      "status": "completed",
+      "boundaries": 35,
+      "native_boundaries": 35
+    },
+    {
+      "id": "campaign-423-seat0",
+      "status": "completed",
+      "boundaries": 10,
+      "native_boundaries": 10
+    },
+    {
+      "id": "campaign-423-seat1",
+      "status": "completed",
+      "boundaries": 16,
+      "native_boundaries": 16
+    },
+    {
+      "id": "campaign-424-seat0",
+      "status": "completed",
+      "boundaries": 43,
+      "native_boundaries": 43
+    },
+    {
+      "id": "campaign-424-seat1",
+      "status": "completed",
+      "boundaries": 14,
+      "native_boundaries": 14
+    },
+    {
+      "id": "campaign-425-seat0",
+      "status": "completed",
+      "boundaries": 44,
+      "native_boundaries": 44
+    },
+    {
+      "id": "campaign-425-seat1",
+      "status": "completed",
+      "boundaries": 39,
+      "native_boundaries": 39
+    },
+    {
+      "id": "campaign-426-seat0",
+      "status": "completed",
+      "boundaries": 3,
+      "native_boundaries": 3
+    },
+    {
+      "id": "campaign-426-seat1",
+      "status": "completed",
+      "boundaries": 5,
+      "native_boundaries": 5
+    },
+    {
+      "id": "campaign-427-seat0",
+      "status": "completed",
+      "boundaries": 6,
+      "native_boundaries": 6
+    },
+    {
+      "id": "campaign-427-seat1",
+      "status": "completed",
+      "boundaries": 5,
+      "native_boundaries": 5
+    },
+    {
+      "id": "campaign-428-seat0",
+      "status": "completed",
+      "boundaries": 7,
+      "native_boundaries": 7
+    },
+    {
+      "id": "campaign-428-seat1",
+      "status": "completed",
+      "boundaries": 10,
+      "native_boundaries": 10
+    },
+    {
+      "id": "campaign-429-seat0",
+      "status": "completed",
+      "boundaries": 1,
+      "native_boundaries": 1
+    },
+    {
+      "id": "campaign-429-seat1",
+      "status": "completed",
+      "boundaries": 1,
+      "native_boundaries": 1
+    },
+    {
+      "id": "campaign-430-seat0",
+      "status": "completed",
+      "boundaries": 28,
+      "native_boundaries": 28
+    },
+    {
+      "id": "campaign-430-seat1",
+      "status": "completed",
+      "boundaries": 27,
+      "native_boundaries": 27
+    },
+    {
+      "id": "campaign-431-seat0",
+      "status": "completed",
+      "boundaries": 53,
+      "native_boundaries": 53
+    },
+    {
+      "id": "campaign-431-seat1",
+      "status": "completed",
+      "boundaries": 61,
+      "native_boundaries": 61
+    },
+    {
+      "id": "campaign-432-seat0",
+      "status": "completed",
+      "boundaries": 11,
+      "native_boundaries": 11
+    },
+    {
+      "id": "campaign-432-seat1",
+      "status": "completed",
+      "boundaries": 5,
+      "native_boundaries": 5
+    },
+    {
+      "id": "campaign-433-seat0",
+      "status": "completed",
+      "boundaries": 30,
+      "native_boundaries": 30
+    },
+    {
+      "id": "campaign-433-seat1",
+      "status": "completed",
+      "boundaries": 34,
+      "native_boundaries": 34
+    },
+    {
+      "id": "campaign-434-seat0",
+      "status": "completed",
+      "boundaries": 119,
+      "native_boundaries": 119
+    },
+    {
+      "id": "campaign-434-seat1",
+      "status": "completed",
+      "boundaries": 62,
+      "native_boundaries": 62
+    },
+    {
+      "id": "campaign-435-seat0",
+      "status": "completed",
+      "boundaries": 6,
+      "native_boundaries": 6
+    },
+    {
+      "id": "campaign-435-seat1",
+      "status": "completed",
+      "boundaries": 9,
+      "native_boundaries": 9
+    },
+    {
+      "id": "campaign-436-seat0",
+      "status": "completed",
+      "boundaries": 50,
+      "native_boundaries": 50
+    },
+    {
+      "id": "campaign-436-seat1",
+      "status": "completed",
+      "boundaries": 51,
+      "native_boundaries": 51
+    },
+    {
+      "id": "campaign-437-seat0",
+      "status": "completed",
+      "boundaries": 42,
+      "native_boundaries": 42
+    },
+    {
+      "id": "campaign-437-seat1",
+      "status": "completed",
+      "boundaries": 41,
+      "native_boundaries": 41
+    },
+    {
+      "id": "campaign-438-seat0",
+      "status": "completed",
+      "boundaries": 2,
+      "native_boundaries": 2
+    },
+    {
+      "id": "campaign-438-seat1",
+      "status": "completed",
+      "boundaries": 3,
+      "native_boundaries": 3
+    },
+    {
+      "id": "campaign-439-seat0",
+      "status": "completed",
+      "boundaries": 28,
+      "native_boundaries": 28
+    },
+    {
+      "id": "campaign-439-seat1",
+      "status": "completed",
+      "boundaries": 26,
+      "native_boundaries": 26
+    },
+    {
+      "id": "campaign-440-seat0",
+      "status": "completed",
+      "boundaries": 82,
+      "native_boundaries": 82
+    },
+    {
+      "id": "campaign-440-seat1",
+      "status": "completed",
+      "boundaries": 77,
+      "native_boundaries": 77
+    },
+    {
+      "id": "campaign-441-seat0",
+      "status": "completed",
+      "boundaries": 6,
+      "native_boundaries": 6
+    },
+    {
+      "id": "campaign-441-seat1",
+      "status": "completed",
+      "boundaries": 4,
+      "native_boundaries": 4
+    },
+    {
+      "id": "campaign-442-seat0",
+      "status": "completed",
+      "boundaries": 5,
+      "native_boundaries": 5
+    },
+    {
+      "id": "campaign-442-seat1",
+      "status": "completed",
+      "boundaries": 6,
+      "native_boundaries": 6
+    },
+    {
+      "id": "campaign-443-seat0",
+      "status": "completed",
+      "boundaries": 43,
+      "native_boundaries": 43
+    },
+    {
+      "id": "campaign-443-seat1",
+      "status": "completed",
+      "boundaries": 40,
+      "native_boundaries": 40
+    },
+    {
+      "id": "campaign-444-seat0",
+      "status": "completed",
+      "boundaries": 1,
+      "native_boundaries": 1
+    },
+    {
+      "id": "campaign-444-seat1",
+      "status": "completed",
+      "boundaries": 1,
+      "native_boundaries": 1
+    },
+    {
+      "id": "campaign-445-seat0",
+      "status": "completed",
+      "boundaries": 11,
+      "native_boundaries": 11
+    },
+    {
+      "id": "campaign-445-seat1",
+      "status": "completed",
+      "boundaries": 11,
+      "native_boundaries": 11
+    },
+    {
+      "id": "campaign-446-seat0",
+      "status": "completed",
+      "boundaries": 39,
+      "native_boundaries": 39
+    },
+    {
+      "id": "campaign-446-seat1",
+      "status": "completed",
+      "boundaries": 95,
+      "native_boundaries": 95
+    },
+    {
+      "id": "campaign-447-seat0",
+      "status": "completed",
+      "boundaries": 1,
+      "native_boundaries": 1
+    },
+    {
+      "id": "campaign-447-seat1",
+      "status": "completed",
+      "boundaries": 1,
+      "native_boundaries": 1
+    },
+    {
+      "id": "campaign-448-seat0",
+      "status": "completed",
+      "boundaries": 22,
+      "native_boundaries": 22
+    },
+    {
+      "id": "campaign-448-seat1",
+      "status": "completed",
+      "boundaries": 22,
+      "native_boundaries": 22
+    },
+    {
+      "id": "campaign-449-seat0",
+      "status": "completed",
+      "boundaries": 48,
+      "native_boundaries": 48
+    },
+    {
+      "id": "campaign-449-seat1",
+      "status": "completed",
+      "boundaries": 49,
+      "native_boundaries": 49
+    },
+    {
+      "id": "campaign-450-seat0",
+      "status": "completed",
+      "boundaries": 1,
+      "native_boundaries": 1
+    },
+    {
+      "id": "campaign-450-seat1",
+      "status": "completed",
+      "boundaries": 1,
+      "native_boundaries": 1
+    },
+    {
+      "id": "campaign-451-seat0",
+      "status": "completed",
+      "boundaries": 21,
+      "native_boundaries": 21
+    },
+    {
+      "id": "campaign-451-seat1",
+      "status": "completed",
+      "boundaries": 26,
+      "native_boundaries": 26
+    },
+    {
+      "id": "campaign-452-seat0",
+      "status": "completed",
+      "boundaries": 35,
+      "native_boundaries": 35
+    },
+    {
+      "id": "campaign-452-seat1",
+      "status": "completed",
+      "boundaries": 39,
+      "native_boundaries": 39
+    },
+    {
+      "id": "campaign-453-seat0",
+      "status": "completed",
+      "boundaries": 8,
+      "native_boundaries": 8
+    },
+    {
+      "id": "campaign-453-seat1",
+      "status": "completed",
+      "boundaries": 4,
+      "native_boundaries": 4
+    },
+    {
+      "id": "campaign-454-seat0",
+      "status": "completed",
+      "boundaries": 9,
+      "native_boundaries": 9
+    },
+    {
+      "id": "campaign-454-seat1",
+      "status": "completed",
+      "boundaries": 14,
+      "native_boundaries": 14
+    },
+    {
+      "id": "campaign-455-seat0",
+      "status": "completed",
+      "boundaries": 25,
+      "native_boundaries": 25
+    },
+    {
+      "id": "campaign-455-seat1",
+      "status": "completed",
+      "boundaries": 31,
+      "native_boundaries": 31
+    },
+    {
+      "id": "campaign-456-seat0",
+      "status": "completed",
+      "boundaries": 47,
+      "native_boundaries": 47
+    },
+    {
+      "id": "campaign-456-seat1",
+      "status": "completed",
+      "boundaries": 41,
+      "native_boundaries": 41
+    },
+    {
+      "id": "campaign-457-seat0",
+      "status": "completed",
+      "boundaries": 14,
+      "native_boundaries": 14
+    },
+    {
+      "id": "campaign-457-seat1",
+      "status": "completed",
+      "boundaries": 17,
+      "native_boundaries": 17
+    },
+    {
+      "id": "campaign-458-seat0",
+      "status": "completed",
+      "boundaries": 46,
+      "native_boundaries": 46
+    },
+    {
+      "id": "campaign-458-seat1",
+      "status": "completed",
+      "boundaries": 38,
+      "native_boundaries": 38
+    },
+    {
+      "id": "campaign-459-seat0",
+      "status": "completed",
+      "boundaries": 1,
+      "native_boundaries": 1
+    },
+    {
+      "id": "campaign-459-seat1",
+      "status": "completed",
+      "boundaries": 1,
+      "native_boundaries": 1
+    },
+    {
+      "id": "campaign-460-seat0",
+      "status": "completed",
+      "boundaries": 6,
+      "native_boundaries": 6
+    },
+    {
+      "id": "campaign-460-seat1",
+      "status": "completed",
+      "boundaries": 6,
+      "native_boundaries": 6
+    },
+    {
+      "id": "campaign-461-seat0",
+      "status": "completed",
+      "boundaries": 55,
+      "native_boundaries": 55
+    },
+    {
+      "id": "campaign-461-seat1",
+      "status": "completed",
+      "boundaries": 58,
+      "native_boundaries": 58
+    },
+    {
+      "id": "campaign-462-seat0",
+      "status": "completed",
+      "boundaries": 21,
+      "native_boundaries": 21
+    },
+    {
+      "id": "campaign-462-seat1",
+      "status": "completed",
+      "boundaries": 25,
+      "native_boundaries": 25
+    },
+    {
+      "id": "campaign-463-seat0",
+      "status": "completed",
+      "boundaries": 7,
+      "native_boundaries": 7
+    },
+    {
+      "id": "campaign-463-seat1",
+      "status": "completed",
+      "boundaries": 7,
+      "native_boundaries": 7
+    },
+    {
+      "id": "campaign-464-seat0",
+      "status": "completed",
+      "boundaries": 91,
+      "native_boundaries": 91
+    },
+    {
+      "id": "campaign-464-seat1",
+      "status": "completed",
+      "boundaries": 22,
+      "native_boundaries": 22
+    },
+    {
+      "id": "campaign-465-seat0",
+      "status": "completed",
+      "boundaries": 14,
+      "native_boundaries": 14
+    },
+    {
+      "id": "campaign-465-seat1",
+      "status": "completed",
+      "boundaries": 9,
+      "native_boundaries": 9
+    },
+    {
+      "id": "campaign-466-seat0",
+      "status": "completed",
+      "boundaries": 12,
+      "native_boundaries": 12
+    },
+    {
+      "id": "campaign-466-seat1",
+      "status": "completed",
+      "boundaries": 11,
+      "native_boundaries": 11
+    },
+    {
+      "id": "campaign-467-seat0",
+      "status": "completed",
+      "boundaries": 15,
+      "native_boundaries": 15
+    },
+    {
+      "id": "campaign-467-seat1",
+      "status": "completed",
+      "boundaries": 46,
+      "native_boundaries": 46
+    },
+    {
+      "id": "campaign-468-seat0",
+      "status": "completed",
+      "boundaries": 1,
+      "native_boundaries": 1
+    },
+    {
+      "id": "campaign-468-seat1",
+      "status": "completed",
+      "boundaries": 2,
+      "native_boundaries": 2
+    },
+    {
+      "id": "campaign-469-seat0",
+      "status": "completed",
+      "boundaries": 5,
+      "native_boundaries": 5
+    },
+    {
+      "id": "campaign-469-seat1",
+      "status": "completed",
+      "boundaries": 4,
+      "native_boundaries": 4
+    },
+    {
+      "id": "campaign-470-seat0",
+      "status": "completed",
+      "boundaries": 31,
+      "native_boundaries": 31
+    },
+    {
+      "id": "campaign-470-seat1",
+      "status": "completed",
+      "boundaries": 33,
+      "native_boundaries": 33
+    },
+    {
+      "id": "campaign-471-seat0",
+      "status": "completed",
+      "boundaries": 1,
+      "native_boundaries": 1
+    },
+    {
+      "id": "campaign-471-seat1",
+      "status": "completed",
+      "boundaries": 1,
+      "native_boundaries": 1
+    },
+    {
+      "id": "campaign-472-seat0",
+      "status": "completed",
+      "boundaries": 11,
+      "native_boundaries": 11
+    },
+    {
+      "id": "campaign-472-seat1",
+      "status": "completed",
+      "boundaries": 12,
+      "native_boundaries": 12
+    },
+    {
+      "id": "campaign-473-seat0",
+      "status": "completed",
+      "boundaries": 30,
+      "native_boundaries": 30
+    },
+    {
+      "id": "campaign-473-seat1",
+      "status": "completed",
+      "boundaries": 18,
+      "native_boundaries": 18
+    },
+    {
+      "id": "campaign-474-seat0",
+      "status": "completed",
+      "boundaries": 8,
+      "native_boundaries": 8
+    },
+    {
+      "id": "campaign-474-seat1",
+      "status": "completed",
+      "boundaries": 12,
+      "native_boundaries": 12
+    },
+    {
+      "id": "campaign-475-seat0",
+      "status": "completed",
+      "boundaries": 12,
+      "native_boundaries": 12
+    },
+    {
+      "id": "campaign-475-seat1",
+      "status": "completed",
+      "boundaries": 14,
+      "native_boundaries": 14
+    },
+    {
+      "id": "campaign-476-seat0",
+      "status": "completed",
+      "boundaries": 48,
+      "native_boundaries": 48
+    },
+    {
+      "id": "campaign-476-seat1",
+      "status": "completed",
+      "boundaries": 54,
+      "native_boundaries": 54
+    },
+    {
+      "id": "campaign-477-seat0",
+      "status": "completed",
+      "boundaries": 15,
+      "native_boundaries": 15
+    },
+    {
+      "id": "campaign-477-seat1",
+      "status": "completed",
+      "boundaries": 15,
+      "native_boundaries": 15
+    },
+    {
+      "id": "campaign-478-seat0",
+      "status": "completed",
+      "boundaries": 7,
+      "native_boundaries": 7
+    },
+    {
+      "id": "campaign-478-seat1",
+      "status": "completed",
+      "boundaries": 8,
+      "native_boundaries": 8
+    },
+    {
+      "id": "campaign-479-seat0",
+      "status": "completed",
+      "boundaries": 26,
+      "native_boundaries": 26
+    },
+    {
+      "id": "campaign-479-seat1",
+      "status": "completed",
+      "boundaries": 72,
+      "native_boundaries": 72
+    },
+    {
+      "id": "campaign-480-seat0",
+      "status": "completed",
+      "boundaries": 4,
+      "native_boundaries": 4
+    },
+    {
+      "id": "campaign-480-seat1",
+      "status": "completed",
+      "boundaries": 1,
+      "native_boundaries": 1
+    },
+    {
+      "id": "campaign-481-seat0",
+      "status": "completed",
+      "boundaries": 15,
+      "native_boundaries": 15
+    },
+    {
+      "id": "campaign-481-seat1",
+      "status": "completed",
+      "boundaries": 15,
+      "native_boundaries": 15
+    },
+    {
+      "id": "campaign-482-seat0",
+      "status": "completed",
+      "boundaries": 17,
+      "native_boundaries": 17
+    },
+    {
+      "id": "campaign-482-seat1",
+      "status": "completed",
+      "boundaries": 18,
+      "native_boundaries": 18
+    },
+    {
+      "id": "campaign-483-seat0",
+      "status": "completed",
+      "boundaries": 1,
+      "native_boundaries": 1
+    },
+    {
+      "id": "campaign-483-seat1",
+      "status": "completed",
+      "boundaries": 1,
+      "native_boundaries": 1
+    },
+    {
+      "id": "campaign-484-seat0",
+      "status": "completed",
+      "boundaries": 14,
+      "native_boundaries": 14
+    },
+    {
+      "id": "campaign-484-seat1",
+      "status": "completed",
+      "boundaries": 15,
+      "native_boundaries": 15
+    },
+    {
+      "id": "campaign-485-seat0",
+      "status": "completed",
+      "boundaries": 15,
+      "native_boundaries": 15
+    },
+    {
+      "id": "campaign-485-seat1",
+      "status": "completed",
+      "boundaries": 15,
+      "native_boundaries": 15
+    },
+    {
+      "id": "campaign-486-seat0",
+      "status": "completed",
+      "boundaries": 17,
+      "native_boundaries": 17
+    },
+    {
+      "id": "campaign-486-seat1",
+      "status": "completed",
+      "boundaries": 17,
+      "native_boundaries": 17
+    },
+    {
+      "id": "campaign-487-seat0",
+      "status": "completed",
+      "boundaries": 24,
+      "native_boundaries": 24
+    },
+    {
+      "id": "campaign-487-seat1",
+      "status": "completed",
+      "boundaries": 24,
+      "native_boundaries": 24
+    },
+    {
+      "id": "campaign-488-seat0",
+      "status": "completed",
+      "boundaries": 22,
+      "native_boundaries": 22
+    },
+    {
+      "id": "campaign-488-seat1",
+      "status": "completed",
+      "boundaries": 32,
+      "native_boundaries": 32
+    },
+    {
+      "id": "campaign-489-seat0",
+      "status": "completed",
+      "boundaries": 1,
+      "native_boundaries": 1
+    },
+    {
+      "id": "campaign-489-seat1",
+      "status": "completed",
+      "boundaries": 1,
+      "native_boundaries": 1
+    },
+    {
+      "id": "campaign-490-seat0",
+      "status": "completed",
+      "boundaries": 7,
+      "native_boundaries": 7
+    },
+    {
+      "id": "campaign-490-seat1",
+      "status": "completed",
+      "boundaries": 4,
+      "native_boundaries": 4
+    },
+    {
+      "id": "campaign-491-seat0",
+      "status": "completed",
+      "boundaries": 55,
+      "native_boundaries": 55
+    },
+    {
+      "id": "campaign-491-seat1",
+      "status": "completed",
+      "boundaries": 61,
+      "native_boundaries": 61
+    },
+    {
+      "id": "campaign-492-seat0",
+      "status": "completed",
+      "boundaries": 1,
+      "native_boundaries": 1
+    },
+    {
+      "id": "campaign-492-seat1",
+      "status": "completed",
+      "boundaries": 1,
+      "native_boundaries": 1
+    },
+    {
+      "id": "campaign-493-seat0",
+      "status": "completed",
+      "boundaries": 4,
+      "native_boundaries": 4
+    },
+    {
+      "id": "campaign-493-seat1",
+      "status": "completed",
+      "boundaries": 5,
+      "native_boundaries": 5
+    },
+    {
+      "id": "campaign-494-seat0",
+      "status": "completed",
+      "boundaries": 37,
+      "native_boundaries": 37
+    },
+    {
+      "id": "campaign-494-seat1",
+      "status": "completed",
+      "boundaries": 38,
+      "native_boundaries": 38
+    },
+    {
+      "id": "campaign-495-seat0",
+      "status": "completed",
+      "boundaries": 71,
+      "native_boundaries": 71
+    },
+    {
+      "id": "campaign-495-seat1",
+      "status": "completed",
+      "boundaries": 74,
+      "native_boundaries": 74
+    },
+    {
+      "id": "campaign-496-seat0",
+      "status": "completed",
+      "boundaries": 14,
+      "native_boundaries": 14
+    },
+    {
+      "id": "campaign-496-seat1",
+      "status": "completed",
+      "boundaries": 13,
+      "native_boundaries": 13
+    },
+    {
+      "id": "campaign-497-seat0",
+      "status": "completed",
+      "boundaries": 84,
+      "native_boundaries": 84
+    },
+    {
+      "id": "campaign-497-seat1",
+      "status": "completed",
+      "boundaries": 38,
+      "native_boundaries": 38
+    },
+    {
+      "id": "campaign-498-seat0",
+      "status": "completed",
+      "boundaries": 17,
+      "native_boundaries": 17
+    },
+    {
+      "id": "campaign-498-seat1",
+      "status": "completed",
+      "boundaries": 17,
+      "native_boundaries": 17
+    },
+    {
+      "id": "campaign-499-seat0",
+      "status": "completed",
+      "boundaries": 11,
+      "native_boundaries": 11
+    },
+    {
+      "id": "campaign-499-seat1",
+      "status": "completed",
+      "boundaries": 8,
+      "native_boundaries": 8
+    }
+  ],
+  "elapsed_seconds": 161.81723427772522,
+  "replayed_indices": [
+    499,
+    999
+  ],
+  "native_returncode": 0,
+  "status": "complete_target"
+}

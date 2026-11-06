@@ -1,0 +1,236 @@
+{
+  "status": "complete",
+  "budget_seconds": 300,
+  "rows": [
+    {
+      "backend": "showdown",
+      "copies": 1,
+      "samples_seconds": [
+        0.04661962300000005,
+        0.03694038199999977,
+        0.03381953999999996
+      ],
+      "warmup_seconds": 0.1119191969999997,
+      "initialization_seconds": [
+        0.8320649940000001,
+        0.0032667489999998905,
+        0.0011715540000000147,
+        0.001292359000000033
+      ],
+      "node": "v24.22.1",
+      "threads": 7,
+      "median_seconds": 0.03694038199999977,
+      "range_seconds": [
+        0.03381953999999996,
+        0.04661962300000005
+      ],
+      "completed_battles": 3,
+      "useful_request_boundaries": 128,
+      "battles_per_second": 81.21193765673615,
+      "useful_boundaries_per_second": 3465.042673354076
+    },
+    {
+      "backend": "cpu",
+      "copies": 1,
+      "samples_seconds": [
+        0.050797912990674376,
+        0.05002527800388634,
+        0.05028619000222534
+      ],
+      "compile_seconds": 0,
+      "warmup_seconds": 0.05857228400418535,
+      "host_preparation_seconds": 0.0003086140059167519,
+      "input_transfer_seconds": [
+        0.0013121589872753248,
+        0.0007936359907034785,
+        0.000796836000517942,
+        0.0007544349937234074
+      ],
+      "threads": 145,
+      "median_seconds": 0.05028619000222534,
+      "range_seconds": [
+        0.05002527800388634,
+        0.050797912990674376
+      ],
+      "completed_battles": 3,
+      "useful_request_boundaries": 128,
+      "battles_per_second": 59.65852652323112,
+      "useful_boundaries_per_second": 2545.4304649911946
+    },
+    {
+      "backend": "gpu",
+      "copies": 1,
+      "samples_seconds": [
+        0.826826834003441,
+        0.5407302609964972,
+        0.539530392998131
+      ],
+      "compile_seconds": 0,
+      "warmup_seconds": 0.8648382959945593,
+      "host_preparation_seconds": 0.00024211099662352353,
+      "input_transfer_seconds": [
+        0.0031662440014770254,
+        0.0031665440037613735,
+        0.002972468006191775,
+        0.0029019640060141683
+      ],
+      "threads": 145,
+      "median_seconds": 0.5407302609964972,
+      "range_seconds": [
+        0.539530392998131,
+        0.826826834003441
+      ],
+      "completed_battles": 3,
+      "useful_request_boundaries": 128,
+      "battles_per_second": 5.54805272867729,
+      "useful_boundaries_per_second": 236.71691642356438
+    },
+    {
+      "backend": "showdown",
+      "copies": 32,
+      "samples_seconds": [
+        0.9493704559999997,
+        0.840741016,
+        0.8400565770000002
+      ],
+      "warmup_seconds": 0.8741203020000002,
+      "initialization_seconds": [
+        0.028690621999999166,
+        0.02298819900000035,
+        0.021332304999999906,
+        0.0213485069999997
+      ],
+      "node": "v24.22.1",
+      "threads": 7,
+      "median_seconds": 0.840741016,
+      "range_seconds": [
+        0.8400565770000002,
+        0.9493704559999997
+      ],
+      "completed_battles": 96,
+      "useful_request_boundaries": 4096,
+      "battles_per_second": 114.18498464216715,
+      "useful_boundaries_per_second": 4871.8926780657985
+    },
+    {
+      "backend": "cpu",
+      "copies": 32,
+      "samples_seconds": [
+        0.6124818690004759,
+        0.5998061260033865,
+        0.5961311389983166
+      ],
+      "compile_seconds": 11.100596708012745,
+      "warmup_seconds": 0.6527782140037743,
+      "host_preparation_seconds": 0.0009386530000483617,
+      "input_transfer_seconds": [
+        0.010496293994947337,
+        0.036439048999454826,
+        0.001974400001927279,
+        0.0024199220060836524
+      ],
+      "threads": 145,
+      "median_seconds": 0.5998061260033865,
+      "range_seconds": [
+        0.5961311389983166,
+        0.6124818690004759
+      ],
+      "completed_battles": 96,
+      "useful_request_boundaries": 4096,
+      "battles_per_second": 160.0517164432195,
+      "useful_boundaries_per_second": 6828.8732349106995
+    },
+    {
+      "backend": "gpu",
+      "copies": 32,
+      "samples_seconds": [
+        0.8717472319985973,
+        0.8717044289951446,
+        0.8758014449995244
+      ],
+      "compile_seconds": 12.816518055013148,
+      "warmup_seconds": 1.218613800010644,
+      "host_preparation_seconds": 0.0009720499947434291,
+      "input_transfer_seconds": [
+        0.007630587002495304,
+        0.004821552996872924,
+        0.004044411994982511,
+        0.004051512005389668
+      ],
+      "threads": 145,
+      "median_seconds": 0.8717472319985973,
+      "range_seconds": [
+        0.8717044289951446,
+        0.8758014449995244
+      ],
+      "completed_battles": 96,
+      "useful_request_boundaries": 4096,
+      "battles_per_second": 110.12366483792228,
+      "useful_boundaries_per_second": 4698.6096997513505
+    }
+  ],
+  "gates": {
+    "cpu": {
+      "status": "passed",
+      "boundaries": 128,
+      "actual_placement": true,
+      "output_digest": "d972f253b2f2c22a276b5b0b546b91ab65c9e971764c571f4fe5632031a16381",
+      "compile_seconds": 11.81474117799371,
+      "input_transfer_seconds": 0.0008382430096389726,
+      "warmup_seconds": 0.05857228400418535
+    },
+    "gpu": {
+      "status": "passed",
+      "boundaries": 128,
+      "actual_placement": true,
+      "output_digest": "d972f253b2f2c22a276b5b0b546b91ab65c9e971764c571f4fe5632031a16381",
+      "compile_seconds": 14.700285922008334,
+      "input_transfer_seconds": 0.003939309011911973,
+      "warmup_seconds": 0.8648382959945593
+    }
+  },
+  "checkpoint": "complete",
+  "elapsed_seconds": 79.1617717199988,
+  "commit": "51da7a941bcd301367e2c904f049c5a377248867",
+  "native_pin": "1242c1e2d9763ba5b85d33f13aecb89bae19ae3d",
+  "fixture_sha256": "400ad378b14d5be83d78b5b3523f8a3c973f4a83365127806de3088b37b7a60f",
+  "source_sha256": {
+    "simulator/shared_engine.py": "8fe364fd9e0b84d8e61daa717c27a0a4e4ce8f65b81b793ffd2fbb5198b3c599",
+    "simulator/shared_engine_io.py": "9863c05e38eba89735b587f6ba8aaffebfa5fe191c9783497b83d3da60e51291",
+    "test/shared_engine_support.py": "ec0dc5dcf696073d3d97f70dd138f64fd84e81f25a8687f7f1ad899669a07459",
+    "benchmarks/shared_engine.py": "4132971c2469467a8e83cba0c5a220e7f6c19a0fef7faf8ff3734f35d82eaa3c",
+    "/workspace/benchmarks/g3_diagnostic.py": "8ddf63f42b25d6b1e987490b9aad1e2eddd0b7782e1340a550bd4b2c87698818",
+    "benchmarks/g3_diagnostic_native.cjs": "30e44546398afc36a0bb5aff18767c4c21737b4ab023282604468216db42ca04"
+  },
+  "affinity": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "jax": "0.12.0.1",
+  "devices": {
+    "cpu": [
+      "cpu:0"
+    ],
+    "gpu": [
+      "cuda:0"
+    ]
+  },
+  "lengths": {
+    "F01-p1": 34,
+    "F02-p1": 33,
+    "F03-p1": 61
+  },
+  "output_contract": "JAX retains every full Result/state/trace plus numeric legal masks on device. Showdown retains normal Battle state, string log and normal generated requests; no per-boundary oracle snapshots or per-draw observer. Host projection/transfer excluded. Different output representations and retention costs remain.",
+  "initialization_seconds": {
+    "cpu": 0.6610785070079146,
+    "gpu": 1.2258157259930158
+  },
+  "validation_position": null,
+  "summary_note": "Rates derived after completion from three raw samples; no additional execution."
+}

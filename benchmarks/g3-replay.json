@@ -1,0 +1,6 @@
+{
+  "schemaVersion": 1,
+  "campaign": "benchmarks/g3-campaign.json",
+  "indices": [0, 1, 4, 19, 99, 119, 165, 256, 257, 479, 499, 999],
+  "selection": "Diagnostic selection persisted before device replay: original fixed samples; original production regressions 4/119/165; paired longest native traces 256/257 (174/177 boundaries); queue-insertion draw cohort 479. Long traces were selected after the independent native census. No statistical equivalence claim."
+}

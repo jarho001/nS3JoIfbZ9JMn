@@ -1,4 +1,68 @@
+# G3 intermediate matched-battle diagnostic
+
+This user-approved diagnostic supersedes the broad campaign below for this run.
+Preserve all completed work and uncommitted simulator repairs. Work directly with
+Sol 6.1/high, without delegation. The requested `/workspace/nS3JoIfbZ9JMn` does not
+exist on this executor; use its existing checkout and evidence in `/workspace`.
+
+Compare pinned CPU Pokémon Showdown with compiled JAX CPU and GPU on exactly
+`F01-p1`, `F02-p1`, `F03-p1`: 34 + 33 + 61 = 128 request boundaries per pack.
+Freeze the existing independent native expectations, teams, initial conditions,
+seed words and every recorded choice into the diagnostic evidence directory.
+Do not generate another campaign. Verify these three trajectories once on the
+measured compiled CPU/GPU code: state, ordered RNG, requests/legal actions,
+events/cumulative histories, terminal outcomes and actual device placement.
+Save the first divergence and stop if the gate fails.
+
+Use only one pack (3 battles) and 32 identical packs (96 battles). A fixed CPU
+allocation of logical CPUs 0–7 applies to every backend, with OMP/BLAS budgets of
+8 threads; Node uses one simulation thread. Record observed process thread
+counts separately from active simulation parallelism. Use the existing isolated
+Python environment, hardware and current uncommitted source; record hashes.
+
+Reuse the existing initialization, projection, exact comparison and benchmark
+synchronization helpers with a small fixed-pack adapter. JAX uses one compiled
+scan over exactly 128 useful transitions per lane, selecting the fresh starting
+state between the three battles. There are no padded or absorbing transitions.
+Retain every full Result/state/event/draw trace, cumulative history and legal
+mask. Showdown runs uninstrumented in one long-lived Node process with its normal
+validation, PRNG, requests and string log retained. It does not retain JAX-style
+numeric full-state snapshots and per-draw trace arrays; disclose this output
+contract difference instead of stripping JAX work.
+
+Prepare fresh independent input buffers/Battle objects outside each timed call.
+Warm once, then measure three repetitions. The one-pack warm result also serves
+as the trajectory gate. Record initialization, host preparation, compilation,
+input transfer and warmup separately. Time only simulation through complete
+output readiness; synchronize all GPU inputs before and all outputs after.
+Exclude assertions, oracle observation, host projection, file I/O, subprocess
+startup and cleanup. Report median and full range of elapsed time, completed
+battles/s and useful boundaries/s. Sequential CPU/GPU execution avoids contention.
+
+A single 300-second process-group timeout bounds execution including imports,
+fixture freezing, validation, compilation, warmup and measurement. Save compact
+checkpoints after each completed backend/point. Budget exhaustion means incomplete
+evidence, with no automatic extension or retry. No fuzzing, suites, ablations,
+optimization or mechanics work. No profiler unless timings expose a clear issue
+and the same remaining budget permits one short capture.
+
+Deliver one compact six-row comparison table, timing boundaries/hardware/source,
+a short evidence-based interpretation and one useful follow-up measurement.
+This restricted-slice diagnostic does not accept G3 or establish peak throughput.
+Artifacts: `test-logs/g3-testing-profiling/diagnostic/`; progress:
+`docs/ORCHESTRATION_STATE.json`; report: `docs/G3_TESTING_PROFILING_RESULTS.md`.
+
+<details>
+<summary>Superseded broad handoff (historical scope; do not execute)</summary>
+
 # Handoff: extensive G3 testing and CPU/GPU bottleneck profiling
+
+**Execution stopped by user, 2026-11-06.** The extensive CPU/GPU sweep below
+is no longer authorized to continue. Establish a matched, uninstrumented legacy
+Showdown-versus-GPU benchmark before any further benchmark execution. Existing
+CPU/GPU timings do not establish speed relative to Showdown. Preserve the
+intermediate evidence in [the results report](G3_TESTING_PROFILING_RESULTS.md)
+and [compact state](ORCHESTRATION_STATE.json); G3 remains open.
 
 Prepared 2026-11-06. This is an execution handoff, not an active campaign or new
 performance evidence. Assign it explicitly to start the work below. Work directly
@@ -233,3 +297,5 @@ with origin/main. Continue through the integrated checkpoints, saving compact
 resumable progress. Deliver measured bottlenecks and recommendations; preserve
 exact simulator semantics and follow the handoff's acceptance/stopping conditions.
 ```
+
+</details>

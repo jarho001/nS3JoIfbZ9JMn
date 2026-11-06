@@ -1,0 +1,6 @@
+test_fainted_status_regressions_continue_from_saved_states_and_reset (test.test_shared_engine_lifecycle.SharedEngineLifecycleTest.test_fainted_status_regressions_continue_from_saved_states_and_reset) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 48.231s
+
+OK

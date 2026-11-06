@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "formatId": "gen5randombattle",
+  "name": "[Gen 5] Random Battle",
+  "generation": 5,
+  "mod": "gen5",
+  "modInheritance": [
+    "gen5",
+    "gen6",
+    "gen7",
+    "gen8",
+    "base"
+  ],
+  "gameType": "singles",
+  "teamGenerator": "random",
+  "declaredRules": [
+    "Obtainable",
+    "Sleep Clause Mod",
+    "HP Percentage Mod",
+    "Cancel Mod",
+    "Illusion Level Mod"
+  ],
+  "declaredBanlist": [],
+  "declaredUnbanlist": [],
+  "effectiveRules": [
+    {
+      "id": "obtainable",
+      "source": ""
+    },
+    {
+      "id": "obtainablemoves",
+      "source": "Obtainable"
+    },
+    {
+      "id": "obtainableabilities",
+      "source": "Obtainable"
+    },
+    {
+      "id": "obtainableformes",
+      "source": "Obtainable"
+    },
+    {
+      "id": "evlimit",
+      "source": "Obtainable"
+    },
+    {
+      "id": "obtainablemisc",
+      "source": "Obtainable"
+    },
+    {
+      "id": "-unreleased",
+      "source": "Obtainable"
+    },
+    {
+      "id": "-tag:unobtainable",
+      "source": "Obtainable"
+    },
+    {
+      "id": "-nonexistent",
+      "source": "Obtainable"
+    },
+    {
+      "id": "sleepclausemod",
+      "source": ""
+    },
+    {
+      "id": "hppercentagemod",
+      "source": ""
+    },
+    {
+      "id": "cancelmod",
+      "source": ""
+    },
+    {
+      "id": "illusionlevelmod",
+      "source": ""
+    }
+  ],
+  "effectiveValueRules": [
+    {
+      "id": "evlimit",
+      "value": "Auto"
+    }
+  ],
+  "effectiveBans": [
+    {
+      "id": "-unreleased",
+      "source": "Obtainable"
+    },
+    {
+      "id": "-tag:unobtainable",
+      "source": "Obtainable"
+    },
+    {
+      "id": "-nonexistent",
+      "source": "Obtainable"
+    }
+  ],
+  "teamPreview": false,
+  "ruleTableNote": "Effective rule table entries and values from the pinned Showdown revision; this is metadata, not an export of executable mechanics.",
+  "upstreamCommit": "1242c1e2d9763ba5b85d33f13aecb89bae19ae3d"
+}

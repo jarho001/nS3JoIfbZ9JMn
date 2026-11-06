@@ -368,8 +368,8 @@ def _attack(c,row):
                 immune=(normal&(ts==GENGAR))|((move==EARTHQUAKE)&(ts==GENGAR))
                 blocked=s.protected[target,tm]
                 def block(c):return _event(c,ACTIVATE,target,tm,move=PROTECT)
+                def immunity(c):return _event(c,IMMUNE,target,tm,aux=jnp.where(move==EARTHQUAKE,2,0))
                 def try_hit(c):
-                    def immunity(c):return _event(c,IMMUNE,target,tm,aux=jnp.where(move==EARTHQUAKE,2,0))
                     def accuracy(c):
                         c,roll=jax.lax.cond(ACCURACY[move]>0,lambda c:_draw(c,0,100,ACC),lambda c:(c,jnp.uint32(0)),c)
                         hit=(ACCURACY[move]==0)|(roll<ACCURACY[move].astype(jnp.uint32))
@@ -382,8 +382,10 @@ def _attack(c,row):
                             t=t._replace(events=t.events.at[move_row,7].set(jnp.where(existing,2,t.events[move_row,7])))
                             return _hit((s,t),actor,move)
                         return jax.lax.cond(hit,hit_fn,miss,c)
-                    return jax.lax.cond(immune,immunity,accuracy,c)
-                return jax.lax.cond(blocked,block,try_hit,c)
+                    return jax.lax.cond(blocked,block,accuracy,c)
+                # Pinned Gen 5 resolves type/Levitate immunity before Protect;
+                # status failure checks still occur after Protect and accuracy.
+                return jax.lax.cond(immune,immunity,try_hit,c)
             def no_target(c):
                 s,t=c;t=t._replace(events=t.events.at[move_row,7].set(3))
                 return _event((s,t),FAIL,actor,mon)
@@ -409,6 +411,9 @@ def _switch(c,row):
              status=s.status[side,incoming],move=row[6])
     s,t=c
     # runSwitch precedes ordinary moves but follows remaining simultaneous swaps.
+    # Native queue.insertChoice updates the incoming Pokemon's Speed before
+    # resolving/sorting its runSwitch callback, including forced replacements.
+    s=s._replace(speed=s.speed.at[side,incoming].set(_speeds(s)[side,incoming]))
     s=_qappend(s,jnp.array([RUN_SWITCH,0,0,0,0,0,0],jnp.int32).at[1].set(side).at[2].set(incoming).at[5].set(s.speed[side,incoming]))
     return _qsort((s,t))
 
@@ -425,7 +430,11 @@ def _residual(c):
                      jnp.array([2,side,0,10000,0,2],jnp.int32).at[2].set(m).at[4].set(s.speed[side,m]),
                      jnp.array([3,side,0,10000,0,2],jnp.int32).at[2].set(m).at[4].set(s.speed[side,m]),
                      jnp.array([4,side,0,5,0,4],jnp.int32).at[2].set(m).at[4].set(s.speed[side,m])])
-        valid.extend([live&((status==TOX)|(status==BRN)),live&s.protected[side,m],live&(s.stall_duration[side,m]>0),live&(s.item[side,m]==1)])
+        # fieldEvent collects status/item callbacks before checking fainted holders.
+        # A fainted holder still participates in handler shuffle draws, then
+        # effect() below skips its callback. Fainting clears volatiles; native
+        # checkFainted changes status to fnt only after the residual action.
+        valid.extend([(status==TOX)|(status==BRN),live&s.protected[side,m],live&(s.stall_duration[side,m]>0),s.item[side,m]==1])
     rows=jnp.stack(rows);valid=jnp.stack(valid);count=jnp.sum(valid).astype(jnp.int32)
     order=jnp.where(valid,rows[:,3],20000)
     idx=jnp.lexsort((jnp.arange(8),rows[:,5],-rows[:,4],order));rows=rows[idx]

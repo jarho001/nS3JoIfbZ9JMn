@@ -1,0 +1,588 @@
+{
+  "schemaVersion": 1,
+  "source": "source.json",
+  "config": "benchmarks/g3-campaign.json",
+  "platform": "cpu",
+  "start_index": 58,
+  "starts": 62,
+  "completed": 61,
+  "truncated": 0,
+  "capacity": 0,
+  "failing": 1,
+  "boundaries": 2420,
+  "decisions": 4655,
+  "ordinary": 54,
+  "synthetic": 8,
+  "effects": {
+    "": 2407,
+    "-fail": 849,
+    "-activate": 290,
+    "upkeep": 2164,
+    "move": 2240,
+    "faint": 162,
+    "-damage": 1009,
+    "switch": 182,
+    "turn": 2164,
+    "-status": 69,
+    "-immune": 1297,
+    "cant": 262,
+    "-singleturn": 243,
+    "-crit": 65,
+    "-heal": 329,
+    "win": 61,
+    "-resisted": 106,
+    "-supereffective": 86,
+    "-curestatus": 25,
+    "-enditem": 25,
+    "-miss": 96
+  },
+  "pairs": {
+    "+-activate": 290,
+    "+-damage": 1009,
+    "+-fail": 849,
+    "+faint": 162,
+    "+move": 2240,
+    "+upkeep": 2164,
+    "-activate+-damage": 175,
+    "-activate+-fail": 32,
+    "-activate+faint": 67,
+    "-activate+move": 290,
+    "-activate+upkeep": 263,
+    "-damage+-fail": 240,
+    "-damage+faint": 162,
+    "-damage+move": 1006,
+    "-damage+upkeep": 867,
+    "-fail+faint": 27,
+    "-fail+move": 849,
+    "-fail+upkeep": 830,
+    "faint+move": 162,
+    "faint+upkeep": 84,
+    "move+upkeep": 2098,
+    "+switch": 182,
+    "+turn": 2164,
+    "switch+turn": 149,
+    "+-immune": 1297,
+    "+-status": 69,
+    "-immune+-status": 24,
+    "-immune+move": 1297,
+    "-immune+turn": 1262,
+    "-immune+upkeep": 1276,
+    "-status+move": 69,
+    "-status+turn": 66,
+    "-status+upkeep": 67,
+    "move+turn": 2014,
+    "turn+upkeep": 2063,
+    "-fail+-immune": 348,
+    "-fail+turn": 814,
+    "+cant": 262,
+    "-fail+cant": 132,
+    "cant+move": 247,
+    "cant+turn": 262,
+    "cant+upkeep": 262,
+    "-activate+-immune": 83,
+    "-damage+-immune": 501,
+    "-immune+faint": 24,
+    "+-singleturn": 243,
+    "-immune+-singleturn": 76,
+    "-singleturn+move": 243,
+    "-singleturn+turn": 242,
+    "-singleturn+upkeep": 243,
+    "+-crit": 65,
+    "+-heal": 329,
+    "-activate+-crit": 13,
+    "-activate+-heal": 47,
+    "-activate+turn": 221,
+    "-crit+-damage": 65,
+    "-crit+-heal": 13,
+    "-crit+-immune": 32,
+    "-crit+move": 65,
+    "-crit+turn": 44,
+    "-crit+upkeep": 50,
+    "-damage+-heal": 289,
+    "-damage+turn": 783,
+    "-heal+-immune": 150,
+    "-heal+move": 314,
+    "-heal+turn": 312,
+    "-heal+upkeep": 327,
+    "+win": 61,
+    "-activate+win": 25,
+    "-damage+win": 61,
+    "-immune+win": 10,
+    "faint+win": 61,
+    "move+win": 61,
+    "-activate+-singleturn": 113,
+    "-fail+-singleturn": 36,
+    "+-resisted": 106,
+    "+-supereffective": 86,
+    "-damage+-resisted": 106,
+    "-damage+-supereffective": 86,
+    "-heal+-resisted": 45,
+    "-heal+-supereffective": 50,
+    "-resisted+-supereffective": 8,
+    "-resisted+move": 106,
+    "-resisted+turn": 66,
+    "-resisted+upkeep": 66,
+    "-supereffective+move": 86,
+    "-supereffective+turn": 57,
+    "-supereffective+upkeep": 67,
+    "-heal+-singleturn": 8,
+    "-immune+-supereffective": 47,
+    "-supereffective+faint": 23,
+    "-supereffective+win": 7,
+    "-immune+cant": 75,
+    "+-curestatus": 25,
+    "+-enditem": 25,
+    "-curestatus+-enditem": 25,
+    "-curestatus+-immune": 10,
+    "-curestatus+-status": 25,
+    "-curestatus+move": 25,
+    "-curestatus+turn": 25,
+    "-curestatus+upkeep": 25,
+    "-enditem+-immune": 10,
+    "-enditem+-status": 25,
+    "-enditem+move": 25,
+    "-enditem+turn": 25,
+    "-enditem+upkeep": 25,
+    "-singleturn+cant": 18,
+    "-activate+cant": 7,
+    "-damage+cant": 19,
+    "-heal+faint": 16,
+    "-crit+faint": 16,
+    "-crit+win": 7,
+    "-activate+-status": 31,
+    "-damage+-status": 38,
+    "-heal+-status": 11,
+    "-fail+-heal": 74,
+    "-damage+-singleturn": 11,
+    "-singleturn+faint": 1,
+    "-damage+switch": 22,
+    "-heal+switch": 26,
+    "switch+upkeep": 70,
+    "-crit+-supereffective": 5,
+    "-resisted+faint": 12,
+    "-resisted+win": 7,
+    "-crit+-fail": 11,
+    "+-miss": 96,
+    "-fail+-miss": 37,
+    "-miss+move": 96,
+    "-miss+turn": 91,
+    "-miss+upkeep": 94,
+    "-fail+-status": 21,
+    "-fail+win": 11,
+    "-resisted+switch": 3,
+    "move+switch": 29,
+    "-supereffective+switch": 9,
+    "faint+switch": 8,
+    "-crit+-resisted": 7,
+    "-crit+-miss": 3,
+    "-damage+-miss": 41,
+    "-activate+-curestatus": 13,
+    "-activate+-enditem": 13,
+    "-status+cant": 3,
+    "-miss+cant": 1,
+    "-immune+-miss": 36,
+    "-heal+cant": 8,
+    "-status+faint": 2,
+    "-status+win": 1,
+    "-immune+switch": 10,
+    "-crit+switch": 1,
+    "-heal+-miss": 15,
+    "-miss+-resisted": 3,
+    "-activate+-resisted": 4,
+    "-curestatus+-damage": 9,
+    "-curestatus+-resisted": 1,
+    "-damage+-enditem": 9,
+    "-enditem+-resisted": 1,
+    "-immune+-resisted": 40,
+    "-resisted+-status": 3,
+    "-curestatus+-fail": 8,
+    "-enditem+-fail": 8,
+    "-miss+faint": 5,
+    "-fail+-resisted": 9,
+    "-miss+win": 2,
+    "-supereffective+cant": 1,
+    "cant+switch": 1,
+    "-resisted+cant": 1,
+    "-curestatus+-heal": 4,
+    "-enditem+-heal": 4,
+    "-heal+win": 2,
+    "-miss+-status": 3,
+    "-activate+-miss": 2,
+    "-curestatus+-miss": 1,
+    "-enditem+-miss": 1,
+    "-activate+-supereffective": 1,
+    "-fail+-supereffective": 1,
+    "-status+-supereffective": 1
+  },
+  "per_start": [
+    {
+      "id": "campaign-029-seat0",
+      "status": "completed",
+      "boundaries": 60,
+      "native_boundaries": 60
+    },
+    {
+      "id": "campaign-029-seat1",
+      "status": "completed",
+      "boundaries": 32,
+      "native_boundaries": 32
+    },
+    {
+      "id": "campaign-030-seat0",
+      "status": "completed",
+      "boundaries": 6,
+      "native_boundaries": 6
+    },
+    {
+      "id": "campaign-030-seat1",
+      "status": "completed",
+      "boundaries": 6,
+      "native_boundaries": 6
+    },
+    {
+      "id": "campaign-031-seat0",
+      "status": "completed",
+      "boundaries": 145,
+      "native_boundaries": 145
+    },
+    {
+      "id": "campaign-031-seat1",
+      "status": "completed",
+      "boundaries": 128,
+      "native_boundaries": 128
+    },
+    {
+      "id": "campaign-032-seat0",
+      "status": "completed",
+      "boundaries": 27,
+      "native_boundaries": 27
+    },
+    {
+      "id": "campaign-032-seat1",
+      "status": "completed",
+      "boundaries": 91,
+      "native_boundaries": 91
+    },
+    {
+      "id": "campaign-033-seat0",
+      "status": "completed",
+      "boundaries": 50,
+      "native_boundaries": 50
+    },
+    {
+      "id": "campaign-033-seat1",
+      "status": "completed",
+      "boundaries": 46,
+      "native_boundaries": 46
+    },
+    {
+      "id": "campaign-034-seat0",
+      "status": "completed",
+      "boundaries": 40,
+      "native_boundaries": 40
+    },
+    {
+      "id": "campaign-034-seat1",
+      "status": "completed",
+      "boundaries": 41,
+      "native_boundaries": 41
+    },
+    {
+      "id": "campaign-035-seat0",
+      "status": "completed",
+      "boundaries": 35,
+      "native_boundaries": 35
+    },
+    {
+      "id": "campaign-035-seat1",
+      "status": "completed",
+      "boundaries": 39,
+      "native_boundaries": 39
+    },
+    {
+      "id": "campaign-036-seat0",
+      "status": "completed",
+      "boundaries": 45,
+      "native_boundaries": 45
+    },
+    {
+      "id": "campaign-036-seat1",
+      "status": "completed",
+      "boundaries": 43,
+      "native_boundaries": 43
+    },
+    {
+      "id": "campaign-037-seat0",
+      "status": "completed",
+      "boundaries": 72,
+      "native_boundaries": 72
+    },
+    {
+      "id": "campaign-037-seat1",
+      "status": "completed",
+      "boundaries": 78,
+      "native_boundaries": 78
+    },
+    {
+      "id": "campaign-038-seat0",
+      "status": "completed",
+      "boundaries": 128,
+      "native_boundaries": 128
+    },
+    {
+      "id": "campaign-038-seat1",
+      "status": "completed",
+      "boundaries": 128,
+      "native_boundaries": 128
+    },
+    {
+      "id": "campaign-039-seat0",
+      "status": "completed",
+      "boundaries": 1,
+      "native_boundaries": 1
+    },
+    {
+      "id": "campaign-039-seat1",
+      "status": "completed",
+      "boundaries": 3,
+      "native_boundaries": 3
+    },
+    {
+      "id": "campaign-040-seat0",
+      "status": "completed",
+      "boundaries": 19,
+      "native_boundaries": 19
+    },
+    {
+      "id": "campaign-040-seat1",
+      "status": "completed",
+      "boundaries": 14,
+      "native_boundaries": 14
+    },
+    {
+      "id": "campaign-041-seat0",
+      "status": "completed",
+      "boundaries": 18,
+      "native_boundaries": 18
+    },
+    {
+      "id": "campaign-041-seat1",
+      "status": "completed",
+      "boundaries": 18,
+      "native_boundaries": 18
+    },
+    {
+      "id": "campaign-042-seat0",
+      "status": "completed",
+      "boundaries": 38,
+      "native_boundaries": 38
+    },
+    {
+      "id": "campaign-042-seat1",
+      "status": "completed",
+      "boundaries": 38,
+      "native_boundaries": 38
+    },
+    {
+      "id": "campaign-043-seat0",
+      "status": "completed",
+      "boundaries": 12,
+      "native_boundaries": 12
+    },
+    {
+      "id": "campaign-043-seat1",
+      "status": "completed",
+      "boundaries": 13,
+      "native_boundaries": 13
+    },
+    {
+      "id": "campaign-044-seat0",
+      "status": "completed",
+      "boundaries": 39,
+      "native_boundaries": 39
+    },
+    {
+      "id": "campaign-044-seat1",
+      "status": "completed",
+      "boundaries": 39,
+      "native_boundaries": 39
+    },
+    {
+      "id": "campaign-045-seat0",
+      "status": "completed",
+      "boundaries": 11,
+      "native_boundaries": 11
+    },
+    {
+      "id": "campaign-045-seat1",
+      "status": "completed",
+      "boundaries": 10,
+      "native_boundaries": 10
+    },
+    {
+      "id": "campaign-046-seat0",
+      "status": "completed",
+      "boundaries": 28,
+      "native_boundaries": 28
+    },
+    {
+      "id": "campaign-046-seat1",
+      "status": "completed",
+      "boundaries": 26,
+      "native_boundaries": 26
+    },
+    {
+      "id": "campaign-047-seat0",
+      "status": "completed",
+      "boundaries": 73,
+      "native_boundaries": 73
+    },
+    {
+      "id": "campaign-047-seat1",
+      "status": "completed",
+      "boundaries": 77,
+      "native_boundaries": 77
+    },
+    {
+      "id": "campaign-048-seat0",
+      "status": "completed",
+      "boundaries": 18,
+      "native_boundaries": 18
+    },
+    {
+      "id": "campaign-048-seat1",
+      "status": "completed",
+      "boundaries": 20,
+      "native_boundaries": 20
+    },
+    {
+      "id": "campaign-049-seat0",
+      "status": "completed",
+      "boundaries": 20,
+      "native_boundaries": 20
+    },
+    {
+      "id": "campaign-049-seat1",
+      "status": "completed",
+      "boundaries": 7,
+      "native_boundaries": 7
+    },
+    {
+      "id": "campaign-050-seat0",
+      "status": "completed",
+      "boundaries": 23,
+      "native_boundaries": 23
+    },
+    {
+      "id": "campaign-050-seat1",
+      "status": "completed",
+      "boundaries": 26,
+      "native_boundaries": 26
+    },
+    {
+      "id": "campaign-051-seat0",
+      "status": "completed",
+      "boundaries": 17,
+      "native_boundaries": 17
+    },
+    {
+      "id": "campaign-051-seat1",
+      "status": "completed",
+      "boundaries": 17,
+      "native_boundaries": 17
+    },
+    {
+      "id": "campaign-052-seat0",
+      "status": "completed",
+      "boundaries": 39,
+      "native_boundaries": 39
+    },
+    {
+      "id": "campaign-052-seat1",
+      "status": "completed",
+      "boundaries": 39,
+      "native_boundaries": 39
+    },
+    {
+      "id": "campaign-053-seat0",
+      "status": "completed",
+      "boundaries": 94,
+      "native_boundaries": 94
+    },
+    {
+      "id": "campaign-053-seat1",
+      "status": "completed",
+      "boundaries": 93,
+      "native_boundaries": 93
+    },
+    {
+      "id": "campaign-054-seat0",
+      "status": "completed",
+      "boundaries": 35,
+      "native_boundaries": 35
+    },
+    {
+      "id": "campaign-054-seat1",
+      "status": "completed",
+      "boundaries": 11,
+      "native_boundaries": 11
+    },
+    {
+      "id": "campaign-055-seat0",
+      "status": "completed",
+      "boundaries": 10,
+      "native_boundaries": 10
+    },
+    {
+      "id": "campaign-055-seat1",
+      "status": "completed",
+      "boundaries": 9,
+      "native_boundaries": 9
+    },
+    {
+      "id": "campaign-056-seat0",
+      "status": "completed",
+      "boundaries": 28,
+      "native_boundaries": 28
+    },
+    {
+      "id": "campaign-056-seat1",
+      "status": "completed",
+      "boundaries": 29,
+      "native_boundaries": 29
+    },
+    {
+      "id": "campaign-057-seat0",
+      "status": "completed",
+      "boundaries": 13,
+      "native_boundaries": 13
+    },
+    {
+      "id": "campaign-057-seat1",
+      "status": "completed",
+      "boundaries": 13,
+      "native_boundaries": 13
+    },
+    {
+      "id": "campaign-058-seat0",
+      "status": "completed",
+      "boundaries": 9,
+      "native_boundaries": 9
+    },
+    {
+      "id": "campaign-058-seat1",
+      "status": "completed",
+      "boundaries": 6,
+      "native_boundaries": 6
+    },
+    {
+      "id": "campaign-059-seat0",
+      "status": "completed",
+      "boundaries": 114,
+      "native_boundaries": 114
+    }
+  ],
+  "elapsed_seconds": 30.908827304840088,
+  "error": "8 != 2 : campaign-059-seat1/14 p1 mon1 speed",
+  "failing_start": "campaign-059-seat1"
+}

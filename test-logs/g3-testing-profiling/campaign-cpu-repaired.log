@@ -1,0 +1,85 @@
+{"starts": 1, "completed": 1, "truncated": 0, "capacity": 0, "boundaries": 2}
+{"starts": 2, "completed": 2, "truncated": 0, "capacity": 0, "boundaries": 4}
+{"starts": 3, "completed": 3, "truncated": 0, "capacity": 0, "boundaries": 9}
+{"starts": 4, "completed": 4, "truncated": 0, "capacity": 0, "boundaries": 16}
+{"starts": 5, "completed": 5, "truncated": 0, "capacity": 0, "boundaries": 115}
+{"starts": 6, "completed": 6, "truncated": 0, "capacity": 0, "boundaries": 211}
+{"starts": 7, "completed": 7, "truncated": 0, "capacity": 0, "boundaries": 217}
+{"starts": 8, "completed": 8, "truncated": 0, "capacity": 0, "boundaries": 242}
+{"starts": 9, "completed": 9, "truncated": 0, "capacity": 0, "boundaries": 270}
+{"starts": 10, "completed": 10, "truncated": 0, "capacity": 0, "boundaries": 297}
+{"starts": 11, "completed": 11, "truncated": 0, "capacity": 0, "boundaries": 349}
+{"starts": 12, "completed": 12, "truncated": 0, "capacity": 0, "boundaries": 405}
+{"starts": 13, "completed": 13, "truncated": 0, "capacity": 0, "boundaries": 420}
+{"starts": 14, "completed": 14, "truncated": 0, "capacity": 0, "boundaries": 430}
+{"starts": 15, "completed": 15, "truncated": 0, "capacity": 0, "boundaries": 465}
+{"starts": 16, "completed": 16, "truncated": 0, "capacity": 0, "boundaries": 499}
+{"starts": 17, "completed": 17, "truncated": 0, "capacity": 0, "boundaries": 519}
+{"starts": 18, "completed": 18, "truncated": 0, "capacity": 0, "boundaries": 539}
+{"starts": 19, "completed": 19, "truncated": 0, "capacity": 0, "boundaries": 540}
+{"starts": 20, "completed": 20, "truncated": 0, "capacity": 0, "boundaries": 542}
+{"starts": 21, "completed": 21, "truncated": 0, "capacity": 0, "boundaries": 552}
+{"starts": 22, "completed": 22, "truncated": 0, "capacity": 0, "boundaries": 561}
+{"starts": 23, "completed": 23, "truncated": 0, "capacity": 0, "boundaries": 601}
+{"starts": 24, "completed": 24, "truncated": 0, "capacity": 0, "boundaries": 639}
+{"starts": 25, "completed": 25, "truncated": 0, "capacity": 0, "boundaries": 647}
+{"starts": 26, "completed": 26, "truncated": 0, "capacity": 0, "boundaries": 653}
+{"starts": 27, "completed": 27, "truncated": 0, "capacity": 0, "boundaries": 691}
+{"starts": 28, "completed": 28, "truncated": 0, "capacity": 0, "boundaries": 729}
+{"starts": 29, "completed": 29, "truncated": 0, "capacity": 0, "boundaries": 771}
+{"starts": 30, "completed": 30, "truncated": 0, "capacity": 0, "boundaries": 813}
+{"starts": 31, "completed": 31, "truncated": 0, "capacity": 0, "boundaries": 816}
+{"starts": 32, "completed": 32, "truncated": 0, "capacity": 0, "boundaries": 817}
+{"starts": 33, "completed": 33, "truncated": 0, "capacity": 0, "boundaries": 831}
+{"starts": 34, "completed": 34, "truncated": 0, "capacity": 0, "boundaries": 847}
+{"starts": 35, "completed": 35, "truncated": 0, "capacity": 0, "boundaries": 854}
+{"starts": 36, "completed": 36, "truncated": 0, "capacity": 0, "boundaries": 861}
+{"starts": 37, "completed": 37, "truncated": 0, "capacity": 0, "boundaries": 862}
+{"starts": 38, "completed": 38, "truncated": 0, "capacity": 0, "boundaries": 863}
+{"starts": 39, "completed": 39, "truncated": 0, "capacity": 0, "boundaries": 957}
+{"starts": 40, "completed": 40, "truncated": 0, "capacity": 0, "boundaries": 979}
+{"starts": 41, "completed": 41, "truncated": 0, "capacity": 0, "boundaries": 1014}
+{"starts": 42, "completed": 42, "truncated": 0, "capacity": 0, "boundaries": 1042}
+{"starts": 43, "completed": 43, "truncated": 0, "capacity": 0, "boundaries": 1106}
+{"starts": 44, "completed": 44, "truncated": 0, "capacity": 0, "boundaries": 1153}
+{"starts": 45, "completed": 45, "truncated": 0, "capacity": 0, "boundaries": 1169}
+{"starts": 46, "completed": 46, "truncated": 0, "capacity": 0, "boundaries": 1184}
+{"starts": 47, "completed": 47, "truncated": 0, "capacity": 0, "boundaries": 1213}
+{"starts": 48, "completed": 48, "truncated": 0, "capacity": 0, "boundaries": 1249}
+{"starts": 49, "completed": 49, "truncated": 0, "capacity": 0, "boundaries": 1251}
+{"starts": 50, "completed": 50, "truncated": 0, "capacity": 0, "boundaries": 1253}
+{"starts": 51, "completed": 51, "truncated": 0, "capacity": 0, "boundaries": 1264}
+{"starts": 52, "completed": 52, "truncated": 0, "capacity": 0, "boundaries": 1275}
+{"starts": 53, "completed": 53, "truncated": 0, "capacity": 0, "boundaries": 1327}
+{"starts": 54, "completed": 54, "truncated": 0, "capacity": 0, "boundaries": 1380}
+{"starts": 55, "completed": 55, "truncated": 0, "capacity": 0, "boundaries": 1393}
+{"starts": 56, "completed": 56, "truncated": 0, "capacity": 0, "boundaries": 1412}
+{"starts": 57, "completed": 57, "truncated": 0, "capacity": 0, "boundaries": 1439}
+{"starts": 58, "completed": 58, "truncated": 0, "capacity": 0, "boundaries": 1468}
+Traceback (most recent call last):
+  File "<frozen runpy>", line 203, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/workspace/benchmarks/shared_engine_campaign.py", line 124, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "/workspace/benchmarks/shared_engine_campaign.py", line 79, in main
+    for side in range(2):check.assertEqual(player_view(state,side)['events'],histories[side])
+                         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/unittest/case.py", line 907, in assertEqual
+    assertion_func(first, second, msg=msg)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/unittest/case.py", line 1113, in assertListEqual
+    self.assertSequenceEqual(list1, list2, msg, seq_type=list)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/unittest/case.py", line 1095, in assertSequenceEqual
+    self.fail(msg)
+    ~~~~~~~~~^^^^^
+  File "/usr/local/lib/python3.13/unittest/case.py", line 732, in fail
+    raise self.failureException(msg)
+AssertionError: Lists differ: [{'ty[867 chars]turn|1'}, {'type': 'event', 'message': '|-immune|p2a: Gengar'}] != [{'ty[867 chars]turn|1'}]
+
+First list contains 1 additional elements.
+First extra element 15:
+{'type': 'event', 'message': '|-immune|p2a: Gengar'}
+
+Diff is 1147 characters long. Set self.maxDiff to None to see it.

@@ -1,0 +1,9 @@
+test_manifest_and_nonempty_family_coverage (test.test_shared_engine_cases.SharedEngineCasesTest.test_manifest_and_nonempty_family_coverage) ... ok
+test_native_initialization_and_boundaries (test.test_shared_engine_cases.SharedEngineCasesTest.test_native_initialization_and_boundaries) ... ok
+test_complete_three_member_native_battles (test.test_shared_engine_battles.SharedEngineBattlesTest.test_complete_three_member_native_battles) ... Native complete-battle comparison: 8 battles, 293 boundaries, families=['direct', 'exhaustion', 'pivot', 'status']
+ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 12.594s
+
+OK

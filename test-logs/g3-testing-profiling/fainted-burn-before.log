@@ -1,0 +1,25 @@
+test_native_initialization_and_boundaries (test.test_shared_engine_cases.SharedEngineCasesTest.test_native_initialization_and_boundaries) ... 
+  test_native_initialization_and_boundaries (test.test_shared_engine_cases.SharedEngineCasesTest.test_native_initialization_and_boundaries) (case='fainted-burn-handler-sort') ... FAIL
+
+======================================================================
+FAIL: test_native_initialization_and_boundaries (test.test_shared_engine_cases.SharedEngineCasesTest.test_native_initialization_and_boundaries) (case='fainted-burn-handler-sort')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/test/test_shared_engine_cases.py", line 38, in test_native_initialization_and_boundaries
+    assert_step(self,before,r,step,f"{case['id']}/{n+1}");s=r.state
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/test/shared_engine_support.py", line 131, in assert_step
+    test.assertEqual(draw_rows(result.trace),native_draws,label+' first divergent draw')
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: [{'ar[1685 chars]ate'}] != [{'ar[1685 chars]ate'}, {'args': [0, 2], 'value': 0, 'before': [94 chars]rs'}]
+
+Second list contains 1 additional elements.
+First extra element 13:
+{'args': [0, 2], 'value': 0, 'before': [9621, 18248, 53276, 33281], 'after': [1282, 42014, 22271, 29224], 'context': 'residual-handlers'}
+
+Diff is 2101 characters long. Set self.maxDiff to None to see it. : fainted-burn-handler-sort/1 first divergent draw
+
+----------------------------------------------------------------------
+Ran 1 test in 4.797s
+
+FAILED (failures=1)

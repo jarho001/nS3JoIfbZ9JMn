@@ -1,0 +1,6798 @@
+{
+  "schemaVersion": 1,
+  "pin": "1242c1e2d9763ba5b85d33f13aecb89bae19ae3d",
+  "config": "benchmarks/g3-campaign.json",
+  "starts": 1000,
+  "completed": 1000,
+  "truncated": 0,
+  "boundaries": 30342,
+  "decisions": 57257,
+  "ordinary": 900,
+  "synthetic": 100,
+  "effects": {
+    "-damage": 13269,
+    "-immune": 11639,
+    "move:Mega Punch": 5593,
+    "move:U-turn": 6022,
+    "turn": 25881,
+    "upkeep": 25881,
+    "-resisted": 2455,
+    "faint": 2515,
+    "win": 1000,
+    "-singleturn": 3074,
+    "activate:move: Protect": 1794,
+    "move:Protect": 4227,
+    "-fail": 9944,
+    "-status:tox": 151,
+    "[from] psn": 598,
+    "activate:ability: Synchronize": 462,
+    "move:Thunder Wave": 4851,
+    "move:Toxic": 2995,
+    "[from] item: Leftovers": 7540,
+    "switch": 1515,
+    "-miss": 1410,
+    "move:Pound": 4376,
+    "move:Will-O-Wisp": 3187,
+    "-curestatus:brn": 151,
+    "-status:brn": 449,
+    "item:Lum Berry": 361,
+    "[from] brn": 3566,
+    "move:Tackle": 6005,
+    "move:Recover": 3288,
+    "-heal": 1227,
+    "[from] recoil": 1330,
+    "activate:move: Struggle": 1422,
+    "move:Struggle": 1422,
+    "-status:par": 515,
+    "-supereffective": 1639,
+    "cant": 3497,
+    "-curestatus:par": 166,
+    "pivot-switch": 1946,
+    "-crit": 906,
+    "-curestatus:tox": 47,
+    "move:Earthquake": 3038
+  },
+  "interactions": {
+    "-damage + -immune": 4759,
+    "-damage + move:Mega Punch": 2992,
+    "-damage + move:U-turn": 5605,
+    "-damage + turn": 9342,
+    "-damage + upkeep": 10384,
+    "-immune + move:Mega Punch": 3956,
+    "-immune + move:U-turn": 1478,
+    "-immune + turn": 11196,
+    "-immune + upkeep": 11335,
+    "move:Mega Punch + move:U-turn": 539,
+    "move:Mega Punch + turn": 5156,
+    "move:Mega Punch + upkeep": 5376,
+    "move:U-turn + turn": 3371,
+    "move:U-turn + upkeep": 3621,
+    "turn + upkeep": 24366,
+    "-damage + -resisted": 2455,
+    "-damage + faint": 2346,
+    "-damage + win": 939,
+    "-resisted + faint": 305,
+    "-resisted + move:U-turn": 2455,
+    "-resisted + win": 142,
+    "faint + move:U-turn": 1070,
+    "faint + win": 1000,
+    "move:U-turn + win": 455,
+    "-singleturn + activate:move: Protect": 1794,
+    "-singleturn + move:Protect": 3074,
+    "-singleturn + move:U-turn": 417,
+    "-singleturn + turn": 3044,
+    "-singleturn + upkeep": 3060,
+    "activate:move: Protect + move:Protect": 1794,
+    "activate:move: Protect + move:U-turn": 417,
+    "activate:move: Protect + turn": 1770,
+    "activate:move: Protect + upkeep": 1782,
+    "move:Protect + move:U-turn": 585,
+    "move:Protect + turn": 4034,
+    "move:Protect + upkeep": 4085,
+    "-fail + -status:tox": 78,
+    "-fail + [from] psn": 345,
+    "-fail + activate:ability: Synchronize": 247,
+    "-fail + move:Thunder Wave": 4288,
+    "-fail + move:Toxic": 1611,
+    "-fail + turn": 9398,
+    "-fail + upkeep": 9635,
+    "-status:tox + [from] psn": 107,
+    "-status:tox + activate:ability: Synchronize": 151,
+    "-status:tox + move:Thunder Wave": 29,
+    "-status:tox + move:Toxic": 151,
+    "-status:tox + turn": 145,
+    "-status:tox + upkeep": 146,
+    "[from] psn + activate:ability: Synchronize": 110,
+    "[from] psn + move:Thunder Wave": 103,
+    "[from] psn + move:Toxic": 359,
+    "[from] psn + turn": 513,
+    "[from] psn + upkeep": 572,
+    "activate:ability: Synchronize + move:Thunder Wave": 221,
+    "activate:ability: Synchronize + move:Toxic": 184,
+    "activate:ability: Synchronize + turn": 444,
+    "activate:ability: Synchronize + upkeep": 448,
+    "move:Thunder Wave + move:Toxic": 316,
+    "move:Thunder Wave + turn": 4699,
+    "move:Thunder Wave + upkeep": 4765,
+    "move:Toxic + turn": 2861,
+    "move:Toxic + upkeep": 2929,
+    "-fail + [from] item: Leftovers": 2226,
+    "[from] item: Leftovers + [from] psn": 264,
+    "[from] item: Leftovers + move:Thunder Wave": 825,
+    "[from] item: Leftovers + move:Toxic": 810,
+    "[from] item: Leftovers + turn": 7206,
+    "[from] item: Leftovers + upkeep": 7491,
+    "-damage + [from] psn": 147,
+    "[from] psn + faint": 83,
+    "[from] psn + move:Mega Punch": 78,
+    "faint + move:Mega Punch": 351,
+    "faint + upkeep": 1150,
+    "switch + turn": 1515,
+    "move:Mega Punch + win": 128,
+    "-damage + -miss": 321,
+    "-damage + [from] item: Leftovers": 5003,
+    "-damage + move:Pound": 2799,
+    "-miss + [from] item: Leftovers": 478,
+    "-miss + [from] psn": 50,
+    "-miss + move:Mega Punch": 511,
+    "-miss + move:Pound": 132,
+    "-miss + turn": 1338,
+    "-miss + upkeep": 1368,
+    "[from] item: Leftovers + move:Mega Punch": 1443,
+    "[from] item: Leftovers + move:Pound": 1267,
+    "[from] psn + move:Pound": 32,
+    "move:Mega Punch + move:Pound": 472,
+    "move:Pound + turn": 4113,
+    "move:Pound + upkeep": 4221,
+    "-miss + move:Will-O-Wisp": 806,
+    "[from] psn + move:Will-O-Wisp": 90,
+    "move:Mega Punch + move:Will-O-Wisp": 379,
+    "move:Will-O-Wisp + turn": 3015,
+    "move:Will-O-Wisp + upkeep": 3101,
+    "-singleturn + move:Will-O-Wisp": 276,
+    "activate:move: Protect + move:Will-O-Wisp": 276,
+    "move:Protect + move:Will-O-Wisp": 386,
+    "-curestatus:brn + -fail": 54,
+    "-curestatus:brn + -status:brn": 151,
+    "-curestatus:brn + item:Lum Berry": 151,
+    "-curestatus:brn + move:Protect": 17,
+    "-curestatus:brn + move:Will-O-Wisp": 151,
+    "-curestatus:brn + turn": 141,
+    "-curestatus:brn + upkeep": 146,
+    "-fail + -status:brn": 177,
+    "-fail + item:Lum Berry": 127,
+    "-fail + move:Protect": 1751,
+    "-fail + move:Will-O-Wisp": 2079,
+    "-status:brn + item:Lum Berry": 158,
+    "-status:brn + move:Protect": 44,
+    "-status:brn + move:Will-O-Wisp": 449,
+    "-status:brn + turn": 426,
+    "-status:brn + upkeep": 433,
+    "item:Lum Berry + move:Protect": 28,
+    "item:Lum Berry + move:Will-O-Wisp": 167,
+    "item:Lum Berry + turn": 343,
+    "item:Lum Berry + upkeep": 350,
+    "-fail + [from] brn": 2054,
+    "-status:brn + [from] brn": 333,
+    "[from] brn + move:Protect": 609,
+    "[from] brn + move:Will-O-Wisp": 2044,
+    "[from] brn + turn": 3305,
+    "[from] brn + upkeep": 3489,
+    "-singleturn + [from] brn": 473,
+    "[from] brn + activate:move: Protect": 347,
+    "-fail + -miss": 357,
+    "-miss + [from] brn": 514,
+    "-miss + move:Protect": 40,
+    "-immune + [from] brn": 1007,
+    "-immune + move:Tackle": 4836,
+    "-immune + move:Toxic": 1554,
+    "[from] brn + move:Tackle": 576,
+    "[from] brn + move:Toxic": 533,
+    "move:Tackle + move:Toxic": 315,
+    "move:Tackle + turn": 5623,
+    "move:Tackle + upkeep": 5792,
+    "-immune + -singleturn": 508,
+    "-immune + move:Protect": 775,
+    "-singleturn + move:Tackle": 325,
+    "move:Protect + move:Tackle": 452,
+    "-immune + faint": 223,
+    "-singleturn + faint": 30,
+    "[from] brn + faint": 253,
+    "faint + move:Protect": 121,
+    "faint + move:Tackle": 266,
+    "-fail + -immune": 2844,
+    "-fail + move:Recover": 2327,
+    "-fail + move:Tackle": 1470,
+    "-immune + move:Recover": 935,
+    "move:Recover + move:Tackle": 460,
+    "move:Recover + turn": 3186,
+    "move:Recover + upkeep": 3217,
+    "move:Recover + move:Toxic": 315,
+    "-miss + move:Recover": 145,
+    "move:Recover + move:Will-O-Wisp": 237,
+    "-curestatus:brn + move:Recover": 16,
+    "-status:brn + move:Recover": 39,
+    "item:Lum Berry + move:Recover": 35,
+    "-miss + move:Toxic": 380,
+    "[from] brn + move:Recover": 620,
+    "-fail + -heal": 266,
+    "-heal + [from] brn": 420,
+    "-heal + move:Recover": 1227,
+    "-heal + move:Will-O-Wisp": 180,
+    "-heal + turn": 1161,
+    "-heal + upkeep": 1183,
+    "-heal + move:Toxic": 102,
+    "-damage + -fail": 2487,
+    "-damage + [from] brn": 1102,
+    "-damage + [from] recoil": 1330,
+    "-damage + activate:move: Struggle": 1330,
+    "-damage + move:Struggle": 1330,
+    "-damage + move:Toxic": 783,
+    "-fail + [from] recoil": 249,
+    "-fail + activate:move: Struggle": 249,
+    "-fail + move:Struggle": 249,
+    "[from] brn + [from] recoil": 62,
+    "[from] brn + activate:move: Struggle": 74,
+    "[from] brn + move:Struggle": 74,
+    "[from] recoil + activate:move: Struggle": 1330,
+    "[from] recoil + move:Struggle": 1330,
+    "[from] recoil + move:Toxic": 56,
+    "[from] recoil + turn": 763,
+    "[from] recoil + upkeep": 1116,
+    "activate:move: Struggle + move:Struggle": 1422,
+    "activate:move: Struggle + move:Toxic": 56,
+    "activate:move: Struggle + turn": 855,
+    "activate:move: Struggle + upkeep": 1208,
+    "move:Struggle + move:Toxic": 56,
+    "move:Struggle + turn": 855,
+    "move:Struggle + upkeep": 1208,
+    "-miss + [from] recoil": 19,
+    "-miss + activate:move: Struggle": 19,
+    "-miss + move:Struggle": 19,
+    "-damage + -heal": 659,
+    "-damage + move:Recover": 924,
+    "-heal + [from] recoil": 63,
+    "-heal + activate:move: Struggle": 63,
+    "-heal + faint": 29,
+    "-heal + move:Struggle": 63,
+    "[from] recoil + faint": 556,
+    "[from] recoil + move:Recover": 90,
+    "activate:move: Struggle + faint": 556,
+    "activate:move: Struggle + move:Recover": 90,
+    "faint + move:Recover": 45,
+    "faint + move:Struggle": 556,
+    "move:Recover + move:Struggle": 90,
+    "-heal + -immune": 34,
+    "-heal + move:Mega Punch": 234,
+    "move:Mega Punch + move:Recover": 491,
+    "-curestatus:brn + -immune": 28,
+    "-curestatus:brn + [from] brn": 47,
+    "-curestatus:brn + activate:ability: Synchronize": 62,
+    "-curestatus:brn + move:Mega Punch": 13,
+    "-immune + -status:brn": 104,
+    "-immune + activate:ability: Synchronize": 169,
+    "-immune + item:Lum Berry": 87,
+    "-immune + move:Will-O-Wisp": 886,
+    "-status:brn + activate:ability: Synchronize": 146,
+    "-status:brn + move:Mega Punch": 41,
+    "[from] brn + activate:ability: Synchronize": 124,
+    "[from] brn + item:Lum Berry": 56,
+    "[from] brn + move:Mega Punch": 523,
+    "activate:ability: Synchronize + item:Lum Berry": 184,
+    "activate:ability: Synchronize + move:Mega Punch": 49,
+    "activate:ability: Synchronize + move:Will-O-Wisp": 168,
+    "item:Lum Berry + move:Mega Punch": 34,
+    "-fail + move:Mega Punch": 1088,
+    "move:Mega Punch + move:Toxic": 401,
+    "-immune + -miss": 471,
+    "-fail + faint": 396,
+    "-fail + win": 126,
+    "-immune + win": 83,
+    "[from] brn + win": 77,
+    "move:Recover + win": 14,
+    "faint + move:Toxic": 97,
+    "-damage + move:Will-O-Wisp": 737,
+    "[from] recoil + move:Will-O-Wisp": 51,
+    "activate:move: Struggle + move:Will-O-Wisp": 51,
+    "faint + move:Will-O-Wisp": 149,
+    "move:Struggle + move:Will-O-Wisp": 51,
+    "-immune + -status:tox": 97,
+    "-immune + [from] psn": 158,
+    "-status:tox + move:Mega Punch": 16,
+    "-heal + [from] psn": 127,
+    "[from] psn + move:Recover": 150,
+    "[from] psn + win": 26,
+    "-damage + -status:par": 150,
+    "-damage + -supereffective": 1639,
+    "-damage + move:Thunder Wave": 1189,
+    "-status:par + -supereffective": 12,
+    "-status:par + move:Thunder Wave": 515,
+    "-status:par + move:U-turn": 44,
+    "-status:par + turn": 494,
+    "-status:par + upkeep": 498,
+    "-supereffective + move:Thunder Wave": 51,
+    "-supereffective + move:U-turn": 1639,
+    "-supereffective + turn": 885,
+    "-supereffective + upkeep": 958,
+    "move:Thunder Wave + move:U-turn": 272,
+    "-resisted + -supereffective": 137,
+    "-resisted + [from] item: Leftovers": 912,
+    "-resisted + turn": 1389,
+    "-resisted + upkeep": 1446,
+    "-supereffective + [from] item: Leftovers": 603,
+    "[from] item: Leftovers + move:U-turn": 1973,
+    "-damage + cant": 696,
+    "-resisted + cant": 111,
+    "[from] item: Leftovers + cant": 662,
+    "cant + move:U-turn": 283,
+    "cant + turn": 3418,
+    "cant + upkeep": 3445,
+    "-status:par + cant": 52,
+    "cant + move:Thunder Wave": 1117,
+    "-singleturn + cant": 133,
+    "cant + move:Protect": 172,
+    "-fail + cant": 1574,
+    "-curestatus:par + -fail": 49,
+    "-curestatus:par + -status:par": 166,
+    "-curestatus:par + [from] item: Leftovers": 14,
+    "-curestatus:par + activate:ability: Synchronize": 78,
+    "-curestatus:par + item:Lum Berry": 166,
+    "-curestatus:par + move:Thunder Wave": 166,
+    "-curestatus:par + turn": 158,
+    "-curestatus:par + upkeep": 160,
+    "-fail + -status:par": 177,
+    "-status:par + [from] item: Leftovers": 61,
+    "-status:par + activate:ability: Synchronize": 200,
+    "-status:par + item:Lum Berry": 181,
+    "[from] item: Leftovers + activate:ability: Synchronize": 72,
+    "[from] item: Leftovers + item:Lum Berry": 48,
+    "item:Lum Berry + move:Thunder Wave": 190,
+    "-singleturn + [from] item: Leftovers": 516,
+    "[from] item: Leftovers + activate:move: Protect": 370,
+    "[from] item: Leftovers + move:Protect": 698,
+    "-immune + -status:par": 90,
+    "-immune + [from] item: Leftovers": 2971,
+    "-immune + move:Thunder Wave": 979,
+    "-status:par + move:Mega Punch": 45,
+    "move:Mega Punch + move:Thunder Wave": 330,
+    "-supereffective + cant": 116,
+    "-singleturn + move:Thunder Wave": 225,
+    "activate:move: Protect + move:Thunder Wave": 225,
+    "move:Protect + move:Thunder Wave": 286,
+    "-immune + cant": 584,
+    "cant + move:Mega Punch": 297,
+    "-fail + -resisted": 266,
+    "-fail + move:U-turn": 650,
+    "-resisted + move:Thunder Wave": 133,
+    "-immune + -supereffective": 603,
+    "-supereffective + move:Mega Punch": 184,
+    "-damage + move:Tackle": 3180,
+    "-curestatus:par + pivot-switch": 1,
+    "-status:par + pivot-switch": 5,
+    "[from] item: Leftovers + pivot-switch": 723,
+    "activate:ability: Synchronize + pivot-switch": 16,
+    "item:Lum Berry + pivot-switch": 17,
+    "move:Thunder Wave + pivot-switch": 18,
+    "pivot-switch + turn": 1283,
+    "pivot-switch + upkeep": 1699,
+    "[from] item: Leftovers + faint": 320,
+    "faint + move:Pound": 207,
+    "-immune + move:Pound": 3160,
+    "move:Pound + move:U-turn": 338,
+    "-crit + -damage": 906,
+    "-crit + -immune": 280,
+    "-crit + [from] item: Leftovers": 327,
+    "-crit + move:Pound": 177,
+    "-crit + move:U-turn": 399,
+    "-crit + turn": 583,
+    "-crit + upkeep": 676,
+    "-miss + cant": 93,
+    "-crit + cant": 50,
+    "-fail + -singleturn": 598,
+    "-damage + pivot-switch": 454,
+    "move:U-turn + pivot-switch": 399,
+    "-supereffective + faint": 379,
+    "faint + pivot-switch": 110,
+    "-crit + -resisted": 203,
+    "-supereffective + pivot-switch": 69,
+    "-status:par + move:Tackle": 38,
+    "move:Tackle + move:Thunder Wave": 622,
+    "-fail + move:Pound": 1046,
+    "move:Pound + move:Thunder Wave": 552,
+    "move:Recover + move:Thunder Wave": 365,
+    "cant + move:Tackle": 265,
+    "move:Tackle + win": 95,
+    "-curestatus:par + -immune": 32,
+    "-curestatus:par + move:Toxic": 16,
+    "-status:par + move:Toxic": 61,
+    "item:Lum Berry + move:Toxic": 76,
+    "move:Pound + move:Toxic": 295,
+    "move:Pound + win": 96,
+    "-curestatus:tox + -immune": 30,
+    "-curestatus:tox + -status:tox": 47,
+    "-curestatus:tox + activate:ability: Synchronize": 47,
+    "-curestatus:tox + item:Lum Berry": 47,
+    "-curestatus:tox + move:Toxic": 47,
+    "-curestatus:tox + turn": 47,
+    "-curestatus:tox + upkeep": 47,
+    "-status:tox + item:Lum Berry": 52,
+    "-immune + pivot-switch": 62,
+    "move:Toxic + pivot-switch": 46,
+    "[from] recoil + move:Mega Punch": 140,
+    "activate:move: Struggle + move:Mega Punch": 140,
+    "move:Mega Punch + move:Struggle": 140,
+    "-heal + [from] item: Leftovers": 260,
+    "[from] item: Leftovers + move:Recover": 572,
+    "-curestatus:par + -damage": 59,
+    "-curestatus:par + move:Mega Punch": 16,
+    "-damage + item:Lum Berry": 112,
+    "-miss + move:Thunder Wave": 151,
+    "-heal + -miss": 83,
+    "-heal + cant": 89,
+    "cant + move:Recover": 210,
+    "-crit + -fail": 139,
+    "-crit + faint": 217,
+    "-crit + move:Mega Punch": 188,
+    "-crit + move:Thunder Wave": 74,
+    "-crit + win": 96,
+    "faint + move:Thunder Wave": 110,
+    "move:Thunder Wave + win": 43,
+    "-crit + -miss": 18,
+    "-crit + move:Toxic": 46,
+    "-status:brn + -status:par": 24,
+    "-status:brn + move:Thunder Wave": 56,
+    "-status:par + [from] brn": 23,
+    "-status:par + move:Will-O-Wisp": 52,
+    "[from] brn + move:Thunder Wave": 500,
+    "move:Thunder Wave + move:Will-O-Wisp": 374,
+    "[from] brn + cant": 210,
+    "[from] recoil + win": 203,
+    "activate:move: Struggle + win": 203,
+    "move:Struggle + win": 203,
+    "-singleturn + activate:move: Struggle": 92,
+    "-singleturn + move:Struggle": 92,
+    "activate:move: Protect + activate:move: Struggle": 92,
+    "activate:move: Protect + move:Struggle": 92,
+    "activate:move: Struggle + move:Protect": 131,
+    "move:Protect + move:Struggle": 131,
+    "-supereffective + win": 170,
+    "-damage + move:Earthquake": 1768,
+    "-heal + move:Earthquake": 42,
+    "move:Earthquake + move:Recover": 186,
+    "move:Earthquake + turn": 2745,
+    "move:Earthquake + upkeep": 2918,
+    "[from] item: Leftovers + [from] recoil": 550,
+    "[from] item: Leftovers + activate:move: Struggle": 580,
+    "[from] item: Leftovers + move:Earthquake": 800,
+    "[from] item: Leftovers + move:Struggle": 580,
+    "[from] recoil + move:Earthquake": 67,
+    "activate:move: Struggle + move:Earthquake": 67,
+    "move:Earthquake + move:Struggle": 67,
+    "-crit + [from] recoil": 96,
+    "-crit + activate:move: Struggle": 96,
+    "-crit + move:Earthquake": 135,
+    "-crit + move:Struggle": 96,
+    "faint + move:Earthquake": 277,
+    "-immune + move:Earthquake": 2108,
+    "-supereffective + move:Earthquake": 114,
+    "move:Earthquake + move:U-turn": 264,
+    "-damage + -status:brn": 130,
+    "-status:brn + move:U-turn": 39,
+    "[from] brn + move:U-turn": 374,
+    "move:U-turn + move:Will-O-Wisp": 197,
+    "-miss + move:U-turn": 88,
+    "-damage + move:Protect": 382,
+    "-singleturn + win": 14,
+    "activate:move: Protect + faint": 24,
+    "activate:move: Protect + win": 12,
+    "move:Protect + win": 40,
+    "-crit + -supereffective": 105,
+    "move:Earthquake + pivot-switch": 21,
+    "[from] item: Leftovers + move:Tackle": 1882,
+    "[from] psn + move:Tackle": 57,
+    "[from] item: Leftovers + win": 49,
+    "move:Toxic + win": 27,
+    "-status:tox + move:Tackle": 3,
+    "activate:ability: Synchronize + move:Tackle": 32,
+    "-singleturn + move:Earthquake": 193,
+    "move:Earthquake + move:Protect": 281,
+    "-fail + move:Earthquake": 604,
+    "-singleturn + move:Mega Punch": 380,
+    "activate:move: Protect + move:Mega Punch": 202,
+    "move:Mega Punch + move:Protect": 505,
+    "move:Earthquake + win": 103,
+    "-crit + -heal": 43,
+    "-crit + move:Recover": 58,
+    "-damage + activate:ability: Synchronize": 116,
+    "-status:brn + [from] item: Leftovers": 104,
+    "[from] brn + [from] item: Leftovers": 1960,
+    "[from] item: Leftovers + move:Will-O-Wisp": 1205,
+    "-supereffective + [from] brn": 55,
+    "-status:brn + pivot-switch": 19,
+    "[from] brn + pivot-switch": 54,
+    "move:Will-O-Wisp + pivot-switch": 21,
+    "-curestatus:brn + -damage": 48,
+    "-curestatus:brn + [from] item: Leftovers": 28,
+    "-curestatus:brn + move:Pound": 11,
+    "-status:brn + move:Pound": 34,
+    "[from] brn + move:Pound": 411,
+    "activate:ability: Synchronize + move:Pound": 34,
+    "item:Lum Berry + move:Pound": 29,
+    "move:Pound + move:Will-O-Wisp": 264,
+    "[from] recoil + cant": 89,
+    "activate:move: Struggle + cant": 89,
+    "cant + faint": 35,
+    "cant + move:Struggle": 89,
+    "-miss + move:Earthquake": 116,
+    "move:Earthquake + move:Toxic": 126,
+    "move:Earthquake + move:Mega Punch": 461,
+    "cant + move:Earthquake": 126,
+    "cant + move:Pound": 247,
+    "move:Earthquake + move:Pound": 354,
+    "move:Pound + move:Recover": 309,
+    "-singleturn + move:Toxic": 256,
+    "activate:move: Protect + move:Toxic": 256,
+    "move:Protect + move:Toxic": 349,
+    "-singleturn + move:Recover": 214,
+    "move:Protect + move:Recover": 286,
+    "move:Toxic + move:U-turn": 174,
+    "[from] recoil + move:U-turn": 93,
+    "activate:move: Struggle + move:U-turn": 93,
+    "move:Struggle + move:U-turn": 93,
+    "-resisted + move:Protect": 52,
+    "-resisted + pivot-switch": 188,
+    "-crit + pivot-switch": 36,
+    "-curestatus:par + -resisted": 9,
+    "-curestatus:par + move:U-turn": 16,
+    "-resisted + -status:par": 16,
+    "-resisted + activate:ability: Synchronize": 20,
+    "-resisted + item:Lum Berry": 14,
+    "activate:ability: Synchronize + move:U-turn": 32,
+    "item:Lum Berry + move:U-turn": 30,
+    "-crit + move:Tackle": 207,
+    "-resisted + move:Tackle": 167,
+    "move:Tackle + move:U-turn": 571,
+    "-resisted + move:Earthquake": 81,
+    "activate:move: Protect + move:Tackle": 124,
+    "-heal + -singleturn": 41,
+    "-heal + move:Protect": 43,
+    "-resisted + move:Recover": 95,
+    "move:Recover + move:U-turn": 214,
+    "activate:move: Protect + move:Earthquake": 122,
+    "-heal + -resisted": 78,
+    "-heal + move:U-turn": 159,
+    "-curestatus:par + cant": 4,
+    "activate:ability: Synchronize + cant": 10,
+    "cant + item:Lum Berry": 4,
+    "-miss + faint": 56,
+    "-miss + -supereffective": 18,
+    "-supereffective + move:Will-O-Wisp": 30,
+    "-curestatus:par + -status:brn": 4,
+    "-curestatus:par + [from] brn": 5,
+    "-curestatus:par + move:Will-O-Wisp": 9,
+    "-curestatus:brn + -supereffective": 4,
+    "-curestatus:brn + move:U-turn": 12,
+    "-fail + -supereffective": 141,
+    "-status:brn + -supereffective": 9,
+    "-supereffective + activate:ability: Synchronize": 6,
+    "-supereffective + item:Lum Berry": 8,
+    "-immune + [from] recoil": 461,
+    "-immune + activate:move: Struggle": 461,
+    "-immune + move:Struggle": 461,
+    "-curestatus:brn + move:Earthquake": 13,
+    "-status:brn + move:Earthquake": 32,
+    "[from] brn + move:Earthquake": 260,
+    "activate:ability: Synchronize + move:Earthquake": 35,
+    "item:Lum Berry + move:Earthquake": 32,
+    "move:Earthquake + move:Will-O-Wisp": 206,
+    "-miss + win": 26,
+    "move:Will-O-Wisp + win": 62,
+    "-curestatus:brn + [from] recoil": 6,
+    "-curestatus:brn + activate:move: Struggle": 6,
+    "-curestatus:brn + move:Struggle": 6,
+    "-status:brn + [from] recoil": 10,
+    "-status:brn + activate:move: Struggle": 10,
+    "-status:brn + move:Struggle": 10,
+    "[from] recoil + item:Lum Berry": 8,
+    "activate:move: Struggle + item:Lum Berry": 8,
+    "item:Lum Berry + move:Struggle": 8,
+    "-miss + -status:brn": 17,
+    "-miss + activate:ability: Synchronize": 21,
+    "move:Mega Punch + pivot-switch": 36,
+    "-curestatus:tox + -fail": 24,
+    "-curestatus:tox + move:Recover": 7,
+    "-status:tox + move:Recover": 22,
+    "activate:ability: Synchronize + move:Recover": 42,
+    "[from] psn + move:Earthquake": 31,
+    "-heal + pivot-switch": 38,
+    "move:Recover + pivot-switch": 38,
+    "[from] recoil + pivot-switch": 10,
+    "activate:move: Struggle + pivot-switch": 10,
+    "move:Struggle + pivot-switch": 10,
+    "-immune + -resisted": 516,
+    "-resisted + move:Mega Punch": 257,
+    "-curestatus:brn + move:Tackle": 8,
+    "-status:brn + move:Tackle": 43,
+    "item:Lum Berry + move:Tackle": 22,
+    "move:Tackle + move:Will-O-Wisp": 434,
+    "-resisted + [from] brn": 134,
+    "-resisted + move:Pound": 153,
+    "-miss + -resisted": 33,
+    "-resisted + move:Will-O-Wisp": 83,
+    "move:Mega Punch + move:Tackle": 855,
+    "-damage + -status:tox": 24,
+    "-resisted + -status:tox": 10,
+    "-resisted + [from] psn": 19,
+    "-resisted + move:Toxic": 74,
+    "-status:tox + move:U-turn": 13,
+    "[from] psn + move:U-turn": 56,
+    "-crit + -status:tox": 3,
+    "-crit + [from] psn": 9,
+    "-crit + activate:ability: Synchronize": 7,
+    "-heal + win": 7,
+    "[from] recoil + move:Thunder Wave": 80,
+    "activate:move: Struggle + move:Thunder Wave": 80,
+    "move:Struggle + move:Thunder Wave": 80,
+    "[from] recoil + move:Protect": 39,
+    "[from] recoil + move:Tackle": 209,
+    "activate:move: Struggle + move:Tackle": 209,
+    "move:Struggle + move:Tackle": 209,
+    "-status:par + move:Earthquake": 42,
+    "move:Earthquake + move:Thunder Wave": 233,
+    "[from] recoil + move:Pound": 128,
+    "activate:move: Struggle + move:Pound": 128,
+    "move:Pound + move:Struggle": 128,
+    "-curestatus:par + move:Pound": 16,
+    "-status:par + move:Pound": 39,
+    "-heal + move:Pound": 86,
+    "move:Pound + move:Protect": 177,
+    "-singleturn + move:Pound": 138,
+    "-crit + [from] brn": 70,
+    "-crit + move:Protect": 15,
+    "-supereffective + move:Tackle": 259,
+    "-status:par + move:Recover": 33,
+    "move:Earthquake + move:Tackle": 388,
+    "cant + move:Toxic": 217,
+    "cant + move:Will-O-Wisp": 196,
+    "move:Toxic + move:Will-O-Wisp": 275,
+    "activate:move: Protect + move:Pound": 80,
+    "-status:brn + faint": 12,
+    "-status:brn + win": 5,
+    "[from] recoil + activate:ability: Synchronize": 8,
+    "activate:ability: Synchronize + activate:move: Struggle": 8,
+    "activate:ability: Synchronize + faint": 9,
+    "activate:ability: Synchronize + move:Struggle": 8,
+    "activate:ability: Synchronize + win": 5,
+    "-curestatus:tox + move:Mega Punch": 5,
+    "-curestatus:tox + -damage": 5,
+    "-curestatus:tox + -resisted": 1,
+    "-curestatus:tox + move:U-turn": 2,
+    "-singleturn + [from] psn": 58,
+    "[from] psn + move:Protect": 79,
+    "-curestatus:par + move:Tackle": 14,
+    "-miss + move:Tackle": 181,
+    "-resisted + -status:brn": 16,
+    "-crit + move:Will-O-Wisp": 38,
+    "cant + pivot-switch": 43,
+    "-curestatus:brn + move:Thunder Wave": 18,
+    "-status:brn + move:Toxic": 56,
+    "-heal + move:Tackle": 124,
+    "-curestatus:brn + move:Toxic": 16,
+    "-heal + -status:brn": 4,
+    "-heal + activate:ability: Synchronize": 7,
+    "-supereffective + [from] psn": 16,
+    "-resisted + [from] recoil": 47,
+    "-resisted + activate:move: Struggle": 47,
+    "-resisted + move:Struggle": 47,
+    "-curestatus:tox + [from] brn": 4,
+    "-curestatus:tox + [from] item: Leftovers": 6,
+    "-curestatus:tox + move:Will-O-Wisp": 7,
+    "-status:tox + [from] brn": 13,
+    "-status:tox + [from] item: Leftovers": 18,
+    "-status:tox + move:Will-O-Wisp": 19,
+    "-curestatus:tox + -miss": 4,
+    "-miss + -status:tox": 9,
+    "-miss + item:Lum Berry": 17,
+    "-status:brn + [from] psn": 16,
+    "[from] psn + [from] recoil": 4,
+    "[from] psn + activate:move: Struggle": 7,
+    "[from] psn + move:Struggle": 7,
+    "-curestatus:brn + [from] psn": 4,
+    "[from] psn + item:Lum Berry": 13,
+    "[from] brn + [from] psn": 70,
+    "-curestatus:brn + faint": 8,
+    "faint + item:Lum Berry": 10,
+    "-supereffective + move:Protect": 47,
+    "move:Pound + move:Tackle": 806,
+    "-curestatus:brn + -status:par": 10,
+    "[from] psn + activate:move: Protect": 47,
+    "[from] psn + cant": 25,
+    "-supereffective + move:Recover": 80,
+    "-status:tox + move:Pound": 5,
+    "-crit + -curestatus:par": 2,
+    "-crit + -status:par": 5,
+    "-crit + item:Lum Berry": 4,
+    "move:Pound + pivot-switch": 14,
+    "-heal + move:Thunder Wave": 33,
+    "-heal + -status:par": 2,
+    "-curestatus:tox + pivot-switch": 4,
+    "-status:tox + pivot-switch": 9,
+    "-curestatus:par + move:Protect": 9,
+    "-status:par + move:Protect": 28,
+    "-curestatus:par + -miss": 9,
+    "-miss + -status:par": 27,
+    "-supereffective + move:Toxic": 22,
+    "-curestatus:brn + win": 3,
+    "item:Lum Berry + win": 3,
+    "-curestatus:tox + move:Earthquake": 2,
+    "-status:tox + move:Earthquake": 4,
+    "-status:tox + move:Protect": 11,
+    "activate:ability: Synchronize + move:Protect": 27,
+    "-status:tox + [from] recoil": 1,
+    "-status:tox + activate:move: Struggle": 1,
+    "-status:tox + faint": 3,
+    "-status:tox + move:Struggle": 1,
+    "-heal + -supereffective": 48,
+    "-supereffective + [from] recoil": 10,
+    "-supereffective + activate:move: Struggle": 10,
+    "-supereffective + move:Struggle": 10,
+    "[from] psn + pivot-switch": 52,
+    "-supereffective + move:Pound": 85,
+    "-curestatus:par + -supereffective": 3,
+    "cant + win": 8,
+    "-status:par + [from] recoil": 6,
+    "-status:par + activate:move: Struggle": 6,
+    "-status:par + faint": 8,
+    "-status:par + move:Struggle": 6,
+    "-status:par + win": 4,
+    "-curestatus:brn + -resisted": 4,
+    "-crit + -status:brn": 9,
+    "-miss + pivot-switch": 7,
+    "-fail + pivot-switch": 32,
+    "-curestatus:tox + [from] psn": 7,
+    "-heal + -status:tox": 4,
+    "-status:par + -status:tox": 17,
+    "-status:par + [from] psn": 13,
+    "move:Tackle + pivot-switch": 13,
+    "-curestatus:tox + -status:par": 8,
+    "-curestatus:tox + move:Thunder Wave": 9,
+    "-curestatus:tox + -status:brn": 3,
+    "-status:brn + -status:tox": 11,
+    "-curestatus:brn + pivot-switch": 12,
+    "-curestatus:brn + -heal": 1,
+    "-heal + item:Lum Berry": 2,
+    "-curestatus:par + move:Recover": 12,
+    "-curestatus:brn + -miss": 4,
+    "-curestatus:brn + -status:tox": 3,
+    "-curestatus:par + move:Earthquake": 17,
+    "-curestatus:tox + -supereffective": 1,
+    "-status:tox + -supereffective": 1,
+    "-curestatus:tox + -heal": 1,
+    "-status:tox + win": 2,
+    "-curestatus:par + [from] recoil": 2,
+    "-curestatus:par + activate:move: Struggle": 2,
+    "-curestatus:par + faint": 2,
+    "-curestatus:par + move:Struggle": 2,
+    "-curestatus:par + -curestatus:tox": 3,
+    "-curestatus:par + -status:tox": 5,
+    "-curestatus:par + [from] psn": 2,
+    "-curestatus:tox + move:Protect": 2,
+    "-curestatus:tox + move:Pound": 2,
+    "-crit + -curestatus:brn": 2
+  },
+  "drawContexts": {
+    "accuracy": 24603,
+    "critical": 14743,
+    "damage": 14743,
+    "residual-handlers": 3316,
+    "stall": 1945,
+    "update": 3959,
+    "switch-order": 170,
+    "queue-sort": 819,
+    "before-turn": 937,
+    "hit-update": 1581,
+    "paralysis": 14914
+  },
+  "perStart": [
+    {
+      "id": "campaign-000-seat0",
+      "boundaries": 2,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-000-seat1",
+      "boundaries": 2,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-001-seat0",
+      "boundaries": 5,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-001-seat1",
+      "boundaries": 7,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-002-seat0",
+      "boundaries": 99,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-002-seat1",
+      "boundaries": 96,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-003-seat0",
+      "boundaries": 6,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-003-seat1",
+      "boundaries": 25,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-004-seat0",
+      "boundaries": 28,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-004-seat1",
+      "boundaries": 27,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-005-seat0",
+      "boundaries": 52,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-005-seat1",
+      "boundaries": 56,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-006-seat0",
+      "boundaries": 15,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-006-seat1",
+      "boundaries": 10,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-007-seat0",
+      "boundaries": 35,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-007-seat1",
+      "boundaries": 34,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-008-seat0",
+      "boundaries": 20,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-008-seat1",
+      "boundaries": 20,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-009-seat0",
+      "boundaries": 1,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-009-seat1",
+      "boundaries": 2,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-010-seat0",
+      "boundaries": 10,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-010-seat1",
+      "boundaries": 9,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-011-seat0",
+      "boundaries": 40,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-011-seat1",
+      "boundaries": 38,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-012-seat0",
+      "boundaries": 8,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-012-seat1",
+      "boundaries": 6,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-013-seat0",
+      "boundaries": 38,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-013-seat1",
+      "boundaries": 38,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-014-seat0",
+      "boundaries": 42,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-014-seat1",
+      "boundaries": 42,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-015-seat0",
+      "boundaries": 3,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-015-seat1",
+      "boundaries": 1,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-016-seat0",
+      "boundaries": 14,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-016-seat1",
+      "boundaries": 16,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-017-seat0",
+      "boundaries": 7,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-017-seat1",
+      "boundaries": 7,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-018-seat0",
+      "boundaries": 1,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-018-seat1",
+      "boundaries": 1,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-019-seat0",
+      "boundaries": 94,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-019-seat1",
+      "boundaries": 22,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-020-seat0",
+      "boundaries": 35,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-020-seat1",
+      "boundaries": 28,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-021-seat0",
+      "boundaries": 64,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-021-seat1",
+      "boundaries": 47,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-022-seat0",
+      "boundaries": 16,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-022-seat1",
+      "boundaries": 15,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-023-seat0",
+      "boundaries": 29,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-023-seat1",
+      "boundaries": 36,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-024-seat0",
+      "boundaries": 2,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-024-seat1",
+      "boundaries": 2,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-025-seat0",
+      "boundaries": 11,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-025-seat1",
+      "boundaries": 11,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-026-seat0",
+      "boundaries": 52,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-026-seat1",
+      "boundaries": 53,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-027-seat0",
+      "boundaries": 13,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-027-seat1",
+      "boundaries": 19,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-028-seat0",
+      "boundaries": 27,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-028-seat1",
+      "boundaries": 29,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-029-seat0",
+      "boundaries": 60,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-029-seat1",
+      "boundaries": 32,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-030-seat0",
+      "boundaries": 6,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-030-seat1",
+      "boundaries": 6,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-031-seat0",
+      "boundaries": 145,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-031-seat1",
+      "boundaries": 128,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-032-seat0",
+      "boundaries": 27,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-032-seat1",
+      "boundaries": 91,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-033-seat0",
+      "boundaries": 50,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-033-seat1",
+      "boundaries": 46,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-034-seat0",
+      "boundaries": 40,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-034-seat1",
+      "boundaries": 41,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-035-seat0",
+      "boundaries": 35,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-035-seat1",
+      "boundaries": 39,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-036-seat0",
+      "boundaries": 45,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-036-seat1",
+      "boundaries": 43,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-037-seat0",
+      "boundaries": 72,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-037-seat1",
+      "boundaries": 78,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-038-seat0",
+      "boundaries": 128,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-038-seat1",
+      "boundaries": 128,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-039-seat0",
+      "boundaries": 1,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-039-seat1",
+      "boundaries": 3,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-040-seat0",
+      "boundaries": 19,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-040-seat1",
+      "boundaries": 14,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-041-seat0",
+      "boundaries": 18,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-041-seat1",
+      "boundaries": 18,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-042-seat0",
+      "boundaries": 38,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-042-seat1",
+      "boundaries": 38,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-043-seat0",
+      "boundaries": 12,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-043-seat1",
+      "boundaries": 13,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-044-seat0",
+      "boundaries": 39,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-044-seat1",
+      "boundaries": 39,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-045-seat0",
+      "boundaries": 11,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-045-seat1",
+      "boundaries": 10,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-046-seat0",
+      "boundaries": 28,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-046-seat1",
+      "boundaries": 26,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-047-seat0",
+      "boundaries": 73,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-047-seat1",
+      "boundaries": 77,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-048-seat0",
+      "boundaries": 18,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-048-seat1",
+      "boundaries": 20,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-049-seat0",
+      "boundaries": 20,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-049-seat1",
+      "boundaries": 7,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-050-seat0",
+      "boundaries": 23,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-050-seat1",
+      "boundaries": 26,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-051-seat0",
+      "boundaries": 17,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-051-seat1",
+      "boundaries": 17,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-052-seat0",
+      "boundaries": 39,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-052-seat1",
+      "boundaries": 39,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-053-seat0",
+      "boundaries": 94,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-053-seat1",
+      "boundaries": 93,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-054-seat0",
+      "boundaries": 35,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-054-seat1",
+      "boundaries": 11,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-055-seat0",
+      "boundaries": 10,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-055-seat1",
+      "boundaries": 9,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-056-seat0",
+      "boundaries": 28,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-056-seat1",
+      "boundaries": 29,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-057-seat0",
+      "boundaries": 13,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-057-seat1",
+      "boundaries": 13,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-058-seat0",
+      "boundaries": 9,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-058-seat1",
+      "boundaries": 6,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-059-seat0",
+      "boundaries": 114,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-059-seat1",
+      "boundaries": 134,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-060-seat0",
+      "boundaries": 1,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-060-seat1",
+      "boundaries": 1,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-061-seat0",
+      "boundaries": 76,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-061-seat1",
+      "boundaries": 74,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-062-seat0",
+      "boundaries": 35,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-062-seat1",
+      "boundaries": 34,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-063-seat0",
+      "boundaries": 17,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-063-seat1",
+      "boundaries": 17,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-064-seat0",
+      "boundaries": 17,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-064-seat1",
+      "boundaries": 20,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-065-seat0",
+      "boundaries": 45,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-065-seat1",
+      "boundaries": 45,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-066-seat0",
+      "boundaries": 2,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-066-seat1",
+      "boundaries": 3,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-067-seat0",
+      "boundaries": 42,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-067-seat1",
+      "boundaries": 44,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-068-seat0",
+      "boundaries": 117,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-068-seat1",
+      "boundaries": 108,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-069-seat0",
+      "boundaries": 1,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-069-seat1",
+      "boundaries": 1,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-070-seat0",
+      "boundaries": 12,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-070-seat1",
+      "boundaries": 11,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-071-seat0",
+      "boundaries": 22,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-071-seat1",
+      "boundaries": 19,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-072-seat0",
+      "boundaries": 20,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-072-seat1",
+      "boundaries": 15,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-073-seat0",
+      "boundaries": 17,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-073-seat1",
+      "boundaries": 18,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-074-seat0",
+      "boundaries": 73,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-074-seat1",
+      "boundaries": 22,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-075-seat0",
+      "boundaries": 5,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-075-seat1",
+      "boundaries": 10,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-076-seat0",
+      "boundaries": 7,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-076-seat1",
+      "boundaries": 7,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-077-seat0",
+      "boundaries": 33,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-077-seat1",
+      "boundaries": 39,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-078-seat0",
+      "boundaries": 49,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-078-seat1",
+      "boundaries": 53,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-079-seat0",
+      "boundaries": 3,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-079-seat1",
+      "boundaries": 5,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-080-seat0",
+      "boundaries": 18,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-080-seat1",
+      "boundaries": 15,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-081-seat0",
+      "boundaries": 6,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-081-seat1",
+      "boundaries": 5,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-082-seat0",
+      "boundaries": 54,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-082-seat1",
+      "boundaries": 60,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-083-seat0",
+      "boundaries": 110,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-083-seat1",
+      "boundaries": 121,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-084-seat0",
+      "boundaries": 19,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-084-seat1",
+      "boundaries": 17,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-085-seat0",
+      "boundaries": 4,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-085-seat1",
+      "boundaries": 9,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-086-seat0",
+      "boundaries": 31,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-086-seat1",
+      "boundaries": 36,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-087-seat0",
+      "boundaries": 33,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-087-seat1",
+      "boundaries": 34,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-088-seat0",
+      "boundaries": 11,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-088-seat1",
+      "boundaries": 18,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-089-seat0",
+      "boundaries": 21,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-089-seat1",
+      "boundaries": 16,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-090-seat0",
+      "boundaries": 7,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-090-seat1",
+      "boundaries": 11,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-091-seat0",
+      "boundaries": 4,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-091-seat1",
+      "boundaries": 4,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-092-seat0",
+      "boundaries": 117,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-092-seat1",
+      "boundaries": 117,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-093-seat0",
+      "boundaries": 2,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-093-seat1",
+      "boundaries": 6,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-094-seat0",
+      "boundaries": 9,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-094-seat1",
+      "boundaries": 9,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-095-seat0",
+      "boundaries": 18,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-095-seat1",
+      "boundaries": 22,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-096-seat0",
+      "boundaries": 129,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-096-seat1",
+      "boundaries": 115,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-097-seat0",
+      "boundaries": 25,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-097-seat1",
+      "boundaries": 27,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-098-seat0",
+      "boundaries": 141,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-098-seat1",
+      "boundaries": 141,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-099-seat0",
+      "boundaries": 1,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-099-seat1",
+      "boundaries": 1,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-100-seat0",
+      "boundaries": 21,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-100-seat1",
+      "boundaries": 23,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-101-seat0",
+      "boundaries": 60,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-101-seat1",
+      "boundaries": 50,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-102-seat0",
+      "boundaries": 5,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-102-seat1",
+      "boundaries": 12,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-103-seat0",
+      "boundaries": 8,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-103-seat1",
+      "boundaries": 10,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-104-seat0",
+      "boundaries": 32,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-104-seat1",
+      "boundaries": 37,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-105-seat0",
+      "boundaries": 6,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-105-seat1",
+      "boundaries": 1,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-106-seat0",
+      "boundaries": 21,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-106-seat1",
+      "boundaries": 21,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-107-seat0",
+      "boundaries": 25,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-107-seat1",
+      "boundaries": 20,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-108-seat0",
+      "boundaries": 6,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-108-seat1",
+      "boundaries": 11,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-109-seat0",
+      "boundaries": 74,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-109-seat1",
+      "boundaries": 62,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-110-seat0",
+      "boundaries": 40,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-110-seat1",
+      "boundaries": 37,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-111-seat0",
+      "boundaries": 3,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-111-seat1",
+      "boundaries": 3,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-112-seat0",
+      "boundaries": 93,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-112-seat1",
+      "boundaries": 84,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-113-seat0",
+      "boundaries": 38,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-113-seat1",
+      "boundaries": 36,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-114-seat0",
+      "boundaries": 7,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-114-seat1",
+      "boundaries": 6,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-115-seat0",
+      "boundaries": 22,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-115-seat1",
+      "boundaries": 22,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-116-seat0",
+      "boundaries": 55,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-116-seat1",
+      "boundaries": 61,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-117-seat0",
+      "boundaries": 2,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-117-seat1",
+      "boundaries": 2,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-118-seat0",
+      "boundaries": 49,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-118-seat1",
+      "boundaries": 32,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-119-seat0",
+      "boundaries": 104,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-119-seat1",
+      "boundaries": 71,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-120-seat0",
+      "boundaries": 4,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-120-seat1",
+      "boundaries": 6,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-121-seat0",
+      "boundaries": 52,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-121-seat1",
+      "boundaries": 52,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-122-seat0",
+      "boundaries": 25,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-122-seat1",
+      "boundaries": 25,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-123-seat0",
+      "boundaries": 110,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-123-seat1",
+      "boundaries": 114,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-124-seat0",
+      "boundaries": 19,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-124-seat1",
+      "boundaries": 20,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-125-seat0",
+      "boundaries": 26,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-125-seat1",
+      "boundaries": 27,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-126-seat0",
+      "boundaries": 11,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-126-seat1",
+      "boundaries": 18,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-127-seat0",
+      "boundaries": 56,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-127-seat1",
+      "boundaries": 56,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-128-seat0",
+      "boundaries": 174,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-128-seat1",
+      "boundaries": 177,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-129-seat0",
+      "boundaries": 1,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-129-seat1",
+      "boundaries": 1,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-130-seat0",
+      "boundaries": 8,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-130-seat1",
+      "boundaries": 9,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-131-seat0",
+      "boundaries": 21,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-131-seat1",
+      "boundaries": 32,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-132-seat0",
+      "boundaries": 21,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-132-seat1",
+      "boundaries": 36,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-133-seat0",
+      "boundaries": 17,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-133-seat1",
+      "boundaries": 21,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-134-seat0",
+      "boundaries": 104,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-134-seat1",
+      "boundaries": 56,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-135-seat0",
+      "boundaries": 2,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-135-seat1",
+      "boundaries": 2,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-136-seat0",
+      "boundaries": 57,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-136-seat1",
+      "boundaries": 21,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-137-seat0",
+      "boundaries": 95,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-137-seat1",
+      "boundaries": 130,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-138-seat0",
+      "boundaries": 7,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-138-seat1",
+      "boundaries": 5,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-139-seat0",
+      "boundaries": 43,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-139-seat1",
+      "boundaries": 14,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-140-seat0",
+      "boundaries": 28,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-140-seat1",
+      "boundaries": 24,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-141-seat0",
+      "boundaries": 92,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-141-seat1",
+      "boundaries": 55,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-142-seat0",
+      "boundaries": 8,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-142-seat1",
+      "boundaries": 8,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-143-seat0",
+      "boundaries": 61,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-143-seat1",
+      "boundaries": 36,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-144-seat0",
+      "boundaries": 5,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-144-seat1",
+      "boundaries": 3,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-145-seat0",
+      "boundaries": 9,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-145-seat1",
+      "boundaries": 9,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-146-seat0",
+      "boundaries": 116,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-146-seat1",
+      "boundaries": 116,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-147-seat0",
+      "boundaries": 8,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-147-seat1",
+      "boundaries": 2,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-148-seat0",
+      "boundaries": 21,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-148-seat1",
+      "boundaries": 20,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-149-seat0",
+      "boundaries": 57,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-149-seat1",
+      "boundaries": 85,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-150-seat0",
+      "boundaries": 18,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-150-seat1",
+      "boundaries": 17,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-151-seat0",
+      "boundaries": 44,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-151-seat1",
+      "boundaries": 56,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-152-seat0",
+      "boundaries": 40,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-152-seat1",
+      "boundaries": 30,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-153-seat0",
+      "boundaries": 58,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-153-seat1",
+      "boundaries": 5,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-154-seat0",
+      "boundaries": 99,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-154-seat1",
+      "boundaries": 106,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-155-seat0",
+      "boundaries": 61,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-155-seat1",
+      "boundaries": 72,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-156-seat0",
+      "boundaries": 6,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-156-seat1",
+      "boundaries": 6,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-157-seat0",
+      "boundaries": 10,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-157-seat1",
+      "boundaries": 10,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-158-seat0",
+      "boundaries": 21,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-158-seat1",
+      "boundaries": 21,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-159-seat0",
+      "boundaries": 1,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-159-seat1",
+      "boundaries": 1,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-160-seat0",
+      "boundaries": 24,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-160-seat1",
+      "boundaries": 22,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-161-seat0",
+      "boundaries": 51,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-161-seat1",
+      "boundaries": 53,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-162-seat0",
+      "boundaries": 2,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-162-seat1",
+      "boundaries": 1,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-163-seat0",
+      "boundaries": 37,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-163-seat1",
+      "boundaries": 41,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-164-seat0",
+      "boundaries": 87,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-164-seat1",
+      "boundaries": 90,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-165-seat0",
+      "boundaries": 2,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-165-seat1",
+      "boundaries": 2,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-166-seat0",
+      "boundaries": 5,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-166-seat1",
+      "boundaries": 8,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-167-seat0",
+      "boundaries": 10,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-167-seat1",
+      "boundaries": 10,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-168-seat0",
+      "boundaries": 40,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-168-seat1",
+      "boundaries": 44,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-169-seat0",
+      "boundaries": 24,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-169-seat1",
+      "boundaries": 11,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-170-seat0",
+      "boundaries": 30,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-170-seat1",
+      "boundaries": 24,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-171-seat0",
+      "boundaries": 7,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-171-seat1",
+      "boundaries": 1,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-172-seat0",
+      "boundaries": 6,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-172-seat1",
+      "boundaries": 6,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-173-seat0",
+      "boundaries": 95,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-173-seat1",
+      "boundaries": 95,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-174-seat0",
+      "boundaries": 1,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-174-seat1",
+      "boundaries": 1,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-175-seat0",
+      "boundaries": 10,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-175-seat1",
+      "boundaries": 9,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-176-seat0",
+      "boundaries": 21,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-176-seat1",
+      "boundaries": 21,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-177-seat0",
+      "boundaries": 84,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-177-seat1",
+      "boundaries": 84,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-178-seat0",
+      "boundaries": 18,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-178-seat1",
+      "boundaries": 18,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-179-seat0",
+      "boundaries": 23,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-179-seat1",
+      "boundaries": 13,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-180-seat0",
+      "boundaries": 2,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-180-seat1",
+      "boundaries": 4,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-181-seat0",
+      "boundaries": 45,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-181-seat1",
+      "boundaries": 45,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-182-seat0",
+      "boundaries": 23,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-182-seat1",
+      "boundaries": 23,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-183-seat0",
+      "boundaries": 4,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-183-seat1",
+      "boundaries": 5,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-184-seat0",
+      "boundaries": 25,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-184-seat1",
+      "boundaries": 24,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-185-seat0",
+      "boundaries": 30,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-185-seat1",
+      "boundaries": 28,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-186-seat0",
+      "boundaries": 1,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-186-seat1",
+      "boundaries": 2,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-187-seat0",
+      "boundaries": 5,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-187-seat1",
+      "boundaries": 4,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-188-seat0",
+      "boundaries": 40,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-188-seat1",
+      "boundaries": 41,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-189-seat0",
+      "boundaries": 1,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-189-seat1",
+      "boundaries": 1,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-190-seat0",
+      "boundaries": 102,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-190-seat1",
+      "boundaries": 103,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-191-seat0",
+      "boundaries": 84,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-191-seat1",
+      "boundaries": 81,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-192-seat0",
+      "boundaries": 17,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-192-seat1",
+      "boundaries": 11,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-193-seat0",
+      "boundaries": 8,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-193-seat1",
+      "boundaries": 9,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-194-seat0",
+      "boundaries": 34,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-194-seat1",
+      "boundaries": 37,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-195-seat0",
+      "boundaries": 3,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-195-seat1",
+      "boundaries": 1,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-196-seat0",
+      "boundaries": 87,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-196-seat1",
+      "boundaries": 90,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-197-seat0",
+      "boundaries": 26,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-197-seat1",
+      "boundaries": 29,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-198-seat0",
+      "boundaries": 1,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-198-seat1",
+      "boundaries": 1,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-199-seat0",
+      "boundaries": 12,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-199-seat1",
+      "boundaries": 12,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-200-seat0",
+      "boundaries": 10,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-200-seat1",
+      "boundaries": 9,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-201-seat0",
+      "boundaries": 1,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-201-seat1",
+      "boundaries": 5,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-202-seat0",
+      "boundaries": 11,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-202-seat1",
+      "boundaries": 12,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-203-seat0",
+      "boundaries": 107,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-203-seat1",
+      "boundaries": 122,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-204-seat0",
+      "boundaries": 2,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-204-seat1",
+      "boundaries": 1,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-205-seat0",
+      "boundaries": 11,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-205-seat1",
+      "boundaries": 9,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-206-seat0",
+      "boundaries": 39,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-206-seat1",
+      "boundaries": 38,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-207-seat0",
+      "boundaries": 4,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-207-seat1",
+      "boundaries": 4,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-208-seat0",
+      "boundaries": 42,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-208-seat1",
+      "boundaries": 43,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-209-seat0",
+      "boundaries": 16,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-209-seat1",
+      "boundaries": 18,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-210-seat0",
+      "boundaries": 20,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-210-seat1",
+      "boundaries": 25,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-211-seat0",
+      "boundaries": 9,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-211-seat1",
+      "boundaries": 9,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-212-seat0",
+      "boundaries": 14,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-212-seat1",
+      "boundaries": 13,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-213-seat0",
+      "boundaries": 6,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-213-seat1",
+      "boundaries": 13,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-214-seat0",
+      "boundaries": 13,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-214-seat1",
+      "boundaries": 13,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-215-seat0",
+      "boundaries": 31,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-215-seat1",
+      "boundaries": 36,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-216-seat0",
+      "boundaries": 19,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-216-seat1",
+      "boundaries": 23,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-217-seat0",
+      "boundaries": 35,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-217-seat1",
+      "boundaries": 35,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-218-seat0",
+      "boundaries": 34,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-218-seat1",
+      "boundaries": 37,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-219-seat0",
+      "boundaries": 1,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-219-seat1",
+      "boundaries": 1,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-220-seat0",
+      "boundaries": 20,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-220-seat1",
+      "boundaries": 17,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-221-seat0",
+      "boundaries": 25,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-221-seat1",
+      "boundaries": 21,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-222-seat0",
+      "boundaries": 12,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-222-seat1",
+      "boundaries": 75,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-223-seat0",
+      "boundaries": 14,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-223-seat1",
+      "boundaries": 13,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-224-seat0",
+      "boundaries": 27,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-224-seat1",
+      "boundaries": 29,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-225-seat0",
+      "boundaries": 1,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-225-seat1",
+      "boundaries": 2,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-226-seat0",
+      "boundaries": 68,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-226-seat1",
+      "boundaries": 70,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-227-seat0",
+      "boundaries": 36,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-227-seat1",
+      "boundaries": 34,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-228-seat0",
+      "boundaries": 1,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-228-seat1",
+      "boundaries": 3,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-229-seat0",
+      "boundaries": 15,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-229-seat1",
+      "boundaries": 7,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-230-seat0",
+      "boundaries": 21,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-230-seat1",
+      "boundaries": 16,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-231-seat0",
+      "boundaries": 4,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-231-seat1",
+      "boundaries": 13,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-232-seat0",
+      "boundaries": 9,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-232-seat1",
+      "boundaries": 9,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-233-seat0",
+      "boundaries": 43,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-233-seat1",
+      "boundaries": 40,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-234-seat0",
+      "boundaries": 19,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-234-seat1",
+      "boundaries": 19,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-235-seat0",
+      "boundaries": 21,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-235-seat1",
+      "boundaries": 22,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-236-seat0",
+      "boundaries": 35,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-236-seat1",
+      "boundaries": 38,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-237-seat0",
+      "boundaries": 1,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-237-seat1",
+      "boundaries": 1,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-238-seat0",
+      "boundaries": 99,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-238-seat1",
+      "boundaries": 92,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-239-seat0",
+      "boundaries": 25,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-239-seat1",
+      "boundaries": 20,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-240-seat0",
+      "boundaries": 2,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-240-seat1",
+      "boundaries": 1,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-241-seat0",
+      "boundaries": 25,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-241-seat1",
+      "boundaries": 26,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-242-seat0",
+      "boundaries": 151,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-242-seat1",
+      "boundaries": 154,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-243-seat0",
+      "boundaries": 2,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-243-seat1",
+      "boundaries": 1,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-244-seat0",
+      "boundaries": 24,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-244-seat1",
+      "boundaries": 22,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-245-seat0",
+      "boundaries": 25,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-245-seat1",
+      "boundaries": 27,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-246-seat0",
+      "boundaries": 5,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-246-seat1",
+      "boundaries": 5,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-247-seat0",
+      "boundaries": 9,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-247-seat1",
+      "boundaries": 9,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-248-seat0",
+      "boundaries": 28,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-248-seat1",
+      "boundaries": 35,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-249-seat0",
+      "boundaries": 1,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-249-seat1",
+      "boundaries": 1,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-250-seat0",
+      "boundaries": 14,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-250-seat1",
+      "boundaries": 10,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-251-seat0",
+      "boundaries": 88,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-251-seat1",
+      "boundaries": 108,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-252-seat0",
+      "boundaries": 2,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-252-seat1",
+      "boundaries": 3,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-253-seat0",
+      "boundaries": 19,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-253-seat1",
+      "boundaries": 19,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-254-seat0",
+      "boundaries": 76,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-254-seat1",
+      "boundaries": 75,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-255-seat0",
+      "boundaries": 2,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-255-seat1",
+      "boundaries": 4,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-256-seat0",
+      "boundaries": 13,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-256-seat1",
+      "boundaries": 16,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-257-seat0",
+      "boundaries": 13,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-257-seat1",
+      "boundaries": 13,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-258-seat0",
+      "boundaries": 1,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-258-seat1",
+      "boundaries": 1,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-259-seat0",
+      "boundaries": 38,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-259-seat1",
+      "boundaries": 8,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-260-seat0",
+      "boundaries": 32,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-260-seat1",
+      "boundaries": 34,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-261-seat0",
+      "boundaries": 5,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-261-seat1",
+      "boundaries": 10,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-262-seat0",
+      "boundaries": 72,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-262-seat1",
+      "boundaries": 74,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-263-seat0",
+      "boundaries": 21,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-263-seat1",
+      "boundaries": 21,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-264-seat0",
+      "boundaries": 20,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-264-seat1",
+      "boundaries": 18,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-265-seat0",
+      "boundaries": 6,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-265-seat1",
+      "boundaries": 5,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-266-seat0",
+      "boundaries": 30,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-266-seat1",
+      "boundaries": 31,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-267-seat0",
+      "boundaries": 10,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-267-seat1",
+      "boundaries": 7,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-268-seat0",
+      "boundaries": 12,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-268-seat1",
+      "boundaries": 11,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-269-seat0",
+      "boundaries": 20,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-269-seat1",
+      "boundaries": 11,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-270-seat0",
+      "boundaries": 1,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-270-seat1",
+      "boundaries": 1,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-271-seat0",
+      "boundaries": 91,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-271-seat1",
+      "boundaries": 91,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-272-seat0",
+      "boundaries": 104,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-272-seat1",
+      "boundaries": 52,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-273-seat0",
+      "boundaries": 16,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-273-seat1",
+      "boundaries": 78,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-274-seat0",
+      "boundaries": 7,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-274-seat1",
+      "boundaries": 6,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-275-seat0",
+      "boundaries": 21,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-275-seat1",
+      "boundaries": 21,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-276-seat0",
+      "boundaries": 1,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-276-seat1",
+      "boundaries": 1,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-277-seat0",
+      "boundaries": 46,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-277-seat1",
+      "boundaries": 50,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-278-seat0",
+      "boundaries": 44,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-278-seat1",
+      "boundaries": 35,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-279-seat0",
+      "boundaries": 1,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-279-seat1",
+      "boundaries": 2,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-280-seat0",
+      "boundaries": 4,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-280-seat1",
+      "boundaries": 4,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-281-seat0",
+      "boundaries": 93,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-281-seat1",
+      "boundaries": 90,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-282-seat0",
+      "boundaries": 34,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-282-seat1",
+      "boundaries": 17,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-283-seat0",
+      "boundaries": 6,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-283-seat1",
+      "boundaries": 6,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-284-seat0",
+      "boundaries": 105,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-284-seat1",
+      "boundaries": 127,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-285-seat0",
+      "boundaries": 1,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-285-seat1",
+      "boundaries": 1,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-286-seat0",
+      "boundaries": 62,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-286-seat1",
+      "boundaries": 118,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-287-seat0",
+      "boundaries": 41,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-287-seat1",
+      "boundaries": 44,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-288-seat0",
+      "boundaries": 8,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-288-seat1",
+      "boundaries": 11,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-289-seat0",
+      "boundaries": 3,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-289-seat1",
+      "boundaries": 6,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-290-seat0",
+      "boundaries": 68,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-290-seat1",
+      "boundaries": 65,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-291-seat0",
+      "boundaries": 2,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-291-seat1",
+      "boundaries": 4,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-292-seat0",
+      "boundaries": 19,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-292-seat1",
+      "boundaries": 20,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-293-seat0",
+      "boundaries": 73,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-293-seat1",
+      "boundaries": 55,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-294-seat0",
+      "boundaries": 3,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-294-seat1",
+      "boundaries": 6,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-295-seat0",
+      "boundaries": 6,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-295-seat1",
+      "boundaries": 9,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-296-seat0",
+      "boundaries": 21,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-296-seat1",
+      "boundaries": 33,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-297-seat0",
+      "boundaries": 20,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-297-seat1",
+      "boundaries": 16,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-298-seat0",
+      "boundaries": 68,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-298-seat1",
+      "boundaries": 68,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-299-seat0",
+      "boundaries": 134,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-299-seat1",
+      "boundaries": 54,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-300-seat0",
+      "boundaries": 3,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-300-seat1",
+      "boundaries": 2,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-301-seat0",
+      "boundaries": 60,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-301-seat1",
+      "boundaries": 60,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-302-seat0",
+      "boundaries": 26,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-302-seat1",
+      "boundaries": 28,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-303-seat0",
+      "boundaries": 17,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-303-seat1",
+      "boundaries": 14,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-304-seat0",
+      "boundaries": 14,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-304-seat1",
+      "boundaries": 13,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-305-seat0",
+      "boundaries": 19,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-305-seat1",
+      "boundaries": 19,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-306-seat0",
+      "boundaries": 5,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-306-seat1",
+      "boundaries": 4,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-307-seat0",
+      "boundaries": 10,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-307-seat1",
+      "boundaries": 11,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-308-seat0",
+      "boundaries": 18,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-308-seat1",
+      "boundaries": 18,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-309-seat0",
+      "boundaries": 1,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-309-seat1",
+      "boundaries": 1,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-310-seat0",
+      "boundaries": 12,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-310-seat1",
+      "boundaries": 13,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-311-seat0",
+      "boundaries": 24,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-311-seat1",
+      "boundaries": 25,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-312-seat0",
+      "boundaries": 54,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-312-seat1",
+      "boundaries": 54,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-313-seat0",
+      "boundaries": 9,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-313-seat1",
+      "boundaries": 9,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-314-seat0",
+      "boundaries": 36,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-314-seat1",
+      "boundaries": 37,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-315-seat0",
+      "boundaries": 2,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-315-seat1",
+      "boundaries": 2,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-316-seat0",
+      "boundaries": 9,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-316-seat1",
+      "boundaries": 9,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-317-seat0",
+      "boundaries": 138,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-317-seat1",
+      "boundaries": 140,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-318-seat0",
+      "boundaries": 11,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-318-seat1",
+      "boundaries": 8,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-319-seat0",
+      "boundaries": 5,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-319-seat1",
+      "boundaries": 10,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-320-seat0",
+      "boundaries": 25,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-320-seat1",
+      "boundaries": 25,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-321-seat0",
+      "boundaries": 17,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-321-seat1",
+      "boundaries": 28,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-322-seat0",
+      "boundaries": 50,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-322-seat1",
+      "boundaries": 45,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-323-seat0",
+      "boundaries": 15,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-323-seat1",
+      "boundaries": 15,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-324-seat0",
+      "boundaries": 46,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-324-seat1",
+      "boundaries": 28,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-325-seat0",
+      "boundaries": 22,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-325-seat1",
+      "boundaries": 25,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-326-seat0",
+      "boundaries": 59,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-326-seat1",
+      "boundaries": 54,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-327-seat0",
+      "boundaries": 65,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-327-seat1",
+      "boundaries": 67,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-328-seat0",
+      "boundaries": 9,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-328-seat1",
+      "boundaries": 8,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-329-seat0",
+      "boundaries": 25,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-329-seat1",
+      "boundaries": 37,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-330-seat0",
+      "boundaries": 1,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-330-seat1",
+      "boundaries": 1,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-331-seat0",
+      "boundaries": 23,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-331-seat1",
+      "boundaries": 23,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-332-seat0",
+      "boundaries": 80,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-332-seat1",
+      "boundaries": 76,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-333-seat0",
+      "boundaries": 1,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-333-seat1",
+      "boundaries": 1,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-334-seat0",
+      "boundaries": 27,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-334-seat1",
+      "boundaries": 30,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-335-seat0",
+      "boundaries": 24,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-335-seat1",
+      "boundaries": 24,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-336-seat0",
+      "boundaries": 32,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-336-seat1",
+      "boundaries": 17,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-337-seat0",
+      "boundaries": 72,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-337-seat1",
+      "boundaries": 74,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-338-seat0",
+      "boundaries": 99,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-338-seat1",
+      "boundaries": 120,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-339-seat0",
+      "boundaries": 1,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-339-seat1",
+      "boundaries": 1,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-340-seat0",
+      "boundaries": 9,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-340-seat1",
+      "boundaries": 9,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-341-seat0",
+      "boundaries": 47,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-341-seat1",
+      "boundaries": 50,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-342-seat0",
+      "boundaries": 1,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-342-seat1",
+      "boundaries": 4,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-343-seat0",
+      "boundaries": 13,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-343-seat1",
+      "boundaries": 9,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-344-seat0",
+      "boundaries": 29,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-344-seat1",
+      "boundaries": 29,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-345-seat0",
+      "boundaries": 2,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-345-seat1",
+      "boundaries": 2,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-346-seat0",
+      "boundaries": 21,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-346-seat1",
+      "boundaries": 20,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-347-seat0",
+      "boundaries": 13,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-347-seat1",
+      "boundaries": 45,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-348-seat0",
+      "boundaries": 2,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-348-seat1",
+      "boundaries": 2,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-349-seat0",
+      "boundaries": 75,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-349-seat1",
+      "boundaries": 69,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-350-seat0",
+      "boundaries": 12,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-350-seat1",
+      "boundaries": 12,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-351-seat0",
+      "boundaries": 5,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-351-seat1",
+      "boundaries": 3,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-352-seat0",
+      "boundaries": 26,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-352-seat1",
+      "boundaries": 22,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-353-seat0",
+      "boundaries": 36,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-353-seat1",
+      "boundaries": 39,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-354-seat0",
+      "boundaries": 26,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-354-seat1",
+      "boundaries": 30,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-355-seat0",
+      "boundaries": 13,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-355-seat1",
+      "boundaries": 15,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-356-seat0",
+      "boundaries": 44,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-356-seat1",
+      "boundaries": 45,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-357-seat0",
+      "boundaries": 9,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-357-seat1",
+      "boundaries": 1,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-358-seat0",
+      "boundaries": 46,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-358-seat1",
+      "boundaries": 48,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-359-seat0",
+      "boundaries": 14,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-359-seat1",
+      "boundaries": 12,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-360-seat0",
+      "boundaries": 40,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-360-seat1",
+      "boundaries": 45,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-361-seat0",
+      "boundaries": 67,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-361-seat1",
+      "boundaries": 65,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-362-seat0",
+      "boundaries": 31,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-362-seat1",
+      "boundaries": 30,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-363-seat0",
+      "boundaries": 16,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-363-seat1",
+      "boundaries": 16,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-364-seat0",
+      "boundaries": 71,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-364-seat1",
+      "boundaries": 64,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-365-seat0",
+      "boundaries": 29,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-365-seat1",
+      "boundaries": 29,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-366-seat0",
+      "boundaries": 8,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-366-seat1",
+      "boundaries": 10,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-367-seat0",
+      "boundaries": 8,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-367-seat1",
+      "boundaries": 8,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-368-seat0",
+      "boundaries": 103,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-368-seat1",
+      "boundaries": 100,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-369-seat0",
+      "boundaries": 1,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-369-seat1",
+      "boundaries": 2,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-370-seat0",
+      "boundaries": 10,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-370-seat1",
+      "boundaries": 12,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-371-seat0",
+      "boundaries": 25,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-371-seat1",
+      "boundaries": 26,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-372-seat0",
+      "boundaries": 9,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-372-seat1",
+      "boundaries": 10,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-373-seat0",
+      "boundaries": 111,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-373-seat1",
+      "boundaries": 111,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-374-seat0",
+      "boundaries": 37,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-374-seat1",
+      "boundaries": 32,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-375-seat0",
+      "boundaries": 9,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-375-seat1",
+      "boundaries": 9,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-376-seat0",
+      "boundaries": 10,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-376-seat1",
+      "boundaries": 11,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-377-seat0",
+      "boundaries": 80,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-377-seat1",
+      "boundaries": 104,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-378-seat0",
+      "boundaries": 81,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-378-seat1",
+      "boundaries": 74,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-379-seat0",
+      "boundaries": 10,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-379-seat1",
+      "boundaries": 14,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-380-seat0",
+      "boundaries": 15,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-380-seat1",
+      "boundaries": 17,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-381-seat0",
+      "boundaries": 57,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-381-seat1",
+      "boundaries": 57,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-382-seat0",
+      "boundaries": 29,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-382-seat1",
+      "boundaries": 26,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-383-seat0",
+      "boundaries": 38,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-383-seat1",
+      "boundaries": 41,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-384-seat0",
+      "boundaries": 73,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-384-seat1",
+      "boundaries": 73,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-385-seat0",
+      "boundaries": 7,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-385-seat1",
+      "boundaries": 8,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-386-seat0",
+      "boundaries": 40,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-386-seat1",
+      "boundaries": 24,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-387-seat0",
+      "boundaries": 7,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-387-seat1",
+      "boundaries": 8,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-388-seat0",
+      "boundaries": 113,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-388-seat1",
+      "boundaries": 110,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-389-seat0",
+      "boundaries": 35,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-389-seat1",
+      "boundaries": 43,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-390-seat0",
+      "boundaries": 5,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-390-seat1",
+      "boundaries": 5,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-391-seat0",
+      "boundaries": 46,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-391-seat1",
+      "boundaries": 47,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-392-seat0",
+      "boundaries": 28,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-392-seat1",
+      "boundaries": 107,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-393-seat0",
+      "boundaries": 7,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-393-seat1",
+      "boundaries": 7,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-394-seat0",
+      "boundaries": 21,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-394-seat1",
+      "boundaries": 20,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-395-seat0",
+      "boundaries": 16,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-395-seat1",
+      "boundaries": 17,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-396-seat0",
+      "boundaries": 26,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-396-seat1",
+      "boundaries": 19,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-397-seat0",
+      "boundaries": 60,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-397-seat1",
+      "boundaries": 60,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-398-seat0",
+      "boundaries": 107,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-398-seat1",
+      "boundaries": 109,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-399-seat0",
+      "boundaries": 1,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-399-seat1",
+      "boundaries": 1,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-400-seat0",
+      "boundaries": 18,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-400-seat1",
+      "boundaries": 18,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-401-seat0",
+      "boundaries": 22,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-401-seat1",
+      "boundaries": 22,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-402-seat0",
+      "boundaries": 23,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-402-seat1",
+      "boundaries": 22,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-403-seat0",
+      "boundaries": 13,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-403-seat1",
+      "boundaries": 10,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-404-seat0",
+      "boundaries": 45,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-404-seat1",
+      "boundaries": 47,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-405-seat0",
+      "boundaries": 2,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-405-seat1",
+      "boundaries": 8,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-406-seat0",
+      "boundaries": 14,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-406-seat1",
+      "boundaries": 18,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-407-seat0",
+      "boundaries": 36,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-407-seat1",
+      "boundaries": 35,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-408-seat0",
+      "boundaries": 13,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-408-seat1",
+      "boundaries": 7,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-409-seat0",
+      "boundaries": 6,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-409-seat1",
+      "boundaries": 5,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-410-seat0",
+      "boundaries": 40,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-410-seat1",
+      "boundaries": 46,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-411-seat0",
+      "boundaries": 10,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-411-seat1",
+      "boundaries": 16,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-412-seat0",
+      "boundaries": 8,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-412-seat1",
+      "boundaries": 9,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-413-seat0",
+      "boundaries": 129,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-413-seat1",
+      "boundaries": 136,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-414-seat0",
+      "boundaries": 33,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-414-seat1",
+      "boundaries": 33,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-415-seat0",
+      "boundaries": 30,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-415-seat1",
+      "boundaries": 29,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-416-seat0",
+      "boundaries": 57,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-416-seat1",
+      "boundaries": 57,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-417-seat0",
+      "boundaries": 38,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-417-seat1",
+      "boundaries": 43,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-418-seat0",
+      "boundaries": 114,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-418-seat1",
+      "boundaries": 84,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-419-seat0",
+      "boundaries": 14,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-419-seat1",
+      "boundaries": 14,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-420-seat0",
+      "boundaries": 1,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-420-seat1",
+      "boundaries": 2,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-421-seat0",
+      "boundaries": 59,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-421-seat1",
+      "boundaries": 59,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-422-seat0",
+      "boundaries": 39,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-422-seat1",
+      "boundaries": 35,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-423-seat0",
+      "boundaries": 10,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-423-seat1",
+      "boundaries": 16,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-424-seat0",
+      "boundaries": 43,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-424-seat1",
+      "boundaries": 14,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-425-seat0",
+      "boundaries": 44,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-425-seat1",
+      "boundaries": 39,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-426-seat0",
+      "boundaries": 3,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-426-seat1",
+      "boundaries": 5,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-427-seat0",
+      "boundaries": 6,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-427-seat1",
+      "boundaries": 5,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-428-seat0",
+      "boundaries": 7,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-428-seat1",
+      "boundaries": 10,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-429-seat0",
+      "boundaries": 1,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-429-seat1",
+      "boundaries": 1,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-430-seat0",
+      "boundaries": 28,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-430-seat1",
+      "boundaries": 27,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-431-seat0",
+      "boundaries": 53,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-431-seat1",
+      "boundaries": 61,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-432-seat0",
+      "boundaries": 11,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-432-seat1",
+      "boundaries": 5,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-433-seat0",
+      "boundaries": 30,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-433-seat1",
+      "boundaries": 34,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-434-seat0",
+      "boundaries": 119,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-434-seat1",
+      "boundaries": 62,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-435-seat0",
+      "boundaries": 6,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-435-seat1",
+      "boundaries": 9,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-436-seat0",
+      "boundaries": 50,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-436-seat1",
+      "boundaries": 51,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-437-seat0",
+      "boundaries": 42,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-437-seat1",
+      "boundaries": 41,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-438-seat0",
+      "boundaries": 2,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-438-seat1",
+      "boundaries": 3,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-439-seat0",
+      "boundaries": 28,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-439-seat1",
+      "boundaries": 26,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-440-seat0",
+      "boundaries": 82,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-440-seat1",
+      "boundaries": 77,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-441-seat0",
+      "boundaries": 6,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-441-seat1",
+      "boundaries": 4,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-442-seat0",
+      "boundaries": 5,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-442-seat1",
+      "boundaries": 6,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-443-seat0",
+      "boundaries": 43,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-443-seat1",
+      "boundaries": 40,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-444-seat0",
+      "boundaries": 1,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-444-seat1",
+      "boundaries": 1,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-445-seat0",
+      "boundaries": 11,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-445-seat1",
+      "boundaries": 11,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-446-seat0",
+      "boundaries": 39,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-446-seat1",
+      "boundaries": 95,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-447-seat0",
+      "boundaries": 1,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-447-seat1",
+      "boundaries": 1,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-448-seat0",
+      "boundaries": 22,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-448-seat1",
+      "boundaries": 22,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-449-seat0",
+      "boundaries": 48,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-449-seat1",
+      "boundaries": 49,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-450-seat0",
+      "boundaries": 1,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-450-seat1",
+      "boundaries": 1,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-451-seat0",
+      "boundaries": 21,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-451-seat1",
+      "boundaries": 26,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-452-seat0",
+      "boundaries": 35,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-452-seat1",
+      "boundaries": 39,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-453-seat0",
+      "boundaries": 8,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-453-seat1",
+      "boundaries": 4,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-454-seat0",
+      "boundaries": 9,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-454-seat1",
+      "boundaries": 14,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-455-seat0",
+      "boundaries": 25,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-455-seat1",
+      "boundaries": 31,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-456-seat0",
+      "boundaries": 47,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-456-seat1",
+      "boundaries": 41,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-457-seat0",
+      "boundaries": 14,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-457-seat1",
+      "boundaries": 17,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-458-seat0",
+      "boundaries": 46,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-458-seat1",
+      "boundaries": 38,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-459-seat0",
+      "boundaries": 1,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-459-seat1",
+      "boundaries": 1,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-460-seat0",
+      "boundaries": 6,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-460-seat1",
+      "boundaries": 6,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-461-seat0",
+      "boundaries": 55,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-461-seat1",
+      "boundaries": 58,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-462-seat0",
+      "boundaries": 21,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-462-seat1",
+      "boundaries": 25,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-463-seat0",
+      "boundaries": 7,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-463-seat1",
+      "boundaries": 7,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-464-seat0",
+      "boundaries": 91,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-464-seat1",
+      "boundaries": 22,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-465-seat0",
+      "boundaries": 14,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-465-seat1",
+      "boundaries": 9,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-466-seat0",
+      "boundaries": 12,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-466-seat1",
+      "boundaries": 11,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-467-seat0",
+      "boundaries": 15,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-467-seat1",
+      "boundaries": 46,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-468-seat0",
+      "boundaries": 1,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-468-seat1",
+      "boundaries": 2,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-469-seat0",
+      "boundaries": 5,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-469-seat1",
+      "boundaries": 4,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-470-seat0",
+      "boundaries": 31,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-470-seat1",
+      "boundaries": 33,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-471-seat0",
+      "boundaries": 1,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-471-seat1",
+      "boundaries": 1,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-472-seat0",
+      "boundaries": 11,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-472-seat1",
+      "boundaries": 12,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-473-seat0",
+      "boundaries": 30,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-473-seat1",
+      "boundaries": 18,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-474-seat0",
+      "boundaries": 8,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-474-seat1",
+      "boundaries": 12,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-475-seat0",
+      "boundaries": 12,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-475-seat1",
+      "boundaries": 14,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-476-seat0",
+      "boundaries": 48,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-476-seat1",
+      "boundaries": 54,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-477-seat0",
+      "boundaries": 15,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-477-seat1",
+      "boundaries": 15,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-478-seat0",
+      "boundaries": 7,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-478-seat1",
+      "boundaries": 8,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-479-seat0",
+      "boundaries": 26,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-479-seat1",
+      "boundaries": 72,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-480-seat0",
+      "boundaries": 4,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-480-seat1",
+      "boundaries": 1,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-481-seat0",
+      "boundaries": 15,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-481-seat1",
+      "boundaries": 15,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-482-seat0",
+      "boundaries": 17,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-482-seat1",
+      "boundaries": 18,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-483-seat0",
+      "boundaries": 1,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-483-seat1",
+      "boundaries": 1,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-484-seat0",
+      "boundaries": 14,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-484-seat1",
+      "boundaries": 15,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-485-seat0",
+      "boundaries": 15,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-485-seat1",
+      "boundaries": 15,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-486-seat0",
+      "boundaries": 17,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-486-seat1",
+      "boundaries": 17,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-487-seat0",
+      "boundaries": 24,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-487-seat1",
+      "boundaries": 24,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-488-seat0",
+      "boundaries": 22,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-488-seat1",
+      "boundaries": 32,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-489-seat0",
+      "boundaries": 1,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-489-seat1",
+      "boundaries": 1,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-490-seat0",
+      "boundaries": 7,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-490-seat1",
+      "boundaries": 4,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-491-seat0",
+      "boundaries": 55,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-491-seat1",
+      "boundaries": 61,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-492-seat0",
+      "boundaries": 1,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-492-seat1",
+      "boundaries": 1,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-493-seat0",
+      "boundaries": 4,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-493-seat1",
+      "boundaries": 5,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-494-seat0",
+      "boundaries": 37,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-494-seat1",
+      "boundaries": 38,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-495-seat0",
+      "boundaries": 71,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-495-seat1",
+      "boundaries": 74,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-496-seat0",
+      "boundaries": 14,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-496-seat1",
+      "boundaries": 13,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-497-seat0",
+      "boundaries": 84,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-497-seat1",
+      "boundaries": 38,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-498-seat0",
+      "boundaries": 17,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-498-seat1",
+      "boundaries": 17,
+      "winner": 2,
+      "truncated": false
+    },
+    {
+      "id": "campaign-499-seat0",
+      "boundaries": 11,
+      "winner": 1,
+      "truncated": false
+    },
+    {
+      "id": "campaign-499-seat1",
+      "boundaries": 8,
+      "winner": 2,
+      "truncated": false
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+{"cohort": "ordinary", "batch": 1, "chunk": 1, "boundaries_per_second": 1061.2126132019794, "compiler_memory": {"argument_size_in_bytes": 166950, "output_size_in_bytes": 177207, "temp_size_in_bytes": 173496, "alias_size_in_bytes": 0}}

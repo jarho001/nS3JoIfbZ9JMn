@@ -1,0 +1,17 @@
+✔ reference identity guard accepts only the pinned clean checkout (1.427278ms)
+✔ real Git checkout inspection rejects changed source, untracked files, wrong commit, and wrong origin (107.839492ms)
+✔ resolved format facts match the pinned Showdown manifest (1711.924137ms)
+✔ seeded teams and initial requests match the pinned semantic fixture (1374.147026ms)
+✔ smoke seeds are separate and must each contain four integers (0.464826ms)
+✔ initial battle facts come from protocol events and requests match submitted teams (0.425624ms)
+✔ initialization reports stream errors/end and destroys the stream on every path (4.983972ms)
+✔ native BattleStream replacement/undo and direct snapshots share recipient boundaries (1478.583188ms)
+✔ native paired histories hide reserves, items and pending opposing choice (2.053512ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3291.49449

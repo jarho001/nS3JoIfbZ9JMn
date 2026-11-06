@@ -1,0 +1,64 @@
+test_native_initialization_and_boundaries (test.test_shared_engine_cases.SharedEngineCasesTest.test_native_initialization_and_boundaries) ... 
+  test_native_initialization_and_boundaries (test.test_shared_engine_cases.SharedEngineCasesTest.test_native_initialization_and_boundaries) (case='protect-immunity-Tackle') ... FAIL
+  test_native_initialization_and_boundaries (test.test_shared_engine_cases.SharedEngineCasesTest.test_native_initialization_and_boundaries) (case='protect-immunity-Earthquake') ... FAIL
+
+======================================================================
+FAIL: test_native_initialization_and_boundaries (test.test_shared_engine_cases.SharedEngineCasesTest.test_native_initialization_and_boundaries) (case='protect-immunity-Tackle')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/test/test_shared_engine_cases.py", line 38, in test_native_initialization_and_boundaries
+    assert_step(self,before,r,step,f"{case['id']}/{n+1}");s=r.state
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/test/shared_engine_support.py", line 129, in assert_step
+    for side in range(2):test.assertEqual(project_events(result.state,result.trace,side),expected['events'][f'p{side+1}'],label+f' p{side+1} event stream')
+                         ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: [{'ty[266 chars]: '|-activate|p2a: Gengar|move: Protect'}, {'t[108 chars]|2'}] != [{'ty[266 chars]: '|-immune|p2a: Gengar'}, {'type': 'event', '[92 chars]|2'}]
+
+First differing element 4:
+{'type': 'event', 'message': '|-activate|p2a: Gengar|move: Protect'}
+{'type': 'event', 'message': '|-immune|p2a: Gengar'}
+
+  [{'message': '|', 'type': 'event'},
+   {'message': '|move|p2a: Gengar|Protect|p2a: Gengar', 'type': 'event'},
+   {'message': '|-singleturn|p2a: Gengar|Protect', 'type': 'event'},
+   {'message': '|move|p1a: Snorlax|Tackle|p2a: Gengar', 'type': 'event'},
+-  {'message': '|-activate|p2a: Gengar|move: Protect', 'type': 'event'},
+?                 --- ^^^             --------------
+
++  {'message': '|-immune|p2a: Gengar', 'type': 'event'},
+?                  ^^^^
+
+   {'message': '|', 'type': 'event'},
+   {'message': '|upkeep', 'type': 'event'},
+   {'message': '|turn|2', 'type': 'event'}] : protect-immunity-Tackle/1 p1 event stream
+
+======================================================================
+FAIL: test_native_initialization_and_boundaries (test.test_shared_engine_cases.SharedEngineCasesTest.test_native_initialization_and_boundaries) (case='protect-immunity-Earthquake')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/test/test_shared_engine_cases.py", line 38, in test_native_initialization_and_boundaries
+    assert_step(self,before,r,step,f"{case['id']}/{n+1}");s=r.state
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/test/shared_engine_support.py", line 129, in assert_step
+    for side in range(2):test.assertEqual(project_events(result.state,result.trace,side),expected['events'][f'p{side+1}'],label+f' p{side+1} event stream')
+                         ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: [{'ty[270 chars]: '|-activate|p2a: Gengar|move: Protect'}, {'t[108 chars]|2'}] != [{'ty[270 chars]: '|-immune|p2a: Gengar|[from] ability: Levita[117 chars]|2'}]
+
+First differing element 4:
+{'type': 'event', 'message': '|-activate|p2a: Gengar|move: Protect'}
+{'type': 'event', 'message': '|-immune|p2a: Gengar|[from] ability: Levitate'}
+
+  [{'message': '|', 'type': 'event'},
+   {'message': '|move|p2a: Gengar|Protect|p2a: Gengar', 'type': 'event'},
+   {'message': '|-singleturn|p2a: Gengar|Protect', 'type': 'event'},
+   {'message': '|move|p1a: Snorlax|Earthquake|p2a: Gengar', 'type': 'event'},
+-  {'message': '|-activate|p2a: Gengar|move: Protect', 'type': 'event'},
++  {'message': '|-immune|p2a: Gengar|[from] ability: Levitate', 'type': 'event'},
+   {'message': '|', 'type': 'event'},
+   {'message': '|upkeep', 'type': 'event'},
+   {'message': '|turn|2', 'type': 'event'}] : protect-immunity-Earthquake/1 p1 event stream
+
+----------------------------------------------------------------------
+Ran 1 test in 4.439s
+
+FAILED (failures=2)

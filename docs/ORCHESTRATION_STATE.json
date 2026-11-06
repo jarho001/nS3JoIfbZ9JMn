@@ -14,7 +14,7 @@
       "CPU-first validation; GPU runs only when task acceptance or a device-specific property requires them, not a full GPU suite for every slice."
     ],
     "defer": "PPO, tournament/scoring, expanded trajectory collection, and additional baseline/reporting infrastructure unless they directly enable simulator semantics or parity validation.",
-    "next_candidate": "First approved G3 CPU goal complete. Later G3 closure requires separately agreed D3 GPU/resource/profile scope; G1 remains open and G2 learning remains deferred.",
+    "next_candidate": "Execute approved G3 testing/profiling handoff; G1 remains open and G2 deferred.",
     "progress_measure": "Increasingly complete parity-tested playable battles, not accepted task count.",
     "active_task": null,
     "accepted_task_count_changed": false,
@@ -517,102 +517,320 @@
     "policy_note": "Automatic Astra, task-count, and independent milestone review gates retired by user instruction on 2026-11-05. Baselines and review histories below are historical evidence, not active gates. Milestone acceptance still requires its stated evidence."
   },
   "active_task": {
-    "id": "G3-first-playable",
-    "status": "completed_cpu_goal",
+    "id": "G3-testing-profiling",
+    "status": "diagnostic_complete",
     "approved_at": "2026-11-06",
     "owner": "/root",
-    "brief": "PROJECT_PLAN.md#proposed-first-g3-goal-mode-brief",
-    "behavior_catalog": "docs/SHOWDOWN_BEHAVIOR_CASES.md",
-    "scope": "Entire proposed first G3 package, including potentially long affected CPU integration/regressions. Direct execution without delegation. G3 milestone remains open pending later GPU closure.",
-    "checkpoint": "All four approved integration checkpoints complete; CPU acceptance passed",
+    "brief": "docs/G3_TESTING_PROFILING.md",
+    "scope": "User-approved fixed F01/F02/F03 matched complete-battle diagnostic; two operating points, one warm and three measurements, five-minute total execution cap. Broad campaign remains stopped.",
+    "checkpoint": "Matched fixed-pack diagnostic complete in 79.16s; both 128-boundary correctness gates passed, all six timing cells complete.",
     "completed_checkpoints": [
-      "Shared roster/move/RNG/request/event schema, native initialization and legacy migrations",
-      "Voluntary switches, native faint replacements, U-turn queue suspension, private replace/cancel and stable command mapping",
-      "Allowlisted status/items/Protect/recovery/residual/Struggle interactions and atomic unsupported/capacity diagnostics",
-      "Complete native terminal traces, cumulative recipient histories, saved continuation/reset, eager/JIT and heterogeneous CPU batch acceptance"
+      "Pinned baseline freeze: 9 native contracts and 128 full CPU tests passed on starting revision.",
+      "Final source: 1000 starts / 30342 boundaries / 57257 decisions exact native agreement, all complete, 900 ordinary / 100 trusted fixtures, zero truncation/capacity/failures.",
+      "Current CPU/GPU acceptance: 13 checks each plus complete residual-status family eager/JIT/32-lane saved continuation/terminal/reset checks (111 native scenarios / 464 boundaries; all 171 catalog boundaries covered).",
+      "Strengthened current CPU and GPU replay: 12 complete traces / 686 boundaries each, first/middle/last saved continuations and resets, including paired 174/177-boundary battles.",
+      "Final-source CPU profiling complete: 28 kernel points, 72 full-output scan points, 12 conservative memory-headroom skips. Every primary measured boundary useful; no absorbing/rejected/pending primary work."
     ],
-    "next": "Stop at the approved first-goal CPU boundary. G3 remains open for separately scoped D3 GPU correctness/placement and compile/warm/memory profiles; no additional implementation goal is approved.",
+    "next": "Stop. Report current slice only. Suggested single follow-up: short GPU trace of the same warmed 96-battle loop, not run.",
+    "source_identity": {
+      "baseline_record": "test-logs/g3-testing-profiling/source-identities.json (baseline-source)",
+      "current_engine_sha256": "8fe364fd9e0b84d8e61daa717c27a0a4e4ce8f65b81b793ffd2fbb5198b3c599",
+      "reference_commit": "1242c1e2d9763ba5b85d33f13aecb89bae19ae3d",
+      "measurement_source": "profile-cpu/results.json: sha256; GPU must match relevant source/config hashes exactly."
+    },
+    "evidence_directory": "test-logs/g3-testing-profiling",
+    "blockers": [],
+    "previous_goal": "completed_goals: G3-first-playable",
     "evidence": [
       {
-        "source_commit": "74a4fd48b7cef73affe430fd1bfe0e44944a920b",
-        "command": "node reference/shared-engine-cases.cjs --batch all --output /tmp/g3-shared-native-acceptance.json",
-        "result": "102 independently observed native scenarios / 448 boundaries; eight complete three-member battles and four complete legacy duels. Semantic digest and replay recipe are in native-case-summary.json.",
-        "summary": "test-logs/g3-first-playable/native-case-summary.json"
+        "command": "node reference/oracle.cjs provenance; node reference/oracle.cjs format; node --test test/reference.test.cjs test/shared-engine.test.cjs; node reference/shared-engine-cases.cjs --batch all --output /tmp/g3-profile-baseline-native.json",
+        "result": "Pinned clean reference verified; 9 native checks passed; fresh corpus 102 scenarios / 448 boundaries.",
+        "source": "test-logs/g3-testing-profiling/source-identities.json",
+        "summary": "test-logs/g3-testing-profiling/native-summary.json",
+        "source_record": "baseline-source"
       },
       {
-        "source_commit": "74a4fd48b7cef73affe430fd1bfe0e44944a920b",
-        "command": "G3_NATIVE_CASES=/tmp/g3-shared-native-acceptance.json JAX_PLATFORMS=cpu .venv-jax/bin/python -m unittest test.test_shared_engine_cases test.test_shared_engine_battles test.test_shared_engine_lifecycle -v",
-        "result": "11 composite checks passed in 252.017s. Every catalog boundary matched native and eager/JIT/32-lane execution; all eight full traces matched scalar/JIT/vmap sizes 1,8,32. Mixed phase/rejection/terminal lanes, lane RNG independence, saved continuation/reset, privacy and real event/draw/queue/history/episode capacity rollback passed.",
-        "log": "test-logs/g3-first-playable/cpu-acceptance.log"
+        "command": "timeout 1800s env G3_NATIVE_CASES=/tmp/g3-profile-baseline-native.json XLA_PYTHON_CLIENT_PREALLOCATE=false JAX_PLATFORMS=cpu OMP_NUM_THREADS=8 OPENBLAS_NUM_THREADS=8 taskset -c 0-7 /opt/jax-env/bin/python -m unittest discover -s test -p test_*.py -v",
+        "result": "128 tests passed in 487.875s; full CPU baseline including primitive/legacy/shared/lifecycle.",
+        "source": "test-logs/g3-testing-profiling/source-identities.json",
+        "log": "test-logs/g3-testing-profiling/cpu-baseline.log",
+        "source_record": "baseline-source"
       },
       {
-        "source_commit": "3b3b697cf79f3a130640f37c8e6ce7451a36549c",
-        "command": "G3_NATIVE_CASES=/tmp/g3-shared-native-acceptance.json JAX_PLATFORMS=cpu .venv-jax/bin/python -m unittest test.test_shared_engine_cases test.test_shared_engine_battles -v",
-        "result": "3 composite checks passed in 36.753s, adding exact cumulative recipient-history assertions at every boundary. Only these two test modules changed after the complete 74a4fd4 run.",
-        "log": "test-logs/g3-first-playable/history-acceptance.log"
+        "command": "G3_NATIVE_CASES=/tmp/g3-profile-repaired-native.json JAX_PLATFORMS=cpu /opt/jax-env/bin/python -m unittest test.test_shared_engine_cases test.test_shared_engine_battles test.test_shared_engine_lifecycle -v",
+        "result": "11 tests passed in 122.030s; Protect/immunity repair corpus: 105 scenarios / 451 boundaries, 158 catalog boundaries. Superseded for second engine repair.",
+        "source": "test-logs/g3-testing-profiling/source-identities.json",
+        "log": "test-logs/g3-testing-profiling/cpu-repair-acceptance.log",
+        "source_record": "repair-source"
       },
       {
-        "source_commit": "d7a7f5c29d8f7d7cae5344582847e04b97bc2c18",
-        "command": "node --test test/shared-engine.test.cjs",
-        "result": "2 passed: actual BattleStream packet parity for replacement/undo/pivot/forced boundaries, and independent native paired privacy histories. This test and its consumed native cases are unchanged in the final source.",
-        "log": "test-logs/g3-first-playable/native-stream-contracts.log"
+        "command": "G3_NATIVE_CASES=/tmp/g3-profile-switch-repaired-native.json JAX_PLATFORMS=cpu /opt/jax-env/bin/python -m unittest test.test_shared_engine_cases test.test_shared_engine_battles test.test_shared_engine_lifecycle -v",
+        "result": "11 tests passed in 127.300s; superseded by residual handler repair.",
+        "source": "test-logs/g3-testing-profiling/source-identities.json",
+        "log": "test-logs/g3-testing-profiling/cpu-switch-repair-acceptance.log",
+        "source_record": "switch-repair-source"
       },
       {
-        "source_base": "6255889",
-        "command": "JAX_PLATFORMS=cpu .venv-jax/bin/python -m unittest test.test_accuracy_choice test.test_accuracy_choice_duel test.test_burn_choice test.test_two_move_session_duel test.test_request_session_batch test.test_two_move_session_reset -v",
-        "result": "10 affected legacy controls passed in 59.334s. All relevant legacy simulator/mechanics/oracle/test files are byte-identical between the synchronized base and final source (git diff --quiet verified).",
-        "log": "test-logs/g3-first-playable/legacy-controls.log"
+        "command": "G3_NATIVE_CASES=/tmp/g3-profile-residual-repaired-native.json JAX_PLATFORMS=cpu /opt/jax-env/bin/python -m unittest test.test_shared_engine_cases test.test_shared_engine_battles -v",
+        "result": "3 tests passed in 12.594s; 109 scenarios / 456 boundaries including all minimized repairs.",
+        "source": "test-logs/g3-testing-profiling/source-identities.json",
+        "log": "test-logs/g3-testing-profiling/cpu-residual-repair-cases.log",
+        "source_record": "residual-repair-source"
       },
       {
-        "source_commit": "6255889",
-        "command": "node --test test/reference.test.cjs test/protocol.test.cjs test/action-space.test.cjs test/battle-runner.test.cjs test/trace.test.cjs test/decision-trajectories.test.cjs test/baseline-matchup.test.cjs",
-        "result": "59 passed. These reference/environment sources and tests remain unchanged.",
-        "log": "test-logs/g3-first-playable/reference-contracts.log"
+        "command": "G3_NATIVE_CASES=/tmp/g3-profile-final-native.json JAX_PLATFORMS=cpu /opt/jax-env/bin/python -m unittest test.test_shared_engine_cases test.test_shared_engine_battles test.test_shared_engine_lifecycle test.test_shared_engine_benchmark -v",
+        "result": "13 tests passed in 147.266s; 109 native scenarios / 456 boundaries; 163 catalog boundaries; complete scalar/JIT/vmap 1/8/32 traces; eager, continuation/reset, capacities and benchmark counters.",
+        "source": "test-logs/g3-testing-profiling/source-identities.json",
+        "log": "test-logs/g3-testing-profiling/cpu-final-acceptance.log",
+        "source_record": "residual-repair-source"
       },
       {
-        "command": "node reference/oracle.cjs format; node reference/accuracy-choice-oracle.cjs; node reference/accuracy-choice-oracle.cjs --duels; node reference/burn-choice-oracle.cjs",
-        "result": "All completed successfully via permitted execution route; V0 format equality is covered by the reference suite. Pinned reference/legacy oracle sources remain unchanged.",
-        "reference_commit": "1242c1e2d9763ba5b85d33f13aecb89bae19ae3d"
+        "command": "G3_NATIVE_CASES=/tmp/g3-profile-final-native.json JAX_PLATFORMS=cpu /opt/jax-env/bin/python -m unittest test.test_shared_engine_lifecycle.SharedEngineLifecycleTest.test_catalog_boundaries_in_heterogeneous_batches test.test_shared_engine_lifecycle.SharedEngineLifecycleTest.test_complete_battles_in_heterogeneous_batches -v",
+        "result": "2 tests passed in 47.625s after changing host comparisons to bulk trees. Every leaf/lane equality and device-placement assertion retained.",
+        "log": "test-logs/g3-testing-profiling/cpu-bulk-comparison.log"
+      },
+      {
+        "command": "G3_NATIVE_CASES=/tmp/g3-profile-final-native.json JAX_PLATFORMS=cuda /opt/jax-env/bin/python -m unittest test.test_shared_engine_cases test.test_shared_engine_battles test.test_shared_engine_lifecycle test.test_shared_engine_benchmark -v",
+        "result": "13 tests passed in 486.372s; explicit GPU backend and all state/trace leaves verified in eager/JIT/batched paths, 109 native scenarios / 456 boundaries, 163 catalog boundaries, full battles batches 1/8/32, mixed rejection/capacity/lifecycle and benchmark counters.",
+        "source": "test-logs/g3-testing-profiling/source-identities.json",
+        "log": "test-logs/g3-testing-profiling/gpu-final-acceptance.log",
+        "source_record": "gpu-acceptance-source"
+      },
+      {
+        "command": "JAX_PLATFORMS=cpu /opt/jax-env/bin/python -m benchmarks.shared_engine_campaign --config benchmarks/g3-campaign.json --platform cpu --indices 0,1,4,19,99,119,165,256,257,479,499,999 --output test-logs/g3-testing-profiling/replay-cpu",
+        "result": "12 complete traces / 686 boundaries; exact native state/draw/request/event/history comparisons; selected eager/JIT/heterogeneous batch, serialized continuation and terminal reset all passed.",
+        "summary": "test-logs/g3-testing-profiling/replay-cpu/summary.json",
+        "source": "test-logs/g3-testing-profiling/replay-cpu/source.json"
+      },
+      {
+        "command": "JAX_PLATFORMS=cuda /opt/jax-env/bin/python -m benchmarks.shared_engine_campaign --config benchmarks/g3-campaign.json --platform gpu --indices 0,1,4,19,99,119,165,256,257,479,499,999 --output test-logs/g3-testing-profiling/replay-gpu",
+        "result": "12 complete traces / 686 boundaries; exact native state/draw/request/event/history comparisons; selected eager/JIT/heterogeneous batch, serialized continuation and terminal reset all passed.",
+        "summary": "test-logs/g3-testing-profiling/replay-gpu/summary.json",
+        "source": "test-logs/g3-testing-profiling/replay-gpu/source.json"
+      },
+      {
+        "command": "timeout 7200s env XLA_PYTHON_CLIENT_PREALLOCATE=false JAX_ENABLE_COMPILATION_CACHE=false JAX_PLATFORMS=cpu OMP_NUM_THREADS=8 OPENBLAS_NUM_THREADS=8 taskset -c 0-7 /opt/jax-env/bin/python -m benchmarks.shared_engine --config benchmarks/g3-profile.json --native /tmp/g3-profile-final-native.json --platform cpu --output test-logs/g3-testing-profiling/profile-cpu",
+        "result": "CPU sweep complete: 28 kernel operating points, 72 full-output scan points, 12 scan points skipped by documented memory guards; all primary work useful, with terminal/rejection cohorts separate.",
+        "measurements": "test-logs/g3-testing-profiling/profile-cpu-before-status-fix/results.json",
+        "log": "test-logs/g3-testing-profiling/profile-cpu-before-status-fix.log",
+        "status": "superseded_by_status_family_repair"
+      },
+      {
+        "command": "G3_NATIVE_CASES=/tmp/g3-profile-status-repaired-native.json JAX_PLATFORMS=cpu /opt/jax-env/bin/python -m unittest test.test_shared_engine_cases test.test_shared_engine_battles test.test_shared_engine_lifecycle test.test_shared_engine_benchmark -v",
+        "result": "13 passed in 137.934s on corrected status-family engine; first-boundary status regressions.",
+        "log": "test-logs/g3-testing-profiling/cpu-status-repair-acceptance.log"
+      },
+      {
+        "command": "G3_NATIVE_CASES=/tmp/g3-profile-status-repaired-native.json JAX_PLATFORMS=cuda /opt/jax-env/bin/python -m unittest test.test_shared_engine_cases test.test_shared_engine_battles test.test_shared_engine_lifecycle test.test_shared_engine_benchmark -v",
+        "result": "13 passed in 498.389s; actual GPU leaf placement, exact corpus and full-battle 1/8/32 parity, eager/capacity/lifecycle and benchmark counters.",
+        "log": "test-logs/g3-testing-profiling/gpu-status-repair-acceptance.log"
+      },
+      {
+        "command": "G3_NATIVE_CASES=/tmp/g3-profile-status-family-native.json JAX_PLATFORMS=cpu /opt/jax-env/bin/python -m unittest test.test_shared_engine_lifecycle.SharedEngineLifecycleTest.test_fainted_status_regressions_continue_from_saved_states_and_reset -v",
+        "result": "1 passed in 24.987s; complete native burn/Toxic regressions, every boundary serialized/restored, eager/JIT and 32 heterogeneous lanes, terminal reset.",
+        "log": "test-logs/g3-testing-profiling/cpu-status-family-32-continuation.log"
+      },
+      {
+        "command": "G3_NATIVE_CASES=/tmp/g3-profile-status-family-native.json JAX_PLATFORMS=cuda /opt/jax-env/bin/python -m unittest test.test_shared_engine_lifecycle.SharedEngineLifecycleTest.test_fainted_status_regressions_continue_from_saved_states_and_reset -v",
+        "result": "1 passed in 48.231s with explicit GPU leaf placement.",
+        "log": "test-logs/g3-testing-profiling/gpu-status-family-continuation.log"
+      },
+      {
+        "command": "JAX_PLATFORMS=cpu /opt/jax-env/bin/python -m benchmarks.shared_engine_campaign --config benchmarks/g3-campaign.json --platform cpu --indices 0,1,4,19,99,119,165,256,257,479,499,999 --output test-logs/g3-testing-profiling/replay-cpu-final",
+        "result": "12 complete traces / 686 boundaries; exact native comparisons, eager/JIT/batch, saved first/middle/last continuation and terminal reset all passed.",
+        "summary": "test-logs/g3-testing-profiling/replay-cpu-final/summary.json",
+        "source": "test-logs/g3-testing-profiling/replay-cpu-final/source.json"
+      },
+      {
+        "command": "JAX_PLATFORMS=cuda /opt/jax-env/bin/python -m benchmarks.shared_engine_campaign --config benchmarks/g3-campaign.json --platform gpu --indices 0,1,4,19,99,119,165,256,257,479,499,999 --output test-logs/g3-testing-profiling/replay-gpu-final",
+        "result": "12 complete traces / 686 boundaries; exact native comparisons, eager/JIT/batch, saved first/middle/last continuation and terminal reset all passed.",
+        "summary": "test-logs/g3-testing-profiling/replay-gpu-final/summary.json",
+        "source": "test-logs/g3-testing-profiling/replay-gpu-final/source.json"
+      },
+      {
+        "command": "timeout 7200s env XLA_PYTHON_CLIENT_PREALLOCATE=false JAX_ENABLE_COMPILATION_CACHE=false JAX_PLATFORMS=cpu OMP_NUM_THREADS=8 OPENBLAS_NUM_THREADS=8 taskset -c 0-7 /opt/jax-env/bin/python -m benchmarks.shared_engine --config benchmarks/g3-profile.json --native /tmp/g3-profile-status-family-native.json --platform cpu --output test-logs/g3-testing-profiling/profile-cpu",
+        "result": "Completed 28 kernels / 72 scans, 12 memory guard skips; source/config hash freeze and useful-work counters verified.",
+        "measurements": "test-logs/g3-testing-profiling/profile-cpu/results.json",
+        "log": "test-logs/g3-testing-profiling/profile-cpu.log"
+      },
+      {
+        "command": "timeout --signal=TERM --kill-after=1s 300s env XLA_PYTHON_CLIENT_PREALLOCATE=false JAX_ENABLE_COMPILATION_CACHE=false OMP_NUM_THREADS=8 OPENBLAS_NUM_THREADS=8 taskset -c 0-7 /opt/jax-env/bin/python -m benchmarks.g3_diagnostic",
+        "result": "Exit 0, 79.16s. Fixed F01/F02/F03 pack: CPU/GPU 128-boundary exact native gates passed; two points x three backends x three timed repetitions complete. No profiler or follow-up run.",
+        "measurements": "test-logs/g3-testing-profiling/diagnostic/results.json",
+        "frozen_fixture": "test-logs/g3-testing-profiling/diagnostic/native-pack.json",
+        "log": "test-logs/g3-testing-profiling/diagnostic.log"
       }
     ],
-    "blockers": [],
-    "source_base": "6255889",
-    "synchronization": "Fetched origin/main and verified it was an ancestor of the six local checkpoint commits. The explicitly authorized normal fast-forward push succeeded; local work and remote history were preserved.",
-    "completed_at": "2026-11-06",
-    "acceptance": "Primary inspected the diff and independent native/CPU evidence. The first G3 CPU goal is accepted; no milestone is closed, no task count is incremented, and no full-format/GPU/performance claim is made.",
-    "source_identity": {
-      "engine_and_lifecycle_commit": "74a4fd48b7cef73affe430fd1bfe0e44944a920b",
-      "engine_and_lifecycle_tree": "036c004f6cb296a7ac6ba0eb263e04688a344e2e",
-      "additional_history_assertions_commit": "3b3b697cf79f3a130640f37c8e6ce7451a36549c",
-      "additional_history_assertions_tree": "9174716895e712b0f408d3c13e0110c16279a1cf",
-      "note": "3b3b697 changes only cumulative-history assertions in the case/battle modules. Engine, native runner, manifest and lifecycle tests are byte-identical to 74a4fd4. Evidence records follow these source revisions."
-    },
+    "runtime": "test-logs/g3-testing-profiling/environment.json",
+    "campaign_config": "benchmarks/g3-campaign.json",
+    "commands_running": [],
+    "regressions": [
+      {
+        "failure": "campaign-002-seat0/11 p1 event stream",
+        "original_source": "test-logs/g3-testing-profiling/campaign-cpu/source.json",
+        "raw": "test-logs/g3-testing-profiling/campaign-cpu/failure-native.json.gz",
+        "counts": "test-logs/g3-testing-profiling/campaign-cpu/summary.json",
+        "minimized_cases": [
+          "protect-immunity-Tackle",
+          "protect-immunity-Earthquake",
+          "protect-immunity-Toxic"
+        ],
+        "before": "test-logs/g3-testing-profiling/protect-immunity-before.log",
+        "repair": "Physical immunity is resolved before Protect; status checks remain after Protect."
+      },
+      {
+        "failure": "campaign-029-seat0 initialization history",
+        "type": "fixture helper, no production change",
+        "raw": "test-logs/g3-testing-profiling/campaign-cpu-repaired/failure-native.json.gz",
+        "minimized_cases": [
+          "trusted-toxic-immune-Gengar",
+          "trusted-toxic-immune-Snorlax"
+        ],
+        "repair": "Mirror native silent rejection of immune trusted setStatus installation."
+      },
+      {
+        "failure": "campaign-059-seat1/14 p1 mon1 speed",
+        "type": "production engine cached Speed",
+        "raw": "test-logs/g3-testing-profiling/campaign-cpu-continued/failure-native.json.gz",
+        "before": "test-logs/g3-testing-profiling/paralyzed-return-before.log",
+        "minimized_cases": [
+          "paralyzed-forced-return"
+        ],
+        "repair": "Refresh incoming effective Speed before runSwitch callback queue insertion, matching native insertChoice."
+      },
+      {
+        "failure": "campaign-082-seat1/58 first divergent draw",
+        "type": "production residual handler collection",
+        "raw": "test-logs/g3-testing-profiling/campaign-cpu-switch-repaired/failure-native.json.gz",
+        "before": "test-logs/g3-testing-profiling/fainted-leftovers-before.log",
+        "minimized_cases": [
+          "fainted-leftovers-handler-sort"
+        ],
+        "repair": "Native sorts item callbacks including fainted holders before skipping their effects; preserve the otherwise invisible shuffle draw."
+      },
+      {
+        "failure": "Minimized burn and Toxic fainted-holder residual sort; discovered by source review after first profiling sweep.",
+        "type": "production status callback collection",
+        "cases": [
+          "fainted-brn-handler-sort",
+          "fainted-tox-handler-sort"
+        ],
+        "before_logs": [
+          "test-logs/g3-testing-profiling/fainted-burn-before.log",
+          "test-logs/g3-testing-profiling/fainted-toxic-before.log"
+        ],
+        "raw": [
+          "test-logs/g3-testing-profiling/minimized-fainted-burn-before-native.json.gz",
+          "test-logs/g3-testing-profiling/minimized-fainted-toxic-before-native.json.gz"
+        ],
+        "repair": "Include retained brn/tox callbacks in residual sorting even when fainted; skip their effects after sorting. Native checkFainted changes status only after residual action."
+      }
+    ],
+    "results_report": "docs/G3_TESTING_PROFILING_RESULTS.md",
+    "campaign_segments": [
+      {
+        "indices": [
+          0,
+          478
+        ],
+        "counts": "test-logs/g3-testing-profiling/campaign-cpu-residual-repaired/summary.json",
+        "result": "479 completed / 15,225 boundaries; native producer aborted on next start. Engine results valid; overall run incomplete.",
+        "source": "test-logs/g3-testing-profiling/campaign-cpu-residual-repaired/source.json"
+      },
+      {
+        "indices": [
+          479,
+          999
+        ],
+        "counts": "test-logs/g3-testing-profiling/campaign-cpu-tail/summary.json",
+        "result": "running; same engine and fixture semantics, queue insertion draw classified as queue-sort.",
+        "source": "test-logs/g3-testing-profiling/campaign-cpu-tail/source.json"
+      }
+    ],
     "coverage": {
-      "native_scenarios": 102,
-      "native_boundaries": 448,
-      "catalog_boundaries": 155,
-      "complete_three_member_battles": 8,
-      "complete_battle_boundaries": 293,
-      "legacy_complete_duels": 4,
-      "cpu_batch_sizes": [
-        1,
-        8,
-        32
-      ],
-      "catalog_batch_size": 32,
-      "summary": "test-logs/g3-first-playable/native-case-summary.json"
+      "starts": 1000,
+      "completed": 1000,
+      "boundaries": 30342,
+      "decisions": 57257,
+      "ordinary": 900,
+      "synthetic": 100,
+      "truncated": 0,
+      "capacity": 0,
+      "failing": 0,
+      "schemaVersion": 1,
+      "status": "complete_target",
+      "source": "campaign-cpu-status-repaired/source.json",
+      "full_summary": "campaign-cpu-status-repaired/summary.json",
+      "native_coverage": "native-campaign-coverage.json",
+      "native_regression_scenarios": 111,
+      "native_regression_boundaries": 464,
+      "catalog_boundaries": 171,
+      "effect_categories": 41,
+      "within_boundary_effect_pairs": 726
     },
-    "runtime": "test-logs/g3-first-playable/cpu-environment.json",
-    "reference_provenance": "test-logs/g3-first-playable/reference-provenance.json",
-    "publication": {
-      "status": "published",
-      "target": "origin/main",
-      "published_goal_head": "ae5818adf4e9cd3a294353f97c0d93856b9d97c1",
-      "authorized_at": "2026-11-06",
-      "authorization": "User explicitly authorized the push in chat.",
-      "result": "Normal fast-forward push succeeded from 6255889 to ae5818a; origin/main and local HEAD matched after publication.",
-      "previous_block": "Automatic approval review initially required explicit chat authorization; resolved by the user.",
-      "scope": "Completed first G3 CPU goal and its committed evidence. GPU/performance execution remains separately scoped."
+    "device_validation_attempts": [
+      {
+        "log": "test-logs/g3-testing-profiling/gpu-host-comparison-interrupted.log",
+        "result": "Interrupted (exit 130) during complete-battle batching; stack identified per-leaf NumPy conversion/device fetch. Scalar native cases, full scalar battles, capacity checks and 163-boundary GPU catalog had passed. No semantic failure. Test comparison now batches transfers without reducing equality coverage."
+      }
+    ],
+    "device_proof": {
+      "backend": "gpu",
+      "device": "NVIDIA GeForce RTX 3060 Ti / CudaDevice(id=0)",
+      "placement": "All initialized state/trace leaves, compared eager/compiled/batched outputs and saved continuations checked; JAX_PLATFORMS=cuda forbids fallback.",
+      "new_campaign_replay": "Final source: 12 CPU and GPU traces / 686 boundaries each; saved first/middle/last continuations and terminal reset passed. Native short+complete status-family checks cover 111 scenarios / 464 boundaries."
+    },
+    "benchmark_gate": {
+      "status": "matched_fixed_pack_comparison_complete",
+      "plan": "docs/G3_TESTING_PROFILING.md",
+      "output_contract_differences": "JAX full numeric state snapshots and draw/event traces retained; native ordinary state/string logs and requests retained, no oracle instrumentation.",
+      "acceptance": "Only fixed restricted-slice diagnostic; G3 remains open."
+    },
+    "profiling_stop": {
+      "stopped_utc": "2026-11-06T13:24:22.843266+00:00",
+      "reason": "User withdrew extensive CPU/GPU sweep and required matched native Showdown-versus-GPU comparison first.",
+      "processes_verified_stopped": [
+        25927,
+        25911
+      ],
+      "commands_stopped": [
+        "timeout 7200s env XLA_PYTHON_CLIENT_PREALLOCATE=false JAX_ENABLE_COMPILATION_CACHE=false JAX_PLATFORMS=cuda OMP_NUM_THREADS=8 OPENBLAS_NUM_THREADS=8 taskset -c 0-7 /opt/jax-env/bin/python -m benchmarks.shared_engine --config benchmarks/g3-profile.json --native /tmp/g3-profile-status-family-native.json --platform gpu --output test-logs/g3-testing-profiling/profile-gpu",
+        "timeout --foreground 7300s nvidia-smi --query-gpu=timestamp,memory.used,memory.free,utilization.gpu,utilization.memory,power.draw,clocks.sm,clocks.mem --format=csv,noheader,nounits --loop-ms=1000 > test-logs/g3-testing-profiling/profile-gpu-device.csv"
+      ],
+      "cpu": {
+        "status": "complete",
+        "kernels": 28,
+        "scans": 72,
+        "measurements": "test-logs/g3-testing-profiling/profile-cpu/results.json"
+      },
+      "gpu": {
+        "status": "interrupted_by_user",
+        "kernels": 13,
+        "scans": 33,
+        "guard_records": 18,
+        "last_checkpoint": {
+          "cohort": "tied",
+          "batch": 1,
+          "chunk": 8,
+          "phase": "compile and measure full scan"
+        },
+        "measurements": "test-logs/g3-testing-profiling/profile-gpu/results.json",
+        "log": "test-logs/g3-testing-profiling/profile-gpu.log",
+        "device_monitor": "test-logs/g3-testing-profiling/profile-gpu-device.csv"
+      }
+    },
+    "diagnostic": {
+      "status": "complete",
+      "results": "test-logs/g3-testing-profiling/diagnostic/results.json",
+      "frozen_fixture": "test-logs/g3-testing-profiling/diagnostic/native-pack.json",
+      "log": "test-logs/g3-testing-profiling/diagnostic.log",
+      "execution_cap_seconds": 300,
+      "elapsed_seconds": 79.1617717199988,
+      "exit_status": 0,
+      "correctness": "CPU/GPU all 128 native boundaries, placement and full output digests passed.",
+      "interpretation": "3 battles: Showdown lowest median; 96: JAX CPU fastest, GPU/native timing ranges overlap.",
+      "g3_acceptance": "open",
+      "source_engine_sha256": "8fe364fd9e0b84d8e61daa717c27a0a4e4ce8f65b81b793ffd2fbb5198b3c599"
     }
   },
   "optional_gpu_validation_history": [
@@ -866,7 +1084,108 @@
       "decisions": "PROJECT_PLAN.md#validation-entry-points-and-remaining-decisions"
     },
     "preparation_handoff": "docs/MILESTONE_PREPARATION.md",
-    "goal_mode_status": "approved_goal_cpu_complete",
-    "note": "2026-11-06 approved first G3 brief executed directly without delegation. CPU goal accepted; G3 device/profile closure and all other open milestones remain open. Repository configuration does not select execution-surface mode."
-  }
+    "goal_mode_status": "approved_execution_assignment_default_mode",
+    "note": "User assigned extensive G3 testing/profiling on 2026-11-06 with Sol 6.1/high, direct execution and available hardware. Current status is in active_task; repository settings do not change execution-surface mode."
+  },
+  "completed_goals": [
+    {
+      "id": "G3-first-playable",
+      "status": "completed_cpu_goal",
+      "approved_at": "2026-11-06",
+      "owner": "/root",
+      "brief": "PROJECT_PLAN.md#proposed-first-g3-goal-mode-brief",
+      "behavior_catalog": "docs/SHOWDOWN_BEHAVIOR_CASES.md",
+      "scope": "Entire proposed first G3 package, including potentially long affected CPU integration/regressions. Direct execution without delegation. G3 milestone remains open pending later GPU closure.",
+      "checkpoint": "All four approved integration checkpoints complete; CPU acceptance passed",
+      "completed_checkpoints": [
+        "Shared roster/move/RNG/request/event schema, native initialization and legacy migrations",
+        "Voluntary switches, native faint replacements, U-turn queue suspension, private replace/cancel and stable command mapping",
+        "Allowlisted status/items/Protect/recovery/residual/Struggle interactions and atomic unsupported/capacity diagnostics",
+        "Complete native terminal traces, cumulative recipient histories, saved continuation/reset, eager/JIT and heterogeneous CPU batch acceptance"
+      ],
+      "next": "Stop at the approved first-goal CPU boundary. G3 remains open for separately scoped D3 GPU correctness/placement and compile/warm/memory profiles; no additional implementation goal is approved.",
+      "evidence": [
+        {
+          "source_commit": "74a4fd48b7cef73affe430fd1bfe0e44944a920b",
+          "command": "node reference/shared-engine-cases.cjs --batch all --output /tmp/g3-shared-native-acceptance.json",
+          "result": "102 independently observed native scenarios / 448 boundaries; eight complete three-member battles and four complete legacy duels. Semantic digest and replay recipe are in native-case-summary.json.",
+          "summary": "test-logs/g3-first-playable/native-case-summary.json"
+        },
+        {
+          "source_commit": "74a4fd48b7cef73affe430fd1bfe0e44944a920b",
+          "command": "G3_NATIVE_CASES=/tmp/g3-shared-native-acceptance.json JAX_PLATFORMS=cpu .venv-jax/bin/python -m unittest test.test_shared_engine_cases test.test_shared_engine_battles test.test_shared_engine_lifecycle -v",
+          "result": "11 composite checks passed in 252.017s. Every catalog boundary matched native and eager/JIT/32-lane execution; all eight full traces matched scalar/JIT/vmap sizes 1,8,32. Mixed phase/rejection/terminal lanes, lane RNG independence, saved continuation/reset, privacy and real event/draw/queue/history/episode capacity rollback passed.",
+          "log": "test-logs/g3-first-playable/cpu-acceptance.log"
+        },
+        {
+          "source_commit": "3b3b697cf79f3a130640f37c8e6ce7451a36549c",
+          "command": "G3_NATIVE_CASES=/tmp/g3-shared-native-acceptance.json JAX_PLATFORMS=cpu .venv-jax/bin/python -m unittest test.test_shared_engine_cases test.test_shared_engine_battles -v",
+          "result": "3 composite checks passed in 36.753s, adding exact cumulative recipient-history assertions at every boundary. Only these two test modules changed after the complete 74a4fd4 run.",
+          "log": "test-logs/g3-first-playable/history-acceptance.log"
+        },
+        {
+          "source_commit": "d7a7f5c29d8f7d7cae5344582847e04b97bc2c18",
+          "command": "node --test test/shared-engine.test.cjs",
+          "result": "2 passed: actual BattleStream packet parity for replacement/undo/pivot/forced boundaries, and independent native paired privacy histories. This test and its consumed native cases are unchanged in the final source.",
+          "log": "test-logs/g3-first-playable/native-stream-contracts.log"
+        },
+        {
+          "source_base": "6255889",
+          "command": "JAX_PLATFORMS=cpu .venv-jax/bin/python -m unittest test.test_accuracy_choice test.test_accuracy_choice_duel test.test_burn_choice test.test_two_move_session_duel test.test_request_session_batch test.test_two_move_session_reset -v",
+          "result": "10 affected legacy controls passed in 59.334s. All relevant legacy simulator/mechanics/oracle/test files are byte-identical between the synchronized base and final source (git diff --quiet verified).",
+          "log": "test-logs/g3-first-playable/legacy-controls.log"
+        },
+        {
+          "source_commit": "6255889",
+          "command": "node --test test/reference.test.cjs test/protocol.test.cjs test/action-space.test.cjs test/battle-runner.test.cjs test/trace.test.cjs test/decision-trajectories.test.cjs test/baseline-matchup.test.cjs",
+          "result": "59 passed. These reference/environment sources and tests remain unchanged.",
+          "log": "test-logs/g3-first-playable/reference-contracts.log"
+        },
+        {
+          "command": "node reference/oracle.cjs format; node reference/accuracy-choice-oracle.cjs; node reference/accuracy-choice-oracle.cjs --duels; node reference/burn-choice-oracle.cjs",
+          "result": "All completed successfully via permitted execution route; V0 format equality is covered by the reference suite. Pinned reference/legacy oracle sources remain unchanged.",
+          "reference_commit": "1242c1e2d9763ba5b85d33f13aecb89bae19ae3d"
+        }
+      ],
+      "blockers": [],
+      "source_base": "6255889",
+      "synchronization": "Fetched origin/main and verified it was an ancestor of the six local checkpoint commits. The explicitly authorized normal fast-forward push succeeded; local work and remote history were preserved.",
+      "completed_at": "2026-11-06",
+      "acceptance": "Primary inspected the diff and independent native/CPU evidence. The first G3 CPU goal is accepted; no milestone is closed, no task count is incremented, and no full-format/GPU/performance claim is made.",
+      "source_identity": {
+        "engine_and_lifecycle_commit": "74a4fd48b7cef73affe430fd1bfe0e44944a920b",
+        "engine_and_lifecycle_tree": "036c004f6cb296a7ac6ba0eb263e04688a344e2e",
+        "additional_history_assertions_commit": "3b3b697cf79f3a130640f37c8e6ce7451a36549c",
+        "additional_history_assertions_tree": "9174716895e712b0f408d3c13e0110c16279a1cf",
+        "note": "3b3b697 changes only cumulative-history assertions in the case/battle modules. Engine, native runner, manifest and lifecycle tests are byte-identical to 74a4fd4. Evidence records follow these source revisions."
+      },
+      "coverage": {
+        "native_scenarios": 102,
+        "native_boundaries": 448,
+        "catalog_boundaries": 155,
+        "complete_three_member_battles": 8,
+        "complete_battle_boundaries": 293,
+        "legacy_complete_duels": 4,
+        "cpu_batch_sizes": [
+          1,
+          8,
+          32
+        ],
+        "catalog_batch_size": 32,
+        "summary": "test-logs/g3-first-playable/native-case-summary.json"
+      },
+      "runtime": "test-logs/g3-first-playable/cpu-environment.json",
+      "reference_provenance": "test-logs/g3-first-playable/reference-provenance.json",
+      "publication": {
+        "status": "published",
+        "target": "origin/main",
+        "published_goal_head": "ae5818adf4e9cd3a294353f97c0d93856b9d97c1",
+        "authorized_at": "2026-11-06",
+        "authorization": "User explicitly authorized the push in chat.",
+        "result": "Normal fast-forward push succeeded from 6255889 to ae5818a; origin/main and local HEAD matched after publication.",
+        "previous_block": "Automatic approval review initially required explicit chat authorization; resolved by the user.",
+        "scope": "Completed first G3 CPU goal and its committed evidence. GPU/performance execution remains separately scoped."
+      }
+    }
+  ]
 }

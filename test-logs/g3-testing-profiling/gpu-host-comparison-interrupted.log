@@ -1,0 +1,73 @@
+test_manifest_and_nonempty_family_coverage (test.test_shared_engine_cases.SharedEngineCasesTest.test_manifest_and_nonempty_family_coverage) ... ok
+test_native_initialization_and_boundaries (test.test_shared_engine_cases.SharedEngineCasesTest.test_native_initialization_and_boundaries) ... ok
+test_complete_three_member_native_battles (test.test_shared_engine_battles.SharedEngineBattlesTest.test_complete_three_member_native_battles) ... Native complete-battle comparison: 8 battles, 293 boundaries, families=['direct', 'exhaustion', 'pivot', 'status']
+ok
+test_atomic_invalid_unsupported_stale_and_capacity (test.test_shared_engine_lifecycle.SharedEngineLifecycleTest.test_atomic_invalid_unsupported_stale_and_capacity) ... ok
+test_catalog_boundaries_in_heterogeneous_batches (test.test_shared_engine_lifecycle.SharedEngineLifecycleTest.test_catalog_boundaries_in_heterogeneous_batches) ... GPU heterogeneous catalog agreement: 163 native boundaries, 32 lanes
+ok
+test_complete_battles_in_heterogeneous_batches (test.test_shared_engine_lifecycle.SharedEngineLifecycleTest.test_complete_battles_in_heterogeneous_batches) ... Traceback (most recent call last):
+  File "<frozen runpy>", line 203, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/usr/local/lib/python3.13/unittest/__main__.py", line 18, in <module>
+    main(module=None)
+    ~~~~^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/unittest/main.py", line 104, in __init__
+    self.runTests()
+    ~~~~~~~~~~~~~^^
+  File "/usr/local/lib/python3.13/unittest/main.py", line 270, in runTests
+    self.result = testRunner.run(self.test)
+                  ~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/unittest/runner.py", line 240, in run
+    test(result)
+    ~~~~^^^^^^^^
+  File "/usr/local/lib/python3.13/unittest/suite.py", line 84, in __call__
+    return self.run(*args, **kwds)
+           ~~~~~~~~^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/unittest/suite.py", line 122, in run
+    test(result)
+    ~~~~^^^^^^^^
+  File "/usr/local/lib/python3.13/unittest/suite.py", line 84, in __call__
+    return self.run(*args, **kwds)
+           ~~~~~~~~^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/unittest/suite.py", line 122, in run
+    test(result)
+    ~~~~^^^^^^^^
+  File "/usr/local/lib/python3.13/unittest/suite.py", line 84, in __call__
+    return self.run(*args, **kwds)
+           ~~~~~~~~^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/unittest/suite.py", line 122, in run
+    test(result)
+    ~~~~^^^^^^^^
+  File "/usr/local/lib/python3.13/unittest/case.py", line 707, in __call__
+    return self.run(*args, **kwds)
+           ~~~~~~~~^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/unittest/case.py", line 651, in run
+    self._callTestMethod(testMethod)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/unittest/case.py", line 606, in _callTestMethod
+    if method() is not None:
+       ~~~~~~^^
+  File "/workspace/test/test_shared_engine_lifecycle.py", line 69, in test_complete_battles_in_heterogeneous_batches
+    equal(self,actual,expected)
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/test/test_shared_engine_lifecycle.py", line 19, in equal
+    for x,y in zip(jax.tree.leaves(a),jax.tree.leaves(b),strict=True):np.testing.assert_array_equal(x,y)
+                                                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/opt/jax-env/lib/python3.13/site-packages/numpy/testing/_private/utils.py", line 1128, in assert_array_equal
+    assert_array_compare(operator.__eq__, actual, desired, err_msg=err_msg,
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                         verbose=verbose, header='Arrays are not equal',
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                         strict=strict)
+                         ^^^^^^^^^^^^^^
+  File "/opt/jax-env/lib/python3.13/site-packages/numpy/testing/_private/utils.py", line 744, in assert_array_compare
+    x = np.asanyarray(x)
+  File "/opt/jax-env/lib/python3.13/site-packages/jax/_src/array.py", line 448, in __array__
+    return np.asarray(self._value, dtype=dtype, **kwds)  # pyrefly: ignore[no-matching-overload]
+                      ^^^^^^^^^^^
+  File "/opt/jax-env/lib/python3.13/site-packages/jax/_src/profiler.py", line 588, in wrapper
+    return func(*args, **kwargs)
+  File "/opt/jax-env/lib/python3.13/site-packages/jax/_src/array.py", line 696, in _value
+    npy_value, did_copy = self._to_np_array_did_copy()
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+KeyboardInterrupt

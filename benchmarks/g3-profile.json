@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "batches": [1, 8, 32, 128, 512, 2048, 8192],
+  "chunks": [1, 8, 32, 128],
+  "primary": ["ordinary", "mixed"],
+  "diagnostic": ["tied", "status", "pivot", "exhaustion", "mixed-aligned", "terminal", "rejected"],
+  "diagnosticBatches": [1, 32],
+  "diagnosticChunks": [1, 8],
+  "repetitions": 10,
+  "targetSeconds": 0.2,
+  "memoryFraction": 0.8,
+  "allocationSafetyFactor": 4,
+  "compilerReserveBytes": 1073741824,
+  "profilerPoint": {"cohort": "mixed", "batch": 32, "chunk": 8},
+  "outputContract": "full Result for advance; final carry and full per-boundary Results for scan; all leaves synchronized; only latest call retained between repetitions"
+}

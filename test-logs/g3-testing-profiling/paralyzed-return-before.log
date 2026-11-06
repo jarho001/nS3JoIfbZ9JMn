@@ -1,0 +1,22 @@
+test_native_initialization_and_boundaries (test.test_shared_engine_cases.SharedEngineCasesTest.test_native_initialization_and_boundaries) ... 
+  test_native_initialization_and_boundaries (test.test_shared_engine_cases.SharedEngineCasesTest.test_native_initialization_and_boundaries) (case='paralyzed-forced-return') ... FAIL
+
+======================================================================
+FAIL: test_native_initialization_and_boundaries (test.test_shared_engine_cases.SharedEngineCasesTest.test_native_initialization_and_boundaries) (case='paralyzed-forced-return')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/test/test_shared_engine_cases.py", line 38, in test_native_initialization_and_boundaries
+    assert_step(self,before,r,step,f"{case['id']}/{n+1}");s=r.state
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/test/shared_engine_support.py", line 132, in assert_step
+    assert_state(test,result.state,expected['after'],label)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/test/shared_engine_support.py", line 90, in assert_state
+    test.assertEqual(v,p[theirs],tag+' '+ours)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 7 != 1 : paralyzed-forced-return/2 p1 mon0 speed
+
+----------------------------------------------------------------------
+Ran 1 test in 4.673s
+
+FAILED (failures=1)

@@ -1,0 +1,14 @@
+{
+  "kind": "build-provenance (machine/runtime metadata; excluded from semantic fixture equality)",
+  "upstreamRepository": "https://github.com/smogon/pokemon-showdown.git",
+  "upstreamCommit": "1242c1e2d9763ba5b85d33f13aecb89bae19ae3d",
+  "upstreamPackageLockSha256": "10960416dfb6af611bcc7f6bd503e3b69d3ef7df0647fa9ce9e9ecf9ac857f82",
+  "runtime": {
+    "node": "v24.22.1",
+    "npm": "11.19.1"
+  },
+  "semanticFixtureSha256": {
+    "format": "87b303476a12f0a14559c659c986fd13eb5112d26b2cac8371f393f84b498b71",
+    "smoke": "aeb4b897cb55136da088e487d6484c8b7e8d842828888bfabb5ca04a1ffa9b09"
+  }
+}

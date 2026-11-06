@@ -1,0 +1,6 @@
+test_materialized_scan_repeats_only_after_native_terminal_and_reset (test.test_shared_engine_benchmark.SharedEngineBenchmarkTest.test_materialized_scan_repeats_only_after_native_terminal_and_reset) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 17.026s
+
+OK
