@@ -1,0 +1,191 @@
+{
+  "transfer_summary": {
+    "MemcpyD2D": {
+      "calls": 826,
+      "sizes_bytes": {
+        "2621440": 826
+      },
+      "total_bytes": 2165309440,
+      "summed_microseconds": 9399.689
+    },
+    "MemcpyD2H": {
+      "calls": 1483,
+      "sizes_bytes": {
+        "1": 1483
+      },
+      "total_bytes": 1483,
+      "summed_microseconds": 1713.081
+    }
+  },
+  "host_command_buffer_executions": 11835,
+  "trace": "test-logs/g3-testing-profiling/diagnostic-profile-96/jax-trace/plugins/profile/2026_11_06_14_08_42/482af3e7f673.trace.json.gz",
+  "capture_annotation_microseconds": 2881897.801,
+  "hardware_streams": {
+    "(1, 14)": "Stream #14(MemcpyD2D,Compute,MemcpyD2H)",
+    "(1, 95)": "Stream #95(Compute)",
+    "(1, 97)": "Stream #97(Compute)",
+    "(1, 109)": "Stream #109(Compute)",
+    "(1, 110)": "Stream #110(Compute)",
+    "(1, 111)": "Stream #111(Compute)"
+  },
+  "hardware_stream_event_count": 572853,
+  "kernel_count": 570544,
+  "nonkernel_count": 2309,
+  "kernel_summed_microseconds": 677689.856000211,
+  "stream_interval_union_microseconds": 676435.5070008624,
+  "first_to_last_stream_microseconds": 2879802.762,
+  "union_fraction_within_first_last": 0.23488952643794372,
+  "union_fraction_within_annotation": 0.2347187699599006,
+  "top_kernels_by_count": [
+    {
+      "name": "memcpy32_post",
+      "calls": 214180,
+      "summed_microseconds": 213741.66900021804
+    },
+    {
+      "name": "input_scatter_fusion_162",
+      "calls": 31679,
+      "summed_microseconds": 31126.257999996193
+    },
+    {
+      "name": "input_scatter_fusion_266",
+      "calls": 7619,
+      "summed_microseconds": 7315.776000000236
+    },
+    {
+      "name": "input_scatter_fusion_10",
+      "calls": 7312,
+      "summed_microseconds": 7807.079999999015
+    },
+    {
+      "name": "loop_add_fusion_3",
+      "calls": 6510,
+      "summed_microseconds": 5956.98899999983
+    },
+    {
+      "name": "wrapped_gather",
+      "calls": 5853,
+      "summed_microseconds": 6479.6819999994295
+    },
+    {
+      "name": "input_scatter_fusion_270",
+      "calls": 4411,
+      "summed_microseconds": 4147.923000000002
+    },
+    {
+      "name": "input_scatter_fusion_156",
+      "calls": 4010,
+      "summed_microseconds": 4289.008999999845
+    },
+    {
+      "name": "loop_add_fusion_2",
+      "calls": 3703,
+      "summed_microseconds": 4205.739000000019
+    },
+    {
+      "name": "input_scatter_fusion_8",
+      "calls": 3703,
+      "summed_microseconds": 4484.052999999923
+    },
+    {
+      "name": "input_scatter_fusion_9",
+      "calls": 3703,
+      "summed_microseconds": 4993.7470000000385
+    },
+    {
+      "name": "input_scatter_fusion_11",
+      "calls": 3703,
+      "summed_microseconds": 4179.607000000026
+    }
+  ],
+  "top_kernels_by_summed_duration": [
+    {
+      "name": "memcpy32_post",
+      "calls": 214180,
+      "summed_microseconds": 213741.66900021804
+    },
+    {
+      "name": "input_scatter_fusion_162",
+      "calls": 31679,
+      "summed_microseconds": 31126.257999996193
+    },
+    {
+      "name": "loop_select_fusion",
+      "calls": 826,
+      "summed_microseconds": 15587.941000000015
+    },
+    {
+      "name": "input_scatter_fusion_10",
+      "calls": 7312,
+      "summed_microseconds": 7807.079999999015
+    },
+    {
+      "name": "input_scatter_fusion_266",
+      "calls": 7619,
+      "summed_microseconds": 7315.776000000236
+    },
+    {
+      "name": "wrapped_gather",
+      "calls": 5853,
+      "summed_microseconds": 6479.6819999994295
+    },
+    {
+      "name": "input_scatter_fusion_24",
+      "calls": 3208,
+      "summed_microseconds": 6405.05599999977
+    },
+    {
+      "name": "loop_add_fusion_3",
+      "calls": 6510,
+      "summed_microseconds": 5956.98899999983
+    },
+    {
+      "name": "input_scatter_fusion_25",
+      "calls": 3208,
+      "summed_microseconds": 5295.195999999794
+    },
+    {
+      "name": "loop_select_fusion_15",
+      "calls": 3208,
+      "summed_microseconds": 5252.509999999951
+    },
+    {
+      "name": "memcpy128",
+      "calls": 381,
+      "summed_microseconds": 5005.710000000002
+    },
+    {
+      "name": "input_scatter_fusion_9",
+      "calls": 3703,
+      "summed_microseconds": 4993.7470000000385
+    }
+  ],
+  "memcpy32_post": {
+    "calls": 214180,
+    "summed_microseconds": 213741.669,
+    "example_args": {
+      "context_id": "$$1",
+      "correlation_id": "1",
+      "cuda_graph_id": "56",
+      "cuda_graph_node_id": "240518168593",
+      "hlo_module": "jit_run",
+      "hlo_op": "command_buffer_1",
+      "kernel_details": "regs:16 static_shared:0 dynamic_shared:0 grid:9,1,1 block:256,1,1 occ_pct:100",
+      "occupancy_min_grid_size": "76",
+      "occupancy_suggested_block_size": "768",
+      "scope_range_id": "281474976710658",
+      "tf_op": "XlaModule:",
+      "theoretical_occupancy_pct": "100"
+    }
+  },
+  "nonkernel_events": {
+    "MemcpyD2H": 1483,
+    "MemcpyD2D": 826
+  },
+  "notes": [
+    "Only GPU hardware Stream threads inside the named captured call are included; enclosing XLA annotations are excluded.",
+    "Summed kernel durations can overlap; interval-union busy time is not SM utilization.",
+    "Profiler overhead changes timings; use the preceding unprofiled diagnostic for performance comparisons.",
+    "Kernel names and counts do not by themselves attribute copies to retained snapshots rather than internal control flow."
+  ]
+}

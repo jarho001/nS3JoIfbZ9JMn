@@ -523,7 +523,7 @@
     "owner": "/root",
     "brief": "docs/G3_TESTING_PROFILING.md",
     "scope": "User-approved fixed F01/F02/F03 matched complete-battle diagnostic; two operating points, one warm and three measurements, five-minute total execution cap. Broad campaign remains stopped.",
-    "checkpoint": "Matched fixed-pack diagnostic complete in 79.16s; both 128-boundary correctness gates passed, all six timing cells complete.",
+    "checkpoint": "User-authorized single 96-battle GPU profile complete; exact saved digest/placement passed. Original diagnostic remains the speed comparison.",
     "completed_checkpoints": [
       "Pinned baseline freeze: 9 native contracts and 128 full CPU tests passed on starting revision.",
       "Final source: 1000 starts / 30342 boundaries / 57257 decisions exact native agreement, all complete, 900 ordinary / 100 trusted fixtures, zero truncation/capacity/failures.",
@@ -531,7 +531,7 @@
       "Strengthened current CPU and GPU replay: 12 complete traces / 686 boundaries each, first/middle/last saved continuations and resets, including paired 174/177-boundary battles.",
       "Final-source CPU profiling complete: 28 kernel points, 72 full-output scan points, 12 conservative memory-headroom skips. Every primary measured boundary useful; no absorbing/rejected/pending primary work."
     ],
-    "next": "Stop. Report current slice only. Suggested single follow-up: short GPU trace of the same warmed 96-battle loop, not run.",
+    "next": "Stop. Explain retention versus forward prediction; optional final-state rollout is a proposed design, not implemented or measured. G3 remains open.",
     "source_identity": {
       "baseline_record": "test-logs/g3-testing-profiling/source-identities.json (baseline-source)",
       "current_engine_sha256": "8fe364fd9e0b84d8e61daa717c27a0a4e4ce8f65b81b793ffd2fbb5198b3c599",
@@ -831,6 +831,24 @@
       "interpretation": "3 battles: Showdown lowest median; 96: JAX CPU fastest, GPU/native timing ranges overlap.",
       "g3_acceptance": "open",
       "source_engine_sha256": "8fe364fd9e0b84d8e61daa717c27a0a4e4ce8f65b81b793ffd2fbb5198b3c599"
+    },
+    "profile_followup": {
+      "status": "complete",
+      "results": "test-logs/g3-testing-profiling/diagnostic-profile-96/results.json",
+      "execution_cap_seconds": 300,
+      "scope": "One warm execution, saved full-trajectory digest and device checks, one profile capture; unchanged loop, no ablations or optimization.",
+      "elapsed_seconds": 49.29,
+      "setup_failure": "Unsupported device_tracer_level option corrected after inspecting installed API; failed setup checkpoint preserved, no capture occurred in failed attempt.",
+      "actual_captures": 1,
+      "analysis": "test-logs/g3-testing-profiling/diagnostic-profile-96/analysis.json",
+      "findings": {
+        "retained_output_bytes": 381706240,
+        "repeated_history_bytes": 335544320,
+        "hardware_kernels": 570544,
+        "single_byte_d2h": 1483,
+        "profiled_seconds": 2.8818899009929737
+      },
+      "limits": "Profiler perturbs timing; retention savings and exact sources of internal copies remain unmeasured. No engine optimization or output elision performed."
     }
   },
   "optional_gpu_validation_history": [

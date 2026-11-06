@@ -52,6 +52,20 @@ This restricted-slice diagnostic does not accept G3 or establish peak throughput
 Artifacts: `test-logs/g3-testing-profiling/diagnostic/`; progress:
 `docs/ORCHESTRATION_STATE.json`; report: `docs/G3_TESTING_PROFILING_RESULTS.md`.
 
+## Authorized follow-up: one warmed 96-battle GPU trace
+
+The user authorized the proposed single trace after the diagnostic publication.
+Reuse the frozen three-battle pack and exact recorded `run` function, 32 copies,
+with all existing outputs retained. Keep affinity 0–7 and the existing software
+and device. Cap this execution, including compilation/warmup/digest checks, at
+300 seconds. Warm once, compare every lane with the previously native-validated
+trajectory digest, capture one complete loop, then stop. Do not run an output
+elision comparison or implement a faster mode in this follow-up. Inspect actual
+hardware stream events separately from enclosing GPU annotations; do not treat
+nested XLA spans as GPU busy time. Record output bytes and compiler memory
+analysis as context, not a causal attribution of time. Artifacts are under
+`test-logs/g3-testing-profiling/diagnostic-profile-96/`.
+
 <details>
 <summary>Superseded broad handoff (historical scope; do not execute)</summary>
 

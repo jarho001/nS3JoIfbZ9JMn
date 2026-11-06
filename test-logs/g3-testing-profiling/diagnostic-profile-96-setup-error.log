@@ -1,0 +1,13 @@
+prepare frozen 96-battle inputs
+compile unchanged 96-battle loop
+one warm execution and exact saved-digest validation
+Traceback (most recent call last):
+  File "<frozen runpy>", line 203, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/workspace/benchmarks/g3_profile_96.py", line 92, in <module>
+    try:main()
+        ~~~~^^
+  File "/workspace/benchmarks/g3_profile_96.py", line 85, in main
+    options=jax.profiler.ProfileOptions();options.host_tracer_level=1;options.python_tracer_level=0;options.device_tracer_level=1
+                                                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'ProfileOptions' object has no attribute 'device_tracer_level' and no __dict__ for setting new attributes. Did you mean: 'host_tracer_level'?

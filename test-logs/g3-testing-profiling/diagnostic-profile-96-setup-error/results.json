@@ -1,0 +1,51 @@
+{
+  "status": "failed",
+  "budget_seconds": 300,
+  "checkpoint": "one warm execution and exact saved-digest validation",
+  "elapsed_seconds": 20.273698407007032,
+  "commit": "5710c0601f581d34ad578a25344a10ef02774a74",
+  "source_sha256": {
+    "simulator/shared_engine.py": "8fe364fd9e0b84d8e61daa717c27a0a4e4ce8f65b81b793ffd2fbb5198b3c599",
+    "simulator/shared_engine_io.py": "9863c05e38eba89735b587f6ba8aaffebfa5fe191c9783497b83d3da60e51291",
+    "test/shared_engine_support.py": "ec0dc5dcf696073d3d97f70dd138f64fd84e81f25a8687f7f1ad899669a07459",
+    "benchmarks/shared_engine.py": "4132971c2469467a8e83cba0c5a220e7f6c19a0fef7faf8ff3734f35d82eaa3c",
+    "/workspace/benchmarks/g3_diagnostic.py": "8ddf63f42b25d6b1e987490b9aad1e2eddd0b7782e1340a550bd4b2c87698818",
+    "benchmarks/g3_diagnostic_native.cjs": "30e44546398afc36a0bb5aff18767c4c21737b4ab023282604468216db42ca04"
+  },
+  "profile_adapter_sha256": "276c8858d790b64ba3832086c97e44eab3382ae2e3f90e5dc3760f4508520dfc",
+  "loop_sha256": "bda1f4e68a01f94962ba83a324ebacd9aa070acf5a77d6d2dc9f53c2a3043b01",
+  "native_fixture_sha256": "400ad378b14d5be83d78b5b3523f8a3c973f4a83365127806de3088b37b7a60f",
+  "affinity": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "jax": "0.12.0.1",
+  "device": "cuda:0",
+  "copies": 32,
+  "complete_battles": 96,
+  "useful_boundaries": 4096,
+  "contract": "Exact diagnostic run function and complete retained outputs; no elision or engine change.",
+  "compile_seconds": 12.443143251002766,
+  "compiler_memory": {
+    "argument_size_in_bytes": 8042272,
+    "output_size_in_bytes": 381706568,
+    "temp_size_in_bytes": 8291904,
+    "alias_size_in_bytes": 0
+  },
+  "warmup_seconds": 1.186836010994739,
+  "validation": "Every output leaf of all 32 identical packs equals the previously CPU/GPU/native-validated complete trajectory digest; actual GPU placement checked.",
+  "output_bytes": {
+    "total": 381706240,
+    "states": 341716992,
+    "state_history": 335544320,
+    "traces": 39882752,
+    "legal_masks": 90112
+  },
+  "error": "AttributeError(\"'ProfileOptions' object has no attribute 'device_tracer_level' and no __dict__ for setting new attributes\")"
+}

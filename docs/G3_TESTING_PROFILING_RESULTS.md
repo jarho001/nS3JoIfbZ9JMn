@@ -2,8 +2,8 @@
 
 Completed in **79.16 seconds** of the 300-second execution allowance, including
 imports, fixture setup, CPU/GPU validation, compilation, warmup and measurements.
-Exit status 0. No profiler, additional campaign, optimization or further timing
-was run. The broad campaign below remains stopped; G3 is not accepted by this
+Exit status 0. During that comparison, no profiler, additional campaign,
+optimization or further timing was run. The broad campaign below remains stopped; G3 is not accepted by this
 intermediate result. The requested nested checkout is absent; execution used
 `/workspace`, preserving the existing local work.
 
@@ -34,7 +34,7 @@ those representation/retention costs differ from native string logs and mutable
 state. These are observed implementation/contract facts, not a measured causal
 breakdown. The most useful single follow-up is **one short GPU profiler trace of
 the same warmed 96-battle loop**, separating kernel execution, device idle gaps
-and memory work. It has not been run.
+and memory work. That follow-up is now completed below.
 
 The fixed workload is `F01-p1` (34 boundaries), `F02-p1` (33), `F03-p1` (61).
 [The frozen pack](../test-logs/g3-testing-profiling/diagnostic/native-pack.json)
@@ -101,6 +101,87 @@ The [revised plan](G3_TESTING_PROFILING.md),
 [compact state](ORCHESTRATION_STATE.json) and
 [execution log](../test-logs/g3-testing-profiling/diagnostic.log) retain the scope,
 stopping condition and checkpoints. All earlier evidence is preserved below.
+
+## Follow-up: one warmed 96-battle GPU capture
+
+The user authorized the proposed trace after publication. The exact recorded
+`run` function was loaded without executing the diagnostic entry point. Engine,
+loop and fixture source hashes match the measured diagnostic. GPU placement and
+every output leaf in all 32 packs matched the previously CPU/GPU/native-validated
+trajectory digest. One warmed complete call was captured, with **96 battles /
+4,096 useful boundaries**, all original outputs retained. No faster mode,
+elision experiment, new campaign or additional performance comparison was run.
+
+The capture setup first failed because this JAX version does not expose
+`ProfileOptions.device_tracer_level`. Supported attributes were inspected and
+that unsupported assignment removed. The failed setup consumed 20.27 seconds;
+the corrected execution consumed 29.01 seconds, including compilation, warmup,
+validation and export. Total machine execution was **49.29 seconds**, within the
+shared 300-second limit; only one actual capture ran. The corrected process was
+limited to 270 seconds rather than restarting a full budget. The setup failure
+log and checkpoint remain alongside the successful artifacts.
+
+The [capture results](../test-logs/g3-testing-profiling/diagnostic-profile-96/results.json)
+and [offline hardware-stream analysis](../test-logs/g3-testing-profiling/diagnostic-profile-96/analysis.json)
+show:
+
+- Retained outputs occupy **381,706,240 bytes (364.0 MiB)**. Per-transition state
+  snapshots account for 325.9 MiB; **320.0 MiB** of that is repeated fixed history
+  buffers. Draw/event traces add **38.0 MiB**. These are materialized output bytes,
+  not measured peak memory or bytes transferred to the host during simulation.
+- **570,544 hardware kernel executions** occur within the one call, including
+  **214,180 `memcpy32_post` kernels**. Those copy-named kernels account for 213.7 ms
+  of summed device durations, about 31.5% of summed kernel durations. Their names
+  alone do not identify which copies come from output retention versus internal
+  state/control-flow handling.
+- There are **1,483 single-byte device-to-host transfers** inside the compiled
+  call. These are consistent with runtime checks of loop conditions; they are
+  distinct from the bulk host output fetch, which occurs after the capture.
+  The host also executes 11,835 command buffers. A compiled JAX loop therefore
+  does not imply one fused GPU kernel or the absence of runtime synchronization.
+- The stream records include **826 device-to-device copies of 2.5 MiB each**,
+  totaling 2.02 GiB. That size equals one 32-lane history buffer. This is consistent
+  with repeated history-buffer copies but is not a complete attribution of them.
+  Their summed transfer duration in this capture is 9.4 ms.
+- The profiled call takes **2.882 seconds**, versus the earlier unprofiled median
+  of 0.872 seconds. Hardware stream interval union is 676.4 ms, about 23.5% of the
+  captured call. This is a property of the perturbed capture, **not an estimate of
+  unprofiled GPU utilization**. Only hardware stream events were counted; nested
+  XLA annotations were excluded. Summed durations can overlap and are not wall
+  time. Use the original diagnostic for backend speed comparisons.
+
+The evidence points to very fine kernel granularity, runtime synchronization and
+repeated data movement as issues to investigate. It does not establish that
+removing saved snapshots alone will resolve the GPU gap or predict a speedup.
+
+### What retention means for a future rollout API
+
+The current benchmark asks `lax.scan` to return every full `Result`, including
+its state, plus legal masks. As a result it saves all intermediate states, each
+with its own complete fixed-size history buffer, as well as every draw/event
+trace. This is a benchmark output contract, not a requirement imposed by JAX's
+immutable programming model. A compiled loop can carry the current state forward
+without returning all earlier states.
+
+Forward prediction still needs the complete current causal battle state: HP,
+PP, statuses/items, active/reserve roster, pending actions and suspended queue,
+turn counters and exact RNG state. It does not inherently need old state
+snapshots or a record of every past RNG draw. A policy may need its observation
+history or recurrent memory, so its required observations/events must still be
+supplied; full trusted internal snapshots are a separate concern.
+
+A reasonable first design is an optional rollout output contract that returns
+final states and status codes, plus selected observations or transitions the
+caller requests, while using the same exact transition implementation. Keep the
+full trace path for parity/debugging. Initially retain the existing state history
+and capacity/validation behavior: removing history or trace accounting from the
+engine itself would change current observable or rejection behavior unless
+handled explicitly. Compare final states, RNG, terminal outcomes and requested
+outputs before accepting such a path. This could reduce storage and permit
+compiler elimination of unused work **while preserving forward prediction**;
+it has not been implemented or timed. It should not be described as a mode that
+sacrifices forward simulation capability.
+
 
 <details>
 <summary>Earlier broad campaign evidence (preserved; superseded scope)</summary>

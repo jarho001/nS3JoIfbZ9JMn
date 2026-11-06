@@ -1,0 +1,5 @@
+prepare frozen 96-battle inputs
+compile unchanged 96-battle loop
+one warm execution and exact saved-digest validation
+single short warmed GPU profiler capture
+capture complete; no additional measurements
