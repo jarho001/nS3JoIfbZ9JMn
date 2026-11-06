@@ -577,7 +577,7 @@
     ],
     "blockers": [],
     "source_base": "6255889",
-    "synchronization": "Initial clean tree fast-forwarded from 7068c36 to live origin/main 6255889. Preserved all local work. Final fetch confirmed origin/main is an ancestor of the four implementation/test checkpoint commits; publish uses a normal fast-forward push.",
+    "synchronization": "Initial clean tree fast-forwarded to live origin/main 6255889. Subsequent permitted fetch confirmed origin/main is an ancestor of the implementation commits. Local work is preserved; the attempted final fetch/push command was rejected before execution by automatic approval review, so no publish is claimed.",
     "completed_at": "2026-11-06",
     "acceptance": "Primary inspected the diff and independent native/CPU evidence. The first G3 CPU goal is accepted; no milestone is closed, no task count is incremented, and no full-format/GPU/performance claim is made.",
     "source_identity": {
@@ -603,7 +603,16 @@
       "summary": "test-logs/g3-first-playable/native-case-summary.json"
     },
     "runtime": "test-logs/g3-first-playable/cpu-environment.json",
-    "reference_provenance": "test-logs/g3-first-playable/reference-provenance.json"
+    "reference_provenance": "test-logs/g3-first-playable/reference-provenance.json",
+    "publication": {
+      "status": "blocked_by_automatic_approval_review",
+      "target": "origin/main",
+      "validated_work_head": "f331c3a72016b9422fe9a1851fd0436b35a1a904",
+      "requested_action": "git push origin HEAD:main",
+      "reason": "Automatic approval review rejected direct publication to the shared default branch because it requires explicit trusted chat approval; it did not accept the standing repository AGENTS.md commit/push authorization. No rejected command was executed and no workaround was attempted.",
+      "required_user_action": "Explicitly approve pushing the completed local commits to origin/main.",
+      "scope": "Publication only. The approved CPU goal is complete and all code, tests and evidence are committed locally."
+    }
   },
   "optional_gpu_validation_history": [
     {
