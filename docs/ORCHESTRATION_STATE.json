@@ -577,7 +577,7 @@
     ],
     "blockers": [],
     "source_base": "6255889",
-    "synchronization": "Initial clean tree fast-forwarded to live origin/main 6255889. Subsequent permitted fetch confirmed origin/main is an ancestor of the implementation commits. Local work is preserved; the attempted final fetch/push command was rejected before execution by automatic approval review, so no publish is claimed.",
+    "synchronization": "Fetched origin/main and verified it was an ancestor of the six local checkpoint commits. The explicitly authorized normal fast-forward push succeeded; local work and remote history were preserved.",
     "completed_at": "2026-11-06",
     "acceptance": "Primary inspected the diff and independent native/CPU evidence. The first G3 CPU goal is accepted; no milestone is closed, no task count is incremented, and no full-format/GPU/performance claim is made.",
     "source_identity": {
@@ -605,13 +605,14 @@
     "runtime": "test-logs/g3-first-playable/cpu-environment.json",
     "reference_provenance": "test-logs/g3-first-playable/reference-provenance.json",
     "publication": {
-      "status": "blocked_by_automatic_approval_review",
+      "status": "published",
       "target": "origin/main",
-      "validated_work_head": "f331c3a72016b9422fe9a1851fd0436b35a1a904",
-      "requested_action": "git push origin HEAD:main",
-      "reason": "Automatic approval review rejected direct publication to the shared default branch because it requires explicit trusted chat approval; it did not accept the standing repository AGENTS.md commit/push authorization. No rejected command was executed and no workaround was attempted.",
-      "required_user_action": "Explicitly approve pushing the completed local commits to origin/main.",
-      "scope": "Publication only. The approved CPU goal is complete and all code, tests and evidence are committed locally."
+      "published_goal_head": "ae5818adf4e9cd3a294353f97c0d93856b9d97c1",
+      "authorized_at": "2026-11-06",
+      "authorization": "User explicitly authorized the push in chat.",
+      "result": "Normal fast-forward push succeeded from 6255889 to ae5818a; origin/main and local HEAD matched after publication.",
+      "previous_block": "Automatic approval review initially required explicit chat authorization; resolved by the user.",
+      "scope": "Completed first G3 CPU goal and its committed evidence. GPU/performance execution remains separately scoped."
     }
   },
   "optional_gpu_validation_history": [
