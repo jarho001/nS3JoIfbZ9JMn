@@ -757,7 +757,16 @@
     "role_invocation": "explicit_user_request_only",
     "automatic_independent_reviews": false,
     "documentation": "current_plan_compact_progress_and_reproducible_evidence",
-    "milestone_preparation_status": "pending",
+    "milestone_preparation_status": "complete",
+    "milestone_preparation": {
+      "prepared_at": "2026-11-06",
+      "source_base": "7068c36975fbe713d55c52c2c07659cf0fcefcbb",
+      "plan": "PROJECT_PLAN.md#milestone-contracts",
+      "behavior_catalog": "docs/SHOWDOWN_BEHAVIOR_CASES.md",
+      "proposed_goal": "Integrated bounded three-member singles engine; CPU parity, shared state/harness, switching/pivots, statuses/items and lifecycle. Awaiting user approval and Goal-mode selection.",
+      "evidence": "Pinned provenance and 22 short native scenarios / 31 boundaries observed; recipe, semantic digest, cases and missing proof are in the catalog. No JAX, long-suite, GPU or performance run; no implementation or milestone acceptance.",
+      "decisions": "PROJECT_PLAN.md#validation-entry-points-and-remaining-decisions"
+    },
     "preparation_handoff": "docs/MILESTONE_PREPARATION.md",
     "goal_mode_status": "not_started",
     "note": "2026-11-05 user-requested workflow experiment. Select Sol 6.1/high Goal mode on the execution surface after milestone preparation and approval of a goal. Existing historical acceptance records are unchanged."

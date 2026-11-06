@@ -27,9 +27,11 @@ and later milestones remain open; G0 is the only accepted milestone.
 
 ## Next step and workflow
 
-Milestone preparation is pending; no Goal-mode implementation is active or
-approved. Use [MILESTONE_PREPARATION.md](MILESTONE_PREPARATION.md) to sharpen
-G0–G8 and prepare native behavior cases, then propose an integrated G3 goal.
+Preparation status lives in [orchestration state](ORCHESTRATION_STATE.json).
+Review the [proposed G3 goal](../PROJECT_PLAN.md#proposed-first-g3-goal-mode-brief)
+and [behavior catalog](SHOWDOWN_BEHAVIOR_CASES.md) before selecting Goal mode.
+No Goal-mode implementation is active or approved. The
+[preparation handoff](MILESTONE_PREPARATION.md) defines this planning boundary.
 Sol 6.1/high owns execution directly under [ORCHESTRATION.md](ORCHESTRATION.md).
 Luna and Janitor require an explicit user request; automatic Astra gates and
 per-patch task/handoff cycles are retired. Historical acceptance remains intact.

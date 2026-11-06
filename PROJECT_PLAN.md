@@ -4,13 +4,13 @@ Build a research platform that can learn exceptional Pokémon battle play throug
 
 The destination is a JAX implementation of the complete training computation: batched battle simulation, player observations, recurrent policy inference, trajectory collection, and learning. The current execution priority is the JAX battle simulator. Keep pinned Showdown as the semantic oracle, source of generated teams and data, and differential test harness.
 
-As of 2026-11-04, the pinned reference, player-view protocol, battle runner, policy/trajectory interfaces, and reproducible baseline artifacts exist. JAX covers validated arithmetic components. Task034 provides one accepted restricted one-Mew-per-side neutral Tackle turn with seeded RNG and recipient-specific projections; Task035 composes that unchanged turn into bounded resumable duels and matches four complete native battles. Task036 adds an accepted separately named restricted speed-tie variant with bounded resumable duels and complete native trace parity. These slices do not implement the full format or close a milestone. No complete JAX battle engine or trained policy has been accepted. G0 specification is accepted; G1 reference-environment milestone and all implementation milestones remain open. This plan records direction, not a performance claim. Hardware and deployment latency remain open configuration choices.
+As of 2026-11-06, 52 numbered tasks are accepted. The pinned reference, player-view protocol, battle runner, action/trajectory interfaces, and reproducible baseline artifacts exist. JAX has validated arithmetic, restricted one-Mew turns and complete duels, speed-tie handling, and private staged sessions with batched continuation/reset. Tasks050–051 combine Tackle/Mega Punch choices with accuracy and complete native battle traces; Task052 adds one pre-existing public burn and its residual. The accuracy/burn variants do not share the staged-session lifecycle or support rosters and switching. These are restricted development slices, not a complete engine or trained policy. G0 specification is accepted; G1–G8 remain open. The milestone packages and first G3 goal below are proposals, not implementation approval, GPU/performance results, or new milestone acceptance.
 
 **Direction decision — 2026-11-03:** Prioritize an integrated, progressively playable JAX simulator. Simulator work may begin without G1 tournament completion or G2 policy learning. Keep the user-facing contract needed for correctness from the start: request and legal-action semantics, simultaneous commitments, player-visible events and history, and outcomes/rewards. Defer neural observation encoding, trajectory expansion, PPO, tournaments, and additional baseline/reporting tools unless they directly enable simulator parity or its validation. Retain exact Showdown RNG/state/event/request comparisons, interaction and full-trace testing, and explicit unsupported-effect reporting. Compile and batch representative slices early, including JIT/vmap and measured performance probes. Progress is demonstrated by increasingly complete parity-tested playable battles, not task count.
 
 Development slices may be explicitly restricted variants while their supported mechanics are listed; they do not count as full-format support. Start validation on CPU. Require GPU runs only when a task criterion or device-specific property needs them; do not require a full GPU performance suite for every slice.
 
-**Define the game before optimizing it.** The target is Showdown's `gen5randombattle`, including its team generator, inherited mechanics, format clauses, requests, information disclosure, and terminal conditions. It is more specific than “Generation 5 Pokémon mechanics.” Pin a Showdown commit, export the resolved format, and assign a version to every benchmark and checkpoint. The currently inspected format specifies the Gen 5 mod, random teams, Sleep Clause Mod, HP Percentage Mod, Cancel Mod, and Illusion Level Mod. Its listed rules do not include Team Preview. Reconfirm the effective inherited rules at the pinned revision. [Showdown format definition](https://raw.githubusercontent.com/smogon/pokemon-showdown/master/config/formats.ts)
+**Define the game before optimizing it.** The accepted target is Showdown's `gen5randombattle` at commit `1242c1e2d9763ba5b85d33f13aecb89bae19ae3d`, including its team generator, inherited mechanics, format clauses, requests, information disclosure, and terminal conditions. It is more specific than “Generation 5 Pokémon mechanics.” The resolved [format manifest](reference/fixtures/format-v1.json) records the Gen 5 mod, Obtainable, Sleep Clause Mod, HP Percentage Mod, Cancel Mod, Illusion Level Mod, and no Team Preview. The complete pinned source and inherited rules/data are authoritative; the manifest describes them without implementing callbacks. Version every benchmark and checkpoint against this identity. [Pinned format definition](https://github.com/smogon/pokemon-showdown/blob/1242c1e2d9763ba5b85d33f13aecb89bae19ae3d/config/formats.ts)
 
 Success has four separate dimensions:
 
@@ -268,21 +268,350 @@ Measure win rate, cross-play stability, calibration, invalid submissions, timeou
 
 Optional human matches and public-server play come after local transfer and latency validation, following the service's rules at that time. Pin or record the actual server version when possible and distinguish live-server format drift from the frozen benchmark. Ladder placement is supplementary evidence, not a stable reproducible research metric.
 
-**Execute the project through acceptance gates, with no fixed dates.** The next implementation priority is G3 simulator work; it is not gated on G1 tournament completion or G2 learning. G1 remains open, and its existing reference harness remains available for parity checks. G2 learning is deferred until the simulator trajectory warrants it. Each gate still requires its own evidence and acceptance; this sequencing decision does not claim any milestone closure.
+## Milestone contracts
 
-| Gate | Main work | Reviewable deliverables | Acceptance condition |
-|---|---|---|---|
-| G0: Specification | Pin Showdown; audit reuse; resolve rules and data | Benchmark charter, source/version manifest, mechanics ledger, reuse decision | Exact target and known coverage gaps are explicit |
-| G1: Reference environment | Implement protocol views, actions, fixtures, baselines | Showdown adapter, trajectory schema, baseline tournament | Complete reference battles; request and visibility tests pass |
-| G2: Learning proof | Train recurrent policy against reference or declared restricted backend; validate algorithms on small games | Reproducible PPO run, recurrent-state tests, learning curves | Learning beats fixed baselines on held-out reference matches |
-| G3: Simulator slice | Implement battle/request state machine and representative mechanics | Scalar and batched kernels, coupled RNG harness, profiler report | Exact differential parity for the declared slice; plausible GPU execution |
-| G4: Full-format simulator | Complete reachable mechanics, generator integration, fuzzing | Coverage report, regression corpus, full battle traces | No known reachable unsupported effects; no unresolved correctness failures |
-| G5: End-to-end training | Integrate device-resident rollout, features, inference, learner | Benchmark harness, reset pools, checkpoints, transfer report | Measured useful training speedup and reference-transfer equivalence within the chosen margin |
-| G6: Strong baseline | Scale PPO, tune architecture, build opponent league | Multi-seed results, cross-play matrix, belief ablations | Robust improvement across the independent evaluation suite |
-| G7: Strategic research | R-NaD, best responses, belief particles, simultaneous search | Controlled comparisons, small-game solver tests, exploitability probes | Benefits exceed complexity and resource costs under declared metrics |
-| G8: Moonshot system | Public-belief planning, search distillation, adaptive compute | Best agent, reproducible release, complete audit and benchmark report | Strongest verified Gen 5 performance achieved within the explored design space |
+Prepared 2026-11-06 against source base `7068c36975fbe713d55c52c2c07659cf0fcefcbb`.
+Only **G0 is accepted**. Each open milestone describes its own completion
+evidence; neither an internal checkpoint nor this preparation accepts one.
+Sol 6.1/high works directly under [AGENTS.md](AGENTS.md), without automatic
+delegation or independent review gates. No fixed dates or new wall-clock budget
+are imposed. The [behavior catalog](docs/SHOWDOWN_BEHAVIOR_CASES.md) owns case
+IDs, evidence levels, native probe recipes, and later case-family gaps.
 
-Proceed from G0 into G3 while G1 remains open. G1 work continues only where needed to support simulator validation; standalone tournament, scoring, or reporting expansion is deferred. G2 learning and G5 end-to-end training follow sufficient runnable simulator coverage. G4 and G5 inform one another: performance prototypes happen early, while full-format performance claims wait for coverage. Keep reference-generated teams available while the full-JAX generator is deferred. G6 does not require successful G7/G8 research.
+The dependency order is **G0 → G3 next**, using the existing G1 reference
+interface. Full G1 tournament completion and G2 learning are not prerequisites
+for simulator work. G1 completion, G2 experiments, and G4 expansion may develop
+alongside simulator integration conceptually; this does not require other agents.
+G5 prototypes can use G3, but full-format G5/G6 claims require G4.
+G6 remains useful without positive G7/G8 research results.
+
+### G0 — frozen game specification (accepted)
+
+- **Outcome/package:** Reproduce and identify the exact game, inherited rules/data,
+  bounded custom-JAX reuse decision and known implementation gaps. Retain the lock,
+  format, charter, mechanics ledger, reuse audit and [2026-11-03 acceptance](docs/reviews/G0-specification.md).
+- **Dependencies/proof:** No implementation milestone. Recorded acceptance is
+  authoritative; V0 rechecks pin/build and exact live format metadata. This
+  preparation rechecked provenance only; it did not rerun the historical review.
+- **Boundary/stop:** Specification closure is demonstrated; executable coverage
+  is not. A changed pin/rule/generator requires a versioned change and affected
+  evidence. No GPU, sample size, throughput or learner is required for G0.
+  D2/D3 measurement decisions do not reopen it. Stop mismatched-game comparisons.
+
+### G1 — complete reference player interface (open)
+
+- **Outcome/package:** Run and replay complete pinned Showdown battles through
+  recipient-safe views, eleven-slot actions, terminal-only rewards, decision
+  trajectories and legal-random/move-first policies; reproduce a paired baseline
+  comparison. Reuse the runner/trace tools instead of another reporting subsystem.
+- **Dependencies:** G0 and a built pinned reference; no JAX engine or G2.
+  Interface cases needed by G3 proceed now; scored tournaments stay deferred
+  until they support learning.
+- **Accept/evidence:** V1 and catalog protocol families cover normal/wait/forced/
+  pivot requests, cancel/replacement, Struggle, rejected/unavailable choices and
+  real outcomes. Both views/history must exclude opposing private requests,
+  choices and training labels. Replay reproduces the outcome; rewards/masks match
+  requests. Complete paired baseline runs record seeds/opponents, failures and
+  uncertainty under D2. Components exist; comprehensive integration and scored
+  comparison remain missing. Required proof is CPU/reference, not GPU.
+- **Exclusions/stop:** No learning, simulator speed or ladder claim. Never use
+  hidden restrictions to give a policy an omniscient mask. Stop on disclosure or
+  request-path disagreement and establish native behavior first. D2 applies
+  before scored comparisons, not before G3 parity work.
+
+### G2 — reproducible learning proof (open, deferred)
+
+- **Outcome/package:** Train/resume recurrent PPO through the player contract,
+  retain learning curves/checkpoints and reproduce held-out improvement over a
+  frozen policy on pinned Showdown. A declared G3 game permits an initial
+  restricted proof with identically restricted native evaluation.
+- **Dependencies:** G0, relevant G1 view/action/trajectory semantics and a runnable
+  reference or accepted simulator package. This does not block G3. Reuse existing
+  trajectories/baselines; recurrent model, learner and algorithm controls are new.
+- **Accept/evidence:** Proposed V5 checks legal masked sampling, finite updates,
+  observation-only actors, episode reset, memory across continuing rollout chunks,
+  recurrent sequence/burn-in consistency and checkpoint/resume. Include a matrix
+  game and a small partially observed memory task. Predeclare training seeds
+  (initial proposal: three), held-out paired evaluation and confidence method;
+  the lower confidence bound on native win-rate improvement over the nominated
+  baseline must exceed zero. No learner or learning result currently exists.
+- **Exclusions/decisions/stop:** No league, search, R-NaD, speedup or full-format
+  claim. CPU controls are required; accelerator training only if selected in the
+  approved experiment. Set D2/D3 before scored work. Stop on leakage, invalid
+  resumption, non-finite updates or insufficient evidence; reward alone is not proof.
+
+### G3 — integrated playable simulator package (open, next)
+
+- **Outcome/package:** Play/resume a declared multi-Pokémon singles slice through
+  one shared state, request/action scheduler, event projection, RNG trace and
+  scalar/compiled batched API. A manifest defines teams, mechanics and bounds;
+  unsupported behavior has explicit diagnostics. The first goal below is its
+  substantial CPU integration package.
+- **Dependencies/reuse:** G0 and existing G1 oracle/player contracts, not G1
+  tournaments or G2. Reuse arithmetic, native RNG observation, action/protocol
+  adapters and full-trace expectations; migrate variant-specific assumptions below.
+- **Accept/evidence:** All required B0–B5 cases need independent native or labeled
+  synthetic expectations; exact state/PP/status/order/RNG/request/event/outcome
+  comparisons; full native terminal traces; information-equivalence tests; and
+  CPU eager/JIT/heterogeneous-batch agreement through continuation/reset (V2–V4).
+  Closing **G3 itself** additionally requires V6 on an agreed GPU: actual device
+  placement, exact compiled batch correctness and synchronized compile/warm
+  execution/memory profiles for homogeneous and heterogeneous workloads. Report
+  results without inventing a speed threshold. Historical arithmetic GPU evidence
+  does not establish current engine execution.
+- **Demonstrated/missing:** Tasks034–052 establish restricted components, sessions
+  and full 1v1 traces. The catalog adds short native observations, not JAX support.
+  Shared roster/status/pivot integration and device/profile proof are missing.
+- **Exclusions/decisions/stop:** No full-format, generated-team, training or
+  speedup claim. First-goal CPU completion can leave G3 open pending D3 device
+  proof. Stop on an unresolved minimized divergence, unsupported approved behavior,
+  capacity failure or unavailable required device evidence; never shrink scope
+  to manufacture completion.
+
+### G4 — complete pinned-format simulator (open)
+
+- **Outcome/package:** Execute the complete pinned `gen5randombattle` distribution
+  in JAX with all reachable inherited mechanics, requests, clauses and outcomes.
+  Keep a reachable-rule/data/callback ledger, minimized regression corpus,
+  coupled full-game harness and differential fuzzing.
+- **Dependencies:** G3 shared engine and G0 target. Reachability/data export and
+  team integration can progress alongside G3; G5 prototypes may reveal gaps.
+  Versioned, refreshed reference-generated teams are permitted. JAX team generation
+  is an optimization, not a prerequisite.
+- **Accept/evidence:** Proposed V7 audits copied/called moves, transformations,
+  exchanged items and inherited callbacks, with every reachable ledger entry
+  implemented and linked to cases. Include six-member generated teams,
+  forced/pivot/recharge requests, sleep/freeze/duration, hazards/weather,
+  trapping/Illusion and terminal clauses. Freeze regression and held-out seeded
+  campaigns; require no known reachable unsupported entry, unresolved divergence
+  or silent fallback. CPU and GPU batch correctness are required for release.
+  Sampling alone does not establish completeness; this evidence is missing.
+- **Exclusions/decisions/stop:** No trained strength or useful training speedup.
+  Fix D2/D3 campaign sizes/resources/stop rules before execution. Unknown
+  reachability stays a gap; an unsupported reachable effect blocks acceptance
+  rather than removing the battle from evaluation.
+
+### G5 — useful end-to-end training system (open)
+
+- **Outcome/package:** Collect device-resident battles with safe features,
+  recurrent inference, reset pools and PPO updates; save/resume and measure useful
+  learning against a matched reference pipeline. Separate simulator-only,
+  rollout-plus-policy and learner/end-to-end workloads.
+- **Dependencies:** G2 learning proof, G1 contract and G4 for full-format claims.
+  Prototype collection/compilation on G3 earlier with restricted labeling.
+- **Accept/evidence:** Proposed V8 checks same-policy JAX/Showdown transfer on
+  paired held-out teams within a predeclared equivalence margin, input isolation,
+  memory/reset behavior and restart. Actual accelerator evidence must report
+  compile time, synchronized warmed throughput, memory, reset/feature/inference/
+  learner cost and fallback/host crossings. Require a declared useful improvement
+  in end-to-end cost/time to the selected held-out strength target, rather than
+  arithmetic speed alone. Pipeline, transfer and performance proof are missing.
+- **Exclusions/decisions/stop:** Multi-device scaling, JAX team generation and
+  search are optional. D2/D3 fix transfer margin, minimum useful gain, workload,
+  hardware and resource budget before measurement. Stop on transfer failure or
+  hidden fallback. Missing required GPU proof stays `awaiting_gpu` with exact
+  source identity, commands and existing CPU evidence.
+
+### G6 — strong, robust recurrent baseline (open)
+
+- **Outcome/package:** Promote a recurrent PPO/league agent that reliably beats
+  the G2 baseline and nominated historical checkpoints on independent pinned
+  Showdown evaluation; retain checkpoints, cross-play and belief/league ablations.
+- **Dependencies:** G5 and G4 for the full format. Restricted architecture/league
+  experiments can begin earlier but do not establish full-format G6 strength.
+- **Accept/evidence:** Proposed V9 uses independent training runs (initial
+  proposal: at least three), paired held-out teams/seeds, frozen diverse opponents
+  and tactical/rare-mechanic cases. Predeclare promotion effect size, confidence
+  method and failure/latency limits. The confidence bound must clear that threshold;
+  disclose cross-play regressions/cycles, calibration and resource use. Compare
+  league/belief contributions to matched controls. Native evaluation and actual
+  training/device provenance are required; no learned-strength evidence exists.
+- **Exclusions/decisions/stop:** No equilibrium, human/superhuman or search claim.
+  Set D2/D3 before scored runs. Stop promotion on unexplained transfer loss,
+  test-set reuse or unacceptable forgetting; self-play rating alone is insufficient.
+
+### G7 — strategic method with controlled benefit (open)
+
+- **Outcome/package:** A selected R-NaD, best-response, explicit-belief or
+  simultaneous-search method improves G6 at declared resources. Choose one
+  comparison under D4 rather than implementing every method as a prerequisite;
+  retain ablations, checkpoints and exploiter results.
+- **Dependencies:** A frozen G6 control, and G4/G5 for full-format experiments.
+  Small-game solver/information-set checks can proceed independently of large
+  training. Implementations and all research proof are missing.
+- **Accept/evidence:** Proposed V10 checks matrix/memory games, stochastic mixed
+  decisions and observation-consistent future strategies. Compare the same
+  checkpoint with/without search or matched-budget training methods; report
+  native held-out gain, belief calibration/particle collapse where applicable,
+  latency and training/inference cost. Train independent best responses and
+  evaluate them held out. Benefit must clear declared uncertainty/cost thresholds;
+  a failed exploiter is not a Nash certificate. CPU semantic checks and actual
+  chosen training/search-device evidence are required.
+- **Exclusions/decisions/stop:** No promised positive result or public-belief
+  moonshot. A negative result closes an experiment, not the beneficial-method
+  milestone; D4 governs a new direction. Stop on strategy fusion, private actor
+  inputs or a resource requirement beyond the approved research scope.
+
+### G8 — audited moonshot candidate and reproducible release (open)
+
+- **Outcome/package:** Combine beneficial public-belief planning, distillation
+  and adaptive inference compute into the best verified candidate in the explored
+  design space. Supply reproducible source/configurations, checkpoint identities,
+  rules/schema/model provenance, inference interface and audit/benchmark report.
+- **Dependencies:** G4–G6; promoted G7 components retain their own proof. Release
+  design can proceed earlier. No public-belief implementation, candidate or
+  release result exists today.
+- **Accept/evidence:** Proposed V11 replays/resumes the candidate, demonstrates
+  future information-set consistency and search/distillation/compute ablations,
+  and compares against frozen best G6/G7 controls on locked native evaluations
+  within declared latency/resources. Report paired uncertainty, exploiters,
+  failures and multiple training runs for major claims. Actual deployment-device
+  measurements and a complete reproducibility manifest are required. Strongest
+  means strongest among the evaluated controls/design space.
+- **Exclusions/decisions/stop:** No automatic expert/superhuman/global-optimum or
+  ladder claim. Human comparisons need a defined independent comparison; public
+  server play/publication are separately scoped. D4 selects the research objective;
+  D5 settles release audience/license/resources. Stop on failed reproducibility,
+  provenance, information integrity or claimed improvement.
+
+## Proposed first G3 Goal-mode brief
+
+**Outcome:** Initialize, play, pause, resume and reset bounded 1–3 Pokémon-per-side
+Gen 5 singles battles through one shared JAX engine, including voluntary switches,
+native forced replacements and U-turn interruptions, with both player views and
+exact pinned native differential traces. This is a restricted custom game, not
+the `gen5randombattle` team distribution. User approval and Goal-mode selection
+are still required before implementation.
+
+**Declared package:** A versioned allowlist of Mew/Synchronize,
+Snorlax/Immunity and Gengar/Levitate; itemless, Leftovers and Lum Berry; up to
+four slots from Tackle, Pound (legacy migration), Mega Punch, Earthquake, U-turn,
+Will-O-Wisp, Toxic, Thunder Wave, Recover and Protect, plus forced Struggle.
+Support burn, paralysis and bad poison application/failure/reflection, cure,
+residual/counter and switching interactions. Direct native execution proves
+behavior for supplied sets; it does not establish generator membership or
+validate arbitrary move/species combinations.
+
+Initial set domain: levels 1–100, Hardy nature, perfect IVs, zero EVs except
+Speed EVs of 0 or 252, no initial boosts, and native resolved types/stats.
+Trusted HP/PP/status boundary fixtures are separately labeled. General nature,
+EV, boost, species and set-distribution expansion belongs to later packages.
+
+Use six roster storage slots and four move slots, with unused positions masked
+and at most three occupied roster slots in this goal. Keep stable internal mon
+identity separate from native request slot order: switches reorder that roster.
+Include normal/forced/wait/terminal phases, pending opposing actions across
+pivots, priority/speed ties, PP depletion, recoil, terminal rewards (+1/-1/0),
+and recipient history. Support native pre-resolution choice replacement/cancel
+where permitted. Old sessions' duplicate rejection is a local wrapper contract,
+not Showdown Cancel Mod semantics; local episode tokens are not native `rqid`.
+
+**Architecture/migration:** `TwoMoveState` fixes two Mew and two shared move IDs;
+v6 requires unequal speeds; v7 adds at most one burn; sessions dispatch to v2/v4.
+These layouts cannot become a shared roster engine merely by adding variant IDs.
+Reuse int32 arithmetic and explicit PRNG recurrence, generalize action/order/RNG
+tracing, and introduce one roster/request/queue state with per-mon PP/status/items,
+active indices, pending choices, counters and bounded event buffers. Reuse
+`projectPackets` and eleven-slot action mapping as reference contracts. Extend
+one native case runner with phase-aware snapshots and independent expected-data
+readers. Its current observer captures extra scheduler draws but labels new
+status/stall contexts `unsupported`; generalize labels without resampling draws.
+
+Migrate Tackle/Pound/accuracy/burn and staged lifecycle cases to that harness.
+Retain old public APIs and native expectations as compatibility controls until
+shared-engine coverage passes. Later retirement may remove redundant adapters/
+oracles after a coverage map and explicit cleanup scope; no cleanup occurs now.
+
+**Exclusions:** Six-member/full-format support, generated-team filtering,
+sleep/freeze/confusion/ordinary-poison infliction, weather/hazards, trapping,
+Illusion/Transform/called moves, effects outside the allowlist, neural encoding,
+PPO/league/tournaments, device-resident reset pools, JAX team generation and a
+throughput target. Entry handling here covers status persistence, counters and
+native ability/item updates; hazards and other entry effects are adjacent G4 work.
+
+**Integration checkpoints — one goal, no numbered tasks:**
+
+1. Establish the shared manifest/state/case schema and independently reproduce
+   B0/B1 legacy state/draw/view expectations and native initialization RNG. Handle
+   mixed moves and tied/unequal-speed batches without a state/variant per move.
+2. Complete the request scheduler through voluntary switch, faint replacement,
+   U-turn pause/resume, permitted cancel/replacement, both submission orders,
+   stable identity/request-slot mapping and recipient-safe history (B3/B4).
+3. Integrate B2 status, Protect/recovery, abilities/items, residual ordering,
+   exhaustion/Struggle and outcomes into the same engine. Diagnose unsupported
+   effects and capacity bounds explicitly (B1/B2/B4).
+4. Finish B5 scripted native battles to real outcomes and deterministic split
+   continuation/reset, then the same cases in heterogeneous CPU `jit(vmap(...))`
+   batches. Inspect the diff and retain first-divergence diagnostics and exact
+   relevant source/tree identity with evidence.
+
+**Acceptance/validation:** B0–B5 is the required matrix; independently observe
+each proposed native expectation before asserting JAX parity. Run V0–V4 affected
+checks, including shared interaction/full-battle/lifecycle modules and affected
+legacy regressions. Native expectations never come from JAX. Compare exact
+numeric state, draw bounds/values/pre/post limbs, queue/requests, both views and
+outcomes; normalize only documented nonsemantic timing/stack paths. Require at
+least four complete three-member native battles over both seats and multiple
+seeds: direct-KO replacements, status/item continuation, pivot resume and an
+exhaustion/recoil ending. Coverage summaries must exercise every required family
+or point to its companion boundary case; empty coverage fails.
+
+The proposed goal includes potentially long affected CPU integration/regression
+runs once implemented. Historical logs took about 512 seconds for 21 legacy
+tests; those logs do not establish current runtime/provenance. Do not rerun all
+history by habit. No long suite, GPU run or performance experiment belongs to
+this preparation. First-goal completion requires CPU integration proof; GPU
+correctness/profile V6 remains a required later G3 closure step under D3.
+
+**Stop/checkpoint:** Preserve unaccepted work, minimized input, pin, source
+identity, exact command/result and first divergence if native behavior contradicts
+the design. Ordinary repairs/oracle clarification stay within the goal. Seek user
+input when resolution changes the approved game/package, needs an excluded
+mechanic or changes device/research scope. Preflight unsupported inputs without
+RNG consumption; on buffer/queue overflow return a diagnostic and unchanged
+pre-advance state, with no partial public events or invented outcome. A harness
+step/turn cap is truncation, never a draw. Never remove a required family or
+label pending evidence passed.
+
+## Validation entry points and remaining decisions
+
+Commands below are **entry points, not results of this preparation**. Run from
+the repository root with the guarded pinned reference built. Set `JAX_PYTHON`
+to an installed interpreter with compatible JAX/JAXLIB; historical `/tmp` paths
+are not portable. Existing means the entry point is present, not that its
+dependencies or all acceptance cases are complete.
+
+| ID | Exact entry point | Status and use |
+|---|---|---|
+| V0 | `node reference/oracle.cjs provenance`; `node reference/oracle.cjs format`; `node --test test/reference.test.cjs` | Existing pin/build and live format equality. G0 maintenance/all native work. |
+| V1 | `node --test test/protocol.test.cjs test/action-space.test.cjs test/battle-runner.test.cjs test/trace.test.cjs test/decision-trajectories.test.cjs test/baseline-matchup.test.cjs` | Existing G1 contracts; protocol-family additions remain needed. Scored runs reuse `node environment/run-baseline-matchup.cjs --root-seed 1,2,3,4 --pair-index 0 --policy-a legal-random-v1 --policy-b move-first-v1 --output NEW_FILE` under D2, not one smoke pair as a tournament. |
+| V2 | `node reference/accuracy-choice-oracle.cjs`; `node reference/accuracy-choice-oracle.cjs --duels`; `node reference/burn-choice-oracle.cjs` | Existing native B0–B2 anchors. Catalog appendix reproduces additional short probes. |
+| V3 | `JAX_PLATFORMS=cpu "$JAX_PYTHON" -m unittest test.test_accuracy_choice test.test_accuracy_choice_duel test.test_burn_choice test.test_two_move_session_duel test.test_request_session_batch test.test_two_move_session_reset -v` | Existing migration/lifecycle controls; may be long. Add changed-helper legacy tests, including known-long `test.test_neutral_two_move` if its dependencies change. |
+| V4 | `node reference/shared-engine-cases.cjs --batch all --output NEW_FILE`; `JAX_PLATFORMS=cpu "$JAX_PYTHON" -m unittest test.test_shared_engine_cases test.test_shared_engine_battles test.test_shared_engine_lifecycle -v` | **Proposed, absent.** One family-batched native runner and shared CPU case/battle/lifecycle modules, B0–B5. |
+| V5 | `JAX_PLATFORMS=cpu "$JAX_PYTHON" -m unittest test.test_recurrent_ppo_contract test.test_small_game_learning -v`; `"$JAX_PYTHON" -m training.run --config APPROVED_CONFIG`; `"$JAX_PYTHON" -m evaluation.learning_proof --config APPROVED_CONFIG` | **Proposed, absent.** G2 controls, learning and native held-out proof. |
+| V6 | `JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_shared_engine_cases test.test_shared_engine_battles test.test_shared_engine_lifecycle -v`; `JAX_PLATFORMS=cuda "$JAX_PYTHON" -m benchmarks.shared_engine --config APPROVED_CONFIG` | **Proposed, absent.** G3 actual GPU placement/correctness and synchronized compile/warm/memory profiles. Adjust platform selector to agreed hardware. |
+| V7 | `"$JAX_PYTHON" -m evaluation.full_format_conformance --config APPROVED_CONFIG` | **Proposed, absent.** G4 frozen/held-out CPU/GPU campaign plus reachable-coverage audit. |
+| V8 | `"$JAX_PYTHON" -m benchmarks.training_pipeline --config APPROVED_CONFIG`; `"$JAX_PYTHON" -m evaluation.policy_transfer --config APPROVED_CONFIG` | **Proposed, absent.** G5 matched workloads, device measurements and transfer equivalence. |
+| V9 | `"$JAX_PYTHON" -m evaluation.baseline_promotion --config APPROVED_CONFIG` | **Proposed, absent.** G6 multi-run native promotion/cross-play/ablations. |
+| V10 | `"$JAX_PYTHON" -m evaluation.strategic_ablation --config APPROVED_CONFIG`; `"$JAX_PYTHON" -m evaluation.information_set_tests --config APPROVED_CONFIG` | **Proposed, absent.** G7 controls, exploiters and future information-set consistency. |
+| V11 | `"$JAX_PYTHON" -m evaluation.release_audit --config APPROVED_CONFIG` | **Proposed, absent.** G8 release replay/resume, locked evaluation and inference-resource audit. |
+
+Decisions below apply when they affect the work, rather than requiring user
+permission for ordinary implementation choices.
+
+| Decision | Proposed default and when user input is needed |
+|---|---|
+| D1 — first goal | Approve the integrated CPU-first G3 package above, then select Sol 6.1/high Goal mode on the execution surface. Preparation is complete; implementation is not approved or started. |
+| D2 — scored research protocol | Before G1 scored tournaments or G2/G5–G8 claims, agree opponents/metrics, suites/seed publication, sample precision, promotion/equivalence margins and statistical stopping rules. Does not reopen G0 or block G3 parity. |
+| D3 — accelerator/resources | Before required G3 device closure or later training/performance runs, select available GPU, memory/batch limits and measurement/training resources. Default first goal: CPU proof, G3 still open. |
+| D4 — strategic objective | At G7/G8 choose the research comparison and useful strength-versus-latency/cost target using G6 evidence, rather than committing to every speculative method now. |
+| D5 — release | At G8 agree audience, checkpoint/data licensing and hosting/publication scope. No external publication/server play is part of this preparation. |
+
+Routine choices resolved here: one shared engine/harness, explicit custom teams,
+reference-generated teams for later full-format work, CPU-first proof, retained
+legacy controls, and no new independent-review gate. Missing native interactions
+are catalog evidence work within the proposed goal, not user preferences.
+
 
 **Keep experiments discriminating.** Every expensive run should answer a question that changes the design. Begin with the following comparisons:
 
@@ -334,6 +663,6 @@ Use fast deterministic checks for every change, larger interaction/differential 
 | Generator or server drifts | Updated teams/rules change results | Freeze old benchmark; publish a new version and explicit transfer study |
 | Resource use grows without strength | Larger runs only improve training reward or raw throughput | Revisit representation, evaluation, and bottlenecks before scaling |
 
-**The first implementation package should make the project testable.** Produce the pinned reference setup, an exported target-format manifest, a mechanics ledger, example request traces, the player-view/action schema, a baseline reference tournament, and a minimal differential harness. Then build a simulator slice spanning a normal simultaneous turn, a forced replacement, a pivot interruption, status/residual effects, and one concealed-information case. That slice should exercise the architecture rather than maximize the number of move names implemented.
+**The next implementation package is the proposed first G3 goal above.** The reference setup, format metadata and interface foundations already exist; use them to validate a shared simulator spanning normal simultaneous choices, replacements, pivot interruption, status/residual effects and concealed information. Baseline tournaments and learning remain deferred. Implementation starts only after the user approves the goal and selects Goal mode.
 
 The long-term research opportunity is the combination: a faithful accelerator-native battle engine enables enormous self-play; an exact information interface makes those experiences legitimate; and a strong learning system can use both training compute and inference compute to discover strategies. All three construction sites should remain independently inspectable so that a gain in one can be trusted by the others.
