@@ -19,9 +19,13 @@ class SharedEngineBattlesTest(unittest.TestCase):
                 families.add(case['setup']['family']);seeds.add(case['setup']['seed'])
                 s,_=initialize_case(case)
                 assert_state(self,s,case['initial'],case['id']+' initial')
+                histories={side:list(case['initialEvents'][f'p{side+1}']) for side in range(2)}
                 for n,step in enumerate(case['steps']):
                     before=s;r=COMPILED(s,choices_array(s,step['choices']))
                     assert_step(self,before,r,step,f"{case['id']}/{n+1}");s=r.state;total+=1
+                    for side in range(2):
+                        histories[side].extend(step['events'][f'p{side+1}'])
+                        self.assertEqual(player_view(s,side)['events'],histories[side],case['id']+' complete recipient history')
                 self.assertGreaterEqual(int(s.winner),0,'a turn cap is not terminal evidence')
                 self.assertFalse(np.any(e.legal_actions(s)))
                 self.assertEqual(np.asarray(e.rewards(s)).tolist(),[1,-1] if int(s.winner)==1 else [-1,1] if int(s.winner)==2 else [0,0])

@@ -32,8 +32,12 @@ class SharedEngineCasesTest(unittest.TestCase):
                 self.assertEqual(draw_rows(trace),case['initializationDraws'],'native initialization draws')
                 assert_state(self,s,case['initial'],case['id']+' initial')
                 for side in range(2):self.assertEqual(player_view(s,side)['events'],case['initialEvents'][f'p{side+1}'],case['id']+' initialization view')
+                histories={side:list(case['initialEvents'][f'p{side+1}']) for side in range(2)}
                 for n,step in enumerate(case['steps']):
                     before=s;r=COMPILED(s,choices_array(s,step['choices']))
                     assert_step(self,before,r,step,f"{case['id']}/{n+1}");s=r.state
+                    for side in range(2):
+                        histories[side].extend(step['events'][f'p{side+1}'])
+                        self.assertEqual(player_view(s,side)['events'],histories[side],case['id']+' complete recipient history')
 
 if __name__=='__main__':unittest.main()
