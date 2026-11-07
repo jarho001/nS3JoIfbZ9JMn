@@ -1,5 +1,11 @@
 # G3 fixed-battle intermediate diagnostic
 
+Implementation update, 2026-11-07: the optional lean rollout wrapper and portable
+diagnostic entry points are now implemented. **No tests, benchmarks or profiler
+runs were performed for that change, at the user's explicit request.** All timing
+and capture results below remain evidence for the earlier full-output contract;
+they do not validate or measure the new wrapper.
+
 Completed in **79.16 seconds** of the 300-second execution allowance, including
 imports, fixture setup, CPU/GPU validation, compilation, warmup and measurements.
 Exit status 0. During that comparison, no profiler, additional campaign,
@@ -90,8 +96,8 @@ measured repetitions' initialization took **1.17–3.27 ms** for 3 battles and
 under the correctness gates and reused by their timing cells; a zero incremental
 compile field in those cells does not mean compilation was free.
 
-Reproduction command (creates a new evidence directory; do not automatically
-rerun or overwrite the existing one):
+Historical execution command (recorded evidence only; the current CLI below
+requires a fresh `--output` directory):
 
 ```sh
 timeout --signal=TERM --kill-after=1s 300s env XLA_PYTHON_CLIENT_PREALLOCATE=false JAX_ENABLE_COMPILATION_CACHE=false OMP_NUM_THREADS=8 OPENBLAS_NUM_THREADS=8 taskset -c 0-7 /opt/jax-env/bin/python -m benchmarks.g3_diagnostic
@@ -154,7 +160,9 @@ The evidence points to very fine kernel granularity, runtime synchronization and
 repeated data movement as issues to investigate. It does not establish that
 removing saved snapshots alone will resolve the GPU gap or predict a speedup.
 
-### Proposed leaner rollout API (recorded; unimplemented)
+<a id="proposed-leaner-rollout-api-recorded-unimplemented"></a>
+
+### Leaner rollout API (implemented; validation pending)
 
 The current benchmark asks `lax.scan` to return every full `Result`, including
 its state, plus legal masks. As a result it saves all intermediate states, each
@@ -170,8 +178,8 @@ snapshots or a record of every past RNG draw. A policy may need its observation
 history or recurrent memory, so its required observations/events must still be
 supplied; full trusted internal snapshots are a separate concern.
 
-A reasonable first design is an optional rollout output contract that returns
-final states and status codes, plus selected observations or transitions the
+The implemented `simulator.rollout` wrapper provides an optional output contract
+that returns final states and status codes, plus selected observations or transitions the
 caller requests, while using the same exact transition implementation. Keep the
 full trace path for parity/debugging. Initially retain the existing state history
 and capacity/validation behavior: removing history or trace accounting from the
@@ -179,10 +187,10 @@ engine itself would change current observable or rejection behavior unless
 handled explicitly. Compare final states, RNG, terminal outcomes and requested
 outputs before accepting such a path. This could reduce storage and permit
 compiler elimination of unused work **while preserving forward prediction**;
-it has not been implemented or timed. It should not be described as a mode that
-sacrifices forward simulation capability.
+its parity and runtime benefit have not been tested or timed. It should not be
+described as a mode that sacrifices forward simulation capability.
 
-The proposed first increment is a wrapper around the existing transition logic:
+The first increment is a wrapper around the existing transition logic:
 
 - Accept existing initial states and supplied choice plans, with explicit stopping
   limits. Carry only the current state through the loop instead of returning a
@@ -206,7 +214,40 @@ three trajectories, plus relevant existing rejection/capacity fixtures. Only
 then would one matched 96-battle comparison quantify any benefit. Savings in
 memory are plausible from the retained-byte counts; runtime gains remain
 unmeasured because the capture also exposes substantial fine-grained execution
-and synchronization. Implementation and measurement remain future work.
+and synchronization. Implementation is complete; validation and measurement
+remain pending by user instruction.
+See [the API contract](shared-engine.md#optional-lean-rollout-wrapper) and compact
+state for the unexecuted follow-up checks.
+
+
+### Portable follow-up commands (not executed)
+
+The diagnostic is import-safe, reads the committed frozen pack instead of a
+prior executor's `/tmp` file, and requires a new evidence directory. It now
+measures one selected operating point (default 32 packs = 96 battles), without
+launching a sweep. `--retention lean` is the new wrapper; `--retention full` keeps
+the historical full-output loop. The lean path uses three bounded scans and
+returns each battle's final state and summary. Its future gate compares all
+three final states, RNG/history/status/counts against the full path, after that
+path passes the native per-boundary comparisons. Loop structure and output
+retention both differ, so a timing difference would not isolate their causes.
+
+```sh
+# Requires a later user-directed validation/measurement session.
+JAX_PLATFORMS=cpu "$JAX_PYTHON" -m unittest test.test_rollout test.test_g3_fixtures -v
+"$GPU_JAX_PYTHON" -m benchmarks.g3_diagnostic --copies 32 --retention lean --output NEW_DIAGNOSTIC_DIR
+JAX_PLATFORMS=cuda "$GPU_JAX_PYTHON" -m benchmarks.g3_profile_96 --baseline NEW_DIAGNOSTIC_DIR/results.json --output NEW_CAPTURE_DIR
+"$JAX_PYTHON" -m benchmarks.g3_profile_96_analysis --capture NEW_CAPTURE_DIR
+```
+
+The diagnostic/profile entry points retain a five-minute process budget and
+refuse to overwrite existing evidence. The profiler verifies the selected loop
+function, engine/helpers and frozen fixture before capture. Source paths resolve
+within the current checkout. Recorded raw source hashes are preserved; checks
+accept only identical bytes or the exact LF/CRLF equivalent. New diagnostic
+records also store canonical LF hashes. Historical absolute `/workspace` paths
+and line endings therefore do not require weakening semantic source checks.
+
 
 
 <details>

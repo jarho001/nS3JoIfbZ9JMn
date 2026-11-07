@@ -1,5 +1,11 @@
 # G3 intermediate matched-battle diagnostic
 
+2026-11-07 implementation follow-up: the optional lean wrapper and portable CLIs
+are implemented, with validation/measurement pending. No tests or benchmarks were
+run for that change by explicit user instruction. Use the current commands and
+output contracts in [the results report](G3_TESTING_PROFILING_RESULTS.md#portable-follow-up-commands-not-executed)
+for a later authorized run; the completed full-output diagnostic below is history.
+
 This user-approved diagnostic supersedes the broad campaign below for this run.
 Preserve all completed work and uncommitted simulator repairs. Work directly with
 Sol 6.1/high, without delegation. The requested `/workspace/nS3JoIfbZ9JMn` does not

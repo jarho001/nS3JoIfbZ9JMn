@@ -33,6 +33,53 @@ pending choices, RNG and hidden reserves/items/PP are excluded from player views
 Terminal requests and masks are empty. `winner` is -1 while live, 0 for a tie,
 and 1/2 for the winning side; `rewards` supplies the terminal +1/-1/0 contract.
 
+## Optional lean rollout wrapper
+
+`simulator.rollout.rollout` applies a supplied choice plan through the same
+`advance` kernel. It is implemented as of 2026-11-07, but its tests and timings
+were explicitly not run in that implementation task. Parity and performance
+acceptance remain pending; existing timing tables describe the full-output loop.
+
+```python
+from functools import partial
+from simulator.rollout import rollout, player_view as rollout_view
+
+# choices is int32[T,2]; one row may contain a private partial commitment.
+run = jax.jit(rollout)
+summary = run(state, choices)
+# Continue an unfinished plan with summary.state; check failed before continuing.
+view = rollout_view(summary, 0)  # host projection, outside compiled timing
+
+# Static options select extra output; samples are zero-based plan indices.
+debug = jax.jit(partial(rollout, retain=('events', 'draws', 'codes'),
+                        sample_steps=(0, 3)))
+```
+
+The default result contains final state/code, attempted-row and useful-transition
+counts, first-failure information, and terminal/truncated flags. It retains no
+per-step arrays by default. The complete causal state, including current history,
+is carried forward. A rejected advance leaves that input unchanged; the rollout
+keeps the preceding successful prefix, records its first failing plan index, and
+freezes that lane. Subsequent rows cannot overwrite the error. Terminal lanes
+also stop advancing. A live state at the plan or `max_steps` limit is truncated;
+it is not labeled a draw. Independent lanes use `jax.vmap(rollout)`.
+
+`max_steps`, `retain` and `sample_steps` are static options. Optional `tokens`
+are int32[T,2] local generation/episode pairs; `enabled` is bool[T] and skips
+disabled rows without consuming RNG. Outputs have at most `max_steps` rows.
+Available retained fields are `states`, `events`, `draws`, `trace`, `rewards`,
+`legal_actions` (after the submission), and `codes`. Their `valid` mask denotes
+attempted rows; stopped rows have code `SKIPPED`, empty event/draw traces and
+zero reward/mask. State samples have separate `sample_valid` and `sample_steps`
+arrays, so callers never interpret unused zero storage as a valid battle.
+
+Raw states/events/draws are trusted diagnostic data, not policy observations.
+Use the wrapper's host `player_view` adapter for recipient-safe final and sampled
+views. It delegates to the existing projection and exposes neither pending
+choices nor RNG nor hidden opposing roster data. No neural encoding or policy
+inference has been added. Retaining all `states` and `trace` arrays remains an
+explicit debugging option; the scalar transition API is unchanged.
+
 States are fixed-shape NamedTuples of arrays and can be stacked with
 `jax.tree.map` and advanced with `jax.jit(jax.vmap(advance))`. Persist all state
 leaves, their field names, manifest/schema identity and source revision; restoring
