@@ -669,3 +669,23 @@ Use fast deterministic checks for every change, larger interaction/differential 
 **The next implementation package is the proposed first G3 goal above.** The reference setup, format metadata and interface foundations already exist; use them to validate a shared simulator spanning normal simultaneous choices, replacements, pivot interruption, status/residual effects and concealed information. Baseline tournaments and learning remain deferred. Implementation starts only after the user approves the goal and selects Goal mode.
 
 The long-term research opportunity is the combination: a faithful accelerator-native battle engine enables enormous self-play; an exact information interface makes those experiences legitimate; and a strong learning system can use both training compute and inference compute to discover strategies. All three construction sites should remain independently inspectable so that a gain in one can be trusted by the others.
+
+## Active approved package: six-member rosters and entry hazards
+
+The user approved both lean-rollout CPU validation and this bounded G4 package
+on 2026-11-07. The rollout checks passed (10 tests, 149.109s, source `bda1df1`);
+see `test-logs/g4-roster-hazards/lean-rollout-cpu.log`.
+
+Expand the existing custom-game domain to one through six members per side,
+Stealth Rock, one through three Spikes layers and Gen 5 Rapid Spin removal.
+Preserve stable identities, command order, exact RNG, requests, both recipient
+event histories, continuation/reset and lean/full rollout agreement. Establish
+pinned native family behavior first, including placement/repeat failures,
+Levitate, insertion order, switch/pivot entry KOs, removal blocked by Ghost or
+Protect, and complete six-member native battles. Validate on CPU with eager/JIT
+and mixed batches; stop on an unresolved minimized mismatch or capacity limit.
+
+Keep existing species, stats, abilities, items and status scope. Toxic Spikes,
+ordinary poison and the remaining G4 families are deferred. This package does
+not close full-format G4. GPU testing, benchmarks, profiling, learning and
+large fuzz campaigns are excluded. Commit/push the coherent validated package.

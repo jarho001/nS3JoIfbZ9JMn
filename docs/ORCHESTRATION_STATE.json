@@ -14,7 +14,7 @@
       "CPU-first validation; GPU runs only when task acceptance or a device-specific property requires them, not a full GPU suite for every slice."
     ],
     "defer": "PPO, tournament/scoring, expanded trajectory collection, and additional baseline/reporting infrastructure unless they directly enable simulator semantics or parity validation.",
-    "next_candidate": "Execute approved G3 testing/profiling handoff; G1 remains open and G2 deferred.",
+    "next_candidate": "Execute approved bounded G4 roster/hazard package; GPU profiling deferred.",
     "progress_measure": "Increasingly complete parity-tested playable battles, not accepted task count.",
     "active_task": null,
     "accepted_task_count_changed": false,
@@ -517,45 +517,16 @@
     "policy_note": "Automatic Astra, task-count, and independent milestone review gates retired by user instruction on 2026-11-05. Baselines and review histories below are historical evidence, not active gates. Milestone acceptance still requires its stated evidence."
   },
   "active_task": {
-    "id": "G3-lean-rollout",
-    "status": "implemented_unvalidated",
+    "id": "G4-roster-hazards",
+    "status": "in_progress",
     "approved_at": "2026-11-07",
     "owner": "/root",
-    "scope": "Implement optional lean rollout output API, portable frozen-fixture/provenance handling and bounded diagnostic wiring. Commit and push. Do not run tests; benchmarks/profiling also left unexecuted.",
-    "previous_goal": "G3-testing-profiling (preserved in completed_goals)",
-    "source_base": "6d24de8bb4b77508dcd1b1f5445d224a9301fe9f",
-    "source_sha256": {
-      "simulator/rollout.py": "e3fcfb2701f793c9f2ab3cd37a93cdf42753739b2d0d6c8a038b5bc035c4e98f",
-      "benchmarks/g3_fixtures.py": "89d7a5c9653828376adc73ed526956d10b1966752f79a33668c07223742d36d7",
-      "benchmarks/g3_diagnostic.py": "260974ea148789197cd9040ff79d3f9f779188bf370096188ef344269efca7e9",
-      "benchmarks/g3_profile_96.py": "63c1b6fae84121bff884e911b6b2614082eed192b0235e446b00c4b81ef98d66",
-      "benchmarks/g3_profile_96_analysis.py": "6d6d9fbede01e7d16c6d203d3bfdc9788e4356f49ad2ca115110ae24b03a2323",
-      "test/test_rollout.py": "9c6d4d408186e4c84613d720baa1bd58f5970ebe603dd7c76108456f6b7a7a12",
-      "test/test_g3_fixtures.py": "33214781324980802b59e9832d4d28181cc01466b65cb22bcd1f6be68615eea8"
-    },
-    "changes": [
-      "Bounded shared-engine rollout with final state/status/counts, latched first failure, terminal stopping, explicit truncation, token/mask support, opt-in traces/events/rewards/masks, sampled states and recipient-safe host views.",
-      "Diagnostic uses the committed frozen pack, fresh evidence directories, one selected operating point (default 96 battles), and lean/full output selection. Lean final states/status/counts are gated against native-validated full output when a later run is authorized.",
-      "Profiler/source lookup handles repository-relative and historical executor paths, exact LF/CRLF-equivalent source hashes, recorded pure-loop identity and either output contract; import-safe entry points and explicit offline capture selection preserve old artifacts."
-    ],
-    "validation": {
-      "status": "not_run_by_explicit_user_instruction",
-      "tests_added": [
-        "test/test_rollout.py",
-        "test/test_g3_fixtures.py"
-      ],
-      "executed": "Static source/diff inspection only; no test, simulator, benchmark or profiler execution.",
-      "pending_commands": [
-        "JAX_PLATFORMS=cpu \"$JAX_PYTHON\" -m unittest test.test_rollout test.test_g3_fixtures -v",
-        "JAX_PLATFORMS=cuda \"$GPU_JAX_PYTHON\" -m unittest test.test_rollout -v",
-        "\"$GPU_JAX_PYTHON\" -m benchmarks.g3_diagnostic --copies 32 --retention lean --output NEW_DIAGNOSTIC_DIR"
-      ]
-    },
-    "record": "docs/shared-engine.md#optional-lean-rollout-wrapper",
-    "results_report": "docs/G3_TESTING_PROFILING_RESULTS.md#leaner-rollout-api-implemented-validation-pending",
-    "checkpoint": "Implementation complete; validation and any performance benefit remain unproven by user request.",
-    "next": "Stop after commit/push. Run the focused pending checks and one matched diagnostic only under a later user instruction. G3 remains open; no milestone/task-count change.",
-    "blockers": []
+    "scope": "User approved both CPU validation of lean rollout and bounded G4 progress. Six-member rosters plus Stealth Rock, Spikes and Gen 5 Rapid Spin in the existing custom species/status domain. Native family traces before implementation; CPU exact state/RNG/request/event/full-battle and lifecycle validation. No GPU, benchmarks, profiling or learning.",
+    "checkpoint": "Lean rollout CPU validation complete; establishing independent native hazard behavior.",
+    "source_base": "bda1df1",
+    "next": "Capture native hazard, switch/pivot/KO/removal and six-member complete battles; implement and validate exact parity.",
+    "blockers": [],
+    "stopping": "Complete the bounded CPU package or preserve minimized unresolved divergence/capacity blocker; do not claim full G4 closure."
   },
   "optional_gpu_validation_history": [
     {
@@ -1254,6 +1225,48 @@
         "evidence": "364 MiB retained output, including 320 MiB repeated history; profile also shows fine-grained kernels and synchronization. Runtime benefit is unmeasured.",
         "future_validation": "Same frozen three trajectories plus relevant existing rejection/capacity fixtures; only then a separately scoped matched 96-battle measurement."
       }
+    },
+    {
+      "id": "G3-lean-rollout",
+      "status": "validated_cpu",
+      "approved_at": "2026-11-07",
+      "owner": "/root",
+      "scope": "Implement optional lean rollout output API, portable frozen-fixture/provenance handling and bounded diagnostic wiring. Commit and push. Do not run tests; benchmarks/profiling also left unexecuted.",
+      "previous_goal": "G3-testing-profiling (preserved in completed_goals)",
+      "source_base": "6d24de8bb4b77508dcd1b1f5445d224a9301fe9f",
+      "source_sha256": {
+        "simulator/rollout.py": "e3fcfb2701f793c9f2ab3cd37a93cdf42753739b2d0d6c8a038b5bc035c4e98f",
+        "benchmarks/g3_fixtures.py": "89d7a5c9653828376adc73ed526956d10b1966752f79a33668c07223742d36d7",
+        "benchmarks/g3_diagnostic.py": "260974ea148789197cd9040ff79d3f9f779188bf370096188ef344269efca7e9",
+        "benchmarks/g3_profile_96.py": "63c1b6fae84121bff884e911b6b2614082eed192b0235e446b00c4b81ef98d66",
+        "benchmarks/g3_profile_96_analysis.py": "6d6d9fbede01e7d16c6d203d3bfdc9788e4356f49ad2ca115110ae24b03a2323",
+        "test/test_rollout.py": "9c6d4d408186e4c84613d720baa1bd58f5970ebe603dd7c76108456f6b7a7a12",
+        "test/test_g3_fixtures.py": "33214781324980802b59e9832d4d28181cc01466b65cb22bcd1f6be68615eea8"
+      },
+      "changes": [
+        "Bounded shared-engine rollout with final state/status/counts, latched first failure, terminal stopping, explicit truncation, token/mask support, opt-in traces/events/rewards/masks, sampled states and recipient-safe host views.",
+        "Diagnostic uses the committed frozen pack, fresh evidence directories, one selected operating point (default 96 battles), and lean/full output selection. Lean final states/status/counts are gated against native-validated full output when a later run is authorized.",
+        "Profiler/source lookup handles repository-relative and historical executor paths, exact LF/CRLF-equivalent source hashes, recorded pure-loop identity and either output contract; import-safe entry points and explicit offline capture selection preserve old artifacts."
+      ],
+      "validation": {
+        "status": "cpu_passed",
+        "tests_added": [
+          "test/test_rollout.py",
+          "test/test_g3_fixtures.py"
+        ],
+        "executed": "JAX_PLATFORMS=cpu .venv-jax/bin/python -m unittest test.test_rollout test.test_g3_fixtures -v: 10 passed in 149.109s; Python 3.12.14, JAX/JAXLIB 0.12.0.1 CPU.",
+        "pending_commands": [
+          "JAX_PLATFORMS=cpu \"$JAX_PYTHON\" -m unittest test.test_rollout test.test_g3_fixtures -v",
+          "JAX_PLATFORMS=cuda \"$GPU_JAX_PYTHON\" -m unittest test.test_rollout -v",
+          "\"$GPU_JAX_PYTHON\" -m benchmarks.g3_diagnostic --copies 32 --retention lean --output NEW_DIAGNOSTIC_DIR"
+        ],
+        "log": "test-logs/g4-roster-hazards/lean-rollout-cpu.log"
+      },
+      "record": "docs/shared-engine.md#optional-lean-rollout-wrapper",
+      "results_report": "docs/G3_TESTING_PROFILING_RESULTS.md#leaner-rollout-api-implemented-validation-pending",
+      "checkpoint": "10 focused rollout/fixture CPU checks passed on bda1df1 in 149.109s",
+      "next": "GPU correctness and a matched diagnostic remain deferred; no performance claim.",
+      "blockers": []
     }
   ]
 }

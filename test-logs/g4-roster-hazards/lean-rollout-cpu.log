@@ -1,0 +1,15 @@
+test_capacity_unsupported_and_budget_are_not_terminal (test.test_rollout.RolloutTest.test_capacity_unsupported_and_budget_are_not_terminal) ... ok
+test_first_error_freezes_successful_prefix (test.test_rollout.RolloutTest.test_first_error_freezes_successful_prefix) ... ok
+test_host_shape_and_static_option_validation (test.test_rollout.RolloutTest.test_host_shape_and_static_option_validation) ... ok
+test_mixed_vmap_lanes_and_disabled_rows (test.test_rollout.RolloutTest.test_mixed_vmap_lanes_and_disabled_rows) ... ok
+test_native_full_outputs_and_final_only_match (test.test_rollout.RolloutTest.test_native_full_outputs_and_final_only_match) ... ok
+test_pending_replace_undo_and_stale_token (test.test_rollout.RolloutTest.test_pending_replace_undo_and_stale_token) ... ok
+test_terminal_padding_samples_and_safe_views (test.test_rollout.RolloutTest.test_terminal_padding_samples_and_safe_views) ... ok
+test_historical_absolute_path_and_line_endings_only (test.test_g3_fixtures.G3FixturesTest.test_historical_absolute_path_and_line_endings_only) ... ok
+test_saved_pack_is_complete_and_uses_the_current_pin (test.test_g3_fixtures.G3FixturesTest.test_saved_pack_is_complete_and_uses_the_current_pin) ... ok
+test_source_paths_cannot_escape_repository_roots (test.test_g3_fixtures.G3FixturesTest.test_source_paths_cannot_escape_repository_roots) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 149.109s
+
+OK
