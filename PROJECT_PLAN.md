@@ -666,7 +666,7 @@ Use fast deterministic checks for every change, larger interaction/differential 
 | Generator or server drifts | Updated teams/rules change results | Freeze old benchmark; publish a new version and explicit transfer study |
 | Resource use grows without strength | Larger runs only improve training reward or raw throughput | Revisit representation, evaluation, and bottlenecks before scaling |
 
-**The next implementation package is the proposed first G3 goal above.** The reference setup, format metadata and interface foundations already exist; use them to validate a shared simulator spanning normal simultaneous choices, replacements, pivot interruption, status/residual effects and concealed information. Baseline tournaments and learning remain deferred. Implementation starts only after the user approves the goal and selects Goal mode.
+**The next implementation package is the approved bounded G4 roster/hazard goal below.** The first G3 CPU package and subsequent diagnostic are recorded in compact state. Baseline tournaments, learning and additional performance runs remain deferred.
 
 The long-term research opportunity is the combination: a faithful accelerator-native battle engine enables enormous self-play; an exact information interface makes those experiences legitimate; and a strong learning system can use both training compute and inference compute to discover strategies. All three construction sites should remain independently inspectable so that a gain in one can be trusted by the others.
 

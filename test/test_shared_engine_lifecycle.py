@@ -200,8 +200,10 @@ class SharedEngineLifecycleTest(unittest.TestCase):
         r=COMPILED(excluded,e.i32([0,0]));self.assertEqual(int(r.code),e.UNSUPPORTED);equal(self,excluded,r.state)
         arbitrary=s._replace(stats=s.stats.at[0,0,1].set(999))
         r=COMPILED(arbitrary,e.i32([0,0]));self.assertEqual(int(r.code),e.UNSUPPORTED);equal(self,arbitrary,r.state)
-        occupied=s._replace(species=s.species.at[0,:4].set(e.MEW))
-        r=COMPILED(occupied,e.i32([0,0]));self.assertEqual(int(r.code),e.UNSUPPORTED);equal(self,occupied,r.state)
+        # Declaring a mon without its required stats/moves is unsupported;
+        # schema 2 now permits four through six fully initialized members.
+        incomplete=s._replace(species=s.species.at[0,3].set(e.MEW))
+        r=COMPILED(incomplete,e.i32([0,0]));self.assertEqual(int(r.code),e.UNSUPPORTED);equal(self,incomplete,r.state)
         for over in (s._replace(hcount=e.i32(e.HISTORY)),s._replace(episode=e.i32(2**31-1))):
             r=COMPILED(over,e.i32([0,0]));self.assertEqual(int(r.code),e.CAPACITY);equal(self,over,r.state)
             self.assertEqual(int(r.trace.ecount),0);self.assertEqual(int(r.trace.dcount),0)

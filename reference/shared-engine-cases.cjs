@@ -172,7 +172,7 @@ function scriptedChoices(battle,scenario,boundary) {
    if(battle.turn===3&&moveCommand('recover')){choices[side.id]=moveCommand('recover');continue;}
   }
   if(scenario.family==='hazards') {
-   const wanted=battle.turn===1?'stealthrock':battle.turn===2?'spikes':battle.turn===3?'rapidspin':null;
+   const wanted=battle.turn===1?'stealthrock':battle.turn===2?'spikes':(side.sideConditions.spikes||side.sideConditions.stealthrock)?'rapidspin':null;
    if(wanted&&moveCommand(wanted)){choices[side.id]=moveCommand(wanted);continue;}
   }
   const preferred=scenario.family==='pivot'?['uturn','earthquake','megapunch','tackle']:

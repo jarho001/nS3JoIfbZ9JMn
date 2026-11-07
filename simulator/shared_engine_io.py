@@ -46,7 +46,7 @@ def project_request(state,side):
             mid=int(mid)
             if not mid:continue
             rows.append({'move':e.MOVE_NAMES[mid],'id':e.MOVE_KEYS[mid],'pp':int(s.pp[side,mon,slot]),
-                         'maxpp':int(e.PP[mid]),'target':'self' if mid in (e.PROTECT,e.RECOVER) else 'allAdjacent' if mid==e.EARTHQUAKE else 'normal',
+                         'maxpp':int(e.PP[mid]),'target':'self' if mid in (e.PROTECT,e.RECOVER) else 'foeSide' if mid in (e.STEALTH_ROCK,e.SPIKES) else 'allAdjacent' if mid==e.EARTHQUAKE else 'normal',
                          'disabled':bool(s.pp[side,mon,slot]==0)})
         if all(row['disabled'] for row in rows):rows=[{'move':'Struggle','id':'struggle','target':'randomNormal','disabled':False}]
         req['active']=[{'moves':rows}]
@@ -61,12 +61,12 @@ def project_events(state,trace,audience):
         actor=ident(side,mon);foe=ident(target,tm);name=e.MOVE_NAMES[move] if move>=0 else ''
         if kind==e.BLANK:line='|'
         elif kind==e.EV_MOVE:
-            shown='' if aux==2 else foe.replace('a: ',': ') if aux==3 else foe
-            annotation={0:'',1:'|[miss]',2:'|[still]',3:'|[notarget]'}[aux]
+            shown='' if aux==2 else foe.replace('a: ',': ') if aux in (3,4) else foe
+            annotation={0:'',1:'|[miss]',2:'|[still]',3:'|[notarget]',4:''}[aux]
             line=f'|move|{actor}|{name}|'+shown+annotation
         elif kind in (e.DAMAGE,e.HEAL):
             line=f'|-'+('damage' if kind==e.DAMAGE else 'heal')+f'|{actor}|'+condition(value,aux,status,side!=audience)
-            if kind==e.DAMAGE and move:line+='|[from] '+{1:'brn',2:'psn',3:'recoil'}[move]
+            if kind==e.DAMAGE and move:line+='|[from] '+{1:'brn',2:'psn',3:'recoil',4:'Stealth Rock',5:'Spikes'}[move]
             if kind==e.HEAL and move:line+='|[from] item: Leftovers'
         elif kind==e.CRIT:line=f'|-crit|{actor}'
         elif kind==e.IMMUNE:line=f'|-immune|{actor}'+({0:'',1:'|[from] ability: Immunity',2:'|[from] ability: Levitate'}[aux])
@@ -85,6 +85,8 @@ def project_events(state,trace,audience):
         elif kind==e.ACTIVATE:
             line=(f'|-supereffective|{actor}' if aux>0 else f'|-resisted|{actor}') if move==-1 else f'|-activate|{actor}|move: {name}'
         elif kind==e.SINGLE:line=f'|-singleturn|{actor}|Protect'
+        elif kind==e.SIDE_START:line=f'|-sidestart|p{side+1}: p{side+1}|'+('move: ' if move==e.STEALTH_ROCK else '')+name
+        elif kind==e.SIDE_END:line=f'|-sideend|p{side+1}: p{side+1}|{name}|[from] move: Rapid Spin|[of] {actor}'
         else:raise ValueError('unknown event')
         out.append({'type':'event','message':line})
     return out

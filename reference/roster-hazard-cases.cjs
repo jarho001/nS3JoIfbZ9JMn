@@ -29,6 +29,8 @@ module.exports = function rosterHazardCases(mon) {
   setup:[{side:'p1',hp:1}],steps:[both(1,1)]},
  {id:'G4-double-entry',seed:9,p1:[m(['Stealth Rock']),l(['Tackle'])],p2:[m(['Spikes']),m(['Tackle'])],
   steps:[both(1,1),step('switch 2','switch 2')]});
+ cases.push({id:'G4-side-no-target',seed:1,p1:[l(['Stealth Rock'])],p2:[m(['Tackle']),m(['Tackle'])],setup:[{side:'p2',hp:1,pp:0}],steps:[both(1,1)]},
+ {id:'G4-minimum-entry',seed:0,p1:[m(['Spikes','Recover'])],p2:[l(['Protect']),m(['Tackle'],{level:1})],steps:[both(1,1),step('move 2','switch 2')]});
  for(const seed of [0,21])for(const swap of [false,true]) {
   const a=[m(['Stealth Rock','Spikes','U-turn','Earthquake']),l(['Rapid Spin','U-turn','Earthquake']),g(['U-turn','Earthquake']),m(['U-turn','Earthquake']),l(['U-turn','Earthquake']),g(['U-turn','Earthquake'])];
   const b=[m(['Stealth Rock','Spikes','U-turn','Earthquake'],fast),l(['Rapid Spin','U-turn','Earthquake']),m(['U-turn','Earthquake']),g(['U-turn','Earthquake']),m(['U-turn','Earthquake']),l(['U-turn','Earthquake'])];

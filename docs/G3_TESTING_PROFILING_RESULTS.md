@@ -162,7 +162,7 @@ removing saved snapshots alone will resolve the GPU gap or predict a speedup.
 
 <a id="proposed-leaner-rollout-api-recorded-unimplemented"></a>
 
-### Leaner rollout API (implemented; validation pending)
+### Leaner rollout API (CPU validated; timing deferred)
 
 The current benchmark asks `lax.scan` to return every full `Result`, including
 its state, plus legal masks. As a result it saves all intermediate states, each
@@ -187,7 +187,7 @@ engine itself would change current observable or rejection behavior unless
 handled explicitly. Compare final states, RNG, terminal outcomes and requested
 outputs before accepting such a path. This could reduce storage and permit
 compiler elimination of unused work **while preserving forward prediction**;
-its parity and runtime benefit have not been tested or timed. It should not be
+CPU parity now passes the focused wrapper checks; runtime benefit remains unmeasured. It should not be
 described as a mode that sacrifices forward simulation capability.
 
 The first increment is a wrapper around the existing transition logic:
@@ -214,10 +214,11 @@ three trajectories, plus relevant existing rejection/capacity fixtures. Only
 then would one matched 96-battle comparison quantify any benefit. Savings in
 memory are plausible from the retained-byte counts; runtime gains remain
 unmeasured because the capture also exposes substantial fine-grained execution
-and synchronization. Implementation is complete; validation and measurement
-remain pending by user instruction.
+and synchronization. Implementation is complete. The subsequent approved CPU check passed 10 tests
+in 149.109s on `bda1df1`; see `test-logs/g4-roster-hazards/lean-rollout-cpu.log`.
+GPU validation and performance measurement remain deferred.
 See [the API contract](shared-engine.md#optional-lean-rollout-wrapper) and compact
-state for the unexecuted follow-up checks.
+state for the deferred GPU/diagnostic follow-up checks.
 
 
 ### Portable follow-up commands (not executed)

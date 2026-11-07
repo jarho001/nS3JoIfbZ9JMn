@@ -1,20 +1,21 @@
 {
   "pin": "1242c1e2d9763ba5b85d33f13aecb89bae19ae3d",
-  "command": "node reference/shared-engine-cases.cjs --batch g4 --output /tmp/g4-native.json",
-  "native_sha256": "4bcf6abf5abe16c562fdf804db7e7f61f4e9a18b6451271fca20b29d2e6918b2",
-  "scenarios": 20,
-  "boundaries": 258,
+  "command": "node reference/shared-engine-cases.cjs --batch g4 --output /tmp/g4-native-expanded.json",
+  "native_sha256": "71299120fad5fc8e549dfa3fdde753651350d0ea8490b337429919deffab202a",
+  "scenarios": 22,
+  "boundaries": 408,
   "complete_six_member_battles": {
-    "G4-full-0-false": 51,
-    "G4-full-0-true": 52,
-    "G4-full-21-false": 48,
-    "G4-full-21-true": 50
+    "G4-full-0-false": 94,
+    "G4-full-0-true": 84,
+    "G4-full-21-false": 86,
+    "G4-full-21-true": 84
   },
   "all_submissions_accepted": true,
   "facts": [
-    "Hazards bypass Protect, have foeSide request target and no accuracy/damage draw. Successful placement still consumes two tied hit-loop Update draws.",
+    "Hazards bypass Protect, have foeSide request target and no accuracy/damage draw. Placement has no hit-loop Update; ordinary scheduler Updates remain exact.",
     "Spikes layers 1/2/3 deal floor(maxHP/8), floor(maxHP/6), floor(maxHP/4), minimum 1. Levitate skips Spikes without disclosure; all three supported species take neutral Stealth Rock.",
     "Switch-in hazards execute in placement order in runSwitch, before pending attacks. Entry KOs resolve then queue/residual resumes; replacement chains keep the turn pending.",
-    "Rapid Spin has Gen 5 power20, maxPP64, Normal STAB and Ghost immunity; Protect prevents clearing. Clear own Spikes then Stealth Rock after damage, before hit-loop Update/faint/win. No Speed boost."
+    "Rapid Spin has Gen 5 power20, maxPP64, Normal STAB and Ghost immunity; Protect prevents clearing. Clear own Spikes then Stealth Rock after damage, before hit-loop Update/faint/win. No Speed boost.",
+    "A foeSide hazard still succeeds after recoil leaves no opposing active target; its move target is the side label without [notarget]. Minimum Spikes damage verified on a level-1 entrant."
   ]
 }

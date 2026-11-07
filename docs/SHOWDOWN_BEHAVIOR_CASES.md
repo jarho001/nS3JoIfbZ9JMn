@@ -380,7 +380,7 @@ case counts, replay command and observed ordering before implementation.
 
 | Family | Required behavior |
 |---|---|
-| Placement | foeSide request; Protect bypass; Rock repeat and fourth Spikes failure; all three layer amounts; exact tied Update draws |
+| Placement | foeSide request; Protect bypass; Rock repeat and fourth Spikes failure; all three layer amounts; exact scheduler Update draws |
 | Entry | Slot six and stable command order; Levitate skips Spikes; Rock and Spikes insertion order; Leftovers after entry; simultaneous swaps |
 | Entry KO | Pending attack loses target; forced replacement chain preserves turn; U-turn queue resumes; last-member hazard KO reaches native terminal |
 | Removal | Gen 5 power/PP/STAB; clear own Spikes then Rock after damage, before faint/win; Ghost/Protect retain hazards |

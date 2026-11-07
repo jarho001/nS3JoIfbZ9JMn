@@ -9,7 +9,7 @@ const {projectPackets}=require('../environment/protocol.cjs');
 
 test('native BattleStream replacement/undo and direct snapshots share recipient boundaries',()=>{
  assertReady();
- for(const id of ['commit-replace','commit-cancel','pivot-resume','forced-replacement']) {
+ for(const id of ['commit-replace','commit-cancel','pivot-resume','forced-replacement','G4-place-Spikes','G4-order-false','G4-order-true','G4-spin-ghost','G4-double-entry']) {
   const scenario=cases.find(c=>c.id===id);const expected=runCase(ps,scenario);
   const packets=[];const stream=new BattleStream({keepAlive:true,noCatch:true});
   stream.pushMessage=(type,data)=>packets.push(type+'\n'+data);

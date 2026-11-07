@@ -1,10 +1,12 @@
 # Shared restricted singles engine
 
-The approved first G3 package uses [one manifest](../rules/shared-engine-v1.json),
+The approved first G3 package introduced [schema 1](../rules/shared-engine-v1.json),
 [one JAX state/scheduler](../simulator/shared_engine.py), and a
 [host player adapter](../simulator/shared_engine_io.py). Legacy APIs remain intact.
-This is a custom 1–3-member singles game; G3 GPU closure and full-format G4
-coverage remain separate acceptance work.
+The current [schema 2](../rules/shared-engine-v2.json) supports custom 1–6-member
+singles with Stealth Rock, Spikes and Gen 5 Rapid Spin. Full-format G4
+coverage remains separate acceptance work. Historical evidence keeps its original
+source/schema identity; it does not imply validation of later engine changes.
 
 ```python
 import jax
@@ -37,8 +39,10 @@ and 1/2 for the winning side; `rewards` supplies the terminal +1/-1/0 contract.
 
 `simulator.rollout.rollout` applies a supplied choice plan through the same
 `advance` kernel. It is implemented as of 2026-11-07, but its tests and timings
-were explicitly not run in that implementation task. Parity and performance
-acceptance remain pending; existing timing tables describe the full-output loop.
+were explicitly not run in that implementation task. The later approved CPU
+validation passed all 10 focused rollout/fixture checks on `bda1df1`
+(`test-logs/g4-roster-hazards/lean-rollout-cpu.log`). GPU correctness and performance
+remain deferred; existing timing tables describe the full-output loop.
 
 ```python
 from functools import partial
@@ -122,3 +126,31 @@ import JAX into the native runner or derive expected damage from this engine.
 Full traces cover eight three-member battles across both seats and multiple
 seeds; exhaustion starts explicitly label depleted PP as synthetic. Passing
 those scripts does not establish untested full-format equivalence or performance.
+
+## Six-member roster and hazards
+
+Schema 2 retains move IDs 1–11 and appends Stealth Rock (12), Spikes (13)
+and Rapid Spin (14). Struggle stays a forced action, never a stored moveslot.
+State adds `hazards: int32[2,3]`: Rock present, Spikes layers, first installed
+hazard (0 none, 1 Rock, 2 Spikes). Placement order determines entry-damage
+order. Rapid Spin clears own Spikes then Rock only after a successful hit;
+it uses Gen 5 power 20 and has no Speed boost. Gengar's Levitate avoids Spikes
+without an ability event, while all supported species take neutral Rock damage.
+
+Persist schema 2 and all named State fields with snapshots. A schema 1 snapshot
+requires an explicit zero-hazard field migration; positional schema 1 tuples
+are incompatible. Existing G3 fixture inputs initialize fresh schema 2 states.
+Toxic Spikes, ordinary poison, additional species and other unlisted callbacks
+remain unsupported. The fixed event/draw/history buffers retain atomic rejection.
+
+```sh
+node reference/shared-engine-cases.cjs --batch g4 --output /tmp/g4-new.json
+G4_NATIVE_CASES=/tmp/g4-new.json JAX_PLATFORMS=cpu \
+  .venv-jax/bin/python -m unittest test.test_roster_hazards -v
+```
+
+`--batch all`, `boundaries` and `battles` preserve the historical G3 catalog;
+`--batch g4` selects the new package. Both native catalogs contain full snapshots,
+ordered draws and recipient events. The G4 checks add complete six-member games,
+hazard placement/removal/entry KOs, mixed batches, saved continuation/reset and
+lean/full rollout agreement. These correctness checks are not performance runs.

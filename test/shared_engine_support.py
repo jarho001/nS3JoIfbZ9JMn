@@ -81,6 +81,7 @@ def assert_state(test,s,native,label):
     test.assertEqual(bool(s.midturn),native['midTurn'],label+' midTurn')
     for side,n in enumerate(native['sides']):
         prefix=label+f' p{side+1}'
+        test.assertEqual(s.hazards[side].tolist(),n.get('hazards',[0,0,0]),prefix+' side hazards/order')
         test.assertEqual(int(s.active[side]),n['active'],prefix+' active')
         test.assertEqual(s.order[side,:len(n['order'])].tolist(),n['order'],prefix+' command roster')
         for p in n['pokemon']:

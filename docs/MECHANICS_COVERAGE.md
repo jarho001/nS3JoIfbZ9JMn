@@ -68,3 +68,16 @@ Operational benchmark choices in the charter—such as suite size, seed roots, s
 These known gaps belong to later implementation gates and are not a requirement to build a full engine for G0: G1 reference-environment integration and full request/visibility/action-path differential coverage; G3 battle/request state and event/turn scheduling beyond the restricted Task034 slice, coupled Showdown PRNG state across phases and mechanics, and additional representative slices; G4 executable coverage of all reachable rules and inherited species/move/item/ability/team-generation data, full interactions, and full-game differential transfer. GPU validation and simulator profiling apply when a later acceptance criterion requires them. Policy learning and strength benchmarks belong to learning and end-to-end evaluation gates.
 
 This ledger remains a **partial arithmetic inventory** for the complete pinned target; acceptance covers the G0 specification boundary, not game-mechanics coverage or implementation. It establishes no coverage percentage or full-engine support. The accepted boundary leaves G1 request/visibility/action-path integration and differential coverage, G3 battle/request state, event/turn scheduling, coupled PRNG behavior and representative mechanics, G4 complete reachable rules/data and full-format differential transfer, and later policy learning and evaluation work open. These later implementations are not prerequisites for G0 specification acceptance.
+
+### Shared engine expansion (bounded G4 package)
+
+The [schema 2 manifest](../rules/shared-engine-v2.json) extends the shared engine
+to one through six supplied members per side, Stealth Rock, Spikes and Gen 5
+Rapid Spin in the existing Mew/Snorlax/Gengar domain. The
+[behavior catalog](SHOWDOWN_BEHAVIOR_CASES.md#approved-bounded-g4-rosterhazard-package)
+and `test/test_roster_hazards.py` cover exact native state, RNG, requests,
+recipient histories, entry-KO queue continuation, hazard insertion/removal order
+and four complete six-member battles. Current acceptance progress and evidence
+live in `docs/ORCHESTRATION_STATE.json`; historical arithmetic rows retain their
+original boundaries. Toxic Spikes, other species/types/abilities, generated-team
+membership and the remaining reachable G4 callbacks are still gaps.
