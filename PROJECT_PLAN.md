@@ -483,8 +483,9 @@ Gen 5 singles battles through one shared JAX engine, including voluntary switche
 native forced replacements and U-turn interruptions, with both player views and
 exact pinned native differential traces. This is a restricted custom game, not
 the `gen5randombattle` team distribution. The user approved this brief and its CPU validation scope on 2026-11-06.
-The active approved goal is `G3-first-playable` in
-[compact state](docs/ORCHESTRATION_STATE.json).
+The completed CPU goal `G3-first-playable` is preserved in
+[compact state](docs/ORCHESTRATION_STATE.json); the current package is recorded
+in the active approved section below.
 
 **Declared package:** A versioned allowlist of Mew/Synchronize,
 Snorlax/Immunity and Gengar/Levitate; itemless, Leftovers and Lum Berry; up to
@@ -689,3 +690,13 @@ Keep existing species, stats, abilities, items and status scope. Toxic Spikes,
 ordinary poison and the remaining G4 families are deferred. This package does
 not close full-format G4. GPU testing, benchmarks, profiling, learning and
 large fuzz campaigns are excluded. Commit/push the coherent validated package.
+
+**CPU acceptance:** complete on source `2982555`: 26 checks passed in 492.679s,
+including all 22 new native scenarios / 408 boundaries and four complete
+six-member battles, existing 111 scenarios / 464 boundaries, eager/JIT/mixed
+batches, lean/full rollouts, saved continuation/reset, privacy and atomic
+rejection/capacity behavior. Two native protocol checks also passed. The final
+native metadata follow-up reports schema 2 for individual G4 case selections;
+it changes no fixture semantics or engine source. Exact commands, source hashes
+and logs are in `test-logs/g4-roster-hazards/` and compact state. The bounded
+package is accepted; full-format G4 and new GPU/performance validation stay open.

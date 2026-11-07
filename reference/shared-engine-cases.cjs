@@ -342,7 +342,7 @@ function main(argv) {
  }
  const selected=batch==='g4'?cases.filter(c=>c.g4):batch==='all'?cases.filter(c=>!c.g4):batch==='boundaries'?cases.filter(c=>!c.g4&&!c.fullBattle):batch==='battles'?cases.filter(c=>!c.g4&&c.fullBattle):cases.filter(c=>c.id===batch);
  if(!selected.length)throw Error('Empty native case selection: '+batch);
- const result={schemaVersion:1,pin,format:'gen5randombattle',caseSchema:batch==='g4'?'shared-engine-v2':'shared-engine-v1',cases:selected.map(c=>runCase(ps,c))};
+ const result={schemaVersion:1,pin,format:'gen5randombattle',caseSchema:selected.some(c=>c.g4)?'shared-engine-v2':'shared-engine-v1',cases:selected.map(c=>runCase(ps,c))};
  const json=JSON.stringify(result,null,2)+'\n';
  if(output)fs.writeFileSync(output,json,{flag:'wx'});else process.stdout.write(json);
 }

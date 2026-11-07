@@ -17,5 +17,7 @@
     "Switch-in hazards execute in placement order in runSwitch, before pending attacks. Entry KOs resolve then queue/residual resumes; replacement chains keep the turn pending.",
     "Rapid Spin has Gen 5 power20, maxPP64, Normal STAB and Ghost immunity; Protect prevents clearing. Clear own Spikes then Stealth Rock after damage, before hit-loop Update/faint/win. No Speed boost.",
     "A foeSide hazard still succeeds after recoil leaves no opposing active target; its move target is the side label without [notarget]. Minimum Spikes damage verified on a level-1 entrant."
-  ]
+  ],
+  "semantic_sha256": "3fbed365e162b2bc03c4e474f83431abe0210f8ce68be4827ebaadba49bc8b16",
+  "semantic_digest": "sha256 of recursively stack-free JSON, sorted keys, compact separators; arrays retain order"
 }

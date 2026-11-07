@@ -14,7 +14,7 @@
       "CPU-first validation; GPU runs only when task acceptance or a device-specific property requires them, not a full GPU suite for every slice."
     ],
     "defer": "PPO, tournament/scoring, expanded trajectory collection, and additional baseline/reporting infrastructure unless they directly enable simulator semantics or parity validation.",
-    "next_candidate": "Execute approved bounded G4 roster/hazard package; GPU profiling deferred.",
+    "next_candidate": "Bounded G4 roster/hazard CPU package complete; select a subsequent G4 family only under new approval. GPU profiling remains deferred.",
     "progress_measure": "Increasingly complete parity-tested playable battles, not accepted task count.",
     "active_task": null,
     "accepted_task_count_changed": false,
@@ -518,13 +518,13 @@
   },
   "active_task": {
     "id": "G4-roster-hazards",
-    "status": "in_progress",
+    "status": "completed_cpu_goal",
     "approved_at": "2026-11-07",
     "owner": "/root",
     "scope": "User approved both CPU validation of lean rollout and bounded G4 progress. Six-member rosters plus Stealth Rock, Spikes and Gen 5 Rapid Spin in the existing custom species/status domain. Native family traces before implementation; CPU exact state/RNG/request/event/full-battle and lifecycle validation. No GPU, benchmarks, profiling or learning.",
-    "checkpoint": "Native family capture and schema 2 mechanics implemented. Preliminary native boundary/full-battle pass and native BattleStream controls passed; final expanded CPU integration pending.",
+    "checkpoint": "Bounded G4 roster/hazard CPU package complete: all 26 integrated checks and 2 native protocol checks passed.",
     "source_base": "bda1df1",
-    "next": "Run expanded G4 CPU suite, existing shared-engine/lifecycle/lean regressions, inspect diff and publish.",
+    "next": "Stop at this approved package. Additional G4 families need a new bounded goal; GPU correctness/profiling and learning remain deferred.",
     "blockers": [],
     "stopping": "Complete the bounded CPU package or preserve minimized unresolved divergence/capacity blocker; do not claim full G4 closure.",
     "native_summary": "test-logs/g4-roster-hazards/native-summary.json",
@@ -532,7 +532,49 @@
     "validation_commands": [
       "G4_NATIVE_CASES=/tmp/g4-native-expanded.json G3_NATIVE_CASES=/tmp/g4-legacy-native.json JAX_PLATFORMS=cpu .venv-jax/bin/python -m unittest test.test_roster_hazards test.test_shared_engine_cases test.test_shared_engine_battles test.test_shared_engine_lifecycle test.test_rollout test.test_g3_fixtures -v",
       "node --test test/shared-engine.test.cjs"
-    ]
+    ],
+    "source_identity": "test-logs/g4-roster-hazards/source.json",
+    "completed_at": "2026-11-07",
+    "acceptance": "Primary inspected the diff, independent pinned native cases and CPU evidence. Six-member custom rosters and Stealth Rock/Spikes/Rapid Spin accepted within schema 2. Full-format G4 remains open; accepted task count and milestone acceptance are unchanged.",
+    "synchronization": "Fetched origin/main; it remains an ancestor. Preserved local work and remote history; no reset, rebase or force push.",
+    "evidence": [
+      {
+        "source_commit": "bda1df1",
+        "command": "JAX_PLATFORMS=cpu .venv-jax/bin/python -m unittest test.test_rollout test.test_g3_fixtures -v",
+        "result": "10 passed in 149.109s before G4 implementation.",
+        "log": "test-logs/g4-roster-hazards/lean-rollout-cpu.log"
+      },
+      {
+        "source_commit": "2982555",
+        "command": "G4_NATIVE_CASES=/tmp/g4-native-expanded.json G3_NATIVE_CASES=/tmp/g4-legacy-native.json JAX_PLATFORMS=cpu .venv-jax/bin/python -m unittest test.test_roster_hazards test.test_shared_engine_cases test.test_shared_engine_battles test.test_shared_engine_lifecycle test.test_rollout test.test_g3_fixtures -v",
+        "result": "26 passed in 492.679s. Exact native state/RNG/request/event/history at all 408 new G4 and 464 legacy boundaries; four complete six-member and eight three-member games. G4 eager/JIT branches, 62 mixed scalar/batched lanes, four-lane complete lean rollouts, full/lean final-state equality, saved continuation/reset and existing 1/8/32-lane lifecycle, privacy, rejection/overflow and rollout checks passed.",
+        "log": "test-logs/g4-roster-hazards/cpu-integration.log",
+        "source_identity": "test-logs/g4-roster-hazards/source.json"
+      },
+      {
+        "command": "node --test test/shared-engine.test.cjs",
+        "result": "2 passed, including actual BattleStream hazard placement/order, Ghost-blocked Spin and simultaneous entry; existing pending/undo/pivot/forced/privacy contracts retained. Single G4 case selection separately verified to report schema 2.",
+        "log": "test-logs/g4-roster-hazards/native-stream.log"
+      }
+    ],
+    "coverage": {
+      "new_native_scenarios": 22,
+      "new_native_boundaries": 408,
+      "complete_six_member_battles": 4,
+      "complete_six_member_boundaries": 348,
+      "legacy_native_scenarios": 111,
+      "legacy_native_boundaries": 464,
+      "new_mixed_batch_lanes": 62,
+      "complete_rollout_lanes": 4,
+      "legacy_cpu_batch_sizes": [
+        1,
+        8,
+        32
+      ],
+      "gpu_runs": 0,
+      "profiling_runs": 0,
+      "benchmarks": 0
+    }
   },
   "optional_gpu_validation_history": [
     {

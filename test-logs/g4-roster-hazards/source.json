@@ -1,0 +1,34 @@
+{
+  "source_commit": "2982555280bff9339243a3fb0c7fc15b4fce3b18",
+  "reference_commit": "1242c1e2d9763ba5b85d33f13aecb89bae19ae3d",
+  "python": "3.12.14",
+  "jax": "0.12.0.1",
+  "jaxlib": "0.12.0.1",
+  "platform": "CPU (JAX_PLATFORMS=cpu; placement assertions enabled)",
+  "scope": "Correctness only. No benchmark, profiler, GPU execution or learning.",
+  "sha256": {
+    "simulator/shared_engine.py": "1bd2c923c14850b5f46ce73ccc982a32fa72d2dc79d4494d97165732df106540",
+    "simulator/shared_engine_io.py": "27ffe771242eeb2f1a8a329da2621d77ea9553f8426e633c1951f581f4d7a2c9",
+    "simulator/rollout.py": "e3fcfb2701f793c9f2ab3cd37a93cdf42753739b2d0d6c8a038b5bc035c4e98f",
+    "reference/shared-engine-cases.cjs": "ab0f14b96b467cbb8eb18fe734ae93a6d059a77747abc3a95175f8ab9831122d",
+    "reference/roster-hazard-cases.cjs": "7c49b3408f4dd8ddbc2d326d92f858c3369da726f380ab2f21465141789f25f9",
+    "rules/shared-engine-v2.json": "1df6d89ef8e9a5eae13a1ca67134ddbad33b0b86286e9727e1d52efba2a7bfed",
+    "test/test_roster_hazards.py": "3f494726f2ed25ae3a887e9cdedc409cf182b821b876964cc4ec577c808b7a88",
+    "test/shared_engine_support.py": "a3047e5b446d1197c3c6f75194dc58309e06be054f34844e7f8c2009ed04ca8c",
+    "test/test_shared_engine_cases.py": "75c74ba7a30f209afaa0f32c752bdfdde8a5df8e04839311164880114e91750a",
+    "test/test_shared_engine_battles.py": "8819483a63f91b25c16d4181e3664ee4ec4c01047a32818e36bd1e00130a113f",
+    "test/test_shared_engine_lifecycle.py": "6c737c7113caa2d8a893edc3b805d6fd2d72143e507ce94af4c6ea796036b836",
+    "test/test_rollout.py": "9c6d4d408186e4c84613d720baa1bd58f5970ebe603dd7c76108456f6b7a7a12",
+    "test/test_g3_fixtures.py": "33214781324980802b59e9832d4d28181cc01466b65cb22bcd1f6be68615eea8"
+  },
+  "native_metadata_followup": {
+    "file": "reference/shared-engine-cases.cjs",
+    "sha256": "bb62ed22266810a25d01f4c95e1b425d0aeca6687ad71c2cab9eeb13185eb583",
+    "change": "Single-case G4 selection reports schema 2; --batch g4/all fixture semantics unchanged.",
+    "commands": [
+      "node reference/shared-engine-cases.cjs --batch G4-side-no-target --output /tmp/g4-exact-case.json",
+      "node --test test/shared-engine.test.cjs"
+    ],
+    "result": "Single-case schema assertion passed; 2 native protocol checks passed (native-stream.log)."
+  }
+}

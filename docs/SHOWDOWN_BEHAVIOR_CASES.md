@@ -388,3 +388,9 @@ case counts, replay command and observed ordering before implementation.
 
 Existing species/abilities/items/status constraints remain. Toxic Spikes and
 full-format G4 closure are excluded, as are GPU and performance runs.
+
+CPU package acceptance: 22 scenarios / 408 new boundaries (four complete
+six-member games), plus all retained shared-engine/lifecycle/rollout controls,
+passed in the 26-check integration run. The two native BattleStream checks also
+passed. See `test-logs/g4-roster-hazards/cpu-integration.log`, `native-stream.log`
+and `source.json`. No GPU or performance evidence is implied.
