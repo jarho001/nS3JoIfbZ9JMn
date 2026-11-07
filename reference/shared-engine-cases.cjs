@@ -152,6 +152,8 @@ for (const [index,family] of ['direct','status','pivot','exhaustion'].entries())
    fullBattle:true,steps:[]});
  }
 }
+cases.push(...require('./roster-hazard-cases.cjs')(mon));
+
 function scriptedChoices(battle,scenario,boundary) {
  const choices={};
  for(const side of battle.sides) {
@@ -168,6 +170,10 @@ function scriptedChoices(battle,scenario,boundary) {
    if(status&&battle.turn===1){choices[side.id]=status;continue;}
    if(battle.turn===2&&moveCommand('protect')){choices[side.id]=moveCommand('protect');continue;}
    if(battle.turn===3&&moveCommand('recover')){choices[side.id]=moveCommand('recover');continue;}
+  }
+  if(scenario.family==='hazards') {
+   const wanted=battle.turn===1?'stealthrock':battle.turn===2?'spikes':battle.turn===3?'rapidspin':null;
+   if(wanted&&moveCommand(wanted)){choices[side.id]=moveCommand(wanted);continue;}
   }
   const preferred=scenario.family==='pivot'?['uturn','earthquake','megapunch','tackle']:
    foe.species.name==='Gengar'?['uturn','earthquake','megapunch','tackle']:['earthquake','megapunch','uturn','tackle'];
@@ -215,6 +221,7 @@ function capture(battle, ids) {
   winner:battle.ended?(battle.winner==='p1'?1:battle.winner==='p2'?2:0):-1,
   midTurn:battle.midTurn,requestState:battle.requestState,queue,
   sides:battle.sides.map(side=>({
+   hazards:[Number(!!side.sideConditions.stealthrock),side.sideConditions.spikes?.layers??0,({stealthrock:1,spikes:2})[Object.keys(side.sideConditions).find(k=>['stealthrock','spikes'].includes(k))]??0],
    active:ids.get(side.active[0]),order:side.pokemon.map(p=>ids.get(p)),
    request:side.activeRequest,actions:side.activeRequest?actionSpace(side.activeRequest):null,
    pending:side.choice.actions.map(a=>({choice:a.choice,actor:ref(a.pokemon),move:a.moveid??null,target:ref(a.target)})),
@@ -333,9 +340,9 @@ function main(argv) {
   if(coverageOutput)fs.writeFileSync(coverageOutput,JSON.stringify(coverage,null,2)+'\n',{flag:'wx'});
   return;
  }
- const selected=batch==='all'?cases:batch==='boundaries'?cases.filter(c=>!c.fullBattle):batch==='battles'?cases.filter(c=>c.fullBattle):cases.filter(c=>c.id===batch);
+ const selected=batch==='g4'?cases.filter(c=>c.g4):batch==='all'?cases.filter(c=>!c.g4):batch==='boundaries'?cases.filter(c=>!c.g4&&!c.fullBattle):batch==='battles'?cases.filter(c=>!c.g4&&c.fullBattle):cases.filter(c=>c.id===batch);
  if(!selected.length)throw Error('Empty native case selection: '+batch);
- const result={schemaVersion:1,pin,format:'gen5randombattle',caseSchema:'shared-engine-v1',cases:selected.map(c=>runCase(ps,c))};
+ const result={schemaVersion:1,pin,format:'gen5randombattle',caseSchema:batch==='g4'?'shared-engine-v2':'shared-engine-v1',cases:selected.map(c=>runCase(ps,c))};
  const json=JSON.stringify(result,null,2)+'\n';
  if(output)fs.writeFileSync(output,json,{flag:'wx'});else process.stdout.write(json);
 }

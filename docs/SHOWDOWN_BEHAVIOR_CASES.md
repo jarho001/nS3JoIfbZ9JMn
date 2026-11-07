@@ -369,3 +369,22 @@ canonical = json.dumps(data, sort_keys=True, separators=(',', ':'),
                        ensure_ascii=False).encode()
 print(hashlib.sha256(canonical).hexdigest())
 ```
+
+## Approved bounded G4 roster/hazard package
+
+`reference/roster-hazard-cases.cjs`, selected by
+`node reference/shared-engine-cases.cjs --batch g4`, independently observes
+six-member supplied rosters and Stealth Rock, Spikes and Gen 5 Rapid Spin.
+`test-logs/g4-roster-hazards/native-summary.json` records the pinned source,
+case counts, replay command and observed ordering before implementation.
+
+| Family | Required behavior |
+|---|---|
+| Placement | foeSide request; Protect bypass; Rock repeat and fourth Spikes failure; all three layer amounts; exact tied Update draws |
+| Entry | Slot six and stable command order; Levitate skips Spikes; Rock and Spikes insertion order; Leftovers after entry; simultaneous swaps |
+| Entry KO | Pending attack loses target; forced replacement chain preserves turn; U-turn queue resumes; last-member hazard KO reaches native terminal |
+| Removal | Gen 5 power/PP/STAB; clear own Spikes then Rock after damage, before faint/win; Ghost/Protect retain hazards |
+| Integrated | Four complete six-member battles, two seeds and swapped seats; exact state/RNG/queue/request/events/history; eager/JIT/batched continuation/reset and lean rollout |
+
+Existing species/abilities/items/status constraints remain. Toxic Spikes and
+full-format G4 closure are excluded, as are GPU and performance runs.
