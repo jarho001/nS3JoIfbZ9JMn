@@ -33,7 +33,7 @@ BATCHES = {'legacy': 'all', 'hazards': 'g4', 'generic': 'generic', 'status_nativ
 SOURCE_PATHS = (
     'simulator', 'mechanics', 'rules', 'reference', 'test', 'environment',
     'evaluation', 'scripts', 'requirements-jax-cpu.txt', 'reference-lock.json',
-    'benchmarks/g3_fixtures.py',
+    'benchmarks',
     'test-logs/g3-testing-profiling/diagnostic/native-pack.json',
 )
 
@@ -172,7 +172,7 @@ def main(argv=None):
         # The 48 status cases are native expectations, not implemented JAX cases.
         summary['modules'] = list(MODULES)
         summary['fixtures'] = fixtures
-        summary['future_full_format_gate'] = 'Pending implementation of V7 and remaining mechanics; see docs/G4_GPU_HANDOFF.md'
+        summary['future_full_format_gate'] = 'Pending implementation of V7 and remaining mechanics; see docs/GPU_HANDOFF.md'
         if args.prepare_only:
             summary['status'] = 'prepared_not_executed'
         else:

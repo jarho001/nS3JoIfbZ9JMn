@@ -64,10 +64,11 @@ tied to unchanged relevant source. A blocked wake without new evidence stops
 without repeating tests or replanning. Never claim unrun checks or scheduler
 changes. Preserve unaccepted WIP explicitly when needed for external validation.
 
-During the user's travel GPU deferral, keep all G4 device obligations, notes and
-exact ready/pending commands in [G4_GPU_HANDOFF.md](docs/G4_GPU_HANDOFF.md).
+During the user's travel GPU deferral, keep all G3/G4 device obligations, notes and
+exact ready/pending commands in [GPU_HANDOFF.md](docs/GPU_HANDOFF.md).
 Update that same handoff and its runnable checkpoint test list as G4 CPU work
-adds mechanics. Missing future release/device evidence does not block the active
+adds mechanics. Keep remaining G3 GPU acceptance checks in the same record.
+Missing future release/device evidence does not block the active
 CPU-only goal; record it in `deferred_gpu_work`, and do not execute GPU work,
 profiling or benchmarks while the deferral remains active.
 

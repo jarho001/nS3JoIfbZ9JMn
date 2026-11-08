@@ -362,8 +362,11 @@ G6 remains useful without positive G7/G8 research results.
 - **Demonstrated/missing:** Tasks034–052 establish the retained legacy controls.
   The first approved G3 goal now passes the shared roster/status/pivot CPU
   integration and native complete-trace/lifecycle acceptance recorded in
-  [compact state](docs/ORCHESTRATION_STATE.json). G3 device/profile proof remains
-  missing and requires the separately agreed D3 scope.
+  [compact state](docs/ORCHESTRATION_STATE.json). Earlier GPU parity and intermediate
+  profiling are preserved in the G3 results report. Matching-source GPU acceptance
+  of the current engine/lean API and the bounded V6 measurements remain deferred
+  during travel; exact commands and closure checks are in the
+  [shared GPU handoff](docs/GPU_HANDOFF.md#g3-closure-remaining-obligations-and-bounded-commands).
 - **Exclusions/decisions/stop:** No full-format, generated-team, training or
   speedup claim. First-goal CPU completion can leave G3 open pending D3 device
   proof. Stop on an unresolved minimized divergence, unsupported approved behavior,
@@ -395,7 +398,7 @@ G6 remains useful without positive G7/G8 research results.
   rather than removing the battle from evaluation.
   See [the proposed G4 CPU execution brief](#proposed-g4-cpu-implementation-and-conformance-goal).
   During travel, accumulate device checks and ready/pending commands in the
-  [G4 GPU handoff](docs/G4_GPU_HANDOFF.md); GPU execution remains deferred while
+  [shared GPU handoff](docs/GPU_HANDOFF.md); GPU execution remains deferred while
   CPU implementation continues. Results must match their recorded source.
 
 ### G5 — useful end-to-end training system (open)
@@ -598,7 +601,7 @@ dependencies or all acceptance cases are complete.
 | V3 | `JAX_PLATFORMS=cpu "$JAX_PYTHON" -m unittest test.test_accuracy_choice test.test_accuracy_choice_duel test.test_burn_choice test.test_two_move_session_duel test.test_request_session_batch test.test_two_move_session_reset -v` | Existing migration/lifecycle controls; may be long. Add changed-helper legacy tests, including known-long `test.test_neutral_two_move` if its dependencies change. |
 | V4 | `node reference/shared-engine-cases.cjs --batch all --output NEW_FILE`; `JAX_PLATFORMS=cpu "$JAX_PYTHON" -m unittest test.test_shared_engine_cases test.test_shared_engine_battles test.test_shared_engine_lifecycle -v` | **Implemented.** One family-batched native runner and shared CPU case/battle/lifecycle modules, B0–B5; current evidence/status is in compact state. |
 | V5 | `JAX_PLATFORMS=cpu "$JAX_PYTHON" -m unittest test.test_recurrent_ppo_contract test.test_small_game_learning -v`; `"$JAX_PYTHON" -m training.run --config APPROVED_CONFIG`; `"$JAX_PYTHON" -m evaluation.learning_proof --config APPROVED_CONFIG` | **Proposed, absent.** G2 controls, learning and native held-out proof. |
-| V6 | `JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_shared_engine_cases test.test_shared_engine_battles test.test_shared_engine_lifecycle -v`; `JAX_PLATFORMS=cuda "$JAX_PYTHON" -m benchmarks.shared_engine --config APPROVED_CONFIG` | **Pending GPU scope/evidence.** Shared test modules exist; GPU placement/profile harness and approved resources remain pending. Adjust platform selector to agreed hardware. |
+| V6 | `"$JAX_PYTHON" scripts/g4_gpu_handoff.py` plus the bounded two-cohort block in [GPU_HANDOFF.md](docs/GPU_HANDOFF.md#g3-closure-remaining-obligations-and-bounded-commands) | **Commands prepared; execution deferred during travel.** Current CPU/CUDA correctness including lean API, then homogeneous/mixed batch 32, chunk 8 compilation/warm execution/memory evidence. No broad sweep or ablations; agent audits G3 closure against matching-source results. |
 | V7 | `JAX_PLATFORMS=cpu "$JAX_PYTHON" -m evaluation.full_format_conformance --config evaluation/g4-cpu-v1.json --suite acceptance --output NEW_DIR` | **Pending; module absent, fixed config present.** Inventory/data export and generic schema are in progress. Implement the remaining inventory, regression and fixed development/held-out CPU gates below. GPU conformance remains a separately authorized release requirement. |
 | V8 | `"$JAX_PYTHON" -m benchmarks.training_pipeline --config APPROVED_CONFIG`; `"$JAX_PYTHON" -m evaluation.policy_transfer --config APPROVED_CONFIG` | **Proposed, absent.** G5 matched workloads, device measurements and transfer equivalence. |
 | V9 | `"$JAX_PYTHON" -m evaluation.baseline_promotion --config APPROVED_CONFIG` | **Proposed, absent.** G6 multi-run native promotion/cross-play/ablations. |
