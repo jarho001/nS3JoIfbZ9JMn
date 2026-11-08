@@ -1,0 +1,185 @@
+#!/usr/bin/env node
+'use strict';
+// Pinned *inventory*, not a claim that a string scan proves reachability.
+// The conservative data universe and unresolved generator/callback edges are
+// retained until independent witnesses or source proofs discharge them.
+const fs = require('node:fs');
+const path = require('node:path');
+const crypto = require('node:crypto');
+const assert = require('node:assert/strict');
+const {execFileSync} = require('node:child_process');
+const {assertReady} = require('./neutral-turn-oracle.cjs');
+const ROOT = path.resolve(__dirname, '..');
+const UPSTREAM = path.join(__dirname, 'vendor/pokemon-showdown');
+const PIN = require('../reference-lock.json').commit;
+const CHAIN = ['gen5', 'gen6', 'gen7', 'gen8', 'base'];
+const FILES = {Pokedex:'pokedex', Moves:'moves', Abilities:'abilities', Items:'items',
+  Conditions:'conditions', Rulesets:'rulesets', TypeChart:'typechart', Natures:'natures', Scripts:'scripts'};
+const hash = value => crypto.createHash('sha256').update(value).digest('hex');
+const jsonHash = value => hash(JSON.stringify(value));
+function canonical(value) {
+  if (Array.isArray(value)) return value.map(canonical);
+  if (value && typeof value === 'object') return Object.fromEntries(
+    Object.keys(value).sort().map(key => [key, canonical(value[key])]));
+  return value;
+}
+function buildInventory() {
+  assertReady();
+  const sources = {};
+  function source(file) {
+    if (!sources[file]) sources[file] = {sha256:hash(fs.readFileSync(path.join(UPSTREAM,file)))};
+    return file;
+  }
+  // Snapshot function identity before Dex.loadData mutates/merges its modules.
+  // A callback's owner is the original module, including nested conditions;
+  // an overridden or null callback cannot accidentally count as inherited.
+  const owners = new Map();
+  function visit(value, file, field) {
+    if (typeof value === 'function') {
+      const list = owners.get(value) || [];
+      list.push({file,field}); owners.set(value,list); return;
+    }
+    if (value && typeof value === 'object') for (const [key,child] of Object.entries(value)) {
+      visit(child,file,field ? `${field}.${key}` : key);
+    }
+  }
+  for (const mod of CHAIN) for (const [table,name] of Object.entries(FILES)) {
+    const prefix = mod === 'base' ? 'data' : `data/mods/${mod}`;
+    const file = `${prefix}/${name}.ts`;
+    const built = path.join(UPSTREAM,'dist',prefix,`${name}.js`);
+    if (!fs.existsSync(built)) continue;
+    source(file); visit(require(built)[table],file,'');
+  }
+  const ps = require('./vendor/pokemon-showdown/dist/sim');
+  const dex = ps.Dex.mod('gen5');
+  const generator = ps.Teams.getGenerator('gen5randombattle',[1,2,3,4]);
+  const setsFile = source('data/random-battles/gen5/sets.json');
+  const sets = JSON.parse(fs.readFileSync(path.join(UPSTREAM,setsFile),'utf8'));
+  const rootRows = [];
+  for (const id of Object.keys(sets).sort()) for (const [roleIndex,set] of sets[id].sets.entries()) {
+    const species = dex.species.get(id);
+    assert.ok(species.exists,`Missing species root ${id}`);
+    rootRows.push({id:`generator:${id}:${roleIndex}`,species:species.id,role:set.role,
+      level:sets[id].level,moves:set.movepool.map(name => ({input:name,id:dex.moves.get(name).id})),
+      abilities:set.abilities.map(name => dex.abilities.get(name).id),
+      source:{file:setsFile,field:`${id}.sets.${roleIndex}`},
+      reachability:'candidate',proof:null});
+  }
+  // Resolved method ownership is recorded separately from mechanics inheritance.
+  const generatorMethods = {};
+  const generatorOwners = new Map();
+  for (const gen of [5,6,7,8,9]) {
+    const file=source(`data/random-battles/gen${gen}/teams.ts`);
+    const ctor=require(path.join(UPSTREAM,`dist/data/random-battles/gen${gen}/teams.js`)).default;
+    generatorOwners.set(ctor.prototype,file);
+  }
+  for (let proto=Object.getPrototypeOf(generator);proto && proto!==Object.prototype;proto=Object.getPrototypeOf(proto)) {
+    const file=generatorOwners.get(proto); assert.ok(file,'Unknown generator prototype');
+    for (const name of Object.getOwnPropertyNames(proto).sort()) {
+      if (name==='constructor' || generatorMethods[name] || typeof proto[name]!=='function') continue;
+      generatorMethods[name]={file,sha256:hash(proto[name].toString()),
+        status:'unaudited',calls:[...new Set([...proto[name].toString().matchAll(/this\.(\w+)\s*\(/g)].map(m=>m[1]))].sort(),
+        callAnalysis:'syntactic candidate edges; dynamic calls and branch preconditions still require audit'};
+    }
+  }
+  const callbacks = {};
+  function serialize(value, owner, field='') {
+    if (typeof value === 'function') {
+      const id=`${owner}:${field}`;
+      const definitions=owners.get(value) || [];
+      // No guessed source ownership: fail the export for an unlocated function.
+      assert.ok(definitions.length,`Unlocated effective callback ${id}`);
+      callbacks[id]={id,owner,field,sha256:hash(value.toString()),definitions,
+        reachability:'candidate',implementation:null,evidence:[],status:'unsupported'};
+      return {$callback:id};
+    }
+    if (value === undefined) return undefined;
+    if (typeof value==='number' && !Number.isFinite(value)) return {$number:String(value)};
+    if (Array.isArray(value)) return value.map((v,i)=>serialize(v,owner,`${field}.${i}`));
+    if (value && typeof value==='object') {
+      return Object.fromEntries(Object.keys(value).sort().filter(k=>value[k]!==undefined &&
+        !['desc','shortDesc','ruleTable'].includes(k)).map(k=>[k,serialize(value[k],owner,field?`${field}.${k}`:k)]));
+    }
+    return value;
+  }
+  const data = {schemaVersion:1,pin:PIN,format:'gen5randombattle',modInheritance:CHAIN,
+    note:'Resolved immutable data, including a conservative candidate superset. Callback tokens are audit references, never executable fallbacks.',
+    species:[],moves:[],abilities:[],items:[],conditions:[],types:[],natures:[],rules:[],scripts:null};
+  const exclusions=[];
+  for (const [kind,accessor] of [['species',dex.species],['moves',dex.moves],['abilities',dex.abilities],['items',dex.items]]) {
+    const all=[...accessor.all()].sort((a,b)=>a.id.localeCompare(b.id,'en'));
+    const seen=new Set();
+    for (const entity of all) {
+      if (seen.has(entity.id)) continue; seen.add(entity.id);
+      const reason=!entity.exists?'does not exist':entity.gen>5?'introduced after generation 5':
+        entity.isNonstandard && entity.isNonstandard!=='Past' ? `nonstandard: ${entity.isNonstandard}` : null;
+      if (reason) {exclusions.push({id:`${kind}:${entity.id}`,reason,
+        proof:'resolved gen5 Dex metadata; excluded from the initial legal data universe, not a proof against indirect effects'});continue;}
+      data[kind].push(serialize(entity,`${kind}:${entity.id}`));
+    }
+  }
+  for (const id of Object.keys(dex.data.Conditions).sort()) data.conditions.push({
+    id,data:serialize(dex.data.Conditions[id],`conditions:${id}`)});
+  for (const type of dex.types.all().filter(t=>t.exists && !t.isNonstandard).sort((a,b)=>a.name.localeCompare(b.name,'en'))) {
+    data.types.push(serialize(type,`types:${type.id}`));
+  }
+  for (const nature of [...dex.natures.all()].sort((a,b)=>a.id.localeCompare(b.id,'en'))) {
+    data.natures.push(serialize(nature,`natures:${nature.id}`));
+  }
+  const format=ps.Dex.formats.get('gen5randombattle');
+  const rules=dex.formats.getRuleTable(format);
+  for (const [id,from] of rules) data.rules.push({id,from,
+    data:serialize(dex.formats.get(id),`rules:${id}`)});
+  data.rules.sort((a,b)=>a.id.localeCompare(b.id,'en'));
+  data.scripts=serialize(dex.data.Scripts,'scripts:gen5');
+  for (const file of ['sim/battle.ts','sim/battle-actions.ts','sim/battle-queue.ts',
+    'sim/field.ts','sim/pokemon.ts','sim/side.ts','sim/prng.ts','sim/dex.ts',
+    'sim/dex-species.ts','sim/dex-moves.ts','sim/dex-items.ts','sim/dex-abilities.ts',
+    'sim/dex-conditions.ts','sim/dex-formats.ts','sim/teams.ts']) source(file);
+  const entries=[];
+  const direct=new Set(rootRows.flatMap(row=>[
+    `species:${row.species}`,...row.moves.map(m=>`moves:${m.id}`),...row.abilities.map(a=>`abilities:${a}`)]));
+  for (const kind of ['species','moves','abilities','items','conditions','types','natures','rules']) {
+    for (const entity of data[kind]) {
+      const id=`${kind}:${entity.id}`;
+      entries.push({id,kind,reachability:'candidate',incoming:[{kind:direct.has(id)?'generator-root':'conservative-superset',
+        precondition:direct.has(id)?'generator role/set branches pending audit':'indirect reachability pending closure'}],
+        definition:{resolver:`Dex.mod('gen5').${kind}`,sha256:jsonHash(entity)},
+        implementation:null,evidence:[],status:'unsupported'});
+    }
+  }
+  const ledger={schemaVersion:1,pin:PIN,format:'gen5randombattle',
+    status:'incomplete',dataSha256:jsonHash(canonical(data)),sources,roots:rootRows,
+    generatorMethods,entries,callbacks:Object.values(callbacks).sort((a,b)=>a.id.localeCompare(b.id,'en')),
+    initialDataExclusions:exclusions,
+    gaps:[
+      {id:'generator-branches',status:'unresolved',detail:'Eligibility, role/move/ability filters, item return branches, forme/stat choices and inherited helper preconditions require source-backed audit.'},
+      {id:'indirect-closure',status:'unresolved',detail:'Resolve called/copied effects, Transform/Imposter, changed abilities, item exchange/creation, forms and recursively referenced conditions to a fixed point. The exported superset does not prove closure.'},
+      {id:'engine-contract',status:'unresolved',detail:'Scheduler, requests/retries, visibility, active rules/terminal paths and capacities require implementation/evidence entries.'},
+    ]};
+  return {data:canonical(data),ledger:canonical(ledger)};
+}
+function inventory() {
+  // Dex mutates require-cached raw tables while inheriting. An isolated reader
+  // preserves original definitions even when the caller already used Dex or
+  // requests the inventory twice in one process.
+  return JSON.parse(execFileSync(process.execPath,[__filename,'--worker'],{
+    encoding:'utf8',maxBuffer:16*1024*1024}));
+}
+function main(args) {
+  if(args.length===1 && args[0]==='--worker') {
+    process.stdout.write(JSON.stringify(buildInventory()));return;
+  }
+  let output,dataOutput;
+  for(let i=0;i<args.length;i++) {
+    if(args[i]==='--output') output=args[++i];
+    else if(args[i]==='--data-output') dataOutput=args[++i];
+    else throw Error(`Unknown argument ${args[i]}`);
+  }
+  const result=buildInventory();
+  if(dataOutput) fs.writeFileSync(dataOutput,JSON.stringify(result.data,null,2)+'\n',{flag:'wx'});
+  if(output) fs.writeFileSync(output,JSON.stringify(result.ledger,null,2)+'\n',{flag:'wx'});
+  else process.stdout.write(JSON.stringify(result.ledger,null,2)+'\n');
+}
+if(require.main===module) main(process.argv.slice(2));
+module.exports={inventory,canonical,jsonHash};

@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "kind": "gen5-cpu-conformance",
+  "referenceCommit": "1242c1e2d9763ba5b85d33f13aecb89bae19ae3d",
+  "formatId": "gen5randombattle",
+  "seedDerivation": "sha256-json-domain-v1",
+  "data": "rules/gen5-data-v1.json",
+  "ledger": "rules/gen5-reachable-v1.json",
+  "suites": {
+    "development": {"rootSeed": [2026, 11, 8, 41], "pairIndices": [0, 31], "starts": 64},
+    "heldOut": {"rootSeed": [2026, 11, 8, 42], "pairIndices": [0, 63], "starts": 128}
+  },
+  "seats": ["A-p1", "B-p1"],
+  "policies": {"evenPairIndex": "legal-random-v1", "oddPairIndex": "move-first-v1"},
+  "maxResolvedRequestBoundaries": 4096,
+  "maxRetriesPerRequest": 16,
+  "chunkBoundaries": 16,
+  "cpuWorkers": {"maximum": 8, "rule": "min(8, available logical CPUs)"},
+  "batchSizes": [1, 8, 32],
+  "stopOnFirstDivergence": true,
+  "replaceFailedStarts": false,
+  "gpu": false,
+  "profiling": false,
+  "benchmarks": false,
+  "training": false
+}

@@ -705,8 +705,9 @@ package is accepted; full-format G4 and new GPU/performance validation stay open
 
 ## Proposed G4 CPU implementation and conformance goal
 
-**Status:** prepared 2026-11-08 against `44759e6`; not approved or launched.
-The user authorized preparation, document checks and commit/push only. Existing
+**Status:** approved by the user and assigned for sustained CPU execution on
+2026-11-08 against `f37067e`, including integrated checkpoints and commit/push.
+Current progress and remaining gates are in `docs/ORCHESTRATION_STATE.json`. Existing
 G0 acceptance and completed G3/G4 CPU packages remain intact. G1/G2/G3 and full
 G4 milestone status do not change. The earlier roster/hazard section records a
 completed package, not the scope ceiling for this proposed goal.

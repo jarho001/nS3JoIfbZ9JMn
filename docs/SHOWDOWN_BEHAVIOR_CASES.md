@@ -397,9 +397,9 @@ and `source.json`. No GPU or performance evidence is implied.
 
 ## Proposed G4 CPU inventory and behavior contract
 
-Preparation only, 2026-11-08; execution awaits approval of
+Prepared 2026-11-08; the user subsequently approved sustained execution of
 [the G4 CPU goal](../PROJECT_PLAN.md#proposed-g4-cpu-implementation-and-conformance-goal).
-No new mechanic, native battle trace or conformance result is claimed here.
+The new pre-entry evidence below is separate from full battle conformance.
 The original B0–B5 catalog and completed roster/hazard evidence remain intact.
 
 ### Pinned inventory roots and closure
@@ -421,7 +421,8 @@ implemented coverage. Hidden Power strings and forms need canonical resolution.
 | Indirect effects | Effective move/ability/item callbacks plus `sim/battle-actions.ts`, `sim/battle.ts`, `sim/pokemon.ts`, `sim/side.ts` | Close dependencies to a fixed point: Sleep Talk, Nature Power, Transform, Imposter, changed/copied abilities, Trick/Switcheroo, consumed/recreated items, forms and recursively referenced conditions. These five move roots occur directly in the set file; other call/copy effects enter only if a dependency proves reachability. |
 | Rules and engine behavior | `reference/fixtures/format-v1.json`; resolved rule table; native scheduler, PRNG and battle termination | Include Sleep Clause, HP Percentage, Cancel and Illusion Level behavior and active Obtainable data constraints. No Team Preview. Audit native turn-limit tie/warnings, other reachable terminal paths and event/queue/history bounds; do not assume every optional clause is active. |
 
-Proposed ledger `rules/gen5-reachable-v1.json` is **absent**. Its rows must carry
+Ledger `rules/gen5-reachable-v1.json` now exports conservative candidates and
+explicit unresolved gaps using `reference/gen5-reachability.cjs`. Its rows carry
 canonical identity/kind, pin/source hash, defining callback/value, incoming
 reachability edge and precondition, implementation field/handler, and native
 witness/test/evidence links or a reviewed source-backed exclusion. Source-backed
@@ -481,5 +482,19 @@ for a new reduced goal. Repairs may resume the fixed campaign with appropriate
 source invalidation and disclosed held-out reuse. Do not replay the full corpus
 per tiny mechanic, launch unbounded fuzzing or run timing/profiling experiments.
 No conformance command, native simulation, CPU integration, GPU run or benchmark
-was executed during this preparation. Static source inspection/counts establish
+was executed during preparation. Static source inspection/counts established
 only the inventory roots and planned proof obligations above.
+
+### Pre-entry data checkpoint during approved execution
+
+`reference/gen5-data-cases.cjs` independently constructs 388 generator-produced
+sets (one per species/form root) before adding the second player starts entry
+hooks. It also constructs 50 nature/level boundary sets and calls native Hidden
+Power for all 4096 independent low-bitplane pairs, plus all 289 type matchups.
+`test/test_gen5_tables.py` compares decoded identity, stats, PP, IV/EV, ability,
+item, Hidden Power and constructor gender/RNG traces, with eager/JIT and mixed
+1/8/32-lane data derivation. This proves pre-entry values only: generator team
+eligibility, complete initialization hooks, playable generated teams and full
+mechanics remain pending. The source-owned callback export is independently
+reproduced by `test/gen5-reachability.test.cjs`; unknown reachability, callback
+implementation and engine contracts remain explicit gaps.
