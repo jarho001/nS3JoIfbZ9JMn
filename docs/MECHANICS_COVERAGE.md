@@ -79,5 +79,20 @@ and `test/test_roster_hazards.py` cover exact native state, RNG, requests,
 recipient histories, entry-KO queue continuation, hazard insertion/removal order
 and four complete six-member battles. Current acceptance progress and evidence
 live in `docs/ORCHESTRATION_STATE.json`; historical arithmetic rows retain their
-original boundaries. Toxic Spikes, other species/types/abilities, generated-team
-membership and the remaining reachable G4 callbacks are still gaps.
+original boundaries. Full generated-team membership and remaining reachable G4
+callbacks are still gaps; the active expansion below supersedes the earlier
+three-species data limit without claiming full-format acceptance.
+
+### Active G4 CPU conformance work
+
+The machine-readable [candidate ledger](../rules/gen5-reachable-v1.json) and
+[resolved data export](../rules/gen5-data-v1.json) now track the larger pinned
+universe, original callback definitions and explicit unknown closure/handler gaps.
+Data/pre-entry mappings are partial entries, not accepted complete mechanics.
+[Schema 3](../rules/shared-engine-v3.json) carries generic set/type/stat values
+through the same shared engine; the [behavior catalog](SHOWDOWN_BEHAVIOR_CASES.md#generic-data-integration-observations)
+links independent generic damage, initialization and complete-battle cases.
+The active goal/evidence record owns current CPU results and remaining families.
+The separately observed status/duration corpus is native expectation work;
+sleep/freeze/confusion/ordinary poison/Rest and their secondary/clause paths still
+need JAX implementation and integrated CPU evidence. Full G4 remains open.

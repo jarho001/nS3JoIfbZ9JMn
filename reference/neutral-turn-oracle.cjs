@@ -201,7 +201,7 @@ function projectEvents(lines, audience) {
 	return projected;
 }
 
-function withObservedBattleDraws(ps, battle, action) {
+function withObservedBattleDraws(ps, battle, action, options = {}) {
 	const descriptor = Object.getOwnPropertyDescriptor(ps.PRNG.prototype, 'random');
 	assert.ok(descriptor && typeof descriptor.value === 'function');
 	const original = descriptor.value;
@@ -231,6 +231,11 @@ function withObservedBattleDraws(ps, battle, action) {
 	ps.PRNG.prototype.random = function (bound, to) {
 		const isBattleRng = this === battle.prng;
 		const before = isBattleRng ? seedArray(this) : null;
+		const effect = options.includeEffects ? {
+			effectId: battle.effect?.id ?? null,
+			effectType: battle.effect?.effectType ?? null,
+			effectEvent: battle.event?.id ?? null,
+		} : {};
 		const value = original.call(this, bound, to);
 		if (isBattleRng) {
 			const stack = new Error().stack.split('\n').slice(2, 8).map(frame => frame.trim());
@@ -249,7 +254,7 @@ function withObservedBattleDraws(ps, battle, action) {
 				runActionChoice: runActionChoices.at(-1) ?? null,
 				eventId: eventIds.at(-1) ?? null,
 			};
-			draws.push({ bound, ...range, value, before, after: seedArray(this), context, stack, ...phase });
+			draws.push({ bound, ...range, value, before, after: seedArray(this), context, stack, ...phase, ...effect });
 		}
 		return value;
 	};

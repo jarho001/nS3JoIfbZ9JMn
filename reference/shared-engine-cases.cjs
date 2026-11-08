@@ -154,6 +154,7 @@ for (const [index,family] of ['direct','status','pivot','exhaustion'].entries())
 }
 cases.push(...require('./roster-hazard-cases.cjs')(mon));
 cases.push(...require('./generic-data-cases.cjs')(mon));
+cases.push(...require('./status-duration-cases.cjs')(mon));
 
 function scriptedChoices(battle,scenario,boundary) {
  const choices={};
@@ -213,14 +214,30 @@ function observeInitialization(ps, action) {
  };
  try {return {battle:action(),draws};} finally {ps.PRNG.prototype.random=original;}
 }
-function capture(battle, ids) {
+function capture(battle, ids, options={}) {
  const ref=p=>p?{side:p.side.n,mon:ids.get(p)}:null;
+ function effectState(value,depth=0) {
+  if(depth>32)throw Error('Effect-state capture depth exceeded');
+  if(value===null||typeof value!=='object') {
+   if(typeof value==='function'||typeof value==='symbol')throw Error('Uncaptured effect-state value');
+   return value;
+  }
+  if(ids.has(value))return {$pokemon:ref(value)};
+  if(battle.sides.includes(value))return {$side:value.n};
+  if(value===battle)return {$battle:true};
+  if(value===battle.field)return {$field:true};
+  if(value.effectType&&value.id)return {$effect:value.id,type:value.effectType};
+  if(Array.isArray(value))return value.map(v=>effectState(v,depth+1));
+  if(Object.getPrototypeOf(value)!==Object.prototype&&Object.getPrototypeOf(value)!==null)throw Error('Uncaptured effect-state object '+value.constructor?.name);
+  return Object.fromEntries(Object.keys(value).sort().map(k=>[k,effectState(value[k],depth+1)]));
+ }
  const queue=battle.queue.list.map(a=>({choice:a.choice,order:a.order,priority:a.priority??0,speed:a.speed??0,
   actor:ref(a.pokemon),target:ref(a.target),move:a.moveid??null,source:a.sourceEffect?.id??null}));
  return {
   rng:battle.prng.getSeed().split(',').map(Number),turn:battle.turn,terminal:battle.ended,
   winner:battle.ended?(battle.winner==='p1'?1:battle.winner==='p2'?2:0):-1,
   midTurn:battle.midTurn,requestState:battle.requestState,queue,
+  ...(options.effects?{effectOrder:battle.effectOrder}:{}),
   sides:battle.sides.map(side=>({
    hazards:[Number(!!side.sideConditions.stealthrock),side.sideConditions.spikes?.layers??0,({stealthrock:1,spikes:2})[Object.keys(side.sideConditions).find(k=>['stealthrock','spikes'].includes(k))]??0],
    active:ids.get(side.active[0]),order:side.pokemon.map(p=>ids.get(p)),
@@ -231,6 +248,8 @@ function capture(battle, ids) {
     id:ids.get(p),species:p.species.name,level:p.level,gender:p.gender,hp:p.hp,maxhp:p.maxhp,
     name:p.name,types:p.getTypes(),ivs:p.set.ivs,evs:p.set.evs,nature:p.set.nature??'Hardy',
     hpType:p.hpType,hpPower:p.hpPower,shiny:!!p.set.shiny,baseAbility:p.baseAbility,
+    ...(options.effects?{statusState:effectState(p.statusState),volatiles:effectState(p.volatiles),
+      abilityState:effectState(p.abilityState),itemState:effectState(p.itemState),speciesState:effectState(p.speciesState)}:{}),
     status:p.status,toxicStage:p.statusState.stage??0,item:p.item,ability:p.ability,
     active:p.isActive,fainted:p.fainted,speed:p.speed,stats:p.storedStats,
     moves:p.moveSlots.map(m=>({id:m.id,pp:m.pp,maxpp:m.maxpp,disabled:m.disabled})),
@@ -245,6 +264,14 @@ function events(battle,start=0) {
 }
 function semanticContext(draw) {
  const stack=draw.stack.join('\n');
+ if(draw.effectId==='slp')return 'sleep-duration';
+ if(draw.effectId==='frz')return 'freeze';
+ if(draw.effectId==='confusion') {
+  if(draw.context==='damage')return 'confusion-damage';
+  if(draw.to!==undefined)return 'confusion-duration';
+  return 'confusion';
+ }
+ if(stack.includes('BattleActions.secondaries'))return 'secondary';
  if(draw.context==='accuracy'||draw.context==='critical'||draw.context==='damage')return draw.context;
  if(stack.includes('onBeforeMove'))return 'paralysis';
  if(stack.includes('onStallMove'))return 'stall';
@@ -273,8 +300,9 @@ function runCase(ps, scenario) {
   }
   if(scenario.setup)battle.makeRequest('move');
   assert.equal(battle.prng.getSeed(),rng,'trusted boundary setup must not consume RNG');
+  const snapshot=()=>capture(battle,ids,{effects:scenario.statusFamily});
   const record={id:scenario.id,classification:scenario.setup?'synthetic':'native-constructed',setup:scenario,initializationDraws,
-   initial:capture(battle,ids),initialEvents:events(battle),steps:[]};
+   initial:snapshot(),initialEvents:events(battle),steps:[]};
   let boundary=0;
   while((scenario.fullBattle||scenario.legacyDuel||scenario.campaign)?!battle.ended:boundary<scenario.steps.length) {
    if(boundary>=512) {
@@ -284,14 +312,14 @@ function runCase(ps, scenario) {
    const choices=scenario.campaign?campaignChoices(battle,scenario,boundary):
     (scenario.fullBattle||scenario.legacyDuel)?scriptedChoices(battle,scenario,boundary):scenario.steps[boundary];
    boundary++;
-   const before=capture(battle,ids), start=battle.log.length,acks=[];
+   const before=snapshot(), start=battle.log.length,acks=[];
    const oldSend=battle.send; battle.send=function(type,data){if(type==='sideupdate')acks.push(data);return oldSend.call(this,type,data);};
    let observed;
    try {observed=withObservedBattleDraws(ps,battle,()=>Object.entries(choices).map(([side,choice])=>{
     if(choice==='undo'){battle.undoChoice(side);return {side,choice,accepted:!battle[side].choice.actions.length};}
     return {side,choice,accepted:battle.choose(side,choice)};
-   }));} finally {battle.send=oldSend;}
-   record.steps.push({choices,accepted:observed.result,before,after:capture(battle,ids),
+   }),{includeEffects:scenario.statusFamily});} finally {battle.send=oldSend;}
+   record.steps.push({choices,accepted:observed.result,before,after:snapshot(),
     draws:observed.draws.map(draw=>({...draw,semanticContext:semanticContext(draw)})),events:events(battle,start),privatePackets:acks});
   }
   if(scenario.fullBattle||scenario.legacyDuel)assert.ok(battle.ended,scenario.id+': must reach real native terminal');
@@ -343,9 +371,9 @@ function main(argv) {
   if(coverageOutput)fs.writeFileSync(coverageOutput,JSON.stringify(coverage,null,2)+'\n',{flag:'wx'});
   return;
  }
- const selected=batch==='generic'?cases.filter(c=>c.generic):batch==='g4'?cases.filter(c=>c.g4):batch==='all'?cases.filter(c=>!c.g4&&!c.generic):batch==='boundaries'?cases.filter(c=>!c.g4&&!c.generic&&!c.fullBattle):batch==='battles'?cases.filter(c=>!c.g4&&!c.generic&&c.fullBattle):cases.filter(c=>c.id===batch);
+ const selected=batch==='status'?cases.filter(c=>c.statusFamily):batch==='generic'?cases.filter(c=>c.generic&&!c.statusFamily):batch==='g4'?cases.filter(c=>c.g4):batch==='all'?cases.filter(c=>!c.g4&&!c.generic):batch==='boundaries'?cases.filter(c=>!c.g4&&!c.generic&&!c.fullBattle):batch==='battles'?cases.filter(c=>!c.g4&&!c.generic&&c.fullBattle):cases.filter(c=>c.id===batch);
  if(!selected.length)throw Error('Empty native case selection: '+batch);
- const result={schemaVersion:1,pin,format:'gen5randombattle',caseSchema:selected.some(c=>c.generic)?'shared-engine-v3':selected.some(c=>c.g4)?'shared-engine-v2':'shared-engine-v1',cases:selected.map(c=>runCase(ps,c))};
+ const result={schemaVersion:1,pin,format:'gen5randombattle',caseSchema:selected.some(c=>c.statusFamily)?'gen5-status-duration-v1':selected.some(c=>c.generic)?'shared-engine-v3':selected.some(c=>c.g4)?'shared-engine-v2':'shared-engine-v1',cases:selected.map(c=>runCase(ps,c))};
  const json=JSON.stringify(result,null,2)+'\n';
  if(output)fs.writeFileSync(output,json,{flag:'wx'});else process.stdout.write(json);
 }

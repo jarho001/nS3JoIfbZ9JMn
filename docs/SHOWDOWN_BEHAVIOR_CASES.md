@@ -512,3 +512,24 @@ special attacks. These supplied sets do not establish generator membership.
 lanes, saved continuation/reset, explicit schema 1/2 migration and full/lean
 rollouts. Results and current source identity belong to compact state; new
 families outside the capability mask remain required rather than excluded.
+
+### Status/duration observations before implementation
+
+`--batch status` now captures 48 independent scenarios / 189 boundaries with
+complete status/volatile/ability/item/species effect states, source identities,
+effect ordering and opt-in native callback annotations on each draw. Unknown
+effect-state object types fail explicitly. `test/status-duration-native.test.cjs`
+checks sleep/wake and switch reset, Sleep Clause versus self-inflicted Rest,
+Lum timing, confusion/self-hit versus paralysis, freeze/thaw, ordinary poison,
+secondary success/failure/protection and direct-KO behavior. Native annotations
+delegate and return original RNG values; the original helper API and all 157
+legacy/hazard/generic case semantics are unchanged after removing diagnostic
+stack paths only.
+
+Pinned observations to preserve in implementation: secondary draws are consumed
+even after a direct KO; Rest consumes the normal sleep-start draw, then writes
+time/startTime 3 after a Lum cure has already cleared the status; Gen 5 sleep
+resets its time to startTime on re-entry. The raw corpus retains these details.
+These cases have native evidence only. New status/duration handlers, source and
+effect-order state, contexts/events, clauses and CPU lifecycle parity remain the
+next integration work within the same approved goal.

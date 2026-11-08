@@ -90,6 +90,7 @@ function buildInventory() {
       // No guessed source ownership: fail the export for an unlocated function.
       assert.ok(definitions.length,`Unlocated effective callback ${id}`);
       callbacks[id]={id,owner,field,sha256:hash(value.toString()),definitions,
+        incoming:[{entry:owner,field,precondition:'owner is active and native callback event applies; transitive reachability audit pending'}],
         reachability:'candidate',implementation:null,evidence:[],status:'unsupported'};
       return {$callback:id};
     }
@@ -137,6 +138,12 @@ function buildInventory() {
     'sim/dex-species.ts','sim/dex-moves.ts','sim/dex-items.ts','sim/dex-abilities.ts',
     'sim/dex-conditions.ts','sim/dex-formats.ts','sim/teams.ts']) source(file);
   const entries=[];
+  const dataMappings={species:'BASE_STATS/SPECIES_TYPES; decode_sets/derive_set_stats',
+    moves:'MOVE_TYPE/MOVE_POWER/MOVE_CATEGORY/MOVE_PRIORITY/MOVE_PP',
+    abilities:'ABILITIES canonical IDs; battle callback coverage pending',
+    items:'ITEMS canonical IDs; battle callback coverage pending',
+    types:'TYPE_CHART/HP_TYPE_IDS; type_matchup/hidden_power',
+    natures:'NATURE_MULTIPLIERS; derive_stored_stats'};
   const direct=new Set(rootRows.flatMap(row=>[
     `species:${row.species}`,...row.moves.map(m=>`moves:${m.id}`),...row.abilities.map(a=>`abilities:${a}`)]));
   for (const kind of ['species','moves','abilities','items','conditions','types','natures','rules']) {
@@ -145,7 +152,12 @@ function buildInventory() {
       entries.push({id,kind,reachability:'candidate',incoming:[{kind:direct.has(id)?'generator-root':'conservative-superset',
         precondition:direct.has(id)?'generator role/set branches pending audit':'indirect reachability pending closure'}],
         definition:{resolver:`Dex.mod('gen5').${kind}`,sha256:jsonHash(entity)},
-        implementation:null,evidence:[],status:'unsupported'});
+        implementation:dataMappings[kind]?{file:'simulator/gen5_tables.py',mapping:dataMappings[kind],
+          scope:'immutable data/pre-entry values only; complete entity and interaction behavior pending'}:null,
+        evidence:dataMappings[kind]?[{test:'test/test_gen5_tables.py',native:'reference/gen5-data-cases.cjs',
+          scope:'438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch',
+          record:'test-logs/g4-cpu-conformance/data-cpu.log',source:'6857d91'}]:[],
+        status:dataMappings[kind]?'partial':'unsupported'});
     }
   }
   const ledger={schemaVersion:1,pin:PIN,format:'gen5randombattle',

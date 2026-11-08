@@ -669,7 +669,7 @@ Use fast deterministic checks for every change, larger interaction/differential 
 | Generator or server drifts | Updated teams/rules change results | Freeze old benchmark; publish a new version and explicit transfer study |
 | Resource use grows without strength | Larger runs only improve training reward or raw throughput | Revisit representation, evaluation, and bottlenecks before scaling |
 
-**The next proposed implementation goal is G4 CPU implementation and conformance below.** The bounded roster/hazard package is CPU-complete. Preparation is authorized; execution of the new goal awaits approval and Goal-mode selection. Baseline tournaments, learning and additional performance runs remain deferred.
+**The active implementation goal is G4 CPU implementation and conformance below.** The user assigned sustained CPU execution on 2026-11-08. The bounded roster/hazard package remains CPU-complete; current generic data/mechanics progress and remaining gates are in compact state. Baseline tournaments, learning and additional performance runs remain deferred.
 
 The long-term research opportunity is the combination: a faithful accelerator-native battle engine enables enormous self-play; an exact information interface makes those experiences legitimate; and a strong learning system can use both training compute and inference compute to discover strategies. All three construction sites should remain independently inspectable so that a gain in one can be trusted by the others.
 
