@@ -580,7 +580,7 @@
         "log": "test-logs/g4-cpu-conformance/status-native-final.log"
       }
     ],
-    "gpu_requirement": "Later full G4 release needs separately scoped relevant-source GPU correctness. No GPU execution or profiling in this CPU goal.",
+    "gpu_requirement": "Deferred during travel. Record all G4 device obligations and ready/pending commands in docs/G4_GPU_HANDOFF.md; current checkpoint runner is scripts/g4_gpu_handoff.py. CPU implementation remains active. Later full G4 release still requires matching-source GPU conformance.",
     "acceptance": "G4-CPU-conformance pending. Generic data checkpoint passes; all remaining prepared CPU gates retained, all milestone acceptance/task count unchanged.",
     "source_identity": "test-logs/g4-cpu-conformance/source.json",
     "evidence_directory": "test-logs/g4-cpu-conformance",
@@ -942,7 +942,8 @@
           "Inline read-only Python assertions against git show 44759e6:docs/ORCHESTRATION_STATE.json, pinned sets.json, local Markdown links and proposed/actual entrypoint paths."
         ]
       }
-    }
+    },
+    "gpu_travel_handoff": "docs/G4_GPU_HANDOFF.md; keep ready/pending commands current without blocking CPU-only work"
   },
   "completed_goals": [
     {
@@ -1490,5 +1491,33 @@
         "benchmarks": 0
       }
     }
-  ]
+  ],
+  "deferred_gpu_work": {
+    "status": "awaiting_home_gpu",
+    "recorded_at": "2026-11-08",
+    "instruction": "User is travelling without a GPU-capable machine. Accumulate G4 GPU notes/commands in one handoff; user will run commands at home and can delegate the result bundle to an agent.",
+    "handoff": "docs/G4_GPU_HANDOFF.md",
+    "runner": "scripts/g4_gpu_handoff.py",
+    "source_commit": "153a056d2eb9e52455d10b80776d431a5a13663c",
+    "source_tree": "b20074171f4eba793a6877402e25e5c21e11414b",
+    "blocks_active_cpu_goal": false,
+    "existing_cpu_evidence": "test-logs/g4-cpu-conformance/source.json (37 checks on engine 4eab254; current checkpoint only)",
+    "ready_command": "\"$JAX_PYTHON\" scripts/g4_gpu_handoff.py",
+    "hardware": "One selected NVIDIA GPU/driver compatible with the chosen pinned JAX CUDA wheel; record actual driver/device/VRAM and eager/JIT placement. No paid provisioning or driver changes authorized by this handoff.",
+    "ready_scope": "Same current CPU/CUDA checkpoint modules and frozen native fixtures; real placement, exact state/RNG/request/views/outcomes, 1/8/32 mixed batches, serialization/reset, full/lean and atomic failures. Default 3600s cap per suite; preserve failure artifacts and stop.",
+    "pending_full_format": "V7 module and GPU config are absent; full CPU closure, reachable audit and final matching-source directed/generated campaign device replay remain required. Checkpoint GPU success cannot accept full G4.",
+    "profiling": "No required G4 profiling workload currently defined. G3 profiling is a separate later obligation; historical baseline hashes mismatch current G4 source. Record a fresh bounded workload/baseline and exact command before any later profile; do not restart the retired broad sweep.",
+    "result_handoff": "Runner prints a fresh results directory and .tar.gz with source/fixture identities, command arrays/environments, device/package metadata, logs and summary, including ordinary failures. Agent review instructions are in the document.",
+    "maintenance": "Each subsequent G4 CPU checkpoint adds new device obligations and implemented test/native-batch commands to this same handoff/runner; native-only cases remain explicitly unimplemented.",
+    "preparation_validation": {
+      "source_commit": "153a056",
+      "commands": [
+        "python3 -m unittest test.test_gpu_handoff test.test_g3_fixtures -v",
+        "python3 scripts/g4_gpu_handoff.py --prepare-only --output work/g4-gpu-handoff-153a056"
+      ],
+      "result": "6 standard-library checks passed; preparation froze 205 independent native scenarios in four corpora, unchanged source hashes and a review archive. No JAX import/backend probe, GPU query, profiling or benchmark was run.",
+      "gpu_tests_executed": false,
+      "profiling_executed": false
+    }
+  }
 }
