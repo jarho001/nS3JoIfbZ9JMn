@@ -31,8 +31,8 @@ class RosterHazardsTest(unittest.TestCase):
 
     def test_manifest_and_catalog(self):
         manifest=json.loads(Path('rules/shared-engine-v2.json').read_text())
-        self.assertEqual(e.SCHEMA,manifest['schema_version'])
-        self.assertEqual(manifest['moves'],[m for m in e.MOVE_NAMES[1:] if m!='Struggle'])
+        self.assertEqual(manifest['schema_version'],2)
+        self.assertEqual(manifest['moves'],[m for m in e.LEGACY_MOVES[1:] if m!='Struggle'])
         self.assertEqual(manifest['storage']['occupied_per_side'],[1,6])
         self.assertEqual(self.pack['pin'],manifest['reference_commit'])
         self.assertEqual(sum(bool(c['setup'].get('fullBattle')) for c in self.cases),4)

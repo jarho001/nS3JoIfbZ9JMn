@@ -524,13 +524,14 @@
     "brief": "PROJECT_PLAN.md#proposed-g4-cpu-implementation-and-conformance-goal",
     "source_base": "f37067e",
     "scope": "Complete pinned gen5randombattle reachable mechanics and every prepared CPU gate. Integrated checkpoints, resumable progress and commit/push authorized. GPU execution, profiling, benchmarks, training, delegation and scored research excluded.",
-    "checkpoint": "Inventory/data foundation implemented; complete generic battle schema and mechanics remain pending.",
+    "checkpoint": "Generic schema 3 and shared damage/type/set integration implemented; final affected CPU integration is pending on this revision.",
     "completed_checkpoints": [
       "Synchronized the clean checkout to the prepared f37067e brief and completed six-member hazard package.",
       "Exported resolved immutable Gen 5 data and conservative candidate/callback ledger with original source ownership. Retained all uncertainty and unsupported implementation states.",
-      "Independent pre-entry generated-set/native data, Hidden Power, type chart, nature/level and gender/RNG checks pass; this is not full initialization or battle conformance."
+      "Independent pre-entry generated-set/native data, Hidden Power, type chart, nature/level and gender/RNG checks pass; this is not full initialization or battle conformance.",
+      "Captured generic native damage/type/set family before implementation; integrated generic tables/fields into the same shared scheduler and host adapter. Initial five focused checks passed before final preflight/priority refinements; final source validation pending."
     ],
-    "next": "Finish generator/item/indirect dependency audit; expand shared schema/capture and integrate generic species, stats and damage in the shared transition. Observe status/duration family before implementation.",
+    "next": "Run frozen-source affected CPU integration, inspect/commit/push evidence, then continue generator closure and status/duration integration within the same goal.",
     "ledger": {
       "path": "rules/gen5-reachable-v1.json",
       "entries": 1768,
@@ -553,7 +554,20 @@
     },
     "blockers": [],
     "first_divergence": null,
-    "evidence": [],
+    "evidence": [
+      {
+        "source_commit": "6857d91",
+        "command": "node --test test/reference.test.cjs test/gen5-reachability.test.cjs",
+        "result": "8 passed; pin, immutable export, callback provenance and repeated-reader isolation.",
+        "log": "test-logs/g4-cpu-conformance/data-native.log"
+      },
+      {
+        "source_commit": "6857d91",
+        "command": "JAX_PLATFORMS=cpu .venv-jax/bin/python -m unittest test.test_gen5_tables -v",
+        "result": "6 passed in 4.554s; 438 pre-entry sets, 4096 Hidden Power bitplanes, 289 type matchups and native constructor gender/RNG.",
+        "log": "test-logs/g4-cpu-conformance/data-cpu.log"
+      }
+    ],
     "gpu_requirement": "Later full G4 release needs separately scoped relevant-source GPU correctness. No GPU execution or profiling in this CPU goal.",
     "acceptance": "pending: all prepared CPU gates remain required; milestone/task count unchanged"
   },

@@ -16,8 +16,8 @@ class SharedEngineCasesTest(unittest.TestCase):
         manifest=json.loads((Path(__file__).resolve().parents[1]/'rules/shared-engine-v1.json').read_text())
         self.assertEqual(manifest['moves'],list(e.MOVE_NAMES[1:e.PROTECT+1]))
         self.assertEqual(manifest['trace']['context'],list(e.DRAW_CONTEXTS))
-        self.assertEqual(list(manifest['species']),list(e.SPECIES[1:]))
-        self.assertEqual(manifest['items'],list(e.ITEMS))
+        self.assertEqual(list(manifest['species']),list(e.LEGACY_SPECIES[1:]))
+        self.assertEqual(manifest['items'],list(e.LEGACY_ITEMS))
         self.assertEqual([manifest['storage'][k] for k in ('queue_rows','events_per_advance','draws_per_advance','history_events')],[e.QUEUE,e.EVENTS,e.DRAWS,e.HISTORY])
         self.assertGreaterEqual(len(self.cases),80)
         ids={c['id'] for c in self.cases}

@@ -1,0 +1,16 @@
+✔ pinned resolved export and conservative inventory reproduce exactly (1635.150813ms)
+✔ reference identity guard accepts only the pinned clean checkout (1.354561ms)
+✔ real Git checkout inspection rejects changed source, untracked files, wrong commit, and wrong origin (64.243861ms)
+✔ resolved format facts match the pinned Showdown manifest (287.153006ms)
+✔ seeded teams and initial requests match the pinned semantic fixture (122.359563ms)
+✔ smoke seeds are separate and must each contain four integers (0.574293ms)
+✔ initial battle facts come from protocol events and requests match submitted teams (0.520152ms)
+✔ initialization reports stream errors/end and destroys the stream on every path (6.454883ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2258.091035

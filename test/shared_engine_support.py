@@ -7,6 +7,7 @@ import jax
 import numpy as np
 from simulator import shared_engine as e
 from simulator.shared_engine_io import project_events,project_request,draw_rows
+from simulator import gen5_tables as generic
 
 ROOT=Path(__file__).resolve().parents[1]
 
@@ -30,6 +31,11 @@ def native_cases():
 
 
 def initialize_case(case):
+    if case['setup'].get('generic'):
+        init=e.make_gen5_state([case['setup'][key] for key in ('p1','p2')],
+                              case['setup'].get('seedWords',[case['setup']['seed'],2,3,4]))
+        if int(init.code)!=e.OK:raise AssertionError(case['id']+': initialization unsupported')
+        return init.state,init.trace
     teams=[]
     for key in ('p1','p2'):
         teams.append([{'species':d['species'],'moves':d['moves'],'level':d['level'],'speed_evs':d['evs']['spe'],
@@ -91,6 +97,18 @@ def assert_state(test,s,native,label):
                 test.assertEqual(v,p[theirs],tag+' '+ours)
             test.assertEqual(int(s.stats[side,m,0]),p['maxhp'],tag+' maxHP')
             test.assertEqual(s.stats[side,m,1:].tolist(),[p['stats'][k] for k in ('atk','def','spa','spd','spe')],tag+' stats')
+            if 'types' in p:
+                types=[generic.DATA['types'][int(t)-1]['name'] for t in s.types[side,m] if t]
+                test.assertEqual(types,p['types'],tag+' types')
+                test.assertEqual(e.SPECIES[int(s.name[side,m])],p['name'],tag+' identity')
+                test.assertEqual(e.ABILITIES[int(s.ability[side,m])],p['ability'],tag+' ability')
+                test.assertEqual(s.ivs[side,m].tolist(),[p['ivs'][k] for k in generic.STATS],tag+' IVs')
+                test.assertEqual(s.evs[side,m].tolist(),[p['evs'][k] for k in generic.STATS],tag+' EVs')
+                test.assertEqual(generic.DATA['natures'][int(s.nature[side,m])-1]['name'],p['nature'],tag+' nature')
+                test.assertEqual(generic.DATA['types'][int(s.hp_type[side,m])-1]['name'],p['hpType'],tag+' Hidden Power type')
+                test.assertEqual(int(s.hp_power[side,m]),p['hpPower'],tag+' Hidden Power power')
+                test.assertEqual(bool(s.shiny[side,m]),p['shiny'],tag+' shiny')
+                test.assertEqual(('','M','F')[int(s.gender[side,m])],p['gender'],tag+' gender')
             test.assertEqual(s.pp[side,m,:len(p['moves'])].tolist(),[x['pp'] for x in p['moves']],tag+' PP')
             stall=None if not int(s.stall_duration[side,m]) else {'counter':int(s.stall[side,m]),'duration':int(s.stall_duration[side,m])}
             test.assertEqual(stall,p['stall'],tag+' stall')

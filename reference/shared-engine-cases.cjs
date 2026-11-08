@@ -153,6 +153,7 @@ for (const [index,family] of ['direct','status','pivot','exhaustion'].entries())
  }
 }
 cases.push(...require('./roster-hazard-cases.cjs')(mon));
+cases.push(...require('./generic-data-cases.cjs')(mon));
 
 function scriptedChoices(battle,scenario,boundary) {
  const choices={};
@@ -228,6 +229,8 @@ function capture(battle, ids) {
    choiceDone:side.isChoiceDone(),
    pokemon:[...side.pokemon].sort((a,b)=>ids.get(a)-ids.get(b)).map(p=>({
     id:ids.get(p),species:p.species.name,level:p.level,gender:p.gender,hp:p.hp,maxhp:p.maxhp,
+    name:p.name,types:p.getTypes(),ivs:p.set.ivs,evs:p.set.evs,nature:p.set.nature??'Hardy',
+    hpType:p.hpType,hpPower:p.hpPower,shiny:!!p.set.shiny,baseAbility:p.baseAbility,
     status:p.status,toxicStage:p.statusState.stage??0,item:p.item,ability:p.ability,
     active:p.isActive,fainted:p.fainted,speed:p.speed,stats:p.storedStats,
     moves:p.moveSlots.map(m=>({id:m.id,pp:m.pp,maxpp:m.maxpp,disabled:m.disabled})),
@@ -340,9 +343,9 @@ function main(argv) {
   if(coverageOutput)fs.writeFileSync(coverageOutput,JSON.stringify(coverage,null,2)+'\n',{flag:'wx'});
   return;
  }
- const selected=batch==='g4'?cases.filter(c=>c.g4):batch==='all'?cases.filter(c=>!c.g4):batch==='boundaries'?cases.filter(c=>!c.g4&&!c.fullBattle):batch==='battles'?cases.filter(c=>!c.g4&&c.fullBattle):cases.filter(c=>c.id===batch);
+ const selected=batch==='generic'?cases.filter(c=>c.generic):batch==='g4'?cases.filter(c=>c.g4):batch==='all'?cases.filter(c=>!c.g4&&!c.generic):batch==='boundaries'?cases.filter(c=>!c.g4&&!c.generic&&!c.fullBattle):batch==='battles'?cases.filter(c=>!c.g4&&!c.generic&&c.fullBattle):cases.filter(c=>c.id===batch);
  if(!selected.length)throw Error('Empty native case selection: '+batch);
- const result={schemaVersion:1,pin,format:'gen5randombattle',caseSchema:selected.some(c=>c.g4)?'shared-engine-v2':'shared-engine-v1',cases:selected.map(c=>runCase(ps,c))};
+ const result={schemaVersion:1,pin,format:'gen5randombattle',caseSchema:selected.some(c=>c.generic)?'shared-engine-v3':selected.some(c=>c.g4)?'shared-engine-v2':'shared-engine-v1',cases:selected.map(c=>runCase(ps,c))};
  const json=JSON.stringify(result,null,2)+'\n';
  if(output)fs.writeFileSync(output,json,{flag:'wx'});else process.stdout.write(json);
 }

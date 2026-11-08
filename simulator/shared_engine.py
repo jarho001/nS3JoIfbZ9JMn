@@ -2,7 +2,8 @@
 
 Fixed-shape int32 storage; exact four-limb PRNG; stable mon identity and a
 separate command roster. Strings/protocol rendering belong to the host adapter.
-The allowlist is a restricted custom game, not full gen5randombattle coverage.
+Schema 3 carries generic pinned data through the same scheduler. Handler masks
+remain incomplete and reject unsupported effects; full conformance is pending.
 """
 from __future__ import annotations
 
@@ -15,8 +16,10 @@ from .gen5_rng import next_state, sample_bounded
 from mechanics.base_damage import base_damage_core
 from mechanics.damage_composition import damage_from_preroll
 from mechanics.stats import derive_stored_stats
+from . import gen5_tables as generic
+from . import gen5_engine_tables as tables
 
-SCHEMA = 2
+SCHEMA = 3
 ROSTER, SLOTS, QUEUE, EVENTS, DRAWS, HISTORY = 6, 4, 8, 128, 128, 2048
 OK, PENDING, INVALID, UNSUPPORTED, CAPACITY, TERMINAL, STALE = range(7)
 MOVE, FORCED, WAIT, END = range(4)
@@ -25,14 +28,12 @@ NONE, BRN, PAR, TOX, FNT = range(5)
 MEW, SNORLAX, GENGAR = 1, 2, 3
 TACKLE, POUND, MEGA_PUNCH, EARTHQUAKE, U_TURN, WISP, TOXIC, THUNDER_WAVE, RECOVER, PROTECT, STRUGGLE = range(1,12)
 STEALTH_ROCK, SPIKES, RAPID_SPIN = range(12,15)
-SPECIES = ('', 'Mew', 'Snorlax', 'Gengar')
-MOVE_NAMES = ('', 'Tackle', 'Pound', 'Mega Punch', 'Earthquake', 'U-turn', 'Will-O-Wisp', 'Toxic', 'Thunder Wave', 'Recover', 'Protect', 'Struggle', 'Stealth Rock', 'Spikes', 'Rapid Spin')
-MOVE_KEYS = ('', 'tackle', 'pound', 'megapunch', 'earthquake', 'uturn', 'willowisp', 'toxic', 'thunderwave', 'recover', 'protect', 'struggle', 'stealthrock', 'spikes', 'rapidspin')
-PP = jnp.array([0,56,56,32,16,32,24,16,32,16,16,1,32,32,64],jnp.int32)
-POWER = jnp.array([0,50,40,80,100,70,0,0,0,0,0,50,0,0,20],jnp.int32)
-ACCURACY = jnp.array([0,100,100,85,100,100,75,90,100,0,0,0,0,0,100],jnp.int32)
-BASE_STATS = jnp.array([[1]*6,[100]*6,[160,110,65,65,110,30],[60,65,60,130,75,110]],jnp.int32)
-ITEMS = ('','leftovers','lumberry')
+ITEMS = tables.ITEMS
+LEGACY_SPECIES,LEGACY_ITEMS,LEGACY_MOVES=tables.LEGACY_SPECIES,tables.LEGACY_ITEMS,tables.LEGACY_MOVES
+SPECIES,MOVE_NAMES,MOVE_KEYS=tables.SPECIES,tables.MOVE_NAMES,tables.MOVE_KEYS
+BASE_STATS,PP,POWER,ACCURACY=tables.BASE_STATS,tables.PP,tables.POWER,tables.ACCURACY
+ABILITIES=tables.ABILITIES
+HIDDEN_POWER,RETURN,FRUSTRATION=(tables.MOVE_IDS[k] for k in ('hiddenpower','return','frustration'))
 # Event fields: kind, side, stable mon, move, target side, target mon, value,
 # auxiliary, status, reserved. HP events retain maxHP for exact projection.
 BLANK, EV_MOVE, DAMAGE, HEAL, CRIT, IMMUNE, MISS, FAINT, WIN, TURN, UPKEEP, SWITCH, STATUS, ABILITY, END_ITEM, CURE, FAIL, CANT, ACTIVATE, SINGLE = range(20)
@@ -79,6 +80,17 @@ class State(NamedTuple):
     # Per side: Rock present, Spikes layers, first installed hazard (1/2).
     # Native onSwitchIn callbacks retain insertion order, even on layer restart.
     hazards: jax.Array
+    ivs: jax.Array
+    evs: jax.Array
+    nature: jax.Array
+    ability: jax.Array
+    types: jax.Array
+    hp_type: jax.Array
+    hp_power: jax.Array
+    shiny: jax.Array
+    happiness: jax.Array
+    name: jax.Array
+    boosts: jax.Array
 
 
 class Trace(NamedTuple):
@@ -226,11 +238,13 @@ def _damage(c,side,amount,cause=0):
 
 
 def _status(c,source,target,status,reflect=True):
-    s,t=c;m=s.active[target];sp=s.species[target,m]
-    immunity=(status==TOX)&((sp==SNORLAX)|(sp==GENGAR))
+    s,t=c;m=s.active[target];ability=s.ability[target,m]
+    poison_type=jnp.any((s.types[target,m]==generic.TYPES['poison'])|(s.types[target,m]==generic.TYPES['steel']))
+    fire_type=jnp.any(s.types[target,m]==generic.TYPES['fire'])
+    immunity=((status==TOX)&((ability==2)|poison_type))|((status==BRN)&fire_type)
     failed=(s.status[target,m]!=NONE)
     def blocked(c):
-        return _event(c,IMMUNE,target,m,aux=jnp.where(sp==SNORLAX,1,0))
+        return _event(c,IMMUNE,target,m,aux=jnp.where((ability==2)&(status==TOX),1,0))
     def attempt(c):
         def fail(c):
             same=s.status[target,m]==status
@@ -247,7 +261,7 @@ def _status(c,source,target,status,reflect=True):
                 def sync(c):
                     c=_event(c,ABILITY,target,m)
                     return _status(c,target,source,status,False)
-                c=_when((sp==MEW)&(source!=target),sync,c)
+                c=_when((ability==1)&(source!=target),sync,c)
             # Native Synchronize recursively attempts reflection once more,
             # generating activation/failure before the item cures.
             elif True:
@@ -255,7 +269,7 @@ def _status(c,source,target,status,reflect=True):
                     s,t=c;other=s.active[source]
                     c=_event(c,ABILITY,target,m)
                     return _event(c,FAIL,source,other,status=status)
-                c=_when((sp==MEW)&(source!=target),back,c)
+                c=_when((ability==1)&(source!=target),back,c)
             # Items update immediately after successful application.
             s,t=c
             def lum(c):
@@ -268,19 +282,26 @@ def _status(c,source,target,status,reflect=True):
 
 def _hit(c,actor,move):
     s,t=c;mon=s.active[actor];target=1-actor;tm=s.active[target]
-    damaging=POWER[move]>0
+    damaging=tables.CATEGORY[move]>0
     def physical(c):
         c,crit=_draw(c,0,16,CRITICAL);c,roll=_draw(c,0,16,ROLL)
         s,t=c
-        core=base_damage_core(s.level[actor,mon],POWER[move],s.stats[actor,mon,1],s.stats[target,tm,2])+2
+        physical=tables.CATEGORY[move]==1
+        attack=s.stats[actor,mon,jnp.where(physical,1,3)]
+        defense=s.stats[target,tm,jnp.where(physical,2,4)]
+        power=jnp.where(move==HIDDEN_POWER,s.hp_power[actor,mon],
+                        jnp.where(move==RETURN,s.happiness[actor,mon]*10//25,
+                                  jnp.where(move==FRUSTRATION,(255-s.happiness[actor,mon])*10//25,POWER[move])))
+        power=jnp.maximum(1,power)
+        move_type=jnp.where(move==HIDDEN_POWER,s.hp_type[actor,mon],tables.MOVE_TYPE[move])
+        core=base_damage_core(s.level[actor,mon],power,attack,defense)+2
         preroll=core*jnp.where(crit==0,2,1)
-        sp=s.species[actor,mon];ts=s.species[target,tm]
-        normal=(move==TACKLE)|(move==POUND)|(move==MEGA_PUNCH)|(move==RAPID_SPIN)
-        exponent=jnp.where((move==U_TURN)&(ts==MEW),1,jnp.where((move==U_TURN)&(ts==GENGAR),-2,0)).astype(jnp.int32)
-        damage=damage_from_preroll(preroll,roll.astype(jnp.int32),(sp==SNORLAX)&normal,jnp.array(False),move==STRUGGLE,
-                                  exponent,s.status[actor,mon]==BRN,jnp.array(True),jnp.array(False),i32(4096))
+        exponent,_=generic.type_matchup(move_type,s.types[target,tm])
+        stab=jnp.any(s.types[actor,mon]==move_type)
+        damage=damage_from_preroll(preroll,roll.astype(jnp.int32),stab,jnp.array(False),move==STRUGGLE,
+                                  jnp.where(move==STRUGGLE,0,exponent),s.status[actor,mon]==BRN,physical,jnp.array(False),i32(4096))
         # Native effectiveness precedes the critical disclosure.
-        c=_when(exponent!=0,lambda c:_event(c,ACTIVATE,target,tm,aux=exponent,move=-1),c)
+        c=_when((exponent!=0)&(move!=STRUGGLE),lambda c:_event(c,ACTIVATE,target,tm,aux=exponent,move=-1),c)
         c=_when(crit==0,lambda c:_event(c,CRIT,target,tm),c)
         c=_damage(c,target,damage)
         def spin(c):
@@ -313,7 +334,9 @@ def _hit(c,actor,move):
         return _when((move==U_TURN)&(s.winner<0)&jnp.any(_live(s)[actor]&(jnp.arange(ROSTER)!=mon)),pivot,c)
     def status_hit(c):
         s,t=c
-        success=(s.status[target,tm]==NONE)&(~((move==TOXIC)&((s.species[target,tm]==SNORLAX)|(s.species[target,tm]==GENGAR))))
+        poison_immune=(s.ability[target,tm]==2)|jnp.any((s.types[target,tm]==generic.TYPES['poison'])|(s.types[target,tm]==generic.TYPES['steel']))
+        burn_immune=jnp.any(s.types[target,tm]==generic.TYPES['fire'])
+        success=(s.status[target,tm]==NONE)&(~((move==TOXIC)&poison_immune))&(~((move==WISP)&burn_immune))
         c=_status(c,actor,target,jnp.where(move==WISP,BRN,jnp.where(move==TOXIC,TOX,PAR)))
         return _when(success,lambda c:_update(_update(c,HIT_UPDATE),HIT_UPDATE),c)
     return jax.lax.cond(damaging,physical,status_hit,c)
@@ -376,12 +399,15 @@ def _attack(c,row):
                 c=_when(~failed,lambda c:_update(_update(c,HIT_UPDATE),HIT_UPDATE),c)
                 return c
             def foe_move(c):
-                s,t=c;ts=s.species[target,tm]
-                normal=(move==TACKLE)|(move==POUND)|(move==MEGA_PUNCH)|(move==RAPID_SPIN)
-                immune=(normal&(ts==GENGAR))|((move==EARTHQUAKE)&(ts==GENGAR))
+                s,t=c
+                move_type=jnp.where(move==HIDDEN_POWER,s.hp_type[actor,mon],tables.MOVE_TYPE[move])
+                _,type_immune=generic.type_matchup(move_type,s.types[target,tm])
+                levitate=(s.ability[target,tm]==3)&(move_type==generic.TYPES['ground'])
+                damaging=tables.CATEGORY[move]>0
+                immune=(move!=STRUGGLE)&(((damaging|(move==THUNDER_WAVE))&type_immune)|(damaging&levitate))
                 blocked=s.protected[target,tm]
                 def block(c):return _event(c,ACTIVATE,target,tm,move=PROTECT)
-                def immunity(c):return _event(c,IMMUNE,target,tm,aux=jnp.where(move==EARTHQUAKE,2,0))
+                def immunity(c):return _event(c,IMMUNE,target,tm,aux=jnp.where(levitate,2,0))
                 def try_hit(c):
                     def accuracy(c):
                         c,roll=jax.lax.cond(ACCURACY[move]>0,lambda c:_draw(c,0,100,ACC),lambda c:(c,jnp.uint32(0)),c)
@@ -391,7 +417,7 @@ def _attack(c,row):
                             return _event((s,t),MISS,actor,mon,move,target,tm)
                         def hit_fn(c):
                             s,t=c
-                            existing=(POWER[move]==0)&(s.status[target,tm]!=NONE)&(s.status[target,tm]!=jnp.where(move==WISP,BRN,jnp.where(move==TOXIC,TOX,PAR)))
+                            existing=(tables.CATEGORY[move]==0)&(s.status[target,tm]!=NONE)&(s.status[target,tm]!=jnp.where(move==WISP,BRN,jnp.where(move==TOXIC,TOX,PAR)))
                             t=t._replace(events=t.events.at[move_row,7].set(jnp.where(existing,2,t.events[move_row,7])))
                             return _hit((s,t),actor,move)
                         return jax.lax.cond(hit,hit_fn,miss,c)
@@ -559,8 +585,10 @@ def _run_queue(c):
                         index=jnp.where(n==0,s.hazards[side,2]-1,2-s.hazards[side,2])
                         index=jnp.clip(index,0,1)
                         layers=s.hazards[side,index]
-                        grounded=s.species[side,m]!=GENGAR
-                        amount=jnp.where(index==0,s.stats[side,m,0]//8,
+                        grounded=(s.ability[side,m]!=3)&(~jnp.any(s.types[side,m]==generic.TYPES['flying']))
+                        rock_exp,_=generic.type_matchup(i32(generic.TYPES['rock']),s.types[side,m])
+                        rock=s.stats[side,m,0]*jnp.left_shift(i32(1),jnp.maximum(0,rock_exp))//(8*jnp.left_shift(i32(1),jnp.maximum(0,-rock_exp)))
+                        amount=jnp.where(index==0,rock,
                                          s.stats[side,m,0]//jnp.maximum(1,10-2*layers))
                         c=_when((layers>0)&((index==0)|grounded)&(c[0].hp[side,m]>0),
                                 lambda c:_damage(c,side,jnp.maximum(1,amount),cause=jnp.where(index==0,4,5)),c)
@@ -602,20 +630,31 @@ def legal_actions(s):
     return jnp.concatenate((ordinary,switches,struggle[:,None]),axis=1)
 
 
-def _supported(s):
+def _supported(s,initializing=False):
     occupied=s.species>0
-    base=derive_stored_stats(BASE_STATS[jnp.clip(s.species,0,3)],s.level,jnp.full((2,6,6),31,jnp.int32),jnp.zeros((2,6,6),jnp.int32),jnp.full((2,6,6),10,jnp.int32))
-    speed_ev=((2*BASE_STATS[jnp.clip(s.species,0,3),5]+31+63)*s.level)//100+5
-    stat_ok=jnp.all(jnp.where(occupied[:,:,None],s.stats[:,:,:5]==base[:,:,:5],s.stats[:,:,:5]==0))
-    stat_ok=stat_ok&jnp.all(jnp.where(occupied,(s.stats[:,:,5]==base[:,:,5])|(s.stats[:,:,5]==speed_ev),s.stats[:,:,5]==0))
+    safe_species=jnp.clip(s.species,0,len(SPECIES)-1)
+    base=derive_stored_stats(BASE_STATS[safe_species],s.level,s.ivs,s.evs,
+                            generic.NATURE_MULTIPLIERS[s.nature],tables.SHEDINJA[safe_species])
+    stat_ok=jnp.all(s.stats==jnp.where(occupied[:,:,None],base,0))
     slots=jnp.arange(4)
     duplicate=(s.moves[:,:,:,None]==s.moves[:,:,None,:])&(s.moves[:,:,:,None]>0)&(slots[:,None]<slots[None,:])
     valid_order=jnp.all(jnp.sort(s.order,axis=1)==jnp.arange(ROSTER))
     return (stat_ok&valid_order&(~jnp.any(duplicate))&jnp.all((s.hcount>=0)&(s.hcount<=HISTORY))
             &jnp.all((s.qcount>=0)&(s.qcount<=QUEUE))&(s.episode>=0)&(s.generation>=0)
             &jnp.all(jnp.where(occupied,jnp.any(s.moves>0,axis=-1),jnp.all(s.moves==0,axis=-1)))
-            &jnp.all((s.species>=0)&(s.species<=3))&jnp.all(jnp.any(occupied,axis=1))
-            &jnp.all((s.moves>=0)&(s.moves<=RAPID_SPIN)&(s.moves!=STRUGGLE))&jnp.all((s.item>=0)&(s.item<=2))
+            &jnp.all((s.species>=0)&(s.species<len(SPECIES)))&jnp.all(jnp.any(occupied,axis=1))
+            &jnp.all((~occupied)|tables.SPECIES_IMPLEMENTED[safe_species])
+            &jnp.all((s.moves>=0)&(s.moves<len(MOVE_KEYS))&(s.moves!=STRUGGLE))
+            &jnp.all((s.moves==0)|tables.MOVE_IMPLEMENTED[jnp.clip(s.moves,0,len(MOVE_KEYS)-1)])
+            &jnp.all((s.item>=0)&(s.item<=2))&jnp.all((s.ability>=0)&(s.ability<=3))
+            &jnp.all((s.ivs>=0)&(s.ivs<=31))&jnp.all((s.evs>=0)&(s.evs<=255))
+            &jnp.all((s.nature>=1)&(s.nature<=len(generic.NATURES)))
+            &jnp.all(s.types==tables.SPECIES_TYPES[safe_species])&jnp.all(s.boosts==0)
+            &jnp.all((s.happiness>=0)&(s.happiness<=255))
+            &jnp.all((s.gender>=(-1 if initializing else 0))&(s.gender<=2))
+            &jnp.all((s.name>=0)&(s.name<len(SPECIES)))&jnp.all((~occupied)|(s.name>0))
+            &jnp.all((~occupied)|((s.hp_type>=1)&(s.hp_type<=len(generic.TYPES))))
+            &jnp.all(s.hp_power==jnp.where(occupied,generic.hidden_power(s.ivs)[1],0))
             &jnp.all((s.hazards>=0)&(s.hazards<=i32([1,3,2])))
             &jnp.all((s.hazards[:,2]==0)==jnp.all(s.hazards[:,:2]==0,axis=1))
             &jnp.all((s.hazards[:,2]!=1)|(s.hazards[:,0]>0))
@@ -630,11 +669,12 @@ def _supported(s):
 
 def _validate_structure(s):
     if not isinstance(s,State):raise ValueError('expected shared-engine State')
-    roster_fields={'species','level','speed','gender','hp','item','status','toxic','stall','stall_duration'}
+    roster_fields={'species','level','speed','gender','hp','item','status','toxic','stall','stall_duration',
+                   'nature','ability','hp_type','hp_power','shiny','happiness','name'}
     vector_fields={'active','pending','request','pivot'}
-    bool_fields={'fainted','protected','pivot','midturn'}
+    bool_fields={'fainted','protected','pivot','midturn','shiny'}
     for name,value in zip(State._fields,s):
-        shape=(2,6) if name in roster_fields or name in {'fainted','protected'} else (2,) if name in vector_fields else (2,3) if name=='hazards' else (2,6,6) if name=='stats' else (2,6,4) if name in {'moves','pp'} else (2,6) if name=='order' else (QUEUE,7) if name=='queue' else (4,) if name=='rng' else (HISTORY,10) if name=='history' else ()
+        shape=(2,6) if name in roster_fields or name in {'fainted','protected'} else (2,) if name in vector_fields else (2,3) if name=='hazards' else (2,6,6) if name in {'stats','ivs','evs'} else (2,6,2) if name=='types' else (2,6,7) if name=='boosts' else (2,6,4) if name in {'moves','pp'} else (2,6) if name=='order' else (QUEUE,7) if name=='queue' else (4,) if name=='rng' else (HISTORY,10) if name=='history' else ()
         dtype=jnp.bool_ if name in bool_fields else jnp.uint16 if name=='rng' else jnp.int32
         if getattr(value,'shape',None)!=shape or getattr(value,'dtype',None)!=jnp.dtype(dtype):
             raise ValueError(f'{name} must have shape {shape} and dtype {jnp.dtype(dtype)}')
@@ -674,7 +714,7 @@ def advance(s,choices,token=None):
                 def add(c):
                     s,t=c;action=pending[side];mon=s.active[side];move=s.moves[side,mon,jnp.clip(action,0,3)]
                     kind=jnp.where(action>=4,jnp.where(action==10,ATTACK,jnp.where(normal,SWAP,INSTANT)),ATTACK)
-                    priority=jnp.where((kind==ATTACK)&(move==PROTECT)&(action!=10),4,0)
+                    priority=jnp.where((kind==ATTACK)&(action!=10),tables.PRIORITY[move],0)
                     source=jnp.where(s.pivot[side],U_TURN,0)
                     row=jnp.stack([kind,i32(side),mon,action,priority,s.speed[side,mon],source])
                     return _qappend(s,row),t
@@ -715,7 +755,7 @@ def make_state(teams,seed=(1,2,3,4),generation=0):
             if set(desc)-{'species','moves','level','speed_evs','item'}:raise ValueError('unsupported set field')
             if type(desc.get('level',50)) is not int:raise ValueError('level must be an integer')
             species[side,mon]=SPECIES.index(desc['species']);level[side,mon]=desc.get('level',50)
-            if species[side,mon]==0 or not 1<=level[side,mon]<=100:raise ValueError('unsupported species/level')
+            if not 1<=species[side,mon]<=3 or not 1<=level[side,mon]<=100:raise ValueError('unsupported species/level')
             speed=desc.get('speed_evs',0)
             if type(speed) is not int or speed not in (0,252):raise ValueError('unsupported Speed EVs')
             evs[side,mon,5]=speed
@@ -725,30 +765,73 @@ def make_state(teams,seed=(1,2,3,4),generation=0):
                 if mid==0 or mid==STRUGGLE or mid>RAPID_SPIN:raise ValueError('unsupported move')
                 moves[side,mon,slot]=mid
             item[side,mon]=ITEMS.index(desc.get('item',''))
+            if item[side,mon]>2:raise ValueError('unsupported legacy item')
     seed=np.asarray(seed)
     if seed.shape!=(4,) or seed.dtype.kind not in 'iu' or np.any(seed<0) or np.any(seed>65535):raise ValueError('seed must have four 16-bit limbs')
     if not isinstance(generation,int) or not 0<=generation<2**31-1:raise ValueError('invalid generation')
     return initialize(i32(species),i32(level),i32(moves),i32(item),i32(evs),jnp.asarray(seed,jnp.uint16),i32(generation))
 
 
-@jax.jit
 def initialize(species,level,moves,item,evs,seed,generation):
+    """Compatibility constructor for schema 1/2 declared custom sets."""
+    ivs=jnp.full((2,6,6),31,jnp.int32)
+    nature=jnp.full((2,6),generic.NATURES['hardy'],jnp.int32)
+    hp_type=generic.HP_TYPE_IDS[generic.hidden_power(ivs)[0]]
+    return _initialize(species,level,moves,item,evs,seed,generation,ivs,nature,
+                       tables.SPECIES_ABILITY[species],tables.SPECIES_GENDER[species],
+                       jnp.zeros((2,6),jnp.bool_),jnp.full((2,6),255,jnp.int32),
+                       tables.SPECIES_NAME[species],hp_type)
+
+
+def make_gen5_state(teams,seed=(1,2,3,4),generation=0):
+    """General set/data schema, with explicit current handler preflight.
+
+    Unsupported initialization returns UNSUPPORTED with unconsumed input RNG
+    and no public events. No generated team is filtered or silently simulated
+    with missing callbacks. Callback coverage remains in the G4 ledger.
+    """
+    sets=generic.decode_sets(teams)
+    seed=np.asarray(seed)
+    if seed.shape!=(4,) or seed.dtype.kind not in 'iu' or np.any(seed<0) or np.any(seed>65535):raise ValueError('seed must have four 16-bit limbs')
+    if type(generation) is not int or not 0<=generation<2**31-1:raise ValueError('invalid generation')
+    species=tables.G_SPECIES[sets.species]
+    names=np.asarray(tables.SPECIES_NAME[species]).copy()
+    for side,team in enumerate(teams):
+        for mon,desc in enumerate(team):
+            if desc.get('name'):
+                name=generic.to_id(desc['name'])
+                if name not in tables.SPECIES_IDS:raise ValueError('arbitrary nickname encoding pending')
+                names[side,mon]=tables.SPECIES_IDS[name]
+    values=generic.derive_set_stats(sets)
+    return _initialize(species,sets.level,tables.G_MOVES[sets.moves],tables.G_ITEMS[sets.item],
+                        sets.evs,jnp.asarray(seed,jnp.uint16),i32(generation),sets.ivs,sets.nature,
+                        tables.G_ABILITIES[sets.ability],sets.gender,sets.shiny,sets.happiness,i32(names),values.hp_type)
+
+
+@jax.jit
+def _initialize(species,level,moves,item,evs,seed,generation,ivs,nature,ability,gender,shiny,happiness,name,hp_type):
     occupied=species>0
-    stats=derive_stored_stats(BASE_STATS[species],level,jnp.full((2,6,6),31,jnp.int32),evs,jnp.full((2,6,6),10,jnp.int32))
+    stats=derive_stored_stats(BASE_STATS[species],level,ivs,evs,generic.NATURE_MULTIPLIERS[nature],tables.SHEDINJA[species])
     stats=jnp.where(occupied[:,:,None],stats,0)
     zeros=jnp.zeros((2,6),jnp.int32)
-    s=State(species,level,stats,stats[:,:,5],zeros,stats[:,:,0],jnp.zeros((2,6),jnp.bool_),moves,PP[moves],item,
+    s=State(species,level,stats,stats[:,:,5],gender,stats[:,:,0],jnp.zeros((2,6),jnp.bool_),moves,PP[moves],item,
             zeros,zeros,zeros,zeros,jnp.zeros((2,6),jnp.bool_),jnp.zeros(2,jnp.int32),
             jnp.tile(jnp.arange(6,dtype=jnp.int32),(2,1)),jnp.full(2,-1,jnp.int32),jnp.full(2,MOVE,jnp.int32),
             jnp.zeros(2,jnp.bool_),jnp.zeros((QUEUE,7),jnp.int32),i32(0),jnp.array(False),seed,i32(1),i32(-1),generation,i32(0),
-            jnp.zeros((HISTORY,10),jnp.int32),i32(0),jnp.zeros((2,3),jnp.int32))
+            jnp.zeros((HISTORY,10),jnp.int32),i32(0),jnp.zeros((2,3),jnp.int32),
+            ivs,evs,nature,ability,tables.SPECIES_TYPES[species],jnp.where(occupied,hp_type,0),
+            jnp.where(occupied,generic.hidden_power(ivs)[1],0),shiny,happiness,name,jnp.zeros((2,6,7),jnp.int32))
+    return jax.lax.cond(_supported(s,initializing=True),_initialize_events,lambda s:Result(s,i32(UNSUPPORTED),empty_trace()),s)
+
+
+def _initialize_events(s):
     c=(s,empty_trace())
     for side in range(2):
         for mon in range(ROSTER):
             def gender(c):
                 c,value=_draw(c,0,2,INIT);s,t=c
                 return s._replace(gender=s.gender.at[side,mon].set(value.astype(jnp.int32)+1)),t
-            c=_when(species[side,mon]>MEW,gender,c)
+            c=_when((s.species[side,mon]>0)&(s.gender[side,mon]<0),gender,c)
     # Native startup: runSwitch all-active speed sort, then its Update, followed
     # by the residual action's Update. No battle RNG is re-seeded after setup.
     for _ in range(3):c=_update(c,INIT)

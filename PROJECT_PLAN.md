@@ -596,7 +596,7 @@ dependencies or all acceptance cases are complete.
 | V4 | `node reference/shared-engine-cases.cjs --batch all --output NEW_FILE`; `JAX_PLATFORMS=cpu "$JAX_PYTHON" -m unittest test.test_shared_engine_cases test.test_shared_engine_battles test.test_shared_engine_lifecycle -v` | **Implemented.** One family-batched native runner and shared CPU case/battle/lifecycle modules, B0–B5; current evidence/status is in compact state. |
 | V5 | `JAX_PLATFORMS=cpu "$JAX_PYTHON" -m unittest test.test_recurrent_ppo_contract test.test_small_game_learning -v`; `"$JAX_PYTHON" -m training.run --config APPROVED_CONFIG`; `"$JAX_PYTHON" -m evaluation.learning_proof --config APPROVED_CONFIG` | **Proposed, absent.** G2 controls, learning and native held-out proof. |
 | V6 | `JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_shared_engine_cases test.test_shared_engine_battles test.test_shared_engine_lifecycle -v`; `JAX_PLATFORMS=cuda "$JAX_PYTHON" -m benchmarks.shared_engine --config APPROVED_CONFIG` | **Pending GPU scope/evidence.** Shared test modules exist; GPU placement/profile harness and approved resources remain pending. Adjust platform selector to agreed hardware. |
-| V7 | `JAX_PLATFORMS=cpu "$JAX_PYTHON" -m evaluation.full_format_conformance --config evaluation/g4-cpu-v1.json --suite acceptance --output NEW_DIR` | **Proposed, module/config absent.** Implement the inventory, regression and fixed development/held-out CPU gates in the G4 brief below. GPU conformance remains a separately authorized release requirement. |
+| V7 | `JAX_PLATFORMS=cpu "$JAX_PYTHON" -m evaluation.full_format_conformance --config evaluation/g4-cpu-v1.json --suite acceptance --output NEW_DIR` | **Pending; module absent, fixed config present.** Inventory/data export and generic schema are in progress. Implement the remaining inventory, regression and fixed development/held-out CPU gates below. GPU conformance remains a separately authorized release requirement. |
 | V8 | `"$JAX_PYTHON" -m benchmarks.training_pipeline --config APPROVED_CONFIG`; `"$JAX_PYTHON" -m evaluation.policy_transfer --config APPROVED_CONFIG` | **Proposed, absent.** G5 matched workloads, device measurements and transfer equivalence. |
 | V9 | `"$JAX_PYTHON" -m evaluation.baseline_promotion --config APPROVED_CONFIG` | **Proposed, absent.** G6 multi-run native promotion/cross-play/ablations. |
 | V10 | `"$JAX_PYTHON" -m evaluation.strategic_ablation --config APPROVED_CONFIG`; `"$JAX_PYTHON" -m evaluation.information_set_tests --config APPROVED_CONFIG` | **Proposed, absent.** G7 controls, exploiters and future information-set consistency. |
@@ -780,8 +780,8 @@ family, weaken equality or turn a harness cap into a native draw.
 | Fixed campaigns | All 64 development and 128 held-out starts defined below reach the same genuine native terminal, with every boundary equal. Zero simulation errors, unresolved divergences, required capacity failures or truncations. Native initialization/generator failures are reported, not silently replaced. Campaign sampling complements the inventory audit and cannot establish complete coverage alone. |
 | Reviewable finish | Primary inspects the diff and ledger, records exact source/pin/environment/commands/results and remaining GPU evidence, commits/pushes coherent work. Only after all CPU gates pass record `G4-CPU-conformance` complete; leave full G4 open. No independent reviewer or task-count ceremony. |
 
-Proposed `evaluation/g4-cpu-v1.json` is **absent** and must be implemented and
-frozen with these fixed settings; it is a conformance configuration, not a
+`evaluation/g4-cpu-v1.json` now records these fixed settings. The executable
+conformance gate is still pending; this is a conformance configuration, not a
 benchmark. Reuse paired-seed derivation `sha256-json-domain-v1` unchanged:
 
 | Suite | Root seed | Pair indices | Seats and policies | Starts |

@@ -1,12 +1,27 @@
-# Shared restricted singles engine
+# Shared singles engine
 
 The approved first G3 package introduced [schema 1](../rules/shared-engine-v1.json),
 [one JAX state/scheduler](../simulator/shared_engine.py), and a
 [host player adapter](../simulator/shared_engine_io.py). Legacy APIs remain intact.
-The current [schema 2](../rules/shared-engine-v2.json) supports custom 1–6-member
-singles with Stealth Rock, Spikes and Gen 5 Rapid Spin. Full-format G4
+The completed [schema 2](../rules/shared-engine-v2.json) package supports custom
+1–6-member singles with Stealth Rock, Spikes and Gen 5 Rapid Spin. Current
+[schema 3](../rules/shared-engine-v3.json) adds generic immutable tables,
+per-mon IV/EV/nature/ability/types/Hidden Power/shiny/happiness/name/boost storage,
+special/type-dependent damage and general set decoding to the same scheduler.
+`make_state` retains the original custom-set contract; `make_gen5_state` accepts
+general sets and returns `UNSUPPORTED` before draws/events for missing handlers.
+The runtime capability masks are incomplete; the full G4 goal remains active.
+Full-format G4
 coverage remains separate acceptance work. Historical evidence keeps its original
 source/schema identity; it does not imply validation of later engine changes.
+
+Use `save_state`/`load_state` in the host adapter for keyed NPZ serialization
+with schema and table hash. Older untagged keyed states require an explicit
+`schema=1` or `schema=2` migration. Original stable IDs and observable state are
+preserved. The old schema did not record IV/EV data: migration reconstructs its
+declared perfect-IV/Hardy domain and infers Speed EVs from stored stats, choosing
+zero when low-level rounding makes both permitted spreads identical. Unknown
+fields/table hashes fail; positional tuples are not a migration format.
 
 ```python
 import jax

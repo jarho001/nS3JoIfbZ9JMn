@@ -1,0 +1,11 @@
+test_every_hidden_power_bitplane (test.test_gen5_tables.Gen5TablesTest.test_every_hidden_power_bitplane) ... ok
+test_mixed_batch_eager_and_compiled_set_derivation (test.test_gen5_tables.Gen5TablesTest.test_mixed_batch_eager_and_compiled_set_derivation) ... ok
+test_native_constructor_gender_draws_and_saved_sets (test.test_gen5_tables.Gen5TablesTest.test_native_constructor_gender_draws_and_saved_sets) ... ok
+test_native_type_chart_and_dual_types (test.test_gen5_tables.Gen5TablesTest.test_native_type_chart_and_dual_types) ... ok
+test_pre_entry_generated_set_values (test.test_gen5_tables.Gen5TablesTest.test_pre_entry_generated_set_values) ... ok
+test_unknown_set_effects_rejected (test.test_gen5_tables.Gen5TablesTest.test_unknown_set_effects_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 4.554s
+
+OK

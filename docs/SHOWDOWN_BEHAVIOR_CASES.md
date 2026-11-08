@@ -469,9 +469,9 @@ case/battle/lifecycle tests, roster/hazard tests, rollout tests, and native
 `test/shared-engine.test.cjs`. These currently validate only their documented
 restricted domains; they are not runnable full-format acceptance.
 
-Proposed and **absent**, to implement within the goal:
-`node reference/gen5-reachability.cjs --output NEW_FILE`, versioned ledger/config,
-and `evaluation.full_format_conformance` from V7. Its acceptance suite must bind
+Inventory export `node reference/gen5-reachability.cjs --output NEW_FILE` and
+versioned ledger/data/config now exist. The complete reachable-handler audit and
+`evaluation.full_format_conformance` from V7 remain pending. Its acceptance suite must bind
 inventory, frozen directed corpus, CPU scalar/eager/JIT/mixed batches, visibility,
 continuation/reset/full-versus-lean, and the fixed 64 development / 128 held-out
 starts defined in the plan. Reuse existing team/seed/policy helpers, preserve
@@ -498,3 +498,17 @@ eligibility, complete initialization hooks, playable generated teams and full
 mechanics remain pending. The source-owned callback export is independently
 reproduced by `test/gen5-reachability.test.cjs`; unknown reachability, callback
 implementation and engine contracts remain explicit gaps.
+
+### Generic data integration observations
+
+`node reference/shared-engine-cases.cjs --batch generic` adds native constructed
+G4-DATA cases before generic transition implementation: physical/special and
+variable Hidden Power/Return/Frustration damage, natures/IV/EV/stat values,
+fixed/unspecified gender draws, shininess, types/STAB/immunity, Gen 5 Steel
+resistances, priority, status/type failures and type-dependent Rock/Spikes entry.
+Four six-member games cover two seeds and both seats with generic species and
+special attacks. These supplied sets do not establish generator membership.
+`test/test_generic_engine.py` compares the full traces, eager/JIT/mixed 1/8/32
+lanes, saved continuation/reset, explicit schema 1/2 migration and full/lean
+rollouts. Results and current source identity belong to compact state; new
+families outside the capability mask remain required rather than excluded.
