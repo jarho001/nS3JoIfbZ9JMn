@@ -595,9 +595,11 @@
     },
     "resolved_failure": "16b5263 preflight rejected ordinary moves because type was missing from its field set; fixed by 4eab254, failed run stopped, all 37 repaired checks pass. Detailed minimized input and source identities are in source.json.",
     "publication": {
-      "status": "pending_checkpoint_push",
+      "status": "published_checkpoint",
       "target": "origin/main",
-      "scope": "Generic schema/data integration, independent status expectations and reproducible CPU evidence; full goal remains incomplete."
+      "published_evidence_head": "42e5f1c",
+      "result": "Normal fast-forward push succeeded; source/corpus/evidence checkpoint published. Full G4 CPU conformance remains in progress.",
+      "scope": "Generic shared schema/data/damage integration and independent status expectations; no GPU/profiling/benchmark/training run."
     }
   },
   "optional_gpu_validation_history": [

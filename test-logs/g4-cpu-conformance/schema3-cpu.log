@@ -6,7 +6,7 @@ test_pre_entry_generated_set_values (test.test_gen5_tables.Gen5TablesTest.test_p
 test_unknown_set_effects_rejected (test.test_gen5_tables.Gen5TablesTest.test_unknown_set_effects_rejected) ... ok
 test_complete_battles_in_streamed_heterogeneous_batches (test.test_generic_engine.GenericEngineTest.test_complete_battles_in_streamed_heterogeneous_batches) ... FAIL
 test_directed_eager_and_mixed_batches (test.test_generic_engine.GenericEngineTest.test_directed_eager_and_mixed_batches) ... FAIL
-test_native_initialization_and_complete_traces (test.test_generic_engine.GenericEngineTest.test_native_initialization_and_complete_traces) ... 
+test_native_initialization_and_complete_traces (test.test_generic_engine.GenericEngineTest.test_native_initialization_and_complete_traces) ...
   test_native_initialization_and_complete_traces (test.test_generic_engine.GenericEngineTest.test_native_initialization_and_complete_traces) (case='G4-data-special-stab') ... FAIL
   test_native_initialization_and_complete_traces (test.test_generic_engine.GenericEngineTest.test_native_initialization_and_complete_traces) (case='G4-data-dual-resistance') ... FAIL
   test_native_initialization_and_complete_traces (test.test_generic_engine.GenericEngineTest.test_native_initialization_and_complete_traces) (case='G4-data-normal-ghost') ... FAIL
@@ -27,4 +27,4 @@ test_schema_migration_saved_continuation_and_rollouts (test.test_generic_engine.
 test_unsupported_callbacks_preflight_without_rng (test.test_generic_engine.GenericEngineTest.test_unsupported_callbacks_preflight_without_rng) ... ok
 test_domain_and_hazard_validation (test.test_roster_hazards.RosterHazardsTest.test_domain_and_hazard_validation) ... ok
 test_manifest_and_catalog (test.test_roster_hazards.RosterHazardsTest.test_manifest_and_catalog) ... ok
-test_mixed_batch_rollout_continuation_and_reset (test.test_roster_hazards.RosterHazardsTest.test_mixed_batch_rollout_continuation_and_reset) ... 
+test_mixed_batch_rollout_continuation_and_reset (test.test_roster_hazards.RosterHazardsTest.test_mixed_batch_rollout_continuation_and_reset) ...
