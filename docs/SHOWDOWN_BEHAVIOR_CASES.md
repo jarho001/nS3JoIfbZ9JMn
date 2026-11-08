@@ -394,3 +394,92 @@ six-member games), plus all retained shared-engine/lifecycle/rollout controls,
 passed in the 26-check integration run. The two native BattleStream checks also
 passed. See `test-logs/g4-roster-hazards/cpu-integration.log`, `native-stream.log`
 and `source.json`. No GPU or performance evidence is implied.
+
+## Proposed G4 CPU inventory and behavior contract
+
+Preparation only, 2026-11-08; execution awaits approval of
+[the G4 CPU goal](../PROJECT_PLAN.md#proposed-g4-cpu-implementation-and-conformance-goal).
+No new mechanic, native battle trace or conformance result is claimed here.
+The original B0–B5 catalog and completed roster/hazard evidence remain intact.
+
+### Pinned inventory roots and closure
+
+Source pin: `1242c1e2d9763ba5b85d33f13aecb89bae19ae3d`; its local checkout
+identity and clean status were inspected. A static JSON scan of
+`reference/vendor/pokemon-showdown/data/random-battles/gen5/sets.json` found
+**388 species/form keys, 605 role sets, 230 distinct movepool strings and 127
+ability labels**. `sets.json` SHA-256:
+`2066d362834c40ce7a4c4e63feb285598cba25883ba171eead1ed634ff93c5dd`.
+These counts describe source candidates, not proven reachable output sets or
+implemented coverage. Hidden Power strings and forms need canonical resolution.
+
+| Root/dependency | Authoritative pinned source | Required audit during implementation |
+|---|---|---|
+| Generated sets and membership | `data/random-battles/gen5/sets.json`; `gen5/teams.ts` `randomTeam`, `randomSet`, `randomMoveset`, `getAbility` | Account for every candidate, role/move/ability choice, eligibility filter, level, IV/EV/nature/gender and form branch; prove exclusions, retain unknowns. Generated-set values exceed the current Hardy/perfect-IV/Speed-only-EV allowlist. |
+| Item and form outputs | `gen5/teams.ts` `getPriorityItem`/`getItem`, required species items; inherited selectors/helpers through random-battles gen6/7/8/9 | Enumerate conditional outputs and dependent abilities/items/forms. Source string scraping or a bag of sampled teams is insufficient. Record call edges and branch preconditions; resolve actual inherited helpers. |
+| Effective data and hooks | Resolved `Dex.mod('gen5')`; mechanics inheritance gen5/gen6/gen7/gen8/base for species/types/moves/abilities/items/conditions | Record the effective value/callback and defining source, including overridden/removed handlers. The generator's class inheritance and mechanics mod inheritance are distinct. |
+| Indirect effects | Effective move/ability/item callbacks plus `sim/battle-actions.ts`, `sim/battle.ts`, `sim/pokemon.ts`, `sim/side.ts` | Close dependencies to a fixed point: Sleep Talk, Nature Power, Transform, Imposter, changed/copied abilities, Trick/Switcheroo, consumed/recreated items, forms and recursively referenced conditions. These five move roots occur directly in the set file; other call/copy effects enter only if a dependency proves reachability. |
+| Rules and engine behavior | `reference/fixtures/format-v1.json`; resolved rule table; native scheduler, PRNG and battle termination | Include Sleep Clause, HP Percentage, Cancel and Illusion Level behavior and active Obtainable data constraints. No Team Preview. Audit native turn-limit tie/warnings, other reachable terminal paths and event/queue/history bounds; do not assume every optional clause is active. |
+
+Proposed ledger `rules/gen5-reachable-v1.json` is **absent**. Its rows must carry
+canonical identity/kind, pin/source hash, defining callback/value, incoming
+reachability edge and precondition, implementation field/handler, and native
+witness/test/evidence links or a reviewed source-backed exclusion. Source-backed
+inference and actual observed cases stay distinct. Initial candidate/unknown
+entries are explicit; CPU acceptance requires no unknown reachability, reachable
+unsupported effect or unvalidated required implementation. Every newly discovered
+callee reopens closure until accounted for. Implementing a conservative candidate
+superset is permitted; silently deleting uncertainty is not.
+
+### Families to observe before implementation
+
+All rows below are **required planned observations**, not newly observed facts.
+The existing hazard cases can seed G4-FIELD; they do not prove the remaining rows.
+Each row inherits the exact assertion contract earlier in this document.
+
+| Family | Ordinary/boundary cases and required interactions |
+|---|---|
+| G4-DATA | Generator role/set initialization; species/form/base stats, arbitrary generated IV/EV/level values, Hidden Power, Gen 5 type chart and special damage; boosts/rounding/immunity/critical boundaries, ability/item/stat modifiers. Compare native initialization draws and recipient reveals. |
+| G4-STATUS | Sleep/Rest/waking, freeze/thaw, confusion/self-hit, ordinary poison and existing status counters; duration expiration and switching/reset rules. Sleep Clause, Lum/natural recovery, damage/weather and skipped-turn interactions. Observe exact draw placement and failed infliction before coding duration rules. |
+| G4-FIELD | Weather start/change/expiry, screens, Tailwind/Trick Room and other reachable side/field conditions; Toxic Spikes application/absorption/grounding plus existing hazards. Speed/priority, residual tie order, healing/status/item hooks, entry KO and forced/pivot chains. |
+| G4-HOOKS | All reachable ability/item callbacks at damage, contact, status, entry, residual, faint and consumption; suppression/replacement, conditional activation and multiple handlers. Include native handler ordering/shuffle draws even when callbacks are later skipped; minimize new ordering regressions. |
+| G4-MOVES | Variable/fixed/delayed/counter damage, secondary effects, multi-hit counts and per-hit hooks, recoil/drain/crash/self-KO, Substitute/Protect, sacrifice/bond effects and PP exhaustion. Include success/failure, immunity, last hit/last PP, pending actor KO and double KO where reachable. |
+| G4-PHASE | Charge/locked/multi-turn/recharge moves, Choice/Encore/Disable/Taunt and other reachable restrictions, trapping, phazing, Pursuit and pivots; interrupted queue resume and forced switch/recharge/Struggle requests. Disclosed request masks must not reveal concealed trapping; compare invalid-choice retry/private disclosure as well as valid choices. |
+| G4-INDIRECT | Illusion identity/history and level displays; Transform/Imposter stats, moves/PP and ability restoration; Sleep Talk/Nature Power targets, nested effects and RNG; Trick/Switcheroo and consumed/recreated item callbacks. Cover copied effects interacting with status, locks, field state and requests. |
+| G4-RULES | Active rule/clause successes/failures, forced replacement/no reserves, native win/tie ordering, turn-limit warnings/tie, and actual terminal histories. Keep driver truncation distinct from native terminal outcomes. Inactive clauses need an inventory exclusion, not fabricated behavior. |
+| G4-VIEW | Actual BattleStream packets for new phases, invalid/retried choices, pending/replace/undo and waits; p1/p2 cumulative histories, HP rounding, disguised identities and reveals. Construct indistinguishable histories differing in hidden reserves/items/PP/choices and test actor isolation. |
+| G4-LIFE | Schema migration and every new state leaf/counter/volatile/queue field; NPZ round-trip before/after interruptions, terminal reset, full/lean rollouts, heterogeneous phase/error lanes and lane-local RNG. Check atomic overflow and no capacity failures for required generated traces/target limits. |
+
+Capture setup classification and generator-membership evidence, exact choices and
+acknowledgements, complete pre/post native state, ordered draws with raw contexts,
+requests/masks/retries and both views. Generalize the shared runner/capture/reader
+for new native fields and contexts; never drop an unfamiliar effect or normalize
+away a new draw. Preserve and rerun the 133 existing scenarios / 872 boundaries
+as the fixed baseline; freeze new directed case IDs/digests before final acceptance.
+A witness using trusted mutations is synthetic even when its mechanic is reachable.
+Every required branch needs an ordinary or labeled synthetic behavioral case;
+separate generator/data audit proves target membership, not the injected state.
+
+### Validation entry points and evidence boundary
+
+Existing: `node reference/oracle.cjs format`; guarded shared native runner
+`--batch all` (legacy) / `--batch g4` (completed hazard package), shared CPU
+case/battle/lifecycle tests, roster/hazard tests, rollout tests, and native
+`test/shared-engine.test.cjs`. These currently validate only their documented
+restricted domains; they are not runnable full-format acceptance.
+
+Proposed and **absent**, to implement within the goal:
+`node reference/gen5-reachability.cjs --output NEW_FILE`, versioned ledger/config,
+and `evaluation.full_format_conformance` from V7. Its acceptance suite must bind
+inventory, frozen directed corpus, CPU scalar/eager/JIT/mixed batches, visibility,
+continuation/reset/full-versus-lean, and the fixed 64 development / 128 held-out
+starts defined in the plan. Reuse existing team/seed/policy helpers, preserve
+source/fixture/config/policy identities and stream bounded trace chunks.
+
+One failing case stops that acceptance shard for minimization and repair, not
+for a new reduced goal. Repairs may resume the fixed campaign with appropriate
+source invalidation and disclosed held-out reuse. Do not replay the full corpus
+per tiny mechanic, launch unbounded fuzzing or run timing/profiling experiments.
+No conformance command, native simulation, CPU integration, GPU run or benchmark
+was executed during this preparation. Static source inspection/counts establish
+only the inventory roots and planned proof obligations above.

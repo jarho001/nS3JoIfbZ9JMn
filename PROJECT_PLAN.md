@@ -389,9 +389,11 @@ G6 remains useful without positive G7/G8 research results.
   or silent fallback. CPU and GPU batch correctness are required for release.
   Sampling alone does not establish completeness; this evidence is missing.
 - **Exclusions/decisions/stop:** No trained strength or useful training speedup.
-  Fix D2/D3 campaign sizes/resources/stop rules before execution. Unknown
+  The proposed CPU goal below fixes conformance campaign sizes and stop rules;
+  D2 scored research and D3 GPU resources remain separate decisions. Unknown
   reachability stays a gap; an unsupported reachable effect blocks acceptance
   rather than removing the battle from evaluation.
+  See [the proposed G4 CPU execution brief](#proposed-g4-cpu-implementation-and-conformance-goal).
 
 ### G5 — useful end-to-end training system (open)
 
@@ -594,7 +596,7 @@ dependencies or all acceptance cases are complete.
 | V4 | `node reference/shared-engine-cases.cjs --batch all --output NEW_FILE`; `JAX_PLATFORMS=cpu "$JAX_PYTHON" -m unittest test.test_shared_engine_cases test.test_shared_engine_battles test.test_shared_engine_lifecycle -v` | **Implemented.** One family-batched native runner and shared CPU case/battle/lifecycle modules, B0–B5; current evidence/status is in compact state. |
 | V5 | `JAX_PLATFORMS=cpu "$JAX_PYTHON" -m unittest test.test_recurrent_ppo_contract test.test_small_game_learning -v`; `"$JAX_PYTHON" -m training.run --config APPROVED_CONFIG`; `"$JAX_PYTHON" -m evaluation.learning_proof --config APPROVED_CONFIG` | **Proposed, absent.** G2 controls, learning and native held-out proof. |
 | V6 | `JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_shared_engine_cases test.test_shared_engine_battles test.test_shared_engine_lifecycle -v`; `JAX_PLATFORMS=cuda "$JAX_PYTHON" -m benchmarks.shared_engine --config APPROVED_CONFIG` | **Pending GPU scope/evidence.** Shared test modules exist; GPU placement/profile harness and approved resources remain pending. Adjust platform selector to agreed hardware. |
-| V7 | `"$JAX_PYTHON" -m evaluation.full_format_conformance --config APPROVED_CONFIG` | **Proposed, absent.** G4 frozen/held-out CPU/GPU campaign plus reachable-coverage audit. |
+| V7 | `JAX_PLATFORMS=cpu "$JAX_PYTHON" -m evaluation.full_format_conformance --config evaluation/g4-cpu-v1.json --suite acceptance --output NEW_DIR` | **Proposed, module/config absent.** Implement the inventory, regression and fixed development/held-out CPU gates in the G4 brief below. GPU conformance remains a separately authorized release requirement. |
 | V8 | `"$JAX_PYTHON" -m benchmarks.training_pipeline --config APPROVED_CONFIG`; `"$JAX_PYTHON" -m evaluation.policy_transfer --config APPROVED_CONFIG` | **Proposed, absent.** G5 matched workloads, device measurements and transfer equivalence. |
 | V9 | `"$JAX_PYTHON" -m evaluation.baseline_promotion --config APPROVED_CONFIG` | **Proposed, absent.** G6 multi-run native promotion/cross-play/ablations. |
 | V10 | `"$JAX_PYTHON" -m evaluation.strategic_ablation --config APPROVED_CONFIG`; `"$JAX_PYTHON" -m evaluation.information_set_tests --config APPROVED_CONFIG` | **Proposed, absent.** G7 controls, exploiters and future information-set consistency. |
@@ -667,7 +669,7 @@ Use fast deterministic checks for every change, larger interaction/differential 
 | Generator or server drifts | Updated teams/rules change results | Freeze old benchmark; publish a new version and explicit transfer study |
 | Resource use grows without strength | Larger runs only improve training reward or raw throughput | Revisit representation, evaluation, and bottlenecks before scaling |
 
-**The next implementation package is the approved bounded G4 roster/hazard goal below.** The first G3 CPU package and subsequent diagnostic are recorded in compact state. Baseline tournaments, learning and additional performance runs remain deferred.
+**The next proposed implementation goal is G4 CPU implementation and conformance below.** The bounded roster/hazard package is CPU-complete. Preparation is authorized; execution of the new goal awaits approval and Goal-mode selection. Baseline tournaments, learning and additional performance runs remain deferred.
 
 The long-term research opportunity is the combination: a faithful accelerator-native battle engine enables enormous self-play; an exact information interface makes those experiences legitimate; and a strong learning system can use both training compute and inference compute to discover strategies. All three construction sites should remain independently inspectable so that a gain in one can be trusted by the others.
 
@@ -700,3 +702,160 @@ native metadata follow-up reports schema 2 for individual G4 case selections;
 it changes no fixture semantics or engine source. Exact commands, source hashes
 and logs are in `test-logs/g4-roster-hazards/` and compact state. The bounded
 package is accepted; full-format G4 and new GPU/performance validation stay open.
+
+## Proposed G4 CPU implementation and conformance goal
+
+**Status:** prepared 2026-11-08 against `44759e6`; not approved or launched.
+The user authorized preparation, document checks and commit/push only. Existing
+G0 acceptance and completed G3/G4 CPU packages remain intact. G1/G2/G3 and full
+G4 milestone status do not change. The earlier roster/hazard section records a
+completed package, not the scope ceiling for this proposed goal.
+
+**Outcome:** Run the complete pinned `gen5randombattle` distribution through the
+shared JAX engine on CPU, from reference-generated six-member teams through
+native terminal outcomes, with exact state/RNG/request/recipient-history parity.
+This is one sustained implementation goal with integrated checkpoints. It is
+not another restricted species or move allowlist. Full G4 acceptance still needs
+later GPU correctness on the relevant source; CPU completion cannot close G4.
+
+**Target and reuse:** Pin `1242c1e2d9763ba5b85d33f13aecb89bae19ae3d`, format
+`gen5randombattle`, resolved `gen5 -> gen6 -> gen7 -> gen8 -> base` mechanics,
+no Team Preview, and the exact effective rules in
+`reference/fixtures/format-v1.json`. Reuse the shared state/scheduler, exact PRNG,
+arithmetic kernels, native observer/case reader, player projection, rollout and
+lifecycle contracts. Reuse `environment/prepared-teams.cjs` and
+`environment/paired-seeds.cjs` for pinned teams and independent seed streams.
+Showdown may export data, generate teams and produce independent expectations;
+JAX transitions must not call native simulation or use Python effect fallbacks.
+Retain frozen schema 1/2 contracts and evidence; version expanded tables, state,
+serialization and bounds explicitly. Required request/protocol changes belong
+in this goal without claiming completion of unrelated G1 work.
+
+### Inventory and implementation scope
+
+The [G4 inventory and behavior contract](docs/SHOWDOWN_BEHAVIOR_CASES.md#proposed-g4-cpu-inventory-and-behavior-contract)
+is the source of family/case coverage. Static inspection found **388 set-file
+species/form entries, 605 role sets, 230 movepool IDs and 127 distinct ability
+labels**. These are candidate roots, not a reachability proof or coverage score.
+The first checkpoint must resolve generator eligibility, item selection,
+forms/stat variations and inherited callbacks, then close dependencies through
+called/copied moves, Transform, changed abilities and exchanged/created items.
+
+During implementation create one versioned machine-readable ledger, proposed
+`rules/gen5-reachable-v1.json`: pin/source hashes, canonical data/effect IDs,
+resolved defining file/callback, reachability edge/precondition, implementation
+mapping, native witness or reasoned exclusion, and tests/evidence. Represent
+candidates, unresolved entries, implemented-but-unvalidated entries and validated
+entries separately. Unknown reachability stays open; conservative implementation
+is allowed, unsupported behavior or sampling is not proof of unreachability.
+Record a source-backed exclusion when a branch cannot occur in this format.
+The ledger must cover transitive effects and scheduler/rule behavior, not just
+names in generated teams. Audit capacities against target turn/action/event
+limits, including the native turn-limit outcome and visible warnings; schema 2's
+2048-row history is an existing bound, not full-format acceptance evidence.
+
+Scope includes all reachable species/forms/types/stats and generator set values;
+physical/special/variable damage and accuracy/critical modifiers; boosts, weather,
+screens, remaining hazards, statuses/durations and clauses; ability/item hooks;
+trapping/phazing/locks/recharge/multi-turn/multi-hit/Substitute/recoil/drain;
+Illusion/Transform/called moves/item exchange; every resulting phase, request,
+visibility, RNG and terminal interaction. Establish native behavior by family
+before implementation, adding interaction cases when dependencies meet. Native
+source inference without an observed case remains labeled provisional.
+Use parameterized cases for shared behavior plus a complete data/handler audit;
+exhaustive battle histories and all combinations of effects are not required.
+
+### Acceptance and bounded CPU validation
+
+All conditions below are required; never replace a failed start, drop a reachable
+family, weaken equality or turn a harness cap into a native draw.
+
+| Gate | Observable pass condition |
+|---|---|
+| Inventory | Every reachable data/effect/rule entry maps to implementation and independent evidence; zero unresolved reachability, unsupported callbacks or unvalidated required entries. A documented proof excludes each discarded candidate. |
+| Directed regression | Retain the 111 legacy shared scenarios / 464 boundaries and 22 roster/hazard scenarios / 408 boundaries. Add native ordinary, boundary/failure and reachable interaction cases for each new behavior; cover its reachable behavioral branches or give a proof they cannot occur. Include generated-set initialization and data equality across candidate roots resolved as reachable. Freeze exact case IDs, source/fixture digests and per-case labels before the final gate. Synthetic installations remain labeled and do not prove generator membership. |
+| Exact differential contract | Compare complete mechanically relevant native state, dynamic effects/counters, speed/order and suspended queue; initialization and every ordered draw argument/value/pre/post RNG; requests, legal/available/rejected choices, private commitments; both recipient histories; terminal result/rewards at every request boundary. Expand capture/projection for new fields before claiming parity. Normalize only documented timing/diagnostic paths. |
+| Execution/lifecycle | Directed cases agree in CPU eager/JIT and mixed `jit(vmap)` batches of 1, 8 and 32. Replay generated complete traces in scalar JIT and heterogeneous 8/32-lane batches, with absorbing padding counted as no work. Save/restore representative ordinary, pending, forced, pivot, locked/recharge and transformed states; verify reset, per-lane RNG isolation, privacy and atomic invalid/stale/unsupported/overflow behavior. Full and lean rollouts agree on final state/status and requested outputs. |
+| Fixed campaigns | All 64 development and 128 held-out starts defined below reach the same genuine native terminal, with every boundary equal. Zero simulation errors, unresolved divergences, required capacity failures or truncations. Native initialization/generator failures are reported, not silently replaced. Campaign sampling complements the inventory audit and cannot establish complete coverage alone. |
+| Reviewable finish | Primary inspects the diff and ledger, records exact source/pin/environment/commands/results and remaining GPU evidence, commits/pushes coherent work. Only after all CPU gates pass record `G4-CPU-conformance` complete; leave full G4 open. No independent reviewer or task-count ceremony. |
+
+Proposed `evaluation/g4-cpu-v1.json` is **absent** and must be implemented and
+frozen with these fixed settings; it is a conformance configuration, not a
+benchmark. Reuse paired-seed derivation `sha256-json-domain-v1` unchanged:
+
+| Suite | Root seed | Pair indices | Seats and policies | Starts |
+|---|---|---|---|---:|
+| Development | `[2026,11,8,41]` | 0..31 | Both seats of each pair; even indices use `legal-random-v1` for both actors, odd indices `move-first-v1` for both | 64 |
+| Held-out | `[2026,11,8,42]` | 0..63 | Same deterministic policy assignment and both seats; disjoint team/battle/policy seed identities | 128 |
+
+Use the existing policies in `environment/random-policy.cjs` and
+`environment/move-first-policy.cjs`, extending only for newly required request
+semantics. Policy inputs are recipient histories/own requests, never trusted
+opposing state or battle RNG; policy RNG is separate. For each native run,
+record choices and exact generated packed-team identities once and replay those
+choices in JAX; assert matching views and legality before each submission.
+Seat mirroring does not assume mirrored outcomes or RNG streams.
+
+Cap each start at **4096 resolved request boundaries**, and cap retried invalid
+submissions at **16 per request**; valid ordinary submissions should need no
+retry. Hitting either cap is a reported unresolved truncation/error, not a pass.
+Directed cancel/undo tests are separate. For CPU batches, stream comparisons in
+chunks of at most **16 boundaries** and persist a cursor/digest; do not retain
+all full-history states for every campaign in memory. Use one configuration and
+CPU worker budget `min(8, available logical CPUs)`; no budget/batch tuning sweep.
+
+Use development shards during implementation after relevant dependencies work;
+run the full acceptance corpus on a frozen candidate source. Keep held-out
+fixtures unopened for implementation until that gate; public seed definitions
+are reproducibility data, not a secrecy claim. Stop on the first divergence and
+save the native case/first differing field. Minimize, repair and rerun affected
+checks; then finish the same fixed corpus. Disclose held-out reuse after a repair,
+which turns that failure into regression evidence. Do not silently refresh seeds,
+add a fresh campaign or claim statistical strength. Progress survives interruption
+only with unchanged relevant source/fixture/config/policy hashes; invalidated
+shards rerun after relevant repairs. No endless automatic campaign repetition.
+
+### Integrated checkpoints and stopping
+
+1. **Inventory and generic schema:** enumerate the pinned generator/effect roots,
+   compute conservative dependency closure and record remaining uncertainties;
+   export resolved data, version tables/state/bounds and native capture. Complete
+   ordinary generated-set initialization and reusable damage/type/stat primitives.
+2. **Playable mechanics integration:** implement statuses, field/side effects,
+   abilities/items and complex move/phase families in dependency order. Capture
+   native family behavior first; combine families in full battles and mixed CPU
+   checks. Add indirect/form/item interactions as dependencies become available.
+3. **Conformance candidate:** close every ledger gap and request/visibility/clause
+   path, freeze the directed corpus/config and validate generated complete battles,
+   saved continuation/reset and full/lean CPU rollouts.
+4. **Final CPU acceptance:** run the fixed development/held-out gates on the
+   candidate, minimize/repair discrepancies without shrinking scope, inspect all
+   evidence and record CPU completion plus later GPU requirements.
+
+These are internal checkpoints, not separate approvals or a prescribed number
+of cloud runs. Continue through them within the approved goal. Save compact
+progress in `active_task` only after execution is approved: completed/next family,
+ledger gaps, exact source identity, evidence, first failure and resumable cursor.
+Commit/push at coherent checkpoints; preserve unrelated work and normal remote
+history. Choose proportional affected checks once per meaningful revision;
+known-long CPU integration is included in the proposed execution scope. Do not
+rerun all history after each move, rebuild tooling or profile to show progress.
+
+Checkpoint and stop on an external access/oracle blocker, a decision that changes
+the pinned game or approved scope, an unresolved minimized semantic divergence,
+a required capacity/campaign cap failure that cannot be repaired within scope,
+or execution-environment limits. Ordinary investigation/repairs stay in scope;
+continue independent work while resolving a gap. A checkpoint preserves WIP and
+is not goal acceptance. Resume the same goal from saved evidence rather than
+starting a new mechanic task. Do not wait for GPU during this CPU goal.
+
+**Exclusions and launch:** no GPU execution, profiling, performance benchmarks,
+optimization sweeps, training/learning/scored tournaments, new game formats,
+JAX team generation, unrelated cleanup, delegation or schedule changes. CPU
+completion is not a speedup claim or full G4 closure. Later GPU correctness needs
+relevant source/fixture/config identities and separately approved hardware;
+keep that future requirement explicit without setting a CPU blocker now.
+After user approval, select Goal mode on the execution surface and assign this
+brief; this preparation does not activate it. A launch assignment can simply
+approve this section and its CPU scope, require direct execution through all
+checkpoints, and retain the explicit exclusions and stopping conditions.

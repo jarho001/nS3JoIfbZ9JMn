@@ -14,7 +14,7 @@
       "CPU-first validation; GPU runs only when task acceptance or a device-specific property requires them, not a full GPU suite for every slice."
     ],
     "defer": "PPO, tournament/scoring, expanded trajectory collection, and additional baseline/reporting infrastructure unless they directly enable simulator semantics or parity validation.",
-    "next_candidate": "Bounded G4 roster/hazard CPU package complete; select a subsequent G4 family only under new approval. GPU profiling remains deferred.",
+    "next_candidate": "Prepared G4 CPU implementation/conformance goal awaits user approval and Goal-mode selection; GPU correctness and profiling remain separate.",
     "progress_measure": "Increasingly complete parity-tested playable battles, not accepted task count.",
     "active_task": null,
     "accepted_task_count_changed": false,
@@ -827,8 +827,96 @@
       "decisions": "PROJECT_PLAN.md#validation-entry-points-and-remaining-decisions"
     },
     "preparation_handoff": "docs/MILESTONE_PREPARATION.md",
-    "goal_mode_status": "approved_execution_assignment_default_mode",
-    "note": "User assigned extensive G3 testing/profiling on 2026-11-06 with Sol 6.1/high, direct execution and available hardware. Current status is in active_task; repository settings do not change execution-surface mode."
+    "goal_mode_status": "g4_cpu_brief_prepared_not_approved_or_launched",
+    "note": "G4 CPU execution is proposed, not active. The completed roster/hazard goal remains in active_task; repository records do not switch the execution-surface mode.",
+    "g4_cpu_preparation": {
+      "status": "prepared_awaiting_goal_approval",
+      "prepared_at": "2026-11-08",
+      "source_base": "44759e6148cd4850495b64c6bb77d4ef1ad08836",
+      "proposed_goal_id": "G4-CPU-conformance",
+      "plan": "PROJECT_PLAN.md#proposed-g4-cpu-implementation-and-conformance-goal",
+      "behavior_catalog": "docs/SHOWDOWN_BEHAVIOR_CASES.md#proposed-g4-cpu-inventory-and-behavior-contract",
+      "authorization": "Preparation, planning-document verification and commit/push only. No implementation or long tests; approval and Goal-mode selection are subsequent user actions.",
+      "inventory": {
+        "reference_commit": "1242c1e2d9763ba5b85d33f13aecb89bae19ae3d",
+        "candidate_species_form_entries": 388,
+        "role_sets": 605,
+        "movepool_ids": 230,
+        "ability_labels": 127,
+        "sets_sha256": "2066d362834c40ce7a4c4e63feb285598cba25883ba171eead1ed634ff93c5dd",
+        "closure_status": "Source roots counted; generator eligibility, item/form outputs and transitive inherited callbacks remain an implementation checkpoint, not proven coverage."
+      },
+      "campaigns": {
+        "development": {
+          "root_seed": [
+            2026,
+            11,
+            8,
+            41
+          ],
+          "pairs": 32,
+          "starts": 64
+        },
+        "held_out": {
+          "root_seed": [
+            2026,
+            11,
+            8,
+            42
+          ],
+          "pairs": 64,
+          "starts": 128
+        },
+        "policy_assignment": "Both seats per pair; even indices legal-random-v1 for both actors, odd indices move-first-v1 for both; reuse independent paired-seed streams.",
+        "max_request_boundaries_per_start": 4096,
+        "max_retries_per_request": 16,
+        "comparison_chunk_boundaries": 16,
+        "cpu_batch_sizes": [
+          1,
+          8,
+          32
+        ],
+        "cpu_worker_limit": "min(8, available logical CPUs)"
+      },
+      "acceptance": "Closed reachable-effect ledger, frozen independent directed corpus, exact state/RNG/request/recipient-history/native terminal parity, CPU eager/JIT/batched lifecycle and full/lean agreement; all fixed campaign starts complete without unresolved mismatch/unsupported/capacity/truncation. Full G4 still requires later GPU correctness.",
+      "checkpoints": [
+        "Inventory/resolved data/schema/native capture",
+        "Integrated playable mechanics and interactions",
+        "Closed ledger and frozen conformance candidate",
+        "Fixed CPU acceptance and evidence"
+      ],
+      "exclusions": [
+        "GPU execution",
+        "profiling and performance benchmarks",
+        "optimization sweeps",
+        "training/scored research",
+        "new formats or JAX team generation",
+        "unrelated cleanup",
+        "delegation or scheduling"
+      ],
+      "execution_started": false,
+      "active_goal_changed": false,
+      "next": "Return the brief for approval. Only a later approved execution may establish this as active_task; preparation does not launch Goal mode.",
+      "validation": {
+        "status": "passed_static_document_checks",
+        "mechanic_tests_run": false,
+        "native_battles_run": false,
+        "gpu_or_performance_runs": false,
+        "checks": [
+          "JSON parsed; git diff --check passed.",
+          "Only PROJECT_PLAN.md, docs/SHOWDOWN_BEHAVIOR_CASES.md and this compact state changed.",
+          "Active/completed goals, acceptance/review history, count 52, deferred evidence and GPU-block state equal the 44759e6 preparation base.",
+          "24 local Markdown paths and both new G4 section anchors resolved.",
+          "Pinned checkout identity/clean status and sets.json hash/counts verified by read-only git/Python inspection.",
+          "64/128 campaign arithmetic, seed separation, batch bounds and existing helper paths agree; proposed ledger/runner/config remain absent and explicitly labeled."
+        ],
+        "commands": [
+          "python3 -m json.tool docs/ORCHESTRATION_STATE.json > /dev/null",
+          "git diff --check",
+          "Inline read-only Python assertions against git show 44759e6:docs/ORCHESTRATION_STATE.json, pinned sets.json, local Markdown links and proposed/actual entrypoint paths."
+        ]
+      }
+    }
   },
   "completed_goals": [
     {
