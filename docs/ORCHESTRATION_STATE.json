@@ -524,14 +524,13 @@
     "brief": "PROJECT_PLAN.md#proposed-g4-cpu-implementation-and-conformance-goal",
     "source_base": "f37067e",
     "scope": "Complete pinned gen5randombattle reachable mechanics and every prepared CPU gate. Integrated checkpoints, resumable progress and commit/push authorized. GPU execution, profiling, benchmarks, training, delegation and scored research excluded.",
-    "checkpoint": "Generic schema 3 and shared damage/type/set integration implemented; final affected CPU integration is pending on this revision.",
+    "checkpoint": "Generic data/schema 3 integration CPU-validated and committed; status/duration native expectations captured. Full G4 CPU goal remains in progress.",
     "completed_checkpoints": [
-      "Synchronized the clean checkout to the prepared f37067e brief and completed six-member hazard package.",
-      "Exported resolved immutable Gen 5 data and conservative candidate/callback ledger with original source ownership. Retained all uncertainty and unsupported implementation states.",
-      "Independent pre-entry generated-set/native data, Hidden Power, type chart, nature/level and gender/RNG checks pass; this is not full initialization or battle conformance.",
-      "Captured generic native damage/type/set family before implementation; integrated generic tables/fields into the same shared scheduler and host adapter. Initial five focused checks passed before final preflight/priority refinements; final source validation pending."
+      "Pinned resolved data and source-owned conservative candidate inventory exported; 605 role roots, 1768 data/effect entries, 1146 callback slots. Data-only mappings remain partial; transitive closure and complete callback implementation are not claimed.",
+      "Generic species/set/type/stat/physical-special/Hidden Power/happiness/priority/hazard integration passes 37 affected CPU checks on 4eab254, retaining all 133 baseline scenarios and validating 24 added scenarios: 157 scenarios / 1059 boundaries, including 20 complete battles (eight six-member games). Eager/JIT/1-8-32 mixed batches, serialized continuation/reset, explicit schema 1/2 migration and full/lean rollouts pass.",
+      "48 status/duration cases / 189 native-only boundaries captured before implementation, with source identities, effect states/order and callback-annotated raw draws. Twelve current native tests pass on 578b352; all 157 baseline/generic case semantics remain identical after diagnostic stack normalization."
     ],
-    "next": "Run frozen-source affected CPU integration, inspect/commit/push evidence, then continue generator closure and status/duration integration within the same goal.",
+    "next": "Resume the same approved goal: implement G4-STATUS against the saved 48-case native corpus in the shared engine, including source/timer/effect-order schema, sleep/freeze/confusion/poison/Rest, secondary draws, Sleep Clause, events/requests and saved lifecycle; continue generator/indirect closure and remaining field/hooks/moves/phases/rules before the fixed campaigns. No new goal approval is required.",
     "ledger": {
       "path": "rules/gen5-reachable-v1.json",
       "entries": 1768,
@@ -541,7 +540,7 @@
         "indirect-closure",
         "engine-contract"
       ],
-      "status": "incomplete; candidate superset, not proven reachability or coverage"
+      "status": "incomplete; 1720 data mappings partial, 48 entries unsupported, all 1146 full callback mappings pending; candidate superset is not a reachability proof"
     },
     "config": "evaluation/g4-cpu-v1.json",
     "campaign": {
@@ -566,10 +565,40 @@
         "command": "JAX_PLATFORMS=cpu .venv-jax/bin/python -m unittest test.test_gen5_tables -v",
         "result": "6 passed in 4.554s; 438 pre-entry sets, 4096 Hidden Power bitplanes, 289 type matchups and native constructor gender/RNG.",
         "log": "test-logs/g4-cpu-conformance/data-cpu.log"
+      },
+      {
+        "source_commit": "4eab25497a2772a613b097edd81f2b0c3200ec15",
+        "source_tree": "5b61642814485f8a8fe77e4e4bec6641af6521aa",
+        "command": "GEN5_NATIVE_CASES=work/gen5-generic-16b5263.json G4_NATIVE_CASES=work/gen5-hazard-native.json G3_NATIVE_CASES=work/gen5-legacy-native.json JAX_PLATFORMS=cpu OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 timeout 1800s .venv-jax/bin/python -m unittest test.test_gen5_tables test.test_generic_engine test.test_roster_hazards test.test_shared_engine_cases test.test_shared_engine_battles test.test_shared_engine_lifecycle test.test_rollout test.test_g3_fixtures -v -f",
+        "result": "37 passed in 663.547s; exact 157 native scenarios / 1059 boundaries and affected lifecycle/rollout controls.",
+        "log": "test-logs/g4-cpu-conformance/schema3-cpu-repaired.log"
+      },
+      {
+        "source_commit": "578b3520c1bb4796b6d2e8f7fcb2485b872564ec",
+        "command": "node --test test/reference.test.cjs test/gen5-reachability.test.cjs test/shared-engine.test.cjs test/status-duration-native.test.cjs",
+        "result": "12 passed; pin/data/provenance, BattleStream contracts and 48 status/duration native cases. Status JAX implementation remains pending.",
+        "log": "test-logs/g4-cpu-conformance/status-native-final.log"
       }
     ],
     "gpu_requirement": "Later full G4 release needs separately scoped relevant-source GPU correctness. No GPU execution or profiling in this CPU goal.",
-    "acceptance": "pending: all prepared CPU gates remain required; milestone/task count unchanged"
+    "acceptance": "G4-CPU-conformance pending. Generic data checkpoint passes; all remaining prepared CPU gates retained, all milestone acceptance/task count unchanged.",
+    "source_identity": "test-logs/g4-cpu-conformance/source.json",
+    "evidence_directory": "test-logs/g4-cpu-conformance",
+    "continuation": {
+      "status": "saved_at_execution_checkpoint",
+      "engine_schema": 3,
+      "native_status_corpus": "test-logs/g4-cpu-conformance/status_native_only.json.gz",
+      "generic_corpus": "test-logs/g4-cpu-conformance/generic.json.gz",
+      "pending_state_design": "Preserve native status/volatile source identities, times/startTime, global effect ordering and effect-state fields. Rest/Lum retains empty-status timers; KO still consumes secondary draw. Account for migration from schemas 1/2/3 before changing State.",
+      "pending_gate": "No generated full-format start or development/held-out campaign is accepted. V7 executable harness is absent; fixed configuration is present. Target turn-limit/history capacity audit remains open.",
+      "validation_reuse": "Existing engine/IO/table/rollout/test bytes match 4eab254 exactly. Native capture-only changes at 578b352 preserve all existing case semantics; source.json records hashes and canonical fixture identities. Re-run affected CPU checks after mechanics changes, not all history per patch."
+    },
+    "resolved_failure": "16b5263 preflight rejected ordinary moves because type was missing from its field set; fixed by 4eab254, failed run stopped, all 37 repaired checks pass. Detailed minimized input and source identities are in source.json.",
+    "publication": {
+      "status": "pending_checkpoint_push",
+      "target": "origin/main",
+      "scope": "Generic schema/data integration, independent status expectations and reproducible CPU evidence; full goal remains incomplete."
+    }
   },
   "optional_gpu_validation_history": [
     {
