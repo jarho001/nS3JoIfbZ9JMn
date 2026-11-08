@@ -2,6 +2,7 @@ reference/vendor/
 node_modules/
 /graft/.cache/
 /.venv-jax/
+/.venv-g4-gpu/
 __pycache__/
 *.py[cod]
 /work/

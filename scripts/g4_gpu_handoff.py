@@ -1,0 +1,225 @@
+#!/usr/bin/env python3
+"""Freeze inputs, run matching CPU/CUDA checks, and package results for review.
+
+Preparation uses only the standard library and the pinned Node oracle. No JAX
+import or GPU query occurs with --prepare-only. This is a correctness handoff,
+not a benchmark or full-format acceptance harness.
+"""
+from __future__ import annotations
+
+import argparse
+from datetime import datetime, timezone
+import hashlib
+import json
+import os
+from pathlib import Path
+import re
+import signal
+import subprocess
+import sys
+import tarfile
+
+ROOT = Path(__file__).resolve().parents[1]
+MODULES = (
+    'test.test_gen5_tables', 'test.test_generic_engine', 'test.test_roster_hazards',
+    'test.test_shared_engine_cases', 'test.test_shared_engine_battles',
+    'test.test_shared_engine_lifecycle', 'test.test_rollout', 'test.test_g3_fixtures',
+)
+NATIVE_TESTS = (
+    'test/reference.test.cjs', 'test/gen5-reachability.test.cjs',
+    'test/shared-engine.test.cjs', 'test/status-duration-native.test.cjs',
+)
+BATCHES = {'legacy': 'all', 'hazards': 'g4', 'generic': 'generic', 'status_native_only': 'status'}
+SOURCE_PATHS = (
+    'simulator', 'mechanics', 'rules', 'reference', 'test', 'environment',
+    'evaluation', 'scripts', 'requirements-jax-cpu.txt', 'reference-lock.json',
+    'benchmarks/g3_fixtures.py',
+    'test-logs/g3-testing-profiling/diagnostic/native-pack.json',
+)
+
+
+def sha256(path):
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
+def git(*args):
+    return subprocess.check_output(['git', *args], cwd=ROOT).decode().strip()
+
+
+def source_identity():
+    names = subprocess.check_output(['git', 'ls-files', '-z', '--', *SOURCE_PATHS], cwd=ROOT)
+    paths = [p for p in names.decode().split('\0') if p]
+    # Include this runner during a local pre-commit preparation check too.
+    paths = sorted(set(paths) | {Path(__file__).resolve().relative_to(ROOT).as_posix()})
+    return {name: sha256(ROOT / name) for name in paths}
+
+
+def save(path, value):
+    path.write_text(json.dumps(value, indent=2) + '\n')
+
+
+def run(command, log, env, timeout, records):
+    """One attempt per phase; kill its process group on timeout/interruption."""
+    keys = ('JAX_PLATFORMS', 'CUDA_VISIBLE_DEVICES', 'OMP_NUM_THREADS', 'OPENBLAS_NUM_THREADS',
+            'XLA_PYTHON_CLIENT_PREALLOCATE', 'JAX_ENABLE_COMPILATION_CACHE',
+            'G3_NATIVE_CASES', 'G4_NATIVE_CASES', 'GEN5_NATIVE_CASES', 'G4_PROBE_OUTPUT')
+    record = {'argv': list(map(str, command)), 'log': log.name, 'timeout_seconds': timeout,
+              'environment':{key:env[key] for key in keys if key in env}}
+    records.append(record)
+    print(f'Running {log.name}', flush=True)
+    with log.open('w') as output:
+        child = subprocess.Popen(command, cwd=ROOT, env=env, stdout=output,
+                                 stderr=subprocess.STDOUT, start_new_session=True)
+        try:
+            record['exit_code'] = child.wait(timeout=timeout)
+        except BaseException:
+            try:
+                os.killpg(child.pid, signal.SIGTERM)
+            except ProcessLookupError:
+                pass
+            try:
+                child.wait(timeout=5)
+            except subprocess.TimeoutExpired:
+                os.killpg(child.pid, signal.SIGKILL)
+                child.wait()
+            record['exit_code'] = child.returncode
+            raise
+    if record['exit_code']:
+        raise RuntimeError(f'{log.name} exited {record["exit_code"]}; retain the bundle and stop')
+
+
+PROBE = r'''
+import importlib.metadata as md
+import json, os, platform
+from pathlib import Path
+import jax, jaxlib, jax.numpy as jnp
+expected = {'cpu':'cpu', 'cuda':'gpu'}[os.environ['JAX_PLATFORMS']]
+assert jax.default_backend() == expected, (expected, jax.default_backend())
+devices = jax.devices()
+assert all(d.platform == expected for d in devices), devices
+if expected == 'gpu':
+    assert len(devices) == 1, 'Select one GPU with CUDA_VISIBLE_DEVICES before running this handoff'
+x = jnp.arange(8, dtype=jnp.int32)
+y = jax.jit(lambda z: z*z+1)(x)
+jax.block_until_ready((x,y))
+assert y.tolist() == [1,2,5,10,17,26,37,50]
+assert all(d.platform == expected for v in (x,y) for d in v.devices())
+result = {'python':platform.python_version(), 'jax':jax.__version__, 'jaxlib':jaxlib.__version__,
+          'backend':jax.default_backend(), 'devices':list(map(str,devices)),
+          'input_devices':list(map(str,x.devices())), 'jit_output_devices':list(map(str,y.devices())),
+          'packages':{d.metadata['Name']:d.version for d in md.distributions()
+                      if d.metadata['Name'].lower().startswith(('jax','nvidia','numpy'))}}
+Path(os.environ['G4_PROBE_OUTPUT']).write_text(json.dumps(result,indent=2)+'\n')
+print(json.dumps(result,indent=2))
+'''
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--output', type=Path, help='Fresh directory; defaults to work/g4-gpu-TIMESTAMP')
+    parser.add_argument('--prepare-only', action='store_true', help='Freeze native inputs and commands; no JAX/GPU execution')
+    parser.add_argument('--suite-timeout', type=int, default=3600, help='Seconds per CPU/CUDA suite; default 3600; no automatic retry')
+    args = parser.parse_args(argv)
+    if args.suite_timeout <= 0:
+        parser.error('--suite-timeout must be positive')
+    stamp = datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
+    out = (args.output or ROOT / 'work' / f'g4-gpu-{stamp}').resolve()
+    # A pre-existing output must never be overwritten or mistaken for this run.
+    out.mkdir(parents=True, exist_ok=False)
+    summary = {'schemaVersion':1, 'status':'running', 'kind':'G4-checkpoint-device-correctness',
+               'started_utc':stamp, 'prepare_only':args.prepare_only, 'commands':[],
+               'full_G4_accepted':False, 'profiling_run':False, 'training_run':False}
+    failure = None
+    identity = None
+    original_affinity = None
+    previous_term = signal.getsignal(signal.SIGTERM)
+    def interrupted(signum, frame):
+        raise InterruptedError(f'received signal {signum}')
+    signal.signal(signal.SIGTERM, interrupted)
+    try:
+        available = sorted(os.sched_getaffinity(0))
+        original_affinity = available
+        selected = available[:min(8, len(available))]
+        os.sched_setaffinity(0, selected)
+        summary['host_cpu_affinity'] = selected
+        env = dict(os.environ, OMP_NUM_THREADS=str(len(selected)), OPENBLAS_NUM_THREADS=str(len(selected)),
+                   XLA_PYTHON_CLIENT_PREALLOCATE='false', JAX_ENABLE_COMPILATION_CACHE='false')
+        # Ignore inherited test-fixture overrides; every test uses this bundle.
+        for key in ('G3_NATIVE_CASES', 'G4_NATIVE_CASES', 'GEN5_NATIVE_CASES'):
+            env.pop(key, None)
+        identity = source_identity()
+        dirty = git('status','--porcelain','--untracked-files=all','--',*SOURCE_PATHS)
+        save(out / 'source.json', {'commit':git('rev-parse','HEAD'), 'tree':git('rev-parse','HEAD^{tree}'),
+                                  'working_tree_status':git('status','--porcelain'), 'sha256':identity})
+        if dirty and not args.prepare_only:
+            raise RuntimeError('Relevant code/fixtures are uncommitted; preserve and commit them before device validation')
+        run(['node','reference/oracle.cjs','provenance'], out/'reference-provenance.log', env, 120, summary['commands'])
+        run(['node','reference/oracle.cjs','format'], out/'reference-format.log', env, 120, summary['commands'])
+        fixtures = {}
+        for name,batch in BATCHES.items():
+            path = out / f'native-{name}.json'
+            run(['node','reference/shared-engine-cases.cjs','--batch',batch,'--output',str(path)],
+                out/f'prepare-{name}.log', env, 180, summary['commands'])
+            data = json.loads(path.read_text())
+            assert data['pin'] == json.loads((ROOT/'reference-lock.json').read_text())['commit']
+            fixtures[name] = {'file':path.name, 'sha256':sha256(path), 'cases':len(data['cases']),
+                              'boundaries':sum(len(c['steps']) for c in data['cases']),
+                              'jax_implemented':name!='status_native_only'}
+        save(out/'fixtures.json', fixtures)
+        env.update(G3_NATIVE_CASES=str(out/'native-legacy.json'),
+                   G4_NATIVE_CASES=str(out/'native-hazards.json'),
+                   GEN5_NATIVE_CASES=str(out/'native-generic.json'))
+        # The 48 status cases are native expectations, not implemented JAX cases.
+        summary['modules'] = list(MODULES)
+        summary['fixtures'] = fixtures
+        summary['future_full_format_gate'] = 'Pending implementation of V7 and remaining mechanics; see docs/G4_GPU_HANDOFF.md'
+        if args.prepare_only:
+            summary['status'] = 'prepared_not_executed'
+        else:
+            run(['node','--test',*NATIVE_TESTS], out/'native-tests.log', env, 300, summary['commands'])
+            for platform in ('cpu','cuda'):
+                summary['phase'] = platform
+                save(out/'summary.json', summary)
+                phase_env = dict(env, JAX_PLATFORMS=platform, G4_PROBE_OUTPUT=str(out/f'{platform}-runtime.json'))
+                if platform == 'cuda':
+                    run(['nvidia-smi'], out/'nvidia-smi.log', env, 30, summary['commands'])
+                run([sys.executable,'-c',PROBE], out/f'{platform}-probe.log', phase_env, 120, summary['commands'])
+                run([sys.executable,'-m','unittest',*MODULES,'-v','-f'], out/f'{platform}-tests.log',
+                    phase_env, args.suite_timeout, summary['commands'])
+                match = re.search(r'Ran (\d+) tests? in ([0-9.]+)s', (out/f'{platform}-tests.log').read_text())
+                if match is None or int(match[1]) <= 0:
+                    raise RuntimeError(f'{platform} suite did not report a nonempty test run')
+                summary[f'{platform}_tests'] = {'passed':True, 'count':int(match[1])}
+            summary['status'] = 'passed_checkpoint_checks_not_full_G4'
+    except BaseException as error:
+        failure = error
+        summary['status'] = 'failed'
+        summary['error'] = repr(error)
+    finally:
+        try:
+            summary['source_unchanged'] = identity is not None and source_identity() == identity
+            if identity is not None and not summary['source_unchanged']:
+                failure = failure or RuntimeError('Relevant source changed during the run; results are not acceptance evidence')
+                summary['status'] = 'failed_source_changed'
+            save(out/'summary.json', summary)
+            archive = out.with_name(out.name + '.tar.gz')
+            with archive.open('xb') as raw:
+                with tarfile.open(fileobj=raw, mode='w:gz') as bundle:
+                    bundle.add(out, arcname=out.name)
+            print(f'Results: {out}\nAgent handoff bundle: {archive}', flush=True)
+        except BaseException as error:
+            failure = failure or error
+            summary['status'] = 'failed_packaging_or_finalization'
+            summary['finalization_error'] = repr(error)
+            save(out/'summary.json', summary)
+        signal.signal(signal.SIGTERM, previous_term)
+        if original_affinity is not None:
+            os.sched_setaffinity(0, original_affinity)
+    if failure:
+        print(f'NOT PASSED: {failure}', file=sys.stderr)
+        return 1
+    return 0
+
+
+if __name__ == '__main__':
+    raise SystemExit(main())

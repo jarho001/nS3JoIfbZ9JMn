@@ -394,6 +394,9 @@ G6 remains useful without positive G7/G8 research results.
   reachability stays a gap; an unsupported reachable effect blocks acceptance
   rather than removing the battle from evaluation.
   See [the proposed G4 CPU execution brief](#proposed-g4-cpu-implementation-and-conformance-goal).
+  During travel, accumulate device checks and ready/pending commands in the
+  [G4 GPU handoff](docs/G4_GPU_HANDOFF.md); GPU execution remains deferred while
+  CPU implementation continues. Results must match their recorded source.
 
 ### G5 — useful end-to-end training system (open)
 
