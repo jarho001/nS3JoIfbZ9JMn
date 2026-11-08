@@ -70,7 +70,7 @@ def plain(row):
     # Unknown declarative fields must fail closed just like unknown callbacks
     # (e.g. False Swipe's noFaint cannot become an ordinary damaging move).
     known={'name','id','fullname','effectType','exists','num','gen','isNonstandard','duration',
-        'noCopy','affectsFainted','sourceEffect','target','basePower','accuracy','critRatio','baseMoveType',
+        'noCopy','affectsFainted','sourceEffect','target','type','basePower','accuracy','critRatio','baseMoveType',
         'secondary','secondaries','hasSheerForceBoost','priority','category','overrideOffensiveStat',
         'overrideOffensivePokemon','overrideDefensiveStat','overrideDefensivePokemon','ignoreNegativeOffensive',
         'ignorePositiveDefensive','ignoreOffensive','ignoreDefensive','ignoreImmunity','pp','noPPBoosts',
