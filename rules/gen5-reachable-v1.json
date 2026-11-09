@@ -7,10 +7,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
+        }
+      ],
       "field": "onModifySTAB",
       "id": "abilities:adaptability:onModifySTAB",
-      "implementation": null,
+      "implementation": {
+        "family": "hook",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:adaptability",
@@ -21,7 +33,7 @@
       "owner": "abilities:adaptability",
       "reachability": "candidate",
       "sha256": "f62a69e5d35f1c88f22aad5176fd0522d21a17d014a6b794801d601bd12348b5",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -329,10 +341,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
+        }
+      ],
       "field": "onModifySpe",
       "id": "abilities:chlorophyll:onModifySpe",
-      "implementation": null,
+      "implementation": {
+        "family": "hook",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:chlorophyll",
@@ -343,7 +367,7 @@
       "owner": "abilities:chlorophyll",
       "reachability": "candidate",
       "sha256": "54df80cbcef1096ad3bbbac6495fa49fa75d3226d83700a67be6eaef7ce63ed1",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -467,10 +491,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
+        }
+      ],
       "field": "onSourceModifyAccuracy",
       "id": "abilities:compoundeyes:onSourceModifyAccuracy",
-      "implementation": null,
+      "implementation": {
+        "family": "hook",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:compoundeyes",
@@ -481,7 +517,7 @@
       "owner": "abilities:compoundeyes",
       "reachability": "candidate",
       "sha256": "158c7c57e12d0b7870ba0bc0a3e88dfece007456915f9555cb43cb9487685c94",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -697,10 +733,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
+        }
+      ],
       "field": "onStart",
       "id": "abilities:drizzle:onStart",
-      "implementation": null,
+      "implementation": {
+        "family": "hook",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:drizzle",
@@ -711,7 +759,7 @@
       "owner": "abilities:drizzle",
       "reachability": "candidate",
       "sha256": "2ed3f0bdefdd40d7c12281360f84d5b22c5a629f86f48f791e1f323004fe3106",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -720,10 +768,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
+        }
+      ],
       "field": "onStart",
       "id": "abilities:drought:onStart",
-      "implementation": null,
+      "implementation": {
+        "family": "hook",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:drought",
@@ -734,7 +794,7 @@
       "owner": "abilities:drought",
       "reachability": "candidate",
       "sha256": "c7f251573fb48d95ef7271e490513c4e1d64028ff0f3b16a10b0c28a0fcff5a6",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -835,10 +895,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
+        }
+      ],
       "field": "onSourceModifyDamage",
       "id": "abilities:filter:onSourceModifyDamage",
-      "implementation": null,
+      "implementation": {
+        "family": "hook",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:filter",
@@ -849,7 +921,7 @@
       "owner": "abilities:filter",
       "reachability": "candidate",
       "sha256": "de511a9afabc2da7a6fe1bb52b2c0dad5c20e9972cabae64338a25c106af0d5b",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -1295,10 +1367,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
+        }
+      ],
       "field": "onModifyAtk",
       "id": "abilities:guts:onModifyAtk",
-      "implementation": null,
+      "implementation": {
+        "family": "hook",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:guts",
@@ -1309,7 +1393,7 @@
       "owner": "abilities:guts",
       "reachability": "candidate",
       "sha256": "0ed9c30a5b7ecc0a2dde63e562daab4c632a37c26126fee32e6dbe1328892d08",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -1433,10 +1517,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
+        }
+      ],
       "field": "onModifyAtk",
       "id": "abilities:hugepower:onModifyAtk",
-      "implementation": null,
+      "implementation": {
+        "family": "hook",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:hugepower",
@@ -1447,7 +1543,7 @@
       "owner": "abilities:hugepower",
       "reachability": "candidate",
       "sha256": "ecb864b3a1de0ba7d36006373c1cd2d4da5faf3dc66077357f2cc6b834fd61cf",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -1456,10 +1552,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
+        }
+      ],
       "field": "onModifyAtk",
       "id": "abilities:hustle:onModifyAtk",
-      "implementation": null,
+      "implementation": {
+        "family": "hook",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:hustle",
@@ -1470,7 +1578,7 @@
       "owner": "abilities:hustle",
       "reachability": "candidate",
       "sha256": "f2d6d4a8208ba0c027c1fca71a780a6d93a7a796d8588533d2be1356700418ee",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -1479,10 +1587,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
+        }
+      ],
       "field": "onSourceModifyAccuracy",
       "id": "abilities:hustle:onSourceModifyAccuracy",
-      "implementation": null,
+      "implementation": {
+        "family": "hook",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:hustle",
@@ -1493,7 +1613,7 @@
       "owner": "abilities:hustle",
       "reachability": "candidate",
       "sha256": "db2b061dd498f714e67ddaffb65e186e99fd39ab0d51e7507b01aa86a4ffc763",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -1548,10 +1668,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
+        }
+      ],
       "field": "onImmunity",
       "id": "abilities:icebody:onImmunity",
-      "implementation": null,
+      "implementation": {
+        "family": "hook",
+        "file": "simulator/field_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:icebody",
@@ -1562,7 +1694,7 @@
       "owner": "abilities:icebody",
       "reachability": "candidate",
       "sha256": "6fa457561076405b1c59a0f85ba5881d21ed985e192548528775d45bca5b9835",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -1571,10 +1703,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
+        }
+      ],
       "field": "onWeather",
       "id": "abilities:icebody:onWeather",
-      "implementation": null,
+      "implementation": {
+        "family": "hook",
+        "file": "simulator/field_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:icebody",
@@ -1585,7 +1729,7 @@
       "owner": "abilities:icebody",
       "reachability": "candidate",
       "sha256": "5e809dc698d0a617a1c6654af53c83af9856fae36e29a876f511730be483da26",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -1882,10 +2026,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
+        }
+      ],
       "field": "onStart",
       "id": "abilities:intimidate:onStart",
-      "implementation": null,
+      "implementation": {
+        "family": "hook",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:intimidate",
@@ -1896,7 +2052,7 @@
       "owner": "abilities:intimidate",
       "reachability": "candidate",
       "sha256": "53c65b3fc93c00b38a42b43eb9227c0c40bfe4346817af023966ccb7d8abd8d6",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -2365,10 +2521,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
+        }
+      ],
       "field": "onModifyDef",
       "id": "abilities:marvelscale:onModifyDef",
-      "implementation": null,
+      "implementation": {
+        "family": "hook",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:marvelscale",
@@ -2379,7 +2547,7 @@
       "owner": "abilities:marvelscale",
       "reachability": "candidate",
       "sha256": "c877e0d39cdc232774d978cee872163ab08e11b5dbf30a29b519e7a557d11ebc",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -3055,10 +3223,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
+        }
+      ],
       "field": "onModifyPriority",
       "id": "abilities:prankster:onModifyPriority",
-      "implementation": null,
+      "implementation": {
+        "family": "hook",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:prankster",
@@ -3069,7 +3249,7 @@
       "owner": "abilities:prankster",
       "reachability": "candidate",
       "sha256": "9007148784a4eb5cefd9d0dbbdb3362a2108bfa1e3d3ef11e6ad6908ad9d10d6",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -3078,10 +3258,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
+        }
+      ],
       "field": "onDeductPP",
       "id": "abilities:pressure:onDeductPP",
-      "implementation": null,
+      "implementation": {
+        "family": "hook",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:pressure",
@@ -3092,7 +3284,7 @@
       "owner": "abilities:pressure",
       "reachability": "candidate",
       "sha256": "ae5eddcdc842cf1e33cc8c47ff4885cbc7337e851aaa51b20a7cb368268389fc",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -3101,10 +3293,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
+        }
+      ],
       "field": "onStart",
       "id": "abilities:pressure:onStart",
-      "implementation": null,
+      "implementation": {
+        "family": "hook",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:pressure",
@@ -3115,7 +3319,7 @@
       "owner": "abilities:pressure",
       "reachability": "candidate",
       "sha256": "508c391de37334e53ad57f4d7d59e9cb614de39605f41eb8994351a66d9d36d1",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -3124,10 +3328,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
+        }
+      ],
       "field": "onModifyAtk",
       "id": "abilities:purepower:onModifyAtk",
-      "implementation": null,
+      "implementation": {
+        "family": "hook",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:purepower",
@@ -3138,7 +3354,7 @@
       "owner": "abilities:purepower",
       "reachability": "candidate",
       "sha256": "ecb864b3a1de0ba7d36006373c1cd2d4da5faf3dc66077357f2cc6b834fd61cf",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -3147,10 +3363,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
+        }
+      ],
       "field": "onModifySpe",
       "id": "abilities:quickfeet:onModifySpe",
-      "implementation": null,
+      "implementation": {
+        "family": "hook",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:quickfeet",
@@ -3161,7 +3389,7 @@
       "owner": "abilities:quickfeet",
       "reachability": "candidate",
       "sha256": "69ade57a04f533152cc119907c424f46ba3faebeaa38ef7153b34af1d307bbce",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -3377,10 +3605,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
+        }
+      ],
       "field": "onImmunity",
       "id": "abilities:sandrush:onImmunity",
-      "implementation": null,
+      "implementation": {
+        "family": "hook",
+        "file": "simulator/field_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:sandrush",
@@ -3391,7 +3631,7 @@
       "owner": "abilities:sandrush",
       "reachability": "candidate",
       "sha256": "89c9e3b0161ecc6549a6d193d7f59a87a8f989c4940312f060ec16ea75b6e189",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -3400,10 +3640,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
+        }
+      ],
       "field": "onModifySpe",
       "id": "abilities:sandrush:onModifySpe",
-      "implementation": null,
+      "implementation": {
+        "family": "hook",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:sandrush",
@@ -3414,7 +3666,7 @@
       "owner": "abilities:sandrush",
       "reachability": "candidate",
       "sha256": "20a051559d27cd6062c6c348b3304124a7cf746383f6be9867fae00b821cc086",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -3423,10 +3675,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
+        }
+      ],
       "field": "onStart",
       "id": "abilities:sandstream:onStart",
-      "implementation": null,
+      "implementation": {
+        "family": "hook",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:sandstream",
@@ -3437,7 +3701,7 @@
       "owner": "abilities:sandstream",
       "reachability": "candidate",
       "sha256": "35115d0d652322c6cdc161ab89de0770484e8053f92c0fd490a854e1580a0cb1",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -3883,10 +4147,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
+        }
+      ],
       "field": "onModifyDamage",
       "id": "abilities:sniper:onModifyDamage",
-      "implementation": null,
+      "implementation": {
+        "family": "hook",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:sniper",
@@ -3897,7 +4173,7 @@
       "owner": "abilities:sniper",
       "reachability": "candidate",
       "sha256": "3c191834a214198b85d738c3ddc7ee271a040c9959656df116d34e874298efe6",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -3952,10 +4228,22 @@
           "file": "data/mods/gen8/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
+        }
+      ],
       "field": "onStart",
       "id": "abilities:snowwarning:onStart",
-      "implementation": null,
+      "implementation": {
+        "family": "hook",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:snowwarning",
@@ -3966,7 +4254,7 @@
       "owner": "abilities:snowwarning",
       "reachability": "candidate",
       "sha256": "5887fbb9c9f40bed8cc7e13d1cda64d2ed7f765aacec4d2a1896a618fe27b9c4",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -4021,10 +4309,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
+        }
+      ],
       "field": "onSourceModifyDamage",
       "id": "abilities:solidrock:onSourceModifyDamage",
-      "implementation": null,
+      "implementation": {
+        "family": "hook",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:solidrock",
@@ -4035,7 +4335,7 @@
       "owner": "abilities:solidrock",
       "reachability": "candidate",
       "sha256": "ca0d26a33a9a89438d4c43175467ed4c8813223d1df17876197a6a2db0e86184",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -4297,10 +4597,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
+        }
+      ],
       "field": "onModifyCritRatio",
       "id": "abilities:superluck:onModifyCritRatio",
-      "implementation": null,
+      "implementation": {
+        "family": "hook",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:superluck",
@@ -4311,7 +4623,7 @@
       "owner": "abilities:superluck",
       "reachability": "candidate",
       "sha256": "a9c793100187caeaf1a4d105be92a28266dc3db7fd3604fcc750e52b90428434",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -4366,10 +4678,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
+        }
+      ],
       "field": "onModifySpe",
       "id": "abilities:swiftswim:onModifySpe",
-      "implementation": null,
+      "implementation": {
+        "family": "hook",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:swiftswim",
@@ -4380,7 +4704,7 @@
       "owner": "abilities:swiftswim",
       "reachability": "candidate",
       "sha256": "4c8db510ce54e1b63b169b19841fe899424fef57bed0b3a5d11365ba64e2177d",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -4447,10 +4771,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
+        }
+      ],
       "field": "onBasePower",
       "id": "abilities:technician:onBasePower",
-      "implementation": null,
+      "implementation": {
+        "family": "hook",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:technician",
@@ -4461,7 +4797,7 @@
       "owner": "abilities:technician",
       "reachability": "candidate",
       "sha256": "fb312a73af24fe9f1464ed041995f32f37d558fcc6774791cea6dee49f946c98",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -4539,10 +4875,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
+        }
+      ],
       "field": "onSourceModifyAtk",
       "id": "abilities:thickfat:onSourceModifyAtk",
-      "implementation": null,
+      "implementation": {
+        "family": "hook",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:thickfat",
@@ -4553,7 +4901,7 @@
       "owner": "abilities:thickfat",
       "reachability": "candidate",
       "sha256": "5fff6242d72a6893e4142280c1a799229189e9e7499ab58b59b893065b7ebc2f",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -4562,10 +4910,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
+        }
+      ],
       "field": "onSourceModifySpA",
       "id": "abilities:thickfat:onSourceModifySpA",
-      "implementation": null,
+      "implementation": {
+        "family": "hook",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:thickfat",
@@ -4576,7 +4936,7 @@
       "owner": "abilities:thickfat",
       "reachability": "candidate",
       "sha256": "5a0786ee06f7ce14a9fd7dd8ca39b1519cb2e22935b3b6e8fad74509070a2728",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -4585,10 +4945,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
+        }
+      ],
       "field": "onModifyDamage",
       "id": "abilities:tintedlens:onModifyDamage",
-      "implementation": null,
+      "implementation": {
+        "family": "hook",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:tintedlens",
@@ -4599,7 +4971,7 @@
       "owner": "abilities:tintedlens",
       "reachability": "candidate",
       "sha256": "f3399523364b41d507fd12cf0eaa8adf70859fc2808e51dcb725731ce19e9595",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -5460,10 +5832,22 @@
           "file": "data/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
+        }
+      ],
       "field": "onDisableMove",
       "id": "conditions:choicelock:onDisableMove",
-      "implementation": null,
+      "implementation": {
+        "family": "hook",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:choicelock",
@@ -5474,7 +5858,7 @@
       "owner": "conditions:choicelock",
       "reachability": "candidate",
       "sha256": "e4665dd4fa0a0001a95641a504a5ce542cdee3f431ce9d00cb34a0b98db4b4b6",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -5483,10 +5867,22 @@
           "file": "data/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
+        }
+      ],
       "field": "onStart",
       "id": "conditions:choicelock:onStart",
-      "implementation": null,
+      "implementation": {
+        "family": "hook",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:choicelock",
@@ -5497,7 +5893,7 @@
       "owner": "conditions:choicelock",
       "reachability": "candidate",
       "sha256": "5c98fcdda74d311331400d7a42ea526be35eb153ddab5f6a4da44c5322661bc8",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -7589,7 +7985,7 @@
       "id": "conditions:sandstorm:onModifySpD",
       "implementation": {
         "family": "field",
-        "file": "simulator/field_effects.py",
+        "file": "simulator/hook_effects.py",
         "scheduler": "simulator/shared_engine.py",
         "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
       },
@@ -9401,10 +9797,22 @@
           "file": "data/items.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
+        }
+      ],
       "field": "onModifyAtk",
       "id": "items:choiceband:onModifyAtk",
-      "implementation": null,
+      "implementation": {
+        "family": "hook",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "items:choiceband",
@@ -9415,7 +9823,7 @@
       "owner": "items:choiceband",
       "reachability": "candidate",
       "sha256": "6733f650476000cbdba327be32035b6e61508c26ede148968fba84fac5ca13d4",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -9424,10 +9832,22 @@
           "file": "data/items.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
+        }
+      ],
       "field": "onModifyMove",
       "id": "items:choiceband:onModifyMove",
-      "implementation": null,
+      "implementation": {
+        "family": "hook",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "items:choiceband",
@@ -9438,7 +9858,7 @@
       "owner": "items:choiceband",
       "reachability": "candidate",
       "sha256": "1b16a95b274be78a22e8fd4fd9224c07fd72d12c235ca610c30cf86fe608b42d",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -9447,10 +9867,22 @@
           "file": "data/items.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
+        }
+      ],
       "field": "onStart",
       "id": "items:choiceband:onStart",
-      "implementation": null,
+      "implementation": {
+        "family": "hook",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "items:choiceband",
@@ -9461,7 +9893,7 @@
       "owner": "items:choiceband",
       "reachability": "candidate",
       "sha256": "da2d733f74915508102e8fbfa98b5cd1169070e0530cbaa25c0ab192717a4451",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -9470,10 +9902,22 @@
           "file": "data/items.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
+        }
+      ],
       "field": "onModifyMove",
       "id": "items:choicescarf:onModifyMove",
-      "implementation": null,
+      "implementation": {
+        "family": "hook",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "items:choicescarf",
@@ -9484,7 +9928,7 @@
       "owner": "items:choicescarf",
       "reachability": "candidate",
       "sha256": "1b16a95b274be78a22e8fd4fd9224c07fd72d12c235ca610c30cf86fe608b42d",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -9493,10 +9937,22 @@
           "file": "data/items.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
+        }
+      ],
       "field": "onModifySpe",
       "id": "items:choicescarf:onModifySpe",
-      "implementation": null,
+      "implementation": {
+        "family": "hook",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "items:choicescarf",
@@ -9507,7 +9963,7 @@
       "owner": "items:choicescarf",
       "reachability": "candidate",
       "sha256": "2b8dd56a7f176d277aea567f2e5bcbeedbb01a32e75a669a8dd4bc403a3a9ed1",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -9516,10 +9972,22 @@
           "file": "data/items.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
+        }
+      ],
       "field": "onStart",
       "id": "items:choicescarf:onStart",
-      "implementation": null,
+      "implementation": {
+        "family": "hook",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "items:choicescarf",
@@ -9530,7 +9998,7 @@
       "owner": "items:choicescarf",
       "reachability": "candidate",
       "sha256": "da2d733f74915508102e8fbfa98b5cd1169070e0530cbaa25c0ab192717a4451",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -9539,10 +10007,22 @@
           "file": "data/items.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
+        }
+      ],
       "field": "onModifyMove",
       "id": "items:choicespecs:onModifyMove",
-      "implementation": null,
+      "implementation": {
+        "family": "hook",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "items:choicespecs",
@@ -9553,7 +10033,7 @@
       "owner": "items:choicespecs",
       "reachability": "candidate",
       "sha256": "1b16a95b274be78a22e8fd4fd9224c07fd72d12c235ca610c30cf86fe608b42d",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -9562,10 +10042,22 @@
           "file": "data/items.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
+        }
+      ],
       "field": "onModifySpA",
       "id": "items:choicespecs:onModifySpA",
-      "implementation": null,
+      "implementation": {
+        "family": "hook",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "items:choicespecs",
@@ -9576,7 +10068,7 @@
       "owner": "items:choicespecs",
       "reachability": "candidate",
       "sha256": "12047098ebd32062cb62459440cc6f943371a33c4af4acf1c72345efa3a5041b",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -9585,10 +10077,22 @@
           "file": "data/items.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
+        }
+      ],
       "field": "onStart",
       "id": "items:choicespecs:onStart",
-      "implementation": null,
+      "implementation": {
+        "family": "hook",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "items:choicespecs",
@@ -9599,7 +10103,7 @@
       "owner": "items:choicespecs",
       "reachability": "candidate",
       "sha256": "da2d733f74915508102e8fbfa98b5cd1169070e0530cbaa25c0ab192717a4451",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -10206,10 +10710,22 @@
           "file": "data/items.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
+        }
+      ],
       "field": "onModifyDef",
       "id": "items:eviolite:onModifyDef",
-      "implementation": null,
+      "implementation": {
+        "family": "hook",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "items:eviolite",
@@ -10220,7 +10736,7 @@
       "owner": "items:eviolite",
       "reachability": "candidate",
       "sha256": "31cd873230df61d05f93f1ea9c033f9f7187ab680bbf9d3ab69fd153133aac70",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -10229,10 +10745,22 @@
           "file": "data/items.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
+        }
+      ],
       "field": "onModifySpD",
       "id": "items:eviolite:onModifySpD",
-      "implementation": null,
+      "implementation": {
+        "family": "hook",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "items:eviolite",
@@ -10243,7 +10771,7 @@
       "owner": "items:eviolite",
       "reachability": "candidate",
       "sha256": "cd99ead7982657cca8a1f251074239cf80fb4545b6316f84d6efde0337b864be",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -10252,10 +10780,22 @@
           "file": "data/items.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
+        }
+      ],
       "field": "onModifyDamage",
       "id": "items:expertbelt:onModifyDamage",
-      "implementation": null,
+      "implementation": {
+        "family": "hook",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "items:expertbelt",
@@ -10266,7 +10806,7 @@
       "owner": "items:expertbelt",
       "reachability": "candidate",
       "sha256": "0feba23b5c420dec1b510bdea4f1bb6dbc12ab77a921052444b7a71f32005e9c",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -11575,10 +12115,22 @@
           "file": "data/mods/gen6/items.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
+        }
+      ],
       "field": "onAfterMoveSecondarySelf",
       "id": "items:lifeorb:onAfterMoveSecondarySelf",
-      "implementation": null,
+      "implementation": {
+        "family": "hook",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "items:lifeorb",
@@ -11589,7 +12141,7 @@
       "owner": "items:lifeorb",
       "reachability": "candidate",
       "sha256": "d7e8d605c8a051c6cf8ee652d0df66ecfb040321fcdfaa9460b8a592e3bb56f3",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -11598,10 +12150,22 @@
           "file": "data/items.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
+        }
+      ],
       "field": "onModifyDamage",
       "id": "items:lifeorb:onModifyDamage",
-      "implementation": null,
+      "implementation": {
+        "family": "hook",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "items:lifeorb",
@@ -11612,7 +12176,7 @@
       "owner": "items:lifeorb",
       "reachability": "candidate",
       "sha256": "c3c1e4f01bc4f0937d900b185a0227790e55c4144a4712f850c88b68ecc7768d",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -12416,10 +12980,22 @@
           "file": "data/items.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
+        }
+      ],
       "field": "onBasePower",
       "id": "items:muscleband:onBasePower",
-      "implementation": null,
+      "implementation": {
+        "family": "hook",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "items:muscleband",
@@ -12430,7 +13006,7 @@
       "owner": "items:muscleband",
       "reachability": "candidate",
       "sha256": "838a9c430d63f0a661f0d88e32c968f546534cfaa3444bd541d3aefd800c2ad0",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -12485,10 +13061,22 @@
           "file": "data/items.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
+        }
+      ],
       "field": "onBasePower",
       "id": "items:mysticwater:onBasePower",
-      "implementation": null,
+      "implementation": {
+        "family": "hook",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "items:mysticwater",
@@ -12499,7 +13087,7 @@
       "owner": "items:mysticwater",
       "reachability": "candidate",
       "sha256": "d8aeebc8c29cf0492e554a3c89beb152aa069c459e0fa3f4eea40a91ffb47447",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -13681,10 +14269,22 @@
           "file": "data/items.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
+        }
+      ],
       "field": "onModifyCritRatio",
       "id": "items:scopelens:onModifyCritRatio",
-      "implementation": null,
+      "implementation": {
+        "family": "hook",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "items:scopelens",
@@ -13695,7 +14295,7 @@
       "owner": "items:scopelens",
       "reachability": "candidate",
       "sha256": "a9c793100187caeaf1a4d105be92a28266dc3db7fd3604fcc750e52b90428434",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -13888,10 +14488,22 @@
           "file": "data/items.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
+        }
+      ],
       "field": "onBasePower",
       "id": "items:silkscarf:onBasePower",
-      "implementation": null,
+      "implementation": {
+        "family": "hook",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "items:silkscarf",
@@ -13902,7 +14514,7 @@
       "owner": "items:silkscarf",
       "reachability": "candidate",
       "sha256": "9dcebc99da8f897807d1599eaedcad156e85926dd539765644f977614b5944bc",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -14923,10 +15535,22 @@
           "file": "data/items.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
+        }
+      ],
       "field": "onBasePower",
       "id": "items:wiseglasses:onBasePower",
-      "implementation": null,
+      "implementation": {
+        "family": "hook",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "items:wiseglasses",
@@ -14937,7 +15561,7 @@
       "owner": "items:wiseglasses",
       "reachability": "candidate",
       "sha256": "b75e121a5da2fc0dbd5c5bade940d22271b029b95c386cea4fc8a953ebaabc05",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -20214,7 +20838,7 @@
       "id": "moves:lightscreen:condition.onAnyModifyDamage",
       "implementation": {
         "family": "field",
-        "file": "simulator/field_effects.py",
+        "file": "simulator/hook_effects.py",
         "scheduler": "simulator/shared_engine.py",
         "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
       },
@@ -22679,7 +23303,7 @@
       "id": "moves:reflect:condition.onAnyModifyDamage",
       "implementation": {
         "family": "field",
-        "file": "simulator/field_effects.py",
+        "file": "simulator/hook_effects.py",
         "scheduler": "simulator/shared_engine.py",
         "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
       },
@@ -65091,10 +65715,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
         }
       ],
       "id": "abilities:adaptability",
       "implementation": {
+        "behavior": {
+          "family": "hook",
+          "file": "simulator/hook_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -65331,10 +65967,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
         }
       ],
       "id": "abilities:battlearmor",
       "implementation": {
+        "behavior": {
+          "family": "hook",
+          "file": "simulator/hook_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -65421,10 +66069,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
         }
       ],
       "id": "abilities:chlorophyll",
       "implementation": {
+        "behavior": {
+          "family": "hook",
+          "file": "simulator/hook_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -65541,10 +66201,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
         }
       ],
       "id": "abilities:compoundeyes",
       "implementation": {
+        "behavior": {
+          "family": "hook",
+          "file": "simulator/hook_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -65781,10 +66453,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
         }
       ],
       "id": "abilities:drizzle",
       "implementation": {
+        "behavior": {
+          "family": "hook",
+          "file": "simulator/hook_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -65811,10 +66495,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
         }
       ],
       "id": "abilities:drought",
       "implementation": {
+        "behavior": {
+          "family": "hook",
+          "file": "simulator/hook_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -65931,10 +66627,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
         }
       ],
       "id": "abilities:filter",
       "implementation": {
+        "behavior": {
+          "family": "hook",
+          "file": "simulator/hook_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -66231,10 +66939,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
         }
       ],
       "id": "abilities:guts",
       "implementation": {
+        "behavior": {
+          "family": "hook",
+          "file": "simulator/hook_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -66411,10 +67131,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
         }
       ],
       "id": "abilities:hugepower",
       "implementation": {
+        "behavior": {
+          "family": "hook",
+          "file": "simulator/hook_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -66441,10 +67173,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
         }
       ],
       "id": "abilities:hustle",
       "implementation": {
+        "behavior": {
+          "family": "hook",
+          "file": "simulator/hook_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -66531,10 +67275,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
         }
       ],
       "id": "abilities:icebody",
       "implementation": {
+        "behavior": {
+          "family": "hook",
+          "file": "simulator/hook_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -66771,10 +67527,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
         }
       ],
       "id": "abilities:intimidate",
       "implementation": {
+        "behavior": {
+          "family": "hook",
+          "file": "simulator/hook_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -67251,10 +68019,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
         }
       ],
       "id": "abilities:marvelscale",
       "implementation": {
+        "behavior": {
+          "family": "hook",
+          "file": "simulator/hook_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -67941,10 +68721,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
         }
       ],
       "id": "abilities:prankster",
       "implementation": {
+        "behavior": {
+          "family": "hook",
+          "file": "simulator/hook_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -67971,10 +68763,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
         }
       ],
       "id": "abilities:pressure",
       "implementation": {
+        "behavior": {
+          "family": "hook",
+          "file": "simulator/hook_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -68001,10 +68805,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
         }
       ],
       "id": "abilities:purepower",
       "implementation": {
+        "behavior": {
+          "family": "hook",
+          "file": "simulator/hook_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -68031,10 +68847,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
         }
       ],
       "id": "abilities:quickfeet",
       "implementation": {
+        "behavior": {
+          "family": "hook",
+          "file": "simulator/hook_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -68331,10 +69159,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
         }
       ],
       "id": "abilities:sandrush",
       "implementation": {
+        "behavior": {
+          "family": "hook",
+          "file": "simulator/hook_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -68361,10 +69201,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
         }
       ],
       "id": "abilities:sandstream",
       "implementation": {
+        "behavior": {
+          "family": "hook",
+          "file": "simulator/hook_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -68601,10 +69453,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
         }
       ],
       "id": "abilities:shellarmor",
       "implementation": {
+        "behavior": {
+          "family": "hook",
+          "file": "simulator/hook_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -68751,10 +69615,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
         }
       ],
       "id": "abilities:sniper",
       "implementation": {
+        "behavior": {
+          "family": "hook",
+          "file": "simulator/hook_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -68811,10 +69687,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
         }
       ],
       "id": "abilities:snowwarning",
       "implementation": {
+        "behavior": {
+          "family": "hook",
+          "file": "simulator/hook_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -68871,10 +69759,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
         }
       ],
       "id": "abilities:solidrock",
       "implementation": {
+        "behavior": {
+          "family": "hook",
+          "file": "simulator/hook_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -69201,10 +70101,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
         }
       ],
       "id": "abilities:superluck",
       "implementation": {
+        "behavior": {
+          "family": "hook",
+          "file": "simulator/hook_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -69261,10 +70173,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
         }
       ],
       "id": "abilities:swiftswim",
       "implementation": {
+        "behavior": {
+          "family": "hook",
+          "file": "simulator/hook_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -69363,10 +70287,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
         }
       ],
       "id": "abilities:technician",
       "implementation": {
+        "behavior": {
+          "family": "hook",
+          "file": "simulator/hook_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -69453,10 +70389,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
         }
       ],
       "id": "abilities:thickfat",
       "implementation": {
+        "behavior": {
+          "family": "hook",
+          "file": "simulator/hook_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -69483,10 +70431,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
         }
       ],
       "id": "abilities:tintedlens",
       "implementation": {
+        "behavior": {
+          "family": "hook",
+          "file": "simulator/hook_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -70983,10 +71943,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
         }
       ],
       "id": "items:choiceband",
       "implementation": {
+        "behavior": {
+          "family": "hook",
+          "file": "simulator/hook_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ITEMS canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -71013,10 +71985,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
         }
       ],
       "id": "items:choicescarf",
       "implementation": {
+        "behavior": {
+          "family": "hook",
+          "file": "simulator/hook_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ITEMS canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -71043,10 +72027,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
         }
       ],
       "id": "items:choicespecs",
       "implementation": {
+        "behavior": {
+          "family": "hook",
+          "file": "simulator/hook_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ITEMS canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -71973,10 +72969,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
         }
       ],
       "id": "items:eviolite",
       "implementation": {
+        "behavior": {
+          "family": "hook",
+          "file": "simulator/hook_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ITEMS canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -72003,10 +73011,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
         }
       ],
       "id": "items:expertbelt",
       "implementation": {
+        "behavior": {
+          "family": "hook",
+          "file": "simulator/hook_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ITEMS canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -73485,10 +74505,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
         }
       ],
       "id": "items:lifeorb",
       "implementation": {
+        "behavior": {
+          "family": "hook",
+          "file": "simulator/hook_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ITEMS canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -74247,10 +75279,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
         }
       ],
       "id": "items:muscleband",
       "implementation": {
+        "behavior": {
+          "family": "hook",
+          "file": "simulator/hook_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ITEMS canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -74307,10 +75351,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
         }
       ],
       "id": "items:mysticwater",
       "implementation": {
+        "behavior": {
+          "family": "hook",
+          "file": "simulator/hook_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ITEMS canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -76167,10 +77223,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
         }
       ],
       "id": "items:scopelens",
       "implementation": {
+        "behavior": {
+          "family": "hook",
+          "file": "simulator/hook_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ITEMS canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -76407,10 +77475,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
         }
       ],
       "id": "items:silkscarf",
       "implementation": {
+        "behavior": {
+          "family": "hook",
+          "file": "simulator/hook_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ITEMS canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -77517,10 +78597,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
         }
       ],
       "id": "items:wiseglasses",
       "implementation": {
+        "behavior": {
+          "family": "hook",
+          "file": "simulator/hook_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ITEMS canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -77678,9 +78770,21 @@
         "resolver": "Dex.mod('gen5').conditions",
         "sha256": "4ce319160e4ff7c536b87571949a16046dc65efe2b0968a53db369828b5c1057"
       },
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/ability-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hook_engine.py"
+        }
+      ],
       "id": "conditions:choicelock",
-      "implementation": null,
+      "implementation": {
+        "family": "hook",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "kind": "conservative-superset",
@@ -77689,7 +78793,7 @@
       ],
       "kind": "conditions",
       "reachability": "candidate",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definition": {

@@ -179,6 +179,11 @@ function scriptedChoices(battle,scenario,boundary) {
    const wanted=battle.turn===1?'stealthrock':battle.turn===2?'spikes':(side.sideConditions.spikes||side.sideConditions.stealthrock)?'rapidspin':null;
    if(wanted&&moveCommand(wanted)){choices[side.id]=moveCommand(wanted);continue;}
   }
+  if(scenario.family==='ability-item') {
+   if(!side.sideConditions.reflect&&moveCommand('reflect')){choices[side.id]=moveCommand('reflect');continue;}
+   const attacks=req.active[0].moves.map((m,i)=>!m.disabled&&battle.dex.moves.get(m.id).category!=='Status'?`move ${i+1}`:null).filter(Boolean);
+   choices[side.id]=attacks[0]??commands.find(c=>c.startsWith('move '))??commands[0];continue;
+  }
   if(scenario.family==='field-boost') {
    const wanted=battle.turn===1?['raindance','sunnyday','sandstorm','hail']:
      battle.turn===2?['reflect','lightscreen']:battle.turn===3?['calmmind','swordsdance','irondefense','agility']:[];

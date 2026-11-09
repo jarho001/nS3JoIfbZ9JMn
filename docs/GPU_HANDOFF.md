@@ -7,27 +7,24 @@ GPU. Preparing this handoff does not run device tests, profiling or benchmarks.
 
 ## Current source and evidence
 
-The active engine is schema 5: status durations and persistent effects, weather,
-screens, boosts and side-condition source/order are implemented. The directed field4-check package
-and final status native replay pass on `c8d3231`; see
-[current source/results](../test-logs/g4-cpu-conformance/schema5-source.json).
-The full45-check matching-schema regression has not been run as a whole. See
-[active progress](ORCHESTRATION_STATE.json). The earlier 37-check pass on
-`4eab254` remains historical evidence for that engine. A combined schema-4 run
-completed 39 checks before the 8 GiB cloud limit killed the status batch check;
-[it is incomplete evidence](../test-logs/g4-cpu-conformance/schema4-source.json).
-The runner now isolates test modules in separate processes to release compiled
-executables between groups, preserving the checks and batch sizes.
+The active engine is schema 6. The new ability/item package passes four CPU
+integration checks: 70 independent native scenarios /324 boundaries, including
+four complete six-member games; eager initialization and transition/JIT,
+heterogeneous 1/8/32 batches, saved continuation/reset, full/lean equivalence,
+Choice-lock metadata rejection and explicit legacy-state migration checks.
+The matching-schema 45-check regression is still pending. Historical schema 5
+[source/results](../test-logs/g4-cpu-conformance/schema5-source.json) and earlier
+37-check evidence remain identified separately in [active progress](ORCHESTRATION_STATE.json).
+The combined schema 4 run completed 39 checks before the 8 GiB limit killed its
+status batch check; [that run is incomplete](../test-logs/g4-cpu-conformance/schema4-source.json).
+The runner isolates test modules; the hook suite also clears executable caches
+between groups to fit this host without dropping cases or batch sizes.
 
-The current correctness scope is 45 checks and 252 independent native scenarios /
-1778 boundaries, including 16 complete six-member games. The 55 status cases
-and 40 field/boost cases are JAX checks in this suite. This remains partial G4:
+The current correctness scope is 49 checks and 322 independent native scenarios /
+2102 boundaries, including 20 complete six-member games. Status 55, field 40 and
+hook 70 cases are implemented JAX checks. This remains partial G4: remaining
 ability/item hooks, complex phases, indirect effects, capacity proof and the
-fixed full-format campaigns are still pending. Passing this checkpoint cannot
-close G4.
-
-The next 41 ability/item hook cases (144 boundaries) are **native-only**. Their
-JAX handlers are pending, so they are excluded from the 252-case device scope.
+fixed full-format campaigns are pending. Passing this checkpoint cannot close G4.
 
 Use the **latest committed checkout** and retain its recorded identities. The
 runner fingerprints engine, tables, IO, tests, oracle, configuration and benchmark
@@ -70,9 +67,9 @@ the combined block below:
 
 1. Creates a fresh `work/g4-gpu-TIMESTAMP/` and records commit/tree, relevant file
    hashes, selected host affinity and independent native fixture hashes.
-2. Freezes legacy, hazard, generic, status and field/boost corpora. Runs the
+2. Freezes legacy, hazard, generic, status, field/boost and ability/item corpora. Runs the
    reference/native contracts. Unknown/unsupported families stay explicit.
-3. Runs the same current 45-check scope on CPU, then under `JAX_PLATFORMS=cuda`,
+3. Runs the same current 49-check scope on CPU, then under `JAX_PLATFORMS=cuda`,
    with each test module in a fresh process.
    A strict probe verifies actual eager/JIT GPU placement; shared case/lifecycle
    assertions also check device leaves. `cuda` initialization failure is a failure.
@@ -113,11 +110,18 @@ The added device checks are correctness checks, not extra profiling points:
   rocks/Light Clay and hazard source/order. Replay complete games, restore/reset,
   invalid metadata rejection and mixed 1/8/32 lanes on the actual GPU.
 
+- Hooks: startup ordering and cached Speed with permanent weather; Pressure PP
+  saturation, Prankster priority, stat/power/critical/accuracy/damage modifier
+  ordering and fixed-point rounding; Choice-lock requests/source metadata,
+  Struggle and sleep; Life Orb double KO/pivot outcomes. Include heterogeneous
+  batches, eager/JIT initialization, exact saved continuation/reset and both
+  rollout outputs. These are the added `test.test_hook_engine` checks.
+
 ## GPU obligations and readiness
 
 | Obligation | Commands / current readiness | Evidence required |
 |---|---|---|
-| Current G4 data/hazard/generic/status/field device correctness | **Runnable checkpoint:** the runner above; check the CPU validation record first, then use the same CPU/CUDA modules and frozen fixtures | Both suites pass; real GPU leaf placement, exact native state/draw/request/view/outcome equality, batches 1/8/32, saved continuation/reset, full/lean equality, invalid/stale/unsupported/overflow isolation. Covers the current checkpoint only. |
+| Current G4 data/hazard/generic/status/field/hook device correctness | **Runnable checkpoint:** the runner above; check the CPU validation record first, then use the same CPU/CUDA modules and frozen fixtures | Both suites pass; real GPU leaf placement, exact native state/draw/request/view/outcome equality, batches 1/8/32, saved continuation/reset, full/lean equality, invalid/stale/unsupported/overflow isolation. Covers the current checkpoint only. |
 | Subsequent G4 mechanics and schema changes | **Append before the next CPU checkpoint:** add implemented family tests and native batches to the runner and this handoff; record CPU source/evidence | GPU replay on matching final source, including new counters/volatiles, queues, visibility, per-lane RNG and serialization. Native-only cases cannot substitute for JAX checks. |
 | Full G4 release conformance | **Blocked by implementation, not travel alone:** V7 executable and GPU config are absent; CPU conformance is still incomplete | Closed reachable ledger and all required directed cases; same fixed 64 development / 128 held-out starts and choices as CPU, true native terminals, zero divergence/truncation/capacity errors. Scalar JIT and heterogeneous 8/32 lanes; compare in chunks of at most 16 boundaries. Preserve held-out reuse history and source/fixture/config/policy identities. |
 | G4 device-specific profiling | **No required G4 profiling experiment is currently defined.** Add a bounded command here if an actual device/capacity issue requires one | Exact workload/output contract, hardware/VRAM, CPU budget, cold compile versus synchronized warm execution, useful work counts, memory and actual GPU stream events. A profiler trace is not conformance or a speedup result. |

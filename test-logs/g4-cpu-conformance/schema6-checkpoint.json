@@ -1,0 +1,29 @@
+{
+  "schema": 6,
+  "status": "hook_cpu_integration_passed_full_regression_pending",
+  "source_base": "7036be7",
+  "native_hook_fixture": "hooks.json.gz",
+  "native_hook_scenarios": 70,
+  "native_hook_boundaries": 324,
+  "complete_six_member_games": 4,
+  "commands": [
+    {
+      "command": "HOOK_NATIVE_CASES=/tmp/g4-hooks-complete.json FIELD_NATIVE_CASES=/tmp/g4-field-accepted-candidate.json JAX_PLATFORMS=cpu .venv-jax/bin/python -m unittest test.test_hook_engine -v -f",
+      "result": "4 passed in672.554s",
+      "log": "schema6-hook-cpu.log"
+    },
+    {
+      "command": "node --test test/reference.test.cjs test/gen5-reachability.test.cjs test/shared-engine.test.cjs test/status-duration-native.test.cjs test/field-boost-native.test.cjs test/ability-item-native.test.cjs",
+      "result": "14 passed",
+      "log": "schema6-native-all.log"
+    },
+    {
+      "command": "python3 -m unittest test.test_gpu_handoff test.test_g3_fixtures -v",
+      "result": "6 passed in0.193s",
+      "log": "schema6-handoff-unit.log"
+    }
+  ],
+  "validation_note": "Core hook code passed the four checks. Subsequent edits clarify comments and add explicit per-leaf placement assertions in test comparisons; the frozen49-check run will include them. No full-format acceptance claim.",
+  "gpu_executed": false,
+  "profiling_executed": false
+}

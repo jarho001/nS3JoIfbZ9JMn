@@ -74,7 +74,7 @@ def choices_array(s,choices):
         else:
             verb,n=command.split();slot=int(n)-1
             if verb=='switch':slot+=4
-            elif not np.any(np.asarray(s.pp[i,int(s.active[i])])>0):slot=10
+            elif bool(e.legal_actions(s)[i,10]):slot=10
             result[i]=slot
     return e.i32(result)
 

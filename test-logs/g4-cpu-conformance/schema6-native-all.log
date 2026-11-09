@@ -1,0 +1,22 @@
+✔ native hook inputs preserve ability startup, PP, locks, speed and permanent weather (1033.396228ms)
+✔ field and boost expectations retain native metadata, durations and rounding (1001.336072ms)
+✔ pinned resolved export and conservative inventory reproduce exactly (2068.501791ms)
+✔ reference identity guard accepts only the pinned clean checkout (1.122967ms)
+✔ real Git checkout inspection rejects changed source, untracked files, wrong commit, and wrong origin (82.276626ms)
+✔ resolved format facts match the pinned Showdown manifest (311.921551ms)
+✔ seeded teams and initial requests match the pinned semantic fixture (134.863352ms)
+✔ smoke seeds are separate and must each contain four integers (0.583441ms)
+✔ initial battle facts come from protocol events and requests match submitted teams (0.581939ms)
+✔ initialization reports stream errors/end and destroys the stream on every path (5.697277ms)
+✔ native BattleStream replacement/undo and direct snapshots share recipient boundaries (399.52091ms)
+✔ native paired histories hide reserves, items and pending opposing choice (2.124905ms)
+✔ status duration family captures native counters, sources, clauses and raw draws (952.080785ms)
+✔ optional callback annotations leave original PRNG results and helper API intact (17.498156ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 6529.053867

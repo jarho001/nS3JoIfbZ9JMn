@@ -42,7 +42,10 @@ test('pinned resolved export and conservative inventory reproduce exactly',()=>{
   assert.equal(ledger.status,'incomplete');
   assert.ok(ledger.gaps.some(g=>g.id==='indirect-closure'&&g.status==='unresolved'));
   for(const id of ['conditions:slp:onBeforeMove','moves:rest:onHit',
-    'moves:reflect:condition.onAnyModifyDamage','conditions:sandstorm:onWeather']) {
+    'moves:reflect:condition.onAnyModifyDamage','conditions:sandstorm:onWeather',
+    'abilities:pressure:onDeductPP','abilities:prankster:onModifyPriority',
+    'abilities:icebody:onWeather','items:lifeorb:onAfterMoveSecondarySelf',
+    'conditions:choicelock:onStart']) {
     const cb=slots.get(id);assert.equal(cb.status,'partial');
     assert.ok(fs.existsSync(cb.implementation.file));
     assert.ok(cb.evidence.every(e=>fs.existsSync(e.native)&&fs.existsSync(e.test)));
@@ -53,7 +56,8 @@ test('pinned resolved export and conservative inventory reproduce exactly',()=>{
     const cb=slots.get(id);assert.equal(cb.status,'unsupported');assert.equal(cb.implementation,null);
   }
   assert.ok(ledger.callbacks.every(c=>['partial','unsupported'].includes(c.status)));
-  assert.ok(ledger.callbacks.filter(c=>c.status==='unsupported').length>1000);
+  assert.equal(ledger.callbacks.filter(c=>c.status==='partial').length,120);
+  assert.equal(ledger.callbacks.filter(c=>c.status==='unsupported').length,1026);
   // Existing native users must not contaminate raw owner provenance.
   require('../reference/vendor/pokemon-showdown/dist/sim').Dex.mod('gen5').moves.all();
   assert.deepEqual(inventory(),{data,ledger});

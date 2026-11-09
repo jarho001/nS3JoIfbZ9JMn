@@ -61,14 +61,11 @@ def damage_parameters(c,actor,target,move,crit,physical,attack,defense,e):
     defstage=jnp.where((crit==0)&(defstage>0),0,defstage)
     attack=scale_stat_stage(attack,atkstage);defense=scale_stat_stage(defense,defstage)
     sand=(s.weather_state[0]==3)&(~physical)&jnp.any(s.types[target,tm]==e.generic.TYPES['rock'])
-    defense=jnp.where(sand,apply_fixedpoint_modifier(defense,e.i32(6144)),defense)
-    screened=(s.screens[target,jnp.where(physical,0,1),0]>0)&(crit!=0)
-    modifier=jnp.where(screened,2048,4096).astype(jnp.int32)
     # Collecting any weather damage/stat hook sets the native effect target.
     weather=s.weather_state[0]
     present=(weather==1)|(weather==2)|((weather==3)&(~physical))
     s=s._replace(weather_state=s.weather_state.at[5].set(jnp.where(present,1,s.weather_state[5])))
-    return (s,t),attack,defense,modifier
+    return (s,t),attack,defense
 
 
 def weather_damage(core,move_type,s,e):
@@ -79,17 +76,6 @@ def weather_damage(core,move_type,s,e):
     return apply_fixedpoint_modifier(core,modifier)
 
 
-def damage_handlers(c,e):
-    # Both screens install onAnyModifyDamage, even on the attacker's side
-    # and even for the other damage category. All have speed/priority zero.
-    # Their order cannot change which one applies in singles, but native
-    # speedSort still consumes its complete shuffle before damage is applied.
-    count=jnp.sum(c[0].screens[:,:,0]>0).astype(jnp.int32)
-    for k in range(3):
-        c=e._when(k+1<count,lambda c:e._draw(c,k,count,e.DAMAGE_MODIFIERS,2)[0],c)
-    return c
-
-
 def accuracy(base,s,actor,target,e):
     m=s.active[actor];tm=s.active[target]
     stage=jnp.clip(s.boosts[actor,m,5]-s.boosts[target,tm,6],-6,6)
@@ -97,7 +83,7 @@ def accuracy(base,s,actor,target,e):
 
 
 def weather_tick(c,e):
-    s,t=c;weather=s.weather_state[0];remaining=s.weather_state[4]-1
+    s,t=c;weather=s.weather_state[0];remaining=jnp.maximum(0,s.weather_state[4]-1);timed=s.weather_state[4]>0
     def end(c):
         s,t=c;state=empty_weather().at[5].set(1)
         return e._event((s._replace(weather_state=state),t),e.WEATHER,value=0)
@@ -112,6 +98,13 @@ def weather_tick(c,e):
             immune=jnp.any(jnp.where(weather==3,
                 (s.types[side,m]==e.generic.TYPES['rock'])|(s.types[side,m]==e.generic.TYPES['ground'])|(s.types[side,m]==e.generic.TYPES['steel']),
                 s.types[side,m]==e.generic.TYPES['ice']))
+            ability=s.ability[side,m]
+            immune=immune|((weather==3)&(ability==e.hook_tables.A['sandrush']))|((weather==4)&(ability==e.hook_tables.A['icebody']))
+            def ice_body(c):
+                s,t=c;hp=s.hp[side,m];maximum=s.stats[side,m,0];newhp=jnp.minimum(maximum,hp+jnp.maximum(1,maximum//16))
+                s=s._replace(hp=s.hp.at[side,m].set(newhp))
+                return e._event((s,t),e.HEAL,side,m,value=newhp,aux=maximum,status=s.status[side,m],move=2)
+            c=e._when((weather==4)&(ability==e.hook_tables.A['icebody'])&(s.hp[side,m]>0)&(s.hp[side,m]<s.stats[side,m,0]),ice_body,c)
             c=e._when(((weather==3)|(weather==4))&(~immune)&(s.hp[side,m]>0),
                       lambda c:e._damage(c,side,s.stats[side,m,0]//16,cause=jnp.where(weather==3,7,8)),c)
         s,t=c
@@ -122,7 +115,7 @@ def weather_tick(c,e):
             faint=(s.hp[side,m]==0)&(~s.fainted[side,m])
             c=e._when(faint,lambda c:e._faint(c,side),c);last=jnp.where(faint,side,last)
         return e._win(c,last)
-    return jax.lax.cond(remaining==0,end,active,c)
+    return jax.lax.cond(timed&(remaining==0),end,active,c)
 
 
 def screen_tick(c,side,index,e):

@@ -60,7 +60,7 @@ def project_request(state,side):
                 happy=int(s.happiness[side,mon]);name+=' '+str(max(1,(happy if mid==e.RETURN else 255-happy)*10//25))
             rows.append({'move':name,'id':e.MOVE_KEYS[mid],'pp':int(s.pp[side,mon,slot]),
                          'maxpp':int(e.PP[mid]),'target':tables.TARGETS[mid],
-                         'disabled':bool(s.pp[side,mon,slot]==0)})
+                         'disabled':bool(e.hook_ops.disabled(s)[side,mon,slot])})
         if all(row['disabled'] for row in rows):rows=[{'move':'Struggle','id':'struggle','target':'randomNormal','disabled':False}]
         req['active']=[{'moves':rows}]
     return req
@@ -71,7 +71,7 @@ def project_events(state,trace,audience):
     for row in t.events[:int(t.ecount)]:
         kind,side,mon,move,target,tm,value,aux,status,_=map(int,row)
         ident=lambda side,mon:f'p{side+1}a: '+e.SPECIES[int(s.name[side,mon])]
-        actor=ident(side,mon);foe=ident(target,tm);name=e.MOVE_NAMES[move] if move>=0 else ''
+        actor=ident(side,mon);foe=ident(target,tm);name=e.MOVE_NAMES[move] if 0<=move<len(e.MOVE_NAMES) else ''
         if kind==e.BLANK:line='|'
         elif kind==e.EV_MOVE:
             shown='' if aux==2 else foe.replace('a: ',': ') if aux in (3,4) else foe
@@ -79,8 +79,8 @@ def project_events(state,trace,audience):
             line=f'|move|{actor}|{name}|'+shown+annotation
         elif kind in (e.DAMAGE,e.HEAL):
             line=f'|-'+('damage' if kind==e.DAMAGE else 'heal')+f'|{actor}|'+condition(value,aux,status,side!=audience)
-            if kind==e.DAMAGE and move:line+='|[from] '+{1:'brn',2:'psn',3:'recoil',4:'Stealth Rock',5:'Spikes',6:'confusion',7:'Sandstorm',8:'Hail'}[move]
-            if kind==e.HEAL and move:line+='|[silent]' if move==-1 else '|[from] item: Leftovers'
+            if kind==e.DAMAGE and move:line+='|[from] '+{1:'brn',2:'psn',3:'recoil',4:'Stealth Rock',5:'Spikes',6:'confusion',7:'Sandstorm',8:'Hail',9:'item: Life Orb'}[move]
+            if kind==e.HEAL and move:line+='|[silent]' if move==-1 else '|[from] ability: Ice Body' if move==2 else '|[from] item: Leftovers'
         elif kind==e.CRIT:line=f'|-crit|{actor}'
         elif kind==e.IMMUNE:line=f'|-immune|{actor}'+({0:'',1:'|[from] ability: Immunity',2:'|[from] ability: Levitate'}[aux])
         elif kind==e.MISS:line=f'|-miss|{actor}|{foe}'
@@ -108,7 +108,8 @@ def project_events(state,trace,audience):
             if value:out.append({'type':'event','message':"|-hint|Sleep Clause Mod prevents players from putting more than one of their opponent's Pokemon to sleep at a time"})
             continue
         elif kind==e.BOOST:line=f'|-'+('unboost' if status else 'boost')+f'|{actor}|{e.field_tables.STATS[aux]}|{abs(value)}'
-        elif kind==e.WEATHER:line='|-weather|'+e.field_tables.WEATHER_NAMES[value]+('|[upkeep]' if aux else '')
+        elif kind==e.WEATHER:line='|-weather|'+e.field_tables.WEATHER_NAMES[value]+(f'|[from] ability: {e.hook_tables.ABILITY_NAMES[move]}|[of] {actor}' if aux==2 else '|[upkeep]' if aux==1 else '')
+        elif kind==e.REVEAL:line=f'|-ability|{actor}|'+e.hook_tables.ABILITY_NAMES[value]+('|boost' if aux else '')
         else:raise ValueError('unknown event')
         out.append({'type':'event','message':line})
     return out
@@ -140,14 +141,14 @@ def save_state(path,state):
 
 
 def load_state(path,*,schema=None):
-    """Load current states or explicitly migrate unambiguous schema 1/2/3 starts."""
+    """Load current states with explicit provenance-preserving legacy migrations."""
     with np.load(path,allow_pickle=False) as saved:
         stored=int(saved['schema']) if 'schema' in saved else None
         if schema is not None and stored is not None and stored!=schema:raise ValueError('schema mismatch')
         version=stored if schema is None else schema
-        if version not in (1,2,3,4,5):raise ValueError('explicit supported state schema required')
+        if version not in (1,2,3,4,5,6):raise ValueError('explicit supported state schema required')
         fields={k:jnp.asarray(saved[k]) for k in saved.files if k not in ('schema','data_sha256')}
-        if version in (3,4,5):
+        if version in (3,4,5,6):
             if 'data_sha256' not in saved or str(saved['data_sha256'])!=generic.DATA_SHA256:
                 raise ValueError('state data table identity mismatch')
         else:
@@ -190,6 +191,14 @@ def load_state(path,*,schema=None):
             migrated=e.State(*(fields[k] for k in e.State._fields))
             for side in range(2):migrated,_=e.effects.activate((migrated,e.empty_trace()),e.i32(side),e)
             fields=dict(zip(e.State._fields,migrated,strict=True))
+        if version<6:
+            # Earlier engines explicitly rejected these hooks. Promoting an old
+            # unsupported initializer would fabricate its startup/lock history.
+            old_abilities=np.asarray(fields['ability']);old_items=np.asarray(fields['item'])
+            if np.any(old_abilities>3) or np.any(old_abilities<0) or np.any(old_items<0) or np.any(old_items>=len(e.ITEMS)) or not np.all(np.asarray(e.field_tables.ITEM_IMPLEMENTED)[np.clip(old_items,0,len(e.ITEMS)-1)]):
+                raise ValueError('legacy hook state requires replay/provenance')
+            if fields['volatile_state'].shape!=(2,6,3,6):raise ValueError('invalid legacy volatile shape')
+            fields['volatile_state']=jnp.pad(fields['volatile_state'],((0,0),(0,0),(0,1),(0,0)))
         if set(fields)!=set(e.State._fields):raise ValueError('invalid state field set')
         state=e.State(*(fields[k] for k in e.State._fields))
         e._validate_structure(state)
@@ -208,15 +217,17 @@ def effect_states(state,side,mon):
     if start>=0:status['startTime']=start
     if mid==e.TOX:status['stage']=int(s.toxic[side,mon])
     volatiles={}
-    for kind,key in enumerate(('protect','stall','confusion')):
+    for kind,key in enumerate(('protect','stall','confusion','choicelock')):
         exists,order,ss,sm,move,time=map(int,s.volatile_state[side,mon,kind])
         if not exists:continue
         row={'id':key,'name':key,'effectOrder':order,'target':target,
              'source':{'$pokemon':{'side':ss,'mon':sm}},'sourceSlot':f'p{ss+1}a'}
-        if move:row['sourceEffect']={'$effect':e.MOVE_KEYS[move],'type':'Move'}
+        if move>0:row['sourceEffect']={'$effect':e.MOVE_KEYS[move],'type':'Move'}
+        if move<0:row['sourceEffect']={'$effect':e.ITEMS[-move],'type':'Item'}
         if kind==0:row['duration']=1
         if kind==1:row.update(counter=int(s.stall[side,mon]),duration=int(s.stall_duration[side,mon]))
         if kind==2:row['time']=time
+        if kind==3:row['move']=e.MOVE_KEYS[time]
         volatiles[key]=row
     return {'statusState':status,'volatiles':volatiles,
         'abilityState':{'id':e.ABILITIES[int(s.ability[side,mon])],'effectOrder':int(s.ability_order[side,mon]),'target':target},

@@ -24,20 +24,33 @@ const STATUS_OWNERS=new Set(['conditions:slp','conditions:frz','conditions:confu
   'moves:protect','abilities:synchronize','items:leftovers','items:lumberry','rules:sleepclausemod']);
 const FIELD_OWNERS=new Set(['conditions:raindance','conditions:sunnyday','conditions:sandstorm',
   'conditions:hail','moves:reflect','moves:lightscreen','moves:stealthrock','moves:spikes']);
+const HOOK_OWNERS=new Set([
+  ...['pressure','intimidate','prankster','hugepower','purepower','adaptability','technician',
+    'hustle','compoundeyes','superluck','sniper','guts','quickfeet','marvelscale','battlearmor',
+    'shellarmor','thickfat','filter','solidrock','tintedlens','drizzle','drought','sandstream',
+    'snowwarning','swiftswim','chlorophyll','sandrush','icebody'].map(id=>`abilities:${id}`),
+  ...['choiceband','choicespecs','choicescarf','lifeorb','expertbelt','muscleband','wiseglasses',
+    'silkscarf','mysticwater','scopelens','eviolite'].map(id=>`items:${id}`),
+  'conditions:choicelock',
+]);
 const UNMAPPED_BRANCHES=new Set(['conditions:frz:onModifyMove','conditions:frz:onAfterMoveSecondary']);
 function partialBehavior(owner,field) {
   if(UNMAPPED_BRANCHES.has(`${owner}:${field}`))return null;
-  const family=STATUS_OWNERS.has(owner)?'status':FIELD_OWNERS.has(owner)?'field':
+  const family=STATUS_OWNERS.has(owner)?'status':FIELD_OWNERS.has(owner)?'field':HOOK_OWNERS.has(owner)?'hook':
     owner==='abilities:immunity'&&field==='onSetStatus'?'status':null;
   if(!family)return null;
-  return {family,file:family==='status'?'simulator/status_effects.py':'simulator/field_effects.py',
+  const weatherHook=(owner==='abilities:sandrush'&&field==='onImmunity')||
+    (owner==='abilities:icebody'&&['onImmunity','onWeather'].includes(field));
+  const fieldModifier=(['moves:reflect','moves:lightscreen'].includes(owner)&&field==='condition.onAnyModifyDamage')||
+    (owner==='conditions:sandstorm'&&field==='onModifySpD');
+  return {family,file:family==='status'?'simulator/status_effects.py':weatherHook||family==='field'&&!fieldModifier?'simulator/field_effects.py':'simulator/hook_effects.py',
     scheduler:'simulator/shared_engine.py',
     scope:'Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending'};
 }
 function familyEvidence(family) {
   return [{test:`test/test_${family}_engine.py`,
-    native:`reference/${family==='status'?'status-duration':'field-boost'}-cases.cjs`,
-    fixture:`test-logs/g4-cpu-conformance/${family==='status'?'status-v5':'field'}.json.gz`,
+    native:`reference/${family==='status'?'status-duration':family==='field'?'field-boost':'ability-item'}-cases.cjs`,
+    fixture:`test-logs/g4-cpu-conformance/${family==='status'?'status-v5':family==='field'?'field':'hooks'}.json.gz`,
     scope:'Independent directed family cases and complete constructed games; not generator membership or full-format acceptance'}];
 }
 function canonical(value) {

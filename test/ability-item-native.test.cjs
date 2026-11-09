@@ -4,15 +4,17 @@ const assert=require('node:assert/strict');
 const {assertReady}=require('../reference/neutral-turn-oracle.cjs');
 const {cases,runCase}=require('../reference/shared-engine-cases.cjs');
 
-test('native-only hook inputs preserve ability startup, PP, locks, speed and permanent weather',()=>{
+test('native hook inputs preserve ability startup, PP, locks, speed and permanent weather',()=>{
  assertReady();const ps=require('../reference/vendor/pokemon-showdown/dist/sim');
- const selected=cases.filter(c=>c.hookFamily);assert.equal(selected.length,41);
+ const selected=cases.filter(c=>c.hookFamily);assert.equal(selected.length,70);
  const records=selected.map(c=>runCase(ps,c));
- assert.equal(records.reduce((n,c)=>n+c.steps.length,0),144);
+ assert.equal(records.reduce((n,c)=>n+c.steps.length,0),324);
  for(const c of records)for(const step of c.steps){
   assert.ok(step.accepted.every(a=>a.accepted),c.id);
   assert.ok(step.after.field);assert.ok(step.after.sides.every(s=>s.sideConditions));
  }
+ assert.equal(records.filter(c=>c.setup.fullBattle).length,4);
+ assert.ok(records.filter(c=>c.setup.fullBattle).every(c=>c.steps.at(-1).after.terminal));
  const find=id=>records.find(c=>c.id===`G4-hooks-${id}`);
  const pressure=find('ability-Pressure');
  assert.equal(pressure.steps[0].after.sides[1].pokemon[0].moves[0].pp,54);
@@ -28,6 +30,12 @@ test('native-only hook inputs preserve ability startup, PP, locks, speed and per
   const c=find(`weather-${name}`);assert.equal(c.initial.field.weatherState.duration,0);
   assert.equal(c.steps.at(-1).after.field.weatherState.duration,0);
  }
+ assert.equal(find('life-orb-terminal').steps[0].after.winner,1);
+ assert.equal(find('life-orb-target-bench').steps[0].after.winner,2);
+ assert.equal(find('life-orb-source-bench').steps[0].after.winner,1);
+ assert.ok(find('life-orb-struggle').steps[0].events.p1.some(e=>e.message.includes('[from] item: Life Orb')));
+ const stacked=find('critical-stage-stacking').steps[0].draws.find(d=>d.semanticContext==='critical');
+ assert.equal(stacked.bound,4);
  const prankster=find('ability-Prankster').steps[0].events.p1.filter(e=>e.message.startsWith('|move|'));
  assert.match(prankster[0].message,/p1a: Mew\|Swords Dance/);
 });

@@ -2,7 +2,7 @@
 
 Fixed-shape int32 storage; exact four-limb PRNG; stable mon identity and a
 separate command roster. Strings/protocol rendering belong to the host adapter.
-Schema 5 carries field, boost and status effect state and generic pinned data through the same scheduler. Handler masks
+Schema 6 carries ability/item, field, boost and status effect state and generic pinned data through the same scheduler. Handler masks
 remain incomplete and reject unsupported effects; full conformance is pending.
 """
 from __future__ import annotations
@@ -21,12 +21,14 @@ from . import gen5_engine_tables as tables
 from . import status_effects as effects
 from . import field_tables
 from . import field_effects as field_ops
+from . import hook_tables
+from . import hook_effects as hook_ops
 import sys
 
 def _engine():
     return sys.modules[__name__]
 
-SCHEMA = 5
+SCHEMA = 6
 ROSTER, SLOTS, QUEUE, EVENTS, DRAWS, HISTORY = 6, 4, 8, 128, 128, 2048
 OK, PENDING, INVALID, UNSUPPORTED, CAPACITY, TERMINAL, STALE = range(7)
 MOVE, FORCED, WAIT, END = range(4)
@@ -49,6 +51,7 @@ BLANK, EV_MOVE, DAMAGE, HEAL, CRIT, IMMUNE, MISS, FAINT, WIN, TURN, UPKEEP, SWIT
 SIDE_START, SIDE_END = 20, 21
 CONF_START, CONF_END, CONF_ACTIVATE, SLEEP_CLAUSE = range(22,26)
 BOOST, WEATHER = 26, 27
+REVEAL = 28
 # Draw contexts; range form stores actual native arguments including offsets.
 INIT, QUEUE_SORT, BEFORE_TURN, UPDATE, HIT_UPDATE, SWITCH_SORT, FIELD_SORT, ACC, CRITICAL, ROLL, PARALYSIS, STALL = range(12)
 SLEEP_DURATION, FREEZE, CONF_DURATION, CONFUSION, CONF_DAMAGE, SECONDARY = range(12,18)
@@ -184,7 +187,7 @@ def _live(s):
 
 def _speeds(s):
     speed=field_ops.scale_stat_stage(s.stats[:,:,5],s.boosts[:,:,4])
-    return jnp.maximum(1,jnp.where(s.status==PAR,speed//4,speed))
+    return hook_ops.speeds(s,speed,_engine())
 
 
 def _refresh_speed(s):
@@ -273,27 +276,33 @@ def _hit(c,actor,move):
     s,t=c;mon=s.active[actor];target=1-actor;tm=s.active[target]
     damaging=tables.CATEGORY[move]>0
     def physical(c):
-        c,crit=_draw(c,0,16,CRITICAL);c,roll=_draw(c,0,16,ROLL)
+        s,t=c
+        bound=hook_ops.critical_denominator(move,s.ability[actor,mon],s.item[actor,mon])
+        c,crit=jax.lax.cond(bound>0,lambda c:_draw(c,0,bound,CRITICAL),lambda c:(c,jnp.uint32(1)),c)
+        crit=jnp.where(hook_ops.critical_blocked(s.ability[target,tm]),jnp.uint32(1),crit)
+        c,roll=_draw(c,0,16,ROLL)
         s,t=c
         physical=tables.CATEGORY[move]==1
         attack=s.stats[actor,mon,jnp.where(physical,1,3)]
         defense=s.stats[target,tm,jnp.where(physical,2,4)]
-        c,attack,defense,final_modifier=field_ops.damage_parameters(c,actor,target,move,crit,physical,attack,defense,_engine());s,t=c
+        c,attack,defense=field_ops.damage_parameters(c,actor,target,move,crit,physical,attack,defense,_engine());s,t=c
         power=jnp.where(move==HIDDEN_POWER,s.hp_power[actor,mon],
                         jnp.where(move==RETURN,s.happiness[actor,mon]*10//25,
                                   jnp.where(move==FRUSTRATION,(255-s.happiness[actor,mon])*10//25,POWER[move])))
         power=jnp.maximum(1,power)
         move_type=jnp.where(move==HIDDEN_POWER,s.hp_type[actor,mon],tables.MOVE_TYPE[move])
+        power=hook_ops.power(power,s.ability[actor,mon],s.item[actor,mon],physical,move_type,_engine())
+        attack,defense=hook_ops.stats(attack,defense,s,actor,target,physical,move_type,_engine())
         core=base_damage_core(s.level[actor,mon],power,attack,defense)+2
         preroll=field_ops.weather_damage(core,move_type,s,_engine())*jnp.where(crit==0,2,1)
         exponent,_=generic.type_matchup(move_type,s.types[target,tm])
         stab=jnp.any(s.types[actor,mon]==move_type)
-        damage=damage_from_preroll(preroll,roll.astype(jnp.int32),stab,jnp.array(False),move==STRUGGLE,
-                                  jnp.where(move==STRUGGLE,0,exponent),s.status[actor,mon]==BRN,physical,jnp.array(False),final_modifier)
         # Native effectiveness precedes the critical disclosure.
         c=_when((exponent!=0)&(move!=STRUGGLE),lambda c:_event(c,ACTIVATE,target,tm,aux=exponent,move=-1),c)
         c=_when(crit==0,lambda c:_event(c,CRIT,target,tm),c)
-        c=field_ops.damage_handlers(c,_engine())
+        c,final_modifier=hook_ops.damage_modifier(c,actor,target,physical,crit==0,jnp.where(move==STRUGGLE,0,exponent),_engine())
+        damage=damage_from_preroll(preroll,roll.astype(jnp.int32),stab,s.ability[actor,mon]==hook_tables.A['adaptability'],move==STRUGGLE,
+                                  jnp.where(move==STRUGGLE,0,exponent),s.status[actor,mon]==BRN,physical,s.ability[actor,mon]==hook_tables.A['guts'],final_modifier)
         c=_damage(c,target,damage,minimum=0)
         c=_when((c[0].status[target,tm]==FRZ)&(move_type==generic.TYPES['fire'])&(c[0].hp[target,tm]>0),
                 lambda c:effects.cure(c,target,_engine(),source=actor),c)
@@ -320,12 +329,17 @@ def _hit(c,actor,move):
         c=_update(c,HIT_UPDATE)
         s,t=c
         c=_when(if_recoil&(s.hp[actor,mon]==0),lambda c:_faint(c,actor),c)
-        c=_win(c,jnp.where(if_recoil,actor,target))
+        def life_orb(c):
+            s,t=c;c=_damage(c,actor,s.stats[actor,mon,0]//10,cause=9)
+            return _when(c[0].hp[actor,mon]==0,lambda c:_faint(c,actor),c)
+        orb=(c[0].item[actor,mon]==hook_tables.I['lifeorb'])&(c[0].hp[actor,mon]>0)
+        c=_when(orb,life_orb,c)
+        c=_win(c,jnp.where(if_recoil|orb,actor,target))
         s,t=c
         def pivot(c):
             s,t=c
             return s._replace(pivot=s.pivot.at[actor].set(True)),t
-        return _when((move==U_TURN)&(s.winner<0)&jnp.any(_live(s)[actor]&(jnp.arange(ROSTER)!=mon)),pivot,c)
+        return _when((move==U_TURN)&(s.winner<0)&(s.hp[actor,mon]>0)&jnp.any(_live(s)[actor]&(jnp.arange(ROSTER)!=mon)),pivot,c)
     def status_hit(c):
         def confuse(c):return effects.confuse(c,actor,target,move,_engine())
         def status(c):
@@ -352,8 +366,10 @@ def _attack(c,row):
         def cannot(c):return c
         def act(c):
             s,t=c;slot=jnp.clip(action,0,3)
-            s=s._replace(pp=s.pp.at[actor,mon,slot].add(jnp.where(move==STRUGGLE,0,-1)))
-            c=(s,t)
+            pressured=hook_tables.PRESSURE_TARGET[move].astype(jnp.bool_)&(s.ability[1-actor,s.active[1-actor]]==hook_tables.A['pressure'])&(~s.fainted[1-actor,s.active[1-actor]])
+            cost=1+pressured.astype(jnp.int32)
+            s=s._replace(pp=s.pp.at[actor,mon,slot].set(jnp.where(move==STRUGGLE,s.pp[actor,mon,slot],jnp.maximum(0,s.pp[actor,mon,slot]-cost))))
+            c=hook_ops.modify_move((s,t),actor,target,move,_engine())
             c=_when(move==STRUGGLE,lambda c:_event(c,ACTIVATE,actor,mon,move=STRUGGLE),c)
             # Reserve move row so the native miss/fail annotation can be filled
             # after the outcome without reordering the event stream.
@@ -411,7 +427,8 @@ def _attack(c,row):
                 def try_hit(c):
                     def accuracy(c):
                         c,roll=jax.lax.cond(ACCURACY[move]>0,lambda c:_draw(c,0,100,ACC),lambda c:(c,jnp.uint32(0)),c)
-                        threshold=field_ops.accuracy(ACCURACY[move],c[0],actor,target,_engine())
+                        base_accuracy=hook_ops.accuracy(ACCURACY[move],c[0],actor,tables.CATEGORY[move]==1)
+                        threshold=field_ops.accuracy(base_accuracy,c[0],actor,target,_engine())
                         hit=(ACCURACY[move]==0)|(roll<threshold.astype(jnp.uint32))
                         def miss(c):
                             s,t=c;t=t._replace(events=t.events.at[move_row,7].set(1))
@@ -557,7 +574,7 @@ def _residual(c):
 
 
 def _new_request(c,request):
-    s,t=c
+    s,t=c;s=hook_ops.normalize_locks(s)
     for side in range(2):
         mon=s.active[side]
         status=jnp.where((request[side]==FORCED)&s.fainted[side,mon],FNT,s.status[side,mon])
@@ -615,6 +632,7 @@ def _run_queue(c):
                                 lambda c:_damage(c,side,jnp.maximum(1,amount),cause=jnp.where(index==0,4,5)),c)
                     return c
                 c=_when(entrants[side],entry,c)
+                c=_when(entrants[side]&(c[0].hp[side,c[0].active[side]]>0),lambda c:hook_ops.start(c,side,_engine()),c)
             # Native resolves entry faint/win after the SwitchIn callbacks,
             # before the ordinary per-action Update and pending attacks.
             for k in range(2):
@@ -644,10 +662,11 @@ def _run_queue(c):
 def legal_actions(s):
     side=jnp.arange(2);mon=s.active
     pp=s.pp[side,mon];moves=s.moves[side,mon]
-    ordinary=(pp>0)&(moves>0)&(s.request[:,None]==MOVE)
+    available=(~hook_ops.disabled(s)[side,mon])&(moves>0)
+    ordinary=available&(s.request[:,None]==MOVE)
     bench=_live(s)[side[:,None],s.order]&(s.order!=mon[:,None])
     switches=bench&((s.request[:,None]==MOVE)|(s.request[:,None]==FORCED))
-    struggle=jnp.all(~((pp>0)&(moves>0)),axis=1)&(s.request==MOVE)
+    struggle=jnp.all(~available,axis=1)&(s.request==MOVE)
     return jnp.concatenate((ordinary,switches,struggle[:,None]),axis=1)
 
 
@@ -661,10 +680,12 @@ def _supported(s,initializing=False):
     duplicate=(s.moves[:,:,:,None]==s.moves[:,:,None,:])&(s.moves[:,:,:,None]>0)&(slots[:,None]<slots[None,:])
     valid_order=jnp.all(jnp.sort(s.order,axis=1)==jnp.arange(ROSTER))
     weather,source,source_mon,source_move,duration,target=s.weather_state
-    weather_sources=(source>=0)&(source<2)&(source_mon>=0)&(source_mon<ROSTER)&(source_move>0)&(source_move<len(MOVE_KEYS))
+    weather_sources=(source>=0)&(source<2)&(source_mon>=0)&(source_mon<ROSTER)&(source_move>=0)&(source_move<len(MOVE_KEYS))
     weather_sources=weather_sources&(s.species[jnp.clip(source,0,1),jnp.clip(source_mon,0,ROSTER-1)]>0)
-    weather_sources=weather_sources&(field_tables.WEATHER[jnp.clip(source_move,0,len(MOVE_KEYS)-1)]==weather)
-    weather_ok=jnp.where(weather>0,weather_sources&(duration>=1),
+    move_weather=(source_move>0)&(field_tables.WEATHER[jnp.clip(source_move,0,len(MOVE_KEYS)-1)]==weather)&(duration>=1)
+    weather_ability=s.ability[jnp.clip(source,0,1),jnp.clip(source_mon,0,ROSTER-1)]
+    ability_weather=(source_move==0)&(hook_tables.ABILITY_WEATHER[jnp.clip(weather_ability,0,len(ABILITIES)-1)]==weather)&(duration==0)
+    weather_ok=jnp.where(weather>0,weather_sources&(move_weather|ability_weather),
                          (source==-1)&(source_mon==-1)&(source_move==0)&(duration==0))
     screen_side=s.screens[:,:,1];screen_mon=s.screens[:,:,2];screen_move=s.screens[:,:,3]
     screen_sources=(screen_side==jnp.arange(2)[:,None])&(screen_mon>=0)&(screen_mon<ROSTER)
@@ -677,7 +698,12 @@ def _supported(s,initializing=False):
     hazard_sources=hazard_sources&(s.species[jnp.clip(hazard_side,0,1),jnp.clip(hazard_mon,0,ROSTER-1)]>0)
     hazard_sources=hazard_sources&(s.hazard_meta[:,:,0]<s.effect_order)
     hazard_ok=jnp.all(jnp.where(s.hazards[:,:2]>0,hazard_sources,jnp.all(s.hazard_meta==0,axis=-1)))
-    return (stat_ok&valid_order&weather_ok&screen_ok&hazard_ok&(~jnp.any(duplicate))&jnp.all((s.hcount>=0)&(s.hcount<=HISTORY))
+    lock=s.volatile_state[:,:,3];source_item=-lock[:,:,4]
+    lock_ok=(lock[:,:,4]<0)&hook_tables.CHOICE[jnp.clip(source_item,0,len(ITEMS)-1)]
+    lock_ok=lock_ok&(source_item==s.item)&(lock[:,:,5]>0)&(lock[:,:,5]<len(MOVE_KEYS))
+    lock_ok=lock_ok&(lock[:,:,1]<s.effect_order)
+    lock_ok=jnp.all((lock[:,:,0]==0)|lock_ok)
+    return (stat_ok&valid_order&weather_ok&screen_ok&hazard_ok&lock_ok&(~jnp.any(duplicate))&jnp.all((s.hcount>=0)&(s.hcount<=HISTORY))
             &jnp.all((s.qcount>=0)&(s.qcount<=QUEUE))&(s.episode>=0)&(s.generation>=0)
             &jnp.all(jnp.where(occupied,jnp.any(s.moves>0,axis=-1),jnp.all(s.moves==0,axis=-1)))
             &jnp.all((s.species>=0)&(s.species<len(SPECIES)))&jnp.all(jnp.any(occupied,axis=1))
@@ -685,7 +711,8 @@ def _supported(s,initializing=False):
             &jnp.all((s.moves>=0)&(s.moves<len(MOVE_KEYS))&(s.moves!=STRUGGLE))
             &jnp.all((s.moves==0)|(tables.MOVE_IMPLEMENTED|field_tables.MOVE_IMPLEMENTED)[jnp.clip(s.moves,0,len(MOVE_KEYS)-1)])
             &jnp.all((s.item>=0)&(s.item<len(ITEMS)))
-            &jnp.all(field_tables.ITEM_IMPLEMENTED[jnp.clip(s.item,0,len(ITEMS)-1)])&jnp.all((s.ability>=0)&(s.ability<=3))
+            &jnp.all(hook_tables.ITEM_IMPLEMENTED[jnp.clip(s.item,0,len(ITEMS)-1)])
+            &jnp.all((s.ability>=0)&(s.ability<len(ABILITIES)))&jnp.all(hook_tables.ABILITY_IMPLEMENTED[jnp.clip(s.ability,0,len(ABILITIES)-1)])
             &jnp.all((s.ivs>=0)&(s.ivs<=31))&jnp.all((s.evs>=0)&(s.evs<=255))
             &jnp.all((s.nature>=1)&(s.nature<=len(generic.NATURES)))
             &jnp.all(s.types==tables.SPECIES_TYPES[safe_species])&jnp.all((s.boosts>=-6)&(s.boosts<=6))
@@ -716,8 +743,10 @@ def _supported(s,initializing=False):
             &jnp.all(s.volatile_state[:,:,:,1]>=0)
             &jnp.all((s.volatile_state[:,:,:,2]>=0)&(s.volatile_state[:,:,:,2]<=1))
             &jnp.all((s.volatile_state[:,:,:,3]>=0)&(s.volatile_state[:,:,:,3]<ROSTER))
-            &jnp.all((s.volatile_state[:,:,:,4]>=0)&(s.volatile_state[:,:,:,4]<len(MOVE_KEYS)))
-            &jnp.all((s.volatile_state[:,:,:,5]>=0)&(s.volatile_state[:,:,:,5]<=5))&jnp.all((s.toxic>=0)&(s.toxic<=15))
+            &jnp.all((s.volatile_state[:,:,:3,4]>=0)&(s.volatile_state[:,:,:3,4]<len(MOVE_KEYS)))
+            &jnp.all((s.volatile_state[:,:,:3,5]>=0)&(s.volatile_state[:,:,:3,5]<=5))
+            &jnp.all((s.volatile_state[:,:,3,4]>-len(ITEMS))&(s.volatile_state[:,:,3,4]<=0))
+            &jnp.all((s.volatile_state[:,:,3,5]>=0)&(s.volatile_state[:,:,3,5]<len(MOVE_KEYS)))&jnp.all((s.toxic>=0)&(s.toxic<=15))
             &jnp.all((~occupied)|(s.level>=1))
             &jnp.all((~occupied)|(s.level<=100))&jnp.all((s.request>=MOVE)&(s.request<=END))
             &jnp.all((s.active>=0)&(s.active<ROSTER))&jnp.all(s.species[jnp.arange(2),s.active]>0))
@@ -731,7 +760,7 @@ def _validate_structure(s):
     vector_fields={'active','pending','request','pivot'}
     bool_fields={'fainted','protected','pivot','midturn','shiny','sleep_clause_target'}
     for name,value in zip(State._fields,s):
-        shape=(2,6) if name in roster_fields or name in {'fainted','protected'} else (2,) if name in vector_fields else (2,3) if name=='hazards' else (2,6,6) if name in {'stats','ivs','evs'} else (2,6,2) if name=='types' else (2,6,7) if name in {'boosts','status_state'} else (2,6,3,6) if name=='volatile_state' else (6,) if name=='weather_state' else (2,2,5) if name=='screens' else (2,2,3) if name=='hazard_meta' else (2,6,4) if name in {'moves','pp'} else (2,6) if name=='order' else (QUEUE,7) if name=='queue' else (4,) if name=='rng' else (HISTORY,10) if name=='history' else ()
+        shape=(2,6) if name in roster_fields or name in {'fainted','protected'} else (2,) if name in vector_fields else (2,3) if name=='hazards' else (2,6,6) if name in {'stats','ivs','evs'} else (2,6,2) if name=='types' else (2,6,7) if name in {'boosts','status_state'} else (2,6,4,6) if name=='volatile_state' else (6,) if name=='weather_state' else (2,2,5) if name=='screens' else (2,2,3) if name=='hazard_meta' else (2,6,4) if name in {'moves','pp'} else (2,6) if name=='order' else (QUEUE,7) if name=='queue' else (4,) if name=='rng' else (HISTORY,10) if name=='history' else ()
         dtype=jnp.bool_ if name in bool_fields else jnp.uint16 if name=='rng' else jnp.int32
         if getattr(value,'shape',None)!=shape or getattr(value,'dtype',None)!=jnp.dtype(dtype):
             raise ValueError(f'{name} must have shape {shape} and dtype {jnp.dtype(dtype)}')
@@ -771,7 +800,7 @@ def advance(s,choices,token=None):
                 def add(c):
                     s,t=c;action=pending[side];mon=s.active[side];move=s.moves[side,mon,jnp.clip(action,0,3)]
                     kind=jnp.where(action>=4,jnp.where(action==10,ATTACK,jnp.where(normal,SWAP,INSTANT)),ATTACK)
-                    priority=jnp.where((kind==ATTACK)&(action!=10),tables.PRIORITY[move],0)
+                    priority=jnp.where((kind==ATTACK)&(action!=10),hook_ops.priority(move,s.ability[side,mon],_engine()),0)
                     source=jnp.where(s.pivot[side],U_TURN,0)
                     row=jnp.stack([kind,i32(side),mon,action,priority,s.speed[side,mon],source])
                     return _qappend(s,row),t
@@ -878,7 +907,7 @@ def _initialize(species,level,moves,item,evs,seed,generation,ivs,nature,ability,
             jnp.zeros((HISTORY,10),jnp.int32),i32(0),jnp.zeros((2,3),jnp.int32),
             ivs,evs,nature,ability,tables.SPECIES_TYPES[species],jnp.where(occupied,hp_type,0),
             jnp.where(occupied,generic.hidden_power(ivs)[1],0),shiny,happiness,name,jnp.zeros((2,6,7),jnp.int32),i32(0),effects.empty_status(),
-            jnp.zeros((2,6,3,6),jnp.int32),zeros,zeros,field_ops.empty_weather(),jnp.zeros((2,2,5),jnp.int32),jnp.zeros((2,2,3),jnp.int32),jnp.array(False))
+            jnp.zeros((2,6,4,6),jnp.int32),zeros,zeros,field_ops.empty_weather(),jnp.zeros((2,2,5),jnp.int32),jnp.zeros((2,2,3),jnp.int32),jnp.array(False))
     return jax.lax.cond(_supported(s,initializing=True),_initialize_events,lambda s:Result(s,i32(UNSUPPORTED),empty_trace()),s)
 
 
@@ -891,15 +920,23 @@ def _initialize_events(s):
                 c,value=_draw(c,0,2,INIT);s,t=c
                 return s._replace(gender=s.gender.at[side,mon].set(value.astype(jnp.int32)+1)),t
             c=_when((s.species[side,mon]>0)&(s.gender[side,mon]<0),gender,c)
-    # Native startup: runSwitch all-active speed sort, then its Update, followed
-    # by the residual action's Update. No battle RNG is re-seeded after setup.
-    for _ in range(3):c=_update(c,INIT)
+    # Initial queue insertion and runSwitch each perform their own all-active
+    # sort. The second draw determines SwitchIn callback order. Keep cached
+    # speed until the first commitChoices, even after weather changes.
+    s,t=c;s=_refresh_speed(s);c=(s,t)
     for side in range(2):
-        s,t=c
         c=_event(c,SWITCH,side,0,value=s.hp[side,0],aux=s.stats[side,0,0])
+    speeds=s.speed[:,0];tie=speeds[0]==speeds[1]
+    c=_when(tie,lambda c:_draw(c,0,2,INIT,2)[0],c)
+    c,word=jax.lax.cond(tie,lambda c:_draw(c,0,2,INIT,2),lambda c:(c,jnp.uint32(0)),c)
+    first=jnp.where(tie,word.astype(jnp.int32),jnp.argmax(speeds))
+    for k in range(2):
+        side=jnp.where(k==0,first,1-first)
+        c=hook_ops.start(c,side,_engine(),initial=True)
+    c=_update(c,INIT)
     c=_event(c,TURN,value=1)
     s,t=c
-    s=s._replace(history=s.history.at[:3].set(t.events[:3]),hcount=i32(3))
+    s=s._replace(history=s.history.at[:EVENTS].set(t.events),hcount=t.ecount)
     return Result(s,i32(OK),t)
 
 

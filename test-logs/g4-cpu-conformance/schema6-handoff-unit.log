@@ -1,0 +1,11 @@
+test_existing_output_is_preserved (test.test_gpu_handoff.GpuHandoffTest.test_existing_output_is_preserved) ... ok
+test_native_failure_retains_failed_summary_and_archive (test.test_gpu_handoff.GpuHandoffTest.test_native_failure_retains_failed_summary_and_archive) ... ok
+test_timeout_stops_child_and_records_exit (test.test_gpu_handoff.GpuHandoffTest.test_timeout_stops_child_and_records_exit) ... ok
+test_historical_absolute_path_and_line_endings_only (test.test_g3_fixtures.G3FixturesTest.test_historical_absolute_path_and_line_endings_only) ... ok
+test_saved_pack_is_complete_and_uses_the_current_pin (test.test_g3_fixtures.G3FixturesTest.test_saved_pack_is_complete_and_uses_the_current_pin) ... ok
+test_source_paths_cannot_escape_repository_roots (test.test_g3_fixtures.G3FixturesTest.test_source_paths_cannot_escape_repository_roots) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.193s
+
+OK

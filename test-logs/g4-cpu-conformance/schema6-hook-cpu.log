@@ -1,0 +1,9 @@
+test_atomic_lock_metadata_and_lossless_schema5_migration (test.test_hook_engine.HookEngineTest.test_atomic_lock_metadata_and_lossless_schema5_migration) ... ok
+test_complete_rollouts_continuation_and_reset (test.test_hook_engine.HookEngineTest.test_complete_rollouts_continuation_and_reset) ... ok
+test_mixed_eager_compiled_batches_and_saved_states (test.test_hook_engine.HookEngineTest.test_mixed_eager_compiled_batches_and_saved_states) ... ok
+test_native_states_draws_requests_and_histories (test.test_hook_engine.HookEngineTest.test_native_states_draws_requests_and_histories) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 672.554s
+
+OK
