@@ -2,7 +2,7 @@
 
 Fixed-shape int32 storage; exact four-limb PRNG; stable mon identity and a
 separate command roster. Strings/protocol rendering belong to the host adapter.
-Schema 3 carries generic pinned data through the same scheduler. Handler masks
+Schema 4 carries status effect state and generic pinned data through the same scheduler. Handler masks
 remain incomplete and reject unsupported effects; full conformance is pending.
 """
 from __future__ import annotations
@@ -18,12 +18,18 @@ from mechanics.damage_composition import damage_from_preroll
 from mechanics.stats import derive_stored_stats
 from . import gen5_tables as generic
 from . import gen5_engine_tables as tables
+from . import status_effects as effects
+import sys
 
-SCHEMA = 3
+def _engine():
+    return sys.modules[__name__]
+
+SCHEMA = 4
 ROSTER, SLOTS, QUEUE, EVENTS, DRAWS, HISTORY = 6, 4, 8, 128, 128, 2048
 OK, PENDING, INVALID, UNSUPPORTED, CAPACITY, TERMINAL, STALE = range(7)
 MOVE, FORCED, WAIT, END = range(4)
-NONE, BRN, PAR, TOX, FNT = range(5)
+NONE, BRN, PAR, TOX, FNT, PSN, SLP, FRZ = range(8)
+STATUS_NAMES=('','brn','par','tox','fnt','psn','slp','frz')
 # Species and moves use local table indices, explicitly versioned here.
 MEW, SNORLAX, GENGAR = 1, 2, 3
 TACKLE, POUND, MEGA_PUNCH, EARTHQUAKE, U_TURN, WISP, TOXIC, THUNDER_WAVE, RECOVER, PROTECT, STRUGGLE = range(1,12)
@@ -33,14 +39,17 @@ LEGACY_SPECIES,LEGACY_ITEMS,LEGACY_MOVES=tables.LEGACY_SPECIES,tables.LEGACY_ITE
 SPECIES,MOVE_NAMES,MOVE_KEYS=tables.SPECIES,tables.MOVE_NAMES,tables.MOVE_KEYS
 BASE_STATS,PP,POWER,ACCURACY=tables.BASE_STATS,tables.PP,tables.POWER,tables.ACCURACY
 ABILITIES=tables.ABILITIES
+SPORE,CONFUSE_RAY,POISON_POWDER,REST=(tables.MOVE_IDS[k] for k in ('spore','confuseray','poisonpowder','rest'))
 HIDDEN_POWER,RETURN,FRUSTRATION=(tables.MOVE_IDS[k] for k in ('hiddenpower','return','frustration'))
 # Event fields: kind, side, stable mon, move, target side, target mon, value,
 # auxiliary, status, reserved. HP events retain maxHP for exact projection.
 BLANK, EV_MOVE, DAMAGE, HEAL, CRIT, IMMUNE, MISS, FAINT, WIN, TURN, UPKEEP, SWITCH, STATUS, ABILITY, END_ITEM, CURE, FAIL, CANT, ACTIVATE, SINGLE = range(20)
 SIDE_START, SIDE_END = 20, 21
+CONF_START, CONF_END, CONF_ACTIVATE, SLEEP_CLAUSE = range(22,26)
 # Draw contexts; range form stores actual native arguments including offsets.
 INIT, QUEUE_SORT, BEFORE_TURN, UPDATE, HIT_UPDATE, SWITCH_SORT, FIELD_SORT, ACC, CRITICAL, ROLL, PARALYSIS, STALL = range(12)
-DRAW_CONTEXTS=('initialization','queue-sort','before-turn','update','hit-update','switch-order','residual-handlers','accuracy','critical','damage','paralysis','stall')
+SLEEP_DURATION, FREEZE, CONF_DURATION, CONFUSION, CONF_DAMAGE, SECONDARY = range(12,18)
+DRAW_CONTEXTS=('initialization','queue-sort','before-turn','update','hit-update','switch-order','residual-handlers','accuracy','critical','damage','paralysis','stall','sleep-duration','freeze','confusion-duration','confusion','confusion-damage','secondary')
 # Queue kinds, order values mirror the pinned scheduler.
 BEFORE, ATTACK, SWAP, INSTANT, RUN_SWITCH, RESIDUAL = range(1,7)
 QORDER=jnp.array([999,4,200,103,3,101,300],jnp.int32)
@@ -91,6 +100,13 @@ class State(NamedTuple):
     happiness: jax.Array
     name: jax.Array
     boosts: jax.Array
+    effect_order: jax.Array
+    # id, effectOrder, source side/mon, target present, time, startTime.
+    status_state: jax.Array
+    # Protect/stall/confusion: present, order, source side/mon, move, time.
+    volatile_state: jax.Array
+    ability_order: jax.Array
+    item_order: jax.Array
 
 
 class Trace(NamedTuple):
@@ -179,11 +195,10 @@ def _update(c,context=UPDATE,sort_all=False):
         def cure(c):
             s,t=c;m=s.active[side];old=s.status[side,m]
             c=_event(c,END_ITEM,side,m)
-            c=_event(c,CURE,side,m,status=old)
             s,t=c
-            return s._replace(item=s.item.at[side,m].set(0),status=s.status.at[side,m].set(0),toxic=s.toxic.at[side,m].set(0)),t
+            return effects.lum((s,t),side,_engine(),emit_item=False)
         s,t=c;m=s.active[side]
-        c=_when((s.item[side,m]==2)&(s.status[side,m]>0)&(s.status[side,m]<FNT)&(s.hp[side,m]>0),cure,c)
+        c=_when((s.item[side,m]==2)&((s.status[side,m]!=NONE)&(s.status[side,m]!=FNT)|(s.volatile_state[side,m,2,0]>0))&(s.hp[side,m]>0),cure,c)
     return c
 
 
@@ -217,6 +232,7 @@ def _qsort(c):
 def _faint(c,side):
     s,t=c;m=s.active[side]
     c=_event(c,FAINT,side,m);s,t=c
+    s=s._replace(volatile_state=s.volatile_state.at[side,m].set(0))
     return s._replace(fainted=s.fainted.at[side,m].set(True),speed=s.speed.at[side,m].set(s.stats[side,m,5]),status=s.status,
                       stall=s.stall.at[side,m].set(0),stall_duration=s.stall_duration.at[side,m].set(0),
                       protected=s.protected.at[side,m].set(False)),t
@@ -237,47 +253,9 @@ def _damage(c,side,amount,cause=0):
     return _event((s,t),DAMAGE,side,m,value=hp,aux=s.stats[side,m,0],status=s.status[side,m],move=cause)
 
 
-def _status(c,source,target,status,reflect=True):
-    s,t=c;m=s.active[target];ability=s.ability[target,m]
-    poison_type=jnp.any((s.types[target,m]==generic.TYPES['poison'])|(s.types[target,m]==generic.TYPES['steel']))
-    fire_type=jnp.any(s.types[target,m]==generic.TYPES['fire'])
-    immunity=((status==TOX)&((ability==2)|poison_type))|((status==BRN)&fire_type)
-    failed=(s.status[target,m]!=NONE)
-    def blocked(c):
-        return _event(c,IMMUNE,target,m,aux=jnp.where((ability==2)&(status==TOX),1,0))
-    def attempt(c):
-        def fail(c):
-            same=s.status[target,m]==status
-            def different(c):
-                s,t=c
-                last=jnp.max(jnp.where((jnp.arange(EVENTS)<t.ecount)&(t.events[:,0]==EV_MOVE),jnp.arange(EVENTS),0))
-                t=t._replace(events=t.events.at[last,7].set(2))
-                return _event((s,t),FAIL,source,s.active[source])
-            return jax.lax.cond(same,lambda c:_event(c,FAIL,target,m,status=status),different,c)
-        def apply(c):
-            s,t=c;s=s._replace(status=s.status.at[target,m].set(status),toxic=s.toxic.at[target,m].set(0))
-            c=_event((s,t),STATUS,target,m,status=status)
-            if reflect:
-                def sync(c):
-                    c=_event(c,ABILITY,target,m)
-                    return _status(c,target,source,status,False)
-                c=_when((ability==1)&(source!=target),sync,c)
-            # Native Synchronize recursively attempts reflection once more,
-            # generating activation/failure before the item cures.
-            elif True:
-                def back(c):
-                    s,t=c;other=s.active[source]
-                    c=_event(c,ABILITY,target,m)
-                    return _event(c,FAIL,source,other,status=status)
-                c=_when((ability==1)&(source!=target),back,c)
-            # Items update immediately after successful application.
-            s,t=c
-            def lum(c):
-                c=_event(c,END_ITEM,target,m);c=_event(c,CURE,target,m,status=status);s,t=c
-                return s._replace(item=s.item.at[target,m].set(0),status=s.status.at[target,m].set(0),toxic=s.toxic.at[target,m].set(0)),t
-            return _when(s.item[target,m]==2,lum,c)
-        return jax.lax.cond(failed,fail,apply,c)
-    return jax.lax.cond(immunity&(~failed),blocked,attempt,c)
+def _status(c,source,target,status,reflect=True,move=0,secondary=False,overwrite=False):
+    return effects.inflict(c,source,target,status,_engine(),reflect=reflect,move=move,
+                           secondary=secondary,overwrite=overwrite)
 
 
 def _hit(c,actor,move):
@@ -304,6 +282,9 @@ def _hit(c,actor,move):
         c=_when((exponent!=0)&(move!=STRUGGLE),lambda c:_event(c,ACTIVATE,target,tm,aux=exponent,move=-1),c)
         c=_when(crit==0,lambda c:_event(c,CRIT,target,tm),c)
         c=_damage(c,target,damage)
+        c=_when((c[0].status[target,tm]==FRZ)&(move_type==generic.TYPES['fire'])&(c[0].hp[target,tm]>0),
+                lambda c:effects.cure(c,target,_engine(),source=actor),c)
+        c=effects.secondary(c,actor,move,_engine())
         def spin(c):
             for index,kind in ((1,SPIKES),(0,STEALTH_ROCK)):
                 c=_when(c[0].hazards[actor,index]>0,
@@ -333,11 +314,16 @@ def _hit(c,actor,move):
             return s._replace(pivot=s.pivot.at[actor].set(True)),t
         return _when((move==U_TURN)&(s.winner<0)&jnp.any(_live(s)[actor]&(jnp.arange(ROSTER)!=mon)),pivot,c)
     def status_hit(c):
-        s,t=c
-        poison_immune=(s.ability[target,tm]==2)|jnp.any((s.types[target,tm]==generic.TYPES['poison'])|(s.types[target,tm]==generic.TYPES['steel']))
-        burn_immune=jnp.any(s.types[target,tm]==generic.TYPES['fire'])
-        success=(s.status[target,tm]==NONE)&(~((move==TOXIC)&poison_immune))&(~((move==WISP)&burn_immune))
-        c=_status(c,actor,target,jnp.where(move==WISP,BRN,jnp.where(move==TOXIC,TOX,PAR)))
+        def confuse(c):return effects.confuse(c,actor,target,move,_engine())
+        def status(c):
+            wanted=jnp.where(move==WISP,BRN,jnp.where(move==TOXIC,TOX,jnp.where(move==POISON_POWDER,PSN,jnp.where(move==SPORE,SLP,PAR))))
+            return _status(c,actor,target,wanted,move=move)
+        before_count=c[1].ecount
+        c=jax.lax.cond(move==CONFUSE_RAY,confuse,status,c)
+        # Only actual successful application runs the hit-loop updates. Lum can
+        # immediately cure it, so inspect the emitted status/start event.
+        event=c[1].events[:,0];valid=(jnp.arange(EVENTS)>=before_count)&(jnp.arange(EVENTS)<c[1].ecount)
+        success=jnp.any(valid&((event==STATUS)|(event==CONF_START)))
         return _when(success,lambda c:_update(_update(c,HIT_UPDATE),HIT_UPDATE),c)
     return jax.lax.cond(damaging,physical,status_hit,c)
 
@@ -345,15 +331,11 @@ def _hit(c,actor,move):
 def _attack(c,row):
     s,t=c;actor=row[1];mon=row[2];action=row[3]
     move=jnp.where(action==10,STRUGGLE,s.moves[actor,mon,jnp.clip(action,0,3)])
-    target=jnp.where((move==RECOVER)|(move==PROTECT),actor,1-actor)
+    target=jnp.where((move==RECOVER)|(move==PROTECT)|(move==REST),actor,1-actor)
     tm=s.active[target]
     def execute(c):
-        # Paralysis occurs before PP spend and move event.
-        def par(c):
-            c,value=_draw(c,0,4,PARALYSIS)
-            return c,value==0
-        c,full=jax.lax.cond(s.status[actor,mon]==PAR,par,lambda c:(c,jnp.array(False)),c)
-        def cannot(c):return _event(c,CANT,actor,mon,status=PAR)
+        c,full=effects.before_move(c,actor,move,_engine())
+        def cannot(c):return c
         def act(c):
             s,t=c;slot=jnp.clip(action,0,3)
             s=s._replace(pp=s.pp.at[actor,mon,slot].add(jnp.where(move==STRUGGLE,0,-1)))
@@ -365,6 +347,7 @@ def _attack(c,row):
             side_move=(move==STEALTH_ROCK)|(move==SPIKES)
             c=_event(c,EV_MOVE,actor,mon,move,target,tm,aux=jnp.where(side_move&(s.hp[target,tm]==0),4,0))
             def self_move(c):
+                original=c[0]
                 def recover(c):
                     s,t=c;hp=s.hp[actor,mon];maxhp=s.stats[actor,mon,0]
                     def fail(c):
@@ -388,14 +371,17 @@ def _attack(c,row):
                         s,t=c;s=s._replace(protected=s.protected.at[actor,mon].set(True),
                          stall=s.stall.at[actor,mon].set(jnp.minimum(256,jnp.maximum(2,counter*2))),
                          stall_duration=s.stall_duration.at[actor,mon].set(2))
-                        return _event((s,t),SINGLE,actor,mon)
+                        c=effects.add_volatile((s,t),actor,0,actor,move,_engine())
+                        c=effects.add_volatile(c,actor,1,actor,move,_engine())
+                        return _event(c,SINGLE,actor,mon)
                     def fail_fn(c):
                         s,t=c;t=t._replace(events=t.events.at[move_row,7].set(2))
                         return _event((s,t),FAIL,actor,mon)
                     return jax.lax.cond(success,success_fn,fail_fn,c)
-                c=jax.lax.cond(move==RECOVER,recover,protect,c)
+                c=jax.lax.cond(move==REST,lambda c:effects.rest(c,actor,move_row,_engine()),
+                    lambda c:jax.lax.cond(move==RECOVER,recover,protect,c),c)
                 # Successful self moves run both hit-loop Updates.
-                s,t=c;failed=t.events[move_row,7]==2
+                s,t=c;failed=(t.events[move_row,7]==2)|((move==REST)&(original.hp[actor,mon]==original.stats[actor,mon,0]))
                 c=_when(~failed,lambda c:_update(_update(c,HIT_UPDATE),HIT_UPDATE),c)
                 return c
             def foe_move(c):
@@ -417,7 +403,7 @@ def _attack(c,row):
                             return _event((s,t),MISS,actor,mon,move,target,tm)
                         def hit_fn(c):
                             s,t=c
-                            existing=(tables.CATEGORY[move]==0)&(s.status[target,tm]!=NONE)&(s.status[target,tm]!=jnp.where(move==WISP,BRN,jnp.where(move==TOXIC,TOX,PAR)))
+                            existing=(tables.CATEGORY[move]==0)&(move!=CONFUSE_RAY)&(s.status[target,tm]!=NONE)&(s.status[target,tm]!=jnp.where(move==WISP,BRN,jnp.where(move==TOXIC,TOX,jnp.where(move==POISON_POWDER,PSN,jnp.where(move==SPORE,SLP,PAR)))))
                             t=t._replace(events=t.events.at[move_row,7].set(jnp.where(existing,2,t.events[move_row,7])))
                             return _hit((s,t),actor,move)
                         return jax.lax.cond(hit,hit_fn,miss,c)
@@ -460,6 +446,8 @@ def _switch(c,row):
                  stall_duration=s.stall_duration.at[side,old].set(0),
                  status=s.status.at[side,old].set(jnp.where(s.status[side,old]==FNT,NONE,s.status[side,old])),
                  toxic=s.toxic.at[side,incoming].set(0),pivot=s.pivot.at[side].set(False))
+    s=s._replace(volatile_state=s.volatile_state.at[side,old].set(0))
+    c=effects.activate((s,t),side,_engine());s,t=c
     c=_event((s,t),SWITCH,side,incoming,value=s.hp[side,incoming],aux=s.stats[side,incoming,0],
              status=s.status[side,incoming],move=row[6])
     s,t=c
@@ -479,7 +467,7 @@ def _residual(c):
     rows=[];valid=[]
     for side in range(2):
         m=s.active[side];live=~s.fainted[side,m];status=s.status[side,m]
-        rows.extend([jnp.array([1,side,0,0,0,0],jnp.int32).at[2].set(m).at[3].set(jnp.where(status==TOX,9,10)).at[4].set(s.speed[side,m]),
+        rows.extend([jnp.array([1,side,0,0,0,0],jnp.int32).at[2].set(m).at[3].set(jnp.where((status==TOX)|(status==PSN),9,10)).at[4].set(s.speed[side,m]),
                      jnp.array([2,side,0,10000,0,2],jnp.int32).at[2].set(m).at[4].set(s.speed[side,m]),
                      jnp.array([3,side,0,10000,0,2],jnp.int32).at[2].set(m).at[4].set(s.speed[side,m]),
                      jnp.array([4,side,0,5,0,4],jnp.int32).at[2].set(m).at[4].set(s.speed[side,m])])
@@ -487,7 +475,7 @@ def _residual(c):
         # A fainted holder still participates in handler shuffle draws, then
         # effect() below skips its callback. Fainting clears volatiles; native
         # checkFainted changes status to fnt only after the residual action.
-        valid.extend([(status==TOX)|(status==BRN),live&s.protected[side,m],live&(s.stall_duration[side,m]>0),s.item[side,m]==1])
+        valid.extend([(status==TOX)|(status==BRN)|(status==PSN),live&s.protected[side,m],live&(s.stall_duration[side,m]>0),s.item[side,m]==1])
     rows=jnp.stack(rows);valid=jnp.stack(valid);count=jnp.sum(valid).astype(jnp.int32)
     order=jnp.where(valid,rows[:,3],20000)
     idx=jnp.lexsort((jnp.arange(8),rows[:,5],-rows[:,4],order));rows=rows[idx]
@@ -511,17 +499,18 @@ def _residual(c):
                 stage=jnp.minimum(15,s.toxic[side,m]+1)
                 amount=jnp.where(tox,jnp.maximum(1,s.stats[side,m,0]//16)*stage,s.stats[side,m,0]//8)
                 s=s._replace(toxic=s.toxic.at[side,m].set(jnp.where(tox,stage,s.toxic[side,m])))
-                c=_damage((s,t),side,amount,cause=jnp.where(tox,2,1));s,t=c
+                c=_damage((s,t),side,amount,cause=jnp.where(tox|(s.status[side,m]==PSN),2,1));s,t=c
                 c=_when(s.hp[side,m]==0,lambda c:_faint(c,side),c)
                 return _win(c,side)
             def duration(c):
                 s,t=c
                 def protect(c):
-                    s,t=c;return s._replace(protected=s.protected.at[side,m].set(False)),t
+                    s,t=c;return s._replace(protected=s.protected.at[side,m].set(False),volatile_state=s.volatile_state.at[side,m,0].set(0)),t
                 def stall(c):
                     s,t=c;duration=jnp.maximum(0,s.stall_duration[side,m]-1)
                     return s._replace(stall_duration=s.stall_duration.at[side,m].set(duration),
-                                     stall=s.stall.at[side,m].set(jnp.where(duration==0,0,s.stall[side,m]))),t
+                                     stall=s.stall.at[side,m].set(jnp.where(duration==0,0,s.stall[side,m])),
+                                     volatile_state=s.volatile_state.at[side,m,1].set(jnp.where(duration==0,0,s.volatile_state[side,m,1]))),t
                 return jax.lax.cond(kind==2,protect,stall,c)
             def leftovers(c):
                 s,t=c;hp=s.hp[side,m];maxhp=s.stats[side,m,0]
@@ -581,6 +570,7 @@ def _run_queue(c):
                 side=jnp.where(k==0,first,1-first)
                 def entry(c):
                     s,t=c;m=s.active[side]
+                    c=effects.sleep_switch(c,side,_engine());s,t=c
                     for n in range(2):
                         index=jnp.where(n==0,s.hazards[side,2]-1,2-s.hazards[side,2])
                         index=jnp.clip(index,0,1)
@@ -660,7 +650,20 @@ def _supported(s,initializing=False):
             &jnp.all((s.hazards[:,2]!=1)|(s.hazards[:,0]>0))
             &jnp.all((s.hazards[:,2]!=2)|(s.hazards[:,1]>0))
             &jnp.all((s.hp>=0)&(s.hp<=s.stats[:,:,0]))&jnp.all((s.pp>=0)&(s.pp<=PP[s.moves]))
-            &jnp.all((s.status>=0)&(s.status<=FNT))&jnp.all((s.toxic>=0)&(s.toxic<=15))
+            &jnp.all((s.status>=0)&(s.status<=FRZ))
+            &(s.effect_order>=0)&jnp.all(s.ability_order>=0)&jnp.all(s.item_order>=0)
+            &jnp.all((s.status_state[:,:,0]>=0)&(s.status_state[:,:,0]<=FRZ))
+            &jnp.all(s.status_state[:,:,1]>=0)
+            &jnp.all((s.status_state[:,:,2]>=-1)&(s.status_state[:,:,2]<=1))
+            &jnp.all((s.status_state[:,:,3]>=-1)&(s.status_state[:,:,3]<ROSTER))
+            &jnp.all((s.status_state[:,:,4]>=0)&(s.status_state[:,:,4]<=1))
+            &jnp.all((s.status_state[:,:,5:]>=-1)&(s.status_state[:,:,5:]<=4))
+            &jnp.all((s.volatile_state[:,:,:,0]>=0)&(s.volatile_state[:,:,:,0]<=1))
+            &jnp.all(s.volatile_state[:,:,:,1]>=0)
+            &jnp.all((s.volatile_state[:,:,:,2]>=0)&(s.volatile_state[:,:,:,2]<=1))
+            &jnp.all((s.volatile_state[:,:,:,3]>=0)&(s.volatile_state[:,:,:,3]<ROSTER))
+            &jnp.all((s.volatile_state[:,:,:,4]>=0)&(s.volatile_state[:,:,:,4]<len(MOVE_KEYS)))
+            &jnp.all((s.volatile_state[:,:,:,5]>=0)&(s.volatile_state[:,:,:,5]<=5))&jnp.all((s.toxic>=0)&(s.toxic<=15))
             &jnp.all((~occupied)|(s.level>=1))
             &jnp.all((~occupied)|(s.level<=100))&jnp.all((s.request>=MOVE)&(s.request<=END))
             &jnp.all((s.active>=0)&(s.active<ROSTER))&jnp.all(s.species[jnp.arange(2),s.active]>0))
@@ -670,11 +673,11 @@ def _supported(s,initializing=False):
 def _validate_structure(s):
     if not isinstance(s,State):raise ValueError('expected shared-engine State')
     roster_fields={'species','level','speed','gender','hp','item','status','toxic','stall','stall_duration',
-                   'nature','ability','hp_type','hp_power','shiny','happiness','name'}
+                   'nature','ability','hp_type','hp_power','shiny','happiness','name','ability_order','item_order'}
     vector_fields={'active','pending','request','pivot'}
     bool_fields={'fainted','protected','pivot','midturn','shiny'}
     for name,value in zip(State._fields,s):
-        shape=(2,6) if name in roster_fields or name in {'fainted','protected'} else (2,) if name in vector_fields else (2,3) if name=='hazards' else (2,6,6) if name in {'stats','ivs','evs'} else (2,6,2) if name=='types' else (2,6,7) if name=='boosts' else (2,6,4) if name in {'moves','pp'} else (2,6) if name=='order' else (QUEUE,7) if name=='queue' else (4,) if name=='rng' else (HISTORY,10) if name=='history' else ()
+        shape=(2,6) if name in roster_fields or name in {'fainted','protected'} else (2,) if name in vector_fields else (2,3) if name=='hazards' else (2,6,6) if name in {'stats','ivs','evs'} else (2,6,2) if name=='types' else (2,6,7) if name in {'boosts','status_state'} else (2,6,3,6) if name=='volatile_state' else (2,6,4) if name in {'moves','pp'} else (2,6) if name=='order' else (QUEUE,7) if name=='queue' else (4,) if name=='rng' else (HISTORY,10) if name=='history' else ()
         dtype=jnp.bool_ if name in bool_fields else jnp.uint16 if name=='rng' else jnp.int32
         if getattr(value,'shape',None)!=shape or getattr(value,'dtype',None)!=jnp.dtype(dtype):
             raise ValueError(f'{name} must have shape {shape} and dtype {jnp.dtype(dtype)}')
@@ -820,12 +823,14 @@ def _initialize(species,level,moves,item,evs,seed,generation,ivs,nature,ability,
             jnp.zeros(2,jnp.bool_),jnp.zeros((QUEUE,7),jnp.int32),i32(0),jnp.array(False),seed,i32(1),i32(-1),generation,i32(0),
             jnp.zeros((HISTORY,10),jnp.int32),i32(0),jnp.zeros((2,3),jnp.int32),
             ivs,evs,nature,ability,tables.SPECIES_TYPES[species],jnp.where(occupied,hp_type,0),
-            jnp.where(occupied,generic.hidden_power(ivs)[1],0),shiny,happiness,name,jnp.zeros((2,6,7),jnp.int32))
+            jnp.where(occupied,generic.hidden_power(ivs)[1],0),shiny,happiness,name,jnp.zeros((2,6,7),jnp.int32),i32(0),effects.empty_status(),
+            jnp.zeros((2,6,3,6),jnp.int32),zeros,zeros)
     return jax.lax.cond(_supported(s,initializing=True),_initialize_events,lambda s:Result(s,i32(UNSUPPORTED),empty_trace()),s)
 
 
 def _initialize_events(s):
     c=(s,empty_trace())
+    for side in range(2):c=effects.activate(c,i32(side),_engine())
     for side in range(2):
         for mon in range(ROSTER):
             def gender(c):

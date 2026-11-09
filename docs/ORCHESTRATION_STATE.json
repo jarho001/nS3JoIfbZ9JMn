@@ -524,13 +524,13 @@
     "brief": "PROJECT_PLAN.md#proposed-g4-cpu-implementation-and-conformance-goal",
     "source_base": "f37067e",
     "scope": "Complete pinned gen5randombattle reachable mechanics and every prepared CPU gate. Integrated checkpoints, resumable progress and commit/push authorized. GPU execution, profiling, benchmarks, training, delegation and scored research excluded.",
-    "checkpoint": "Generic data/schema 3 integration CPU-validated and committed; status/duration native expectations captured. Full G4 CPU goal remains in progress.",
+    "checkpoint": "Schema 4 status/volatile/source/effect-order implementation is in place. All 55 native status scenarios / 411 boundaries, including four complete six-member games, pass exact scalar JIT state/RNG/request/effect-state/recipient-history replay. Integrated CPU/eager/batch/lifecycle/regression acceptance is pending.",
     "completed_checkpoints": [
       "Pinned resolved data and source-owned conservative candidate inventory exported; 605 role roots, 1768 data/effect entries, 1146 callback slots. Data-only mappings remain partial; transitive closure and complete callback implementation are not claimed.",
       "Generic species/set/type/stat/physical-special/Hidden Power/happiness/priority/hazard integration passes 37 affected CPU checks on 4eab254, retaining all 133 baseline scenarios and validating 24 added scenarios: 157 scenarios / 1059 boundaries, including 20 complete battles (eight six-member games). Eager/JIT/1-8-32 mixed batches, serialized continuation/reset, explicit schema 1/2 migration and full/lean rollouts pass.",
       "48 status/duration cases / 189 native-only boundaries captured before implementation, with source identities, effect states/order and callback-annotated raw draws. Twelve current native tests pass on 578b352; all 157 baseline/generic case semantics remain identical after diagnostic stack normalization."
     ],
-    "next": "Resume the same approved goal: implement G4-STATUS against the saved 48-case native corpus in the shared engine, including source/timer/effect-order schema, sleep/freeze/confusion/poison/Rest, secondary draws, Sleep Clause, events/requests and saved lifecycle; continue generator/indirect closure and remaining field/hooks/moves/phases/rules before the fixed campaigns. No new goal approval is required.",
+    "next": "Complete schema 4 status CPU integration and update GPU handoff, then continue the same G4 goal through field/boost/hooks/move/phase/indirect/terminal/conformance work. No new approval is required.",
     "ledger": {
       "path": "rules/gen5-reachable-v1.json",
       "entries": 1768,
@@ -585,11 +585,11 @@
     "source_identity": "test-logs/g4-cpu-conformance/source.json",
     "evidence_directory": "test-logs/g4-cpu-conformance",
     "continuation": {
-      "status": "saved_at_execution_checkpoint",
-      "engine_schema": 3,
+      "status": "executing_status_integration",
+      "engine_schema": 4,
       "native_status_corpus": "test-logs/g4-cpu-conformance/status_native_only.json.gz",
       "generic_corpus": "test-logs/g4-cpu-conformance/generic.json.gz",
-      "pending_state_design": "Preserve native status/volatile source identities, times/startTime, global effect ordering and effect-state fields. Rest/Lum retains empty-status timers; KO still consumes secondary draw. Account for migration from schemas 1/2/3 before changing State.",
+      "pending_state_design": "Implemented status source/time/startTime, retained empty Rest/Lum timers, global effect ordering and Protect/stall/confusion metadata. Full CPU integration pending; advanced schema 1/2/3 snapshots without this provenance fail explicit migration rather than inventing state.",
       "pending_gate": "No generated full-format start or development/held-out campaign is accepted. V7 executable harness is absent; fixed configuration is present. Target turn-limit/history capacity audit remains open.",
       "validation_reuse": "Existing engine/IO/table/rollout/test bytes match 4eab254 exactly. Native capture-only changes at 578b352 preserve all existing case semantics; source.json records hashes and canonical fixture identities. Re-run affected CPU checks after mechanics changes, not all history per patch."
     },
@@ -1545,6 +1545,7 @@
       "profiling_executed": false,
       "native_battles_executed": false
     },
-    "combined_return_home_block": "docs/GPU_HANDOFF.md#one-return-home-block-correctness-plus-g3-v6-measurements"
+    "combined_return_home_block": "docs/GPU_HANDOFF.md#one-return-home-block-correctness-plus-g3-v6-measurements",
+    "pending_status_checkpoint": "Schema 4 status/counter/effect-order/source and serialization work needs meaningful GPU replay after CPU acceptance. No GPU execution now; handoff runner/test list will be updated at that checkpoint."
   }
 }

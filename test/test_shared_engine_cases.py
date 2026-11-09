@@ -15,7 +15,7 @@ class SharedEngineCasesTest(unittest.TestCase):
     def test_manifest_and_nonempty_family_coverage(self):
         manifest=json.loads((Path(__file__).resolve().parents[1]/'rules/shared-engine-v1.json').read_text())
         self.assertEqual(manifest['moves'],list(e.MOVE_NAMES[1:e.PROTECT+1]))
-        self.assertEqual(manifest['trace']['context'],list(e.DRAW_CONTEXTS))
+        self.assertEqual(manifest['trace']['context'],list(e.DRAW_CONTEXTS[:12]))
         self.assertEqual(list(manifest['species']),list(e.LEGACY_SPECIES[1:]))
         self.assertEqual(manifest['items'],list(e.LEGACY_ITEMS))
         self.assertEqual([manifest['storage'][k] for k in ('queue_rows','events_per_advance','draws_per_advance','history_events')],[e.QUEUE,e.EVENTS,e.DRAWS,e.HISTORY])
@@ -23,7 +23,7 @@ class SharedEngineCasesTest(unittest.TestCase):
         ids={c['id'] for c in self.cases}
         for name in ('legacy-pound-tied','wisp-hit','toxic-type-immunity','pivot-resume','forced-replacement','struggle-double-ko','struggle-protected','protect-success-256','M03-last-tackle','M04-residual-ko','privacy-hp-a','privacy-b'):
             self.assertIn(name,ids)
-        self.assertEqual(set().union(*(set(d['semanticContext'] for d in step['draws']) for c in self.cases for step in c['steps'])),set(e.DRAW_CONTEXTS[1:]))
+        self.assertEqual(set().union(*(set(d['semanticContext'] for d in step['draws']) for c in self.cases for step in c['steps'])),set(e.DRAW_CONTEXTS[1:12]))
 
     def test_native_initialization_and_boundaries(self):
         for case in self.cases:

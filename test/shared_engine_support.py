@@ -35,17 +35,18 @@ def initialize_case(case):
         init=e.make_gen5_state([case['setup'][key] for key in ('p1','p2')],
                               case['setup'].get('seedWords',[case['setup']['seed'],2,3,4]))
         if int(init.code)!=e.OK:raise AssertionError(case['id']+': initialization unsupported')
-        return init.state,init.trace
-    teams=[]
-    for key in ('p1','p2'):
-        teams.append([{'species':d['species'],'moves':d['moves'],'level':d['level'],'speed_evs':d['evs']['spe'],
-                       'item':{'':'','Leftovers':'leftovers','Lum Berry':'lumberry'}[d['item']]} for d in case['setup'][key]])
-    init=e.make_state(teams,case['setup'].get('seedWords',[case['setup']['seed'],2,3,4]));s=init.state
+    else:
+        teams=[]
+        for key in ('p1','p2'):
+            teams.append([{'species':d['species'],'moves':d['moves'],'level':d['level'],'speed_evs':d['evs']['spe'],
+                           'item':{'':'','Leftovers':'leftovers','Lum Berry':'lumberry'}[d['item']]} for d in case['setup'][key]])
+        init=e.make_state(teams,case['setup'].get('seedWords',[case['setup']['seed'],2,3,4]))
+    s=init.state
     # Synthetic state installation is a trusted fixture, not ordinary reset.
     for setup in case['setup'].get('setup',[]):
         side=int(setup['side'][1])-1;mon=setup.get('mon',0)
         if 'status' in setup:
-            status={'brn':e.BRN,'par':e.PAR,'tox':e.TOX}[setup['status']]
+            status=e.STATUS_NAMES.index(setup['status'])
             # Native Pokemon.setStatus silently rejects an immune synthetic
             # installation; it is not an attempted status move disclosure.
             immune=status==e.TOX and int(s.species[side,mon]) in (e.SNORLAX,e.GENGAR)
@@ -85,6 +86,7 @@ def assert_state(test,s,native,label):
     test.assertEqual(int(s.turn),native['turn'],label+' turn')
     test.assertEqual(int(s.winner),native['winner'],label+' winner')
     test.assertEqual(bool(s.midturn),native['midTurn'],label+' midTurn')
+    if 'effectOrder' in native:test.assertEqual(int(s.effect_order),native['effectOrder'],label+' global effectOrder')
     for side,n in enumerate(native['sides']):
         prefix=label+f' p{side+1}'
         test.assertEqual(s.hazards[side].tolist(),n.get('hazards',[0,0,0]),prefix+' side hazards/order')
@@ -93,7 +95,7 @@ def assert_state(test,s,native,label):
         for p in n['pokemon']:
             m=p['id'];tag=prefix+f' mon{m}'
             for ours,theirs in [('hp','hp'),('status','status'),('toxic','toxicStage'),('item','item'),('speed','speed'),('fainted','fainted')]:
-                v={'status':('','brn','par','tox','fnt')[int(s.status[side,m])],'item':e.ITEMS[int(s.item[side,m])]}.get(ours,np.asarray(getattr(s,ours)[side,m]).item())
+                v={'status':e.STATUS_NAMES[int(s.status[side,m])],'item':e.ITEMS[int(s.item[side,m])]}.get(ours,np.asarray(getattr(s,ours)[side,m]).item())
                 test.assertEqual(v,p[theirs],tag+' '+ours)
             test.assertEqual(int(s.stats[side,m,0]),p['maxhp'],tag+' maxHP')
             test.assertEqual(s.stats[side,m,1:].tolist(),[p['stats'][k] for k in ('atk','def','spa','spd','spe')],tag+' stats')
@@ -113,6 +115,9 @@ def assert_state(test,s,native,label):
             stall=None if not int(s.stall_duration[side,m]) else {'counter':int(s.stall[side,m]),'duration':int(s.stall_duration[side,m])}
             test.assertEqual(stall,p['stall'],tag+' stall')
             test.assertEqual(bool(s.protected[side,m]),p['protect'],tag+' protect')
+            if 'statusState' in p:
+                from simulator.shared_engine_io import effect_states
+                for key,value in effect_states(s,side,m).items():test.assertEqual(value,p[key],tag+' '+key)
             test.assertEqual(bool(s.active[side]==m and not s.fainted[side,m]),p['active'],tag+' active flag')
             test.assertTrue(all(value==0 for value in p['boosts'].values()),tag+' supported zero boosts')
             test.assertFalse(p['forceSwitchFlag'],tag+' no excluded phazing')

@@ -8,7 +8,9 @@ test('status duration family captures native counters, sources, clauses and raw 
   assertReady();
   const ps=require('../reference/vendor/pokemon-showdown/dist/sim');
   const pack=cases.filter(c=>c.statusFamily).map(c=>runCase(ps,c));
-  assert.equal(pack.length,48);
+  assert.equal(pack.length,55);
+  assert.equal(pack.filter(c=>c.setup.fullBattle).length,4);
+  assert.ok(pack.filter(c=>c.setup.fullBattle).every(c=>c.steps.at(-1).after.terminal));
   const find=id=>pack.find(c=>c.id===id);
   for(const c of pack)for(const step of c.steps) {
     assert.ok(step.accepted.every(a=>a.accepted),c.id);

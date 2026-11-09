@@ -177,6 +177,13 @@ function scriptedChoices(battle,scenario,boundary) {
    const wanted=battle.turn===1?'stealthrock':battle.turn===2?'spikes':(side.sideConditions.spikes||side.sideConditions.stealthrock)?'rapidspin':null;
    if(wanted&&moveCommand(wanted)){choices[side.id]=moveCommand(wanted);continue;}
   }
+  if(scenario.family==='status-duration') {
+   const early=battle.turn===1?moveCommand('spore'):battle.turn===2?moveCommand('confuseray'):null;
+   if(early){choices[side.id]=early;continue;}
+   if(battle.turn%7===0&&pokemon.hp<pokemon.maxhp/2&&moveCommand('rest')){choices[side.id]=moveCommand('rest');continue;}
+   const attacks=req.active[0].moves.map((m,i)=>!m.disabled&&battle.dex.moves.get(m.id).category!=='Status'?`move ${i+1}`:null).filter(Boolean);
+   choices[side.id]=attacks[0]??commands.find(c=>c.startsWith('move '))??commands[0];continue;
+  }
   const preferred=scenario.family==='pivot'?['uturn','earthquake','megapunch','tackle']:
    foe.species.name==='Gengar'?['uturn','earthquake','megapunch','tackle']:['earthquake','megapunch','uturn','tackle'];
   choices[side.id]=preferred.map(moveCommand).find(Boolean)??commands.find(c=>c.startsWith('move '))??commands[0];

@@ -55,6 +55,7 @@ CATEGORY=mv(lambda r:{'Status':0,'Physical':1,'Special':2}[r['category']])
 MOVE_TYPE=mv(lambda r:g.TYPES.get(g.to_id(r['type']),0))
 PRIORITY=mv(lambda r:r['priority'])
 TARGETS=('',)+tuple(MV_ROWS[key]['target'] for key in MOVE_KEYS[1:])
+SELF_TARGET=jnp.asarray([target=='self' for target in TARGETS],jnp.bool_)
 
 
 def has_callback(value):
@@ -89,5 +90,19 @@ def plain(row):
     return True
 
 
-MOVE_IMPLEMENTED=jnp.asarray([False]+[name in LEGACY_MOVES or key in ('hiddenpower','return','frustration') or
-    plain(MV_ROWS[key]) for name,key in zip(MOVE_NAMES[1:],MOVE_KEYS[1:])])
+STATUS_CODES={'brn':1,'par':2,'tox':3,'psn':5,'slp':6,'frz':7}
+SECONDARY_CHANCE=mv(lambda r:(r.get('secondary') or {}).get('chance',0) if
+    set(r.get('secondary') or {})<= {'chance','status'} and (r.get('secondary') or {}).get('status') in STATUS_CODES else 0)
+SECONDARY_STATUS=mv(lambda r:STATUS_CODES.get((r.get('secondary') or {}).get('status'),0))
+
+
+def simple_secondary(row):
+    if not row.get('secondary') or set(row['secondary'])-{'chance','status'}:return False
+    if row['secondary'].get('status') not in STATUS_CODES:return False
+    if row.get('secondaries') not in (None,[row['secondary']]):return False
+    clean=dict(row);clean.pop('secondary',None);clean.pop('secondaries',None)
+    return plain(clean)
+
+
+MOVE_IMPLEMENTED=jnp.asarray([False]+[name in LEGACY_MOVES or key in ('hiddenpower','return','frustration','spore','confuseray','poisonpowder','rest') or
+    plain(MV_ROWS[key]) or simple_secondary(MV_ROWS[key]) for name,key in zip(MOVE_NAMES[1:],MOVE_KEYS[1:])])
