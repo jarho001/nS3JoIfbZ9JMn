@@ -1,0 +1,28 @@
+{
+  "schema": 5,
+  "status": "partial_checkpoint_not_current_acceptance",
+  "initial_field_run": {
+    "command": "FIELD_NATIVE_CASES=/tmp/g4-field-current.json JAX_PLATFORMS=cpu .venv-jax/bin/python -m unittest test.test_field_engine -vf",
+    "result": "4 passed in 520.121s; 36 cases /300 boundaries and four six-member games; eager/JIT/1-8-32 batches, saved continuation/reset, full/lean and invalid metadata/migration checks.",
+    "fixture_sha256": "5a5b985ed59b538d479b9d362b7c8c9c898f0099dc3cc0947056a3dc59476652",
+    "source_note": "Pre-final-Sunny-Day immunity metadata repair and four added interaction cases; not acceptance for final candidate. Expanded 40-case run still required.",
+    "log": "schema5-field-initial.log"
+  },
+  "current_field_fixture": "field.json.gz",
+  "current_field_scenarios": 40,
+  "current_field_boundaries": 308,
+  "new_status_fixture": "status-v5.json.gz",
+  "status_running": "/tmp/g4-schema5-status-cpu.log; started before the final Sunny Day metadata branch, not matching final candidate source.",
+  "gpu_executed": false,
+  "profiling_executed": false,
+  "native_final": {
+    "command": "node --test test/field-boost-native.test.cjs",
+    "result": "1 passed, 40 independent native field cases /308 boundaries; four genuine complete six-member games; critical negative Attack, boosted confusion and four-screen/Sunny status metadata branches asserted.",
+    "log": "schema5-field-native.log"
+  },
+  "handoff_preparation": {
+    "command": "python3 scripts/g4_gpu_handoff.py --prepare-only --output work/g4-schema5-gpu-prepared",
+    "result": "Prepared five native corpora (252 scenarios /1778 boundaries) and current45-check CPU/CUDA module scope. No JAX import/backend probe, GPU query, profiling or benchmark. Run was before staging new source files; real device runner requires committed source and will create its own full fingerprints.",
+    "status": "prepared_not_executed"
+  }
+}

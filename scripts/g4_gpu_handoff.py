@@ -24,12 +24,14 @@ MODULES = (
     'test.test_gen5_tables', 'test.test_generic_engine', 'test.test_roster_hazards',
     'test.test_shared_engine_cases', 'test.test_shared_engine_battles',
     'test.test_shared_engine_lifecycle', 'test.test_rollout', 'test.test_g3_fixtures',
+    'test.test_status_engine', 'test.test_field_engine',
 )
 NATIVE_TESTS = (
     'test/reference.test.cjs', 'test/gen5-reachability.test.cjs',
     'test/shared-engine.test.cjs', 'test/status-duration-native.test.cjs',
+    'test/field-boost-native.test.cjs',
 )
-BATCHES = {'legacy': 'all', 'hazards': 'g4', 'generic': 'generic', 'status_native_only': 'status'}
+BATCHES = {'legacy': 'all', 'hazards': 'g4', 'generic': 'generic', 'status': 'status', 'field': 'field'}
 SOURCE_PATHS = (
     'simulator', 'mechanics', 'rules', 'reference', 'test', 'environment',
     'evaluation', 'scripts', 'requirements-jax-cpu.txt', 'reference-lock.json',
@@ -62,7 +64,8 @@ def run(command, log, env, timeout, records):
     """One attempt per phase; kill its process group on timeout/interruption."""
     keys = ('JAX_PLATFORMS', 'CUDA_VISIBLE_DEVICES', 'OMP_NUM_THREADS', 'OPENBLAS_NUM_THREADS',
             'XLA_PYTHON_CLIENT_PREALLOCATE', 'JAX_ENABLE_COMPILATION_CACHE',
-            'G3_NATIVE_CASES', 'G4_NATIVE_CASES', 'GEN5_NATIVE_CASES', 'G4_PROBE_OUTPUT')
+            'G3_NATIVE_CASES', 'G4_NATIVE_CASES', 'GEN5_NATIVE_CASES', 'STATUS_NATIVE_CASES',
+            'FIELD_NATIVE_CASES', 'G4_PROBE_OUTPUT')
     record = {'argv': list(map(str, command)), 'log': log.name, 'timeout_seconds': timeout,
               'environment':{key:env[key] for key in keys if key in env}}
     records.append(record)
@@ -118,7 +121,7 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output', type=Path, help='Fresh directory; defaults to work/g4-gpu-TIMESTAMP')
     parser.add_argument('--prepare-only', action='store_true', help='Freeze native inputs and commands; no JAX/GPU execution')
-    parser.add_argument('--suite-timeout', type=int, default=3600, help='Seconds per CPU/CUDA suite; default 3600; no automatic retry')
+    parser.add_argument('--suite-timeout', type=int, default=3600, help='Seconds per isolated CPU/CUDA test module; default 3600; no automatic retry')
     args = parser.parse_args(argv)
     if args.suite_timeout <= 0:
         parser.error('--suite-timeout must be positive')
@@ -145,7 +148,7 @@ def main(argv=None):
         env = dict(os.environ, OMP_NUM_THREADS=str(len(selected)), OPENBLAS_NUM_THREADS=str(len(selected)),
                    XLA_PYTHON_CLIENT_PREALLOCATE='false', JAX_ENABLE_COMPILATION_CACHE='false')
         # Ignore inherited test-fixture overrides; every test uses this bundle.
-        for key in ('G3_NATIVE_CASES', 'G4_NATIVE_CASES', 'GEN5_NATIVE_CASES'):
+        for key in ('G3_NATIVE_CASES', 'G4_NATIVE_CASES', 'GEN5_NATIVE_CASES', 'STATUS_NATIVE_CASES', 'FIELD_NATIVE_CASES'):
             env.pop(key, None)
         identity = source_identity()
         dirty = git('status','--porcelain','--untracked-files=all','--',*SOURCE_PATHS)
@@ -164,12 +167,13 @@ def main(argv=None):
             assert data['pin'] == json.loads((ROOT/'reference-lock.json').read_text())['commit']
             fixtures[name] = {'file':path.name, 'sha256':sha256(path), 'cases':len(data['cases']),
                               'boundaries':sum(len(c['steps']) for c in data['cases']),
-                              'jax_implemented':name!='status_native_only'}
+                              'jax_implemented':True}
         save(out/'fixtures.json', fixtures)
         env.update(G3_NATIVE_CASES=str(out/'native-legacy.json'),
                    G4_NATIVE_CASES=str(out/'native-hazards.json'),
-                   GEN5_NATIVE_CASES=str(out/'native-generic.json'))
-        # The 48 status cases are native expectations, not implemented JAX cases.
+                   GEN5_NATIVE_CASES=str(out/'native-generic.json'),
+                   STATUS_NATIVE_CASES=str(out/'native-status.json'),
+                   FIELD_NATIVE_CASES=str(out/'native-field.json'))
         summary['modules'] = list(MODULES)
         summary['fixtures'] = fixtures
         summary['future_full_format_gate'] = 'Pending implementation of V7 and remaining mechanics; see docs/GPU_HANDOFF.md'
@@ -184,12 +188,21 @@ def main(argv=None):
                 if platform == 'cuda':
                     run(['nvidia-smi'], out/'nvidia-smi.log', env, 30, summary['commands'])
                 run([sys.executable,'-c',PROBE], out/f'{platform}-probe.log', phase_env, 120, summary['commands'])
-                run([sys.executable,'-m','unittest',*MODULES,'-v','-f'], out/f'{platform}-tests.log',
-                    phase_env, args.suite_timeout, summary['commands'])
-                match = re.search(r'Ran (\d+) tests? in ([0-9.]+)s', (out/f'{platform}-tests.log').read_text())
-                if match is None or int(match[1]) <= 0:
-                    raise RuntimeError(f'{platform} suite did not report a nonempty test run')
-                summary[f'{platform}_tests'] = {'passed':True, 'count':int(match[1])}
+                # Release compiled executables between modules. A combined CPU
+                # run exceeded the cloud's 8 GiB limit after 39 checks; process
+                # isolation preserves every check without accumulating caches.
+                counts = {}
+                for module in MODULES:
+                    log = out/f'{platform}-{module.rsplit(".",1)[-1]}.log'
+                    run([sys.executable,'-m','unittest',module,'-v','-f'], log,
+                        phase_env, args.suite_timeout, summary['commands'])
+                    match = re.search(r'Ran (\d+) tests? in ([0-9.]+)s', log.read_text())
+                    if match is None or int(match[1]) <= 0:
+                        raise RuntimeError(f'{platform} {module} did not report a nonempty test run')
+                    counts[module] = int(match[1])
+                    summary[f'{platform}_tests'] = {'passed':False, 'modules':counts, 'count':sum(counts.values())}
+                    save(out/'summary.json',summary)
+                summary[f'{platform}_tests']['passed'] = True
             summary['status'] = 'passed_checkpoint_checks_not_full_G4'
     except BaseException as error:
         failure = error

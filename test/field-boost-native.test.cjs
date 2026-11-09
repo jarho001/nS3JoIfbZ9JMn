@@ -1,0 +1,40 @@
+'use strict';
+const test=require('node:test');
+const assert=require('node:assert/strict');
+const {assertReady}=require('../reference/neutral-turn-oracle.cjs');
+const {cases,runCase}=require('../reference/shared-engine-cases.cjs');
+test('field and boost expectations retain native metadata, durations and rounding',()=>{
+ assertReady();const ps=require('../reference/vendor/pokemon-showdown/dist/sim');
+ const selected=cases.filter(c=>c.fieldFamily);assert.equal(selected.length,40);
+ const records=selected.map(c=>runCase(ps,c));
+ assert.equal(records.reduce((n,c)=>n+c.steps.length,0),308);
+ for(const c of records)for(const step of c.steps){
+  assert.ok(step.accepted.every(a=>a.accepted),c.id);
+  assert.ok(step.after.field);assert.ok(step.after.sides.every(s=>s.sideConditions));
+ }
+ assert.equal(records.filter(c=>c.setup.fullBattle).length,4);
+ assert.ok(records.filter(c=>c.setup.fullBattle).every(c=>c.steps.at(-1).after.terminal));
+ const find=id=>records.find(c=>c.id===id);
+ const rain=find('G4-field-weather-RainDance');
+ assert.equal(rain.steps[0].after.field.weatherState.duration,4);
+ assert.ok(!('target' in rain.steps[0].after.field.weatherState));
+ assert.deepEqual(rain.steps[1].after.field.weatherState.target,{$field:true});
+ assert.ok(rain.steps[4].events.p1.some(e=>e.message==='|-weather|none'));
+ const reflect=find('G4-field-screen-Reflect');
+ assert.equal(reflect.steps[0].after.sides[0].sideConditions.reflect.duration,4);
+ assert.equal(reflect.steps[0].after.sides[0].sideConditions.reflect.effectOrder,2);
+ assert.ok(reflect.steps[4].events.p1.some(e=>e.message==='|-sideend|p1: p1|Reflect'));
+ assert.equal(find('G4-field-boost-cap').initial.sides[0].pokemon[0].boosts.atk,0);
+ const negative=find('G4-field-critical-negative-attack').steps[0];
+ assert.equal(negative.after.sides[1].pokemon[0].boosts.atk,-1);
+ assert.ok(negative.events.p1.some(e=>e.message==='|-crit|p1a: Mew'));
+ const confusion=find('G4-field-confusion-boost').steps[1];
+ assert.equal(confusion.after.sides[0].pokemon[0].boosts.atk,2);
+ assert.ok(confusion.events.p1.some(e=>e.message.includes('[from] confusion')));
+ assert.deepEqual(find('G4-field-four-screen-handlers').steps[2].draws.filter(d=>d.semanticContext==='damage-modifiers').map(d=>[d.bound,d.to]),[[0,4],[1,4],[2,4],[0,4],[1,4],[2,4]]);
+ assert.deepEqual(find('G4-field-sun-status-immunity-metadata').steps[0].after.field.weatherState.target,{$field:true});
+ const cap=find('G4-field-boost-cap').steps.at(-1);
+ assert.equal(cap.after.sides[0].pokemon[0].boosts.atk,6);
+ assert.ok(cap.events.p1.some(e=>e.message==='|-boost|p1a: Mew|atk|0'));
+ assert.ok(find('G4-field-screen-critical').steps[0].events.p1.some(e=>e.message==='|-crit|p1a: Mew'));
+});

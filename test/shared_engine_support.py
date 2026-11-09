@@ -87,8 +87,14 @@ def assert_state(test,s,native,label):
     test.assertEqual(int(s.winner),native['winner'],label+' winner')
     test.assertEqual(bool(s.midturn),native['midTurn'],label+' midTurn')
     if 'effectOrder' in native:test.assertEqual(int(s.effect_order),native['effectOrder'],label+' global effectOrder')
+    if 'field' in native:
+        from simulator.shared_engine_io import field_state
+        test.assertEqual(field_state(s),native['field'],label+' field state')
     for side,n in enumerate(native['sides']):
         prefix=label+f' p{side+1}'
+        if 'sideConditions' in n:
+            from simulator.shared_engine_io import side_conditions
+            test.assertEqual(side_conditions(s,side),n['sideConditions'],prefix+' side conditions')
         test.assertEqual(s.hazards[side].tolist(),n.get('hazards',[0,0,0]),prefix+' side hazards/order')
         test.assertEqual(int(s.active[side]),n['active'],prefix+' active')
         test.assertEqual(s.order[side,:len(n['order'])].tolist(),n['order'],prefix+' command roster')
@@ -119,7 +125,7 @@ def assert_state(test,s,native,label):
                 from simulator.shared_engine_io import effect_states
                 for key,value in effect_states(s,side,m).items():test.assertEqual(value,p[key],tag+' '+key)
             test.assertEqual(bool(s.active[side]==m and not s.fainted[side,m]),p['active'],tag+' active flag')
-            test.assertTrue(all(value==0 for value in p['boosts'].values()),tag+' supported zero boosts')
+            test.assertEqual(s.boosts[side,m].tolist(),[p['boosts'][k] for k in ('atk','def','spa','spd','spe','accuracy','evasion')],tag+' boosts')
             test.assertFalse(p['forceSwitchFlag'],tag+' no excluded phazing')
         expected=None if native['terminal'] else n['request']
         test.assertEqual(project_request(s,side),expected,prefix+' private request')

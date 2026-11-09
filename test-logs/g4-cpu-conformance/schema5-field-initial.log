@@ -1,0 +1,9 @@
+test_complete_rollouts_continuation_and_reset (test.test_field_engine.FieldEngineTest.test_complete_rollouts_continuation_and_reset) ... ok
+test_mixed_eager_compiled_batches_and_saved_states (test.test_field_engine.FieldEngineTest.test_mixed_eager_compiled_batches_and_saved_states) ... ok
+test_native_states_draws_requests_and_histories (test.test_field_engine.FieldEngineTest.test_native_states_draws_requests_and_histories) ... ok
+test_rejects_invalid_sources_and_lossy_hazard_migration (test.test_field_engine.FieldEngineTest.test_rejects_invalid_sources_and_lossy_hazard_migration) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 520.121s
+
+OK

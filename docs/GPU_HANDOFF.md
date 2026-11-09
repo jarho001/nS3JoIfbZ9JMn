@@ -7,22 +7,27 @@ GPU. Preparing this handoff does not run device tests, profiling or benchmarks.
 
 ## Current source and evidence
 
-The G4 handoff was prepared from checkpoint `00ec1e7`; consolidation pulled
-`5e03cc3` on 2026-11-08. The current engine/table/IO/test bytes match
-CPU-validated engine commit `4eab254`; native capture additions are at `578b352`.
-The correctness runner fingerprints benchmark code as well as engine/tests so
-G3 measurement artifacts can be checked against the same source.
-See [source identities and results](../test-logs/g4-cpu-conformance/source.json)
-and [active progress](ORCHESTRATION_STATE.json). If code changes during travel,
-run the **latest committed checkout** and retain its own identities; do not reuse
-GPU results for changed mechanics, tables, schemas, fixtures or test adapters.
+The active engine is schema 5: status durations and persistent effects, weather,
+screens, boosts and side-condition source/order are implemented. CPU validation
+of this expanded checkpoint is in progress; see
+[active progress](ORCHESTRATION_STATE.json). The earlier 37-check pass on
+`4eab254` remains historical evidence for that engine. A combined schema-4 run
+completed 39 checks before the 8 GiB cloud limit killed the status batch check;
+[it is incomplete evidence](../test-logs/g4-cpu-conformance/schema4-source.json).
+The runner now isolates test modules in separate processes to release compiled
+executables between groups, preserving the checks and batch sizes.
 
-Current CPU evidence: 37 checks, 157 native scenarios / 1059 boundaries, including
-eight six-member games, eager/JIT/mixed batches 1/8/32, continuation/reset,
-schema migration and full/lean rollout equivalence. This is partial G4 support.
-The 48 status/duration cases are native expectations; their JAX implementation
-is still pending. They must not be reported as GPU-validated mechanics merely
-because their native tests pass.
+The current correctness scope is 45 checks and 252 independent native scenarios /
+1778 boundaries, including 16 complete six-member games. The 55 status cases
+and 40 field/boost cases are JAX checks in this suite. This remains partial G4:
+ability/item hooks, complex phases, indirect effects, capacity proof and the
+fixed full-format campaigns are still pending. Passing this checkpoint cannot
+close G4.
+
+Use the **latest committed checkout** and retain its recorded identities. The
+runner fingerprints engine, tables, IO, tests, oracle, configuration and benchmark
+code; it separately hashes each freshly captured native fixture. Device results
+cannot transfer across changed relevant source or fixtures.
 
 ## Return-home setup
 
@@ -60,9 +65,10 @@ the combined block below:
 
 1. Creates a fresh `work/g4-gpu-TIMESTAMP/` and records commit/tree, relevant file
    hashes, selected host affinity and independent native fixture hashes.
-2. Freezes legacy, hazard, generic and native-only status corpora. Runs the
+2. Freezes legacy, hazard, generic, status and field/boost corpora. Runs the
    reference/native contracts. Unknown/unsupported families stay explicit.
-3. Runs the same current 37-check suite on CPU, then under `JAX_PLATFORMS=cuda`.
+3. Runs the same current 45-check scope on CPU, then under `JAX_PLATFORMS=cuda`,
+   with each test module in a fresh process.
    A strict probe verifies actual eager/JIT GPU placement; shared case/lifecycle
    assertions also check device leaves. `cuda` initialization failure is a failure.
 4. Saves package/device/driver information, exact command arrays, full logs and
@@ -73,8 +79,8 @@ the combined block below:
 The CPU worker budget is `min(8, available affinity CPUs)`, identical for both
 backends; it is not a tuning sweep. GPU allocations grow on demand; persistent
 compilation caching is disabled and recorded by the command environment. Each
-suite has a 3600-second cap. Prior CPU runtime was about 11 minutes; current GPU
-runtime/memory remain unmeasured. A timeout/OOM is incomplete evidence, not a
+isolated module has a 3600-second cap. The expanded suite is longer than the
+historical 11-minute checkpoint; current GPU runtime/memory remain unmeasured. A timeout/OOM is incomplete evidence, not a
 passing shard. Diagnose before changing the cap or workload.
 
 Optional output location and a preparation-only check:
@@ -92,11 +98,21 @@ resets Git, commits, pushes, or launches training/profiling. Do not run both
 correctness commands as a routine repeat; these are alternatives to the
 checkpoint phase of the combined block below.
 
+The added device checks are correctness checks, not extra profiling points:
+
+- Status: sleep/freeze/confusion durations and RNG, Rest/Lum retained timers,
+  Sleep Clause metadata, secondary effects and self-KO; exact saved continuation,
+  full/lean complete games and mixed 1/8/32-lane isolation.
+- Field: cached Speed after boosts, critical stage bypass and minimum screen
+  damage, native weather/screen handler draws and expiry, weather double KO,
+  rocks/Light Clay and hazard source/order. Replay complete games, restore/reset,
+  invalid metadata rejection and mixed 1/8/32 lanes on the actual GPU.
+
 ## GPU obligations and readiness
 
 | Obligation | Commands / current readiness | Evidence required |
 |---|---|---|
-| Current G4 data/hazard/generic device correctness | **Ready:** the runner above; same CPU/CUDA modules and frozen fixtures | Both suites pass; real GPU leaf placement, exact native state/draw/request/view/outcome equality, batches 1/8/32, saved continuation/reset, full/lean equality, invalid/stale/unsupported/overflow isolation. Covers the current checkpoint only. |
+| Current G4 data/hazard/generic/status/field device correctness | **Runnable checkpoint:** the runner above; check the CPU validation record first, then use the same CPU/CUDA modules and frozen fixtures | Both suites pass; real GPU leaf placement, exact native state/draw/request/view/outcome equality, batches 1/8/32, saved continuation/reset, full/lean equality, invalid/stale/unsupported/overflow isolation. Covers the current checkpoint only. |
 | Subsequent G4 mechanics and schema changes | **Append before the next CPU checkpoint:** add implemented family tests and native batches to the runner and this handoff; record CPU source/evidence | GPU replay on matching final source, including new counters/volatiles, queues, visibility, per-lane RNG and serialization. Native-only cases cannot substitute for JAX checks. |
 | Full G4 release conformance | **Blocked by implementation, not travel alone:** V7 executable and GPU config are absent; CPU conformance is still incomplete | Closed reachable ledger and all required directed cases; same fixed 64 development / 128 held-out starts and choices as CPU, true native terminals, zero divergence/truncation/capacity errors. Scalar JIT and heterogeneous 8/32 lanes; compare in chunks of at most 16 boundaries. Preserve held-out reuse history and source/fixture/config/policy identities. |
 | G4 device-specific profiling | **No required G4 profiling experiment is currently defined.** Add a bounded command here if an actual device/capacity issue requires one | Exact workload/output contract, hardware/VRAM, CPU budget, cold compile versus synchronized warm execution, useful work counts, memory and actual GPU stream events. A profiler trace is not conformance or a speedup result. |
@@ -137,7 +153,7 @@ full-format G4, a large batch sweep or further optimization to close.
 Run after setup above. This performs one CPU/CUDA checkpoint suite, then just
 the two GPU measurement points; it does not launch a hardware capture, diagnostic
 ablation, learning run or full G4 campaign. The measurement process has a
-**300-second cap**; correctness retains its existing 3600s cap per CPU/CUDA suite.
+**300-second cap**; correctness has a 3600s cap per isolated test module on each backend.
 These are caps, not expected runtimes. A timeout/OOM/skip/source change is failed
 or incomplete evidence: preserve artifacts and stop, with no automatic retries.
 

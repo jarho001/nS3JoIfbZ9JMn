@@ -2,7 +2,7 @@
 
 Fixed-shape int32 storage; exact four-limb PRNG; stable mon identity and a
 separate command roster. Strings/protocol rendering belong to the host adapter.
-Schema 4 carries status effect state and generic pinned data through the same scheduler. Handler masks
+Schema 5 carries field, boost and status effect state and generic pinned data through the same scheduler. Handler masks
 remain incomplete and reject unsupported effects; full conformance is pending.
 """
 from __future__ import annotations
@@ -19,12 +19,14 @@ from mechanics.stats import derive_stored_stats
 from . import gen5_tables as generic
 from . import gen5_engine_tables as tables
 from . import status_effects as effects
+from . import field_tables
+from . import field_effects as field_ops
 import sys
 
 def _engine():
     return sys.modules[__name__]
 
-SCHEMA = 4
+SCHEMA = 5
 ROSTER, SLOTS, QUEUE, EVENTS, DRAWS, HISTORY = 6, 4, 8, 128, 128, 2048
 OK, PENDING, INVALID, UNSUPPORTED, CAPACITY, TERMINAL, STALE = range(7)
 MOVE, FORCED, WAIT, END = range(4)
@@ -46,10 +48,14 @@ HIDDEN_POWER,RETURN,FRUSTRATION=(tables.MOVE_IDS[k] for k in ('hiddenpower','ret
 BLANK, EV_MOVE, DAMAGE, HEAL, CRIT, IMMUNE, MISS, FAINT, WIN, TURN, UPKEEP, SWITCH, STATUS, ABILITY, END_ITEM, CURE, FAIL, CANT, ACTIVATE, SINGLE = range(20)
 SIDE_START, SIDE_END = 20, 21
 CONF_START, CONF_END, CONF_ACTIVATE, SLEEP_CLAUSE = range(22,26)
+BOOST, WEATHER = 26, 27
 # Draw contexts; range form stores actual native arguments including offsets.
 INIT, QUEUE_SORT, BEFORE_TURN, UPDATE, HIT_UPDATE, SWITCH_SORT, FIELD_SORT, ACC, CRITICAL, ROLL, PARALYSIS, STALL = range(12)
 SLEEP_DURATION, FREEZE, CONF_DURATION, CONFUSION, CONF_DAMAGE, SECONDARY = range(12,18)
-DRAW_CONTEXTS=('initialization','queue-sort','before-turn','update','hit-update','switch-order','residual-handlers','accuracy','critical','damage','paralysis','stall','sleep-duration','freeze','confusion-duration','confusion','confusion-damage','secondary')
+WEATHER_CHANGE, WEATHER_ORDER = 18,19
+DAMAGE_MODIFIERS = 20
+MOVE_ACTOR_TARGET=field_tables.ACTOR_TARGET
+DRAW_CONTEXTS=('initialization','queue-sort','before-turn','update','hit-update','switch-order','residual-handlers','accuracy','critical','damage','paralysis','stall','sleep-duration','freeze','confusion-duration','confusion','confusion-damage','secondary','weather-change','weather-order','damage-modifiers')
 # Queue kinds, order values mirror the pinned scheduler.
 BEFORE, ATTACK, SWAP, INSTANT, RUN_SWITCH, RESIDUAL = range(1,7)
 QORDER=jnp.array([999,4,200,103,3,101,300],jnp.int32)
@@ -107,6 +113,10 @@ class State(NamedTuple):
     volatile_state: jax.Array
     ability_order: jax.Array
     item_order: jax.Array
+    weather_state: jax.Array
+    screens: jax.Array
+    hazard_meta: jax.Array
+    sleep_clause_target: jax.Array
 
 
 class Trace(NamedTuple):
@@ -173,7 +183,8 @@ def _live(s):
 
 
 def _speeds(s):
-    return jnp.maximum(1,jnp.where(s.status==PAR,s.stats[:,:,5]//4,s.stats[:,:,5]))
+    speed=field_ops.scale_stat_stage(s.stats[:,:,5],s.boosts[:,:,4])
+    return jnp.maximum(1,jnp.where(s.status==PAR,speed//4,speed))
 
 
 def _refresh_speed(s):
@@ -232,7 +243,7 @@ def _qsort(c):
 def _faint(c,side):
     s,t=c;m=s.active[side]
     c=_event(c,FAINT,side,m);s,t=c
-    s=s._replace(volatile_state=s.volatile_state.at[side,m].set(0))
+    s=s._replace(volatile_state=s.volatile_state.at[side,m].set(0),boosts=s.boosts.at[side,m].set(0))
     return s._replace(fainted=s.fainted.at[side,m].set(True),speed=s.speed.at[side,m].set(s.stats[side,m,5]),status=s.status,
                       stall=s.stall.at[side,m].set(0),stall_duration=s.stall_duration.at[side,m].set(0),
                       protected=s.protected.at[side,m].set(False)),t
@@ -247,8 +258,8 @@ def _win(c,last_side):
     return _when(jnp.any(~alive),end,c)
 
 
-def _damage(c,side,amount,cause=0):
-    s,t=c;m=s.active[side];hp=jnp.maximum(0,s.hp[side,m]-jnp.maximum(1,amount))
+def _damage(c,side,amount,cause=0,minimum=1):
+    s,t=c;m=s.active[side];hp=jnp.maximum(0,s.hp[side,m]-jnp.maximum(minimum,amount))
     s=s._replace(hp=s.hp.at[side,m].set(hp))
     return _event((s,t),DAMAGE,side,m,value=hp,aux=s.stats[side,m,0],status=s.status[side,m],move=cause)
 
@@ -267,21 +278,23 @@ def _hit(c,actor,move):
         physical=tables.CATEGORY[move]==1
         attack=s.stats[actor,mon,jnp.where(physical,1,3)]
         defense=s.stats[target,tm,jnp.where(physical,2,4)]
+        c,attack,defense,final_modifier=field_ops.damage_parameters(c,actor,target,move,crit,physical,attack,defense,_engine());s,t=c
         power=jnp.where(move==HIDDEN_POWER,s.hp_power[actor,mon],
                         jnp.where(move==RETURN,s.happiness[actor,mon]*10//25,
                                   jnp.where(move==FRUSTRATION,(255-s.happiness[actor,mon])*10//25,POWER[move])))
         power=jnp.maximum(1,power)
         move_type=jnp.where(move==HIDDEN_POWER,s.hp_type[actor,mon],tables.MOVE_TYPE[move])
         core=base_damage_core(s.level[actor,mon],power,attack,defense)+2
-        preroll=core*jnp.where(crit==0,2,1)
+        preroll=field_ops.weather_damage(core,move_type,s,_engine())*jnp.where(crit==0,2,1)
         exponent,_=generic.type_matchup(move_type,s.types[target,tm])
         stab=jnp.any(s.types[actor,mon]==move_type)
         damage=damage_from_preroll(preroll,roll.astype(jnp.int32),stab,jnp.array(False),move==STRUGGLE,
-                                  jnp.where(move==STRUGGLE,0,exponent),s.status[actor,mon]==BRN,physical,jnp.array(False),i32(4096))
+                                  jnp.where(move==STRUGGLE,0,exponent),s.status[actor,mon]==BRN,physical,jnp.array(False),final_modifier)
         # Native effectiveness precedes the critical disclosure.
         c=_when((exponent!=0)&(move!=STRUGGLE),lambda c:_event(c,ACTIVATE,target,tm,aux=exponent,move=-1),c)
         c=_when(crit==0,lambda c:_event(c,CRIT,target,tm),c)
-        c=_damage(c,target,damage)
+        c=field_ops.damage_handlers(c,_engine())
+        c=_damage(c,target,damage,minimum=0)
         c=_when((c[0].status[target,tm]==FRZ)&(move_type==generic.TYPES['fire'])&(c[0].hp[target,tm]>0),
                 lambda c:effects.cure(c,target,_engine(),source=actor),c)
         c=effects.secondary(c,actor,move,_engine())
@@ -290,7 +303,7 @@ def _hit(c,actor,move):
                 c=_when(c[0].hazards[actor,index]>0,
                         lambda c:_event(c,SIDE_END,actor,mon,move=kind),c)
             s,t=c
-            return s._replace(hazards=s.hazards.at[actor].set(0)),t
+            return s._replace(hazards=s.hazards.at[actor].set(0),hazard_meta=s.hazard_meta.at[actor].set(0)),t
         c=_when(move==RAPID_SPIN,spin,c)
         c=_update(c,HIT_UPDATE)
         s,t=c;ko=s.hp[target,tm]==0
@@ -317,7 +330,8 @@ def _hit(c,actor,move):
         def confuse(c):return effects.confuse(c,actor,target,move,_engine())
         def status(c):
             wanted=jnp.where(move==WISP,BRN,jnp.where(move==TOXIC,TOX,jnp.where(move==POISON_POWDER,PSN,jnp.where(move==SPORE,SLP,PAR))))
-            return _status(c,actor,target,wanted,move=move)
+            return jax.lax.cond(field_tables.IS_BOOST[move],lambda c:field_ops.boost(c,actor,target,move,_engine()),
+                lambda c:_status(c,actor,target,wanted,move=move),c)
         before_count=c[1].ecount
         c=jax.lax.cond(move==CONFUSE_RAY,confuse,status,c)
         # Only actual successful application runs the hit-loop updates. Lum can
@@ -331,7 +345,7 @@ def _hit(c,actor,move):
 def _attack(c,row):
     s,t=c;actor=row[1];mon=row[2];action=row[3]
     move=jnp.where(action==10,STRUGGLE,s.moves[actor,mon,jnp.clip(action,0,3)])
-    target=jnp.where((move==RECOVER)|(move==PROTECT)|(move==REST),actor,1-actor)
+    target=jnp.where(MOVE_ACTOR_TARGET[move],actor,1-actor)
     tm=s.active[target]
     def execute(c):
         c,full=effects.before_move(c,actor,move,_engine())
@@ -397,13 +411,14 @@ def _attack(c,row):
                 def try_hit(c):
                     def accuracy(c):
                         c,roll=jax.lax.cond(ACCURACY[move]>0,lambda c:_draw(c,0,100,ACC),lambda c:(c,jnp.uint32(0)),c)
-                        hit=(ACCURACY[move]==0)|(roll<ACCURACY[move].astype(jnp.uint32))
+                        threshold=field_ops.accuracy(ACCURACY[move],c[0],actor,target,_engine())
+                        hit=(ACCURACY[move]==0)|(roll<threshold.astype(jnp.uint32))
                         def miss(c):
                             s,t=c;t=t._replace(events=t.events.at[move_row,7].set(1))
                             return _event((s,t),MISS,actor,mon,move,target,tm)
                         def hit_fn(c):
                             s,t=c
-                            existing=(tables.CATEGORY[move]==0)&(move!=CONFUSE_RAY)&(s.status[target,tm]!=NONE)&(s.status[target,tm]!=jnp.where(move==WISP,BRN,jnp.where(move==TOXIC,TOX,jnp.where(move==POISON_POWDER,PSN,jnp.where(move==SPORE,SLP,PAR)))))
+                            existing=(tables.CATEGORY[move]==0)&(~field_tables.IS_BOOST[move])&(move!=CONFUSE_RAY)&(s.status[target,tm]!=NONE)&(s.status[target,tm]!=jnp.where(move==WISP,BRN,jnp.where(move==TOXIC,TOX,jnp.where(move==POISON_POWDER,PSN,jnp.where(move==SPORE,SLP,PAR)))))
                             t=t._replace(events=t.events.at[move_row,7].set(jnp.where(existing,2,t.events[move_row,7])))
                             return _hit((s,t),actor,move)
                         return jax.lax.cond(hit,hit_fn,miss,c)
@@ -421,15 +436,24 @@ def _attack(c,row):
                     s,t=c
                     hazards=s.hazards.at[target,index].set(layers+1).at[target,2].set(
                         jnp.where(s.hazards[target,2]==0,index+1,s.hazards[target,2]))
-                    c=_event((s._replace(hazards=hazards),t),SIDE_START,target,move=move)
+                    new=layers==0
+                    metadata=jnp.stack((s.effect_order,actor,mon))
+                    s=s._replace(hazards=hazards,hazard_meta=s.hazard_meta.at[target,index].set(jnp.where(new,metadata,s.hazard_meta[target,index])),
+                                 effect_order=s.effect_order+new.astype(jnp.int32))
+                    c=_event((s,t),SIDE_START,target,move=move)
                     return c
                 def fail(c):
                     s,t=c;t=t._replace(events=t.events.at[move_row,7].set(2))
                     return _event((s,t),FAIL,actor,mon)
                 return jax.lax.cond(layers<limit,success,fail,c)
-            return jax.lax.cond((move==STEALTH_ROCK)|(move==SPIKES),hazard,
+            def ordinary(c):
+                return jax.lax.cond((move==STEALTH_ROCK)|(move==SPIKES),hazard,
                 lambda c:jax.lax.cond((target!=actor)&(s.hp[target,tm]==0),no_target,
                     lambda c:jax.lax.cond(target==actor,self_move,foe_move,c),c),c)
+            return jax.lax.cond((field_tables.WEATHER[move]>0)|(field_tables.SCREEN[move]>0),
+                lambda c:field_ops.move(c,actor,move,move_row,_engine()),
+                lambda c:jax.lax.cond(field_tables.IS_BOOST[move]&(target==actor),
+                    lambda c:field_ops.boost(c,actor,target,move,_engine()),ordinary,c),c)
         return jax.lax.cond(full,cannot,act,c)
     # A queued actor remains tied to its original mon, and cannot act after KO.
     return _when((s.active[actor]==mon)&(s.hp[actor,mon]>0),execute,c)
@@ -446,7 +470,7 @@ def _switch(c,row):
                  stall_duration=s.stall_duration.at[side,old].set(0),
                  status=s.status.at[side,old].set(jnp.where(s.status[side,old]==FNT,NONE,s.status[side,old])),
                  toxic=s.toxic.at[side,incoming].set(0),pivot=s.pivot.at[side].set(False))
-    s=s._replace(volatile_state=s.volatile_state.at[side,old].set(0))
+    s=s._replace(volatile_state=s.volatile_state.at[side,old].set(0),boosts=s.boosts.at[side,old].set(0))
     c=effects.activate((s,t),side,_engine());s,t=c
     c=_event((s,t),SWITCH,side,incoming,value=s.hp[side,incoming],aux=s.stats[side,incoming,0],
              status=s.status[side,incoming],move=row[6])
@@ -476,21 +500,26 @@ def _residual(c):
         # effect() below skips its callback. Fainting clears volatiles; native
         # checkFainted changes status to fnt only after the residual action.
         valid.extend([(status==TOX)|(status==BRN)|(status==PSN),live&s.protected[side,m],live&(s.stall_duration[side,m]>0),s.item[side,m]==1])
+    rows.append(i32([5,0,0,1,0,0]));valid.append(s.weather_state[0]>0)
+    for side in range(2):
+        for index in range(2):
+            rows.append(i32([6,side,index,26,0,index+1]));valid.append(s.screens[side,index,0]>0)
+    handlers=len(rows)
     rows=jnp.stack(rows);valid=jnp.stack(valid);count=jnp.sum(valid).astype(jnp.int32)
     order=jnp.where(valid,rows[:,3],20000)
-    idx=jnp.lexsort((jnp.arange(8),rows[:,5],-rows[:,4],order));rows=rows[idx]
+    idx=jnp.lexsort((jnp.arange(handlers),rows[:,5],-rows[:,4],order));rows=rows[idx]
     def shuffle_body(k,carry):
         c,rows=carry
         # Resolve each equal group once, using native shuffle(from,to) calls.
         key=rows[k,3:6]
-        eq=jnp.all(rows[:,3:6]==key,axis=1)&(jnp.arange(8)<count)
-        first=jnp.min(jnp.where(eq,jnp.arange(8),8));end=jnp.max(jnp.where(eq,jnp.arange(8),-1))+1
+        eq=jnp.all(rows[:,3:6]==key,axis=1)&(jnp.arange(handlers)<count)
+        first=jnp.min(jnp.where(eq,jnp.arange(handlers),handlers));end=jnp.max(jnp.where(eq,jnp.arange(handlers),-1))+1
         def shuffle(carry):
             c,rows=carry;c,value=_draw(c,k,end,FIELD_SORT,2);v=value.astype(jnp.int32)
             a,b=rows[k],rows[v];rows=rows.at[k].set(b).at[v].set(a)
             return c,rows
         return jax.lax.cond((k>=first)&(k+1<end)&(k<count),shuffle,lambda x:x,(c,rows))
-    c,rows=jax.lax.fori_loop(0,7,shuffle_body,(c,rows))
+    c,rows=jax.lax.fori_loop(0,handlers-1,shuffle_body,(c,rows))
     def effect(k,c):
         s,t=c;row=rows[k];kind,side,m=row[:3]
         def apply(c):
@@ -518,9 +547,11 @@ def _residual(c):
                     s,t=c;newhp=jnp.minimum(maxhp,hp+jnp.maximum(1,maxhp//16));s=s._replace(hp=s.hp.at[side,m].set(newhp))
                     return _event((s,t),HEAL,side,m,value=newhp,aux=maxhp,status=s.status[side,m],move=1)
                 return _when(hp<maxhp,heal,c)
-            return jax.lax.cond(kind==1,status_tick,lambda c:jax.lax.cond(kind==4,leftovers,duration,c),c)
-        return _when((k<count)&(~s.fainted[side,m])&(s.winner<0),apply,c)
-    c=jax.lax.fori_loop(0,8,effect,c)
+            return jax.lax.cond(kind==5,lambda c:field_ops.weather_tick(c,_engine()),
+                lambda c:jax.lax.cond(kind==6,lambda c:field_ops.screen_tick(c,side,m,_engine()),
+                    lambda c:jax.lax.cond(kind==1,status_tick,lambda c:jax.lax.cond(kind==4,leftovers,duration,c),c),c),c)
+        return _when((k<count)&((kind>=5)|(~s.fainted[side,m]))&(s.winner<0),apply,c)
+    c=jax.lax.fori_loop(0,handlers,effect,c)
     s,t=c
     return _when(s.winner<0,lambda c:_event(c,UPKEEP),c)
 
@@ -629,17 +660,35 @@ def _supported(s,initializing=False):
     slots=jnp.arange(4)
     duplicate=(s.moves[:,:,:,None]==s.moves[:,:,None,:])&(s.moves[:,:,:,None]>0)&(slots[:,None]<slots[None,:])
     valid_order=jnp.all(jnp.sort(s.order,axis=1)==jnp.arange(ROSTER))
-    return (stat_ok&valid_order&(~jnp.any(duplicate))&jnp.all((s.hcount>=0)&(s.hcount<=HISTORY))
+    weather,source,source_mon,source_move,duration,target=s.weather_state
+    weather_sources=(source>=0)&(source<2)&(source_mon>=0)&(source_mon<ROSTER)&(source_move>0)&(source_move<len(MOVE_KEYS))
+    weather_sources=weather_sources&(s.species[jnp.clip(source,0,1),jnp.clip(source_mon,0,ROSTER-1)]>0)
+    weather_sources=weather_sources&(field_tables.WEATHER[jnp.clip(source_move,0,len(MOVE_KEYS)-1)]==weather)
+    weather_ok=jnp.where(weather>0,weather_sources&(duration>=1),
+                         (source==-1)&(source_mon==-1)&(source_move==0)&(duration==0))
+    screen_side=s.screens[:,:,1];screen_mon=s.screens[:,:,2];screen_move=s.screens[:,:,3]
+    screen_sources=(screen_side==jnp.arange(2)[:,None])&(screen_mon>=0)&(screen_mon<ROSTER)
+    screen_sources=screen_sources&(screen_move==i32(field_tables.SCREEN_MOVES)[None,:])
+    screen_sources=screen_sources&(s.species[jnp.clip(screen_side,0,1),jnp.clip(screen_mon,0,ROSTER-1)]>0)
+    screen_sources=screen_sources&(s.screens[:,:,4]>=0)&(s.screens[:,:,4]<s.effect_order)
+    screen_ok=jnp.all(jnp.where(s.screens[:,:,0]>0,screen_sources,jnp.all(s.screens==0,axis=-1)))
+    hazard_side=s.hazard_meta[:,:,1];hazard_mon=s.hazard_meta[:,:,2]
+    hazard_sources=(hazard_side>=0)&(hazard_side<2)&(hazard_mon>=0)&(hazard_mon<ROSTER)
+    hazard_sources=hazard_sources&(s.species[jnp.clip(hazard_side,0,1),jnp.clip(hazard_mon,0,ROSTER-1)]>0)
+    hazard_sources=hazard_sources&(s.hazard_meta[:,:,0]<s.effect_order)
+    hazard_ok=jnp.all(jnp.where(s.hazards[:,:2]>0,hazard_sources,jnp.all(s.hazard_meta==0,axis=-1)))
+    return (stat_ok&valid_order&weather_ok&screen_ok&hazard_ok&(~jnp.any(duplicate))&jnp.all((s.hcount>=0)&(s.hcount<=HISTORY))
             &jnp.all((s.qcount>=0)&(s.qcount<=QUEUE))&(s.episode>=0)&(s.generation>=0)
             &jnp.all(jnp.where(occupied,jnp.any(s.moves>0,axis=-1),jnp.all(s.moves==0,axis=-1)))
             &jnp.all((s.species>=0)&(s.species<len(SPECIES)))&jnp.all(jnp.any(occupied,axis=1))
             &jnp.all((~occupied)|tables.SPECIES_IMPLEMENTED[safe_species])
             &jnp.all((s.moves>=0)&(s.moves<len(MOVE_KEYS))&(s.moves!=STRUGGLE))
-            &jnp.all((s.moves==0)|tables.MOVE_IMPLEMENTED[jnp.clip(s.moves,0,len(MOVE_KEYS)-1)])
-            &jnp.all((s.item>=0)&(s.item<=2))&jnp.all((s.ability>=0)&(s.ability<=3))
+            &jnp.all((s.moves==0)|(tables.MOVE_IMPLEMENTED|field_tables.MOVE_IMPLEMENTED)[jnp.clip(s.moves,0,len(MOVE_KEYS)-1)])
+            &jnp.all((s.item>=0)&(s.item<len(ITEMS)))
+            &jnp.all(field_tables.ITEM_IMPLEMENTED[jnp.clip(s.item,0,len(ITEMS)-1)])&jnp.all((s.ability>=0)&(s.ability<=3))
             &jnp.all((s.ivs>=0)&(s.ivs<=31))&jnp.all((s.evs>=0)&(s.evs<=255))
             &jnp.all((s.nature>=1)&(s.nature<=len(generic.NATURES)))
-            &jnp.all(s.types==tables.SPECIES_TYPES[safe_species])&jnp.all(s.boosts==0)
+            &jnp.all(s.types==tables.SPECIES_TYPES[safe_species])&jnp.all((s.boosts>=-6)&(s.boosts<=6))
             &jnp.all((s.happiness>=0)&(s.happiness<=255))
             &jnp.all((s.gender>=(-1 if initializing else 0))&(s.gender<=2))
             &jnp.all((s.name>=0)&(s.name<len(SPECIES)))&jnp.all((~occupied)|(s.name>0))
@@ -651,7 +700,12 @@ def _supported(s,initializing=False):
             &jnp.all((s.hazards[:,2]!=2)|(s.hazards[:,1]>0))
             &jnp.all((s.hp>=0)&(s.hp<=s.stats[:,:,0]))&jnp.all((s.pp>=0)&(s.pp<=PP[s.moves]))
             &jnp.all((s.status>=0)&(s.status<=FRZ))
-            &(s.effect_order>=0)&jnp.all(s.ability_order>=0)&jnp.all(s.item_order>=0)
+            &(s.effect_order>=0)
+            &(s.weather_state[0]>=0)&(s.weather_state[0]<=4)&(s.weather_state[4]>=0)&(s.weather_state[4]<=8)
+            &(s.weather_state[1]>=-1)&(s.weather_state[1]<=1)&(s.weather_state[2]>=-1)&(s.weather_state[2]<ROSTER)
+            &(s.weather_state[5]>=0)&(s.weather_state[5]<=1)
+            &jnp.all((s.screens[:,:,0]>=0)&(s.screens[:,:,0]<=8))
+            &jnp.all(s.hazard_meta[:,:,0]>=0)&jnp.all(s.ability_order>=0)&jnp.all(s.item_order>=0)
             &jnp.all((s.status_state[:,:,0]>=0)&(s.status_state[:,:,0]<=FRZ))
             &jnp.all(s.status_state[:,:,1]>=0)
             &jnp.all((s.status_state[:,:,2]>=-1)&(s.status_state[:,:,2]<=1))
@@ -675,9 +729,9 @@ def _validate_structure(s):
     roster_fields={'species','level','speed','gender','hp','item','status','toxic','stall','stall_duration',
                    'nature','ability','hp_type','hp_power','shiny','happiness','name','ability_order','item_order'}
     vector_fields={'active','pending','request','pivot'}
-    bool_fields={'fainted','protected','pivot','midturn','shiny'}
+    bool_fields={'fainted','protected','pivot','midturn','shiny','sleep_clause_target'}
     for name,value in zip(State._fields,s):
-        shape=(2,6) if name in roster_fields or name in {'fainted','protected'} else (2,) if name in vector_fields else (2,3) if name=='hazards' else (2,6,6) if name in {'stats','ivs','evs'} else (2,6,2) if name=='types' else (2,6,7) if name in {'boosts','status_state'} else (2,6,3,6) if name=='volatile_state' else (2,6,4) if name in {'moves','pp'} else (2,6) if name=='order' else (QUEUE,7) if name=='queue' else (4,) if name=='rng' else (HISTORY,10) if name=='history' else ()
+        shape=(2,6) if name in roster_fields or name in {'fainted','protected'} else (2,) if name in vector_fields else (2,3) if name=='hazards' else (2,6,6) if name in {'stats','ivs','evs'} else (2,6,2) if name=='types' else (2,6,7) if name in {'boosts','status_state'} else (2,6,3,6) if name=='volatile_state' else (6,) if name=='weather_state' else (2,2,5) if name=='screens' else (2,2,3) if name=='hazard_meta' else (2,6,4) if name in {'moves','pp'} else (2,6) if name=='order' else (QUEUE,7) if name=='queue' else (4,) if name=='rng' else (HISTORY,10) if name=='history' else ()
         dtype=jnp.bool_ if name in bool_fields else jnp.uint16 if name=='rng' else jnp.int32
         if getattr(value,'shape',None)!=shape or getattr(value,'dtype',None)!=jnp.dtype(dtype):
             raise ValueError(f'{name} must have shape {shape} and dtype {jnp.dtype(dtype)}')
@@ -824,7 +878,7 @@ def _initialize(species,level,moves,item,evs,seed,generation,ivs,nature,ability,
             jnp.zeros((HISTORY,10),jnp.int32),i32(0),jnp.zeros((2,3),jnp.int32),
             ivs,evs,nature,ability,tables.SPECIES_TYPES[species],jnp.where(occupied,hp_type,0),
             jnp.where(occupied,generic.hidden_power(ivs)[1],0),shiny,happiness,name,jnp.zeros((2,6,7),jnp.int32),i32(0),effects.empty_status(),
-            jnp.zeros((2,6,3,6),jnp.int32),zeros,zeros)
+            jnp.zeros((2,6,3,6),jnp.int32),zeros,zeros,field_ops.empty_weather(),jnp.zeros((2,2,5),jnp.int32),jnp.zeros((2,2,3),jnp.int32),jnp.array(False))
     return jax.lax.cond(_supported(s,initializing=True),_initialize_events,lambda s:Result(s,i32(UNSUPPORTED),empty_trace()),s)
 
 

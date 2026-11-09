@@ -79,7 +79,7 @@ def project_events(state,trace,audience):
             line=f'|move|{actor}|{name}|'+shown+annotation
         elif kind in (e.DAMAGE,e.HEAL):
             line=f'|-'+('damage' if kind==e.DAMAGE else 'heal')+f'|{actor}|'+condition(value,aux,status,side!=audience)
-            if kind==e.DAMAGE and move:line+='|[from] '+{1:'brn',2:'psn',3:'recoil',4:'Stealth Rock',5:'Spikes',6:'confusion'}[move]
+            if kind==e.DAMAGE and move:line+='|[from] '+{1:'brn',2:'psn',3:'recoil',4:'Stealth Rock',5:'Spikes',6:'confusion',7:'Sandstorm',8:'Hail'}[move]
             if kind==e.HEAL and move:line+='|[silent]' if move==-1 else '|[from] item: Leftovers'
         elif kind==e.CRIT:line=f'|-crit|{actor}'
         elif kind==e.IMMUNE:line=f'|-immune|{actor}'+({0:'',1:'|[from] ability: Immunity',2:'|[from] ability: Levitate'}[aux])
@@ -98,8 +98,8 @@ def project_events(state,trace,audience):
         elif kind==e.ACTIVATE:
             line=(f'|-supereffective|{actor}' if aux>0 else f'|-resisted|{actor}') if move==-1 else f'|-activate|{actor}|move: {name}'
         elif kind==e.SINGLE:line=f'|-singleturn|{actor}|Protect'
-        elif kind==e.SIDE_START:line=f'|-sidestart|p{side+1}: p{side+1}|'+('move: ' if move==e.STEALTH_ROCK else '')+name
-        elif kind==e.SIDE_END:line=f'|-sideend|p{side+1}: p{side+1}|{name}|[from] move: Rapid Spin|[of] {actor}'
+        elif kind==e.SIDE_START:line=f'|-sidestart|p{side+1}: p{side+1}|'+('move: ' if move in (e.STEALTH_ROCK,e.field_tables.SCREEN_MOVES[1]) else '')+name
+        elif kind==e.SIDE_END:line=f'|-sideend|p{side+1}: p{side+1}|'+('move: ' if move==e.field_tables.SCREEN_MOVES[1] else '')+name+(f'|[from] move: Rapid Spin|[of] {actor}' if aux==0 else '')
         elif kind==e.CONF_START:line=f'|-start|{actor}|confusion'
         elif kind==e.CONF_END:line=f'|-end|{actor}|confusion'
         elif kind==e.CONF_ACTIVATE:line=f'|-activate|{actor}|confusion'
@@ -107,6 +107,8 @@ def project_events(state,trace,audience):
             out.append({'type':'event','message':'|-message|Sleep Clause Mod activated.'})
             if value:out.append({'type':'event','message':"|-hint|Sleep Clause Mod prevents players from putting more than one of their opponent's Pokemon to sleep at a time"})
             continue
+        elif kind==e.BOOST:line=f'|-'+('unboost' if status else 'boost')+f'|{actor}|{e.field_tables.STATS[aux]}|{abs(value)}'
+        elif kind==e.WEATHER:line='|-weather|'+e.field_tables.WEATHER_NAMES[value]+('|[upkeep]' if aux else '')
         else:raise ValueError('unknown event')
         out.append({'type':'event','message':line})
     return out
@@ -143,9 +145,9 @@ def load_state(path,*,schema=None):
         stored=int(saved['schema']) if 'schema' in saved else None
         if schema is not None and stored is not None and stored!=schema:raise ValueError('schema mismatch')
         version=stored if schema is None else schema
-        if version not in (1,2,3,4):raise ValueError('explicit supported state schema required')
+        if version not in (1,2,3,4,5):raise ValueError('explicit supported state schema required')
         fields={k:jnp.asarray(saved[k]) for k in saved.files if k not in ('schema','data_sha256')}
-        if version in (3,4):
+        if version in (3,4,5):
             if 'data_sha256' not in saved or str(saved['data_sha256'])!=generic.DATA_SHA256:
                 raise ValueError('state data table identity mismatch')
         else:
@@ -169,6 +171,14 @@ def load_state(path,*,schema=None):
                 hp_type=jnp.where(species>0,generic.HP_TYPE_IDS[hp_type],0),hp_power=jnp.where(species>0,power,0),
                 shiny=jnp.zeros((2,6),jnp.bool_),happiness=jnp.full((2,6),255,jnp.int32),
                 name=tables.SPECIES_NAME[species],boosts=jnp.zeros((2,6,7),jnp.int32))
+        if version<5:
+            # Schema 4 could not record hazard effect creation/source metadata.
+            history=np.asarray(fields['history'])[:int(fields['hcount'])]
+            if np.any(np.asarray(fields.get('hazards',np.zeros((2,3),np.int32)))) or np.any(np.isin(history[:,0],[e.SIDE_START,e.SIDE_END])):
+                raise ValueError('legacy hazard state requires replay/provenance for schema 5 effect order')
+            fields.update(weather_state=e.field_ops.empty_weather(),screens=jnp.zeros((2,2,5),jnp.int32),
+                          hazard_meta=jnp.zeros((2,2,3),jnp.int32),
+                          sleep_clause_target=jnp.asarray(np.any(np.isin(history[:,0],[e.STATUS,e.SLEEP_CLAUSE]))))
         if version<4:
             # Earlier schemas omitted source/timer/effectOrder state. Only fresh
             # starts/private initial commitments can be reconstructed exactly.
@@ -212,3 +222,33 @@ def effect_states(state,side,mon):
         'abilityState':{'id':e.ABILITIES[int(s.ability[side,mon])],'effectOrder':int(s.ability_order[side,mon]),'target':target},
         'itemState':{'id':e.ITEMS[int(s.item[side,mon])],'effectOrder':int(s.item_order[side,mon]),'target':target},
         'speciesState':{'id':e.generic.to_id(e.SPECIES[int(s.species[side,mon])]),'effectOrder':0}}
+
+
+def field_state(state):
+    s=jax.device_get(state);weather,side,mon,move,duration,target=map(int,s.weather_state)
+    current={'id':e.field_tables.WEATHER_KEYS[weather],'effectOrder':0}
+    if weather:
+        current.update(duration=duration,source={'$pokemon':{'side':side,'mon':mon}},sourceSlot=f'p{side+1}a')
+    if target:current['target']={'$field':True}
+    clause={'effectOrder':0,'id':'sleepclausemod','source':None}
+    if bool(s.sleep_clause_target):clause['target']={'$field':True}
+    return {'weather':e.field_tables.WEATHER_KEYS[weather],'weatherState':current,
+            'pseudoWeather':{'sleepclausemod':clause},
+            'terrain':'','terrainState':{'effectOrder':0,'id':''}}
+
+
+def side_conditions(state,side):
+    s=jax.device_get(state);out={}
+    for index,key in enumerate(('stealthrock','spikes')):
+        layers=int(s.hazards[side,index])
+        if not layers:continue
+        order,source,mon=map(int,s.hazard_meta[side,index])
+        out[key]={'id':key,'effectOrder':order,'source':{'$pokemon':{'side':source,'mon':mon}},
+                  'sourceSlot':f'p{source+1}a','target':{'$side':side}}
+        if index==1:out[key]['layers']=layers
+    for index,key in enumerate(e.field_tables.SCREEN_KEYS):
+        duration,source,mon,move,order=map(int,s.screens[side,index])
+        if not duration:continue
+        out[key]={'id':key,'effectOrder':order,'duration':duration,
+                  'source':{'$pokemon':{'side':source,'mon':mon}},'sourceSlot':f'p{source+1}a','target':{'$side':side}}
+    return out

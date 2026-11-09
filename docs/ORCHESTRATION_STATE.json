@@ -524,13 +524,13 @@
     "brief": "PROJECT_PLAN.md#proposed-g4-cpu-implementation-and-conformance-goal",
     "source_base": "f37067e",
     "scope": "Complete pinned gen5randombattle reachable mechanics and every prepared CPU gate. Integrated checkpoints, resumable progress and commit/push authorized. GPU execution, profiling, benchmarks, training, delegation and scored research excluded.",
-    "checkpoint": "Schema 4 status/volatile/source/effect-order implementation is in place. All 55 native status scenarios / 411 boundaries, including four complete six-member games, pass exact scalar JIT state/RNG/request/effect-state/recipient-history replay. Integrated CPU/eager/batch/lifecycle/regression acceptance is pending.",
+    "checkpoint": "Schema-5 initial field integration passed 4 CPU checks (36 cases /300 boundaries, four six-member games, eager/JIT/mixed1-8-32/save/reset/full-lean). Four added interaction cases and a native Sunny Day/Spore metadata repair are frozen as 40 cases /308 boundaries and pass the native family assertions; matching candidate CPU replay remains pending. The status-only suite is running; prior schema-4 run completed 39 checks then hit the 8 GiB environment limit.",
     "completed_checkpoints": [
       "Pinned resolved data and source-owned conservative candidate inventory exported; 605 role roots, 1768 data/effect entries, 1146 callback slots. Data-only mappings remain partial; transitive closure and complete callback implementation are not claimed.",
       "Generic species/set/type/stat/physical-special/Hidden Power/happiness/priority/hazard integration passes 37 affected CPU checks on 4eab254, retaining all 133 baseline scenarios and validating 24 added scenarios: 157 scenarios / 1059 boundaries, including 20 complete battles (eight six-member games). Eager/JIT/1-8-32 mixed batches, serialized continuation/reset, explicit schema 1/2 migration and full/lean rollouts pass.",
       "48 status/duration cases / 189 native-only boundaries captured before implementation, with source identities, effect states/order and callback-annotated raw draws. Twelve current native tests pass on 578b352; all 157 baseline/generic case semantics remain identical after diagnostic stack normalization."
     ],
-    "next": "Complete schema 4 status CPU integration and update GPU handoff, then continue the same G4 goal through field/boost/hooks/move/phase/indirect/terminal/conformance work. No new approval is required.",
+    "next": "Complete isolated schema-5 CPU status/field/regression checks, then continue abilities/items, complex move/phase families, indirect closure, capacity/terminal audit and fixed CPU campaigns. No new approval is required.",
     "ledger": {
       "path": "rules/gen5-reachable-v1.json",
       "entries": 1768,
@@ -540,7 +540,7 @@
         "indirect-closure",
         "engine-contract"
       ],
-      "status": "incomplete; 1720 data mappings partial, 48 entries unsupported, all 1146 full callback mappings pending; candidate superset is not a reachability proof"
+      "status": "incomplete; 1732 data/effect entries partial, 36 unsupported; 68 callback mappings partial and 1078 unsupported. No callback is accepted as full-format validated; candidate superset is not reachability proof."
     },
     "config": "evaluation/g4-cpu-v1.json",
     "campaign": {
@@ -578,6 +578,13 @@
         "command": "node --test test/reference.test.cjs test/gen5-reachability.test.cjs test/shared-engine.test.cjs test/status-duration-native.test.cjs",
         "result": "12 passed; pin/data/provenance, BattleStream contracts and 48 status/duration native cases. Status JAX implementation remains pending.",
         "log": "test-logs/g4-cpu-conformance/status-native-final.log"
+      },
+      {
+        "source_commit": "eb747ef",
+        "command": "See schema4-source.json for full command and source hashes",
+        "result": "Incomplete: 39 checks passed, then the environment killed status mixed eager/JIT/batch check (exit137, 8 GiB cgroup OOM); native status scalar check was not reached. No suite or milestone acceptance.",
+        "log": "test-logs/g4-cpu-conformance/schema4-cpu-incomplete.log",
+        "source_identity": "test-logs/g4-cpu-conformance/schema4-source.json"
       }
     ],
     "gpu_requirement": "Deferred during travel. Record all G4 device obligations and ready/pending commands in docs/GPU_HANDOFF.md; current checkpoint runner is scripts/g4_gpu_handoff.py. CPU implementation remains active. Later full G4 release still requires matching-source GPU conformance.",
@@ -585,13 +592,15 @@
     "source_identity": "test-logs/g4-cpu-conformance/source.json",
     "evidence_directory": "test-logs/g4-cpu-conformance",
     "continuation": {
-      "status": "executing_status_integration",
-      "engine_schema": 4,
-      "native_status_corpus": "test-logs/g4-cpu-conformance/status_native_only.json.gz",
+      "status": "executing_field_status_integration",
+      "engine_schema": 5,
+      "native_status_corpus": "test-logs/g4-cpu-conformance/status-v5.json.gz",
       "generic_corpus": "test-logs/g4-cpu-conformance/generic.json.gz",
-      "pending_state_design": "Implemented status source/time/startTime, retained empty Rest/Lum timers, global effect ordering and Protect/stall/confusion metadata. Full CPU integration pending; advanced schema 1/2/3 snapshots without this provenance fail explicit migration rather than inventing state.",
+      "pending_state_design": "Schema 5 persists weather/screen durations and sources, hazard creation order, boosts and Sleep Clause field state. Version 4 status state is retained; lossy old hazard snapshots require replay/provenance.",
       "pending_gate": "No generated full-format start or development/held-out campaign is accepted. V7 executable harness is absent; fixed configuration is present. Target turn-limit/history capacity audit remains open.",
-      "validation_reuse": "Existing engine/IO/table/rollout/test bytes match 4eab254 exactly. Native capture-only changes at 578b352 preserve all existing case semantics; source.json records hashes and canonical fixture identities. Re-run affected CPU checks after mechanics changes, not all history per patch."
+      "validation_reuse": "Historical 37-check engine-4eab254 evidence retained. Schema-4 eb747ef completed 39/41 checks before environment OOM; schema4-source.json records exact hashes and incomplete outcome. Schema-5 acceptance is pending; run JAX test groups sequentially in fresh processes.",
+      "native_field_corpus": "test-logs/g4-cpu-conformance/field.json.gz",
+      "pending_field_gate": "Replay the expanded40-case field corpus on current source and finish status checks with field/Sleep Clause metadata. Initial field pass predates final Sunny metadata fix; do not transfer acceptance."
     },
     "resolved_failure": "16b5263 preflight rejected ordinary moves because type was missing from its field set; fixed by 4eab254, failed run stopped, all 37 repaired checks pass. Detailed minimized input and source identities are in source.json.",
     "publication": {
@@ -1501,10 +1510,10 @@
     "source_commit": "153a056d2eb9e52455d10b80776d431a5a13663c",
     "source_tree": "b20074171f4eba793a6877402e25e5c21e11414b",
     "blocks_active_cpu_goal": false,
-    "existing_cpu_evidence": "test-logs/g4-cpu-conformance/source.json (37 checks on engine 4eab254; current checkpoint only)",
+    "existing_cpu_evidence": "Historical source.json (37 checks on engine 4eab254); schema4-source.json records an incomplete environment-OOM run on eb747ef. Expanded schema-5 checks are running.",
     "ready_command": "\"$JAX_PYTHON\" scripts/g4_gpu_handoff.py",
     "hardware": "One selected NVIDIA GPU/driver compatible with the chosen pinned JAX CUDA wheel; record actual driver/device/VRAM and eager/JIT placement. No paid provisioning or driver changes authorized by this handoff.",
-    "ready_scope": "Same current CPU/CUDA checkpoint modules and frozen native fixtures; real placement, exact state/RNG/request/views/outcomes, 1/8/32 mixed batches, serialization/reset, full/lean and atomic failures. Default 3600s cap per suite; preserve failure artifacts and stop.",
+    "ready_scope": "45 current CPU/CUDA checks in isolated module processes, five independent native corpora (252 scenarios /1778 boundaries); strict placement, exact state/RNG/request/views/outcomes, 1/8/32 lanes, serialization/reset, full/lean and atomic failures. CPU validation of expanded checkpoint pending; 3600s cap per module, stop on failure.",
     "pending_full_format": "V7 module and GPU config are absent; full CPU closure, reachable audit and final matching-source directed/generated campaign device replay remain required. Checkpoint GPU success cannot accept full G4.",
     "profiling": "G3 V6 bounded homogeneous/mixed compilation, warm execution and memory measurements are documented with exact commands. Optional current-source baseline + single trace recipe is separate. No required G4 profiling workload is defined; broad sweeps remain excluded.",
     "result_handoff": "Runner prints a fresh results directory and .tar.gz with source/fixture identities, command arrays/environments, device/package metadata, logs and summary, including ordinary failures. Agent review instructions are in the document.",
@@ -1546,6 +1555,16 @@
       "native_battles_executed": false
     },
     "combined_return_home_block": "docs/GPU_HANDOFF.md#one-return-home-block-correctness-plus-g3-v6-measurements",
-    "pending_status_checkpoint": "Schema 4 status/counter/effect-order/source and serialization work needs meaningful GPU replay after CPU acceptance. No GPU execution now; handoff runner/test list will be updated at that checkpoint."
+    "pending_status_checkpoint": "Schema-5 status and field GPU correctness is wired into the checkpoint runner; CPU integration acceptance is pending. No GPU work now.",
+    "expanded_checkpoint": {
+      "status": "cpu_validation_in_progress",
+      "engine_schema": 5,
+      "modules": 45,
+      "native_scenarios": 252,
+      "native_boundaries": 1778,
+      "initial_field_evidence": "test-logs/g4-cpu-conformance/schema5-checkpoint.json",
+      "source": "Use latest committed checkout and runner source/fixture fingerprints; earlier source_commit fields describe historical preparation.",
+      "handoff_prepared": true
+    }
   }
 }

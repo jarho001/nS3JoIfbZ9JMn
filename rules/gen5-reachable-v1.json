@@ -1686,10 +1686,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-v5.json.gz",
+          "native": "reference/status-duration-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_engine.py"
+        }
+      ],
       "field": "onSetStatus",
       "id": "abilities:immunity:onSetStatus",
-      "implementation": null,
+      "implementation": {
+        "family": "status",
+        "file": "simulator/status_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:immunity",
@@ -1700,7 +1712,7 @@
       "owner": "abilities:immunity",
       "reachability": "candidate",
       "sha256": "eb2181becd597dbc2290996f57a698e14d21e9d05388eb23b93775092ecbe03d",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -4377,10 +4389,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-v5.json.gz",
+          "native": "reference/status-duration-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_engine.py"
+        }
+      ],
       "field": "onAfterSetStatus",
       "id": "abilities:synchronize:onAfterSetStatus",
-      "implementation": null,
+      "implementation": {
+        "family": "status",
+        "file": "simulator/status_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:synchronize",
@@ -4391,7 +4415,7 @@
       "owner": "abilities:synchronize",
       "reachability": "candidate",
       "sha256": "8756bb4c6ee180c5fdfb4d0c80afd3d3f51ff64896bc48a800f737289fa7e0ec",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -5366,10 +5390,22 @@
           "file": "data/mods/gen6/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-v5.json.gz",
+          "native": "reference/status-duration-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_engine.py"
+        }
+      ],
       "field": "onResidual",
       "id": "conditions:brn:onResidual",
-      "implementation": null,
+      "implementation": {
+        "family": "status",
+        "file": "simulator/status_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:brn",
@@ -5380,7 +5416,7 @@
       "owner": "conditions:brn",
       "reachability": "candidate",
       "sha256": "e2d98cce06adcb06823fc4b11301d78d413186ccd89e7477705672670ff283a8",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -5389,10 +5425,22 @@
           "file": "data/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-v5.json.gz",
+          "native": "reference/status-duration-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_engine.py"
+        }
+      ],
       "field": "onStart",
       "id": "conditions:brn:onStart",
-      "implementation": null,
+      "implementation": {
+        "family": "status",
+        "file": "simulator/status_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:brn",
@@ -5403,7 +5451,7 @@
       "owner": "conditions:brn",
       "reachability": "candidate",
       "sha256": "2a47979574d3d83beac3d18f7183c22fe88b6e7c9ca18187c93d54498ade01db",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -5596,10 +5644,22 @@
           "file": "data/mods/gen6/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-v5.json.gz",
+          "native": "reference/status-duration-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_engine.py"
+        }
+      ],
       "field": "onBeforeMove",
       "id": "conditions:confusion:onBeforeMove",
-      "implementation": null,
+      "implementation": {
+        "family": "status",
+        "file": "simulator/status_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:confusion",
@@ -5610,7 +5670,7 @@
       "owner": "conditions:confusion",
       "reachability": "candidate",
       "sha256": "f93ef0c2900157394eaad2382ccd70438d4e97ee601f5c51953adab4418337dd",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -5619,10 +5679,22 @@
           "file": "data/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-v5.json.gz",
+          "native": "reference/status-duration-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_engine.py"
+        }
+      ],
       "field": "onEnd",
       "id": "conditions:confusion:onEnd",
-      "implementation": null,
+      "implementation": {
+        "family": "status",
+        "file": "simulator/status_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:confusion",
@@ -5633,7 +5705,7 @@
       "owner": "conditions:confusion",
       "reachability": "candidate",
       "sha256": "9551f566487c04175892abdff2190bfed5caf62b888ff420394280a39a08e168",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -5642,10 +5714,22 @@
           "file": "data/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-v5.json.gz",
+          "native": "reference/status-duration-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_engine.py"
+        }
+      ],
       "field": "onStart",
       "id": "conditions:confusion:onStart",
-      "implementation": null,
+      "implementation": {
+        "family": "status",
+        "file": "simulator/status_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:confusion",
@@ -5656,7 +5740,7 @@
       "owner": "conditions:confusion",
       "reachability": "candidate",
       "sha256": "c97b231fc765050e04098745f9e358e3f5c30e1eb488a1a9f2ebe523b46f8c0a",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -6102,10 +6186,22 @@
           "file": "data/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-v5.json.gz",
+          "native": "reference/status-duration-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_engine.py"
+        }
+      ],
       "field": "onBeforeMove",
       "id": "conditions:frz:onBeforeMove",
-      "implementation": null,
+      "implementation": {
+        "family": "status",
+        "file": "simulator/status_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:frz",
@@ -6116,7 +6212,7 @@
       "owner": "conditions:frz",
       "reachability": "candidate",
       "sha256": "510d853d69062691d353bc77c54c96f38fcde0217f915f1bc9d2aed9ffa61a9f",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -6125,10 +6221,22 @@
           "file": "data/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-v5.json.gz",
+          "native": "reference/status-duration-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_engine.py"
+        }
+      ],
       "field": "onDamagingHit",
       "id": "conditions:frz:onDamagingHit",
-      "implementation": null,
+      "implementation": {
+        "family": "status",
+        "file": "simulator/status_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:frz",
@@ -6139,7 +6247,7 @@
       "owner": "conditions:frz",
       "reachability": "candidate",
       "sha256": "ef493485c13ee5e5ef84eb3f1d6c02d1b0e430bcba72ad0ee955b9cb1faea63a",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -6171,10 +6279,22 @@
           "file": "data/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-v5.json.gz",
+          "native": "reference/status-duration-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_engine.py"
+        }
+      ],
       "field": "onStart",
       "id": "conditions:frz:onStart",
-      "implementation": null,
+      "implementation": {
+        "family": "status",
+        "file": "simulator/status_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:frz",
@@ -6185,7 +6305,7 @@
       "owner": "conditions:frz",
       "reachability": "candidate",
       "sha256": "417c613c9c3578a6e9bdcf73be924c14e90383308c52cbd9828296019b67dc12",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -6309,10 +6429,22 @@
           "file": "data/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/field.json.gz",
+          "native": "reference/field-boost-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_field_engine.py"
+        }
+      ],
       "field": "durationCallback",
       "id": "conditions:hail:durationCallback",
-      "implementation": null,
+      "implementation": {
+        "family": "field",
+        "file": "simulator/field_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:hail",
@@ -6323,7 +6455,7 @@
       "owner": "conditions:hail",
       "reachability": "candidate",
       "sha256": "f52623543a6c8520dcca2c19954cfd4111bbbcddf9462c16ecb6e54ce130896f",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -6332,10 +6464,22 @@
           "file": "data/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/field.json.gz",
+          "native": "reference/field-boost-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_field_engine.py"
+        }
+      ],
       "field": "onFieldEnd",
       "id": "conditions:hail:onFieldEnd",
-      "implementation": null,
+      "implementation": {
+        "family": "field",
+        "file": "simulator/field_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:hail",
@@ -6346,7 +6490,7 @@
       "owner": "conditions:hail",
       "reachability": "candidate",
       "sha256": "596d2e83b326b5ec48e2da41b0dd7e8a66a04a6fcaf26ae93f88fd0ca952ff13",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -6355,10 +6499,22 @@
           "file": "data/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/field.json.gz",
+          "native": "reference/field-boost-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_field_engine.py"
+        }
+      ],
       "field": "onFieldResidual",
       "id": "conditions:hail:onFieldResidual",
-      "implementation": null,
+      "implementation": {
+        "family": "field",
+        "file": "simulator/field_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:hail",
@@ -6369,7 +6525,7 @@
       "owner": "conditions:hail",
       "reachability": "candidate",
       "sha256": "597ae3012b1b13d4c3db13426a110ec74ad60f6cde9cb27c5846c79378463432",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -6378,10 +6534,22 @@
           "file": "data/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/field.json.gz",
+          "native": "reference/field-boost-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_field_engine.py"
+        }
+      ],
       "field": "onFieldStart",
       "id": "conditions:hail:onFieldStart",
-      "implementation": null,
+      "implementation": {
+        "family": "field",
+        "file": "simulator/field_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:hail",
@@ -6392,7 +6560,7 @@
       "owner": "conditions:hail",
       "reachability": "candidate",
       "sha256": "9f57b7b5180fed28df4ca411c6add76a836373c098cd9b11ffc5a50917fe023d",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -6401,10 +6569,22 @@
           "file": "data/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/field.json.gz",
+          "native": "reference/field-boost-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_field_engine.py"
+        }
+      ],
       "field": "onWeather",
       "id": "conditions:hail:onWeather",
-      "implementation": null,
+      "implementation": {
+        "family": "field",
+        "file": "simulator/field_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:hail",
@@ -6415,7 +6595,7 @@
       "owner": "conditions:hail",
       "reachability": "candidate",
       "sha256": "27baf89c246ee3469b455c854c95929d16f31a2133bdfb16b722a8f10f9aec23",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -6654,10 +6834,22 @@
           "file": "data/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-v5.json.gz",
+          "native": "reference/status-duration-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_engine.py"
+        }
+      ],
       "field": "onBeforeMove",
       "id": "conditions:par:onBeforeMove",
-      "implementation": null,
+      "implementation": {
+        "family": "status",
+        "file": "simulator/status_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:par",
@@ -6668,7 +6860,7 @@
       "owner": "conditions:par",
       "reachability": "candidate",
       "sha256": "f19a5924ddf7764d1d00dbec718cf048d1cd759cd1a78087ffa15186b8d87567",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -6677,10 +6869,22 @@
           "file": "data/mods/gen6/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-v5.json.gz",
+          "native": "reference/status-duration-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_engine.py"
+        }
+      ],
       "field": "onModifySpe",
       "id": "conditions:par:onModifySpe",
-      "implementation": null,
+      "implementation": {
+        "family": "status",
+        "file": "simulator/status_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:par",
@@ -6691,7 +6895,7 @@
       "owner": "conditions:par",
       "reachability": "candidate",
       "sha256": "be58cbee6a57e2ae66deee469d34c62a15f66b27c63cb9df28b9dd228459150b",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -6700,10 +6904,22 @@
           "file": "data/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-v5.json.gz",
+          "native": "reference/status-duration-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_engine.py"
+        }
+      ],
       "field": "onStart",
       "id": "conditions:par:onStart",
-      "implementation": null,
+      "implementation": {
+        "family": "status",
+        "file": "simulator/status_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:par",
@@ -6714,7 +6930,7 @@
       "owner": "conditions:par",
       "reachability": "candidate",
       "sha256": "9fb1e62652b41c90f27c584edae1c955f4b4e129768394ae3b3dc51419b64364",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -6953,10 +7169,22 @@
           "file": "data/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-v5.json.gz",
+          "native": "reference/status-duration-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_engine.py"
+        }
+      ],
       "field": "onResidual",
       "id": "conditions:psn:onResidual",
-      "implementation": null,
+      "implementation": {
+        "family": "status",
+        "file": "simulator/status_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:psn",
@@ -6967,7 +7195,7 @@
       "owner": "conditions:psn",
       "reachability": "candidate",
       "sha256": "e2d98cce06adcb06823fc4b11301d78d413186ccd89e7477705672670ff283a8",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -6976,10 +7204,22 @@
           "file": "data/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-v5.json.gz",
+          "native": "reference/status-duration-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_engine.py"
+        }
+      ],
       "field": "onStart",
       "id": "conditions:psn:onStart",
-      "implementation": null,
+      "implementation": {
+        "family": "status",
+        "file": "simulator/status_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:psn",
@@ -6990,7 +7230,7 @@
       "owner": "conditions:psn",
       "reachability": "candidate",
       "sha256": "3061874e8d43b1e499b4b7d6a067e2d79924d04229475a876fe42ab68a6bcb0c",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -6999,10 +7239,22 @@
           "file": "data/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/field.json.gz",
+          "native": "reference/field-boost-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_field_engine.py"
+        }
+      ],
       "field": "durationCallback",
       "id": "conditions:raindance:durationCallback",
-      "implementation": null,
+      "implementation": {
+        "family": "field",
+        "file": "simulator/field_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:raindance",
@@ -7013,7 +7265,7 @@
       "owner": "conditions:raindance",
       "reachability": "candidate",
       "sha256": "a67b03f7b195346e043a66c94a5afa0edaec7d4efe5af07c5d68192b695766ee",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -7022,10 +7274,22 @@
           "file": "data/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/field.json.gz",
+          "native": "reference/field-boost-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_field_engine.py"
+        }
+      ],
       "field": "onFieldEnd",
       "id": "conditions:raindance:onFieldEnd",
-      "implementation": null,
+      "implementation": {
+        "family": "field",
+        "file": "simulator/field_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:raindance",
@@ -7036,7 +7300,7 @@
       "owner": "conditions:raindance",
       "reachability": "candidate",
       "sha256": "596d2e83b326b5ec48e2da41b0dd7e8a66a04a6fcaf26ae93f88fd0ca952ff13",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -7045,10 +7309,22 @@
           "file": "data/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/field.json.gz",
+          "native": "reference/field-boost-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_field_engine.py"
+        }
+      ],
       "field": "onFieldResidual",
       "id": "conditions:raindance:onFieldResidual",
-      "implementation": null,
+      "implementation": {
+        "family": "field",
+        "file": "simulator/field_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:raindance",
@@ -7059,7 +7335,7 @@
       "owner": "conditions:raindance",
       "reachability": "candidate",
       "sha256": "efa9950d873e9b1d0b1046090f79628657529209398b948eb7fa693ac37dd2c0",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -7068,10 +7344,22 @@
           "file": "data/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/field.json.gz",
+          "native": "reference/field-boost-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_field_engine.py"
+        }
+      ],
       "field": "onFieldStart",
       "id": "conditions:raindance:onFieldStart",
-      "implementation": null,
+      "implementation": {
+        "family": "field",
+        "file": "simulator/field_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:raindance",
@@ -7082,7 +7370,7 @@
       "owner": "conditions:raindance",
       "reachability": "candidate",
       "sha256": "a82c2b842c2b3bd22a2fe95caa4e5fd2fb91c494f11c85ecf42453bf8c3775f5",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -7091,10 +7379,22 @@
           "file": "data/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/field.json.gz",
+          "native": "reference/field-boost-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_field_engine.py"
+        }
+      ],
       "field": "onWeatherModifyDamage",
       "id": "conditions:raindance:onWeatherModifyDamage",
-      "implementation": null,
+      "implementation": {
+        "family": "field",
+        "file": "simulator/field_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:raindance",
@@ -7105,7 +7405,7 @@
       "owner": "conditions:raindance",
       "reachability": "candidate",
       "sha256": "e340d7a4bb5d8646812753c3a0106c7ce7746a8a0dd3abb693b072552cb1c8f1",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -7137,10 +7437,22 @@
           "file": "data/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/field.json.gz",
+          "native": "reference/field-boost-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_field_engine.py"
+        }
+      ],
       "field": "durationCallback",
       "id": "conditions:sandstorm:durationCallback",
-      "implementation": null,
+      "implementation": {
+        "family": "field",
+        "file": "simulator/field_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:sandstorm",
@@ -7151,7 +7463,7 @@
       "owner": "conditions:sandstorm",
       "reachability": "candidate",
       "sha256": "ea5808219e74939cdfb94a7765cbc2578a5b95328d4260d4b059b14aaf48fecb",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -7160,10 +7472,22 @@
           "file": "data/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/field.json.gz",
+          "native": "reference/field-boost-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_field_engine.py"
+        }
+      ],
       "field": "onFieldEnd",
       "id": "conditions:sandstorm:onFieldEnd",
-      "implementation": null,
+      "implementation": {
+        "family": "field",
+        "file": "simulator/field_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:sandstorm",
@@ -7174,7 +7498,7 @@
       "owner": "conditions:sandstorm",
       "reachability": "candidate",
       "sha256": "596d2e83b326b5ec48e2da41b0dd7e8a66a04a6fcaf26ae93f88fd0ca952ff13",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -7183,10 +7507,22 @@
           "file": "data/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/field.json.gz",
+          "native": "reference/field-boost-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_field_engine.py"
+        }
+      ],
       "field": "onFieldResidual",
       "id": "conditions:sandstorm:onFieldResidual",
-      "implementation": null,
+      "implementation": {
+        "family": "field",
+        "file": "simulator/field_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:sandstorm",
@@ -7197,7 +7533,7 @@
       "owner": "conditions:sandstorm",
       "reachability": "candidate",
       "sha256": "e8d312afe56a8d741723758cbc7fc98c9eeff0ed6a6892f90d7cc6616ee19565",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -7206,10 +7542,22 @@
           "file": "data/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/field.json.gz",
+          "native": "reference/field-boost-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_field_engine.py"
+        }
+      ],
       "field": "onFieldStart",
       "id": "conditions:sandstorm:onFieldStart",
-      "implementation": null,
+      "implementation": {
+        "family": "field",
+        "file": "simulator/field_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:sandstorm",
@@ -7220,7 +7568,7 @@
       "owner": "conditions:sandstorm",
       "reachability": "candidate",
       "sha256": "31b7d7f04e3e00d3d59e9f2bad8afd6a64b3f8ddfb529066e1bf4650017eeef0",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -7229,10 +7577,22 @@
           "file": "data/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/field.json.gz",
+          "native": "reference/field-boost-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_field_engine.py"
+        }
+      ],
       "field": "onModifySpD",
       "id": "conditions:sandstorm:onModifySpD",
-      "implementation": null,
+      "implementation": {
+        "family": "field",
+        "file": "simulator/field_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:sandstorm",
@@ -7243,7 +7603,7 @@
       "owner": "conditions:sandstorm",
       "reachability": "candidate",
       "sha256": "d53648131d85bef66c02db74f1e8a4bb1c20e975d057b2da26c9ce1d21173d31",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -7252,10 +7612,22 @@
           "file": "data/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/field.json.gz",
+          "native": "reference/field-boost-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_field_engine.py"
+        }
+      ],
       "field": "onWeather",
       "id": "conditions:sandstorm:onWeather",
-      "implementation": null,
+      "implementation": {
+        "family": "field",
+        "file": "simulator/field_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:sandstorm",
@@ -7266,7 +7638,7 @@
       "owner": "conditions:sandstorm",
       "reachability": "candidate",
       "sha256": "27baf89c246ee3469b455c854c95929d16f31a2133bdfb16b722a8f10f9aec23",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -7298,10 +7670,22 @@
           "file": "data/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-v5.json.gz",
+          "native": "reference/status-duration-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_engine.py"
+        }
+      ],
       "field": "onBeforeMove",
       "id": "conditions:slp:onBeforeMove",
-      "implementation": null,
+      "implementation": {
+        "family": "status",
+        "file": "simulator/status_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:slp",
@@ -7312,7 +7696,7 @@
       "owner": "conditions:slp",
       "reachability": "candidate",
       "sha256": "05eaa15eb1cd0daef786e91af1fed1dcd5eec088625d4997bcc788265ad5abe7",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -7321,10 +7705,22 @@
           "file": "data/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-v5.json.gz",
+          "native": "reference/status-duration-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_engine.py"
+        }
+      ],
       "field": "onStart",
       "id": "conditions:slp:onStart",
-      "implementation": null,
+      "implementation": {
+        "family": "status",
+        "file": "simulator/status_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:slp",
@@ -7335,7 +7731,7 @@
       "owner": "conditions:slp",
       "reachability": "candidate",
       "sha256": "d90ab27590b97b9b9120b25d40318bf22573fca4a1255076ffa8890ee8ef4d5f",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -7344,10 +7740,22 @@
           "file": "data/mods/gen5/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-v5.json.gz",
+          "native": "reference/status-duration-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_engine.py"
+        }
+      ],
       "field": "onSwitchIn",
       "id": "conditions:slp:onSwitchIn",
-      "implementation": null,
+      "implementation": {
+        "family": "status",
+        "file": "simulator/status_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:slp",
@@ -7358,7 +7766,7 @@
       "owner": "conditions:slp",
       "reachability": "candidate",
       "sha256": "484896e8850c07bdf80479f31eb164cea905ca9eef5f917483bbaa30f394f728",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -7551,10 +7959,22 @@
           "file": "data/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/field.json.gz",
+          "native": "reference/field-boost-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_field_engine.py"
+        }
+      ],
       "field": "durationCallback",
       "id": "conditions:sunnyday:durationCallback",
-      "implementation": null,
+      "implementation": {
+        "family": "field",
+        "file": "simulator/field_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:sunnyday",
@@ -7565,7 +7985,7 @@
       "owner": "conditions:sunnyday",
       "reachability": "candidate",
       "sha256": "2a3ba9957c0fbd2e9d3640c803f6cad3799789c77834d411753eefa83042e70b",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -7574,10 +7994,22 @@
           "file": "data/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/field.json.gz",
+          "native": "reference/field-boost-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_field_engine.py"
+        }
+      ],
       "field": "onFieldEnd",
       "id": "conditions:sunnyday:onFieldEnd",
-      "implementation": null,
+      "implementation": {
+        "family": "field",
+        "file": "simulator/field_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:sunnyday",
@@ -7588,7 +8020,7 @@
       "owner": "conditions:sunnyday",
       "reachability": "candidate",
       "sha256": "596d2e83b326b5ec48e2da41b0dd7e8a66a04a6fcaf26ae93f88fd0ca952ff13",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -7597,10 +8029,22 @@
           "file": "data/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/field.json.gz",
+          "native": "reference/field-boost-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_field_engine.py"
+        }
+      ],
       "field": "onFieldResidual",
       "id": "conditions:sunnyday:onFieldResidual",
-      "implementation": null,
+      "implementation": {
+        "family": "field",
+        "file": "simulator/field_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:sunnyday",
@@ -7611,7 +8055,7 @@
       "owner": "conditions:sunnyday",
       "reachability": "candidate",
       "sha256": "5d669a5de28ae2005eabe50af47914fa99402e19e113bd74bd1c94db54118c3d",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -7620,10 +8064,22 @@
           "file": "data/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/field.json.gz",
+          "native": "reference/field-boost-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_field_engine.py"
+        }
+      ],
       "field": "onFieldStart",
       "id": "conditions:sunnyday:onFieldStart",
-      "implementation": null,
+      "implementation": {
+        "family": "field",
+        "file": "simulator/field_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:sunnyday",
@@ -7634,7 +8090,7 @@
       "owner": "conditions:sunnyday",
       "reachability": "candidate",
       "sha256": "3c92f06acc086b1f93bb88e58b5a9c4a61522fe4e9bf275edc4a7180909a122d",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -7643,10 +8099,22 @@
           "file": "data/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/field.json.gz",
+          "native": "reference/field-boost-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_field_engine.py"
+        }
+      ],
       "field": "onImmunity",
       "id": "conditions:sunnyday:onImmunity",
-      "implementation": null,
+      "implementation": {
+        "family": "field",
+        "file": "simulator/field_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:sunnyday",
@@ -7657,7 +8125,7 @@
       "owner": "conditions:sunnyday",
       "reachability": "candidate",
       "sha256": "e08c7736e0ad9e5a1e37730eb2a02824fc87a3b5870f2134d5abf49850269a8f",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -7666,10 +8134,22 @@
           "file": "data/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/field.json.gz",
+          "native": "reference/field-boost-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_field_engine.py"
+        }
+      ],
       "field": "onWeatherModifyDamage",
       "id": "conditions:sunnyday:onWeatherModifyDamage",
-      "implementation": null,
+      "implementation": {
+        "family": "field",
+        "file": "simulator/field_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:sunnyday",
@@ -7680,7 +8160,7 @@
       "owner": "conditions:sunnyday",
       "reachability": "candidate",
       "sha256": "3806e8a58e1c3055998483728f8a6850e079f45188ef8dbfbae7ea2d08c0f608",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -7689,10 +8169,22 @@
           "file": "data/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-v5.json.gz",
+          "native": "reference/status-duration-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_engine.py"
+        }
+      ],
       "field": "onResidual",
       "id": "conditions:tox:onResidual",
-      "implementation": null,
+      "implementation": {
+        "family": "status",
+        "file": "simulator/status_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:tox",
@@ -7703,7 +8195,7 @@
       "owner": "conditions:tox",
       "reachability": "candidate",
       "sha256": "5bbd74e4fc26c19c8d842a4188dc3ca503b36ccf8da69cf9fa66f84e3e461919",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -7712,10 +8204,22 @@
           "file": "data/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-v5.json.gz",
+          "native": "reference/status-duration-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_engine.py"
+        }
+      ],
       "field": "onStart",
       "id": "conditions:tox:onStart",
-      "implementation": null,
+      "implementation": {
+        "family": "status",
+        "file": "simulator/status_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:tox",
@@ -7726,7 +8230,7 @@
       "owner": "conditions:tox",
       "reachability": "candidate",
       "sha256": "55bf69a9f4eae60a58c59cf7078828b70cb205eadc89964443ac43f9a5512725",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -7735,10 +8239,22 @@
           "file": "data/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-v5.json.gz",
+          "native": "reference/status-duration-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_engine.py"
+        }
+      ],
       "field": "onSwitchIn",
       "id": "conditions:tox:onSwitchIn",
-      "implementation": null,
+      "implementation": {
+        "family": "status",
+        "file": "simulator/status_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:tox",
@@ -7749,7 +8265,7 @@
       "owner": "conditions:tox",
       "reachability": "candidate",
       "sha256": "36fcc82af87dfb5bbcdc39bdfcf2e763d57721d27df52e5fcce3afc462aff645",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -10932,10 +11448,22 @@
           "file": "data/items.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-v5.json.gz",
+          "native": "reference/status-duration-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_engine.py"
+        }
+      ],
       "field": "onResidual",
       "id": "items:leftovers:onResidual",
-      "implementation": null,
+      "implementation": {
+        "family": "status",
+        "file": "simulator/status_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "items:leftovers",
@@ -10946,7 +11474,7 @@
       "owner": "items:leftovers",
       "reachability": "candidate",
       "sha256": "1ddbbb54866fca34e7d4d8c5c7c9b64070749dc4443888769b685c3717ab5a34",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -11162,10 +11690,22 @@
           "file": "data/items.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-v5.json.gz",
+          "native": "reference/status-duration-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_engine.py"
+        }
+      ],
       "field": "onAfterSetStatus",
       "id": "items:lumberry:onAfterSetStatus",
-      "implementation": null,
+      "implementation": {
+        "family": "status",
+        "file": "simulator/status_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "items:lumberry",
@@ -11176,7 +11716,7 @@
       "owner": "items:lumberry",
       "reachability": "candidate",
       "sha256": "d1d503cf1b8598845034ed44ec9d127fc806a95a5265f5fb5db467f3216a2b0d",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -11185,10 +11725,22 @@
           "file": "data/items.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-v5.json.gz",
+          "native": "reference/status-duration-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_engine.py"
+        }
+      ],
       "field": "onEat",
       "id": "items:lumberry:onEat",
-      "implementation": null,
+      "implementation": {
+        "family": "status",
+        "file": "simulator/status_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "items:lumberry",
@@ -11199,7 +11751,7 @@
       "owner": "items:lumberry",
       "reachability": "candidate",
       "sha256": "475665e37e513958165a27b0de8fa672b3d42cd4b9268a8a5c8263e21095aac9",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -11208,10 +11760,22 @@
           "file": "data/items.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-v5.json.gz",
+          "native": "reference/status-duration-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_engine.py"
+        }
+      ],
       "field": "onUpdate",
       "id": "items:lumberry:onUpdate",
-      "implementation": null,
+      "implementation": {
+        "family": "status",
+        "file": "simulator/status_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "items:lumberry",
@@ -11222,7 +11786,7 @@
       "owner": "items:lumberry",
       "reachability": "candidate",
       "sha256": "69d747a479d5a1484153f681fa3a7b2086412a4321a4ec2f940c4586c2b0b0cb",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -19603,10 +20167,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/field.json.gz",
+          "native": "reference/field-boost-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_field_engine.py"
+        }
+      ],
       "field": "condition.durationCallback",
       "id": "moves:lightscreen:condition.durationCallback",
-      "implementation": null,
+      "implementation": {
+        "family": "field",
+        "file": "simulator/field_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:lightscreen",
@@ -19617,7 +20193,7 @@
       "owner": "moves:lightscreen",
       "reachability": "candidate",
       "sha256": "9ac531b9f69db15c791db15335ac65f86399a09509a28f0687800afd74d57419",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -19626,10 +20202,22 @@
           "file": "data/mods/gen5/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/field.json.gz",
+          "native": "reference/field-boost-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_field_engine.py"
+        }
+      ],
       "field": "condition.onAnyModifyDamage",
       "id": "moves:lightscreen:condition.onAnyModifyDamage",
-      "implementation": null,
+      "implementation": {
+        "family": "field",
+        "file": "simulator/field_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:lightscreen",
@@ -19640,7 +20228,7 @@
       "owner": "moves:lightscreen",
       "reachability": "candidate",
       "sha256": "aa37814f9c9dcd7070ebbf2a971184e799e51087f3c16c2774ecca0013b7abc6",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -19649,10 +20237,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/field.json.gz",
+          "native": "reference/field-boost-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_field_engine.py"
+        }
+      ],
       "field": "condition.onSideEnd",
       "id": "moves:lightscreen:condition.onSideEnd",
-      "implementation": null,
+      "implementation": {
+        "family": "field",
+        "file": "simulator/field_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:lightscreen",
@@ -19663,7 +20263,7 @@
       "owner": "moves:lightscreen",
       "reachability": "candidate",
       "sha256": "795ac24fc6876067a2e82f41b381f9688f7d4f5621ddbefe2d05410b3aef6e62",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -19672,10 +20272,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/field.json.gz",
+          "native": "reference/field-boost-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_field_engine.py"
+        }
+      ],
       "field": "condition.onSideStart",
       "id": "moves:lightscreen:condition.onSideStart",
-      "implementation": null,
+      "implementation": {
+        "family": "field",
+        "file": "simulator/field_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:lightscreen",
@@ -19686,7 +20298,7 @@
       "owner": "moves:lightscreen",
       "reachability": "candidate",
       "sha256": "a22238ec7c2740d7d335b145eb76c456d17074dff27cbbcbab871c701bc5a2d6",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -21328,10 +21940,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-v5.json.gz",
+          "native": "reference/status-duration-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_engine.py"
+        }
+      ],
       "field": "condition.onStart",
       "id": "moves:protect:condition.onStart",
-      "implementation": null,
+      "implementation": {
+        "family": "status",
+        "file": "simulator/status_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:protect",
@@ -21342,7 +21966,7 @@
       "owner": "moves:protect",
       "reachability": "candidate",
       "sha256": "65783a4ecc168c6f3763853c2f50449e565c6d79a88ae58186f852629062a1c1",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -21351,10 +21975,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-v5.json.gz",
+          "native": "reference/status-duration-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_engine.py"
+        }
+      ],
       "field": "condition.onTryHit",
       "id": "moves:protect:condition.onTryHit",
-      "implementation": null,
+      "implementation": {
+        "family": "status",
+        "file": "simulator/status_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:protect",
@@ -21365,7 +22001,7 @@
       "owner": "moves:protect",
       "reachability": "candidate",
       "sha256": "4f32ee3547aa29f98dd01dde3d05332395283e25883bafd11ed6f3c2120b33c3",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -21374,10 +22010,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-v5.json.gz",
+          "native": "reference/status-duration-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_engine.py"
+        }
+      ],
       "field": "onHit",
       "id": "moves:protect:onHit",
-      "implementation": null,
+      "implementation": {
+        "family": "status",
+        "file": "simulator/status_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:protect",
@@ -21388,7 +22036,7 @@
       "owner": "moves:protect",
       "reachability": "candidate",
       "sha256": "5b5941707493703ade6290d0003c628d3c89b1d026404b069516404c07e6fb32",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -21397,10 +22045,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-v5.json.gz",
+          "native": "reference/status-duration-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_engine.py"
+        }
+      ],
       "field": "onPrepareHit",
       "id": "moves:protect:onPrepareHit",
-      "implementation": null,
+      "implementation": {
+        "family": "status",
+        "file": "simulator/status_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:protect",
@@ -21411,7 +22071,7 @@
       "owner": "moves:protect",
       "reachability": "candidate",
       "sha256": "0d8d7298fa9f227dcf1f9444bee5c51ec8f46b5eac780becc175ebb39eb7ee95",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -21972,10 +22632,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/field.json.gz",
+          "native": "reference/field-boost-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_field_engine.py"
+        }
+      ],
       "field": "condition.durationCallback",
       "id": "moves:reflect:condition.durationCallback",
-      "implementation": null,
+      "implementation": {
+        "family": "field",
+        "file": "simulator/field_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:reflect",
@@ -21986,7 +22658,7 @@
       "owner": "moves:reflect",
       "reachability": "candidate",
       "sha256": "9ac531b9f69db15c791db15335ac65f86399a09509a28f0687800afd74d57419",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -21995,10 +22667,22 @@
           "file": "data/mods/gen5/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/field.json.gz",
+          "native": "reference/field-boost-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_field_engine.py"
+        }
+      ],
       "field": "condition.onAnyModifyDamage",
       "id": "moves:reflect:condition.onAnyModifyDamage",
-      "implementation": null,
+      "implementation": {
+        "family": "field",
+        "file": "simulator/field_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:reflect",
@@ -22009,7 +22693,7 @@
       "owner": "moves:reflect",
       "reachability": "candidate",
       "sha256": "1126cfbea8cbbf33ca64400c962ebd04de017febf67fed6c09104524b8646b1f",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -22018,10 +22702,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/field.json.gz",
+          "native": "reference/field-boost-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_field_engine.py"
+        }
+      ],
       "field": "condition.onSideEnd",
       "id": "moves:reflect:condition.onSideEnd",
-      "implementation": null,
+      "implementation": {
+        "family": "field",
+        "file": "simulator/field_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:reflect",
@@ -22032,7 +22728,7 @@
       "owner": "moves:reflect",
       "reachability": "candidate",
       "sha256": "0e95d07797f372bacc809d4b1e436935276ad8afdafc8b81bf9ed13593c71247",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -22041,10 +22737,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/field.json.gz",
+          "native": "reference/field-boost-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_field_engine.py"
+        }
+      ],
       "field": "condition.onSideStart",
       "id": "moves:reflect:condition.onSideStart",
-      "implementation": null,
+      "implementation": {
+        "family": "field",
+        "file": "simulator/field_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:reflect",
@@ -22055,7 +22763,7 @@
       "owner": "moves:reflect",
       "reachability": "candidate",
       "sha256": "ea4d34d13d4cf70f0884ded46fb81d2022f1819bd6dd74cf13d3671a274719f5",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -22133,10 +22841,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-v5.json.gz",
+          "native": "reference/status-duration-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_engine.py"
+        }
+      ],
       "field": "onHit",
       "id": "moves:rest:onHit",
-      "implementation": null,
+      "implementation": {
+        "family": "status",
+        "file": "simulator/status_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:rest",
@@ -22147,7 +22867,7 @@
       "owner": "moves:rest",
       "reachability": "candidate",
       "sha256": "05f8e437d8566c60900b0a4999dac0341fcfc18137a2abb9c8716964c0d7a179",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -22156,10 +22876,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-v5.json.gz",
+          "native": "reference/status-duration-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_engine.py"
+        }
+      ],
       "field": "onTry",
       "id": "moves:rest:onTry",
-      "implementation": null,
+      "implementation": {
+        "family": "status",
+        "file": "simulator/status_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:rest",
@@ -22170,7 +22902,7 @@
       "owner": "moves:rest",
       "reachability": "candidate",
       "sha256": "d4b2d4552ebc64b4d569c934b81c348d0f9aac342f7368047cef17d730577be5",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -23398,10 +24130,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/field.json.gz",
+          "native": "reference/field-boost-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_field_engine.py"
+        }
+      ],
       "field": "condition.onSideRestart",
       "id": "moves:spikes:condition.onSideRestart",
-      "implementation": null,
+      "implementation": {
+        "family": "field",
+        "file": "simulator/field_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:spikes",
@@ -23412,7 +24156,7 @@
       "owner": "moves:spikes",
       "reachability": "candidate",
       "sha256": "a7fecefac1cd4d20ae3a731667a61d5a94bb48cb9ba18189c2a69e5ac29e20f0",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -23421,10 +24165,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/field.json.gz",
+          "native": "reference/field-boost-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_field_engine.py"
+        }
+      ],
       "field": "condition.onSideStart",
       "id": "moves:spikes:condition.onSideStart",
-      "implementation": null,
+      "implementation": {
+        "family": "field",
+        "file": "simulator/field_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:spikes",
@@ -23435,7 +24191,7 @@
       "owner": "moves:spikes",
       "reachability": "candidate",
       "sha256": "2f02d6d726251990c8b9519ae5859388c065209c56d298ac1c29faa9cad6e41c",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -23444,10 +24200,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/field.json.gz",
+          "native": "reference/field-boost-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_field_engine.py"
+        }
+      ],
       "field": "condition.onSwitchIn",
       "id": "moves:spikes:condition.onSwitchIn",
-      "implementation": null,
+      "implementation": {
+        "family": "field",
+        "file": "simulator/field_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:spikes",
@@ -23458,7 +24226,7 @@
       "owner": "moves:spikes",
       "reachability": "candidate",
       "sha256": "e232a6be08ae499d2763c5ebfe4b9209308ecffb281e6b4ce81f4de624bc312a",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -23605,10 +24373,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/field.json.gz",
+          "native": "reference/field-boost-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_field_engine.py"
+        }
+      ],
       "field": "condition.onSideStart",
       "id": "moves:stealthrock:condition.onSideStart",
-      "implementation": null,
+      "implementation": {
+        "family": "field",
+        "file": "simulator/field_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:stealthrock",
@@ -23619,7 +24399,7 @@
       "owner": "moves:stealthrock",
       "reachability": "candidate",
       "sha256": "834e2fc7d9efc712d8a5440ae6a46cb184e6f6816abf0a914c4a9976d2bc800a",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -23628,10 +24408,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/field.json.gz",
+          "native": "reference/field-boost-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_field_engine.py"
+        }
+      ],
       "field": "condition.onSwitchIn",
       "id": "moves:stealthrock:condition.onSwitchIn",
-      "implementation": null,
+      "implementation": {
+        "family": "field",
+        "file": "simulator/field_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:stealthrock",
@@ -23642,7 +24434,7 @@
       "owner": "moves:stealthrock",
       "reachability": "candidate",
       "sha256": "d3ede2ef3922b35efaf78c8d4a64182f4ccc5dbf0e691e00094163e7bd904e43",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -25928,10 +26720,22 @@
           "file": "data/rulesets.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-v5.json.gz",
+          "native": "reference/status-duration-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_engine.py"
+        }
+      ],
       "field": "onBegin",
       "id": "rules:sleepclausemod:onBegin",
-      "implementation": null,
+      "implementation": {
+        "family": "status",
+        "file": "simulator/status_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "rules:sleepclausemod",
@@ -25942,7 +26746,7 @@
       "owner": "rules:sleepclausemod",
       "reachability": "candidate",
       "sha256": "1f3090399bfc3a1c81eabeda8ed4dab99289c1518429c0805671de3c23e54756",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -25951,10 +26755,22 @@
           "file": "data/rulesets.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-v5.json.gz",
+          "native": "reference/status-duration-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_engine.py"
+        }
+      ],
       "field": "onSetStatus",
       "id": "rules:sleepclausemod:onSetStatus",
-      "implementation": null,
+      "implementation": {
+        "family": "status",
+        "file": "simulator/status_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "rules:sleepclausemod",
@@ -25965,7 +26781,7 @@
       "owner": "rules:sleepclausemod",
       "reachability": "candidate",
       "sha256": "c00ae1631dcf3cbce02310717802c4579c256219f4b8b94289e50980adbf7ebc",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -55443,10 +56259,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/field.json.gz",
+          "native": "reference/field-boost-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_field_engine.py"
         }
       ],
       "id": "moves:lightscreen",
       "implementation": {
+        "behavior": {
+          "family": "field",
+          "file": "simulator/field_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "MOVE_TYPE/MOVE_POWER/MOVE_CATEGORY/MOVE_PRIORITY/MOVE_PP",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -57873,10 +58701,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-v5.json.gz",
+          "native": "reference/status-duration-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_engine.py"
         }
       ],
       "id": "moves:protect",
       "implementation": {
+        "behavior": {
+          "family": "status",
+          "file": "simulator/status_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "MOVE_TYPE/MOVE_POWER/MOVE_CATEGORY/MOVE_PRIORITY/MOVE_PP",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -58623,10 +59463,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/field.json.gz",
+          "native": "reference/field-boost-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_field_engine.py"
         }
       ],
       "id": "moves:reflect",
       "implementation": {
+        "behavior": {
+          "family": "field",
+          "file": "simulator/field_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "MOVE_TYPE/MOVE_POWER/MOVE_CATEGORY/MOVE_PRIORITY/MOVE_PP",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -58743,10 +59595,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-v5.json.gz",
+          "native": "reference/status-duration-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_engine.py"
         }
       ],
       "id": "moves:rest",
       "implementation": {
+        "behavior": {
+          "family": "status",
+          "file": "simulator/status_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "MOVE_TYPE/MOVE_POWER/MOVE_CATEGORY/MOVE_PRIORITY/MOVE_PP",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -61143,10 +62007,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/field.json.gz",
+          "native": "reference/field-boost-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_field_engine.py"
         }
       ],
       "id": "moves:spikes",
       "implementation": {
+        "behavior": {
+          "family": "field",
+          "file": "simulator/field_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "MOVE_TYPE/MOVE_POWER/MOVE_CATEGORY/MOVE_PRIORITY/MOVE_PP",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -61293,10 +62169,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/field.json.gz",
+          "native": "reference/field-boost-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_field_engine.py"
         }
       ],
       "id": "moves:stealthrock",
       "implementation": {
+        "behavior": {
+          "family": "field",
+          "file": "simulator/field_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "MOVE_TYPE/MOVE_POWER/MOVE_CATEGORY/MOVE_PRIORITY/MOVE_PP",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -68403,10 +69291,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-v5.json.gz",
+          "native": "reference/status-duration-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_engine.py"
         }
       ],
       "id": "abilities:synchronize",
       "implementation": {
+        "behavior": {
+          "family": "status",
+          "file": "simulator/status_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -72483,10 +73383,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-v5.json.gz",
+          "native": "reference/status-duration-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_engine.py"
         }
       ],
       "id": "items:leftovers",
       "implementation": {
+        "behavior": {
+          "family": "status",
+          "file": "simulator/status_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ITEMS canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -72693,10 +73605,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-v5.json.gz",
+          "native": "reference/status-duration-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_engine.py"
         }
       ],
       "id": "items:lumberry",
       "implementation": {
+        "behavior": {
+          "family": "status",
+          "file": "simulator/status_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ITEMS canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -76724,9 +77648,21 @@
         "resolver": "Dex.mod('gen5').conditions",
         "sha256": "8cfb217a92320e0ed8e214f5104308e0bbb530aced3cfe713a6655aa93f99972"
       },
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-v5.json.gz",
+          "native": "reference/status-duration-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_engine.py"
+        }
+      ],
       "id": "conditions:brn",
-      "implementation": null,
+      "implementation": {
+        "family": "status",
+        "file": "simulator/status_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "kind": "conservative-superset",
@@ -76735,7 +77671,7 @@
       ],
       "kind": "conditions",
       "reachability": "candidate",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definition": {
@@ -76796,9 +77732,21 @@
         "resolver": "Dex.mod('gen5').conditions",
         "sha256": "5c02c909ca9a830f3dc72d733799e2eaf0e8d0ebdb589cbc6d3ebc19924bb8f6"
       },
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-v5.json.gz",
+          "native": "reference/status-duration-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_engine.py"
+        }
+      ],
       "id": "conditions:confusion",
-      "implementation": null,
+      "implementation": {
+        "family": "status",
+        "file": "simulator/status_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "kind": "conservative-superset",
@@ -76807,7 +77755,7 @@
       ],
       "kind": "conditions",
       "reachability": "candidate",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definition": {
@@ -76886,9 +77834,21 @@
         "resolver": "Dex.mod('gen5').conditions",
         "sha256": "990bc15851f87b24ebee4a634eeb795b16cc79a37e6518fcb64b43812c13c7a9"
       },
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-v5.json.gz",
+          "native": "reference/status-duration-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_engine.py"
+        }
+      ],
       "id": "conditions:frz",
-      "implementation": null,
+      "implementation": {
+        "family": "status",
+        "file": "simulator/status_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "kind": "conservative-superset",
@@ -76897,7 +77857,7 @@
       ],
       "kind": "conditions",
       "reachability": "candidate",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definition": {
@@ -76940,9 +77900,21 @@
         "resolver": "Dex.mod('gen5').conditions",
         "sha256": "c80078e546dcbb0d2a95f0c860b3fdc1ab4ad289dfe19341085beb1d4d13d0d2"
       },
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/field.json.gz",
+          "native": "reference/field-boost-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_field_engine.py"
+        }
+      ],
       "id": "conditions:hail",
-      "implementation": null,
+      "implementation": {
+        "family": "field",
+        "file": "simulator/field_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "kind": "conservative-superset",
@@ -76951,7 +77923,7 @@
       ],
       "kind": "conditions",
       "reachability": "candidate",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definition": {
@@ -77012,9 +77984,21 @@
         "resolver": "Dex.mod('gen5').conditions",
         "sha256": "ff49c885b3e871cc347da6c4f0e8df52ebe12a63bbc06391be33c1f50151d45a"
       },
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-v5.json.gz",
+          "native": "reference/status-duration-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_engine.py"
+        }
+      ],
       "id": "conditions:par",
-      "implementation": null,
+      "implementation": {
+        "family": "status",
+        "file": "simulator/status_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "kind": "conservative-superset",
@@ -77023,7 +78007,7 @@
       ],
       "kind": "conditions",
       "reachability": "candidate",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definition": {
@@ -77066,9 +78050,21 @@
         "resolver": "Dex.mod('gen5').conditions",
         "sha256": "44052b90d41d969967c286c45b489f5b5d1f112e82fa8f06fc86ffc035e11c69"
       },
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-v5.json.gz",
+          "native": "reference/status-duration-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_engine.py"
+        }
+      ],
       "id": "conditions:psn",
-      "implementation": null,
+      "implementation": {
+        "family": "status",
+        "file": "simulator/status_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "kind": "conservative-superset",
@@ -77077,16 +78073,28 @@
       ],
       "kind": "conditions",
       "reachability": "candidate",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definition": {
         "resolver": "Dex.mod('gen5').conditions",
         "sha256": "e5054af9d49ec45d30d15fafaf71b2d2d1e1d4add95fb6bfbbb8334ea740f332"
       },
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/field.json.gz",
+          "native": "reference/field-boost-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_field_engine.py"
+        }
+      ],
       "id": "conditions:raindance",
-      "implementation": null,
+      "implementation": {
+        "family": "field",
+        "file": "simulator/field_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "kind": "conservative-superset",
@@ -77095,7 +78103,7 @@
       ],
       "kind": "conditions",
       "reachability": "candidate",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definition": {
@@ -77120,9 +78128,21 @@
         "resolver": "Dex.mod('gen5').conditions",
         "sha256": "7d0b54c0b74ae996915cdc916e3212f8e48d03bd9b44b5149d2614b0238514b1"
       },
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/field.json.gz",
+          "native": "reference/field-boost-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_field_engine.py"
+        }
+      ],
       "id": "conditions:sandstorm",
-      "implementation": null,
+      "implementation": {
+        "family": "field",
+        "file": "simulator/field_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "kind": "conservative-superset",
@@ -77131,7 +78151,7 @@
       ],
       "kind": "conditions",
       "reachability": "candidate",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definition": {
@@ -77156,9 +78176,21 @@
         "resolver": "Dex.mod('gen5').conditions",
         "sha256": "067356a24d8b545837e0ad3d6ab449af8369aa93077562d9098d6ccb45a7ba8c"
       },
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-v5.json.gz",
+          "native": "reference/status-duration-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_engine.py"
+        }
+      ],
       "id": "conditions:slp",
-      "implementation": null,
+      "implementation": {
+        "family": "status",
+        "file": "simulator/status_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "kind": "conservative-superset",
@@ -77167,7 +78199,7 @@
       ],
       "kind": "conditions",
       "reachability": "candidate",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definition": {
@@ -77210,9 +78242,21 @@
         "resolver": "Dex.mod('gen5').conditions",
         "sha256": "3b305bf123682c8ff47592be850eb86191c93e3fcafddabe4d0f8ac5ecfccf1a"
       },
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/field.json.gz",
+          "native": "reference/field-boost-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_field_engine.py"
+        }
+      ],
       "id": "conditions:sunnyday",
-      "implementation": null,
+      "implementation": {
+        "family": "field",
+        "file": "simulator/field_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "kind": "conservative-superset",
@@ -77221,16 +78265,28 @@
       ],
       "kind": "conditions",
       "reachability": "candidate",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definition": {
         "resolver": "Dex.mod('gen5').conditions",
         "sha256": "b3ee8661b6cd26f0ada23f3a79f7254b577dee10b99730f4943b8fa56c9cad75"
       },
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-v5.json.gz",
+          "native": "reference/status-duration-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_engine.py"
+        }
+      ],
       "id": "conditions:tox",
-      "implementation": null,
+      "implementation": {
+        "family": "status",
+        "file": "simulator/status_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "kind": "conservative-superset",
@@ -77239,7 +78295,7 @@
       ],
       "kind": "conditions",
       "reachability": "candidate",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definition": {
@@ -78812,9 +79868,21 @@
         "resolver": "Dex.mod('gen5').rules",
         "sha256": "db3c32cfd9a36f7df7b4ad45dcebde3ef17a241cfdf6cc69316cb9fb9f484acf"
       },
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-v5.json.gz",
+          "native": "reference/status-duration-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_engine.py"
+        }
+      ],
       "id": "rules:sleepclausemod",
-      "implementation": null,
+      "implementation": {
+        "family": "status",
+        "file": "simulator/status_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "kind": "conservative-superset",
@@ -78823,7 +79891,7 @@
       ],
       "kind": "rules",
       "reachability": "candidate",
-      "status": "unsupported"
+      "status": "partial"
     }
   ],
   "format": "gen5randombattle",

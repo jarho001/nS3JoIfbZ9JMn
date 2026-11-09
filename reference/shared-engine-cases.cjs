@@ -155,6 +155,7 @@ for (const [index,family] of ['direct','status','pivot','exhaustion'].entries())
 cases.push(...require('./roster-hazard-cases.cjs')(mon));
 cases.push(...require('./generic-data-cases.cjs')(mon));
 cases.push(...require('./status-duration-cases.cjs')(mon));
+cases.push(...require('./field-boost-cases.cjs')(mon));
 
 function scriptedChoices(battle,scenario,boundary) {
  const choices={};
@@ -176,6 +177,14 @@ function scriptedChoices(battle,scenario,boundary) {
   if(scenario.family==='hazards') {
    const wanted=battle.turn===1?'stealthrock':battle.turn===2?'spikes':(side.sideConditions.spikes||side.sideConditions.stealthrock)?'rapidspin':null;
    if(wanted&&moveCommand(wanted)){choices[side.id]=moveCommand(wanted);continue;}
+  }
+  if(scenario.family==='field-boost') {
+   const wanted=battle.turn===1?['raindance','sunnyday','sandstorm','hail']:
+     battle.turn===2?['reflect','lightscreen']:battle.turn===3?['calmmind','swordsdance','irondefense','agility']:[];
+   const early=wanted.map(moveCommand).find(Boolean);
+   if(early){choices[side.id]=early;continue;}
+   const attacks=req.active[0].moves.map((m,i)=>!m.disabled&&battle.dex.moves.get(m.id).category!=='Status'?`move ${i+1}`:null).filter(Boolean);
+   choices[side.id]=attacks[0]??commands.find(c=>c.startsWith('move '))??commands[0];continue;
   }
   if(scenario.family==='status-duration') {
    const early=battle.turn===1?moveCommand('spore'):battle.turn===2?moveCommand('confuseray'):null;
@@ -245,7 +254,10 @@ function capture(battle, ids, options={}) {
   winner:battle.ended?(battle.winner==='p1'?1:battle.winner==='p2'?2:0):-1,
   midTurn:battle.midTurn,requestState:battle.requestState,queue,
   ...(options.effects?{effectOrder:battle.effectOrder}:{}),
+  ...(options.field?{field:{weather:battle.field.weather,weatherState:effectState(battle.field.weatherState),
+    pseudoWeather:effectState(battle.field.pseudoWeather),terrain:battle.field.terrain,terrainState:effectState(battle.field.terrainState)}}:{}),
   sides:battle.sides.map(side=>({
+   ...(options.field?{sideConditions:effectState(side.sideConditions)}:{}),
    hazards:[Number(!!side.sideConditions.stealthrock),side.sideConditions.spikes?.layers??0,({stealthrock:1,spikes:2})[Object.keys(side.sideConditions).find(k=>['stealthrock','spikes'].includes(k))]??0],
    active:ids.get(side.active[0]),order:side.pokemon.map(p=>ids.get(p)),
    request:side.activeRequest,actions:side.activeRequest?actionSpace(side.activeRequest):null,
@@ -260,7 +272,7 @@ function capture(battle, ids, options={}) {
     status:p.status,toxicStage:p.statusState.stage??0,item:p.item,ability:p.ability,
     active:p.isActive,fainted:p.fainted,speed:p.speed,stats:p.storedStats,
     moves:p.moveSlots.map(m=>({id:m.id,pp:m.pp,maxpp:m.maxpp,disabled:m.disabled})),
-    boosts:p.boosts,stall:p.volatiles.stall?{counter:p.volatiles.stall.counter,duration:p.volatiles.stall.duration}:null,
+    boosts:{...p.boosts},stall:p.volatiles.stall?{counter:p.volatiles.stall.counter,duration:p.volatiles.stall.duration}:null,
     protect:!!p.volatiles.protect,switchFlag:p.switchFlag,forceSwitchFlag:p.forceSwitchFlag,
    }))
   }))
@@ -271,6 +283,9 @@ function events(battle,start=0) {
 }
 function semanticContext(draw) {
  const stack=draw.stack.join('\n');
+ if(stack.includes('BattleActions.modifyDamage')&&draw.context==='speed-sort')return 'damage-modifiers';
+ if(draw.eventId==='WeatherChange')return 'weather-change';
+ if(draw.eventId==='Weather')return 'weather-order';
  if(draw.effectId==='slp')return 'sleep-duration';
  if(draw.effectId==='frz')return 'freeze';
  if(draw.effectId==='confusion') {
@@ -307,7 +322,7 @@ function runCase(ps, scenario) {
   }
   if(scenario.setup)battle.makeRequest('move');
   assert.equal(battle.prng.getSeed(),rng,'trusted boundary setup must not consume RNG');
-  const snapshot=()=>capture(battle,ids,{effects:scenario.statusFamily});
+  const snapshot=()=>capture(battle,ids,{effects:scenario.statusFamily||scenario.fieldFamily,field:scenario.fieldFamily||scenario.statusFamily});
   const record={id:scenario.id,classification:scenario.setup?'synthetic':'native-constructed',setup:scenario,initializationDraws,
    initial:snapshot(),initialEvents:events(battle),steps:[]};
   let boundary=0;
@@ -325,7 +340,7 @@ function runCase(ps, scenario) {
    try {observed=withObservedBattleDraws(ps,battle,()=>Object.entries(choices).map(([side,choice])=>{
     if(choice==='undo'){battle.undoChoice(side);return {side,choice,accepted:!battle[side].choice.actions.length};}
     return {side,choice,accepted:battle.choose(side,choice)};
-   }),{includeEffects:scenario.statusFamily});} finally {battle.send=oldSend;}
+   }),{includeEffects:scenario.statusFamily||scenario.fieldFamily});} finally {battle.send=oldSend;}
    record.steps.push({choices,accepted:observed.result,before,after:snapshot(),
     draws:observed.draws.map(draw=>({...draw,semanticContext:semanticContext(draw)})),events:events(battle,start),privatePackets:acks});
   }
@@ -378,9 +393,9 @@ function main(argv) {
   if(coverageOutput)fs.writeFileSync(coverageOutput,JSON.stringify(coverage,null,2)+'\n',{flag:'wx'});
   return;
  }
- const selected=batch==='status'?cases.filter(c=>c.statusFamily):batch==='generic'?cases.filter(c=>c.generic&&!c.statusFamily):batch==='g4'?cases.filter(c=>c.g4):batch==='all'?cases.filter(c=>!c.g4&&!c.generic):batch==='boundaries'?cases.filter(c=>!c.g4&&!c.generic&&!c.fullBattle):batch==='battles'?cases.filter(c=>!c.g4&&!c.generic&&c.fullBattle):cases.filter(c=>c.id===batch);
+ const selected=batch==='field'?cases.filter(c=>c.fieldFamily):batch==='status'?cases.filter(c=>c.statusFamily):batch==='generic'?cases.filter(c=>c.generic&&!c.statusFamily&&!c.fieldFamily):batch==='g4'?cases.filter(c=>c.g4):batch==='all'?cases.filter(c=>!c.g4&&!c.generic):batch==='boundaries'?cases.filter(c=>!c.g4&&!c.generic&&!c.fullBattle):batch==='battles'?cases.filter(c=>!c.g4&&!c.generic&&c.fullBattle):cases.filter(c=>c.id===batch);
  if(!selected.length)throw Error('Empty native case selection: '+batch);
- const result={schemaVersion:1,pin,format:'gen5randombattle',caseSchema:selected.some(c=>c.statusFamily)?'gen5-status-duration-v1':selected.some(c=>c.generic)?'shared-engine-v3':selected.some(c=>c.g4)?'shared-engine-v2':'shared-engine-v1',cases:selected.map(c=>runCase(ps,c))};
+ const result={schemaVersion:1,pin,format:'gen5randombattle',caseSchema:selected.some(c=>c.fieldFamily)?'gen5-field-boost-v1':selected.some(c=>c.statusFamily)?'gen5-status-duration-v1':selected.some(c=>c.generic)?'shared-engine-v3':selected.some(c=>c.g4)?'shared-engine-v2':'shared-engine-v1',cases:selected.map(c=>runCase(ps,c))};
  const json=JSON.stringify(result,null,2)+'\n';
  if(output)fs.writeFileSync(output,json,{flag:'wx'});else process.stdout.write(json);
 }

@@ -17,6 +17,29 @@ const FILES = {Pokedex:'pokedex', Moves:'moves', Abilities:'abilities', Items:'i
   Conditions:'conditions', Rulesets:'rulesets', TypeChart:'typechart', Natures:'natures', Scripts:'scripts'};
 const hash = value => crypto.createHash('sha256').update(value).digest('hex');
 const jsonHash = value => hash(JSON.stringify(value));
+// Partial mappings record implemented branches; they do not discharge the
+// reachability/interaction audit or upgrade an entire native callback to done.
+const STATUS_OWNERS=new Set(['conditions:slp','conditions:frz','conditions:confusion',
+  'conditions:brn','conditions:par','conditions:psn','conditions:tox','moves:rest',
+  'moves:protect','abilities:synchronize','items:leftovers','items:lumberry','rules:sleepclausemod']);
+const FIELD_OWNERS=new Set(['conditions:raindance','conditions:sunnyday','conditions:sandstorm',
+  'conditions:hail','moves:reflect','moves:lightscreen','moves:stealthrock','moves:spikes']);
+const UNMAPPED_BRANCHES=new Set(['conditions:frz:onModifyMove','conditions:frz:onAfterMoveSecondary']);
+function partialBehavior(owner,field) {
+  if(UNMAPPED_BRANCHES.has(`${owner}:${field}`))return null;
+  const family=STATUS_OWNERS.has(owner)?'status':FIELD_OWNERS.has(owner)?'field':
+    owner==='abilities:immunity'&&field==='onSetStatus'?'status':null;
+  if(!family)return null;
+  return {family,file:family==='status'?'simulator/status_effects.py':'simulator/field_effects.py',
+    scheduler:'simulator/shared_engine.py',
+    scope:'Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending'};
+}
+function familyEvidence(family) {
+  return [{test:`test/test_${family}_engine.py`,
+    native:`reference/${family==='status'?'status-duration':'field-boost'}-cases.cjs`,
+    fixture:`test-logs/g4-cpu-conformance/${family==='status'?'status-v5':'field'}.json.gz`,
+    scope:'Independent directed family cases and complete constructed games; not generator membership or full-format acceptance'}];
+}
 function canonical(value) {
   if (Array.isArray(value)) return value.map(canonical);
   if (value && typeof value === 'object') return Object.fromEntries(
@@ -89,9 +112,11 @@ function buildInventory() {
       const definitions=owners.get(value) || [];
       // No guessed source ownership: fail the export for an unlocated function.
       assert.ok(definitions.length,`Unlocated effective callback ${id}`);
+      const behavior=partialBehavior(owner,field);
       callbacks[id]={id,owner,field,sha256:hash(value.toString()),definitions,
         incoming:[{entry:owner,field,precondition:'owner is active and native callback event applies; transitive reachability audit pending'}],
-        reachability:'candidate',implementation:null,evidence:[],status:'unsupported'};
+        reachability:'candidate',implementation:behavior,evidence:behavior?familyEvidence(behavior.family):[],
+        status:behavior?'partial':'unsupported'};
       return {$callback:id};
     }
     if (value === undefined) return undefined;
@@ -149,15 +174,20 @@ function buildInventory() {
   for (const kind of ['species','moves','abilities','items','conditions','types','natures','rules']) {
     for (const entity of data[kind]) {
       const id=`${kind}:${entity.id}`;
+      const behavior=partialBehavior(id,'');
+      const implementation=dataMappings[kind]?{file:'simulator/gen5_tables.py',mapping:dataMappings[kind],
+        scope:'immutable data/pre-entry values only; complete entity and interaction behavior pending'}:null;
+      if(behavior){
+        if(implementation)implementation.behavior=behavior;
+      }
       entries.push({id,kind,reachability:'candidate',incoming:[{kind:direct.has(id)?'generator-root':'conservative-superset',
         precondition:direct.has(id)?'generator role/set branches pending audit':'indirect reachability pending closure'}],
         definition:{resolver:`Dex.mod('gen5').${kind}`,sha256:jsonHash(entity)},
-        implementation:dataMappings[kind]?{file:'simulator/gen5_tables.py',mapping:dataMappings[kind],
-          scope:'immutable data/pre-entry values only; complete entity and interaction behavior pending'}:null,
-        evidence:dataMappings[kind]?[{test:'test/test_gen5_tables.py',native:'reference/gen5-data-cases.cjs',
+        implementation:implementation||behavior,
+        evidence:[...(dataMappings[kind]?[{test:'test/test_gen5_tables.py',native:'reference/gen5-data-cases.cjs',
           scope:'438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch',
-          record:'test-logs/g4-cpu-conformance/data-cpu.log',source:'6857d91'}]:[],
-        status:dataMappings[kind]?'partial':'unsupported'});
+          record:'test-logs/g4-cpu-conformance/data-cpu.log',source:'6857d91'}]:[]),...(behavior?familyEvidence(behavior.family):[])],
+        status:dataMappings[kind]||behavior?'partial':'unsupported'});
     }
   }
   const ledger={schemaVersion:1,pin:PIN,format:'gen5randombattle',

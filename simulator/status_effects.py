@@ -65,7 +65,9 @@ def inflict(c,source,target,status,e,reflect=True,move=0,secondary=False,overwri
     poison=jnp.any((s.types[target,m]==e.generic.TYPES['poison'])|(s.types[target,m]==e.generic.TYPES['steel']))
     fire=jnp.any(s.types[target,m]==e.generic.TYPES['fire'])
     ice=jnp.any(s.types[target,m]==e.generic.TYPES['ice'])
-    immunity=(((status==e.TOX)|(status==e.PSN))&((ability==2)|poison))|((status==e.BRN)&fire)|((status==e.FRZ)&ice)
+    freeze_weather=(s.weather_state[0]==2)
+    natural_immunity=(((status==e.TOX)|(status==e.PSN))&poison)|((status==e.BRN)&fire)|((status==e.FRZ)&ice)
+    immunity=natural_immunity|(((status==e.TOX)|(status==e.PSN))&(ability==2))|((status==e.FRZ)&freeze_weather)
     failed=(s.status[target,m]!=e.NONE)&(~jnp.asarray(overwrite))
     asleep=(s.status[target]==e.SLP)&(s.status_state[target,:,2]!=target)
     clause=(status==e.SLP)&(source!=target)&jnp.any(asleep)
@@ -107,8 +109,14 @@ def inflict(c,source,target,status,e,reflect=True,move=0,secondary=False,overwri
         return e._when(c[0].item[target,m]==2,lambda c:lum(c,target,e),c)
     def attempt(c):
         # Native trySetStatus on a secondary with existing status does nothing.
-        return jax.lax.cond(failed,rejected,lambda c:jax.lax.cond(immunity,blocked,
-            lambda c:jax.lax.cond(clause,clause_failure,apply,c),c),c)
+        # Sunny Day's Immunity callback is visited for every naturally allowed
+        # status, not only freeze. Its effect target persists even for sleep.
+        s,t=c;visited=(~failed)&(~natural_immunity)&(s.weather_state[0]==2)
+        c=(s._replace(weather_state=s.weather_state.at[5].set(jnp.where(visited,1,s.weather_state[5]))),t)
+        def set_status(c):
+            s,t=c;c=(s._replace(sleep_clause_target=jnp.array(True)),t)
+            return jax.lax.cond(clause,clause_failure,apply,c)
+        return jax.lax.cond(failed,rejected,lambda c:jax.lax.cond(immunity,blocked,set_status,c),c)
     return e._when(s.hp[target,m]>0,attempt,c)
 
 
@@ -139,7 +147,7 @@ def secondary(c,actor,move,e):
 
 def before_move(c,actor,move,e):
     s,t=c;m=s.active[actor]
-    event_source=jnp.where(e.tables.SELF_TARGET[move],actor,1-actor)
+    event_source=jnp.where(e.MOVE_ACTOR_TARGET[move],actor,1-actor)
     def sleep(c):
         s,t=c;time=s.status_state[actor,m,5]-1
         s=s._replace(status_state=s.status_state.at[actor,m,5].set(time))
@@ -162,7 +170,9 @@ def before_move(c,actor,move,e):
             c,value=e._draw(c,0,2,e.CONFUSION)
             def self_hit(c):
                 s,t=c
-                core=e.base_damage_core(s.level[actor,m],e.i32(40),s.stats[actor,m,1],s.stats[actor,m,2])+2
+                attack=e.field_ops.scale_stat_stage(s.stats[actor,m,1],s.boosts[actor,m,0])
+                defense=e.field_ops.scale_stat_stage(s.stats[actor,m,2],s.boosts[actor,m,1])
+                core=e.base_damage_core(s.level[actor,m],e.i32(40),attack,defense)+2
                 c,roll=e._draw(c,0,16,e.CONF_DAMAGE)
                 damage=jnp.maximum(1,(core&65535)*(100-roll.astype(jnp.int32))//100)
                 c=e._damage(c,actor,damage,cause=6);s,t=c
