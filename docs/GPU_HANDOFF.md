@@ -31,6 +31,12 @@ runner fingerprints engine, tables, IO, tests, oracle, configuration and benchma
 code; it separately hashes each freshly captured native fixture. Device results
 cannot transfer across changed relevant source or fixtures.
 
+The complete current 49-check CPU checkpoint passed on `7631872`, with unchanged
+source/input hashes and actual CPU placement. The record is
+[`schema6-checkpoint.json`](../test-logs/g4-cpu-conformance/schema6-checkpoint.json);
+its regression archive contains all module logs, source/fixture hashes and commands.
+Full-format implementation, capacity proof and the fixed campaigns remain pending.
+
 ## Return-home setup
 
 Run from the repository root on Linux with one NVIDIA GPU compatible with the

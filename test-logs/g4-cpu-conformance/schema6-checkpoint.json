@@ -1,6 +1,6 @@
 {
   "schema": 6,
-  "status": "hook_cpu_integration_passed_full_regression_pending",
+  "status": "full_49_check_cpu_checkpoint_passed_not_full_G4",
   "source_base": "7036be7",
   "native_hook_fixture": "hooks.json.gz",
   "native_hook_scenarios": 70,
@@ -23,7 +23,77 @@
       "log": "schema6-handoff-unit.log"
     }
   ],
-  "validation_note": "Core hook code passed the four checks. Subsequent edits clarify comments and add explicit per-leaf placement assertions in test comparisons; the frozen49-check run will include them. No full-format acceptance claim.",
+  "validation_note": "Core hook code passed the four checks. Subsequent edits clarify comments and add explicit per-leaf placement assertions in test comparisons; the frozen49-check run will include them. No full-format acceptance claim. All49 matching-source checks now pass on7631872, including explicit device-leaf assertions. Full-format CPU gates and deferred GPU acceptance remain pending.",
   "gpu_executed": false,
-  "profiling_executed": false
+  "profiling_executed": false,
+  "regression": {
+    "source_commit": "76318723cce59df97db13535477f286577b5c06f",
+    "source_tree": "075be8db1424020e1396c0983449e661d693d434",
+    "status": "passed_cpu_checkpoint_not_full_G4",
+    "checks": 49,
+    "modules": {
+      "test.test_gen5_tables": {
+        "count": 6,
+        "seconds": 5.982,
+        "log": "test_gen5_tables.log"
+      },
+      "test.test_generic_engine": {
+        "count": 5,
+        "seconds": 986.105,
+        "log": "test_generic_engine.log"
+      },
+      "test.test_roster_hazards": {
+        "count": 4,
+        "seconds": 408.14,
+        "log": "test_roster_hazards.log"
+      },
+      "test.test_shared_engine_cases": {
+        "count": 2,
+        "seconds": 68.231,
+        "log": "test_shared_engine_cases.log"
+      },
+      "test.test_shared_engine_battles": {
+        "count": 1,
+        "seconds": 47.924,
+        "log": "test_shared_engine_battles.log"
+      },
+      "test.test_shared_engine_lifecycle": {
+        "count": 9,
+        "seconds": 761.936,
+        "log": "test_shared_engine_lifecycle.log"
+      },
+      "test.test_rollout": {
+        "count": 7,
+        "seconds": 663.116,
+        "log": "test_rollout.log"
+      },
+      "test.test_g3_fixtures": {
+        "count": 3,
+        "seconds": 0.031,
+        "log": "test_g3_fixtures.log"
+      },
+      "test.test_status_engine": {
+        "count": 4,
+        "seconds": 589.266,
+        "log": "test_status_engine.log"
+      },
+      "test.test_field_engine": {
+        "count": 4,
+        "seconds": 571.224,
+        "log": "test_field_engine.log"
+      },
+      "test.test_hook_engine": {
+        "count": 4,
+        "seconds": 693.964,
+        "log": "test_hook_engine.log"
+      }
+    },
+    "archive": "test-logs/g4-cpu-conformance/schema6-cpu-regression.tar.gz",
+    "archive_sha256": "a78ae80b9129d96a759f06182c868da13620e445f4c46445df298a3b63c9b217",
+    "identity_and_commands": "Archive contains source.json, fixtures.json, CPU runtime/placement probe, exact command arrays/environments and complete per-module logs.",
+    "source_unchanged": true,
+    "recovery": "Generic5-check completed log recovered after the usage interruption and exact source/input hash verification; recovered checks were not repeated.",
+    "gpu_executed": false,
+    "full_cpu_G4_accepted": false
+  }
 }

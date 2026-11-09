@@ -1,0 +1,141 @@
+'use strict';
+// Source-backed bound investigation, not a replacement for the full ledger.
+const fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto');
+const {assertReady}=require('./neutral-turn-oracle.cjs');
+assertReady();const ps=require('./vendor/pokemon-showdown/dist/sim');
+const dex=ps.Dex.mod('gen5'),gen=ps.Teams.getGenerator('gen5randombattle',[1,2,3,4]);
+const ledger=require('../rules/gen5-reachable-v1.json');
+const sha=s=>crypto.createHash('sha256').update(s).digest('hex');
+const moves=[...new Set(ledger.roots.flatMap(r=>r.moves.map(m=>m.id)))].sort();
+const abilities=[...new Set(ledger.roots.flatMap(r=>r.abilities))].sort();
+const acorn=require('./vendor/pokemon-showdown/node_modules/acorn');
+const itemMethods=['getPriorityItem','getItem'];
+const literalItems=new Set(),methodEvidence={};
+const requiredItems=[...new Set(ledger.roots.flatMap(root=>dex.species.get(root.species).requiredItems??[]))].sort();
+function methodAst(name){const text=gen[name].toString();return {text,body:acorn.parse('({'+text+'})',{ecmaVersion:'latest'}).body[0].expression.properties[0].value.body};}
+function walk(node,visit){if(!node||typeof node!=='object')return;visit(node);for(const value of Object.values(node))if(Array.isArray(value))value.forEach(n=>walk(n,visit));else if(value&&typeof value==='object')walk(value,visit);}
+for(const name of itemMethods){
+ const {text,body}=methodAst(name),returns=[];
+ function bound(node){
+  if(node?.type==='ConditionalExpression')return [...bound(node.consequent),...bound(node.alternate)];
+  if(node?.type==='Literal'&&typeof node.value==='string')return [node.value];
+  if(node?.type==='CallExpression'&&text.slice(node.start-2,node.end-2)==='this.sample(species.requiredItems)')return requiredItems;
+  if(!node||node.type==='Identifier'&&node.name==='undefined')return [];
+  throw Error('Unaudited item return expression: '+text.slice(node.start-2,node.end-2));
+ }
+ walk(body,node=>{if(node.type==='ReturnStatement'){
+  const names=bound(node.argument);for(const value of names){const item=dex.items.get(value);if(!item.exists)throw Error('Unknown item '+value);literalItems.add(item.id);}
+  returns.push({expression:node.argument?text.slice(node.argument.start-2,node.argument.end-2):'undefined',itemIds:names.map(n=>dex.items.get(n).id).sort()});
+ }});
+ methodEvidence[name]={sha256:sha(text),owner:ledger.generatorMethods[name],status:'all_return_expressions_bounded',returns};
+}
+{
+ const {text,body}=methodAst('randomSet'),assignments=[];
+ walk(body,node=>{if(node.type==='AssignmentExpression'&&node.left.type==='Identifier'&&node.left.name==='item'){
+  const value=text.slice(node.right.start-2,node.right.end-2);
+  if(node.right.type==='CallExpression'&&node.right.callee.type==='MemberExpression'&&['getPriorityItem','getItem'].includes(node.right.callee.property.name))assignments.push({expression:value,edge:node.right.callee.property.name});
+  else if(node.right.type==='Literal'&&node.right.value==='Black Sludge'){literalItems.add('blacksludge');assignments.push({expression:value,edge:'leftovers_to_blacksludge_for_poison'});}
+  else throw Error('Unaudited randomSet item assignment '+value);
+ }});
+ if(assignments.length!==3)throw Error('Expected all three pinned item assignments');
+ methodEvidence.randomSet={sha256:sha(text),owner:ledger.generatorMethods.randomSet,status:'all_item_assignments_bounded',assignments};
+}
+const speciesForms=new Set();
+for(const root of ledger.roots){
+ const s=dex.species.get(root.species);speciesForms.add(s.id);
+ for(const item of s.requiredItems??[])literalItems.add(dex.items.get(item).id);
+ for(const forme of s.cosmeticFormes??[])speciesForms.add(dex.species.get(forme).id);
+ if(typeof s.battleOnly==='string')speciesForms.add(dex.species.get(s.battleOnly).id);
+ if(s.baseSpecies==='Basculin')speciesForms.add(dex.species.get('Basculin-Blue-Striped').id);
+ if(s.baseSpecies==='Keldeo')speciesForms.add(dex.species.get('Keldeo-Resolute').id);
+}
+const calls={};
+for(const id of moves){
+ const move=dex.moves.get(id);const entries=[];
+ function visit(v,key=''){
+  if(typeof v==='function'){
+   const text=v.toString();
+   if(/\b(?:useMove|runMove|transformInto|setAbility|setItem|formeChange)\s*\(/.test(text))entries.push({field:key,sha256:sha(text),body:text});
+  }else if(v&&typeof v==='object')for(const[k,x]of Object.entries(v))if(!['ruleTable'].includes(k))visit(x,key?key+'.'+k:k);
+ }
+ // Resolved move objects contain immutable effect/data values, not battle objects.
+ visit(move);if(entries.length)calls[id]=entries;
+}
+const abilityEdges={};
+for(const id of abilities){
+ const ability=dex.abilities.get(id),entries=[];
+ for(const [field,value] of Object.entries(ability))if(typeof value==='function'){
+  const text=value.toString();
+  if(/\b(?:useMove|runMove|transformInto|setAbility|setItem|formeChange)\s*\(|\.item\s*=/.test(text))entries.push({field,sha256:sha(text),body:text});
+ }
+ if(entries.length)abilityEdges[id]=entries;
+}
+// Conservative dependency fixed point. Dynamic arguments remain explicit gaps;
+// callback/reference discovery is not itself an unreachability proof.
+const conditionMethods=new Set(['addVolatile','addSideCondition','addSlotCondition',
+ 'addPseudoWeather','setWeather','setTerrain','setStatus','trySetStatus']);
+const conditionIds=new Set(['brn','par','psn','tox','slp','frz','confusion','strugglerecoil']);
+const conditionEdges=[],dynamicConditionEdges=[],seenOwners=new Set(),queue=[];
+function strings(node){
+ if(!node)return [];
+ if(node.type==='Literal'&&typeof node.value==='string')return [node.value];
+ if(node.type==='ArrayExpression')return node.elements.flatMap(strings);
+ if(node.type==='ConditionalExpression')return [...strings(node.consequent),...strings(node.alternate)];
+ if(node.type==='CallExpression'&&node.callee.type==='MemberExpression'&&['sample','sampleIfArray'].includes(node.callee.property.name))return strings(node.arguments[0]);
+ return [];
+}
+function inspectConditionRefs(value,owner,field=''){
+ if(typeof value==='function'){
+  const text=value.toString();let tree;
+  try{tree=acorn.parse('({'+text+'})',{ecmaVersion:'latest'});}catch{tree=acorn.parse('('+text+')',{ecmaVersion:'latest'});}
+  walk(tree,node=>{
+   if(node.type!=='CallExpression'||node.callee.type!=='MemberExpression'||!conditionMethods.has(node.callee.property.name))return;
+   const method=node.callee.property.name,ids=strings(node.arguments[0]);
+   if(ids.length)for(const id of ids){conditionIds.add(ps.toID(id));conditionEdges.push({owner,field,method,condition:id,callbackSha256:sha(text)});}
+   else dynamicConditionEdges.push({owner,field,method,callbackSha256:sha(text),expression:node.arguments[0]?.type??'missing'});
+  });return;
+ }
+ if(value&&typeof value==='object')for(const[key,child]of Object.entries(value)){
+  if(['volatileStatus','sideCondition','slotCondition','weather','terrain','pseudoWeather','status'].includes(key)&&typeof child==='string'&&child){conditionIds.add(ps.toID(child));conditionEdges.push({owner,field:field?field+'.'+key:key,condition:child,method:'declarative'});}
+  if(key!=='ruleTable')inspectConditionRefs(child,owner,field?field+'.'+key:key);
+ }
+}
+for(const id of moves)queue.push(['moves:'+id,dex.moves.get(id)]);
+for(const id of abilities)queue.push(['abilities:'+id,dex.abilities.get(id)]);
+for(const id of literalItems)queue.push(['items:'+id,dex.items.get(id)]);
+for(const id of speciesForms)if(dex.data.Conditions[id])conditionIds.add(id);
+for(const row of require('../rules/gen5-data-v1.json').rules)queue.push(['rules:'+row.id,dex.formats.get(row.id)]);
+for(let cursor=0;cursor<queue.length;cursor++){
+ const [owner,value]=queue[cursor];if(seenOwners.has(owner))continue;seenOwners.add(owner);
+ inspectConditionRefs(value,owner);
+ for(const id of conditionIds)if(!seenOwners.has('conditions:'+id)&&!queue.some(([key])=>key==='conditions:'+id))queue.push(['conditions:'+id,dex.conditions.get(id)]);
+}
+const dynamicProofs={
+ 'moves:triattack:secondary.onHit':{sha256:'6c68bee2aa4fd5023f3868d24061684126b36c3d7abcbe379e5389e8d28d682c',ids:['brn','par','frz'],reason:'Local status is sampled from the literal three-entry array before trySetStatus.'},
+ 'moves:triattack:secondaries.0.onHit':{sha256:'6c68bee2aa4fd5023f3868d24061684126b36c3d7abcbe379e5389e8d28d682c',ids:['brn','par','frz'],reason:'Alias of the same resolved secondary callback.'},
+ 'abilities:synchronize:onAfterSetStatus':{sha256:'8756bb4c6ee180c5fdfb4d0c80afd3d3f51ff64896bc48a800f737289fa7e0ec',ids:['brn','par','psn','tox'],reason:'Copies the applied status; sleep/freeze exit before the call. No new status identity.'},
+ 'conditions:twoturnmove:onStart':{sha256:'88b7dea7a80770b682af442a9b26c1f3d30d59e75c5d7dba710886680ddb96b2',ids:moves.filter(id=>dex.moves.get(id).flags.charge),reason:'Native hit pipeline installs this condition with its active charge move. Closed root charge flag bound is Solar Beam; called/copied move closure remains separately pending.'},
+};
+for(const edge of dynamicConditionEdges){
+ const proof=dynamicProofs[edge.owner+':'+edge.field];
+ if(proof&&proof.sha256===edge.callbackSha256){edge.resolution=proof;for(const id of proof.ids)conditionIds.add(id);}
+}
+// Inspect conditions newly bounded by the reviewed dynamic arguments too.
+let priorOwners=-1;
+while(priorOwners!==seenOwners.size){
+ priorOwners=seenOwners.size;
+ for(const id of conditionIds){const owner='conditions:'+id;if(!seenOwners.has(owner)){seenOwners.add(owner);inspectConditionRefs(dex.conditions.get(id),owner);}}
+ for(const edge of dynamicConditionEdges)if(!edge.resolution){const proof=dynamicProofs[edge.owner+':'+edge.field];if(proof&&proof.sha256===edge.callbackSha256){edge.resolution=proof;for(const id of proof.ids)conditionIds.add(id);}}
+}
+const conditionClosure={status:'provisional_dynamic_edges_and_engine_paths_pending',
+ ids:[...conditionIds].sort(),edges:conditionEdges,dynamicEdges:dynamicConditionEdges,unresolvedDynamicEdges:dynamicConditionEdges.filter(e=>!e.resolution),
+ note:'Static methods/declarative fields are a conservative discovery fixed point, not complete dependency acceptance. Audit computed arguments, state-installed species/rule hooks and all engine entry paths before exclusions.'};
+const output={status:'provisional_source_bound_not_full_reachability_acceptance',pin:require('../reference-lock.json').commit,
+ conditionClosure,rootMoveIds:moves,rootAbilityIds:abilities,initialFormBound:[...speciesForms].sort(),initialItemReturnBound:[...literalItems].sort(),methodEvidence,
+ indirectMoveCallbacks:calls,indirectAbilityCallbacks:abilityEdges,
+ findings:['230 set-file spellings resolve to223 move IDs. The only direct calling/copy roots among the candidate pools are Nature Power, Sleep Talk and Transform; broad Metronome/Assist/Sketch/Copycat expansion is not justified by these roots.',
+ 'Pinned Gen5 Nature Power calls Earthquake. Sleep Talk selects from the user set; Transform/Imposter copy opponent moves. Pursuit and Magic Bounce reuse existing move IDs. These observations still require a complete source/engine/ability/item closure audit before exclusions enter the accepted ledger.',
+ 'All pinned getPriorityItem/getItem return expressions and all randomSet item assignments are structurally bounded by the recorded expressions and species.requiredItems. This initial item upper bound is not proof of generator eligibility or transitive closure.'],
+ remaining:['Generator branch/source audit and initial eligibility','All127 ability callback bodies and item transfer/creation edges','Forms from Forecast/Flower Gift/Relic Song/Multitype and Transform','Engine/rule injection and complete dependency fixed point']};
+if(!process.argv[2])throw Error('Pass a fresh output path');fs.writeFileSync(process.argv[2],JSON.stringify(output,null,2)+'\n',{flag:'wx'});
+console.log(JSON.stringify({moveIds:moves.length,abilityIds:abilities.length,initialItemReturnBound:output.initialItemReturnBound,calls:Object.keys(calls)}));
