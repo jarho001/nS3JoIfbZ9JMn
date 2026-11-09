@@ -8,8 +8,10 @@ GPU. Preparing this handoff does not run device tests, profiling or benchmarks.
 ## Current source and evidence
 
 The active engine is schema 5: status durations and persistent effects, weather,
-screens, boosts and side-condition source/order are implemented. CPU validation
-of this expanded checkpoint is in progress; see
+screens, boosts and side-condition source/order are implemented. The directed field4-check package
+and final status native replay pass on `c8d3231`; see
+[current source/results](../test-logs/g4-cpu-conformance/schema5-source.json).
+The full45-check matching-schema regression has not been run as a whole. See
 [active progress](ORCHESTRATION_STATE.json). The earlier 37-check pass on
 `4eab254` remains historical evidence for that engine. A combined schema-4 run
 completed 39 checks before the 8 GiB cloud limit killed the status batch check;
