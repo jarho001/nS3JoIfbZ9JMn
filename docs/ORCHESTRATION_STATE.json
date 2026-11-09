@@ -610,12 +610,14 @@
       "pending_field_gate": "Current-schema prior45 CPU regression checks are pending; schema5 status/field evidence remains historical. Hook70/324 current integration4 checks pass.",
       "native_hooks_corpus": "test-logs/g4-cpu-conformance/hooks.json.gz",
       "regression": {
-        "status": "pending",
+        "status": "restarting_after_obsolete_rejection_fixture",
         "checks": 49,
-        "completed_modules": 0,
-        "source_commit": null,
-        "cursor": 0,
-        "configuration": "Same fixed CPU/placement/native matrix as GPU handoff; sequential fresh module processes; no sweep or GPU work."
+        "completed_modules": 1,
+        "source_commit": "c3f9a09",
+        "cursor": 1,
+        "configuration": "Same fixed CPU/placement/native matrix as GPU handoff; sequential fresh module processes; no sweep or GPU work.",
+        "interrupted_run": "work/g4-schema6-cpu-regression",
+        "reason": "Preemptively stopped the in-flight generic group: its old rejection fixture still named newly implemented Life Orb. Replace with genuinely unsupported Black Sludge; keep all zero-RNG/event/state-rollback assertions and dedicated Life Orb native coverage. No simulation divergence was observed."
       }
     },
     "resolved_failure": "16b5263 preflight rejected ordinary moves because type was missing from its field set; fixed by 4eab254, failed run stopped, all 37 repaired checks pass. Detailed minimized input and source identities are in source.json.",
