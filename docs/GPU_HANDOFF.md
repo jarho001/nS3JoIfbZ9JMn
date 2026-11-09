@@ -24,6 +24,9 @@ ability/item hooks, complex phases, indirect effects, capacity proof and the
 fixed full-format campaigns are still pending. Passing this checkpoint cannot
 close G4.
 
+The next 41 ability/item hook cases (144 boundaries) are **native-only**. Their
+JAX handlers are pending, so they are excluded from the 252-case device scope.
+
 Use the **latest committed checkout** and retain its recorded identities. The
 runner fingerprints engine, tables, IO, tests, oracle, configuration and benchmark
 code; it separately hashes each freshly captured native fixture. Device results

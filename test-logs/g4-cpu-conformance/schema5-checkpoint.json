@@ -24,5 +24,18 @@
     "command": "python3 scripts/g4_gpu_handoff.py --prepare-only --output work/g4-schema5-gpu-prepared",
     "result": "Prepared five native corpora (252 scenarios /1778 boundaries) and current45-check CPU/CUDA module scope. No JAX import/backend probe, GPU query, profiling or benchmark. Run was before staging new source files; real device runner requires committed source and will create its own full fingerprints.",
     "status": "prepared_not_executed"
+  },
+  "status_initial_run": {
+    "command": "STATUS_NATIVE_CASES=/tmp/g4-schema5-status.json JAX_PLATFORMS=cpu .venv-jax/bin/python -m unittest test.test_status_engine -v -f",
+    "result": "4 passed in526.847s: 55 status scenarios /411 boundaries, four complete six-member games, exact field/Sleep Clause/effect state, eager/JIT/1-8-32, saved continuation/reset, full/lean and metadata/migration rejection.",
+    "log": "schema5-status-initial.log",
+    "source_note": "Run started before final Sunny Day metadata visitation patch. All status fixtures have no weather; not a full final-candidate acceptance claim. Final current-source native replay and expanded field checks remain pending."
+  },
+  "next_native_family": {
+    "status": "native_only_no_JAX_acceptance",
+    "fixture": "hooks-native-only.json.gz",
+    "scenarios": 41,
+    "boundaries": 144,
+    "implementation": "pending"
   }
 }

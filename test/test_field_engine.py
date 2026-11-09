@@ -115,4 +115,3 @@ class FieldEngineTest(unittest.TestCase):
             same(load_state(path),s)
 
 if __name__=='__main__':unittest.main()
-

@@ -177,5 +177,6 @@
   "acceptance": "Not a passed suite or G4 gate; repeat affected acceptance on final schema 5 in isolated processes.",
   "command": "STATUS_NATIVE_CASES=/tmp/g4-status-current.json G3_NATIVE_CASES=/tmp/g4-schema4-legacy.json G4_NATIVE_CASES=/tmp/g4-schema4-hazards.json GEN5_NATIVE_CASES=/tmp/g4-schema4-generic.json JAX_PLATFORMS=cpu .venv-jax/bin/python -m unittest test.test_gen5_tables test.test_generic_engine test.test_roster_hazards test.test_shared_engine_cases test.test_shared_engine_battles test.test_shared_engine_lifecycle test.test_rollout test.test_g3_fixtures test.test_status_engine -v -f",
   "gpu_executed": false,
-  "profiling_executed": false
+  "profiling_executed": false,
+  "log_format": "Only trailing display whitespace removed; interrupted test output retained, exit137/OOM recorded separately."
 }

@@ -1,0 +1,9 @@
+test_complete_rollouts_continuation_and_reset (test.test_status_engine.StatusEngineTest.test_complete_rollouts_continuation_and_reset) ... ok
+test_frozen_schema3_requires_explicit_rehydration_for_advanced_states (test.test_status_engine.StatusEngineTest.test_frozen_schema3_requires_explicit_rehydration_for_advanced_states) ... ok
+test_mixed_eager_compiled_batches_and_saved_states (test.test_status_engine.StatusEngineTest.test_mixed_eager_compiled_batches_and_saved_states) ... ok
+test_native_states_draws_requests_and_histories (test.test_status_engine.StatusEngineTest.test_native_states_draws_requests_and_histories) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 526.847s
+
+OK

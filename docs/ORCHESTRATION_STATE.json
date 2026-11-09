@@ -524,7 +524,7 @@
     "brief": "PROJECT_PLAN.md#proposed-g4-cpu-implementation-and-conformance-goal",
     "source_base": "f37067e",
     "scope": "Complete pinned gen5randombattle reachable mechanics and every prepared CPU gate. Integrated checkpoints, resumable progress and commit/push authorized. GPU execution, profiling, benchmarks, training, delegation and scored research excluded.",
-    "checkpoint": "Schema-5 initial field integration passed 4 CPU checks (36 cases /300 boundaries, four six-member games, eager/JIT/mixed1-8-32/save/reset/full-lean). Four added interaction cases and a native Sunny Day/Spore metadata repair are frozen as 40 cases /308 boundaries and pass the native family assertions; matching candidate CPU replay remains pending. The status-only suite is running; prior schema-4 run completed 39 checks then hit the 8 GiB environment limit.",
+    "checkpoint": "Status and initial field CPU packages each passed4 checks, with 55/411 status and36/300 field exact native replay, eight six-member games, eager/JIT/mixed1-8-32/save/reset/full-lean. Final native40/308 field corpus adds four meaningful interactions and a Sunny Day metadata fix; matching candidate replay remains pending. Next41/144 ability/item cases captured native-only; JAX hooks remain pending.",
     "completed_checkpoints": [
       "Pinned resolved data and source-owned conservative candidate inventory exported; 605 role roots, 1768 data/effect entries, 1146 callback slots. Data-only mappings remain partial; transitive closure and complete callback implementation are not claimed.",
       "Generic species/set/type/stat/physical-special/Hidden Power/happiness/priority/hazard integration passes 37 affected CPU checks on 4eab254, retaining all 133 baseline scenarios and validating 24 added scenarios: 157 scenarios / 1059 boundaries, including 20 complete battles (eight six-member games). Eager/JIT/1-8-32 mixed batches, serialized continuation/reset, explicit schema 1/2 migration and full/lean rollouts pass.",
@@ -600,7 +600,8 @@
       "pending_gate": "No generated full-format start or development/held-out campaign is accepted. V7 executable harness is absent; fixed configuration is present. Target turn-limit/history capacity audit remains open.",
       "validation_reuse": "Historical 37-check engine-4eab254 evidence retained. Schema-4 eb747ef completed 39/41 checks before environment OOM; schema4-source.json records exact hashes and incomplete outcome. Schema-5 acceptance is pending; run JAX test groups sequentially in fresh processes.",
       "native_field_corpus": "test-logs/g4-cpu-conformance/field.json.gz",
-      "pending_field_gate": "Replay the expanded40-case field corpus on current source and finish status checks with field/Sleep Clause metadata. Initial field pass predates final Sunny metadata fix; do not transfer acceptance."
+      "pending_field_gate": "Replay expanded40-case field corpus and status native55 cases on candidate21f68e6/current formatting-only test bytes. Initial status/field passes predate the final Sunny metadata branch; do not claim final conformance.",
+      "native_hooks_corpus": "test-logs/g4-cpu-conformance/hooks-native-only.json.gz"
     },
     "resolved_failure": "16b5263 preflight rejected ordinary moves because type was missing from its field set; fixed by 4eab254, failed run stopped, all 37 repaired checks pass. Detailed minimized input and source identities are in source.json.",
     "publication": {
