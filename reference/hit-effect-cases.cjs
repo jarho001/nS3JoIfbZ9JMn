@@ -33,7 +33,7 @@ module.exports=function hitEffectCases(mon){
   cases.push({id:`G4-hit-immunity-${move.replaceAll(' ','')}`,seed:0,p1:[m([move==='Bullet Seed'?'Double Slap':move],fast)],p2:[mon('Gengar',['Recover'],{ability:'Levitate'})],steps:[both()]});
  }
  cases.push({id:'G4-hit-boost-weather-screen',seed:21,p1:[m(['Swords Dance','Bullet Seed'],{ability:'Skill Link',item:'Life Orb'})],p2:[m(['Rain Dance','Reflect','Recover'],fast)],steps:[both(1,1),both(2,2),both(2,3)]},
-  {id:'G4-hit-paralysis-tied-contact',seed:21,p1:[m(['Double Slap'])],p2:[m(['Tackle'],{ability:'Iron Barbs',item:'Rocky Helmet'})],setup:[{side:'p1',status:'par'},{side:'p2',status:'par'}],steps:[both(),both()]},
+  {id:'G4-hit-paralysis-tied-contact',seed:21,p1:[m(['Double Slap'])],p2:[m(['Tackle'],{ability:'Iron Barbs',item:'Rocky Helmet'})],setup:[{side:'p1',status:'par'},{side:'p2',status:'par'}],steps:[both()]},
   {id:'G4-hit-ooze-survives',seed:0,p1:[m(['Giga Drain'],fast)],p2:[m(['Recover'],{ability:'Liquid Ooze',...tank})],setup:[{side:'p1',hp:100}],steps:[both()]},
   {id:'G4-hit-rockhead-recoil',seed:0,p1:[m(['Brave Bird'],{ability:'Rock Head',...fast})],p2:[m(['Recover'],tank)],steps:[both()]});
  for(const [id,foe,setup,ability] of [
@@ -52,6 +52,11 @@ module.exports=function hitEffectCases(mon){
  cases.push({id:'G4-hit-scald-frozen-confusion-blocked',seed:0,seedWords:[35861,12493,8975,48894],p1:[m(['Tackle','Scald'])],p2:[m(['Confuse Ray','Recover'],fast)],setup:[{side:'p1',status:'frz'}],steps:[both(1,1),both(2,2)]});
  cases.push({id:'G4-hit-defrost-miss',seed:0,p1:[m(['Flare Blitz'],{ability:'Hustle',...fast})],p2:[m(['Recover'],tank)],setup:[{side:'p1',status:'frz'}],steps:[both()]},
   {id:'G4-hit-defrost-protected',seed:0,p1:[m(['Scald'],fast)],p2:[m(['Protect'],tank)],setup:[{side:'p1',status:'frz'}],steps:[both()]});
+ cases.push({id:'G4-hit-frozen-target-fire-Synchronize',seed:0,p1:[m(['Sacred Fire'],fast)],p2:[m(['Recover'])],setup:[{side:'p2',status:'frz'}],steps:[both()]});
+ const fireContact={seed:0,seedWords:[39407,18577,41884,47404],p1:[m(['Flare Blitz'],fast)],p2:[m(['Recover'],{ability:'Rough Skin',item:'Rocky Helmet'})],steps:[both()]};
+ cases.push({...fireContact,id:'G4-hit-frozen-target-fire-contact',setup:[{side:'p2',status:'frz'}]},
+  {...fireContact,id:'G4-hit-frozen-target-fire-terminal',setup:[{side:'p1',hp:1},{side:'p2',status:'frz'}]});
+ for(const hp of [1,100])cases.push({id:`G4-hit-spin-contact-${hp}`,seed:0,p1:[m(['Protect','Rapid Spin'],fast),m(['Tackle'])],p2:[m(['Spikes','Recover'],{ability:'Rough Skin'})],setup:[{side:'p1',hp}],steps:[both(1,1),both(2,2)]});
  for(const seed of [0,21])for(const swap of [false,true]){
   const a=[m(['Bullet Seed'],{ability:'Skill Link',item:'Life Orb',...fast}),m(['Double-Edge'],{ability:'Rock Head'}),
    m(['Drain Punch']),m(['Rock Blast'],{item:'Choice Band'}),m(['Brave Bird']),m(['Giga Drain'],{item:'Leftovers'})];

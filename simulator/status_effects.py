@@ -23,9 +23,9 @@ def activate(c,side,e):
                       item_order=s.item_order.at[side,m].set(item)),t
 
 
-def cure(c,side,e,source=None):
+def cure(c,side,e,source=None,move=0):
     s,t=c;m=s.active[side];old=s.status[side,m]
-    c=e._event(c,e.CURE,side,m,status=old);s,t=c
+    c=e._event(c,e.CURE,side,m,status=old,move=move);s,t=c
     source=side if source is None else source
     meta=e.i32([0,0,0,0,1,-1,-1]).at[2].set(source).at[3].set(s.active[source])
     return s._replace(status=s.status.at[side,m].set(0),toxic=s.toxic.at[side,m].set(0),
@@ -158,7 +158,7 @@ def before_move(c,actor,move,e):
         c,value=e._draw(c,0,5,e.FREEZE)
         def frozen(c):return e._event(c,e.CANT,actor,m,status=e.FRZ),jnp.array(True)
         return jax.lax.cond(value==0,lambda c:(cure(c,actor,e,source=event_source),jnp.array(False)),frozen,c)
-    c,blocked=jax.lax.cond((~blocked)&(c[0].status[actor,m]==e.FRZ),freeze,lambda c:(c,blocked),c)
+    c,blocked=jax.lax.cond((~blocked)&(c[0].status[actor,m]==e.FRZ)&(~e.hit_tables.DEFROST[move]),freeze,lambda c:(c,blocked),c)
     def confusion(c):
         s,t=c;remaining=s.volatile_state[actor,m,2,5]-1
         s=s._replace(volatile_state=s.volatile_state.at[actor,m,2,5].set(remaining));c=(s,t)

@@ -1,0 +1,44 @@
+{
+  "schema": 7,
+  "status": "validated_CPU_checkpoint_not_full_G4",
+  "native_scenarios": 419,
+  "native_boundaries": 2355,
+  "complete_six_member_games": 24,
+  "hit_family": {
+    "scenarios": 97,
+    "boundaries": 253,
+    "CPU_checks": 4,
+    "seconds": 1196.004,
+    "scope": "Exact native replay; eager/JIT and mixed1/8/32; save/load/reset; full/lean complete games; atomic unsupported and schema6 continuation."
+  },
+  "baseline_replay": {
+    "scenarios": 322,
+    "boundaries": 2102,
+    "successful_checks": 7,
+    "execution": "Five checks passed before a field context-inventory assertion failed. Its global tail slice was replaced with its three owned context names; the remaining field/hook checks passed. No native equality assertions were removed.",
+    "test_only_rebinding": {
+      "changed_paths": [
+        "test/test_field_engine.py"
+      ],
+      "prior": "607015b7c52a73bacd494261ec71c1555a39afd51d82785354d20475ddd3e089",
+      "current": "aa7873556e1d6674d3f108e74fb903dbd95a63291629a602ff28f0120e6ef4a0",
+      "reason": "Field-specific coverage assertion names its three owned contexts; all runtime/hit-test/native/config inputs are unchanged. Prior five successful scalar checks and four hit integration checks remain relevant."
+    }
+  },
+  "native_tests": {
+    "passed": 15,
+    "log": "logs/native-interactions-tests.log"
+  },
+  "handoff_helper_tests": {
+    "passed": 6,
+    "seconds": 0.178
+  },
+  "evidence_archive": "test-logs/g4-cpu-conformance/schema7-validation.tar.gz",
+  "archive_sha256": "c21a33ce76cb90dbb42b45e37f44a408eb1ba5f2c8a0462b6bd994f9b1691a21",
+  "source_identity": "g4-schema7-scalar-regression-remaining/source.json inside archive",
+  "fixtures": "hits.json.gz plus schema6-cpu-regression.tar.gz; exact input hashes/commands/environments are preserved in archive",
+  "full_53_check_source7_run": "not_run; preceding source6 full49 remains historical",
+  "full_cpu_G4_accepted": false,
+  "GPU_executed": false,
+  "profiling_executed": false
+}

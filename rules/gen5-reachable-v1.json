@@ -2061,10 +2061,22 @@
           "file": "data/mods/gen6/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hits.json.gz",
+          "native": "reference/hit-effect-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hit_engine.py"
+        }
+      ],
       "field": "onDamagingHit",
       "id": "abilities:ironbarbs:onDamagingHit",
-      "implementation": null,
+      "implementation": {
+        "family": "hit",
+        "file": "simulator/hit_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:ironbarbs",
@@ -2075,7 +2087,7 @@
       "owner": "abilities:ironbarbs",
       "reachability": "candidate",
       "sha256": "8818e17b905c252d5772ef6a970e58959abd551a5c6e10572da7e2e13c09eaee",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -2337,10 +2349,22 @@
           "file": "data/mods/gen6/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hits.json.gz",
+          "native": "reference/hit-effect-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hit_engine.py"
+        }
+      ],
       "field": "onSourceTryHeal",
       "id": "abilities:liquidooze:onSourceTryHeal",
-      "implementation": null,
+      "implementation": {
+        "family": "hit",
+        "file": "simulator/hit_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:liquidooze",
@@ -2351,7 +2375,7 @@
       "owner": "abilities:liquidooze",
       "reachability": "candidate",
       "sha256": "bcacdfc8150460972cbbe8d1b40961c9b3890142276f790acdaf502cb5baf4d4",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -3513,10 +3537,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hits.json.gz",
+          "native": "reference/hit-effect-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hit_engine.py"
+        }
+      ],
       "field": "onDamage",
       "id": "abilities:rockhead:onDamage",
-      "implementation": null,
+      "implementation": {
+        "family": "hit",
+        "file": "simulator/shared_engine.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:rockhead",
@@ -3527,7 +3563,7 @@
       "owner": "abilities:rockhead",
       "reachability": "candidate",
       "sha256": "93f86584c39c6ffe0a2a36792751f9e88f304762eb8e48befecd1ee630b9ef1d",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -3536,10 +3572,22 @@
           "file": "data/mods/gen6/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hits.json.gz",
+          "native": "reference/hit-effect-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hit_engine.py"
+        }
+      ],
       "field": "onDamagingHit",
       "id": "abilities:roughskin:onDamagingHit",
-      "implementation": null,
+      "implementation": {
+        "family": "hit",
+        "file": "simulator/hit_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:roughskin",
@@ -3550,7 +3598,7 @@
       "owner": "abilities:roughskin",
       "reachability": "candidate",
       "sha256": "8818e17b905c252d5772ef6a970e58959abd551a5c6e10572da7e2e13c09eaee",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -3986,10 +4034,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hits.json.gz",
+          "native": "reference/hit-effect-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hit_engine.py"
+        }
+      ],
       "field": "onModifyMove",
       "id": "abilities:skilllink:onModifyMove",
-      "implementation": null,
+      "implementation": {
+        "family": "hit",
+        "file": "simulator/hit_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:skilllink",
@@ -4000,7 +4060,7 @@
       "owner": "abilities:skilllink",
       "reachability": "candidate",
       "sha256": "4c780f723cb6f83f798b7465f201a9541adf97893215642d4bcf6b1e689f5f2a",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -6619,17 +6679,17 @@
       ],
       "evidence": [
         {
-          "fixture": "test-logs/g4-cpu-conformance/status-v5.json.gz",
-          "native": "reference/status-duration-cases.cjs",
+          "fixture": "test-logs/g4-cpu-conformance/hits.json.gz",
+          "native": "reference/hit-effect-cases.cjs",
           "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
-          "test": "test/test_status_engine.py"
+          "test": "test/test_hit_engine.py"
         }
       ],
       "field": "onDamagingHit",
       "id": "conditions:frz:onDamagingHit",
       "implementation": {
-        "family": "status",
-        "file": "simulator/status_effects.py",
+        "family": "hit",
+        "file": "simulator/shared_engine.py",
         "scheduler": "simulator/shared_engine.py",
         "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
       },
@@ -6652,10 +6712,22 @@
           "file": "data/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hits.json.gz",
+          "native": "reference/hit-effect-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hit_engine.py"
+        }
+      ],
       "field": "onModifyMove",
       "id": "conditions:frz:onModifyMove",
-      "implementation": null,
+      "implementation": {
+        "family": "hit",
+        "file": "simulator/status_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:frz",
@@ -6666,7 +6738,7 @@
       "owner": "conditions:frz",
       "reachability": "candidate",
       "sha256": "2429dbeff95a2eb3c346a400ca3404aea3a2c8b327c47750baaa11494f46b299",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -14131,10 +14203,22 @@
           "file": "data/mods/gen6/items.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hits.json.gz",
+          "native": "reference/hit-effect-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hit_engine.py"
+        }
+      ],
       "field": "onDamagingHit",
       "id": "items:rockyhelmet:onDamagingHit",
-      "implementation": null,
+      "implementation": {
+        "family": "hit",
+        "file": "simulator/hit_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "items:rockyhelmet",
@@ -14145,7 +14229,7 @@
       "owner": "items:rockyhelmet",
       "reachability": "candidate",
       "sha256": "404f0c9d257b952434ca74d5e71e0974b1f1ea59df8bbb68a0f1196e0543b8e9",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -67569,10 +67653,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hits.json.gz",
+          "native": "reference/hit-effect-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hit_engine.py"
         }
       ],
       "id": "abilities:ironbarbs",
       "implementation": {
+        "behavior": {
+          "family": "hit",
+          "file": "simulator/hit_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -67869,10 +67965,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hits.json.gz",
+          "native": "reference/hit-effect-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hit_engine.py"
         }
       ],
       "id": "abilities:liquidooze",
       "implementation": {
+        "behavior": {
+          "family": "hit",
+          "file": "simulator/hit_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -69039,10 +69147,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hits.json.gz",
+          "native": "reference/hit-effect-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hit_engine.py"
         }
       ],
       "id": "abilities:rockhead",
       "implementation": {
+        "behavior": {
+          "family": "hit",
+          "file": "simulator/shared_engine.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -69069,10 +69189,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hits.json.gz",
+          "native": "reference/hit-effect-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hit_engine.py"
         }
       ],
       "id": "abilities:roughskin",
       "implementation": {
+        "behavior": {
+          "family": "hit",
+          "file": "simulator/hit_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -69555,10 +69687,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hits.json.gz",
+          "native": "reference/hit-effect-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hit_engine.py"
         }
       ],
       "id": "abilities:skilllink",
       "implementation": {
+        "behavior": {
+          "family": "hit",
+          "file": "simulator/hit_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -77073,10 +77217,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hits.json.gz",
+          "native": "reference/hit-effect-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_hit_engine.py"
         }
       ],
       "id": "items:rockyhelmet",
       "implementation": {
+        "behavior": {
+          "family": "hit",
+          "file": "simulator/hit_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ITEMS canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"

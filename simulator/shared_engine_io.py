@@ -79,8 +79,9 @@ def project_events(state,trace,audience):
             line=f'|move|{actor}|{name}|'+shown+annotation
         elif kind in (e.DAMAGE,e.HEAL):
             line=f'|-'+('damage' if kind==e.DAMAGE else 'heal')+f'|{actor}|'+condition(value,aux,status,side!=audience)
-            if kind==e.DAMAGE and move:line+='|[from] '+{1:'brn',2:'psn',3:'recoil',4:'Stealth Rock',5:'Spikes',6:'confusion',7:'Sandstorm',8:'Hail',9:'item: Life Orb'}[move]
-            if kind==e.HEAL and move:line+='|[silent]' if move==-1 else '|[from] ability: Ice Body' if move==2 else '|[from] item: Leftovers'
+            if kind==e.DAMAGE and move:line+='|[from] '+{1:'brn',2:'psn',3:'recoil',4:'Stealth Rock',5:'Spikes',6:'confusion',7:'Sandstorm',8:'Hail',9:'item: Life Orb',10:'Recoil',11:'ability: Rough Skin',12:'ability: Iron Barbs',13:'item: Rocky Helmet',14:'ability: Liquid Ooze'}[move]
+            if kind==e.DAMAGE and move in (11,12,13,14):line+='|[of] '+foe
+            if kind==e.HEAL and move:line+='|[silent]' if move==-1 else '|[from] ability: Ice Body' if move==2 else '|[from] drain|[of] '+foe if move==3 else '|[from] item: Leftovers'
         elif kind==e.CRIT:line=f'|-crit|{actor}'
         elif kind==e.IMMUNE:line=f'|-immune|{actor}'+({0:'',1:'|[from] ability: Immunity',2:'|[from] ability: Levitate'}[aux])
         elif kind==e.MISS:line=f'|-miss|{actor}|{foe}'
@@ -92,7 +93,7 @@ def project_events(state,trace,audience):
         elif kind==e.STATUS:line=f'|-status|{actor}|'+e.STATUS_NAMES[status]+(f'|[from] move: {name}' if status==e.SLP and move else '')
         elif kind==e.ABILITY:line=f'|-activate|{actor}|ability: Synchronize'
         elif kind==e.END_ITEM:line=f'|-enditem|{actor}|Lum Berry|[eat]'
-        elif kind==e.CURE:line=f'|-curestatus|{actor}|'+e.STATUS_NAMES[status]+'|[msg]'
+        elif kind==e.CURE:line=f'|-curestatus|{actor}|'+e.STATUS_NAMES[status]+(f'|[from] move: {name}' if move else '|[msg]')
         elif kind==e.FAIL:line=f'|-fail|{actor}'+('|heal' if aux==1 else '|'+e.STATUS_NAMES[status] if status else '')
         elif kind==e.CANT:line=f'|cant|{actor}|'+e.STATUS_NAMES[status]
         elif kind==e.ACTIVATE:
@@ -109,6 +110,7 @@ def project_events(state,trace,audience):
             continue
         elif kind==e.BOOST:line=f'|-'+('unboost' if status else 'boost')+f'|{actor}|{e.field_tables.STATS[aux]}|{abs(value)}'
         elif kind==e.WEATHER:line='|-weather|'+e.field_tables.WEATHER_NAMES[value]+(f'|[from] ability: {e.hook_tables.ABILITY_NAMES[move]}|[of] {actor}' if aux==2 else '|[upkeep]' if aux==1 else '')
+        elif kind==e.HIT_COUNT:line=f'|-hitcount|'+(actor.replace('a: ',': ') if aux else actor)+f'|{value}'
         elif kind==e.REVEAL:line=f'|-ability|{actor}|'+e.hook_tables.ABILITY_NAMES[value]+('|boost' if aux else '')
         else:raise ValueError('unknown event')
         out.append({'type':'event','message':line})
@@ -146,9 +148,9 @@ def load_state(path,*,schema=None):
         stored=int(saved['schema']) if 'schema' in saved else None
         if schema is not None and stored is not None and stored!=schema:raise ValueError('schema mismatch')
         version=stored if schema is None else schema
-        if version not in (1,2,3,4,5,6):raise ValueError('explicit supported state schema required')
+        if version not in (1,2,3,4,5,6,7):raise ValueError('explicit supported state schema required')
         fields={k:jnp.asarray(saved[k]) for k in saved.files if k not in ('schema','data_sha256')}
-        if version in (3,4,5,6):
+        if version in (3,4,5,6,7):
             if 'data_sha256' not in saved or str(saved['data_sha256'])!=generic.DATA_SHA256:
                 raise ValueError('state data table identity mismatch')
         else:
@@ -220,7 +222,7 @@ def effect_states(state,side,mon):
     for kind,key in enumerate(('protect','stall','confusion','choicelock')):
         exists,order,ss,sm,move,time=map(int,s.volatile_state[side,mon,kind])
         if not exists:continue
-        row={'id':key,'name':key,'effectOrder':order,'target':target,
+        row={'id':key,'name':e.MOVE_NAMES[e.PROTECT] if kind==0 else key,'effectOrder':order,'target':target,
              'source':{'$pokemon':{'side':ss,'mon':sm}},'sourceSlot':f'p{ss+1}a'}
         if move>0:row['sourceEffect']={'$effect':e.MOVE_KEYS[move],'type':'Move'}
         if move<0:row['sourceEffect']={'$effect':e.ITEMS[-move],'type':'Item'}

@@ -4,8 +4,7 @@ The approved first G3 package introduced [schema 1](../rules/shared-engine-v1.js
 [one JAX state/scheduler](../simulator/shared_engine.py), and a
 [host player adapter](../simulator/shared_engine_io.py). Legacy APIs remain intact.
 The completed [schema 2](../rules/shared-engine-v2.json) package supports custom
-1–6-member singles with Stealth Rock, Spikes and Gen 5 Rapid Spin. Current
-[schema 3](../rules/shared-engine-v3.json) adds generic immutable tables,
+1–6-member singles with Stealth Rock, Spikes and Gen 5 Rapid Spin. [Schema 3](../rules/shared-engine-v3.json) added generic immutable tables,
 per-mon IV/EV/nature/ability/types/Hidden Power/shiny/happiness/name/boost storage,
 special/type-dependent damage and general set decoding to the same scheduler.
 `make_state` retains the original custom-set contract; `make_gen5_state` accepts
@@ -14,6 +13,28 @@ The runtime capability masks are incomplete; the full G4 goal remains active.
 Full-format G4
 coverage remains separate acceptance work. Historical evidence keeps its original
 source/schema identity; it does not imply validation of later engine changes.
+
+The current runtime uses [schema 7](../rules/shared-engine-v7.json). Schemas
+4–6 integrated major statuses and effect provenance, boosts/weather/screens,
+and observed ability/item hooks. Schema7 adds declarative hit counts, per-hit
+updates, capped drain/recoil arithmetic, self-destruction and reactive damage.
+Rough Skin, Iron Barbs, Rocky Helmet and Liquid Ooze inherit native Gen6
+callbacks with immediate faint resolution in Gen5. Resolve those faints before
+the next hit update/handler; the resulting double-KO order differs from later
+recoil. Life Orb remains once per move. Move-driven thaw occurs only after
+BeforeMove succeeds; Gen5 Scald's explicit `thawsTarget:false` leaves a frozen
+target frozen. These transitions use the same pure JAX scheduler and masks.
+
+Schema7 appends trace event/draw IDs without changing schema6 state storage or
+canonical data IDs, so schema6 continuation is lossless. Earlier schema
+migrations retain their explicit provenance requirements; missing advanced
+status/field history is not reconstructed by guessing. The current 2048-row
+history is known to be insufficient for full G4: a reference-generated legal
+switch-only battle reaches 6541 visible rows and the native turn-limit tie.
+Capacity/terminal repair, remaining callbacks and fixed conformance campaigns
+remain active work. Current CPU evidence and exact source identities belong in
+[the progress record](ORCHESTRATION_STATE.json); later device checks belong in
+[the GPU handoff](GPU_HANDOFF.md).
 
 Use `save_state`/`load_state` in the host adapter for keyed NPZ serialization
 with schema and table hash. Older untagged keyed states require an explicit
@@ -155,8 +176,9 @@ without an ability event, while all supported species take neutral Rock damage.
 Persist schema 2 and all named State fields with snapshots. A schema 1 snapshot
 requires an explicit zero-hazard field migration; positional schema 1 tuples
 are incompatible. Existing G3 fixture inputs initialize fresh schema 2 states.
-Toxic Spikes, ordinary poison, additional species and other unlisted callbacks
-remain unsupported. The fixed event/draw/history buffers retain atomic rejection.
+Those schema2-specific bounds did not implement Toxic Spikes, ordinary poison,
+additional species or other unlisted callbacks. Later schemas extend that domain;
+the current masks still reject all remaining unsupported handlers. The fixed event/draw/history buffers retain atomic rejection.
 
 ```sh
 node reference/shared-engine-cases.cjs --batch g4 --output /tmp/g4-new.json

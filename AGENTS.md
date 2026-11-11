@@ -1,9 +1,10 @@
 # Working policy
 
-Use GPT-6.1 Sol with high reasoning effort as the primary agent, as configured
+Use GPT-6.1 Sol with medium reasoning effort as the primary agent, as configured
 in `.codex/config.toml`. The primary investigates, implements, tests, inspects
 the diff, and finishes the work directly. If this model/effort is unavailable,
-report the blocker rather than silently substituting.
+report the blocker rather than silently substituting. Do not automatically raise
+reasoning effort; the user selected Medium to control usage.
 
 ## Ownership and scope
 
@@ -17,7 +18,7 @@ report the blocker rather than silently substituting.
 - Before Goal mode, sharpen the milestones and behavior cases using
   [the preparation handoff](docs/MILESTONE_PREPARATION.md). Goal mode is selected
   on the execution surface; repository configuration does not activate it.
-  The current workflow experiment uses Sol 6.1/high without a new wall-clock
+  The current workflow experiment uses Sol 6.1/medium without a new wall-clock
   budget. Do not launch Goal mode or invent an approved goal on a scheduled wake.
 - Preserve unrelated work and avoid overlapping edits. Stop for a concrete
   blocker or a decision outside the approved goal; ordinary implementation

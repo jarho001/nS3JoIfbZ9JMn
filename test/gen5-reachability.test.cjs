@@ -45,19 +45,22 @@ test('pinned resolved export and conservative inventory reproduce exactly',()=>{
     'moves:reflect:condition.onAnyModifyDamage','conditions:sandstorm:onWeather',
     'abilities:pressure:onDeductPP','abilities:prankster:onModifyPriority',
     'abilities:icebody:onWeather','items:lifeorb:onAfterMoveSecondarySelf',
-    'conditions:choicelock:onStart']) {
+    'conditions:choicelock:onStart','conditions:frz:onModifyMove',
+    'abilities:skilllink:onModifyMove','abilities:rockhead:onDamage',
+    'abilities:roughskin:onDamagingHit','abilities:ironbarbs:onDamagingHit',
+    'abilities:liquidooze:onSourceTryHeal','items:rockyhelmet:onDamagingHit']) {
     const cb=slots.get(id);assert.equal(cb.status,'partial');
     assert.ok(fs.existsSync(cb.implementation.file));
     assert.ok(cb.evidence.every(e=>fs.existsSync(e.native)&&fs.existsSync(e.test)));
     assert.match(cb.implementation.scope,/complete .*validation pending/);
   }
-  for(const id of ['conditions:frz:onModifyMove','conditions:frz:onAfterMoveSecondary',
+  for(const id of ['conditions:frz:onAfterMoveSecondary',
     'abilities:immunity:onUpdate','abilities:magicguard:onDamage']) {
     const cb=slots.get(id);assert.equal(cb.status,'unsupported');assert.equal(cb.implementation,null);
   }
   assert.ok(ledger.callbacks.every(c=>['partial','unsupported'].includes(c.status)));
-  assert.equal(ledger.callbacks.filter(c=>c.status==='partial').length,120);
-  assert.equal(ledger.callbacks.filter(c=>c.status==='unsupported').length,1026);
+  assert.equal(ledger.callbacks.filter(c=>c.status==='partial').length,127);
+  assert.equal(ledger.callbacks.filter(c=>c.status==='unsupported').length,1019);
   // Existing native users must not contaminate raw owner provenance.
   require('../reference/vendor/pokemon-showdown/dist/sim').Dex.mod('gen5').moves.all();
   assert.deepEqual(inventory(),{data,ledger});

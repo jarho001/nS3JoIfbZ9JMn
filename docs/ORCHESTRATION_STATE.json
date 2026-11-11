@@ -524,16 +524,17 @@
     "brief": "PROJECT_PLAN.md#proposed-g4-cpu-implementation-and-conformance-goal",
     "source_base": "f37067e",
     "scope": "Complete pinned gen5randombattle reachable mechanics and every prepared CPU gate. Integrated checkpoints, resumable progress and commit/push authorized. GPU execution, profiling, benchmarks, training, delegation and scored research excluded.",
-    "checkpoint": "Schema6 checkpoint passes all49 CPU checks on unchanged7631872:322 native scenarios/2102 boundaries,20 six-member games plus8 legacy games, eager/JIT/mixed1/8/32, lifecycle/serialization and full/lean. Full-format mechanics/audit/capacity/campaigns remain open; next92/246 hit/defrost cases are native-only with staged JAX code.",
+    "checkpoint": "Schema7 integrated CPU checkpoint validated:419 native scenarios/2355 boundaries, including24 six-member games. Four hit-family execution/lifecycle checks and all seven prior scalar replay checks pass;15 native and6 helper checks pass. Full53 matching-source suite, remaining mechanics/closure/capacity and fixed campaigns remain pending.",
     "completed_checkpoints": [
       "Pinned resolved data and source-owned conservative candidate inventory exported; 605 role roots, 1768 data/effect entries, 1146 callback slots. Data-only mappings remain partial; transitive closure and complete callback implementation are not claimed.",
       "Generic species/set/type/stat/physical-special/Hidden Power/happiness/priority/hazard integration passes 37 affected CPU checks on 4eab254, retaining all 133 baseline scenarios and validating 24 added scenarios: 157 scenarios / 1059 boundaries, including 20 complete battles (eight six-member games). Eager/JIT/1-8-32 mixed batches, serialized continuation/reset, explicit schema 1/2 migration and full/lean rollouts pass.",
       "48 status/duration cases / 189 native-only boundaries captured before implementation, with source identities, effect states/order and callback-annotated raw draws. Twelve current native tests pass on 578b352; all 157 baseline/generic case semantics remain identical after diagnostic stack normalization.",
       "Schema5 status/field integration: final-source exact95 scenarios/719 boundaries and eight six-member games; four field execution/lifecycle checks plus final status replay pass on engine21f68e6/candidatec8d3231. Native-only41/144 ability/item family captured and checked before implementation. No full-format or GPU acceptance.",
       "Schema6 observed-hook integration passes4 CPU checks over70 scenarios/324 boundaries and four full six-member games. Tests cover eager startup/transition, JIT, mixed1/8/32, full/lean, save/restore/reset, malformed Choice metadata and lossless schema5 field/status migration. Matching-schema broader regression still pending.",
-      "Full schema6 baseline:49 checks pass on7631872 with unchanged tracked source/input hashes, isolated processes and real CPU placement. Resume recovered the already completed generic5-check log; no repeated completed groups."
+      "Full schema6 baseline:49 checks pass on7631872 with unchanged tracked source/input hashes, isolated processes and real CPU placement. Resume recovered the already completed generic5-check log; no repeated completed groups.",
+      "Schema7:97 hit/thaw scenarios/253 boundaries integrated; four execution/lifecycle checks and all322 prior scalar scenarios pass. Current total419/2355; GPU/final conformance deferred or pending as recorded."
     ],
-    "next": "Integrate staged declarative hit loops, recoil/drain/self-destruction, reactive hooks and move-driven thaw; validate4 new CPU checks plus affected native/scalar regressions. Then continue phase/indirect/form/terminal/capacity closure and fixed campaigns.",
+    "next": "Implement the next coherent phase/counter family from saved native observations, with focused CPU validation. Keep GPU execution/profiling deferred; do not rerun completed checkpoint checks without relevant changes.",
     "ledger": {
       "path": "rules/gen5-reachable-v1.json",
       "entries": 1768,
@@ -543,7 +544,7 @@
         "indirect-closure",
         "engine-contract"
       ],
-      "status": "incomplete;1733 entries partial/35 unsupported;120 callback mappings partial/1026 unsupported; no full-format validation or reachability closure claimed."
+      "status": "Incomplete:127 callback mappings partial/1019 unsupported; all three inventory/engine gaps remain open."
     },
     "config": "evaluation/g4-cpu-v1.json",
     "campaign": {
@@ -599,15 +600,19 @@
         "result": "All49 current-checkpoint CPU checks pass with unchanged source and inputs; not full-format CPU or GPU acceptance.",
         "record": "test-logs/g4-cpu-conformance/schema6-checkpoint.json",
         "archive": "test-logs/g4-cpu-conformance/schema6-cpu-regression.tar.gz"
+      },
+      {
+        "record": "test-logs/g4-cpu-conformance/schema7-checkpoint.json",
+        "result": "Four integration checks, seven scalar replays,15 native tests and6 handoff/fixture helpers pass; no full-format acceptance."
       }
     ],
     "gpu_requirement": "Deferred during travel. Record all G4 device obligations and ready/pending commands in docs/GPU_HANDOFF.md; current checkpoint runner is scripts/g4_gpu_handoff.py. CPU implementation remains active. Later full G4 release still requires matching-source GPU conformance.",
     "acceptance": "G4-CPU-conformance pending. Generic data checkpoint passes; all remaining prepared CPU gates retained, all milestone acceptance/task count unchanged.",
-    "source_identity": "test-logs/g4-cpu-conformance/source.json",
+    "source_identity": "test-logs/g4-cpu-conformance/schema7-checkpoint.json",
     "evidence_directory": "test-logs/g4-cpu-conformance",
     "continuation": {
-      "status": "schema6_full_checkpoint_passed_hit_integration_next",
-      "engine_schema": 6,
+      "status": "schema7_CPU_checkpoint_validated",
+      "engine_schema": 7,
       "native_status_corpus": "test-logs/g4-cpu-conformance/status-v5.json.gz",
       "generic_corpus": "test-logs/g4-cpu-conformance/generic.json.gz",
       "pending_state_design": "Schema6 adds Choice-lock item source/locked move metadata and explicit schema5 padding/old-unsupported-hook migration rejection; generic ability startup and permanent weather, PP/priority/speed/attack/defense/base-power/critical/accuracy/final-damage/item recoil integrate through shared scheduler.",
@@ -649,7 +654,16 @@
           "work/g4-phase-investigation/battle_tracking.py"
         ],
         "staging_note": "Unenabled draft phase/counter helpers preserved under ignored work directory; production source remains the frozen schema6 checkpoint. Hit integration is separately staged under work/g4-hit-integration.",
-        "runner_archive": "test-logs/g4-cpu-conformance/native-investigation-scripts.tar.gz"
+        "runner_archive": "test-logs/g4-cpu-conformance/native-investigation-scripts.tar.gz",
+        "tracking_observations": "Raw phaseState evidence: faint clears lastMove/lastDamage/attackedBy, but attempted action count persists and final move result can be assigned after faint. Confusion self-damage updates lastDamage despite no move use. gotAttacked appends ordered records after loop faint resolution, including after target faint; boolean/numeric damageValue must remain distinct. Native nextTurn removes records from inactive sources and clears thisTurn on retained records. A per-source overwrite array is insufficient.",
+        "tracking_corpora": {
+          "archive": "test-logs/g4-cpu-conformance/tracking-native-investigation.tar.gz",
+          "status": "native_only_before_causal_field_implementation",
+          "existing_corpus": "322 scenarios/2102 boundaries; all prior initialization draws, ordinary snapshots, choices/acknowledgements, draws and recipient events unchanged.",
+          "extended_corpus": "97 current hit cases plus53 standalone phase cases;366 boundaries, with duplicate IDs explicitly separated by sourceCorpus. Not an independent coverage total.",
+          "new_fields": "Last move/Encore/used move, last damage/target, active turn/action counters, typed move results, ordered attackedBy with typed damageValue, hurt/item/boost flags, trapping flags and side faint pointers.",
+          "source": "Archive includes the read-only runner and two streamed NDJSON corpora. No JAX/GPU/profiling acceptance."
+        }
       },
       "reachability_investigation": {
         "status": "provisional_not_ledger_acceptance",
@@ -660,11 +674,11 @@
         "frozen_output": "test-logs/g4-cpu-conformance/closure-source-investigation.json.gz"
       },
       "next_hit_family": {
-        "status": "native_observed_JAX_staging_unenabled",
+        "status": "implemented_validated_CPU_checkpoint",
         "inputs": "reference/hit-effect-cases.cjs",
         "fixture": "test-logs/g4-cpu-conformance/hit-native-investigation.json.gz",
-        "scenarios": 92,
-        "boundaries": 246,
+        "scenarios": 97,
+        "boundaries": 253,
         "full_six_member_games": 4,
         "runner": "work/g4-phase-investigation/observe-hits.cjs",
         "staged_core": "work/g4-hit-integration/",
@@ -672,7 +686,7 @@
           "simulator/hit_tables.py",
           "simulator/hit_effects.py"
         ],
-        "pending": "Wait for unchanged schema6 regression to finish, then integrate staged core/IO/reader, manifest references, native semantic assertions and4 CPU execution checks. Current runtime remains schema6; staged/untracked tests and helpers are not accepted capabilities. Observe new final reader/capture before running JAX. Defrost source/target distinction and confusion-blocked native branches are observed; staged status_effects.py suppresses the freeze draw and cures only after BeforeMove succeeds. Apply via work/g4-hit-integration/apply.py only after all49 frozen checks pass.",
+        "pending": "Complete. Remaining locks/recharge/two-turn/trapping/indirect/form/terminal/capacity work stays in the active goal.",
         "runner_archive": "test-logs/g4-cpu-conformance/native-investigation-scripts.tar.gz",
         "input_sha256": "67c563e7faacddf363dfb67f00cc00ac08470638cd8b0a134ace4cdb6b991331"
       },
@@ -709,16 +723,47 @@
         "archive": "test-logs/g4-cpu-conformance/native-investigation-scripts.tar.gz",
         "extract": "tar -xzf test-logs/g4-cpu-conformance/native-investigation-scripts.tar.gz",
         "scope": "Original raw-observation runners reuse pinned capture/observeInitialization/withObservedBattleDraws; no JAX execution, no profiling. Inputs are the committed reference/move-phase-cases.cjs and reference/hit-effect-cases.cjs. Output paths must be fresh."
+      },
+      "hit_cpu_gate": {
+        "status": "passed_four_checks",
+        "driver": "/tmp/g4-schema7-hit-cpu-interactions.py",
+        "output": "work/g4-schema7-hit-cpu-interactions",
+        "checks": 4,
+        "native_scenarios": 97,
+        "native_boundaries": 253,
+        "prior_failure": "work/g4-schema7-hit-cpu",
+        "native_result": "15 native tests pass in7.429s; exact export/ledger, protocol and all seven family corpora. Sandbox spawn EPERM was resolved with the allowed native subprocess access.",
+        "full_cpu_G4_accepted": false,
+        "second_failure": "Protect retained at terminal has native name Protect; host projection incorrectly used lowercase protect. Correct the immutable name, retain exact comparison. Failed source/fixture hashes and patch preserved in work/g4-schema7-hit-cpu-repaired.",
+        "third_failure": "Gen5 Scald has explicit thawsTarget:false; generic declarative preflight rejected the unknown inactive property. Recognize only this false field; true thaw-target behavior remains unsupported. All92 declared case moves/abilities/items are checked through actual capability masks before rerun.",
+        "completed_checks": 4,
+        "stopped_prior_run": "work/g4-schema7-hit-cpu-scope-fixed passed native92/246 and atomic/migration checks, then was deliberately stopped during mixed-mode compilation after new independent interactions exposed two source timing errors. No matrix or four-check pass claimed.",
+        "interaction_repairs": "Secondaries precede DamagingHit. Ordered Rough Skin/Iron Barbs/Helmet contact callbacks precede the default-order freeze hook, which can still cure after a terminal win. Rapid Spin is AfterHit and must not remove hazards after lethal contact. Five new native cases observe these branches.",
+        "seconds": 1196.004,
+        "source_unchanged": true,
+        "fixture_unchanged": true
+      },
+      "ledger_status": "127 partial callback mappings/1019 unsupported;1768 entries and all3 original reachability/engine gaps remain open.",
+      "prior_scalar_regression": {
+        "status": "all_seven_passed_with_test_only_inventory_fix",
+        "checks": 7,
+        "scenarios": 322,
+        "boundaries": 2102,
+        "driver": "/tmp/g4-schema7-scalar-regression.py",
+        "output": "work/g4-schema7-scalar-regression",
+        "source": "Runtime and hit-test hashes unchanged from the four-check gate; only the field-test inventory assertion changed, with exact rebinding recorded in checkpoint evidence.",
+        "evidence": "test-logs/g4-cpu-conformance/schema7-checkpoint.json"
       }
     },
     "resolved_failure": "16b5263 preflight rejected ordinary moves because type was missing from its field set; fixed by 4eab254, failed run stopped, all 37 repaired checks pass. Detailed minimized input and source identities are in source.json.",
     "publication": {
-      "status": "published_checkpoint",
+      "status": "schema7_checkpoint_ready_to_publish",
       "target": "origin/main",
-      "published_evidence_head": "c8d3231",
-      "result": "Normal fast-forward push succeeded; source/corpus/evidence checkpoint published. Full G4 CPU conformance remains in progress.",
-      "scope": "Schema4/5 status/field implementation and current45-check GPU handoff; native-only next hook family. No GPU/profiling/benchmark/training run."
-    }
+      "published_evidence_head": "cbec220",
+      "result": "Schema7 checkpoint validated and prepared for normal fast-forward publication; cbec220 is the preceding published evidence checkpoint.",
+      "scope": "Validated hit/thaw/reactive-damage integration, exact CPU evidence and expanded deferred GPU handoff."
+    },
+    "reasoning_effort": "medium (user preference,2026-11-10; no automatic escalation)"
   },
   "optional_gpu_validation_history": [
     {
@@ -951,7 +996,7 @@
   ],
   "workflow_policy": {
     "primary_model": "gpt-6.1-sol",
-    "primary_reasoning_effort": "high",
+    "primary_reasoning_effort": "medium",
     "execution": "primary_owns_goal_directly",
     "optional_roles": [
       "implementer",
@@ -1619,10 +1664,10 @@
     "source_commit": "153a056d2eb9e52455d10b80776d431a5a13663c",
     "source_tree": "b20074171f4eba793a6877402e25e5c21e11414b",
     "blocks_active_cpu_goal": false,
-    "existing_cpu_evidence": "All49 schema6 CPU checks pass on unchanged7631872; schema6-checkpoint.json and schema6-cpu-regression.tar.gz record source/fixtures/environment/commands/logs. Earlier schema4/5 evidence remains historical.",
+    "existing_cpu_evidence": "schema7-checkpoint.json:four integration and seven successful prior scalar checks; native15/helper6 pass. Historical source6 full49 preserved. Full matching-source53 run not repeated.",
     "ready_command": "\"$JAX_PYTHON\" scripts/g4_gpu_handoff.py",
     "hardware": "One selected NVIDIA GPU/driver compatible with the chosen pinned JAX CUDA wheel; record actual driver/device/VRAM and eager/JIT placement. No paid provisioning or driver changes authorized by this handoff.",
-    "ready_scope": "49 CPU/CUDA checks in11 isolated module processes, six independent native corpora (322 scenarios/2102 boundaries). All49 CPU checks pass on7631872; actual GPU correctness remains deferred. Native-only hit/defrost/turn-limit cases are not ready GPU checks.",
+    "ready_scope": "53 CPU/CUDA checks in12 isolated modules; seven corpora419/2355,24 constructed six-member games. Current targeted CPU checkpoint validated; real GPU execution remains deferred.",
     "pending_full_format": "V7 module and GPU config are absent; full CPU closure, reachable audit and final matching-source directed/generated campaign device replay remain required. Checkpoint GPU success cannot accept full G4.",
     "profiling": "G3 V6 bounded homogeneous/mixed compilation, warm execution and memory measurements are documented with exact commands. Optional current-source baseline + single trace recipe is separate. No required G4 profiling workload is defined; broad sweeps remain excluded.",
     "result_handoff": "Runner prints a fresh results directory and .tar.gz with source/fixture identities, command arrays/environments, device/package metadata, logs and summary, including ordinary failures. Agent review instructions are in the document.",
@@ -1666,16 +1711,17 @@
     "combined_return_home_block": "docs/GPU_HANDOFF.md#one-return-home-block-correctness-plus-g3-v6-measurements",
     "pending_status_checkpoint": "Current status/field/hook GPU checks are wired into the49-check runner; no GPU execution during travel. Preserve matching-source CPU results and do not transfer earlier GPU/CPU evidence across changed source.",
     "expanded_checkpoint": {
-      "status": "full_49_check_cpu_checkpoint_passed",
-      "engine_schema": 6,
-      "modules": 49,
-      "native_scenarios": 322,
-      "native_boundaries": 2102,
+      "status": "CPU_checkpoint_validated",
+      "engine_schema": 7,
+      "modules": 12,
+      "native_scenarios": 419,
+      "native_boundaries": 2355,
       "initial_field_evidence": "test-logs/g4-cpu-conformance/schema5-checkpoint.json",
       "source": "Use latest committed checkout and runner source/fixture fingerprints; earlier source_commit fields describe historical preparation.",
       "handoff_prepared": true,
-      "source_commit": "76318723cce59df97db13535477f286577b5c06f",
-      "source_identity": "test-logs/g4-cpu-conformance/schema6-cpu-regression.tar.gz"
+      "source_commit": "see schema7-checkpoint source hashes and publishing commit",
+      "source_identity": "test-logs/g4-cpu-conformance/schema6-cpu-regression.tar.gz",
+      "checks": 53
     }
   }
 }
