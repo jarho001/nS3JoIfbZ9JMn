@@ -7,19 +7,19 @@ GPU. Preparing this handoff does not run device tests, profiling or benchmarks.
 
 ## Current source and evidence
 
-The engine is schema 7, adding declarative hit loops, drain/recoil,
-self-destruction, reactive damage and move-driven thaw. Its four CPU integration
-checks pass, including eager/JIT, mixed1/8/32, save/load/reset and full/lean games.
-All seven prior scalar replay checks pass after correcting a test-only field
-context inventory assertion. All 15 native and 6 helper checks pass. Exact source,
-commands and qualifications are in [schema7-checkpoint.json](../test-logs/g4-cpu-conformance/schema7-checkpoint.json).
-The entire 53-check matching-source suite has not been repeated during this checkpoint.
+The engine is schema 8, adding forced recharge after schema7's hit/thaw
+integration. Four recharge CPU integration checks and 12 prior scalar/migration checks pass.
+Exact source, commands and results are in
+[schema8-checkpoint.json](../test-logs/g4-cpu-conformance/schema8-checkpoint.json).
+The entire 57-check matching-source suite was not repeated; run the handoff on
+matching committed source. Historical schema7 evidence remains in
+[schema7-checkpoint.json](../test-logs/g4-cpu-conformance/schema7-checkpoint.json).
 
-The expanded runner expects **53 checks in 12 isolated modules**, using seven
-independent native corpora: **419 scenarios / 2355 boundaries**, including
-24 complete constructed six-member games. The 97 new hit/thaw scenarios are
-covered by `test.test_hit_engine`. Full G4 remains open: remaining reachable
-mechanics, closure audit, history/terminal repair and the fixed full-format
+The expanded runner expects **57 checks in 13 isolated modules**, using eight
+independent native corpora: **453 scenarios / 2524 boundaries**, including
+26 complete constructed six-member games. The 34 recharge scenarios are in
+`test.test_recharge_engine`. Full G4 remains open: remaining reachable mechanics,
+closure audit, causal counters, history/terminal repair and the fixed full-format
 campaigns are still required. A genuine reference-generated switch-only game
 already proves the existing history bound insufficient (6541 visible rows).
 That native-only witness is not an implemented GPU test.
@@ -28,7 +28,7 @@ The preceding **49-check schema 6 CPU checkpoint passed on `7631872`**, with
 unchanged source/input hashes and actual CPU placement. Its
 [record](../test-logs/g4-cpu-conformance/schema6-checkpoint.json) and regression
 archive retain commands, fixture/source identities and every module log.
-That result is historical evidence for schema 7. Earlier incomplete/OOM and
+That result is historical evidence for schema 8. Earlier incomplete/OOM and
 schema3/5 evidence remain in [active progress](ORCHESTRATION_STATE.json).
 The runner isolates modules and integration suites release compiled caches;
 cases and batch sizes are retained.
@@ -74,9 +74,9 @@ the combined block below:
 
 1. Creates a fresh `work/g4-gpu-TIMESTAMP/` and records commit/tree, relevant file
    hashes, selected host affinity and independent native fixture hashes.
-2. Freezes legacy, hazard, generic, status, field/boost, ability/item and hit/thaw corpora. Runs the
+2. Freezes legacy, hazard, generic, status, field/boost, ability/item, hit/thaw and recharge corpora. Runs the
    reference/native contracts. Unknown/unsupported families stay explicit.
-3. Runs the same current 53-check scope on CPU, then under `JAX_PLATFORMS=cuda`,
+3. Runs the same current 57-check scope on CPU, then under `JAX_PLATFORMS=cuda`,
    with each test module in a fresh process.
    A strict probe verifies actual eager/JIT GPU placement; shared case/lifecycle
    assertions also check device leaves. `cuda` initialization failure is a failure.
@@ -132,11 +132,21 @@ The added device checks are correctness checks, not extra profiling points:
   1/8/32-lane, save/restore/reset and full/lean checks on actual GPU leaves.
   The runner includes `test.test_hit_engine` and freezes `--batch hits` inputs.
 
+- Recharge: the runner freezes `--batch recharge` and executes
+  `test.test_recharge_engine` on CPU and CUDA. Check all six moves, minimal
+  trapped requests, slot-2 moves versus the recharge pseudo-action, pending/undo
+  and rejected switches/slots; PP exhaustion/Pressure/Choice; freeze, sleep,
+  paralysis and confusion priority; duration-handler RNG, contact/Life Orb and
+  residual faints, forced replacements and native terminal timing. Include
+  eager/JIT and 1/8/32 mixed lanes, serialization of locked/private pending states,
+  atomic invalid/stale/overflow behavior, lossless schema7 migration, and both
+  complete six-member full/lean rollouts with continuation/reset.
+
 ## GPU obligations and readiness
 
 | Obligation | Commands / current readiness | Evidence required |
 |---|---|---|
-| Current G4 data/hazard/generic/status/field/hook/hit device correctness | **Runnable checkpoint:** the runner above; check the CPU validation record first, then use the same CPU/CUDA modules and frozen fixtures | Both suites pass; real GPU leaf placement, exact native state/draw/request/view/outcome equality, batches 1/8/32, saved continuation/reset, full/lean equality, invalid/stale/unsupported/overflow isolation. Covers the current checkpoint only. |
+| Current G4 data/hazard/generic/status/field/hook/hit/recharge device correctness | **Runnable checkpoint:** the runner above; check the CPU validation record first, then use the same CPU/CUDA modules and frozen fixtures | Both suites pass; real GPU leaf placement, exact native state/draw/request/view/outcome equality, batches 1/8/32, saved continuation/reset, full/lean equality, invalid/stale/unsupported/overflow isolation. Covers the current checkpoint only. |
 | Subsequent G4 mechanics and schema changes | **Append before the next CPU checkpoint:** add implemented family tests and native batches to the runner and this handoff; record CPU source/evidence | GPU replay on matching final source, including new counters/volatiles, queues, visibility, per-lane RNG and serialization. Native-only cases cannot substitute for JAX checks. |
 | Full G4 release conformance | **Blocked by implementation, not travel alone:** V7 executable and GPU config are absent; CPU conformance is still incomplete | Closed reachable ledger and all required directed cases; same fixed 64 development / 128 held-out starts and choices as CPU, true native terminals, zero divergence/truncation/capacity errors. Scalar JIT and heterogeneous 8/32 lanes; compare in chunks of at most 16 boundaries. Preserve held-out reuse history and source/fixture/config/policy identities. |
 | G4 device-specific profiling | **No required G4 profiling experiment is currently defined.** Add a bounded command here if an actual device/capacity issue requires one | Exact workload/output contract, hardware/VRAM, CPU budget, cold compile versus synchronized warm execution, useful work counts, memory and actual GPU stream events. A profiler trace is not conformance or a speedup result. |

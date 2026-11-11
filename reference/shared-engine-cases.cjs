@@ -158,6 +158,7 @@ cases.push(...require('./status-duration-cases.cjs')(mon));
 cases.push(...require('./field-boost-cases.cjs')(mon));
 cases.push(...require('./ability-item-cases.cjs')(mon));
 cases.push(...require('./hit-effect-cases.cjs')(mon));
+cases.push(...require('./recharge-cases.cjs')(mon));
 
 function scriptedChoices(battle,scenario,boundary) {
  const choices={};
@@ -330,7 +331,7 @@ function runCase(ps, scenario) {
   }
   if(scenario.setup)battle.makeRequest('move');
   assert.equal(battle.prng.getSeed(),rng,'trusted boundary setup must not consume RNG');
-  const snapshot=()=>capture(battle,ids,{effects:scenario.statusFamily||scenario.fieldFamily||scenario.hookFamily||scenario.hitFamily,field:scenario.fieldFamily||scenario.statusFamily||scenario.hookFamily||scenario.hitFamily});
+  const snapshot=()=>capture(battle,ids,{effects:scenario.statusFamily||scenario.fieldFamily||scenario.hookFamily||scenario.hitFamily||scenario.rechargeFamily,field:scenario.fieldFamily||scenario.statusFamily||scenario.hookFamily||scenario.hitFamily||scenario.rechargeFamily});
   const record={id:scenario.id,classification:scenario.setup?'synthetic':'native-constructed',setup:scenario,initializationDraws,
    initial:snapshot(),initialEvents:events(battle),steps:[]};
   let boundary=0;
@@ -348,7 +349,7 @@ function runCase(ps, scenario) {
    try {observed=withObservedBattleDraws(ps,battle,()=>Object.entries(choices).map(([side,choice])=>{
     if(choice==='undo'){battle.undoChoice(side);return {side,choice,accepted:!battle[side].choice.actions.length};}
     return {side,choice,accepted:battle.choose(side,choice)};
-   }),{includeEffects:scenario.statusFamily||scenario.fieldFamily||scenario.hookFamily||scenario.hitFamily});} finally {battle.send=oldSend;}
+   }),{includeEffects:scenario.statusFamily||scenario.fieldFamily||scenario.hookFamily||scenario.hitFamily||scenario.rechargeFamily});} finally {battle.send=oldSend;}
    record.steps.push({choices,accepted:observed.result,before,after:snapshot(),
     draws:observed.draws.map(draw=>({...draw,semanticContext:semanticContext(draw)})),events:events(battle,start),privatePackets:acks});
   }
@@ -401,9 +402,9 @@ function main(argv) {
   if(coverageOutput)fs.writeFileSync(coverageOutput,JSON.stringify(coverage,null,2)+'\n',{flag:'wx'});
   return;
  }
- const selected=batch==='hits'?cases.filter(c=>c.hitFamily):batch==='hooks'?cases.filter(c=>c.hookFamily&&!c.hitFamily):batch==='field'?cases.filter(c=>c.fieldFamily):batch==='status'?cases.filter(c=>c.statusFamily):batch==='generic'?cases.filter(c=>c.generic&&!c.statusFamily&&!c.fieldFamily&&!c.hookFamily&&!c.hitFamily):batch==='g4'?cases.filter(c=>c.g4):batch==='all'?cases.filter(c=>!c.g4&&!c.generic):batch==='boundaries'?cases.filter(c=>!c.g4&&!c.generic&&!c.fullBattle):batch==='battles'?cases.filter(c=>!c.g4&&!c.generic&&c.fullBattle):cases.filter(c=>c.id===batch);
+ const selected=batch==='recharge'?cases.filter(c=>c.rechargeFamily):batch==='hits'?cases.filter(c=>c.hitFamily):batch==='hooks'?cases.filter(c=>c.hookFamily&&!c.hitFamily&&!c.rechargeFamily):batch==='field'?cases.filter(c=>c.fieldFamily):batch==='status'?cases.filter(c=>c.statusFamily):batch==='generic'?cases.filter(c=>c.generic&&!c.statusFamily&&!c.fieldFamily&&!c.hookFamily&&!c.hitFamily&&!c.rechargeFamily):batch==='g4'?cases.filter(c=>c.g4):batch==='all'?cases.filter(c=>!c.g4&&!c.generic):batch==='boundaries'?cases.filter(c=>!c.g4&&!c.generic&&!c.fullBattle):batch==='battles'?cases.filter(c=>!c.g4&&!c.generic&&c.fullBattle):cases.filter(c=>c.id===batch);
  if(!selected.length)throw Error('Empty native case selection: '+batch);
- const result={schemaVersion:1,pin,format:'gen5randombattle',caseSchema:selected.some(c=>c.hitFamily)?'gen5-hit-effects-v1':selected.some(c=>c.hookFamily)?'gen5-ability-item-v1':selected.some(c=>c.fieldFamily)?'gen5-field-boost-v1':selected.some(c=>c.statusFamily)?'gen5-status-duration-v1':selected.some(c=>c.generic)?'shared-engine-v3':selected.some(c=>c.g4)?'shared-engine-v2':'shared-engine-v1',cases:selected.map(c=>runCase(ps,c))};
+ const result={schemaVersion:1,pin,format:'gen5randombattle',caseSchema:selected.some(c=>c.rechargeFamily)?'gen5-recharge-v1':selected.some(c=>c.hitFamily)?'gen5-hit-effects-v1':selected.some(c=>c.hookFamily)?'gen5-ability-item-v1':selected.some(c=>c.fieldFamily)?'gen5-field-boost-v1':selected.some(c=>c.statusFamily)?'gen5-status-duration-v1':selected.some(c=>c.generic)?'shared-engine-v3':selected.some(c=>c.g4)?'shared-engine-v2':'shared-engine-v1',cases:selected.map(c=>runCase(ps,c))};
  const json=JSON.stringify(result,null,2)+'\n';
  if(output)fs.writeFileSync(output,json,{flag:'wx'});else process.stdout.write(json);
 }

@@ -14,7 +14,7 @@ Full-format G4
 coverage remains separate acceptance work. Historical evidence keeps its original
 source/schema identity; it does not imply validation of later engine changes.
 
-The current runtime uses [schema 7](../rules/shared-engine-v7.json). Schemas
+The current runtime uses [schema 8](../rules/shared-engine-v8.json). Schemas
 4–6 integrated major statuses and effect provenance, boosts/weather/screens,
 and observed ability/item hooks. Schema7 adds declarative hit counts, per-hit
 updates, capped drain/recoil arithmetic, self-destruction and reactive damage.
@@ -24,6 +24,18 @@ the next hit update/handler; the resulting double-KO order differs from later
 recoil. Life Orb remains once per move. Move-driven thaw occurs only after
 BeforeMove succeeds; Gen5 Scald's explicit `thawsTarget:false` leaves a frozen
 target frozen. These transitions use the same pure JAX scheduler and masks.
+
+Schema8 appends a fifth volatile record for `mustrecharge`, preserving native
+source, global effect order and residual duration. All six declarative recharge
+moves share the hit path. Successful hits install recharge before contact damage;
+misses, immunity and Protect do not. Recharge requests contain one minimal
+`Recharge` row and `trapped: true`; public action slot 0 queues an explicit
+internal recharge action rather than underlying move slot 0. Its BeforeMove
+handler runs before sleep/freeze/confusion/paralysis, spends no PP and consumes
+no status RNG. Pending/undo, replacements and retained queues preserve this
+identity. Fainting clears the phase. Accepted schema6/7 continuations pad the
+new slot with zeros; fabricated legacy recharge requires replay/provenance.
+Rampage, charge moves, other locks and the broader causal counters remain open.
 
 Schema7 appends trace event/draw IDs without changing schema6 state storage or
 canonical data IDs, so schema6 continuation is lossless. Earlier schema

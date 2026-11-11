@@ -1,0 +1,48 @@
+{
+  "schema": 8,
+  "status": "validated_focused_CPU_checkpoint_not_full_G4",
+  "native_scenarios": 453,
+  "native_boundaries": 2524,
+  "complete_six_member_games": 26,
+  "recharge": {
+    "scenarios": 34,
+    "boundaries": 169,
+    "six_member_games": 2,
+    "count": 4,
+    "seconds": 948.898,
+    "passed": true,
+    "scope": "Exact tracked state/effects/timers/order, draws/RNG, requests/actions/private pending and recipient histories; eager/JIT and heterogeneous1/8/32; locked save/restore; full/lean complete games/reset; atomic invalid/stale/unsupported/overflow and legacy continuation."
+  },
+  "prior_regression": {
+    "scenarios": 419,
+    "boundaries": 2355,
+    "count": 12,
+    "seconds": 334.178,
+    "passed": true,
+    "scope": "Eight prior scalar family replays plus four migration/metadata/continuation checks. Earlier full suites are historical; the entire 57-check matching-source suite was not repeated."
+  },
+  "native_tests": {
+    "passed": 2,
+    "scope": "New recharge contract and reproducible callback ledger",
+    "log": "g4-recharge-integration/native-final.log"
+  },
+  "handoff_helpers": {
+    "passed": 6,
+    "seconds": 0.217
+  },
+  "handoff_preparation": {
+    "status": "prepared_not_executed",
+    "cases": 453,
+    "boundaries": 2524,
+    "modules": 13,
+    "expected_checks": 57
+  },
+  "evidence_archive": "test-logs/g4-cpu-conformance/schema8-validation.tar.gz",
+  "archive_sha256": "4d2a64d4fcabf4b847fdf8de0df07d5e78f19da1f5cb64c4fc3b7b9ef12419c9",
+  "source_identity": "g4-schema8-recharge-cpu/source.json inside archive; source unchanged throughout CPU checks",
+  "fixtures": "Exact hashes/paths in archived fixtures.json; schema6-cpu-regression.tar.gz, hits.json.gz and recharge.json.gz preserve frozen inputs. Fresh preparation metadata/logs are included; commands regenerate that preparation.",
+  "full_cpu_G4_accepted": false,
+  "GPU_executed": false,
+  "profiling_executed": false,
+  "remaining": "Broader causal battle counters, rampage/charge/restrictions, other reachable mechanics/closure, native terminal/history capacity repair and fixed64/128 campaigns."
+}

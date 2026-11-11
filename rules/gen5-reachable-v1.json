@@ -7256,10 +7256,22 @@
           "file": "data/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/recharge.json.gz",
+          "native": "reference/recharge-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_recharge_engine.py"
+        }
+      ],
       "field": "onBeforeMove",
       "id": "conditions:mustrecharge:onBeforeMove",
-      "implementation": null,
+      "implementation": {
+        "family": "recharge",
+        "file": "simulator/phase_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:mustrecharge",
@@ -7270,7 +7282,7 @@
       "owner": "conditions:mustrecharge",
       "reachability": "candidate",
       "sha256": "2d5a01f87147728f095dbdd2ac7abf2ac6a7b0774f1c4002ad79314735ff6033",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -7279,10 +7291,22 @@
           "file": "data/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/recharge.json.gz",
+          "native": "reference/recharge-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_recharge_engine.py"
+        }
+      ],
       "field": "onStart",
       "id": "conditions:mustrecharge:onStart",
-      "implementation": null,
+      "implementation": {
+        "family": "recharge",
+        "file": "simulator/phase_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:mustrecharge",
@@ -7293,7 +7317,7 @@
       "owner": "conditions:mustrecharge",
       "reachability": "candidate",
       "sha256": "1ebb382f36c4b62fa7b73cce593d2ae4178efcf0ded8c05152972fcdadedd6ec",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -79226,9 +79250,21 @@
         "resolver": "Dex.mod('gen5').conditions",
         "sha256": "b6da65ca24240b49b4b27925c23d6f1c1adc7a3bb8031d633d3f2c933a9a9bf6"
       },
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/recharge.json.gz",
+          "native": "reference/recharge-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_recharge_engine.py"
+        }
+      ],
       "id": "conditions:mustrecharge",
-      "implementation": null,
+      "implementation": {
+        "family": "recharge",
+        "file": "simulator/phase_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "kind": "conservative-superset",
@@ -79237,7 +79273,7 @@
       ],
       "kind": "conditions",
       "reachability": "candidate",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definition": {

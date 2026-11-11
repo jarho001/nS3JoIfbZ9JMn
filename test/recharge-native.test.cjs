@@ -1,0 +1,31 @@
+'use strict';
+const test=require('node:test'),assert=require('node:assert/strict');
+const {assertReady}=require('../reference/neutral-turn-oracle.cjs');
+const {cases,runCase}=require('../reference/shared-engine-cases.cjs');
+test('native recharge family fixes minimal forced requests, timing and failure boundaries',()=>{
+ assertReady();const ps=require('../reference/vendor/pokemon-showdown/dist/sim');
+ const records=cases.filter(c=>c.rechargeFamily).map(c=>runCase(ps,c));assert.equal(records.length,34);
+ assert.equal(records.reduce((n,c)=>n+c.steps.length,0),169);
+ const find=id=>records.find(c=>c.id===`G4-recharge-${id}`);
+ const messages=(id,n=0)=>find(id).steps[n].events.p1.map(e=>e.message);
+ const state=(id,n=0)=>find(id).steps[n].after.sides[0].pokemon[0];
+ const req=find('slot2-pending-undo').steps[0].after.sides[0].request.active[0];
+ assert.deepEqual(req,{moves:[{move:'Recharge',id:'recharge'}],trapped:true});
+ assert.equal(find('slot2-pending-undo').steps[1].after.sides[0].pending[0].move,'recharge');
+ for(const id of ['reject-switch','reject-slot2'])assert.equal(find(id).steps[1].accepted[0].accepted,false);
+ for(const id of ['protect','immune'])assert.equal(state(id).volatiles.mustrecharge,undefined);
+ assert.equal(state('terminal').volatiles.mustrecharge.duration,2);
+ assert.equal(state('pressure').moves[0].pp,6);assert.equal(state('pressure',1).moves[0].pp,6);
+ assert.ok(messages('Spore',1).includes('|cant|p1a: Mew|recharge'));
+ assert.ok(!find('ConfuseRay').steps[1].draws.some(d=>d.effectId==='confusion'));
+ // Synchronize also paralyzes the opponent; only that holder draws here.
+ assert.equal(find('ThunderWave').steps[1].draws.filter(d=>d.semanticContext==='paralysis').length,1);
+ assert.ok(messages('ThunderWave',1).includes('|cant|p1a: Mew|recharge'));
+ assert.ok(!find('frozen-recharge').steps[1].draws.some(d=>d.semanticContext==='freeze'));
+ assert.equal(state('frozen-recharge',1).status,'frz');
+ assert.ok(!messages('ko-before-recharge',1).some(s=>s.endsWith('|recharge')));
+ assert.ok(find('both-recharge').steps[0].after.sides.every(s=>s.pokemon[0].volatiles.mustrecharge));
+ for(const id of ['contact-1','orb-ko','residual-ko'])assert.equal(state(id).volatiles.mustrecharge,undefined);
+ const contact=messages('contact-1');assert.ok(contact.findIndex(s=>s.startsWith('|-mustrecharge|'))<contact.findIndex(s=>s.includes('ability: Rough Skin')));
+ for(const c of records.filter(c=>c.setup.fullBattle))assert.equal(c.steps.at(-1).after.terminal,true);
+});

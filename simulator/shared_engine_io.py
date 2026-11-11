@@ -62,7 +62,7 @@ def project_request(state,side):
                          'maxpp':int(e.PP[mid]),'target':tables.TARGETS[mid],
                          'disabled':bool(e.hook_ops.disabled(s)[side,mon,slot])})
         if all(row['disabled'] for row in rows):rows=[{'move':'Struggle','id':'struggle','target':'randomNormal','disabled':False}]
-        req['active']=[{'moves':rows}]
+        req['active']=[{'moves':[{'move':'Recharge','id':'recharge'}],'trapped':True} if bool(e.phase_ops.locked(s)[side]) else {'moves':rows}]
     return req
 
 
@@ -110,6 +110,8 @@ def project_events(state,trace,audience):
             continue
         elif kind==e.BOOST:line=f'|-'+('unboost' if status else 'boost')+f'|{actor}|{e.field_tables.STATS[aux]}|{abs(value)}'
         elif kind==e.WEATHER:line='|-weather|'+e.field_tables.WEATHER_NAMES[value]+(f'|[from] ability: {e.hook_tables.ABILITY_NAMES[move]}|[of] {actor}' if aux==2 else '|[upkeep]' if aux==1 else '')
+        elif kind==e.MUST_RECHARGE:line=f'|-mustrecharge|{actor}'
+        elif kind==e.RECHARGE_CANT:line=f'|cant|{actor}|recharge'
         elif kind==e.HIT_COUNT:line=f'|-hitcount|'+(actor.replace('a: ',': ') if aux else actor)+f'|{value}'
         elif kind==e.REVEAL:line=f'|-ability|{actor}|'+e.hook_tables.ABILITY_NAMES[value]+('|boost' if aux else '')
         else:raise ValueError('unknown event')
@@ -148,9 +150,9 @@ def load_state(path,*,schema=None):
         stored=int(saved['schema']) if 'schema' in saved else None
         if schema is not None and stored is not None and stored!=schema:raise ValueError('schema mismatch')
         version=stored if schema is None else schema
-        if version not in (1,2,3,4,5,6,7):raise ValueError('explicit supported state schema required')
+        if version not in (1,2,3,4,5,6,7,8):raise ValueError('explicit supported state schema required')
         fields={k:jnp.asarray(saved[k]) for k in saved.files if k not in ('schema','data_sha256')}
-        if version in (3,4,5,6,7):
+        if version in (3,4,5,6,7,8):
             if 'data_sha256' not in saved or str(saved['data_sha256'])!=generic.DATA_SHA256:
                 raise ValueError('state data table identity mismatch')
         else:
@@ -190,9 +192,11 @@ def load_state(path,*,schema=None):
             fields.update(effect_order=e.i32(0),status_state=e.effects.empty_status(),
                 volatile_state=jnp.zeros((2,6,3,6),jnp.int32),ability_order=jnp.zeros((2,6),jnp.int32),
                 item_order=jnp.zeros((2,6),jnp.int32))
+            fields['volatile_state']=jnp.pad(fields['volatile_state'],((0,0),(0,0),(0,2),(0,0)))
             migrated=e.State(*(fields[k] for k in e.State._fields))
             for side in range(2):migrated,_=e.effects.activate((migrated,e.empty_trace()),e.i32(side),e)
             fields=dict(zip(e.State._fields,migrated,strict=True))
+            fields['volatile_state']=fields['volatile_state'][:,:,:3,:]
         if version<6:
             # Earlier engines explicitly rejected these hooks. Promoting an old
             # unsupported initializer would fabricate its startup/lock history.
@@ -200,6 +204,14 @@ def load_state(path,*,schema=None):
             if np.any(old_abilities>3) or np.any(old_abilities<0) or np.any(old_items<0) or np.any(old_items>=len(e.ITEMS)) or not np.all(np.asarray(e.field_tables.ITEM_IMPLEMENTED)[np.clip(old_items,0,len(e.ITEMS)-1)]):
                 raise ValueError('legacy hook state requires replay/provenance')
             if fields['volatile_state'].shape!=(2,6,3,6):raise ValueError('invalid legacy volatile shape')
+            fields['volatile_state']=jnp.pad(fields['volatile_state'],((0,0),(0,0),(0,1),(0,0)))
+        if version<8:
+            if fields['volatile_state'].shape!=(2,6,4,6):raise ValueError('invalid legacy volatile shape')
+            # Earlier capability masks reject recharge moves, so no accepted
+            # old continuation can contain the new forced phase.
+            old_moves=np.asarray(fields['moves'])
+            safe=np.clip(old_moves,0,len(e.MOVE_KEYS)-1)
+            if np.any(np.asarray(e.phase_ops.RECHARGE)[safe]):raise ValueError('legacy recharge requires replay/provenance')
             fields['volatile_state']=jnp.pad(fields['volatile_state'],((0,0),(0,0),(0,1),(0,0)))
         if set(fields)!=set(e.State._fields):raise ValueError('invalid state field set')
         state=e.State(*(fields[k] for k in e.State._fields))
@@ -219,7 +231,7 @@ def effect_states(state,side,mon):
     if start>=0:status['startTime']=start
     if mid==e.TOX:status['stage']=int(s.toxic[side,mon])
     volatiles={}
-    for kind,key in enumerate(('protect','stall','confusion','choicelock')):
+    for kind,key in enumerate(('protect','stall','confusion','choicelock','mustrecharge')):
         exists,order,ss,sm,move,time=map(int,s.volatile_state[side,mon,kind])
         if not exists:continue
         row={'id':key,'name':e.MOVE_NAMES[e.PROTECT] if kind==0 else key,'effectOrder':order,'target':target,
@@ -230,6 +242,7 @@ def effect_states(state,side,mon):
         if kind==1:row.update(counter=int(s.stall[side,mon]),duration=int(s.stall_duration[side,mon]))
         if kind==2:row['time']=time
         if kind==3:row['move']=e.MOVE_KEYS[time]
+        if kind==4:row['duration']=time
         volatiles[key]=row
     return {'statusState':status,'volatiles':volatiles,
         'abilityState':{'id':e.ABILITIES[int(s.ability[side,mon])],'effectOrder':int(s.ability_order[side,mon]),'target':target},

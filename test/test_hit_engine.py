@@ -40,7 +40,7 @@ class HitEngineTest(unittest.TestCase):
 
     def test_native_state_rng_requests_histories_and_outcomes(self):
         self.assertEqual(len(self.cases),97)
-        manifest=json.loads(Path('rules/shared-engine-v7.json').read_text())
+        manifest=json.loads(Path('rules/shared-engine-v8.json').read_text())
         self.assertEqual(manifest['schema_version'],e.SCHEMA)
         self.assertEqual(manifest['draw_contexts'],list(e.DRAW_CONTEXTS))
         for case in self.cases:
@@ -98,7 +98,7 @@ class HitEngineTest(unittest.TestCase):
 
     def test_atomic_unsupported_and_schema6_continuation(self):
         case=next(c for c in self.cases if c['id']=='G4-phase-count-2');s,_=initialize_case(case)
-        for move in ('triplekick','gigaimpact','outrage','solarbeam'):
+        for move in ('triplekick','outrage','solarbeam'):
             bad=s._replace(moves=s.moves.at[0,0,0].set(tables.MOVE_IDS[move]),pp=s.pp.at[0,0,0].set(e.PP[tables.MOVE_IDS[move]]))
             r=STEP(bad,e.i32([0,0]));self.assertEqual(int(r.code),e.UNSUPPORTED);same(r.state,bad)
             self.assertEqual(int(r.trace.ecount),0);self.assertEqual(int(r.trace.dcount),0)
@@ -109,7 +109,7 @@ class HitEngineTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             path=Path(tmp)/'old.npz'
             from simulator import gen5_tables as g
-            np.savez(path,schema=6,data_sha256=np.asarray(g.DATA_SHA256),**{k:np.asarray(getattr(s,k))for k in e.State._fields})
+            np.savez(path,schema=6,data_sha256=np.asarray(g.DATA_SHA256),**{k:np.asarray(getattr(s,k))[:,:,:4,:] if k=='volatile_state' else np.asarray(getattr(s,k)) for k in e.State._fields})
             restored=load_state(path);same(restored,s);same(STEP(restored,e.i32([0,0])),STEP(s,e.i32([0,0])))
 
 if __name__=='__main__':unittest.main()
