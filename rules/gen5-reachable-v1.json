@@ -4615,10 +4615,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/items.json.gz",
+          "native": "reference/item-lifecycle-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_item_lifecycle_engine.py"
+        }
+      ],
       "field": "onTakeItem",
       "id": "abilities:stickyhold:onTakeItem",
-      "implementation": null,
+      "implementation": {
+        "family": "item_lifecycle",
+        "file": "simulator/item_lifecycle.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:stickyhold",
@@ -4629,7 +4641,7 @@
       "owner": "abilities:stickyhold",
       "reachability": "candidate",
       "sha256": "c9cd6af8ba164120e626440e6a3510b38fa9fe19371a6daffbef8da0426638dc",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -21384,10 +21396,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/items.json.gz",
+          "native": "reference/item-lifecycle-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_item_lifecycle_engine.py"
+        }
+      ],
       "field": "onAfterHit",
       "id": "moves:knockoff:onAfterHit",
-      "implementation": null,
+      "implementation": {
+        "family": "item_lifecycle",
+        "file": "simulator/item_lifecycle.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:knockoff",
@@ -21398,7 +21422,7 @@
       "owner": "moves:knockoff",
       "reachability": "candidate",
       "sha256": "c2b881eb9a3fcf54d6b73aa62b6a6115ccb2c9036419de001affd3680a99dc1a",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -24001,10 +24025,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/items.json.gz",
+          "native": "reference/item-lifecycle-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_item_lifecycle_engine.py"
+        }
+      ],
       "field": "onHit",
       "id": "moves:recycle:onHit",
-      "implementation": null,
+      "implementation": {
+        "family": "item_lifecycle",
+        "file": "simulator/item_lifecycle.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:recycle",
@@ -24015,7 +24051,7 @@
       "owner": "moves:recycle",
       "reachability": "candidate",
       "sha256": "e00226a839b6475187aff00b8588370bab96f334426f5b7ae4aae9355ac8035b",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -26288,10 +26324,22 @@
           "file": "data/mods/gen7/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/items.json.gz",
+          "native": "reference/item-lifecycle-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_item_lifecycle_engine.py"
+        }
+      ],
       "field": "onHit",
       "id": "moves:switcheroo:onHit",
-      "implementation": null,
+      "implementation": {
+        "family": "item_lifecycle",
+        "file": "simulator/item_lifecycle.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:switcheroo",
@@ -26302,7 +26350,7 @@
       "owner": "moves:switcheroo",
       "reachability": "candidate",
       "sha256": "c88733fd0c51932972bdeca7111d836c9b9c71ed27c5ef686e33a3c404b9140c",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -26311,10 +26359,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/items.json.gz",
+          "native": "reference/item-lifecycle-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_item_lifecycle_engine.py"
+        }
+      ],
       "field": "onTryImmunity",
       "id": "moves:switcheroo:onTryImmunity",
-      "implementation": null,
+      "implementation": {
+        "family": "item_lifecycle",
+        "file": "simulator/item_lifecycle.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:switcheroo",
@@ -26325,7 +26385,7 @@
       "owner": "moves:switcheroo",
       "reachability": "candidate",
       "sha256": "ab85d28a88899ea060a7e544094283158f7470adca06fd96c80b997544c5189e",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -27108,10 +27168,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/items.json.gz",
+          "native": "reference/item-lifecycle-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_item_lifecycle_engine.py"
+        }
+      ],
       "field": "onHit",
       "id": "moves:trick:onHit",
-      "implementation": null,
+      "implementation": {
+        "family": "item_lifecycle",
+        "file": "simulator/item_lifecycle.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:trick",
@@ -27122,7 +27194,7 @@
       "owner": "moves:trick",
       "reachability": "candidate",
       "sha256": "d5a84177623f51f999bdd925036285d2734a257aa63aa4130827eeed018ce7c5",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -27131,10 +27203,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/items.json.gz",
+          "native": "reference/item-lifecycle-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_item_lifecycle_engine.py"
+        }
+      ],
       "field": "onTryImmunity",
       "id": "moves:trick:onTryImmunity",
-      "implementation": null,
+      "implementation": {
+        "family": "item_lifecycle",
+        "file": "simulator/item_lifecycle.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:trick",
@@ -27145,7 +27229,7 @@
       "owner": "moves:trick",
       "reachability": "candidate",
       "sha256": "ab85d28a88899ea060a7e544094283158f7470adca06fd96c80b997544c5189e",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -57615,10 +57699,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/items.json.gz",
+          "native": "reference/item-lifecycle-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_item_lifecycle_engine.py"
         }
       ],
       "id": "moves:knockoff",
       "implementation": {
+        "behavior": {
+          "family": "item_lifecycle",
+          "file": "simulator/item_lifecycle.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "MOVE_TYPE/MOVE_POWER/MOVE_CATEGORY/MOVE_PRIORITY/MOVE_PP",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -61113,10 +61209,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/items.json.gz",
+          "native": "reference/item-lifecycle-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_item_lifecycle_engine.py"
         }
       ],
       "id": "moves:recycle",
       "implementation": {
+        "behavior": {
+          "family": "item_lifecycle",
+          "file": "simulator/item_lifecycle.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "MOVE_TYPE/MOVE_POWER/MOVE_CATEGORY/MOVE_PRIORITY/MOVE_PP",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -64689,10 +64797,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/items.json.gz",
+          "native": "reference/item-lifecycle-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_item_lifecycle_engine.py"
         }
       ],
       "id": "moves:switcheroo",
       "implementation": {
+        "behavior": {
+          "family": "item_lifecycle",
+          "file": "simulator/item_lifecycle.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "MOVE_TYPE/MOVE_POWER/MOVE_CATEGORY/MOVE_PRIORITY/MOVE_PP",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -65583,10 +65703,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/items.json.gz",
+          "native": "reference/item-lifecycle-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_item_lifecycle_engine.py"
         }
       ],
       "id": "moves:trick",
       "implementation": {
+        "behavior": {
+          "family": "item_lifecycle",
+          "file": "simulator/item_lifecycle.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "MOVE_TYPE/MOVE_POWER/MOVE_CATEGORY/MOVE_PRIORITY/MOVE_PP",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -71229,10 +71361,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/items.json.gz",
+          "native": "reference/item-lifecycle-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_item_lifecycle_engine.py"
         }
       ],
       "id": "abilities:stickyhold",
       "implementation": {
+        "behavior": {
+          "family": "item_lifecycle",
+          "file": "simulator/item_lifecycle.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"

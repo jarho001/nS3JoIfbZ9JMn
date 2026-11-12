@@ -14,7 +14,7 @@ Full-format G4
 coverage remains separate acceptance work. Historical evidence keeps its original
 source/schema identity; it does not imply validation of later engine changes.
 
-The current runtime uses [schema 15](../rules/shared-engine-v15.json). Schemas
+The current runtime uses [schema 16](../rules/shared-engine-v16.json). Schemas
 4–6 integrated major statuses and effect provenance, boosts/weather/screens,
 and observed ability/item hooks. Schema7 adds declarative hit counts, per-hit
 updates, capped drain/recoil arithmetic, self-destruction and reactive damage.
@@ -226,6 +226,25 @@ the reachable-mechanics audit, long-history capacity gap or full-format G4 gates
 The [schema9 CPU checkpoint](../test-logs/g4-cpu-conformance/schema9-checkpoint.json)
 records 18 affected checks and exact scalar replay of 526 scenarios and 2895 boundaries.
 The full 61-check checkpoint suite and full-format G4 gates remain pending.
+
+## Gen5 item lifecycle and provenance
+
+Schema16 appends `item_provenance[side,mon,2]`: immutable initial item and pending
+native item staleness (undefined/internal/external). Trick/Switcheroo take both
+items and set the target's new item before the source's, preserving callback
+creation order and native messages. Choice acquisition runs the same item Start
+hook as entry, removing an old lock even when exchanging two Choice items.
+Knock Off uses Gen5 power20 and removes after contact only if the source survives;
+removal does not set lastItem or make an item recyclable. Recycle clears consumed
+lastItem and runs item Start/Update on restoration. Sticky Hold keeps its distinct
+Trick immunity and Knock Off activation behavior. All remain under current item
+capability masks; species-locked and unimplemented item hooks stay unsupported.
+
+Old states can infer original item from held/consumed history under their earlier
+masks; independently matching replay retains missing-provenance safeguards.
+Journal6 binds the appended field, with explicit older layout/replay handling.
+Focused28/44 native parity and current persistence passed; broad legacy migration
+and execution matrices remain deferred to the consolidated gate.
 
 ## Gen5 Pursuit and pre-switch work
 

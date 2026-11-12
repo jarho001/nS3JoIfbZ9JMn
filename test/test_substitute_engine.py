@@ -95,15 +95,15 @@ class SubstituteEngineTest(unittest.TestCase):
             p=Path(tmp)/'live-journal.npz';live=journal.from_state(s);journal.save(p,live);restored=journal.load(p);same(restored.core,live.core)
             a=choices_array(s,c['steps'][1]['choices']);next_cp,r=journal.advance(restored,a,step=CORE);same(r.state,e.core_state(STEP(s,a).state))
             for side in range(2):self.assertEqual(journal.player_view(next_cp,side),player_view(STEP(s,a).state,side))
-            p=Path(tmp)/'old.npz';fields={name:np.asarray(getattr(start,name))for name in e.State._fields};fields['volatile_state']=fields['volatile_state'][:,:,:20,:];fields['action_state']=fields['action_state'][:,:,:21]
+            p=Path(tmp)/'old.npz';fields={name:np.asarray(getattr(start,name))for name in e.State._fields if name!='item_provenance'};fields['volatile_state']=fields['volatile_state'][:,:,:20,:];fields['action_state']=fields['action_state'][:,:,:21]
             np.savez(p,schema=11,data_sha256=np.asarray(journal.tables.DATA_SHA256),**fields)
             same(load_state(p),start);same(load_state(p,replayed_state=start),start)
             with self.assertRaisesRegex(ValueError,'mismatch'):load_state(p,replayed_state=s)
             fields['volatile_state']=np.asarray(start.volatile_state);np.savez(p,schema=11,data_sha256=np.asarray(journal.tables.DATA_SHA256),**fields)
             with self.assertRaisesRegex(ValueError,'volatile shape'):load_state(p)
-            cp=journal.from_state(start);fields={name:np.asarray(getattr(cp.core,name))for name in e.CoreState._fields};fields['volatile_state']=fields['volatile_state'][:,:,:20,:];fields['action_state']=fields['action_state'][:,:,:21]
+            cp=journal.from_state(start);fields={name:np.asarray(getattr(cp.core,name))for name in e.CoreState._fields if name!='item_provenance'};fields['volatile_state']=fields['volatile_state'][:,:,:20,:];fields['action_state']=fields['action_state'][:,:,:21]
             meta={'journal_schema':2,'data_sha256':journal.tables.DATA_SHA256,'pages':[{'rows':page.rows,'recipients':page.recipients}for page in cp.pages]}
-            payload=json.dumps(meta,sort_keys=True,separators=(',',':'));np.savez(p,metadata=np.asarray(payload),journal_sha256=np.asarray(journal._checksum(payload,fields)),**fields)
+            payload=json.dumps(meta,sort_keys=True,separators=(',',':'));np.savez(p,metadata=np.asarray(payload),journal_sha256=np.asarray(journal._checksum(payload,fields,tuple(fields))),**fields)
             with self.assertRaisesRegex(ValueError,'replay/provenance'):journal.load(p)
             same(journal.load(p,replayed=cp).core,cp.core)
             with self.assertRaisesRegex(ValueError,'mismatch'):journal.load(p,replayed=journal.from_state(s))

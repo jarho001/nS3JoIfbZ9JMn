@@ -99,6 +99,9 @@ def project_events(state,trace,audience):
         elif kind==e.WIN:line=f'|win|p{value}' if value else '|tie'
         elif kind==e.TURN:line=f'|turn|{value}'
         elif kind==e.UPKEEP:line='|upkeep'
+        elif kind==e.ITEM_SWAP:line=f'|-activate|{actor}|move: Trick|[of] {foe}'
+        elif kind==e.ITEM_GAIN:line=f'|-item|{actor}|'+e.hook_tables.ITEM_NAMES[value]+f'|[from] move: {name}'
+        elif kind==e.ITEM_LOSS:line=f'|-enditem|{actor}|'+e.hook_tables.ITEM_NAMES[value]+('|[silent]' if aux else '')+f'|[from] move: {name}'+(f'|[of] {foe}' if move==e.item_ops.KNOCK else '')
         elif kind==e.PURSUIT_HINT:line="|-hint|A Pokemon can't switch between when it runs out of HP and when it faints"
         elif kind==e.PHAZE_ABILITY:line=f'|-activate|{actor}|ability: '+e.hook_tables.ABILITY_NAMES[value]
         elif kind==e.DRAG:line=f'|drag|{actor}|{details(s,side,mon)}|'+condition(value,aux,status,side!=audience)
@@ -194,15 +197,15 @@ def load_state(path,*,schema=None,replayed_state=None):
         stored=int(saved['schema']) if 'schema' in saved else None
         if schema is not None and stored is not None and stored!=schema:raise ValueError('schema mismatch')
         version=stored if schema is None else schema
-        if version not in (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15):raise ValueError('explicit supported state schema required')
+        if version not in (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16):raise ValueError('explicit supported state schema required')
         fields={k:jnp.asarray(saved[k]) for k in saved.files if k not in ('schema','data_sha256')}
-        if version in (3,4,5,6,7,8,9,10,11,12,13,14,15):
+        if version in (3,4,5,6,7,8,9,10,11,12,13,14,15,16):
             if 'data_sha256' not in saved or str(saved['data_sha256'])!=generic.DATA_SHA256:
                 raise ValueError('state data table identity mismatch')
-        if version<15 and replayed_state is not None:
+        if version<16 and replayed_state is not None:
             e._validate_structure(replayed_state)
             end='ivs' if version<=2 else 'effect_order' if version==3 else 'weather_state' if version==4 else 'move_history' if version<9 else 'request_state'
-            expected=set(e.State._fields if version>=11 else e.State._fields[:e.State._fields.index(end)])
+            expected=set(e.State._fields[:e.State._fields.index('item_provenance')] if version>=11 else e.State._fields[:e.State._fields.index(end)])
             if version==1:expected.remove('hazards')
             if set(fields)!=expected:raise ValueError('invalid legacy field set for replay')
             for key,value in fields.items():
@@ -212,8 +215,8 @@ def load_state(path,*,schema=None,replayed_state=None):
                     if old.shape!=(2,6,slots,6):raise ValueError('invalid legacy volatile shape for replay')
                     replay=replay[:,:,:slots,:6]
                 elif key=='volatile_state':
-                    replay=replay[:,:,:22 if version>=13 else 21 if version==12 else 20,:]
-                if key=='action_state':replay=replay[:,:,:21]
+                    replay=replay[:,:,:23 if version==15 else 22 if version>=13 else 21 if version==12 else 20,:]
+                if key=='action_state' and version<15:replay=replay[:,:,:21]
                 if old.shape!=replay.shape or old.dtype!=replay.dtype or not np.array_equal(old,replay):
                     raise ValueError('legacy replay/provenance mismatch: '+key)
             return replayed_state
@@ -256,13 +259,14 @@ def load_state(path,*,schema=None,replayed_state=None):
                 item_order=jnp.zeros((2,6),jnp.int32))
             fields.update(_initial_causal(fields))
             fields['request_state']=jnp.zeros((2,2),jnp.int32)
+            fields['item_provenance']=jnp.stack((fields['item'],jnp.zeros((2,6),jnp.int32)),axis=-1)
             fields['volatile_state']=jnp.pad(fields['volatile_state'],((0,0),(0,0),(0,len(e.phase_ops.VOLATILES)-3),(0,e.phase_ops.VOLATILE_WIDTH-6)))
             migrated=e.State(*(fields[k] for k in e.State._fields))
             for side in range(2):migrated,_=e.effects.activate((migrated,e.empty_trace()),e.i32(side),e)
             fields=dict(zip(e.State._fields,migrated,strict=True))
             fields['volatile_state']=fields['volatile_state'][:,:,:3,:6]
             for key in _CAUSAL_FIELDS:fields.pop(key)
-            fields.pop('request_state')
+            fields.pop('request_state');fields.pop('item_provenance')
         if version<6:
             # Earlier engines explicitly rejected these hooks. Promoting an old
             # unsupported initializer would fabricate its startup/lock history.
@@ -307,6 +311,9 @@ def load_state(path,*,schema=None,replayed_state=None):
             a=fields['action_state']
             if a.shape!=(2,6,21):raise ValueError('invalid legacy action-state shape')
             fields['action_state']=jnp.pad(a,((0,0),(0,0),(0,3)))
+        if version<16:
+            initial=jnp.where(fields['item']>0,fields['item'],fields['action_state'][:,:,e.tracking.LAST_ITEM])
+            fields['item_provenance']=jnp.stack((initial,jnp.zeros((2,6),jnp.int32)),axis=-1)
         if set(fields)!=set(e.State._fields):raise ValueError('invalid state field set')
         state=e.State(*(fields[k] for k in e.State._fields))
         e._validate_structure(state)
@@ -397,7 +404,7 @@ def move_snapshot(row):
             'category':('Status','Physical','Special')[category],'basePower':power}
 
 
-def causal_state(state,side,mon,*,include_pursuit=False):
+def causal_state(state,side,mon,*,include_pursuit=False,include_items=False):
     """Trusted mechanics projection; deliberately absent from player_view."""
     s=jax.device_get(state);tr=e.tracking;a=s.action_state[side,mon]
     value=lambda k:int(a[k])
@@ -413,6 +420,7 @@ def causal_state(state,side,mon,*,include_pursuit=False):
          ('newlySwitched',tr.NEWLY_SWITCHED),('usedItemThisTurn',tr.USED_ITEM),('statsRaisedThisTurn',tr.RAISED),('statsLoweredThisTurn',tr.LOWERED),('ateBerry',tr.ATE_BERRY)]:result[key]=bool(a[column])
     if value(tr.TRAPPED)==2:result['trapped']='hidden'
     result['moveSlotsUsed']=[bool(value(tr.USED_SLOTS)&(1<<slot))for slot,move in enumerate(s.moves[side,mon])if move]
+    if include_items:result.update(initialItem=e.ITEMS[int(s.item_provenance[side,mon,0])],pendingStaleness=({'$undefined':True},'internal','external')[int(s.item_provenance[side,mon,1])])
     if include_pursuit:result.update(beingCalledBack=bool(value(tr.CALLED_BACK)),pursuitActivated=bool(value(tr.PURSUIT_ACTIVE)),skipPursuit=bool(value(tr.SKIP_PURSUIT)))
     result['previouslySwitchedIn']=value(tr.SWITCH_COUNT)
     for row in s.attacked_by[side,mon,:value(tr.ATTACK_COUNT)]:

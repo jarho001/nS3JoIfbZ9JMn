@@ -126,6 +126,11 @@ def start(c,side,e,initial=False):
         return e._when((speeds[0]==speeds[1])&jnp.all(~s.fainted[jnp.arange(2),s.active]),
                        lambda c:e._draw(c,0,2,context,2)[0],c)
     c=e._when((weather>0)&((c[0].weather_state[0]!=weather)|(c[0].weather_state[4]>0)),set_weather,c)
+    return item_start(c,side,e)
+
+
+def item_start(c,side,e):
+    m=c[0].active[side]
     # Choice items' Start hook removes an old lock on acquisition/switch-in.
     def choice(c):
         s,t=c;return s._replace(volatile_state=s.volatile_state.at[side,m,3].set(0)),t
