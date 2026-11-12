@@ -39,7 +39,7 @@ class HookEngineTest(unittest.TestCase):
 
     def test_native_states_draws_requests_and_histories(self):
         self.assertEqual(len(self.cases),70)
-        manifest=json.loads(Path('rules/shared-engine-v9.json').read_text())
+        manifest=json.loads(Path('rules/shared-engine-v10.json').read_text())
         self.assertEqual(manifest['schema_version'],e.SCHEMA)
         self.assertEqual(manifest['draw_contexts'],list(e.DRAW_CONTEXTS))
         for case in self.cases:

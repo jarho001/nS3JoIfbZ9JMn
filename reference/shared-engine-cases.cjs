@@ -451,4 +451,4 @@ function main(argv) {
  if(output)fs.writeFileSync(output,json,{flag:'wx'});else process.stdout.write(json);
 }
 if(require.main===module)main(process.argv.slice(2));
-module.exports={cases,runCase,capture,observeInitialization};
+module.exports={cases,runCase,capture,observeInitialization,semanticContext};

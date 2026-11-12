@@ -32,7 +32,7 @@ import sys
 def _engine():
     return sys.modules[__name__]
 
-SCHEMA = 9
+SCHEMA = 10
 ROSTER, SLOTS, QUEUE, EVENTS, DRAWS, HISTORY = 6, 4, 8, 128, 128, 2048
 OK, PENDING, INVALID, UNSUPPORTED, CAPACITY, TERMINAL, STALE = range(7)
 MOVE, FORCED, WAIT, END = range(4)
@@ -60,6 +60,7 @@ HIT_COUNT = 29
 MUST_RECHARGE, RECHARGE_CANT = 30,31
 PREPARE,ANIM,END_HELD_ITEM,FLINCH_CANT=32,33,34,35
 VOL_START,VOL_END,VOL_CANT=36,37,38
+TURN_WARNING,TURN_LIMIT=39,40
 # Draw contexts; range form stores actual native arguments including offsets.
 INIT, QUEUE_SORT, BEFORE_TURN, UPDATE, HIT_UPDATE, SWITCH_SORT, FIELD_SORT, ACC, CRITICAL, ROLL, PARALYSIS, STALL = range(12)
 SLEEP_DURATION, FREEZE, CONF_DURATION, CONFUSION, CONF_DAMAGE, SECONDARY = range(12,18)
@@ -137,6 +138,14 @@ class State(NamedTuple):
     battle_move: jax.Array
     battle_success: jax.Array
     battle_damage: jax.Array
+
+
+# Same mechanical fields, without the compatibility history allocation.
+CoreState = NamedTuple('CoreState', [(name, jax.Array) for name in State._fields if name not in ('history','hcount')])
+
+def core_state(state):
+    _validate_structure(state)
+    return CoreState(*(getattr(state,name) for name in CoreState._fields))
 
 
 class Trace(NamedTuple):
@@ -684,8 +693,16 @@ def _finish(c):
     s,t=c
     s=s._replace(midturn=jnp.array(False),turn=s.turn+1,queue=jnp.zeros_like(s.queue),qcount=i32(0))
     s=tracking.new_turn(s)
-    c=_event((s,t),TURN,value=s.turn)
-    return _new_request(c,jnp.full(2,MOVE,jnp.int32))
+    c=(s,t)
+    warning=((s.turn>=500)&(s.turn%100==0))|((s.turn>=900)&(s.turn%10==0))|(s.turn>=990)
+    def terminal(c):
+        c=_event(c,TURN_LIMIT);c=_event(c,BLANK);c=_event(c,WIN,value=0)
+        s,t=c
+        return s._replace(winner=i32(0),request=jnp.full(2,END,jnp.int32)),t
+    def live(c):
+        c=_when(warning,lambda c:_event(c,TURN_WARNING,value=s.turn),c)
+        return _new_request(_event(c,TURN,value=s.turn),jnp.full(2,MOVE,jnp.int32))
+    return jax.lax.cond(s.turn>1000,terminal,live,c)
 
 
 def _run_queue(c):
@@ -803,7 +820,7 @@ def _supported(s,initializing=False):
     lock_ok=lock_ok&(source_item==s.item)&(lock[:,:,5]>0)&(lock[:,:,5]<len(MOVE_KEYS))
     lock_ok=lock_ok&(lock[:,:,1]<s.effect_order)
     lock_ok=jnp.all((lock[:,:,0]==0)|lock_ok)
-    return (tracking.valid(s,_engine())&stat_ok&valid_order&weather_ok&screen_ok&hazard_ok&lock_ok&(~jnp.any(duplicate))&jnp.all((s.hcount>=0)&(s.hcount<=HISTORY))
+    return (tracking.valid(s,_engine())&stat_ok&valid_order&weather_ok&screen_ok&hazard_ok&lock_ok&(~jnp.any(duplicate))&(jnp.all((s.hcount>=0)&(s.hcount<=HISTORY)) if isinstance(s,State) else jnp.array(True))
             &jnp.all((s.qcount>=0)&(s.qcount<=QUEUE))&(s.episode>=0)&(s.generation>=0)
             &jnp.all(jnp.where(occupied,jnp.any(s.moves>0,axis=-1),jnp.all(s.moves==0,axis=-1)))
             &jnp.all((s.species>=0)&(s.species<len(SPECIES)))&jnp.all(jnp.any(occupied,axis=1))
@@ -855,12 +872,12 @@ def _supported(s,initializing=False):
 
 
 def _validate_structure(s):
-    if not isinstance(s,State):raise ValueError('expected shared-engine State')
+    if not isinstance(s,(State,CoreState)):raise ValueError('expected shared-engine State or CoreState')
     roster_fields={'species','level','speed','gender','hp','item','status','toxic','stall','stall_duration',
                    'nature','ability','hp_type','hp_power','shiny','happiness','name','ability_order','item_order'}
     vector_fields={'active','pending','request','pivot'}
     bool_fields={'fainted','protected','pivot','midturn','shiny','sleep_clause_target'}
-    for name,value in zip(State._fields,s):
+    for name,value in zip(type(s)._fields,s):
         shape=(2,6) if name in roster_fields or name in {'fainted','protected'} else (2,) if name in vector_fields else (2,3) if name=='hazards' else (2,6,6) if name in {'stats','ivs','evs'} else (2,6,2) if name=='types' else (2,6,7) if name in {'boosts','status_state'} else (2,6,len(phase_ops.VOLATILES),phase_ops.VOLATILE_WIDTH) if name=='volatile_state' else (2,6,3,4) if name=='move_history' else (2,6,tracking.COLUMNS) if name=='action_state' else (2,6,tracking.ATTACK_RECORDS,7) if name=='attacked_by' else (2,2) if name=='side_faints' else (4,) if name=='battle_move' else (6,) if name=='weather_state' else (2,2,5) if name=='screens' else (2,2,3) if name=='hazard_meta' else (2,6,4) if name in {'moves','pp'} else (2,6) if name=='order' else (QUEUE,7) if name=='queue' else (4,) if name=='rng' else (HISTORY,10) if name=='history' else ()
         dtype=jnp.bool_ if name in bool_fields else jnp.uint16 if name=='rng' else jnp.int32
         if getattr(value,'shape',None)!=shape or getattr(value,'dtype',None)!=jnp.dtype(dtype):
@@ -921,8 +938,10 @@ def advance(s,choices,token=None):
             t=t._replace(overflow=t.overflow|(s.qcount>QUEUE))
             return _run_queue((s,t))
         s,t=jax.lax.cond(ready,resolve,lambda c:c,(s,t))
-        overflow=t.overflow|(s.hcount+t.ecount>HISTORY)|(s.episode<0)
+        overflow=t.overflow|(s.episode<0)
+        if isinstance(s,State):overflow=overflow|(s.hcount+t.ecount>HISTORY)
         def success(_):
+            if isinstance(s,CoreState):return Result(s,jnp.where(ready,OK,PENDING),t)
             def add(k,s):return s._replace(history=s.history.at[s.hcount+k].set(t.events[k]))
             s2=jax.lax.fori_loop(0,t.ecount,add,s)
             return Result(s2._replace(hcount=s.hcount+t.ecount),jnp.where(ready,OK,PENDING),t)
@@ -930,6 +949,11 @@ def advance(s,choices,token=None):
     original=s
     code=jnp.where(stale,STALE,jnp.where(s.winner>=0,TERMINAL,jnp.where(~_supported(s),UNSUPPORTED,jnp.where(invalid,INVALID,-1))))
     return jax.lax.cond(code>=0,lambda _:Result(s,code,empty_trace()),lambda _:accepted((s,t)),None)
+
+
+def advance_core(s,choices,token=None):
+    if not isinstance(s,CoreState):raise ValueError('expected CoreState')
+    return advance(s,choices,token)
 
 
 def make_state(teams,seed=(1,2,3,4),generation=0):
@@ -1057,6 +1081,7 @@ def reset(state,replacement,token):
     """
     _validate_structure(state)
     _validate_structure(replacement)
+    if type(state) is not type(replacement):raise ValueError('reset state types must match')
     if token.shape!=(2,) or token.dtype!=jnp.int32:raise ValueError('token must be int32[2]')
     valid=_supported(replacement)&(replacement.winner<0)&(replacement.turn==1)&(~replacement.midturn)&jnp.all(replacement.pending==-1)&(replacement.qcount==0)&(state.winner>=0)&jnp.all(token==jnp.stack((state.generation,state.episode)))&(state.generation<2**31-1)
     def apply(_):

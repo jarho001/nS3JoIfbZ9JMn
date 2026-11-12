@@ -87,6 +87,10 @@ def project_events(state,trace,audience):
         elif kind==e.IMMUNE:line=f'|-immune|{actor}'+({0:'',1:'|[from] ability: Immunity',2:'|[from] ability: Levitate'}[aux])
         elif kind==e.MISS:line=f'|-miss|{actor}|{foe}'
         elif kind==e.FAINT:line=f'|faint|{actor}'
+        elif kind==e.TURN_WARNING:
+            left=1000-value;duration='1 turn' if left==1 else f'{left} turns'
+            line=f"|bigerror|You will auto-tie if the battle doesn't end in {duration} (on turn 1000)."
+        elif kind==e.TURN_LIMIT:line='|message|It is turn 1000. You have hit the turn limit!'
         elif kind==e.WIN:line=f'|win|p{value}' if value else '|tie'
         elif kind==e.TURN:line=f'|turn|{value}'
         elif kind==e.UPKEEP:line='|upkeep'
@@ -136,6 +140,7 @@ def draw_rows(trace):
 
 def player_view(s,side):
     """Only a private request and recipient-rendered history leave the adapter."""
+    if not isinstance(s,e.State):raise ValueError('CoreState history requires the journal adapter')
     trace=e.empty_trace()._replace(events=s.history,ecount=s.hcount)
     prefix=['|gametype|singles','|player|p1|p1||','|player|p2|p2||','|gen|5','|tier|[Gen 5] Random Battle',
             '|rule|Sleep Clause Mod: Limit one foe put to sleep','|rule|HP Percentage Mod: HP is shown in percentages',
@@ -146,6 +151,7 @@ def player_view(s,side):
 
 def save_state(path,state):
     """Explicit schema/table identity, no pickle or positional tuple loading."""
+    if not isinstance(state,e.State):raise ValueError('CoreState persistence requires journal.save')
     e._validate_structure(state)
     np.savez(path,schema=np.int32(e.SCHEMA),data_sha256=np.asarray(generic.DATA_SHA256),
              **dict(zip(e.State._fields,jax.device_get(state),strict=True)))
@@ -175,9 +181,9 @@ def load_state(path,*,schema=None,replayed_state=None):
         stored=int(saved['schema']) if 'schema' in saved else None
         if schema is not None and stored is not None and stored!=schema:raise ValueError('schema mismatch')
         version=stored if schema is None else schema
-        if version not in (1,2,3,4,5,6,7,8,9):raise ValueError('explicit supported state schema required')
+        if version not in (1,2,3,4,5,6,7,8,9,10):raise ValueError('explicit supported state schema required')
         fields={k:jnp.asarray(saved[k]) for k in saved.files if k not in ('schema','data_sha256')}
-        if version in (3,4,5,6,7,8,9):
+        if version in (3,4,5,6,7,8,9,10):
             if 'data_sha256' not in saved or str(saved['data_sha256'])!=generic.DATA_SHA256:
                 raise ValueError('state data table identity mismatch')
         if version<9 and replayed_state is not None:

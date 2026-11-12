@@ -418,3 +418,28 @@ ability simply to make an action mask exact.
 These decisions are ready for Medium implementation. Unknown native branches
 remain evidence obligations, not architecture debates to settle by approximation.
 No throughput claim or profiling run is needed for this pass.
+
+## Schema10 core/journal implementation checkpoint
+
+`CoreState` contains the same mechanical fields as the compatibility `State`,
+without `history` or `hcount`. Both call the same `advance` transition code;
+`advance_core` enforces the core input type. Legacy states retain their2048-row
+atomic capacity guard. `simulator.journal.Checkpoint` pairs a core with immutable
+raw and recipient-rendered event pages. The host adapter renders each boundary
+at event time, preserves the complete prefix, and returns the original checkpoint
+on invalid/stale/unsupported/capacity/terminal errors. `journal.save/load` binds
+all core fields and journal metadata with a checksum and table/schema identity.
+Use this adapter to persist or display core histories; the legacy IO functions
+explicitly reject bare core inputs that lack a journal.
+
+Schema10 preserves the schema9 state field layout and accepts schema9 saves
+without causal reconstruction. Core/journal persistence has its own version1.
+The hard turn-limit path emits native warnings and the turn1001 tie before a new
+turn/request. Earlier Endless Battle Clause conditions remain unsupported work.
+The external journal removes the full-game history allocation from the scan carry;
+per-advance traces, draws, queue and ordered-attack bounds remain independently
+guarded and unaudited for full-format acceptance.
+
+The first CPU integrated gate is still running. GPU correctness remains deferred.
+Device chunk collection, journal-level reset and private retry/disclosure are next;
+this checkpoint does not claim the entire architecture or G4 complete.

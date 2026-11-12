@@ -7,6 +7,12 @@ GPU. Preparing this handoff does not run device tests, profiling or benchmarks.
 
 ## Current source and evidence
 
+**Schema10 candidate:** the shared history-free core, lossless host journal and
+native hard turn-limit path are implemented. The integrated core CPU gate is
+running; previous schema9 evidence below remains historical. Development scalar
+checks passed for a complete combat game and the 1000-boundary switch-only game.
+Do not treat pending batch/rollout/persistence checks as passed.
+
 The engine is schema9, adding hidden causal state, rampages, eight charge moves,
 semi-invulnerability, Power Herb, action restrictions and flinching. The four
 phase execution/lifecycle checks and 13 prior scalar/migration checks passed on
@@ -17,8 +23,8 @@ The entire matching-source 61-check suite has not been repeated. Historical
 schema8 results remain in
 [schema8-checkpoint.json](../test-logs/g4-cpu-conformance/schema8-checkpoint.json).
 
-The expanded runner expects **61 checks in 14 isolated modules**, using nine
-independent native corpora: **526 scenarios / 2895 boundaries**, including
+The expanded runner expects **64 checks in 15 isolated modules**, using ten
+independent native corpora: **527 scenarios / 3895 boundaries**, including
 28 complete constructed six-member games. The new 73 phase scenarios are in
 `test.test_lock_phase_engine`. The runner recaptures causal state for the prior
 corpora too. Use the existing commands below on matching committed source.
@@ -82,7 +88,7 @@ the combined block below:
    hashes, selected host affinity and independent native fixture hashes.
 2. Freezes legacy, hazard, generic, status, field/boost, ability/item, hit/thaw and recharge corpora. Runs the
    reference/native contracts. Unknown/unsupported families stay explicit.
-3. Runs the same current 61-check scope on CPU, then under `JAX_PLATFORMS=cuda`,
+3. Runs the same current 64-check scope on CPU, then under `JAX_PLATFORMS=cuda`,
    with each test module in a fresh process.
    A strict probe verifies actual eager/JIT GPU placement; shared case/lifecycle
    assertions also check device leaves. `cuda` initialization failure is a failure.
@@ -371,7 +377,7 @@ G3/G4 work adds obligations; do not create a handoff per mechanic.
 ## Architecture pass: future device obligations
 
 The [2026-11-12 decisions](shared-engine.md#g4-architecture-decisions--2026-11-12)
-add no implemented GPU tests yet. The current 61-check runner scope is unchanged.
+add no implemented GPU tests yet. The runner now includes `test.test_core_journal` and prepares `TURN_LIMIT_NATIVE_CASE` automatically.
 Once implemented, extend that same runner with core/journal full-versus-lean
 parity across 16-boundary chunk flushes, save/restore including private disclosure
 and journal pages, and mixed-lane called/reflected/transformed states. Verify
@@ -388,3 +394,12 @@ node --test test/g4-design-native.test.cjs test/gen5-reachability.test.cjs test/
 
 This command passed five native/source-contract checks. Its five constructed
 native cases are design witnesses, not additions to the 526 implemented JAX cases.
+
+The new module checks scalar core/full parity, mixed core batches1/8/32, lean/full
+core rollout agreement, core reset, journal persistence/corruption and native
+turn-limit warnings/tie across1000 boundaries. The lossless host journal is a CPU
+adapter over device transitions. Device-side chunk collection and host journal
+reset still require implementation; kernel reset alone does not validate them.
+The earlier reference-generated6541-row witness still needs replay once all its
+mechanics are supported. The neutral constructed witness does not prove generator
+membership or final bounds. No profiling is part of this checkpoint.

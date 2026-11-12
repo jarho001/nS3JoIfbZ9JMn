@@ -825,6 +825,18 @@
         },
         "fixture_hashes_unchanged": true,
         "source_unchanged": true
+      },
+      "core_journal": {
+        "status": "schema10_candidate_integrated_cpu_gate_running",
+        "source_base": "cd97a8a",
+        "changes": [
+          "Shared CoreState without history/hcount; same transition kernel",
+          "Immutable host recipient/raw journal with checksum-bound save/restore",
+          "Native hard turn-limit warnings and tie at1001; earlier Endless Battle Clause remains open"
+        ],
+        "evidence": "work/g4-core/checkpoint.json",
+        "gate_log": "work/g4-core/final-cpu.log",
+        "next": "Finish CPU1/8/32/full-lean/reset and both native replays. Preserve source/fixture identities, update GPU handoff and checkpoint; then private retry/trapping implementation."
       }
     },
     "resolved_failure": "16b5263 preflight rejected ordinary moves because type was missing from its field set; fixed by 4eab254, failed run stopped, all 37 repaired checks pass. Detailed minimized input and source identities are in source.json.",
