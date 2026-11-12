@@ -524,7 +524,7 @@
     "brief": "PROJECT_PLAN.md#proposed-g4-cpu-implementation-and-conformance-goal",
     "source_base": "f37067e",
     "scope": "Complete pinned gen5randombattle reachable mechanics and every prepared CPU gate. Integrated checkpoints, resumable progress and commit/push authorized. GPU execution, profiling, benchmarks, training, delegation and scored research excluded.",
-    "checkpoint": "Schema8 recharge CPU checkpoint validated:34 new scenarios/169 boundaries and two complete six-member games; four integration/lifecycle checks and 12 prior scalar/migration checks pass. Current corpus453/2524 with26 six-member games. Full57 suite and full-format G4 remain pending.",
+    "checkpoint": "Schema9 causal/phase CPU checkpoint validated on567f02c:18 affected checks plus17 native/6 helper checks pass; current526 scenarios/2895 boundaries,28 constructed six-member and8 legacy three-member games. Full61 suite and full-format G4 remain pending.",
     "completed_checkpoints": [
       "Pinned resolved data and source-owned conservative candidate inventory exported; 605 role roots, 1768 data/effect entries, 1146 callback slots. Data-only mappings remain partial; transitive closure and complete callback implementation are not claimed.",
       "Generic species/set/type/stat/physical-special/Hidden Power/happiness/priority/hazard integration passes 37 affected CPU checks on 4eab254, retaining all 133 baseline scenarios and validating 24 added scenarios: 157 scenarios / 1059 boundaries, including 20 complete battles (eight six-member games). Eager/JIT/1-8-32 mixed batches, serialized continuation/reset, explicit schema 1/2 migration and full/lean rollouts pass.",
@@ -533,9 +533,10 @@
       "Schema6 observed-hook integration passes4 CPU checks over70 scenarios/324 boundaries and four full six-member games. Tests cover eager startup/transition, JIT, mixed1/8/32, full/lean, save/restore/reset, malformed Choice metadata and lossless schema5 field/status migration. Matching-schema broader regression still pending.",
       "Full schema6 baseline:49 checks pass on7631872 with unchanged tracked source/input hashes, isolated processes and real CPU placement. Resume recovered the already completed generic5-check log; no repeated completed groups.",
       "Schema7:97 hit/thaw scenarios/253 boundaries integrated; four execution/lifecycle checks and all322 prior scalar scenarios pass. Current total419/2355; GPU/final conformance deferred or pending as recorded.",
-      "Schema8 recharge:four focused execution/lifecycle checks and 12 prior scalar/migration checks pass on unchanged source/fixtures;34 new scenarios/169 boundaries. Current corpus453/2524; two more constructed six-member games. GPU and full-format conformance remain pending."
+      "Schema8 recharge:four focused execution/lifecycle checks and 12 prior scalar/migration checks pass on unchanged source/fixtures;34 new scenarios/169 boundaries. Current corpus453/2524; two more constructed six-member games. GPU and full-format conformance remain pending.",
+      "Schema9: hidden typed causal state, ordered attacks/counters and move snapshots; rampages/eight charge moves/semi-invulnerability/Power Herb/restrictions/flinching. Four phase execution/lifecycle checks and14 prior scalar/migration/rollout checks pass on unchanged source/fixture hashes; all526 scenarios/2895 boundaries replay exactly. No full-format acceptance, GPU or profiling."
     ],
-    "next": "Integrate native-observed causal counters and rampage/charge/restrictions as the next coherent family. Preserve exact ordered attackedBy and typed move results; do not promote unenabled work drafts. Keep GPU/profiling deferred and avoid repeating completed checkpoint checks without relevant changes.",
+    "next": "Repair native long-history/turn-limit behavior and justify capacity bounds; complete Substitute boundary specification and integrate remaining reachable move/ability/item/form/calling families. Close the ledger before fixed64/128 campaigns. GPU/profiling remain deferred.",
     "ledger": {
       "path": "rules/gen5-reachable-v1.json",
       "entries": 1768,
@@ -771,36 +772,59 @@
         "evidence": "test-logs/g4-cpu-conformance/schema8-checkpoint.json"
       },
       "causal_phase_integration": {
-        "status": "frozen_candidate_cpu_gate_running",
+        "status": "validated_CPU_checkpoint_not_full_G4",
         "source_base": "d275abc",
         "schema_candidate": 9,
-        "native_inputs": "work/g4-schema9-ready/fixtures.json",
+        "native_inputs": "test-logs/g4-cpu-conformance/schema9-checkpoint.json#native_fixtures",
         "scope": "All453 prior scenarios/2524 boundaries captured with typed causal state, ordered attackedBy, used-slot flags and battle/side fields. No fixed campaign opened. Wide effect metadata reserves Condition provenance for move locks.",
         "first_repair": "Default target location was unrecorded; preserve undefined separately from native self -1 and foe +1. Failed source/log retained under work/g4-causal-integration.",
-        "next": "Finish four phase execution/lifecycle checks plus13 prior scalar/migration checks on frozen schema9 source. Preserve failures; then checkpoint before continuing remaining mechanics/capacity.",
+        "next": "Repair native long-history/turn-limit behavior and justify capacity bounds; complete Substitute boundary specification and integrate remaining reachable move/ability/item/form/calling families. Close the ledger before fixed64/128 campaigns. GPU/profiling remain deferred.",
         "validation_pending": [
-          "frozen-source integrated CPU gate",
           "full61-check checkpoint suite",
-          "full-format ledger closure and fixed campaigns"
+          "history/native turn-limit repair and capacity audit",
+          "remaining reachable mechanics and dependency closure",
+          "fixed64/128 campaigns",
+          "deferred GPU"
         ],
         "native_scenarios": 526,
         "native_boundaries": 2895,
         "phase_scenarios": 73,
         "phase_boundaries": 371,
         "scalar_phase_replay": "Passed73/371 including two full games in71.881s; terminal fatigue and weather expiry RNG repaired.",
-        "gate": "work/g4-causal-integration/validation9.json",
-        "source_identity": "work/g4-causal-integration/source9-candidate.json",
+        "gate": "test-logs/g4-cpu-conformance/schema9-validation.tar.gz",
+        "source_identity": "test-logs/g4-cpu-conformance/schema9-checkpoint.json",
         "native_contracts": "17/17 passed on frozen source; log work/g4-causal-integration/native-all.log",
         "capacity_witness": {
           "status": "native_only_unimplemented_gap",
-          "file": "work/g4-causal-integration/simple-turn-limit-native.json",
-          "script": "work/g4-causal-integration/observe-simple-turn-limit.cjs",
+          "file": "schema9-validation.tar.gz:simple-turn-limit-native.json",
+          "script": "schema9-validation.tar.gz:observe-simple-turn-limit.cjs",
           "scope": "Six neutral supported Mew per side; legal switch2 on every request. Independent of generated witness.",
           "boundaries": 1000,
           "recipient_rows": 6041,
           "native_terminal_turn": 1001,
           "next": "Implement warning schedule and turn-limit tie before new request; preserve causal nextTurn ordering. Repair complete history capacity with justified bounds."
-        }
+        },
+        "implementation_commit": "567f02c",
+        "pushed": true,
+        "integrated_passed_so_far": [
+          "18 affected CPU checks; all526/2895 native boundaries; eager/JIT/mixed1/8/32; full/lean/save/continuation/reset; schema1/2 and explicit advanced legacy replay migration"
+        ],
+        "next_family_native_spec": {
+          "status": "native_only_not_implemented",
+          "script": "schema9-validation.tar.gz:observe-substitute.cjs",
+          "fixture": "schema9-validation.tar.gz:substitute-native.json",
+          "cases": 25,
+          "boundaries": 72,
+          "observations": [
+            "Gen5 Substitute hits update source.lastDamage and skip target.attackedBy for absorbed hits.",
+            "Gen5 recoil/drain occur per absorbed hit; Hyper Beam installs recharge via AfterSubDamage.",
+            "Taunt and Encore bypass Substitute; blocked status and secondaries require distinct paths.",
+            "Creation direct damage preserves native hurtThisTurn semantics; weak/present failures differ."
+          ],
+          "next": "Expand native boundary/interaction specification before implementation, including break-mid-multihit, low-HP recoil/drain, sound and bypass flags, Struggle and source ability hooks."
+        },
+        "fixture_hashes_unchanged": true,
+        "source_unchanged": true
       }
     },
     "resolved_failure": "16b5263 preflight rejected ordinary moves because type was missing from its field set; fixed by 4eab254, failed run stopped, all 37 repaired checks pass. Detailed minimized input and source identities are in source.json.",
@@ -1758,17 +1782,17 @@
     "combined_return_home_block": "docs/GPU_HANDOFF.md#one-return-home-block-correctness-plus-g3-v6-measurements",
     "pending_status_checkpoint": "Current status/field/hook GPU checks are wired into the49-check runner; no GPU execution during travel. Preserve matching-source CPU results and do not transfer earlier GPU/CPU evidence across changed source.",
     "expanded_checkpoint": {
-      "status": "schema9_candidate_in_progress_not_validated",
-      "engine_schema": 8,
-      "modules": 13,
-      "native_scenarios": 453,
-      "native_boundaries": 2524,
+      "status": "schema9_CPU_checkpoint_validated_GPU_deferred",
+      "engine_schema": 9,
+      "modules": 14,
+      "native_scenarios": 526,
+      "native_boundaries": 2895,
       "initial_field_evidence": "test-logs/g4-cpu-conformance/schema5-checkpoint.json",
       "source": "Use latest committed checkout and runner source/fixture fingerprints; earlier source_commit fields describe historical preparation.",
       "handoff_prepared": true,
-      "source_commit": "Publishing commit and schema8-checkpoint source hashes",
-      "source_identity": "test-logs/g4-cpu-conformance/schema8-checkpoint.json",
-      "checks": 57
+      "source_commit": "567f02c (engine); publishing record commit leaves source unchanged",
+      "source_identity": "test-logs/g4-cpu-conformance/schema9-checkpoint.json",
+      "checks": 61
     }
   }
 }

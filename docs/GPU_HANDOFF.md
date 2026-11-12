@@ -7,9 +7,14 @@ GPU. Preparing this handoff does not run device tests, profiling or benchmarks.
 
 ## Current source and evidence
 
-The schema9 candidate adds hidden causal state and integrated move phases after
-schema8's recharge checkpoint. Its CPU validation is in progress; do not treat
-this as a passing source checkpoint yet. Historical schema8 results remain in
+The engine is schema9, adding hidden causal state, rampages, eight charge moves,
+semi-invulnerability, Power Herb, action restrictions and flinching. The four
+phase execution/lifecycle checks and 13 prior scalar/migration checks passed on
+engine commit `567f02c`, with unchanged source and fixture hashes. A separate
+schema1/2 migration/rollout check also passed: **18 affected CPU checks total**.
+Exact source and results are recorded in [schema9-checkpoint.json](../test-logs/g4-cpu-conformance/schema9-checkpoint.json).
+The entire matching-source 61-check suite has not been repeated. Historical
+schema8 results remain in
 [schema8-checkpoint.json](../test-logs/g4-cpu-conformance/schema8-checkpoint.json).
 
 The expanded runner expects **61 checks in 14 isolated modules**, using nine

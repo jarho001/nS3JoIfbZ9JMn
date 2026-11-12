@@ -1,6 +1,6 @@
 {
   "schema": 9,
-  "status": "candidate_scalar_passed_integrated_cpu_gate_running_not_full_G4",
+  "status": "18_affected_CPU_checks_passed_not_full_G4",
   "source_base": "d275abc",
   "source_sha256": {
     "benchmarks/g3-campaign.json": "a3ab66ce73c1b6ba73703057df34648a618fbabb1f4e941216a88f10778eb0af",
@@ -302,23 +302,130 @@
     "log": "expanded-locks-terminal-fixed.log"
   },
   "integrated_gate": {
-    "status": "running",
-    "record": "work/g4-causal-integration/validation9.json",
-    "passed_so_far": [
-      "causal metadata/capacity/privacy/legacy replay",
-      "complete full/lean games/continuation/reset"
+    "status": "passed",
+    "checks": 18,
+    "groups": 15,
+    "logs": [
+      {
+        "log": "cpu9-00-test_lock_phase_engine.log",
+        "count": 4,
+        "seconds": 1315.308,
+        "passed": true
+      },
+      {
+        "log": "cpu9-01-test_generic_engine.log",
+        "count": 1,
+        "seconds": 66.306,
+        "passed": true
+      },
+      {
+        "log": "cpu9-02-test_roster_hazards.log",
+        "count": 1,
+        "seconds": 99.798,
+        "passed": true
+      },
+      {
+        "log": "cpu9-03-test_shared_engine_cases.log",
+        "count": 1,
+        "seconds": 93.095,
+        "passed": true
+      },
+      {
+        "log": "cpu9-04-test_shared_engine_battles.log",
+        "count": 1,
+        "seconds": 72.292,
+        "passed": true
+      },
+      {
+        "log": "cpu9-05-test_status_engine.log",
+        "count": 1,
+        "seconds": 86.752,
+        "passed": true
+      },
+      {
+        "log": "cpu9-06-test_field_engine.log",
+        "count": 1,
+        "seconds": 77.029,
+        "passed": true
+      },
+      {
+        "log": "cpu9-07-test_hook_engine.log",
+        "count": 1,
+        "seconds": 74.889,
+        "passed": true
+      },
+      {
+        "log": "cpu9-08-test_hit_engine.log",
+        "count": 1,
+        "seconds": 84.803,
+        "passed": true
+      },
+      {
+        "log": "cpu9-09-test_recharge_engine.log",
+        "count": 1,
+        "seconds": 67.244,
+        "passed": true
+      },
+      {
+        "log": "cpu9-10-test_field_engine.log",
+        "count": 1,
+        "seconds": 60.757,
+        "passed": true
+      },
+      {
+        "log": "cpu9-11-test_hook_engine.log",
+        "count": 1,
+        "seconds": 60.043,
+        "passed": true
+      },
+      {
+        "log": "cpu9-12-test_hit_engine.log",
+        "count": 1,
+        "seconds": 60.275,
+        "passed": true
+      },
+      {
+        "log": "cpu9-13-test_recharge_engine.log",
+        "count": 1,
+        "seconds": 114.108,
+        "passed": true
+      },
+      {
+        "log": "cpu9-legacy-generic.log",
+        "count": 1,
+        "seconds": 178.293,
+        "passed": true
+      }
     ],
-    "planned": "four phase checks plus13 prior scalar/migration checks; full61 suite pending"
+    "source_record": "validation9.json",
+    "legacy_record": "legacy-validation9.json",
+    "scope": "Four phase execution/lifecycle checks, nine prior scalar family checks, four prior migration/corruption checks and generic schema1/2 migration/rollout check. Full61 suite not repeated.",
+    "total_seconds": 2537.098381996155
   },
   "fixture_sha256": "ec958991c4e6b5695e171dfad67d8f6b836a8a5e4d9b45869cc08b8d2b3f973b",
   "gpu_executed": false,
   "profiling_executed": false,
   "full_G4_accepted": false,
   "remaining": [
-    "current integrated CPU gate",
-    "history and native turn-limit repair",
-    "remaining mechanics/callbacks and dependency closure",
-    "fixed64/128 generated campaigns",
+    "full61-check checkpoint suite",
+    "history/native turn-limit repair and final capacity bounds",
+    "remaining reachable mechanics/callbacks and dependency closure",
+    "fixed64 development/128 held-out generated campaigns",
     "deferred matching-source GPU validation"
-  ]
+  ],
+  "implementation_commit": "567f02c",
+  "source_unchanged": true,
+  "fixture_hashes_unchanged": true,
+  "scenario_total": 526,
+  "boundary_total": 2895,
+  "complete_constructed_six_member_games": 28,
+  "legacy_three_member_games": 8,
+  "validation_archive": "schema9-validation.tar.gz",
+  "next_family_native_spec": {
+    "status": "native_only_not_implemented",
+    "cases": 25,
+    "boundaries": 72,
+    "fixture": "substitute-native.json",
+    "script": "observe-substitute.cjs"
+  }
 }

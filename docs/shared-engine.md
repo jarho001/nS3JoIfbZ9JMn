@@ -222,3 +222,7 @@ Advanced pre-schema9 saves cannot reconstruct this causal history: loading them
 requires an independently replayed state that matches every recorded old field.
 Fresh initial states retain automatic migration. These additions do not close
 the reachable-mechanics audit, long-history capacity gap or full-format G4 gates.
+
+The [schema9 CPU checkpoint](../test-logs/g4-cpu-conformance/schema9-checkpoint.json)
+records 18 affected checks and exact scalar replay of 526 scenarios and 2895 boundaries.
+The full 61-check checkpoint suite and full-format G4 gates remain pending.
