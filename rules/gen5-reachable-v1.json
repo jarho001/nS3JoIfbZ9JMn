@@ -550,10 +550,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/ability-create.json.gz",
+          "native": "reference/ability-create-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_ability_create_engine.py"
+        }
+      ],
       "field": "onChangeBoost",
       "id": "abilities:contrary:onChangeBoost",
-      "implementation": null,
+      "implementation": {
+        "family": "ability_create",
+        "file": "simulator/ability_creation.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:contrary",
@@ -564,7 +576,7 @@
       "owner": "abilities:contrary",
       "reachability": "candidate",
       "sha256": "85e23e9f6074a6741dc2df3b2d443a66c2061beed7d92abba50e764c73173406",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -4311,10 +4323,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/ability-create.json.gz",
+          "native": "reference/ability-create-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_ability_create_engine.py"
+        }
+      ],
       "field": "onChangeBoost",
       "id": "abilities:simple:onChangeBoost",
-      "implementation": null,
+      "implementation": {
+        "family": "ability_create",
+        "file": "simulator/ability_creation.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:simple",
@@ -4325,7 +4349,7 @@
       "owner": "abilities:simple",
       "reachability": "candidate",
       "sha256": "bc18eed17ec7266c6e83788b01c92a78d9915a3f7ecea3daed244416478ddb63",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -25217,10 +25241,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/ability-create.json.gz",
+          "native": "reference/ability-create-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_ability_create_engine.py"
+        }
+      ],
       "field": "onHit",
       "id": "moves:simplebeam:onHit",
-      "implementation": null,
+      "implementation": {
+        "family": "ability_create",
+        "file": "simulator/ability_creation.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:simplebeam",
@@ -25231,7 +25267,7 @@
       "owner": "moves:simplebeam",
       "reachability": "candidate",
       "sha256": "0a5c5dc77019fe4799bcfd548140fd0d70c147a9f9c51a02c9bcea290ae4069b",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -25240,10 +25276,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/ability-create.json.gz",
+          "native": "reference/ability-create-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_ability_create_engine.py"
+        }
+      ],
       "field": "onTryHit",
       "id": "moves:simplebeam:onTryHit",
-      "implementation": null,
+      "implementation": {
+        "family": "ability_create",
+        "file": "simulator/ability_creation.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:simplebeam",
@@ -25254,7 +25302,7 @@
       "owner": "moves:simplebeam",
       "reachability": "candidate",
       "sha256": "ab597c95a67dbad00f4d17c5196c61b18e3b7bdd327411f494d9b76a9c8c16bc",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -28508,10 +28556,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/ability-create.json.gz",
+          "native": "reference/ability-create-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_ability_create_engine.py"
+        }
+      ],
       "field": "onHit",
       "id": "moves:worryseed:onHit",
-      "implementation": null,
+      "implementation": {
+        "family": "ability_create",
+        "file": "simulator/ability_creation.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:worryseed",
@@ -28522,7 +28582,7 @@
       "owner": "moves:worryseed",
       "reachability": "candidate",
       "sha256": "9e12bb835baa61158086f27902df375227279b4dd94c80d7f770486e6db38db6",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -28531,10 +28591,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/ability-create.json.gz",
+          "native": "reference/ability-create-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_ability_create_engine.py"
+        }
+      ],
       "field": "onTryHit",
       "id": "moves:worryseed:onTryHit",
-      "implementation": null,
+      "implementation": {
+        "family": "ability_create",
+        "file": "simulator/ability_creation.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:worryseed",
@@ -28545,7 +28617,7 @@
       "owner": "moves:worryseed",
       "reachability": "candidate",
       "sha256": "56512ae01d30aab6de039e6fa3a0238bb028bcdff8bb62fd17cfd41188cdfd56",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -28554,10 +28626,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/ability-create.json.gz",
+          "native": "reference/ability-create-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_ability_create_engine.py"
+        }
+      ],
       "field": "onTryImmunity",
       "id": "moves:worryseed:onTryImmunity",
-      "implementation": null,
+      "implementation": {
+        "family": "ability_create",
+        "file": "simulator/ability_creation.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:worryseed",
@@ -28568,7 +28652,7 @@
       "owner": "moves:worryseed",
       "reachability": "candidate",
       "sha256": "78110bcc104d2c2aeb7ec0a04391e5dcfe1766a10ef6c014016d841b09eb7aae",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -63297,10 +63381,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/ability-create.json.gz",
+          "native": "reference/ability-create-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_ability_create_engine.py"
         }
       ],
       "id": "moves:simplebeam",
       "implementation": {
+        "behavior": {
+          "family": "ability_create",
+          "file": "simulator/ability_creation.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "MOVE_TYPE/MOVE_POWER/MOVE_CATEGORY/MOVE_PRIORITY/MOVE_PP",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -67221,10 +67317,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/ability-create.json.gz",
+          "native": "reference/ability-create-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_ability_create_engine.py"
         }
       ],
       "id": "moves:worryseed",
       "implementation": {
+        "behavior": {
+          "family": "ability_create",
+          "file": "simulator/ability_creation.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "MOVE_TYPE/MOVE_POWER/MOVE_CATEGORY/MOVE_PRIORITY/MOVE_PP",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -67971,10 +68079,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/ability-create.json.gz",
+          "native": "reference/ability-create-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_ability_create_engine.py"
         }
       ],
       "id": "abilities:contrary",
       "implementation": {
+        "behavior": {
+          "family": "ability_create",
+          "file": "simulator/ability_creation.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -71385,10 +71505,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/ability-create.json.gz",
+          "native": "reference/ability-create-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_ability_create_engine.py"
         }
       ],
       "id": "abilities:simple",
       "implementation": {
+        "behavior": {
+          "family": "ability_create",
+          "file": "simulator/ability_creation.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"

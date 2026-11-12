@@ -3,7 +3,7 @@ import jax.numpy as jnp
 from . import gen5_engine_tables as t
 A=t.ABILITY_IDS;M=t.MOVE_IDS
 ROLE=M['roleplay'];SWAP=M['skillswap'];ENTRAIN=M['entrainment']
-MOVE_IMPLEMENTED=jnp.asarray([k in ('roleplay','skillswap','entrainment')for k in t.MOVE_KEYS],jnp.bool_)
+MOVE_IMPLEMENTED=jnp.asarray([k in ('roleplay','skillswap','entrainment','worryseed','simplebeam')for k in t.MOVE_KEYS],jnp.bool_)
 PROTECT=t.mv(lambda r:bool(r.get('flags',{}).get('protect'))).astype(jnp.bool_)
 ROWS={r['id']:r for r in t.g.DATA['abilities']}
 def flag(key):return jnp.asarray([bool(ROWS.get(k,{}).get('flags',{}).get(key))for k in t.ABILITIES],jnp.bool_)
@@ -16,7 +16,7 @@ def fail(c,actor,move,move_row,e):
 
 def try_hit(c,actor,target,move,move_row,e):
     s,_=c;old=s.ability[actor,s.active[actor]];other=s.ability[target,s.active[target]]
-    denied=jnp.where(move==ROLE,(old==other)|ROLE_FAIL[other]|CANT[old],jnp.where(move==ENTRAIN,(old==other)|CANT[other]|(other==A['truant'])|NO_ENTRAIN[old],False))
+    denied=jnp.where(move==ROLE,(old==other)|ROLE_FAIL[other]|CANT[old],jnp.where(move==ENTRAIN,(old==other)|CANT[other]|(other==A['truant'])|NO_ENTRAIN[old],e.creation_ops.denied(s,target,move,CANT)))
     return e._when(denied,lambda c:fail(c,actor,move,move_row,e),c),denied
 
 def end(c,side,e):
@@ -30,7 +30,7 @@ def assign(s,side,ability,e):
 
 def hit(c,actor,target,move,move_row,e):
     s,_=c;old=s.ability[actor,s.active[actor]];other=s.ability[target,s.active[target]]
-    denied=jnp.where(move==SWAP,SWAP_FAIL[old]|SWAP_FAIL[other]|(old==other),CANT[old]|CANT[other])
+    denied=jnp.where(move==SWAP,SWAP_FAIL[old]|SWAP_FAIL[other]|(old==other),jnp.where(e.creation_ops.CREATED[move]>0,CANT[other],CANT[old]|CANT[other]))
     def swap(c):
         s,_=c;c=e._event(c,e.ABILITY_SWAP,actor,s.active[actor],target=target,targetmon=s.active[target],value=other,aux=old)
         c=end(c,actor,e);c=end(c,target,e);s,tr=c
@@ -39,11 +39,12 @@ def hit(c,actor,target,move,move_row,e):
         c=e.hook_ops.ability_start((s,tr),target,e)
         return e.hook_ops.ability_start(c,actor,e)
     def single(c):
-        receiver=jnp.where(move==ROLE,actor,target);source=1-receiver;ability=jnp.where(move==ROLE,other,old)
+        receiver=jnp.where(move==ROLE,actor,target);source=1-receiver;ability=jnp.where(e.creation_ops.CREATED[move]>0,e.creation_ops.CREATED[move],jnp.where(move==ROLE,other,old))
         c=end(c,receiver,e);s,tr=c;previous=s.ability[receiver,s.active[receiver]]
         s=assign(s,receiver,ability,e)
-        c=e._event((s,tr),e.ABILITY_CHANGE,receiver,s.active[receiver],move=move,target=source,targetmon=s.active[source],value=ability,aux=previous)
+        c=e._event((s,tr),e.ABILITY_CHANGE,receiver,s.active[receiver],move=move,target=source,targetmon=s.active[source],value=ability,aux=previous,status=(e.creation_ops.CREATED[move]>0).astype(jnp.int32))
         c=e.hook_ops.ability_start(c,receiver,e)
+        c=e._when((move==e.creation_ops.WORRY)&(c[0].status[receiver,c[0].active[receiver]]==e.SLP),lambda c:e.effects.cure(c,receiver,e,source=actor),c)
         s,tr=c;s=s._replace(ability_staleness=s.ability_staleness.at[receiver,s.active[receiver]].set(jnp.where(move==ENTRAIN,1,s.ability_staleness[receiver,s.active[receiver]])))
         return s,tr
     def success(c):

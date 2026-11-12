@@ -199,10 +199,10 @@ def charge(c,actor,move,move_row,e):
     def prepare(c):
         c=e._event(c,e.PREPARE,actor,mon,move=move)
         def skull(c):
-            s,trace=c;old=s.boosts[actor,mon,1];new=jnp.minimum(6,old+1)
+            s,trace=c;old=s.boosts[actor,mon,1];change=e.creation_ops.delta(s,actor,e.i32(1));new=jnp.clip(old+change,-6,6)
             s=s._replace(boosts=s.boosts.at[actor,mon,1].set(new))
-            s=e.tracking.boosted(s,actor,new>old,jnp.array(False))
-            return e._event((s,trace),e.BOOST,actor,mon,value=new-old,aux=1)
+            s=e.tracking.boosted(s,actor,new>old,new<old)
+            return e._event((s,trace),e.BOOST,actor,mon,value=new-old,aux=1,status=(change<0).astype(jnp.int32))
         c=e._when(move==t.MOVE_IDS['skullbash'],skull,c)
         sun=(move==t.MOVE_IDS['solarbeam'])&(c[0].weather_state[0]==2)
         herb=(c[0].item[actor,mon]==POWER_HERB)&(~sun)

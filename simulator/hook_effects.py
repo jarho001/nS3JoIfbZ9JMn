@@ -115,10 +115,10 @@ def ability_start(c,side,e,initial=False):
         return e._when(item>0,lambda c:e._event(c,e.FRISK_ITEM,side,m,value=item),c)
     c=e._when((ability==h.A['frisk'])&(~c[0].fainted[1-side,c[0].active[1-side]]),frisk,c)
     def intimidate(c):
-        s,t=c;foe=1-side;fm=s.active[foe];old=s.boosts[foe,fm,0];new=jnp.maximum(-6,old-1)
+        s,t=c;foe=1-side;fm=s.active[foe];old=s.boosts[foe,fm,0];change=e.creation_ops.delta(s,foe,e.i32(-1));new=jnp.clip(old+change,-6,6)
         s=s._replace(boosts=s.boosts.at[foe,fm,0].set(new))
         s=e.tracking.boosted(s,foe,new>old,new<old)
-        return e._event((s,t),e.BOOST,foe,fm,value=new-old,aux=0,status=1)
+        return e._event((s,t),e.BOOST,foe,fm,value=new-old,aux=0,status=(change<0).astype(jnp.int32))
     c=e._when((ability==h.A['intimidate'])&(c[0].hp[1-side,c[0].active[1-side]]>0),intimidate,c)
     def set_weather(c):
         s,t=c;state=jnp.stack((weather,side,m,e.i32(0),e.i32(0),e.i32(0)))

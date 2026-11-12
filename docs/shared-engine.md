@@ -14,7 +14,7 @@ Full-format G4
 coverage remains separate acceptance work. Historical evidence keeps its original
 source/schema identity; it does not imply validation of later engine changes.
 
-The current runtime uses [schema 22](../rules/shared-engine-v22.json). Schemas
+The current runtime uses [schema 23](../rules/shared-engine-v23.json). Schemas
 4–6 integrated major statuses and effect provenance, boosts/weather/screens,
 and observed ability/item hooks. Schema7 adds declarative hit counts, per-hit
 updates, capped drain/recoil arithmetic, self-destruction and reactive damage.
@@ -630,3 +630,11 @@ The shared Update scheduler visits holders in native speed/shuffle order. Rest
 respects Insomnia/Vital Spirit; primary and secondary prevention retain exact
 visibility and RNG. Focused18/39 CPU parity and live persistence pass. Yawn/Own
 Tempo, broad execution/migration and full G4 conformance remain pending.
+
+Schema23 adds Worry Seed/Simple Beam and Simple/Contrary across declarative
+boosts, Intimidate and Skull Bash. Created abilities keep original private ability
+and omit a source Pokémon from native announcements; Worry Seed directly cures
+existing sleep before Update. Zen/Illusion End and early Worry Seed immunity are
+covered. The old numeric Immunity event value is retained for legacy history.
+Focused23/48 CPU parity and live persistence pass; suppression, broad execution/
+migration and full-format acceptance remain pending.

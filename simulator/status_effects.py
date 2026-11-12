@@ -88,7 +88,7 @@ def inflict(c,source,target,status,e,reflect=True,move=0,secondary=False,overwri
         return e._event(c,e.SLEEP_CLAUSE,value=1)
     def blocked(c):
         if secondary:return c
-        return e._event(c,e.IMMUNE,target,m,value=jnp.where(e.immunity_ops.blocks(ability,status,e),ability,0),aux=jnp.where((ability==2)&((status==e.TOX)|(status==e.PSN)),1,jnp.where(e.immunity_ops.blocks(ability,status,e),4,0)))
+        return e._event(c,e.IMMUNE,target,m,value=jnp.where(e.immunity_ops.blocks(ability,status,e)&(ability!=2),ability,0),aux=jnp.where((ability==2)&((status==e.TOX)|(status==e.PSN)),1,jnp.where(e.immunity_ops.blocks(ability,status,e),4,0)))
     def apply(c):
         s,t=c
         meta=jnp.stack((status,s.effect_order,source,sm,e.i32(1),e.i32(-1),e.i32(-1)))

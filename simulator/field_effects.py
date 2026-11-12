@@ -16,15 +16,15 @@ def boost(c,actor,target,move,e):
     for step in range(7):
         k=f.BOOST_ORDER[move,step]
         def apply(c):
-            s,t=c;old=s.boosts[target,m,k];new=jnp.clip(old+change[k],-6,6)
+            s,t=c;old=s.boosts[target,m,k];new=jnp.clip(old+e.creation_ops.delta(s,target,change[k]),-6,6)
             s=s._replace(boosts=s.boosts.at[target,m,k].set(new))
             s=e.tracking.boosted(s,target,new>old,new<old)
             value=jnp.where(new!=old,e.tracking.TRUE,s.action_state[actor,s.active[actor],e.tracking.RESULT])
             s, t=e.tracking.outcome((s,t),actor,value,move)
             # Even a capped raise emits its zero-sized native boost event.
-            return e._event((s,t),e.BOOST,target,m,value=new-old,aux=k,status=(change[k]<0).astype(jnp.int32))
+            return e._event((s,t),e.BOOST,target,m,value=new-old,aux=k,status=(e.creation_ops.delta(s,target,change[k])<0).astype(jnp.int32))
         c=e._when(change[k]!=0,apply,c)
-    return e._update(e._update(c,e.HIT_UPDATE),e.HIT_UPDATE)
+    return e._when(c[0].action_state[actor,c[0].active[actor],e.tracking.RESULT]==e.tracking.TRUE,lambda c:e._update(e._update(c,e.HIT_UPDATE),e.HIT_UPDATE),c)
 
 
 def _fail(c,actor,move_row,e):
