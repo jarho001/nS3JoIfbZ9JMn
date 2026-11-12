@@ -2,7 +2,7 @@
 import jax.numpy as jnp
 from . import gen5_engine_tables as t
 
-VOLATILES=('protect','stall','confusion','choicelock','mustrecharge','lockedmove','twoturnmove','solarbeam','skyattack','skullbash','razorwind','fly','dig','dive','bounce','taunt','encore','disable','torment','flinch','substitute','partiallytrapped')
+VOLATILES=('protect','stall','confusion','choicelock','mustrecharge','lockedmove','twoturnmove','solarbeam','skyattack','skullbash','razorwind','fly','dig','dive','bounce','taunt','encore','disable','torment','flinch','substitute','partiallytrapped','pursuit')
 VOLATILE_IDS={key:i for i,key in enumerate(VOLATILES)}
 VOLATILE_WIDTH=12
 SOURCE_MOVE,SOURCE_ITEM,SOURCE_CONDITION,SOURCE_EMPTY=1,2,3,4
@@ -161,6 +161,9 @@ def valid_phases(s):
             fields=(row[:,:,6]==SOURCE_MOVE)&(row[:,:,4]==t.MOVE_IDS[VOLATILES[kind]])
             fields=fields&((row[:,:,5]>=1)&(row[:,:,5]<=5) if kind!=18 else row[:,:,5]==0)
             if kind in (16,17):fields=fields&(row[:,:,7]>0)&(row[:,:,7]<len(t.MOVE_KEYS))
+        elif kind==VOLATILE_IDS['pursuit']:
+            fields=(row[:,:,6]==SOURCE_MOVE)&(row[:,:,4]==t.MOVE_IDS['pursuit'])&(row[:,:,5]==1)&jnp.all(row[:,:,7:]==0,axis=-1)
+            fields=fields&(row[:,:,2]==jnp.arange(2)[:,None])&(row[:,:,3]==jnp.arange(6)[None,:])
         elif kind==VOLATILE_IDS['partiallytrapped']:
             effect=jnp.clip(row[:,:,4],0,len(t.MOVE_KEYS)-1)
             fields=(row[:,:,6]==SOURCE_MOVE)&PARTIAL_MOVES[effect]&(row[:,:,4]>0)&(row[:,:,4]<len(t.MOVE_KEYS))

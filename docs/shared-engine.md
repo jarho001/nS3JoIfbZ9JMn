@@ -14,7 +14,7 @@ Full-format G4
 coverage remains separate acceptance work. Historical evidence keeps its original
 source/schema identity; it does not imply validation of later engine changes.
 
-The current runtime uses [schema 14](../rules/shared-engine-v14.json). Schemas
+The current runtime uses [schema 15](../rules/shared-engine-v15.json). Schemas
 4–6 integrated major statuses and effect provenance, boosts/weather/screens,
 and observed ability/item hooks. Schema7 adds declarative hit counts, per-hit
 updates, capped drain/recoil arithmetic, self-destruction and reactive damage.
@@ -226,6 +226,25 @@ the reachable-mechanics audit, long-history capacity gap or full-format G4 gates
 The [schema9 CPU checkpoint](../test-logs/g4-cpu-conformance/schema9-checkpoint.json)
 records 18 affected checks and exact scalar replay of 526 scenarios and 2895 boundaries.
 The full 61-check checkpoint suite and full-format G4 gates remain pending.
+
+## Gen5 Pursuit and pre-switch work
+
+Schema15 appends Pursuit volatile slot22 and causal columns21–23 for
+`beingCalledBack`, `pursuitActivated` and `skipPursuit`. A before-turn-move queue
+entry installs its duration1 callback. Interception removes the source's queued
+attack and schedules the same move dispatcher with a Pursuit source annotation;
+voluntary switches also schedule finish work. This avoids nested full-engine
+calls and preserves native Updates, cancellation and the KO hint. U-turn can be
+intercepted before its replacement prompt; phazing bypasses interception.
+Pursuit doubles base power before Technician and skips accuracy on a switching
+target, retaining ordinary behavior otherwise. Activation/skip flags survive a
+canceled switch until replacement, including exact source/target KO handling.
+
+Old state layouts pad missing causal columns and volatile slots; old journals
+require independently matching replay of every recorded field. Current pivot
+flags and both recipient histories round-trip under journal5. Native capture
+includes the three flags for Pursuit cases; historical cases retain their
+original projection contract. Focused23/41 parity is not broad G4 acceptance.
 
 ## Gen5 phazing
 

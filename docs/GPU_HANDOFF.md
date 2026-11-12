@@ -7,6 +7,19 @@ GPU. Preparing this handoff does not run device tests, profiling or benchmarks.
 
 ## Current source and evidence
 
+**Schema15 Pursuit checkpoint:** the focused CPU check passed23 scenarios/41
+boundaries in89.858s; one native contract passed. It covers normal/intercepted
+Pursuit, voluntary switches and both U-turn orders, skipped turns, PP/Pressure,
+Substitute/Protect, Choice/Technician, KO/double-KO cancellation, mirrored seats,
+and live pivot NPZ/journal persistence. See
+[schema15-checkpoint.json](../test-logs/g4-cpu-conformance/schema15-checkpoint.json).
+The source uses queued interception plus finish work through one move dispatcher;
+being-called-back/activation/skip flags are persisted in schema15, journal5.
+The return-home runner includes `test.test_pursuit_engine`; isolated correctness
+replay is `JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_pursuit_engine -v -f`.
+Broader execution/lifecycle coverage and current preparation remain deferred.
+No GPU work, profiling or budget sweeps ran.
+
 **Schema14 phazing checkpoint:** focused CPU parity passed36 scenarios/46
 boundaries in81.552s; the pinned native contract passed. Coverage includes four
 phazing moves, Substitute/Protect/no-bench, Suction Cups/Soundproof, cancellation,
@@ -87,8 +100,8 @@ The entire matching-source 61-check suite has not been repeated. Historical
 schema8 results remain in
 [schema8-checkpoint.json](../test-logs/g4-cpu-conformance/schema8-checkpoint.json).
 
-The expanded runner expects **75 checks in 19 isolated modules**, using fourteen
-independent native corpora: **672 scenarios / 4445 boundaries**, including
+The expanded runner expects **76 checks in 20 isolated modules**, using fifteen
+independent native corpora: **695 scenarios / 4486 boundaries**, including
 32 complete constructed six-member combat games (plus the neutral switch-only
 turn-limit game and eight historical three-member games). The 73 phase scenarios are in
 `test.test_lock_phase_engine`. The runner recaptures causal state for the prior
@@ -151,10 +164,10 @@ the combined block below:
 
 1. Creates a fresh `work/g4-gpu-TIMESTAMP/` and records commit/tree, relevant file
    hashes, selected host affinity and independent native fixture hashes.
-2. Freezes all fourteen legacy/current corpora, including move phases, the
+2. Freezes all fifteen legacy/current corpora, including move phases, the
    turn-limit witness, trapping/retries, Substitute and partial trapping. Runs the reference/native
    contracts. Unknown/unsupported families stay explicit.
-3. Runs the same current 75-check scope on CPU, then under `JAX_PLATFORMS=cuda`,
+3. Runs the same current 76-check scope on CPU, then under `JAX_PLATFORMS=cuda`,
    with each test module in a fresh process.
    A strict probe verifies actual eager/JIT GPU placement; shared case/lifecycle
    assertions also check device leaves. `cuda` initialization failure is a failure.

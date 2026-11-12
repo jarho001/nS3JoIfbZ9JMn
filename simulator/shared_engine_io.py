@@ -82,7 +82,7 @@ def project_events(state,trace,audience):
         elif kind in (e.EV_MOVE,e.ANIM):
             shown='' if aux==2 else foe.replace('a: ',': ') if aux in (3,4) else foe
             annotation={0:'',1:'|[miss]',2:'|[still]',3:'|[notarget]',4:''}[aux]
-            line='|'+('move' if kind==e.EV_MOVE else '-anim')+f'|{actor}|{name}|'+shown+('|[from] lockedmove' if from_lock else '')+annotation
+            line='|'+('move' if kind==e.EV_MOVE else '-anim')+f'|{actor}|{name}|'+shown+('|[from] lockedmove' if from_lock==1 else '|[from] move: Pursuit' if from_lock==2 else '')+annotation
         elif kind in (e.DAMAGE,e.HEAL):
             line=f'|-'+('damage' if kind==e.DAMAGE else 'heal')+f'|{actor}|'+condition(value,aux,status,side!=audience)
             if kind==e.DAMAGE and move:line+='|[from] '+{1:'brn',2:'psn',3:'recoil',4:'Stealth Rock',5:'Spikes',6:'confusion',7:'Sandstorm',8:'Hail',9:'item: Life Orb',10:'Recoil',11:'ability: Rough Skin',12:'ability: Iron Barbs',13:'item: Rocky Helmet',14:'ability: Liquid Ooze'}[move]
@@ -99,6 +99,7 @@ def project_events(state,trace,audience):
         elif kind==e.WIN:line=f'|win|p{value}' if value else '|tie'
         elif kind==e.TURN:line=f'|turn|{value}'
         elif kind==e.UPKEEP:line='|upkeep'
+        elif kind==e.PURSUIT_HINT:line="|-hint|A Pokemon can't switch between when it runs out of HP and when it faints"
         elif kind==e.PHAZE_ABILITY:line=f'|-activate|{actor}|ability: '+e.hook_tables.ABILITY_NAMES[value]
         elif kind==e.DRAG:line=f'|drag|{actor}|{details(s,side,mon)}|'+condition(value,aux,status,side!=audience)
         elif kind==e.SWITCH:line=f'|switch|{actor}|{details(s,side,mon)}|'+condition(value,aux,status,side!=audience)+('|[from] U-turn' if move else '')
@@ -193,12 +194,12 @@ def load_state(path,*,schema=None,replayed_state=None):
         stored=int(saved['schema']) if 'schema' in saved else None
         if schema is not None and stored is not None and stored!=schema:raise ValueError('schema mismatch')
         version=stored if schema is None else schema
-        if version not in (1,2,3,4,5,6,7,8,9,10,11,12,13,14):raise ValueError('explicit supported state schema required')
+        if version not in (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15):raise ValueError('explicit supported state schema required')
         fields={k:jnp.asarray(saved[k]) for k in saved.files if k not in ('schema','data_sha256')}
-        if version in (3,4,5,6,7,8,9,10,11,12,13,14):
+        if version in (3,4,5,6,7,8,9,10,11,12,13,14,15):
             if 'data_sha256' not in saved or str(saved['data_sha256'])!=generic.DATA_SHA256:
                 raise ValueError('state data table identity mismatch')
-        if version<14 and replayed_state is not None:
+        if version<15 and replayed_state is not None:
             e._validate_structure(replayed_state)
             end='ivs' if version<=2 else 'effect_order' if version==3 else 'weather_state' if version==4 else 'move_history' if version<9 else 'request_state'
             expected=set(e.State._fields if version>=11 else e.State._fields[:e.State._fields.index(end)])
@@ -211,7 +212,8 @@ def load_state(path,*,schema=None,replayed_state=None):
                     if old.shape!=(2,6,slots,6):raise ValueError('invalid legacy volatile shape for replay')
                     replay=replay[:,:,:slots,:6]
                 elif key=='volatile_state':
-                    replay=replay[:,:,:22 if version==13 else 21 if version==12 else 20,:]
+                    replay=replay[:,:,:22 if version>=13 else 21 if version==12 else 20,:]
+                if key=='action_state':replay=replay[:,:,:21]
                 if old.shape!=replay.shape or old.dtype!=replay.dtype or not np.array_equal(old,replay):
                     raise ValueError('legacy replay/provenance mismatch: '+key)
             return replayed_state
@@ -296,11 +298,15 @@ def load_state(path,*,schema=None,replayed_state=None):
             if np.any(np.asarray(e.trap_ops.QUERY)[species]) or np.any(np.asarray(e.trap_ops.ABILITY_IMPLEMENTED)[ability]):
                 raise ValueError('legacy trapping/disclosure requires replay/provenance')
             fields['request_state']=jnp.zeros((2,2),jnp.int32)
-        if 9<=version<13:
+        if 9<=version<15:
             v=fields['volatile_state']
-            slots=21 if version==12 else 20
+            slots=22 if version>=13 else 21 if version==12 else 20
             if v.shape!=(2,6,slots,e.phase_ops.VOLATILE_WIDTH):raise ValueError('invalid legacy volatile shape')
             fields['volatile_state']=jnp.pad(v,((0,0),(0,0),(0,len(e.phase_ops.VOLATILES)-slots),(0,0)))
+        if 9<=version<15:
+            a=fields['action_state']
+            if a.shape!=(2,6,21):raise ValueError('invalid legacy action-state shape')
+            fields['action_state']=jnp.pad(a,((0,0),(0,0),(0,3)))
         if set(fields)!=set(e.State._fields):raise ValueError('invalid state field set')
         state=e.State(*(fields[k] for k in e.State._fields))
         e._validate_structure(state)
@@ -339,6 +345,7 @@ def effect_states(state,side,mon):
         if 7<=kind<=14:
             row['targetLoc']=int(s.volatile_state[side,mon,kind,9])
             if key in ('fly','dig','dive','bounce'):row.update(name=e.MOVE_NAMES[tables.MOVE_IDS[key]],duration=time)
+        if key=='pursuit':row.update(name='Pursuit',duration=time)
         if key=='partiallytrapped':row.update(duration=time,boundDivisor=int(s.volatile_state[side,mon,kind,7]))
         if key=='substitute':row.update(name='Substitute',hp=int(s.volatile_state[side,mon,kind,7]))
         if key=='flinch':row['duration']=time
@@ -390,7 +397,7 @@ def move_snapshot(row):
             'category':('Status','Physical','Special')[category],'basePower':power}
 
 
-def causal_state(state,side,mon):
+def causal_state(state,side,mon,*,include_pursuit=False):
     """Trusted mechanics projection; deliberately absent from player_view."""
     s=jax.device_get(state);tr=e.tracking;a=s.action_state[side,mon]
     value=lambda k:int(a[k])
@@ -406,6 +413,7 @@ def causal_state(state,side,mon):
          ('newlySwitched',tr.NEWLY_SWITCHED),('usedItemThisTurn',tr.USED_ITEM),('statsRaisedThisTurn',tr.RAISED),('statsLoweredThisTurn',tr.LOWERED),('ateBerry',tr.ATE_BERRY)]:result[key]=bool(a[column])
     if value(tr.TRAPPED)==2:result['trapped']='hidden'
     result['moveSlotsUsed']=[bool(value(tr.USED_SLOTS)&(1<<slot))for slot,move in enumerate(s.moves[side,mon])if move]
+    if include_pursuit:result.update(beingCalledBack=bool(value(tr.CALLED_BACK)),pursuitActivated=bool(value(tr.PURSUIT_ACTIVE)),skipPursuit=bool(value(tr.SKIP_PURSUIT)))
     result['previouslySwitchedIn']=value(tr.SWITCH_COUNT)
     for row in s.attacked_by[side,mon,:value(tr.ATTACK_COUNT)]:
         source,sm,move,damage,this_turn,tag,number=map(int,row)

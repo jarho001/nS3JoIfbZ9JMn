@@ -11,7 +11,8 @@ UNDEFINED,NULL,FALSE,TRUE,NUMBER=range(5)
 (TARGET_LOC,LAST_DAMAGE,ACTIVE_TURNS,ACTIONS,MOVE_THIS_TURN,RESULT,PREV_RESULT,
  HURT,TIMES_ATTACKED,TRAPPED,MAYBE_TRAPPED,MAYBE_DISABLED,NEWLY_SWITCHED,
  USED_ITEM,LAST_ITEM,RAISED,LOWERED,ATTACK_COUNT,USED_SLOTS,ATE_BERRY,SWITCH_COUNT)=range(21)
-COLUMNS=21
+CALLED_BACK,PURSUIT_ACTIVE,SKIP_PURSUIT=21,22,23
+COLUMNS=24
 ATTACK_RECORDS=1024
 
 
@@ -73,7 +74,7 @@ def attacked(c,target,source,move,amount,value_kind,hits,e):
 def clear_volatile(s,side):
     mon=s.active[side];a=s.action_state
     for k in (LAST_DAMAGE,MOVE_THIS_TURN,RESULT,PREV_RESULT,ATTACK_COUNT):a=a.at[side,mon,k].set(0)
-    a=a.at[side,mon,HURT].set(-1).at[side,mon,NEWLY_SWITCHED].set(1)
+    a=a.at[side,mon,HURT].set(-1).at[side,mon,NEWLY_SWITCHED].set(1).at[side,mon,CALLED_BACK].set(0)
     return s._replace(action_state=a,move_history=s.move_history.at[side,mon].set(0),
                       attacked_by=s.attacked_by.at[side,mon].set(0))
 
@@ -85,7 +86,7 @@ def faint(s,side):
 
 def switched(s,side,old,incoming):
     # Preserve lifetime counters and the fainted holder's final attack records.
-    for k in (USED_ITEM,RAISED,LOWERED):s=put(s,side,k,0,old)
+    for k in (USED_ITEM,RAISED,LOWERED,PURSUIT_ACTIVE,SKIP_PURSUIT):s=put(s,side,k,0,old)
     a=s.action_state.at[side,incoming,ACTIVE_TURNS].set(0).at[side,incoming,ACTIONS].set(0)
     a=a.at[side,incoming,USED_SLOTS].set(0).at[side,incoming,SWITCH_COUNT].add(1)
     return s._replace(action_state=a)
@@ -136,7 +137,7 @@ def valid(s,e):
     good=good&jnp.all((a[:,:,TARGET_LOC]>=-2)&(a[:,:,TARGET_LOC]<=1))
     good=good&jnp.all((a[:,:,HURT]>=-1)&(a[:,:,HURT]<=s.stats[:,:,0]))
     for k in (RESULT,PREV_RESULT):good=good&jnp.all(a[:,:,k]<=TRUE)
-    for k in (MAYBE_TRAPPED,MAYBE_DISABLED,NEWLY_SWITCHED,USED_ITEM,RAISED,LOWERED,ATE_BERRY):good=good&jnp.all(a[:,:,k]<=1)
+    for k in (MAYBE_TRAPPED,MAYBE_DISABLED,NEWLY_SWITCHED,USED_ITEM,RAISED,LOWERED,ATE_BERRY,CALLED_BACK,PURSUIT_ACTIVE,SKIP_PURSUIT):good=good&jnp.all(a[:,:,k]<=1)
     good=good&jnp.all(a[:,:,TRAPPED]<=2)&jnp.all(a[:,:,USED_SLOTS]<=15)
     good=good&jnp.all(a[:,:,MOVE_THIS_TURN]<len(t.MOVE_KEYS))&jnp.all(a[:,:,LAST_ITEM]<len(t.ITEMS))
     good=good&jnp.all(a[:,:,ATTACK_COUNT]<=ATTACK_RECORDS)

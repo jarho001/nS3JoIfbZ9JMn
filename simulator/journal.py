@@ -15,7 +15,7 @@ from . import shared_engine as e
 from . import shared_engine_io as io
 from . import gen5_tables as tables
 
-CORE_SCHEMA=4
+CORE_SCHEMA=5
 
 @dataclass(frozen=True)
 class Page:
@@ -89,7 +89,7 @@ def load(path,*,replayed=None):
         payload=str(data['metadata'])
         version=json.loads(payload)['journal_schema']
         names=tuple(n for n in e.CoreState._fields if n!='request_state') if version==1 else e.CoreState._fields
-        if version not in (1,2,3,CORE_SCHEMA):raise ValueError('unsupported core journal schema')
+        if version not in (1,2,3,4,CORE_SCHEMA):raise ValueError('unsupported core journal schema')
         if version<CORE_SCHEMA and replayed is None:raise ValueError('old core journal requires independent replay/provenance')
         if _checksum(payload,data,names)!=str(data['journal_sha256']):raise ValueError('journal checksum mismatch')
         metadata=json.loads(payload)
@@ -99,7 +99,8 @@ def load(path,*,replayed=None):
             e._validate_structure(replayed.core)
             for name in names:
                 expected=np.asarray(getattr(replayed.core,name))
-                if name=='volatile_state':expected=expected[:,:,:21 if version==3 else 20,:]
+                if name=='volatile_state':expected=expected[:,:,:22 if version==4 else 21 if version==3 else 20,:]
+                if name=='action_state':expected=expected[:,:,:21]
                 if data[name].shape!=expected.shape or data[name].dtype!=expected.dtype or not np.array_equal(data[name],expected):raise ValueError('core replay/provenance mismatch')
             core=replayed.core
         else:core=e.CoreState(*(e.jnp.asarray(data[name])for name in names))

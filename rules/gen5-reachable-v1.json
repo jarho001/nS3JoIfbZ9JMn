@@ -23527,10 +23527,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/pursuit.json.gz",
+          "native": "reference/pursuit-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_pursuit_engine.py"
+        }
+      ],
       "field": "basePowerCallback",
       "id": "moves:pursuit:basePowerCallback",
-      "implementation": null,
+      "implementation": {
+        "family": "pursuit",
+        "file": "simulator/pursuit.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:pursuit",
@@ -23541,7 +23553,7 @@
       "owner": "moves:pursuit",
       "reachability": "candidate",
       "sha256": "8bf46eee514200a3e90fe66b3ad2b8b134562a14f55f7fea35ff8d11021d3bdb",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -23550,10 +23562,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/pursuit.json.gz",
+          "native": "reference/pursuit-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_pursuit_engine.py"
+        }
+      ],
       "field": "beforeTurnCallback",
       "id": "moves:pursuit:beforeTurnCallback",
-      "implementation": null,
+      "implementation": {
+        "family": "pursuit",
+        "file": "simulator/pursuit.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:pursuit",
@@ -23564,7 +23588,7 @@
       "owner": "moves:pursuit",
       "reachability": "candidate",
       "sha256": "4c1b40cbd14208426512544e757072f3fa7966ab71f182b646868ba2e88a714e",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -23573,10 +23597,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/pursuit.json.gz",
+          "native": "reference/pursuit-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_pursuit_engine.py"
+        }
+      ],
       "field": "condition.onFoeBeforeSwitchOut",
       "id": "moves:pursuit:condition.onFoeBeforeSwitchOut",
-      "implementation": null,
+      "implementation": {
+        "family": "pursuit",
+        "file": "simulator/pursuit.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:pursuit",
@@ -23587,7 +23623,7 @@
       "owner": "moves:pursuit",
       "reachability": "candidate",
       "sha256": "10e4258d61a73da8e03e90782433fcad64f56e950a91bf7a07b35e8eb7993360",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -23596,10 +23632,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/pursuit.json.gz",
+          "native": "reference/pursuit-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_pursuit_engine.py"
+        }
+      ],
       "field": "onModifyMove",
       "id": "moves:pursuit:onModifyMove",
-      "implementation": null,
+      "implementation": {
+        "family": "pursuit",
+        "file": "simulator/pursuit.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:pursuit",
@@ -23610,7 +23658,7 @@
       "owner": "moves:pursuit",
       "reachability": "candidate",
       "sha256": "081696b2a50a1e865e0539c0ba17212ec70b9450f2f6bfb521ba142dae9912e9",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -60651,10 +60699,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/pursuit.json.gz",
+          "native": "reference/pursuit-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_pursuit_engine.py"
         }
       ],
       "id": "moves:pursuit",
       "implementation": {
+        "behavior": {
+          "family": "pursuit",
+          "file": "simulator/pursuit.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "MOVE_TYPE/MOVE_POWER/MOVE_CATEGORY/MOVE_PRIORITY/MOVE_PP",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"

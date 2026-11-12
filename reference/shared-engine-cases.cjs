@@ -76,6 +76,7 @@ cases.push(
 cases.push(...require('./substitute-cases.cjs')());
 cases.push(...require('./partial-trap-cases.cjs')());
 cases.push(...require('./phazing-cases.cjs')(mon));
+cases.push(...require('./pursuit-cases.cjs')(mon));
 
 // Migrate the accepted v6/v7 boundary inputs without modifying their old APIs.
 const legacyAccuracy=[
@@ -283,7 +284,7 @@ function capture(battle, ids, options={}) {
  }
  const typed=x=>x===undefined?{$undefined:true}:x;
  const moveState=x=>x?{id:x.id,type:x.type,category:x.category,basePower:x.basePower}:null;
- const tracking=p=>({lastMove:moveState(p.lastMove),lastMoveEncore:moveState(p.lastMoveEncore),lastMoveUsed:moveState(p.lastMoveUsed),
+ const tracking=p=>({...options.pursuit?{beingCalledBack:p.beingCalledBack,pursuitActivated:p.pursuitActivated,skipPursuit:p.skipPursuit}:{},lastMove:moveState(p.lastMove),lastMoveEncore:moveState(p.lastMoveEncore),lastMoveUsed:moveState(p.lastMoveUsed),
   lastMoveTargetLoc:typed(p.lastMoveTargetLoc),lastDamage:p.lastDamage,activeTurns:p.activeTurns,activeMoveActions:p.activeMoveActions,
   moveThisTurn:p.moveThisTurn,moveThisTurnResult:typed(p.moveThisTurnResult),moveLastTurnResult:typed(p.moveLastTurnResult),
   hurtThisTurn:p.hurtThisTurn,timesAttacked:p.timesAttacked,trapped:p.trapped,maybeTrapped:p.maybeTrapped,maybeDisabled:p.maybeDisabled,
@@ -376,7 +377,7 @@ function runCase(ps, scenario, {tracking=true}={}) {
   }
   if(scenario.setup)battle.makeRequest('move');
   assert.equal(battle.prng.getSeed(),rng,'trusted boundary setup must not consume RNG');
-  const snapshot=()=>capture(battle,ids,{tracking,effects:tracking||scenario.statusFamily||scenario.fieldFamily||scenario.hookFamily||scenario.hitFamily||scenario.rechargeFamily||scenario.lockFamily,field:tracking||scenario.fieldFamily||scenario.statusFamily||scenario.hookFamily||scenario.hitFamily||scenario.rechargeFamily||scenario.lockFamily});
+  const snapshot=()=>capture(battle,ids,{tracking,pursuit:!!scenario.pursuitFamily,effects:tracking||scenario.statusFamily||scenario.fieldFamily||scenario.hookFamily||scenario.hitFamily||scenario.rechargeFamily||scenario.lockFamily,field:tracking||scenario.fieldFamily||scenario.statusFamily||scenario.hookFamily||scenario.hitFamily||scenario.rechargeFamily||scenario.lockFamily});
   const record={id:scenario.id,classification:scenario.setup?'synthetic':'native-constructed',setup:scenario,initializationDraws,
    initial:snapshot(),initialEvents:events(battle),steps:[]};
   let boundary=0;
@@ -458,7 +459,7 @@ function main(argv) {
   } finally {fs.closeSync(fd);}
   return;
  }
- const selected=batch==='phazing'?cases.filter(c=>c.phazingFamily):batch==='partialtrap'?cases.filter(c=>c.partialTrapFamily):batch==='substitute'?cases.filter(c=>c.substituteFamily):batch==='trapping'?cases.filter(c=>c.trappingFamily):batch==='locks'?cases.filter(c=>c.lockFamily):batch==='recharge'?cases.filter(c=>c.rechargeFamily):batch==='hits'?cases.filter(c=>c.hitFamily&&!c.substituteFamily&&!c.partialTrapFamily&&!c.phazingFamily):batch==='hooks'?cases.filter(c=>c.hookFamily&&!c.hitFamily&&!c.rechargeFamily&&!c.lockFamily&&!c.trappingFamily):batch==='field'?cases.filter(c=>c.fieldFamily):batch==='status'?cases.filter(c=>c.statusFamily):batch==='generic'?cases.filter(c=>c.generic&&!c.statusFamily&&!c.fieldFamily&&!c.hookFamily&&!c.hitFamily&&!c.rechargeFamily&&!c.lockFamily&&!c.trappingFamily):batch==='g4'?cases.filter(c=>c.g4):batch==='all'?cases.filter(c=>!c.g4&&!c.generic):batch==='boundaries'?cases.filter(c=>!c.g4&&!c.generic&&!c.fullBattle):batch==='battles'?cases.filter(c=>!c.g4&&!c.generic&&c.fullBattle):cases.filter(c=>c.id===batch);
+ const selected=batch==='pursuit'?cases.filter(c=>c.pursuitFamily):batch==='phazing'?cases.filter(c=>c.phazingFamily):batch==='partialtrap'?cases.filter(c=>c.partialTrapFamily):batch==='substitute'?cases.filter(c=>c.substituteFamily):batch==='trapping'?cases.filter(c=>c.trappingFamily):batch==='locks'?cases.filter(c=>c.lockFamily):batch==='recharge'?cases.filter(c=>c.rechargeFamily):batch==='hits'?cases.filter(c=>c.hitFamily&&!c.substituteFamily&&!c.partialTrapFamily&&!c.phazingFamily&&!c.pursuitFamily):batch==='hooks'?cases.filter(c=>c.hookFamily&&!c.hitFamily&&!c.rechargeFamily&&!c.lockFamily&&!c.trappingFamily):batch==='field'?cases.filter(c=>c.fieldFamily):batch==='status'?cases.filter(c=>c.statusFamily):batch==='generic'?cases.filter(c=>c.generic&&!c.statusFamily&&!c.fieldFamily&&!c.hookFamily&&!c.hitFamily&&!c.rechargeFamily&&!c.lockFamily&&!c.trappingFamily):batch==='g4'?cases.filter(c=>c.g4):batch==='all'?cases.filter(c=>!c.g4&&!c.generic):batch==='boundaries'?cases.filter(c=>!c.g4&&!c.generic&&!c.fullBattle):batch==='battles'?cases.filter(c=>!c.g4&&!c.generic&&c.fullBattle):cases.filter(c=>c.id===batch);
  if(!selected.length)throw Error('Empty native case selection: '+batch);
  const result={schemaVersion:1,pin,format:'gen5randombattle',caseSchema:selected.some(c=>c.lockFamily)?'gen5-lock-phase-v1':selected.some(c=>c.rechargeFamily)?'gen5-recharge-v1':selected.some(c=>c.hitFamily)?'gen5-hit-effects-v1':selected.some(c=>c.hookFamily)?'gen5-ability-item-v1':selected.some(c=>c.fieldFamily)?'gen5-field-boost-v1':selected.some(c=>c.statusFamily)?'gen5-status-duration-v1':selected.some(c=>c.generic)?'shared-engine-v3':selected.some(c=>c.g4)?'shared-engine-v2':'shared-engine-v1',cases:selected.map(c=>runCase(ps,c))};
  const json=JSON.stringify(result,null,2)+'\n';

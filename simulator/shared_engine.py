@@ -29,6 +29,7 @@ from . import trapping as trap_ops
 from . import substitute as sub_ops
 from . import partial_trap as partial_ops
 from . import phazing as phaze_ops
+from . import pursuit as pursuit_ops
 from . import hook_tables
 from . import hook_effects as hook_ops
 import sys
@@ -36,7 +37,7 @@ import sys
 def _engine():
     return sys.modules[__name__]
 
-SCHEMA = 14
+SCHEMA = 15
 ROSTER, SLOTS, QUEUE, EVENTS, DRAWS, HISTORY = 6, 4, 8, 128, 128, 2048
 OK, PENDING, INVALID, UNSUPPORTED, CAPACITY, TERMINAL, STALE = range(7)
 RETRY=7
@@ -70,6 +71,7 @@ FRISK_ITEM=41
 SUB_DAMAGE=42
 PARTIAL_START,PARTIAL_END,PARTIAL_DAMAGE=43,44,45
 DRAG,PHAZE_ABILITY=46,47
+PURSUIT_HINT=48
 # Draw contexts; range form stores actual native arguments including offsets.
 INIT, QUEUE_SORT, BEFORE_TURN, UPDATE, HIT_UPDATE, SWITCH_SORT, FIELD_SORT, ACC, CRITICAL, ROLL, PARALYSIS, STALL = range(12)
 SLEEP_DURATION, FREEZE, CONF_DURATION, CONFUSION, CONF_DAMAGE, SECONDARY = range(12,18)
@@ -83,8 +85,8 @@ PHAZE_SELECTION=25
 MOVE_ACTOR_TARGET=field_tables.ACTOR_TARGET
 DRAW_CONTEXTS=('initialization','queue-sort','before-turn','update','hit-update','switch-order','residual-handlers','accuracy','critical','damage','paralysis','stall','sleep-duration','freeze','confusion-duration','confusion','confusion-damage','secondary','weather-change','weather-order','damage-modifiers','multihit-count','rampage-duration','frisk-target','volatile-duration','phazing-selection')
 # Queue kinds, order values mirror the pinned scheduler.
-BEFORE, ATTACK, SWAP, INSTANT, RUN_SWITCH, RESIDUAL = range(1,7)
-QORDER=jnp.array([999,4,200,103,3,101,300],jnp.int32)
+BEFORE, ATTACK, SWAP, INSTANT, RUN_SWITCH, RESIDUAL, BEFORE_MOVE, FINISH_SWITCH = range(1,9)
+QORDER=jnp.array([999,4,200,103,3,101,300,5,3],jnp.int32)
 
 
 class State(NamedTuple):
@@ -269,7 +271,7 @@ def _qsort(c):
     s,t=c
     q=s.queue
     valid=jnp.arange(QUEUE)<s.qcount
-    order=jnp.where(valid,QORDER[jnp.clip(q[:,0],0,6)],10000)
+    order=jnp.where(valid,QORDER[jnp.clip(q[:,0],0,8)],10000)
     idx=jnp.lexsort((jnp.arange(QUEUE),-q[:,5],-q[:,4],order))
     s=s._replace(queue=q[idx]);c=(s,t)
     def body(k,c):
@@ -332,7 +334,7 @@ def _hit(c,actor,move):
         power=jnp.where(move==HIDDEN_POWER,s.hp_power[actor,mon],
                         jnp.where(move==RETURN,s.happiness[actor,mon]*10//25,
                                   jnp.where(move==FRUSTRATION,(255-s.happiness[actor,mon])*10//25,POWER[move])))
-        power=jnp.maximum(1,power)
+        power=jnp.maximum(1,power)*jnp.where(pursuit_ops.boosted(s,target,move,_engine()),2,1)
         move_type=jnp.where(move==HIDDEN_POWER,s.hp_type[actor,mon],tables.MOVE_TYPE[move])
         power=hook_ops.power(power,s.ability[actor,mon],s.item[actor,mon],physical,move_type,_engine(),phase_ops.power_modifier(s,target,move))
         attack,defense=hook_ops.stats(attack,defense,s,actor,target,physical,move_type,_engine())
@@ -462,7 +464,7 @@ def _attack(c,row):
             move_row=t.ecount+jnp.where(move==STRUGGLE,1,0)
             side_move=(move==STEALTH_ROCK)|(move==SPIKES)
             c=_event(c,EV_MOVE,actor,mon,move,target,tm,aux=jnp.where(side_move&(s.hp[target,tm]==0),4,0))
-            s,t=c;c=(s,t._replace(events=t.events.at[move_row,9].set(locked_before.astype(jnp.int32))))
+            s,t=c;c=(s,t._replace(events=t.events.at[move_row,9].set(jnp.where(row[6]==pursuit_ops.MOVE,2,locked_before.astype(jnp.int32)))))
             def sacrifice(c):
                 s,t=c
                 return s._replace(hp=s.hp.at[actor,mon].set(0)),t
@@ -519,10 +521,10 @@ def _attack(c,row):
                 def immunity(c):return _event(c,IMMUNE,target,tm,aux=jnp.where(levitate,2,0))
                 def try_hit(c):
                     def accuracy(c):
-                        c,roll=jax.lax.cond(ACCURACY[move]>0,lambda c:_draw(c,0,100,ACC),lambda c:(c,jnp.uint32(0)),c)
+                        c,roll=jax.lax.cond((ACCURACY[move]>0)&(~pursuit_ops.boosted(c[0],target,move,_engine())),lambda c:_draw(c,0,100,ACC),lambda c:(c,jnp.uint32(0)),c)
                         base_accuracy=hook_ops.accuracy(ACCURACY[move],c[0],actor,tables.CATEGORY[move]==1)
                         threshold=field_ops.accuracy(base_accuracy,c[0],actor,target,_engine())
-                        hit=(ACCURACY[move]==0)|(roll<threshold.astype(jnp.uint32))
+                        hit=pursuit_ops.boosted(c[0],target,move,_engine())|(ACCURACY[move]==0)|(roll<threshold.astype(jnp.uint32))
                         def miss(c):
                             s,t=c;t=t._replace(events=t.events.at[move_row,7].set(1))
                             return _event((s,t),MISS,actor,mon,move,target,tm)
@@ -539,7 +541,7 @@ def _attack(c,row):
                     s,t=c;t=t._replace(events=t.events.at[move_row,7].set(1))
                     return _event((s,t),MISS,actor,mon,move,target,tm)
                 sound=phaze_ops.SOUND[move]&(s.ability[target,tm]==tables.ABILITY_IDS['soundproof'])
-                return jax.lax.cond(phase_ops.invulnerable(s,target,move),semi_miss,lambda c:jax.lax.cond(immune,immunity,lambda c:jax.lax.cond(sound,lambda c:_event(c,IMMUNE,target,tm,aux=3),try_hit,c),c),c)
+                return jax.lax.cond(phase_ops.invulnerable(s,target,move)&(~pursuit_ops.boosted(s,target,move,_engine())),semi_miss,lambda c:jax.lax.cond(immune,immunity,lambda c:jax.lax.cond(sound,lambda c:_event(c,IMMUNE,target,tm,aux=3),try_hit,c),c),c)
             def no_target(c):
                 s,t=c;t=t._replace(events=t.events.at[move_row,7].set(3))
                 return _event((s,t),FAIL,actor,mon)
@@ -582,8 +584,18 @@ def _attack(c,row):
 
 
 def _switch(c,row,drag=False):
+    if drag:return _switch_entry(c,row,drag=True)
+    side=row[1];old=c[0].active[side]
+    return jax.lax.cond(c[0].hp[side,old]>0,lambda c:pursuit_ops.before_switch(c,row,_engine()),lambda c:_switch_entry(c,row),c)
+
+
+def _finish_switch(c,row):
+    side=row[1];old=c[0].active[side]
+    return jax.lax.cond(c[0].hp[side,old]==0,lambda c:_event(c,PURSUIT_HINT),lambda c:_switch_entry(c,row),c)
+
+
+def _switch_entry(c,row,drag=False):
     s,t=c;side=row[1];old=s.active[side];slot=row[3]-4;incoming=s.order[side,slot]
-    c=_when((row[0]==SWAP)&(s.hp[side,old]>0),lambda c:_update(c,UPDATE),c)
     s,t=c
     if drag:
         keep=(jnp.arange(QUEUE)<s.qcount)&(~((s.queue[:,0]==ATTACK)&(s.queue[:,1]==side)&(s.queue[:,2]==old)))
@@ -765,10 +777,13 @@ def _finish(c):
 def _run_queue(c):
     def condition(c):
         s,t=c
-        return (s.qcount>0)&(s.winner<0)&(~jnp.any(s.pivot))&(~t.overflow)
+        intercept=(s.queue[0,0]==ATTACK)&(s.queue[0,6]==pursuit_ops.MOVE)
+        return (s.qcount>0)&((s.winner<0)|(s.queue[0,0]==FINISH_SWITCH))&((~jnp.any(s.pivot))|intercept)&(~t.overflow)
     def step(c):
         s,t=c;row=s.queue[0];kind=row[0]
         s=s._replace(queue=jnp.concatenate((s.queue[1:],jnp.zeros((1,7),jnp.int32))),qcount=s.qcount-1)
+        scheduling=((kind==SWAP)|(kind==INSTANT))&pursuit_ops.eligible(s,row[1],_engine())
+        intercepted=(kind==ATTACK)&(row[6]==pursuit_ops.MOVE)
         c=(s,t)
         def before(c):return _update(c,BEFORE_TURN)
         def move(c):return _attack(c,row)
@@ -784,15 +799,17 @@ def _run_queue(c):
             q=jnp.where((jnp.arange(QUEUE)+count)[:,None]<s.qcount,q[jnp.minimum(jnp.arange(QUEUE)+count,QUEUE-1)],0)
             s=s._replace(queue=q,qcount=s.qcount-count)
             return _run_switch((s,t),entrants)
-        c=jax.lax.switch(jnp.clip(kind-1,0,5),(before,move,swap,swap,run_switch,_residual),c)
+        c=jax.lax.switch(jnp.clip(kind-1,0,7),(before,move,swap,swap,run_switch,_residual,lambda c:pursuit_ops.prepare(c,row,_engine()),lambda c:_finish_switch(c,row)),c)
         c=phaze_ops.resolve(c,_engine())
         s,t=c
         # A skipped fainted action returns before the native per-action Update.
         skipped=(kind==ATTACK)&((s.active[row[1]]!=row[2])|s.fainted[row[1],row[2]])
         next_instant=(s.qcount>0)&(s.queue[0,0]==INSTANT)
-        c=_when((s.winner<0)&(~skipped)&(~next_instant),lambda c:_update(c,UPDATE),c)
+        c=_when((s.winner<0)&(~skipped)&(~next_instant)&(~scheduling),lambda c:_update(c,UPDATE),c)
         s,t=c
-        c=_when(jnp.any(s.pivot)&(s.winner<0),lambda c:_update(c,UPDATE),c)
+        c=_when(intercepted,lambda c:pursuit_ops.complete(c,1-row[1],_engine()),c)
+        for side in range(2):
+            c=_when(c[0].pivot[side]&(c[0].winner<0),lambda c:pursuit_ops.pivot(c,i32(side),_engine()),c)
         return c
     c=jax.lax.while_loop(condition,step,c)
     s,t=c
@@ -856,7 +873,7 @@ def _supported(s,initializing=False):
             &jnp.all((s.species>=0)&(s.species<len(SPECIES)))&jnp.all(jnp.any(occupied,axis=1))
             &jnp.all((~occupied)|tables.SPECIES_IMPLEMENTED[safe_species])
             &jnp.all((s.moves>=0)&(s.moves<len(MOVE_KEYS))&(s.moves!=STRUGGLE))
-            &jnp.all((s.moves==0)|(tables.MOVE_IMPLEMENTED|field_tables.MOVE_IMPLEMENTED|hit_tables.MOVE_IMPLEMENTED|phase_ops.MOVE_IMPLEMENTED|partial_ops.MOVE_IMPLEMENTED|phaze_ops.MOVE_IMPLEMENTED)[jnp.clip(s.moves,0,len(MOVE_KEYS)-1)])
+            &jnp.all((s.moves==0)|(tables.MOVE_IMPLEMENTED|field_tables.MOVE_IMPLEMENTED|hit_tables.MOVE_IMPLEMENTED|phase_ops.MOVE_IMPLEMENTED|partial_ops.MOVE_IMPLEMENTED|phaze_ops.MOVE_IMPLEMENTED|pursuit_ops.MOVE_IMPLEMENTED)[jnp.clip(s.moves,0,len(MOVE_KEYS)-1)])
             &jnp.all((s.item>=0)&(s.item<len(ITEMS)))
             &jnp.all((hook_tables.ITEM_IMPLEMENTED|hit_tables.ITEM_IMPLEMENTED|phase_ops.ITEM_IMPLEMENTED|partial_ops.ITEM_IMPLEMENTED)[jnp.clip(s.item,0,len(ITEMS)-1)])
             &jnp.all((s.ability>=0)&(s.ability<len(ABILITIES)))&jnp.all((hook_tables.ABILITY_IMPLEMENTED|hit_tables.ABILITY_IMPLEMENTED|trap_ops.ABILITY_IMPLEMENTED|phaze_ops.ABILITY_IMPLEMENTED)[jnp.clip(s.ability,0,len(ABILITIES)-1)])
@@ -959,7 +976,10 @@ def advance(s,choices,token=None):
                     priority=jnp.where((kind==ATTACK)&(action!=10)&(~recharge),hook_ops.priority(move,s.ability[side,mon],_engine()),0)
                     source=jnp.where(s.pivot[side],U_TURN,0)
                     row=jnp.stack([kind,i32(side),mon,action,priority,s.speed[side,mon],source])
-                    return _qappend(s,row),t
+                    s=_qappend(s,row)
+                    def prepare(s):return _qappend(s,i32([BEFORE_MOVE,0,0,0,0,0,0]).at[1].set(side).at[2].set(mon).at[3].set(action).at[5].set(s.speed[side,mon]))
+                    s=jax.lax.cond(normal&(kind==ATTACK)&(move==pursuit_ops.MOVE)&(~recharge),prepare,lambda s:s,s)
+                    return s,t
                 c=_when(s.request[side]<WAIT,add,c);s,t=c
             c=_when(normal,lambda c:(_qappend(c[0],i32([RESIDUAL,0,0,0,0,1,0])),c[1]),c)
             s,t=c;s=s._replace(pivot=jnp.zeros(2,jnp.bool_))

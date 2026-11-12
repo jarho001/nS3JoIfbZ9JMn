@@ -132,7 +132,7 @@ def assert_state(test,s,native,label):
             test.assertEqual(bool(s.protected[side,m]),p['protect'],tag+' protect')
             if 'phaseState' in p:
                 from simulator.shared_engine_io import causal_state
-                test.assertEqual(json.dumps(causal_state(s,side,m),sort_keys=True),json.dumps(p['phaseState'],sort_keys=True),tag+' causal Pokemon')
+                test.assertEqual(json.dumps(causal_state(s,side,m,include_pursuit='beingCalledBack'in p['phaseState']),sort_keys=True),json.dumps(p['phaseState'],sort_keys=True),tag+' causal Pokemon')
             if 'statusState' in p:
                 from simulator.shared_engine_io import effect_states
                 for key,value in effect_states(s,side,m).items():test.assertEqual(value,p[key],tag+' '+key)
@@ -157,7 +157,7 @@ def assert_state(test,s,native,label):
         if kind==e.ATTACK:
             move='recharge' if action==e.phase_ops.RECHARGE_ACTION else e.MOVE_KEYS[e.STRUGGLE if action==10 else int(s.moves[side,mon,action])]
         else:move=None
-        q.append({'choice':{e.BEFORE:'beforeTurn',e.ATTACK:'move',e.SWAP:'switch',e.INSTANT:'instaswitch',e.RUN_SWITCH:'runSwitch',e.RESIDUAL:'residual'}[kind],
+        q.append({'choice':{e.BEFORE:'beforeTurn',e.ATTACK:'move',e.SWAP:'switch',e.INSTANT:'instaswitch',e.RUN_SWITCH:'runSwitch',e.RESIDUAL:'residual',e.BEFORE_MOVE:'beforeTurnMove'}[kind],
                   'order':int(e.QORDER[kind]),'priority':priority,'speed':speed,
                   'actor':None if kind in (e.BEFORE,e.RESIDUAL) else {'side':side,'mon':mon},
                   'target':None if kind not in (e.SWAP,e.INSTANT) else {'side':side,'mon':int(s.order[side,action-4])},
