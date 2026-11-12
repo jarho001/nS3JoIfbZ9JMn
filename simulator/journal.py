@@ -6,13 +6,16 @@ Pages freeze event-time rendering so later species changes cannot rewrite it.
 from dataclasses import dataclass
 import hashlib
 import json
+import os
+import tempfile
+from pathlib import Path
 import jax
 import numpy as np
 from . import shared_engine as e
 from . import shared_engine_io as io
 from . import gen5_tables as tables
 
-CORE_SCHEMA=1
+CORE_SCHEMA=2
 
 @dataclass(frozen=True)
 class Page:
@@ -37,7 +40,7 @@ def append(checkpoint,result):
     """Commit a successful core result and its events as one immutable value."""
     if not isinstance(result.state,e.CoreState):raise ValueError('core result required')
     code=int(result.code)
-    if code not in (e.OK,e.PENDING):return checkpoint
+    if code not in (e.OK,e.PENDING,e.RETRY):return checkpoint
     rows=tuple(tuple(map(int,row))for row in np.asarray(result.trace.events)[:int(result.trace.ecount)])
     views=tuple(tuple(ev['message']for ev in io.project_events(result.state,result.trace,side))for side in range(2))
     pages=checkpoint.pages+((Page(rows,views),)if rows else ())
@@ -55,9 +58,9 @@ def player_view(checkpoint,side):
             'events':[{'type':'event','message':line}for page in checkpoint.pages for line in page.recipients[side]]}
 
 
-def _checksum(payload,fields):
+def _checksum(payload,fields,names=None):
     digest=hashlib.sha256(payload.encode())
-    for name in e.CoreState._fields:
+    for name in (e.CoreState._fields if names is None else names):
         value=np.asarray(fields[name]);digest.update(name.encode());digest.update(value.dtype.str.encode());digest.update(str(value.shape).encode());digest.update(value.tobytes())
     return digest.hexdigest()
 
@@ -69,21 +72,40 @@ def save(path,checkpoint):
     payload=json.dumps(metadata,sort_keys=True,separators=(',',':'))
     fields={k:np.asarray(v)for k,v in zip(e.CoreState._fields,checkpoint.core)}
     digest=_checksum(payload,fields)
-    np.savez(path,journal_sha256=np.asarray(digest),metadata=np.asarray(payload),**fields)
+    target=Path(path)
+    temporary=None
+    try:
+        with tempfile.NamedTemporaryFile(dir=target.parent,prefix=target.name+'.',delete=False)as file:
+            temporary=Path(file.name)
+            np.savez(file,journal_sha256=np.asarray(digest),metadata=np.asarray(payload),**fields)
+            file.flush();os.fsync(file.fileno())
+        os.replace(temporary,target)
+    finally:
+        if temporary is not None:temporary.unlink(missing_ok=True)
 
 
-def load(path):
+def load(path,*,replayed=None):
     with np.load(path,allow_pickle=False)as data:
         payload=str(data['metadata'])
-        if _checksum(payload,data)!=str(data['journal_sha256']):raise ValueError('journal checksum mismatch')
+        version=json.loads(payload)['journal_schema']
+        names=tuple(n for n in e.CoreState._fields if n!='request_state') if version==1 else e.CoreState._fields
+        if version not in (1,CORE_SCHEMA):raise ValueError('unsupported core journal schema')
+        if version==1 and replayed is None:raise ValueError('old core journal requires independent replay/provenance')
+        if _checksum(payload,data,names)!=str(data['journal_sha256']):raise ValueError('journal checksum mismatch')
         metadata=json.loads(payload)
-        if metadata['journal_schema']!=CORE_SCHEMA or metadata['data_sha256']!=tables.DATA_SHA256:raise ValueError('journal schema/table mismatch')
-        if set(data.files)!={'metadata','journal_sha256',*e.CoreState._fields}:raise ValueError('invalid core field set')
-        core=e.CoreState(*(e.jnp.asarray(data[name])for name in e.CoreState._fields));e._validate_structure(core)
+        if metadata['data_sha256']!=tables.DATA_SHA256:raise ValueError('journal schema/table mismatch')
+        if set(data.files)!={'metadata','journal_sha256',*names}:raise ValueError('invalid core field set')
+        if version==1:
+            e._validate_structure(replayed.core)
+            if any(not np.array_equal(data[name],np.asarray(getattr(replayed.core,name)))for name in names):raise ValueError('core replay/provenance mismatch')
+            core=replayed.core
+        else:core=e.CoreState(*(e.jnp.asarray(data[name])for name in names))
+        e._validate_structure(core)
         pages=[]
         for page in metadata['pages']:
             rows=tuple(tuple(row)for row in page['rows']);views=tuple(tuple(v)for v in page['recipients'])
             if any(len(row)!=10 or any(type(v)is not int for v in row)for row in rows)or len(views)!=2 or any(type(v)is not str for view in views for v in view):raise ValueError('invalid journal page')
             pages.append(Page(rows,views))
         if not pages:raise ValueError('missing initialization journal')
+        if version==1 and tuple(pages)!=replayed.pages:raise ValueError('journal replay/provenance mismatch')
         return Checkpoint(core,tuple(pages))

@@ -112,7 +112,7 @@ def rollout(state, choices, *, max_steps=None, tokens=None, enabled=None,
 
         result = jax.lax.cond(active, advance,
                               lambda _: e.Result(current, e.i32(SKIPPED), e.empty_trace()), None)
-        bad = active & (result.code != e.OK) & (result.code != e.PENDING) & (result.code != e.TERMINAL)
+        bad = active & (result.code != e.OK) & (result.code != e.PENDING) & (result.code != e.TERMINAL) & (result.code != e.RETRY)
         code = jnp.where(active, result.code, code)
         failure_step = jnp.where(bad & (~failed), index, failure_step)
         failed = failed | bad

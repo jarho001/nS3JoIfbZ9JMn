@@ -40,7 +40,7 @@ class HitEngineTest(unittest.TestCase):
 
     def test_native_state_rng_requests_histories_and_outcomes(self):
         self.assertEqual(len(self.cases),97)
-        manifest=json.loads(Path('rules/shared-engine-v10.json').read_text())
+        manifest=json.loads(Path('rules/shared-engine-v11.json').read_text())
         self.assertEqual(manifest['schema_version'],e.SCHEMA)
         self.assertEqual(manifest['draw_contexts'],list(e.DRAW_CONTEXTS))
         for case in self.cases:

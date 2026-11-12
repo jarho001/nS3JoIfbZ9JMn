@@ -160,6 +160,7 @@ cases.push(...require('./ability-item-cases.cjs')(mon));
 cases.push(...require('./hit-effect-cases.cjs')(mon));
 cases.push(...require('./recharge-cases.cjs')(mon));
 cases.push(...require('./lock-phase-cases.cjs')(mon));
+cases.push(...require('./trapping-cases.cjs')(mon));
 
 function scriptedChoices(battle,scenario,boundary) {
  const choices={};
@@ -294,6 +295,7 @@ function capture(battle, ids, options={}) {
    ...(options.tracking?{phaseState:{faintedThisTurn:ref(side.faintedThisTurn),faintedLastTurn:ref(side.faintedLastTurn)}}:{}),
    ...(options.field?{sideConditions:effectState(side.sideConditions)}:{}),
    hazards:[Number(!!side.sideConditions.stealthrock),side.sideConditions.spikes?.layers??0,({stealthrock:1,spikes:2})[Object.keys(side.sideConditions).find(k=>['stealthrock','spikes'].includes(k))]??0],
+   ...(options.tracking?{cantUndo:side.choice.cantUndo}:{}),
    active:ids.get(side.active[0]),order:side.pokemon.map(p=>ids.get(p)),
    request:requestSnapshot(side.activeRequest),actions:side.activeRequest?actionSpace(side.activeRequest):null,
    pending:side.choice.actions.map(a=>({choice:a.choice,actor:ref(a.pokemon),move:a.moveid??null,target:ref(a.target)})),
@@ -324,6 +326,7 @@ function semanticContext(draw) {
  if(draw.eventId==='Weather')return 'weather-order';
  if(draw.effectId==='lockedmove')return 'rampage-duration';
  if(draw.effectId==='sleeptalk')return 'sleep-talk-selection';
+ if(draw.effectId==='frisk')return 'frisk-target';
  if(draw.effectId==='slp')return 'sleep-duration';
  if(draw.effectId==='frz')return 'freeze';
  if(draw.effectId==='confusion') {
@@ -444,7 +447,7 @@ function main(argv) {
   } finally {fs.closeSync(fd);}
   return;
  }
- const selected=batch==='locks'?cases.filter(c=>c.lockFamily):batch==='recharge'?cases.filter(c=>c.rechargeFamily):batch==='hits'?cases.filter(c=>c.hitFamily):batch==='hooks'?cases.filter(c=>c.hookFamily&&!c.hitFamily&&!c.rechargeFamily&&!c.lockFamily):batch==='field'?cases.filter(c=>c.fieldFamily):batch==='status'?cases.filter(c=>c.statusFamily):batch==='generic'?cases.filter(c=>c.generic&&!c.statusFamily&&!c.fieldFamily&&!c.hookFamily&&!c.hitFamily&&!c.rechargeFamily&&!c.lockFamily):batch==='g4'?cases.filter(c=>c.g4):batch==='all'?cases.filter(c=>!c.g4&&!c.generic):batch==='boundaries'?cases.filter(c=>!c.g4&&!c.generic&&!c.fullBattle):batch==='battles'?cases.filter(c=>!c.g4&&!c.generic&&c.fullBattle):cases.filter(c=>c.id===batch);
+ const selected=batch==='trapping'?cases.filter(c=>c.trappingFamily):batch==='locks'?cases.filter(c=>c.lockFamily):batch==='recharge'?cases.filter(c=>c.rechargeFamily):batch==='hits'?cases.filter(c=>c.hitFamily):batch==='hooks'?cases.filter(c=>c.hookFamily&&!c.hitFamily&&!c.rechargeFamily&&!c.lockFamily&&!c.trappingFamily):batch==='field'?cases.filter(c=>c.fieldFamily):batch==='status'?cases.filter(c=>c.statusFamily):batch==='generic'?cases.filter(c=>c.generic&&!c.statusFamily&&!c.fieldFamily&&!c.hookFamily&&!c.hitFamily&&!c.rechargeFamily&&!c.lockFamily&&!c.trappingFamily):batch==='g4'?cases.filter(c=>c.g4):batch==='all'?cases.filter(c=>!c.g4&&!c.generic):batch==='boundaries'?cases.filter(c=>!c.g4&&!c.generic&&!c.fullBattle):batch==='battles'?cases.filter(c=>!c.g4&&!c.generic&&c.fullBattle):cases.filter(c=>c.id===batch);
  if(!selected.length)throw Error('Empty native case selection: '+batch);
  const result={schemaVersion:1,pin,format:'gen5randombattle',caseSchema:selected.some(c=>c.lockFamily)?'gen5-lock-phase-v1':selected.some(c=>c.rechargeFamily)?'gen5-recharge-v1':selected.some(c=>c.hitFamily)?'gen5-hit-effects-v1':selected.some(c=>c.hookFamily)?'gen5-ability-item-v1':selected.some(c=>c.fieldFamily)?'gen5-field-boost-v1':selected.some(c=>c.statusFamily)?'gen5-status-duration-v1':selected.some(c=>c.generic)?'shared-engine-v3':selected.some(c=>c.g4)?'shared-engine-v2':'shared-engine-v1',cases:selected.map(c=>runCase(ps,c))};
  const json=JSON.stringify(result,null,2)+'\n';

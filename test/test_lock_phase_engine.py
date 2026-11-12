@@ -36,7 +36,7 @@ class LockPhaseEngineTest(unittest.TestCase):
     def test_native_causal_state_effects_draws_requests_and_histories(self):
         self.assertEqual(len(self.cases),73)
         self.assertEqual(sum(len(c['steps'])for c in self.cases),371)
-        manifest=json.loads(Path('rules/shared-engine-v10.json').read_text())
+        manifest=json.loads(Path('rules/shared-engine-v11.json').read_text())
         self.assertEqual(manifest['schema_version'],e.SCHEMA)
         self.assertEqual(manifest['draw_contexts'],list(e.DRAW_CONTEXTS))
         for case in self.cases:
@@ -48,7 +48,7 @@ class LockPhaseEngineTest(unittest.TestCase):
                 r=STEP(s,choices_array(s,step['choices']));label=f"{case['id']}/{n}"
                 if any(not a['accepted']for a in step['accepted']):
                     self.assertEqual(len(step['accepted']),1,label+' rejection episode must isolate the command')
-                    self.assertEqual(int(r.code),e.INVALID,label);same(r.state,s)
+                    self.assertEqual(int(r.code),e.RETRY if any(cmd.startswith('switch ') for cmd in step['choices'].values()) else e.INVALID,label);same(r.state,s)
                     self.assertEqual(int(r.trace.ecount),0);self.assertEqual(int(r.trace.dcount),0)
                     assert_state(self,r.state,step['after'],label)
                 else:assert_step(self,s,r,step,label)

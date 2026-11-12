@@ -7,6 +7,14 @@ GPU. Preparing this handoff does not run device tests, profiling or benchmarks.
 
 ## Current source and evidence
 
+**Schema11 trapping/retry checkpoint:** eight affected CPU checks passed,
+plus six native and six helper checks. The new31 scenarios/215 boundaries include
+two complete games and mirrored private-state cases. Exact source identities,
+fixture hashes and the descriptor-only version-label correction are recorded in
+[schema11-checkpoint.json](../test-logs/g4-cpu-conformance/schema11-checkpoint.json).
+The full68-check suite and GPU correctness remain pending. Preparation of all
+eleven native corpora succeeded without JAX/GPU execution or profiling.
+
 **Schema10 checkpoint:** three integrated CPU checks passed on `a9d0fbd`,
 covering full/core native combat parity, mixed1/8/32,full/lean,core reset,
 checksum-bound journal persistence and the exact1000-boundary turn-limit replay.
@@ -25,8 +33,8 @@ The entire matching-source 61-check suite has not been repeated. Historical
 schema8 results remain in
 [schema8-checkpoint.json](../test-logs/g4-cpu-conformance/schema8-checkpoint.json).
 
-The expanded runner expects **64 checks in 15 isolated modules**, using ten
-independent native corpora: **527 scenarios / 3895 boundaries**, including
+The expanded runner expects **68 checks in 16 isolated modules**, using eleven
+independent native corpora: **558 scenarios / 4110 boundaries**, including
 28 complete constructed six-member games. The new 73 phase scenarios are in
 `test.test_lock_phase_engine`. The runner recaptures causal state for the prior
 corpora too. Use the existing commands below on matching committed source.
@@ -90,7 +98,7 @@ the combined block below:
    hashes, selected host affinity and independent native fixture hashes.
 2. Freezes legacy, hazard, generic, status, field/boost, ability/item, hit/thaw and recharge corpora. Runs the
    reference/native contracts. Unknown/unsupported families stay explicit.
-3. Runs the same current 64-check scope on CPU, then under `JAX_PLATFORMS=cuda`,
+3. Runs the same current 68-check scope on CPU, then under `JAX_PLATFORMS=cuda`,
    with each test module in a fresh process.
    A strict probe verifies actual eager/JIT GPU placement; shared case/lifecycle
    assertions also check device leaves. `cuda` initialization failure is a failure.
@@ -405,3 +413,11 @@ reset still require implementation; kernel reset alone does not validate them.
 The earlier reference-generated6541-row witness still needs replay once all its
 mechanics are supported. The neutral constructed witness does not prove generator
 membership or final bounds. No profiling is part of this checkpoint.
+
+The runner now includes `test.test_trapping_engine`, prepares `TRAP_NATIVE_CASES`
+automatically, and preserves ordered retry fixtures. Its new checks cover private
+feedback/request disclosure, opposing pending commitments, cannot-undo behavior,
+Gen5 Ghost/grounded/Steel cases, Frisk RNG, eager/JIT/mixed1/8/32, retry-aware
+core full/lean rollouts, saved private state and replay-required migration. Run
+the same existing runner commands on matching committed source after travel.
+No GPU or profiling command was executed for this candidate.

@@ -203,10 +203,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/trapping.json.gz",
+          "native": "reference/trapping-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_trapping_engine.py"
+        }
+      ],
       "field": "onFoeMaybeTrapPokemon",
       "id": "abilities:arenatrap:onFoeMaybeTrapPokemon",
-      "implementation": null,
+      "implementation": {
+        "family": "trapping",
+        "file": "simulator/trapping.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:arenatrap",
@@ -217,7 +229,7 @@
       "owner": "abilities:arenatrap",
       "reachability": "candidate",
       "sha256": "d236dfb7d73ca06fc3db80be2b9694c5db303ba62dfbcff4c4f9456fc513fb6f",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -226,10 +238,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/trapping.json.gz",
+          "native": "reference/trapping-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_trapping_engine.py"
+        }
+      ],
       "field": "onFoeTrapPokemon",
       "id": "abilities:arenatrap:onFoeTrapPokemon",
-      "implementation": null,
+      "implementation": {
+        "family": "trapping",
+        "file": "simulator/trapping.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:arenatrap",
@@ -240,7 +264,7 @@
       "owner": "abilities:arenatrap",
       "reachability": "candidate",
       "sha256": "86db2e256a48a360da4d4cbd3e447d5d4779f1a5cfb931fa301b42025140de79",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -1298,10 +1322,22 @@
           "file": "data/mods/gen5/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/trapping.json.gz",
+          "native": "reference/trapping-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_trapping_engine.py"
+        }
+      ],
       "field": "onStart",
       "id": "abilities:frisk:onStart",
-      "implementation": null,
+      "implementation": {
+        "family": "trapping",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:frisk",
@@ -1312,7 +1348,7 @@
       "owner": "abilities:frisk",
       "reachability": "candidate",
       "sha256": "dce177dba7b00eb6f0a7cbce2fa762d5aa869ef8057398f4c2ebf2ebf8435e6e",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -2499,10 +2535,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/trapping.json.gz",
+          "native": "reference/trapping-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_trapping_engine.py"
+        }
+      ],
       "field": "onFoeMaybeTrapPokemon",
       "id": "abilities:magnetpull:onFoeMaybeTrapPokemon",
-      "implementation": null,
+      "implementation": {
+        "family": "trapping",
+        "file": "simulator/trapping.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:magnetpull",
@@ -2513,7 +2561,7 @@
       "owner": "abilities:magnetpull",
       "reachability": "candidate",
       "sha256": "924c8598b1e580a11e4134598227d344037059beb2e9c9552f287800b6e9b834",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -2522,10 +2570,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/trapping.json.gz",
+          "native": "reference/trapping-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_trapping_engine.py"
+        }
+      ],
       "field": "onFoeTrapPokemon",
       "id": "abilities:magnetpull:onFoeTrapPokemon",
-      "implementation": null,
+      "implementation": {
+        "family": "trapping",
+        "file": "simulator/trapping.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:magnetpull",
@@ -2536,7 +2596,7 @@
       "owner": "abilities:magnetpull",
       "reachability": "candidate",
       "sha256": "a8a746a6a05599a597f7616111a129d8ae684ed8e5cae73cd04b4e94740ceb2b",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -3873,10 +3933,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/trapping.json.gz",
+          "native": "reference/trapping-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_trapping_engine.py"
+        }
+      ],
       "field": "onFoeMaybeTrapPokemon",
       "id": "abilities:shadowtag:onFoeMaybeTrapPokemon",
-      "implementation": null,
+      "implementation": {
+        "family": "trapping",
+        "file": "simulator/trapping.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:shadowtag",
@@ -3887,7 +3959,7 @@
       "owner": "abilities:shadowtag",
       "reachability": "candidate",
       "sha256": "1525a866060df3f2fccc42eff77a754bffb9b669ba9cea7c9cf579e5471ce991",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -3896,10 +3968,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/trapping.json.gz",
+          "native": "reference/trapping-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_trapping_engine.py"
+        }
+      ],
       "field": "onFoeTrapPokemon",
       "id": "abilities:shadowtag:onFoeTrapPokemon",
-      "implementation": null,
+      "implementation": {
+        "family": "trapping",
+        "file": "simulator/trapping.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:shadowtag",
@@ -3910,7 +3994,7 @@
       "owner": "abilities:shadowtag",
       "reachability": "candidate",
       "sha256": "67a08dbbdd46026918041e1f1776c3db5b734cbda546a81ac9013a66e9963ed0",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -66735,10 +66819,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/trapping.json.gz",
+          "native": "reference/trapping-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_trapping_engine.py"
         }
       ],
       "id": "abilities:arenatrap",
       "implementation": {
+        "behavior": {
+          "family": "trapping",
+          "file": "simulator/trapping.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -67707,10 +67803,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/trapping.json.gz",
+          "native": "reference/trapping-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_trapping_engine.py"
         }
       ],
       "id": "abilities:frisk",
       "implementation": {
+        "behavior": {
+          "family": "trapping",
+          "file": "simulator/hook_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -68841,10 +68949,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/trapping.json.gz",
+          "native": "reference/trapping-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_trapping_engine.py"
         }
       ],
       "id": "abilities:magnetpull",
       "implementation": {
+        "behavior": {
+          "family": "trapping",
+          "file": "simulator/trapping.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -70239,10 +70359,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/trapping.json.gz",
+          "native": "reference/trapping-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_trapping_engine.py"
         }
       ],
       "id": "abilities:shadowtag",
       "implementation": {
+        "behavior": {
+          "family": "trapping",
+          "file": "simulator/trapping.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"

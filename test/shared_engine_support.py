@@ -97,6 +97,7 @@ def assert_state(test,s,native,label):
         test.assertEqual(field_state(s),native['field'],label+' field state')
     for side,n in enumerate(native['sides']):
         prefix=label+f' p{side+1}'
+        if 'cantUndo' in n:test.assertEqual(bool(s.request_state[side,1]),n['cantUndo'],prefix+' cannot undo choice')
         if 'phaseState' in n:
             from simulator.shared_engine_io import causal_side
             test.assertEqual(json.dumps(causal_side(s,side),sort_keys=True),json.dumps(n['phaseState'],sort_keys=True),prefix+' causal side')

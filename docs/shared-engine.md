@@ -383,8 +383,9 @@ Keep existing no-change guarantees for those errors. For a native retry, preserv
 mechanics and RNG while updating only the affected private request/disclosure
 and native commitment state; retain the opponent's accepted commitment exactly.
 Specify token advancement and reset behavior before exposing the API: advance
-the episode token for any accepted private-state transition so old request tokens
-cannot apply to a new disclosure revision. This is adapter bookkeeping, not a
+the episode token when retry disclosure or rejected-command commitment clearing
+changes private state, so old request tokens cannot apply to a new disclosure
+revision. Ordinary pending submissions retain the G3 request episode contract. This is adapter bookkeeping, not a
 native battle RNG/action increment. Use ordered per-side submissions for retry
 fixtures, never an ambiguous mixed invalid/valid atomic batch. Existing commands
 remain compatible; add the result handling to rollout/policy adapters explicitly.
@@ -443,3 +444,48 @@ guarded and unaudited for full-format acceptance.
 The [first CPU integrated gate](../test-logs/g4-cpu-conformance/schema10-checkpoint.json) passed three checks, including the1000-boundary native replay. GPU correctness remains deferred.
 Device chunk collection, journal-level reset and private retry/disclosure are next;
 this checkpoint does not claim the entire architecture or G4 complete.
+
+## Schema11 trapping/private retry checkpoint
+
+The candidate adds Arena Trap, Magnet Pull, Shadow Tag and Gen5 Frisk. Trapping
+truth stays distinct from species-based possible-trap queries and the request's
+disclosed `trapped` bit. The current capability masks exclude Transform/Illusion
+and type-changing callbacks; known/apparent-type query handling must be extended
+before enabling them. Ghosts do not gain later-generation trapping immunity.
+Frisk retains native single-target sampling, including its draw when no item is
+announced.
+
+`request_state:int32[2,2]` stores trap disclosure and the cannot-undo flag for an
+accepted speculative switch. `RETRY=7` returns recipient-only numeric feedback in
+`Trace.private_errors`; `shared_engine_io.private_packets` renders that side's
+native error/resend. Public event history receives no private error packets.
+A first hidden-trap rejection changes disclosure, clears only that side's pending
+choice and advances the local episode token. A repeated known rejection or a
+blocked undo/replace may have no state change. Neither draws battle RNG nor
+counts a resolved transition. A successful speculative switch becomes committed
+until resolution; undo and replacement are rejected exactly as native. Forced
+replacement and pivots can escape ability trapping.
+
+Retries isolate one ordered side submission. Ambiguous combined invalid/valid
+vectors remain atomic INVALID; the future generated campaign recorder must
+split per-side submissions and retain intermediate receipts. Do not remove
+hidden-trap switch candidates from policy inputs or use true opposing abilities
+to avoid retries. Syntactic invalid/stale/unsupported/capacity errors retain their
+no-change guarantees. Validly formed hard-lock switch rejections now return RETRY
+and private feedback; their mechanics, public trace and RNG remain unchanged.
+
+Rollout continues through RETRY, counting attempts but no resolved transition.
+Journal checkpoints persist the private state in core schema2 and use atomic
+file replacement. Old core-schema1 checkpoints require an independently matching
+replay with identical recorded fields and complete pages. State-schema9/10 saves
+involving trap/query species or new abilities likewise need replay/provenance;
+trap-free legacy saves use zero disclosure. The old schema10 core checkpoint and
+its evidence retain their original source identity.
+
+The new native corpus has31 scenarios/215 boundaries and two complete six-member
+battles. Native `choose()` can flush ordinary private requests after500 log rows;
+those request JSON objects are compared to canonical boundary requests. Exact
+retry error/resend packets are compared separately. Raw packets remain captured;
+BattleStream delivery timing is G1 work, not an ignored mechanical field.
+Scalar parity and eight affected CPU checks passed; see the [schema11 checkpoint](../test-logs/g4-cpu-conformance/schema11-checkpoint.json).
+The full68-check suite, full-format G4 and GPU acceptance remain pending.

@@ -4,6 +4,7 @@ No native oracle is imported. Only own roster information enters a request;
 opposing HP is rounded exactly as HP Percentage Mod. Trusted state and queued
 choices must never be passed to a policy.
 """
+import json
 import jax
 import jax.numpy as jnp
 import numpy as np
@@ -64,6 +65,10 @@ def project_request(state,side):
         if all(row['disabled'] for row in rows):rows=[{'move':'Struggle','id':'struggle','target':'randomNormal','disabled':False}]
         forced=int(e.phase_ops.forced_move(s)[side])
         req['active']=[{'moves':[{'move':'Recharge' if forced<0 else e.MOVE_NAMES[forced],'id':'recharge' if forced<0 else e.MOVE_KEYS[forced]}],'trapped':True} if forced else {'moves':rows}]
+        if not forced and bool(e.trap_ops.has_bench(s,e)[side]):
+            truth=int(s.action_state[side,mon,e.tracking.TRAPPED])
+            if truth==1 or int(s.request_state[side,0]):req['active'][0]['trapped']=True
+            elif bool(s.action_state[side,mon,e.tracking.MAYBE_TRAPPED]):req['active'][0]['maybeTrapped']=True
     return req
 
 
@@ -124,6 +129,7 @@ def project_events(state,trace,audience):
         elif kind==e.MUST_RECHARGE:line=f'|-mustrecharge|{actor}'
         elif kind==e.RECHARGE_CANT:line=f'|cant|{actor}|recharge'
         elif kind==e.HIT_COUNT:line=f'|-hitcount|'+(actor.replace('a: ',': ') if aux else actor)+f'|{value}'
+        elif kind==e.FRISK_ITEM:line='|-item||'+e.hook_tables.ITEM_NAMES[value]+f'|[from] ability: Frisk|[of] {actor}'
         elif kind==e.REVEAL:line=f'|-ability|{actor}|'+e.hook_tables.ABILITY_NAMES[value]+('|boost' if aux else '')
         else:raise ValueError('unknown event')
         out.append({'type':'event','message':line})
@@ -181,20 +187,20 @@ def load_state(path,*,schema=None,replayed_state=None):
         stored=int(saved['schema']) if 'schema' in saved else None
         if schema is not None and stored is not None and stored!=schema:raise ValueError('schema mismatch')
         version=stored if schema is None else schema
-        if version not in (1,2,3,4,5,6,7,8,9,10):raise ValueError('explicit supported state schema required')
+        if version not in (1,2,3,4,5,6,7,8,9,10,11):raise ValueError('explicit supported state schema required')
         fields={k:jnp.asarray(saved[k]) for k in saved.files if k not in ('schema','data_sha256')}
-        if version in (3,4,5,6,7,8,9,10):
+        if version in (3,4,5,6,7,8,9,10,11):
             if 'data_sha256' not in saved or str(saved['data_sha256'])!=generic.DATA_SHA256:
                 raise ValueError('state data table identity mismatch')
-        if version<9 and replayed_state is not None:
+        if version<11 and replayed_state is not None:
             e._validate_structure(replayed_state)
-            end='ivs' if version<=2 else 'effect_order' if version==3 else 'weather_state' if version==4 else 'move_history'
+            end='ivs' if version<=2 else 'effect_order' if version==3 else 'weather_state' if version==4 else 'move_history' if version<9 else 'request_state'
             expected=set(e.State._fields[:e.State._fields.index(end)])
             if version==1:expected.remove('hazards')
             if set(fields)!=expected:raise ValueError('invalid legacy field set for replay')
             for key,value in fields.items():
                 replay=np.asarray(getattr(replayed_state,key));old=np.asarray(value)
-                if key=='volatile_state':
+                if key=='volatile_state' and version<9:
                     slots=3 if version<6 else 4 if version<8 else 5
                     if old.shape!=(2,6,slots,6):raise ValueError('invalid legacy volatile shape for replay')
                     replay=replay[:,:,:slots,:6]
@@ -239,12 +245,14 @@ def load_state(path,*,schema=None,replayed_state=None):
                 volatile_state=jnp.zeros((2,6,3,6),jnp.int32),ability_order=jnp.zeros((2,6),jnp.int32),
                 item_order=jnp.zeros((2,6),jnp.int32))
             fields.update(_initial_causal(fields))
+            fields['request_state']=jnp.zeros((2,2),jnp.int32)
             fields['volatile_state']=jnp.pad(fields['volatile_state'],((0,0),(0,0),(0,len(e.phase_ops.VOLATILES)-3),(0,e.phase_ops.VOLATILE_WIDTH-6)))
             migrated=e.State(*(fields[k] for k in e.State._fields))
             for side in range(2):migrated,_=e.effects.activate((migrated,e.empty_trace()),e.i32(side),e)
             fields=dict(zip(e.State._fields,migrated,strict=True))
             fields['volatile_state']=fields['volatile_state'][:,:,:3,:6]
             for key in _CAUSAL_FIELDS:fields.pop(key)
+            fields.pop('request_state')
         if version<6:
             # Earlier engines explicitly rejected these hooks. Promoting an old
             # unsupported initializer would fabricate its startup/lock history.
@@ -275,6 +283,11 @@ def load_state(path,*,schema=None,replayed_state=None):
             v=jnp.pad(v,((0,0),(0,0),(0,len(e.phase_ops.VOLATILES)-5),(0,e.phase_ops.VOLATILE_WIDTH-6)))
             kind=jnp.where(v[:,:,:,4]>0,e.phase_ops.SOURCE_MOVE,jnp.where(v[:,:,:,4]<0,e.phase_ops.SOURCE_ITEM,e.phase_ops.SOURCE_EMPTY))
             fields['volatile_state']=v.at[:,:,:,6].set(jnp.where(v[:,:,:,0]>0,kind,0))
+        if version<11:
+            species=np.asarray(fields['species']);ability=np.asarray(fields['ability'])
+            if np.any(np.asarray(e.trap_ops.QUERY)[species]) or np.any(np.asarray(e.trap_ops.ABILITY_IMPLEMENTED)[ability]):
+                raise ValueError('legacy trapping/disclosure requires replay/provenance')
+            fields['request_state']=jnp.zeros((2,2),jnp.int32)
         if set(fields)!=set(e.State._fields):raise ValueError('invalid state field set')
         state=e.State(*(fields[k] for k in e.State._fields))
         e._validate_structure(state)
@@ -395,3 +408,17 @@ def causal_side(state,side):
 def causal_battle(state):
     s=jax.device_get(state)
     return {'lastMove':move_snapshot(s.battle_move),'lastSuccessfulMoveThisTurn':e.MOVE_KEYS[int(s.battle_success)] or None,'lastDamage':int(s.battle_damage)}
+
+
+def private_packets(state,trace,side):
+    """Recipient-only command feedback; never append to public battle events."""
+    if side not in (0,1):raise ValueError('side must be 0 or 1')
+    error=int(trace.private_errors[side])
+    if not error:return []
+    message="Can't undo: A trapping/disabling effect would cause undo to leak information" if error==3 else "Can't switch: The active Pokémon is trapped"
+    packets=[f"p{side+1}\n|error|[{'Unavailable' if error==1 else 'Invalid'} choice] "+message]
+    if error==1:
+        request=project_request(state,side)
+        request={'active':request['active'],**{k:v for k,v in request.items()if k!='active'},'update':True}
+        packets.append(f"p{side+1}\n|request|"+json.dumps(request,ensure_ascii=False,separators=(',',':')))
+    return packets

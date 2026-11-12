@@ -107,6 +107,11 @@ def start(c,side,e,initial=False):
     s,t=c;m=s.active[side];ability=s.ability[side,m];weather=h.ABILITY_WEATHER[ability]
     c=e._when((ability==h.A['pressure'])|((ability==h.A['intimidate'])&(s.hp[1-side,s.active[1-side]]>0)),
         lambda c:e._event(c,e.REVEAL,side,m,value=ability,aux=(ability==h.A['intimidate']).astype(jnp.int32)),c)
+    def frisk(c):
+        c,_=e._draw(c,0,1,e.INIT if initial else e.FRISK_TARGET)
+        s,t=c;item=s.item[1-side,s.active[1-side]]
+        return e._when(item>0,lambda c:e._event(c,e.FRISK_ITEM,side,m,value=item),c)
+    c=e._when((ability==h.A['frisk'])&(~c[0].fainted[1-side,c[0].active[1-side]]),frisk,c)
     def intimidate(c):
         s,t=c;foe=1-side;fm=s.active[foe];old=s.boosts[foe,fm,0];new=jnp.maximum(-6,old-1)
         s=s._replace(boosts=s.boosts.at[foe,fm,0].set(new))

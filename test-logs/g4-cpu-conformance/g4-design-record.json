@@ -18,7 +18,7 @@
     "reference/shared-engine-cases.cjs": "d4fc8ef1b227686cd3f6842cdb32d5687093841acd9846dfc7206809b045d830",
     "test/g4-design-native.test.cjs": "a2d3740117c865f7e36e9233dddb0b9b2cf6f5b77e053e56a77942331d2bad13",
     "test-logs/g4-cpu-conformance/g4-design-frontier.json.gz": "6aa9deeab23c4c648d8028cfd5014edbe58dff14fdd9c28dd319b75f28207ff7",
-    "test-logs/g4-cpu-conformance/g4-design-native.json.gz": "fe1b9e5af362b16b454dfd5f583ac5e59bc56d12cc944817324b39a07630daee"
+    "test-logs/g4-cpu-conformance/g4-design-native-schema10.json.gz": "fe1b9e5af362b16b454dfd5f583ac5e59bc56d12cc944817324b39a07630daee"
   },
   "audit": {
     "mutation_sites": 47,
@@ -32,5 +32,6 @@
   "gpu_executed": false,
   "profiling_executed": false,
   "jax_regressions_rerun": false,
-  "historical_cpu_evidence": "schema9-checkpoint.json remains attached to its original exact source; design source/capture additions do not constitute a new full matching-source runtime gate."
+  "historical_cpu_evidence": "schema9-checkpoint.json remains attached to its original exact source; design source/capture additions do not constitute a new full matching-source runtime gate.",
+  "native_fixture_history": "Original five witnesses preserved in g4-design-native-schema10.json.gz. Living fixture now includes side.cantUndo; all previously recorded fields remain byte-semantically equal after removing only that added field."
 }

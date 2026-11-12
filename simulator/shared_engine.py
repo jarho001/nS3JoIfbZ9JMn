@@ -25,6 +25,7 @@ from . import hit_tables
 from . import hit_effects as hit_ops
 from . import phase_effects as phase_ops
 from . import battle_tracking as tracking
+from . import trapping as trap_ops
 from . import hook_tables
 from . import hook_effects as hook_ops
 import sys
@@ -32,9 +33,10 @@ import sys
 def _engine():
     return sys.modules[__name__]
 
-SCHEMA = 10
+SCHEMA = 11
 ROSTER, SLOTS, QUEUE, EVENTS, DRAWS, HISTORY = 6, 4, 8, 128, 128, 2048
 OK, PENDING, INVALID, UNSUPPORTED, CAPACITY, TERMINAL, STALE = range(7)
+RETRY=7
 MOVE, FORCED, WAIT, END = range(4)
 NONE, BRN, PAR, TOX, FNT, PSN, SLP, FRZ = range(8)
 STATUS_NAMES=('','brn','par','tox','fnt','psn','slp','frz')
@@ -61,6 +63,7 @@ MUST_RECHARGE, RECHARGE_CANT = 30,31
 PREPARE,ANIM,END_HELD_ITEM,FLINCH_CANT=32,33,34,35
 VOL_START,VOL_END,VOL_CANT=36,37,38
 TURN_WARNING,TURN_LIMIT=39,40
+FRISK_ITEM=41
 # Draw contexts; range form stores actual native arguments including offsets.
 INIT, QUEUE_SORT, BEFORE_TURN, UPDATE, HIT_UPDATE, SWITCH_SORT, FIELD_SORT, ACC, CRITICAL, ROLL, PARALYSIS, STALL = range(12)
 SLEEP_DURATION, FREEZE, CONF_DURATION, CONFUSION, CONF_DAMAGE, SECONDARY = range(12,18)
@@ -68,8 +71,9 @@ WEATHER_CHANGE, WEATHER_ORDER = 18,19
 DAMAGE_MODIFIERS = 20
 MULTIHIT_COUNT = 21
 RAMPAGE_DURATION = 22
+FRISK_TARGET=23
 MOVE_ACTOR_TARGET=field_tables.ACTOR_TARGET
-DRAW_CONTEXTS=('initialization','queue-sort','before-turn','update','hit-update','switch-order','residual-handlers','accuracy','critical','damage','paralysis','stall','sleep-duration','freeze','confusion-duration','confusion','confusion-damage','secondary','weather-change','weather-order','damage-modifiers','multihit-count','rampage-duration')
+DRAW_CONTEXTS=('initialization','queue-sort','before-turn','update','hit-update','switch-order','residual-handlers','accuracy','critical','damage','paralysis','stall','sleep-duration','freeze','confusion-duration','confusion','confusion-damage','secondary','weather-change','weather-order','damage-modifiers','multihit-count','rampage-duration','frisk-target')
 # Queue kinds, order values mirror the pinned scheduler.
 BEFORE, ATTACK, SWAP, INSTANT, RUN_SWITCH, RESIDUAL = range(1,7)
 QORDER=jnp.array([999,4,200,103,3,101,300],jnp.int32)
@@ -138,6 +142,7 @@ class State(NamedTuple):
     battle_move: jax.Array
     battle_success: jax.Array
     battle_damage: jax.Array
+    request_state: jax.Array
 
 
 # Same mechanical fields, without the compatibility history allocation.
@@ -158,6 +163,7 @@ class Trace(NamedTuple):
     after: jax.Array
     dcount: jax.Array
     overflow: jax.Array
+    private_errors: jax.Array
 
 
 class Result(NamedTuple):
@@ -173,7 +179,7 @@ def i32(value):
 def empty_trace():
     return Trace(jnp.zeros((EVENTS,10),jnp.int32),i32(0),jnp.zeros((DRAWS,3),jnp.uint32),
                  jnp.zeros(DRAWS,jnp.uint32),jnp.zeros(DRAWS,jnp.int32),
-                 jnp.zeros((DRAWS,4),jnp.uint16),jnp.zeros((DRAWS,4),jnp.uint16),i32(0),jnp.array(False))
+                 jnp.zeros((DRAWS,4),jnp.uint16),jnp.zeros((DRAWS,4),jnp.uint16),i32(0),jnp.array(False),jnp.zeros(2,jnp.int32))
 
 
 def _event(c, kind, side=0, mon=0, move=0, target=0, targetmon=0, value=0, aux=0, status=0):
@@ -686,13 +692,14 @@ def _new_request(c,request):
         m=s.active[side]
         value=jnp.where((request[side]==MOVE)&phase_ops.locked(s)[side],1,s.action_state[side,m,tracking.TRAPPED])
         s=tracking.put(s,side,tracking.TRAPPED,value)
-    return s._replace(request=request,pending=jnp.full(2,-1,jnp.int32),episode=s.episode+1),t
+        s=tracking.put(s,side,tracking.MAYBE_TRAPPED,jnp.where((request[side]==MOVE)&phase_ops.locked(s)[side],0,s.action_state[side,m,tracking.MAYBE_TRAPPED]))
+    return s._replace(request_state=jnp.zeros((2,2),jnp.int32),request=request,pending=jnp.full(2,-1,jnp.int32),episode=s.episode+1),t
 
 
 def _finish(c):
     s,t=c
     s=s._replace(midturn=jnp.array(False),turn=s.turn+1,queue=jnp.zeros_like(s.queue),qcount=i32(0))
-    s=tracking.new_turn(s)
+    s=trap_ops.refresh(tracking.new_turn(s),_engine())
     c=(s,t)
     warning=((s.turn>=500)&(s.turn%100==0))|((s.turn>=900)&(s.turn%10==0))|(s.turn>=990)
     def terminal(c):
@@ -782,7 +789,7 @@ def legal_actions(s):
     recharge=phase_ops.locked(s)
     ordinary=jnp.where(recharge[:,None],jnp.arange(SLOTS)[None,:]==0,available)&(s.request[:,None]==MOVE)
     bench=_live(s)[side[:,None],s.order]&(s.order!=mon[:,None])
-    switches=bench&(((s.request[:,None]==MOVE)&(~recharge[:,None]))|(s.request[:,None]==FORCED))
+    switches=bench&(((s.request[:,None]==MOVE)&(~recharge[:,None])&trap_ops.selectable_switches(s,_engine())[:,None])|(s.request[:,None]==FORCED))
     struggle=jnp.all(~available,axis=1)&(~recharge)&(s.request==MOVE)
     return jnp.concatenate((ordinary,switches,struggle[:,None]),axis=1)
 
@@ -820,7 +827,7 @@ def _supported(s,initializing=False):
     lock_ok=lock_ok&(source_item==s.item)&(lock[:,:,5]>0)&(lock[:,:,5]<len(MOVE_KEYS))
     lock_ok=lock_ok&(lock[:,:,1]<s.effect_order)
     lock_ok=jnp.all((lock[:,:,0]==0)|lock_ok)
-    return (tracking.valid(s,_engine())&stat_ok&valid_order&weather_ok&screen_ok&hazard_ok&lock_ok&(~jnp.any(duplicate))&(jnp.all((s.hcount>=0)&(s.hcount<=HISTORY)) if isinstance(s,State) else jnp.array(True))
+    return (jnp.all((s.request_state>=0)&(s.request_state<=1))&tracking.valid(s,_engine())&stat_ok&valid_order&weather_ok&screen_ok&hazard_ok&lock_ok&(~jnp.any(duplicate))&(jnp.all((s.hcount>=0)&(s.hcount<=HISTORY)) if isinstance(s,State) else jnp.array(True))
             &jnp.all((s.qcount>=0)&(s.qcount<=QUEUE))&(s.episode>=0)&(s.generation>=0)
             &jnp.all(jnp.where(occupied,jnp.any(s.moves>0,axis=-1),jnp.all(s.moves==0,axis=-1)))
             &jnp.all((s.species>=0)&(s.species<len(SPECIES)))&jnp.all(jnp.any(occupied,axis=1))
@@ -829,7 +836,7 @@ def _supported(s,initializing=False):
             &jnp.all((s.moves==0)|(tables.MOVE_IMPLEMENTED|field_tables.MOVE_IMPLEMENTED|hit_tables.MOVE_IMPLEMENTED|phase_ops.MOVE_IMPLEMENTED)[jnp.clip(s.moves,0,len(MOVE_KEYS)-1)])
             &jnp.all((s.item>=0)&(s.item<len(ITEMS)))
             &jnp.all((hook_tables.ITEM_IMPLEMENTED|hit_tables.ITEM_IMPLEMENTED|phase_ops.ITEM_IMPLEMENTED)[jnp.clip(s.item,0,len(ITEMS)-1)])
-            &jnp.all((s.ability>=0)&(s.ability<len(ABILITIES)))&jnp.all((hook_tables.ABILITY_IMPLEMENTED|hit_tables.ABILITY_IMPLEMENTED)[jnp.clip(s.ability,0,len(ABILITIES)-1)])
+            &jnp.all((s.ability>=0)&(s.ability<len(ABILITIES)))&jnp.all((hook_tables.ABILITY_IMPLEMENTED|hit_tables.ABILITY_IMPLEMENTED|trap_ops.ABILITY_IMPLEMENTED)[jnp.clip(s.ability,0,len(ABILITIES)-1)])
             &jnp.all((s.ivs>=0)&(s.ivs<=31))&jnp.all((s.evs>=0)&(s.evs<=255))
             &jnp.all((s.nature>=1)&(s.nature<=len(generic.NATURES)))
             &jnp.all(s.types==tables.SPECIES_TYPES[safe_species])&jnp.all((s.boosts>=-6)&(s.boosts<=6))
@@ -878,7 +885,7 @@ def _validate_structure(s):
     vector_fields={'active','pending','request','pivot'}
     bool_fields={'fainted','protected','pivot','midturn','shiny','sleep_clause_target'}
     for name,value in zip(type(s)._fields,s):
-        shape=(2,6) if name in roster_fields or name in {'fainted','protected'} else (2,) if name in vector_fields else (2,3) if name=='hazards' else (2,6,6) if name in {'stats','ivs','evs'} else (2,6,2) if name=='types' else (2,6,7) if name in {'boosts','status_state'} else (2,6,len(phase_ops.VOLATILES),phase_ops.VOLATILE_WIDTH) if name=='volatile_state' else (2,6,3,4) if name=='move_history' else (2,6,tracking.COLUMNS) if name=='action_state' else (2,6,tracking.ATTACK_RECORDS,7) if name=='attacked_by' else (2,2) if name=='side_faints' else (4,) if name=='battle_move' else (6,) if name=='weather_state' else (2,2,5) if name=='screens' else (2,2,3) if name=='hazard_meta' else (2,6,4) if name in {'moves','pp'} else (2,6) if name=='order' else (QUEUE,7) if name=='queue' else (4,) if name=='rng' else (HISTORY,10) if name=='history' else ()
+        shape=(2,6) if name in roster_fields or name in {'fainted','protected'} else (2,) if name in vector_fields else (2,3) if name=='hazards' else (2,6,6) if name in {'stats','ivs','evs'} else (2,6,2) if name=='types' else (2,6,7) if name in {'boosts','status_state'} else (2,6,len(phase_ops.VOLATILES),phase_ops.VOLATILE_WIDTH) if name=='volatile_state' else (2,6,3,4) if name=='move_history' else (2,6,tracking.COLUMNS) if name=='action_state' else (2,6,tracking.ATTACK_RECORDS,7) if name=='attacked_by' else (2,2) if name in ('side_faints','request_state') else (4,) if name=='battle_move' else (6,) if name=='weather_state' else (2,2,5) if name=='screens' else (2,2,3) if name=='hazard_meta' else (2,6,4) if name in {'moves','pp'} else (2,6) if name=='order' else (QUEUE,7) if name=='queue' else (4,) if name=='rng' else (HISTORY,10) if name=='history' else ()
         dtype=jnp.bool_ if name in bool_fields else jnp.uint16 if name=='rng' else jnp.int32
         if getattr(value,'shape',None)!=shape or getattr(value,'dtype',None)!=jnp.dtype(dtype):
             raise ValueError(f'{name} must have shape {shape} and dtype {jnp.dtype(dtype)}')
@@ -905,7 +912,10 @@ def advance(s,choices,token=None):
     def accepted(c):
         s,t=c
         pending=jnp.where(choices==-2,-1,jnp.where(incoming,choices,s.pending))
-        s=s._replace(pending=pending)
+        switching=(choices>=4)&(choices<10)&(s.request==MOVE)
+        lock=switching&(s.action_state[jnp.arange(2),s.active,tracking.MAYBE_TRAPPED]>0)
+        cant=jnp.where((choices>=0)|(choices==-2),lock.astype(jnp.int32),s.request_state[:,1])
+        s=s._replace(pending=pending,request_state=s.request_state.at[:,1].set(cant))
         ready=jnp.all((s.request>=WAIT)|(pending>=0))
         def resolve(c):
             s,t=c;c=_event(c,BLANK);s,t=c;s=_refresh_speed(s)
@@ -947,8 +957,24 @@ def advance(s,choices,token=None):
             return Result(s2._replace(hcount=s.hcount+t.ecount),jnp.where(ready,OK,PENDING),t)
         return jax.lax.cond(overflow,lambda _:Result(original,i32(CAPACITY),empty_trace()),success,None)
     original=s
-    code=jnp.where(stale,STALE,jnp.where(s.winner>=0,TERMINAL,jnp.where(~_supported(s),UNSUPPORTED,jnp.where(invalid,INVALID,-1))))
-    return jax.lax.cond(code>=0,lambda _:Result(s,code,empty_trace()),lambda _:accepted((s,t)),None)
+    errors=trap_ops.private_error(s,choices,mask,_engine())
+    any_error=jnp.any(errors>0)
+    # Native retry episodes isolate a side's rejected command. Keep ambiguous
+    # combined invalid/valid submissions atomic, rather than inventing ordering.
+    isolated=(jnp.sum((choices>=0)|(choices==-2))==1)&jnp.all((choices>=-2)&(choices<=10))
+    retry=any_error&isolated
+    def rejected(_):
+        clear=(errors==1)|(errors==2)
+        pending=jnp.where(clear,-1,s.pending)
+        disclosed=jnp.where(errors==1,1,s.request_state[:,0])
+        changed=jnp.any(disclosed!=s.request_state[:,0])|jnp.any(pending!=s.pending)
+        state=s._replace(pending=pending,request_state=s.request_state.at[:,0].set(disclosed),episode=s.episode+changed.astype(jnp.int32))
+        return jax.lax.cond(state.episode<0,lambda _:Result(s,i32(CAPACITY),empty_trace()),
+            lambda _:Result(state,i32(RETRY),empty_trace()._replace(private_errors=errors)),None)
+    code=jnp.where(stale,STALE,jnp.where(s.winner>=0,TERMINAL,jnp.where(~_supported(s),UNSUPPORTED,jnp.where((invalid|any_error)&(~retry),INVALID,-1))))
+    return jax.lax.cond(code>=0,lambda _:Result(s,code,empty_trace()),
+        lambda _:jax.lax.cond(retry,rejected,lambda _:accepted((s,t)),None),None)
+
 
 
 def advance_core(s,choices,token=None):
@@ -1039,7 +1065,7 @@ def _initialize(species,level,moves,item,evs,seed,generation,ivs,nature,ability,
             jnp.where(occupied,generic.hidden_power(ivs)[1],0),shiny,happiness,name,jnp.zeros((2,6,7),jnp.int32),i32(0),effects.empty_status(),
             jnp.zeros((2,6,len(phase_ops.VOLATILES),phase_ops.VOLATILE_WIDTH),jnp.int32),zeros,zeros,field_ops.empty_weather(),jnp.zeros((2,2,5),jnp.int32),jnp.zeros((2,2,3),jnp.int32),jnp.array(False),jnp.zeros((2,6,3,4),jnp.int32),
             tracking.empty().at[:,:,tracking.NEWLY_SWITCHED].set(occupied.astype(jnp.int32)),
-            jnp.zeros((2,6,tracking.ATTACK_RECORDS,7),jnp.int32),jnp.full((2,2),-1,jnp.int32),jnp.zeros(4,jnp.int32),i32(0),i32(0))
+            jnp.zeros((2,6,tracking.ATTACK_RECORDS,7),jnp.int32),jnp.full((2,2),-1,jnp.int32),jnp.zeros(4,jnp.int32),i32(0),i32(0),jnp.zeros((2,2),jnp.int32))
     return jax.lax.cond(_supported(s,initializing=True),_initialize_events,lambda s:Result(s,i32(UNSUPPORTED),empty_trace()),s)
 
 
@@ -1068,7 +1094,7 @@ def _initialize_events(s):
     c=_update(c,INIT)
     s,t=c
     s=s._replace(action_state=s.action_state.at[:,0,tracking.SWITCH_COUNT].set(1))
-    c=(tracking.new_turn(s),t)
+    c=(trap_ops.refresh(tracking.new_turn(s),_engine()),t)
     c=_event(c,TURN,value=1)
     s,t=c
     s=s._replace(history=s.history.at[:EVENTS].set(t.events),hcount=t.ecount)
