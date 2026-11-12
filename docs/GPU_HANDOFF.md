@@ -7,13 +7,15 @@ GPU. Preparing this handoff does not run device tests, profiling or benchmarks.
 
 ## Current source and evidence
 
-**Schema10 candidate:** the shared history-free core, lossless host journal and
-native hard turn-limit path are implemented. The integrated core CPU gate is
-running; previous schema9 evidence below remains historical. Development scalar
-checks passed for a complete combat game and the 1000-boundary switch-only game.
-Do not treat pending batch/rollout/persistence checks as passed.
+**Schema10 checkpoint:** three integrated CPU checks passed on `a9d0fbd`,
+covering full/core native combat parity, mixed1/8/32,full/lean,core reset,
+checksum-bound journal persistence and the exact1000-boundary turn-limit replay.
+Five native and six helper checks also passed. Source/fixture hashes stayed
+unchanged; see [schema10-checkpoint.json](../test-logs/g4-cpu-conformance/schema10-checkpoint.json).
+The full64-check matching-source suite has not been repeated. GPU execution and
+profiling remain deferred. The older schema9 evidence below is historical.
 
-The engine is schema9, adding hidden causal state, rampages, eight charge moves,
+The preceding schema9 checkpoint, adding hidden causal state, rampages, eight charge moves,
 semi-invulnerability, Power Herb, action restrictions and flinching. The four
 phase execution/lifecycle checks and 13 prior scalar/migration checks passed on
 engine commit `567f02c`, with unchanged source and fixture hashes. A separate

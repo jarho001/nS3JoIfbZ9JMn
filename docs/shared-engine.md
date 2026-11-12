@@ -440,6 +440,6 @@ The external journal removes the full-game history allocation from the scan carr
 per-advance traces, draws, queue and ordered-attack bounds remain independently
 guarded and unaudited for full-format acceptance.
 
-The first CPU integrated gate is still running. GPU correctness remains deferred.
+The [first CPU integrated gate](../test-logs/g4-cpu-conformance/schema10-checkpoint.json) passed three checks, including the1000-boundary native replay. GPU correctness remains deferred.
 Device chunk collection, journal-level reset and private retry/disclosure are next;
 this checkpoint does not claim the entire architecture or G4 complete.

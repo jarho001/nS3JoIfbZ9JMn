@@ -1,0 +1,78 @@
+{
+  "status": "3_integrated_CPU_checks_passed_not_full_G4",
+  "schema": 10,
+  "source_base": "cd97a8a",
+  "relevant_source_sha256": {
+    "simulator/__init__.py": "771044eeaae218d973d7f0a76e09781e441444f6256824f0605ace5aa78eccd3",
+    "simulator/accuracy_choice.py": "a2599f3ff3451482f5a2b2c7cfc12ecc600597931171f4e2b5c90a1ec2ffed69",
+    "simulator/battle_tracking.py": "599bae62f9e57159b77f2a457cc8fcdd052ddd38e8e935a2894bcb885971f5fa",
+    "simulator/burn_choice.py": "672e258463a83eed9e5c0714fde69ca64f1ccaf25071c5a5f9ea2f9fa0e4e0e6",
+    "simulator/field_effects.py": "b920835f6a30cb9052f080fde8f12f1e97fb2085534e6039f3c7ee0de13cb0b0",
+    "simulator/field_tables.py": "69ba84cdbed0e40d879945fc04e425b049b3ff5f3fd5367c73e089bebda98d34",
+    "simulator/gen5_engine_tables.py": "2c424486c43318febe26e815e5333b8f0a9137b0ee0eee162d82900aaa581cd8",
+    "simulator/gen5_rng.py": "716c10f38fdae8036df4ebe07af6889c467c1bcb392ba4886fa3dd519b2c35d7",
+    "simulator/gen5_tables.py": "47333f7651b00a5b74fea5081e417b5336498f5513cf764bd1ded8829a4ba53a",
+    "simulator/hit_effects.py": "41380ebffa55d043d087641e7af5f339565394fdd0eabb7a427e6c6c95198221",
+    "simulator/hit_tables.py": "2af79af260e424a7b5140ba954549d3b41f1abea05ff0719d2dca4db457e4208",
+    "simulator/hook_effects.py": "adbf71f126b8e3fa27f2093e3eb929d1c65085f337725ff1055bd8f97378ddcc",
+    "simulator/hook_tables.py": "10e16f688b6b09e037f5cb19c1d98d02ec61f82c1b670e8bf55c5bc9ca0c76b4",
+    "simulator/journal.py": "4b956cd60a34b75f9f168552271b2584df8975d90cab4f05189b09ff550e4dd8",
+    "simulator/neutral_duel.py": "28cf1e59eea90f5bcd8fa1427695ba7e20448c4792033fdb323a051af5543357",
+    "simulator/neutral_mega_punch.py": "9a99c65be335491fd656b3f27023aac93045808f51972845a4598630ee04c5f8",
+    "simulator/neutral_pound.py": "081e1841e2cd59a97055bd78a951c0b983bea69c7b9211ce83c4f0446664b990",
+    "simulator/neutral_tackle.py": "535d0a6d9c5645e089b12fa05387a7c8db7e4e6efe30cb25020199cb5900924a",
+    "simulator/neutral_tackle_ties.py": "cfae3a6f0459a74c91307050ab55ffc6e00a2e6bbb615d76b33d7d858a10e88a",
+    "simulator/neutral_two_move.py": "7eecd7f2e1cf8963714dbe671fc6fa68bcf98ca22fbbc7686e726fa3745511da",
+    "simulator/phase_effects.py": "5ddda902a84e262cc12b7a3f03b492d068776aede2a189fc1b1b7a4a0304b8ec",
+    "simulator/request_session.py": "12828f66618e7d1ad08b3f26cf4b1245f4f4644a9ab68ca79da179f21c0fb313",
+    "simulator/rollout.py": "e3fcfb2701f793c9f2ab3cd37a93cdf42753739b2d0d6c8a038b5bc035c4e98f",
+    "simulator/shared_engine.py": "fb622e2f215bd29f1c90311371855743ffa2a8be9e61c8fbbd91c2be5dd396b9",
+    "simulator/shared_engine_io.py": "76dbc5d9df4d7708448c52def122159f06505879aa32027e03278d8b2c935f3b",
+    "simulator/status_effects.py": "cabe308b7fb89e5d5b27c05b9419fba1a316cea5d9c0eadbc272d252c10f6071",
+    "simulator/two_move_session.py": "8f9cd35bf71a0e99fd42747570c020d1ea1aae09b4f3c6784eb9adcced12968f",
+    "test/test_core_journal.py": "3575339700a5d70f18cfdea0671ea15db09fea346b53d2fe3ccc95ffddca3433"
+  },
+  "gate": "LOCK_NATIVE_CASES=work/g4-schema9-ready/native-locks.json TURN_LIMIT_NATIVE_CASE=work/g4-core/turn-limit-ready.json JAX_PLATFORMS=cpu OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 XLA_PYTHON_CLIENT_PREALLOCATE=false JAX_ENABLE_COMPILATION_CACHE=false .venv-jax/bin/python -m unittest test.test_core_journal -v -f",
+  "development_checks": [
+    "full/core 84-boundary game with resume/atomic failures passed231.734s before terminal integration",
+    "1000-boundary neutral native replay passed76.756s before strengthening checkpoint checksum"
+  ],
+  "fixture_sha256": {
+    "work/g4-schema9-ready/native-locks.json": "ec958991c4e6b5695e171dfad67d8f6b836a8a5e4d9b45869cc08b8d2b3f973b",
+    "work/g4-core/turn-limit-ready.json": "cd35e17747b3ca6db44ad8bb1061808fc82d50d7df6502781d835896fdc76404"
+  },
+  "gpu_executed": false,
+  "profiling_executed": false,
+  "implementation_commit": "a9d0fbd",
+  "source_unchanged": true,
+  "fixtures_unchanged": true,
+  "checks": 3,
+  "seconds": 1174.685,
+  "native_checks": 5,
+  "helper_checks": 6,
+  "corpora": {
+    "scenarios": 527,
+    "boundaries": 3895
+  },
+  "runtime": {
+    "backend": "cpu",
+    "devices": [
+      "cpu:0"
+    ],
+    "jax": "0.12.0.1",
+    "jaxlib": "0.12.0.1",
+    "python": "3.12.14",
+    "affinity": [
+      0,
+      1,
+      2
+    ]
+  },
+  "remaining": [
+    "Full64-check checkpoint suite",
+    "Private retry/disclosure and trapping",
+    "Device chunk collection and journal reset",
+    "Remaining mechanics/closure/capacity audit and fixed64/128 campaigns",
+    "Deferred GPU correctness"
+  ]
+}
