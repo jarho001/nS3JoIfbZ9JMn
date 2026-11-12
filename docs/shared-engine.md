@@ -14,7 +14,7 @@ Full-format G4
 coverage remains separate acceptance work. Historical evidence keeps its original
 source/schema identity; it does not imply validation of later engine changes.
 
-The current runtime uses [schema 16](../rules/shared-engine-v16.json). Schemas
+The current runtime uses [schema 17](../rules/shared-engine-v17.json). Schemas
 4–6 integrated major statuses and effect provenance, boosts/weather/screens,
 and observed ability/item hooks. Schema7 adds declarative hit counts, per-hit
 updates, capped drain/recoil arithmetic, self-destruction and reactive damage.
@@ -586,3 +586,10 @@ retry error/resend packets are compared separately. Raw packets remain captured;
 BattleStream delivery timing is G1 work, not an ignored mechanical field.
 Scalar parity and eight affected CPU checks passed; see the [schema11 checkpoint](../test-logs/g4-cpu-conformance/schema11-checkpoint.json).
 The full68-check suite, full-format G4 and GPU acceptance remain pending.
+
+Schema17 separates base/effective identity for Transform and Imposter. Original
+requests/stats and original moves/PP survive virtual replacement; copied ability
+Start and cached effect identity follow native lifecycle timing. Known/apparent
+types preserve speculative private trap queries. Switch/faint restore the base
+identity. Focused17/36 CPU parity and live persistence pass; Illusion/event-time
+identity, forms, calls, broad regressions and full G4 acceptance remain pending.

@@ -103,7 +103,7 @@ def damage_modifier(c,actor,target,physical,critical,exponent,e,move):
     return c,modifier
 
 
-def start(c,side,e,initial=False):
+def ability_start(c,side,e,initial=False):
     s,t=c;m=s.active[side];ability=s.ability[side,m];weather=h.ABILITY_WEATHER[ability]
     c=e._when((ability==h.A['pressure'])|((ability==h.A['intimidate'])&(s.hp[1-side,s.active[1-side]]>0)),
         lambda c:e._event(c,e.REVEAL,side,m,value=ability,aux=(ability==h.A['intimidate']).astype(jnp.int32)),c)
@@ -126,6 +126,13 @@ def start(c,side,e,initial=False):
         return e._when((speeds[0]==speeds[1])&jnp.all(~s.fainted[jnp.arange(2),s.active]),
                        lambda c:e._draw(c,0,2,context,2)[0],c)
     c=e._when((weather>0)&((c[0].weather_state[0]!=weather)|(c[0].weather_state[4]>0)),set_weather,c)
+    return c
+
+
+def start(c,side,e,initial=False):
+    ability=c[0].ability[side,c[0].active[side]]
+    def copy(c):return e.identity_ops.transform(c,side,1-side,e,imposter=True,initial=initial)[0]
+    c=e.jax.lax.cond(ability==e.identity_ops.IMPOSTER,copy,lambda c:ability_start(c,side,e,initial=initial),c)
     return item_start(c,side,e)
 
 

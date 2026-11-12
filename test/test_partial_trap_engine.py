@@ -35,9 +35,9 @@ class PartialTrapEngineTest(unittest.TestCase):
             if c['id']=='G4-partial-trap-substitute-blocks':
                 # Schema12 accepted Substitute state has21 volatile slots.
                 with tempfile.TemporaryDirectory()as tmp:
-                    p=Path(tmp)/'old.npz';fields={k:np.asarray(v)for k,v in zip(e.State._fields,s)if k!='item_provenance'};fields['volatile_state']=fields['volatile_state'][:,:,:21,:];fields['action_state']=fields['action_state'][:,:,:21]
+                    p=Path(tmp)/'old.npz';fields={k:np.asarray(v)for k,v in zip(e.State._fields,s)if k in e.State._fields[:e.State._fields.index('item_provenance')]};fields['volatile_state']=fields['volatile_state'][:,:,:21,:];fields['action_state']=fields['action_state'][:,:,:21]
                     np.savez(p,schema=12,data_sha256=np.asarray(journal.tables.DATA_SHA256),**fields);same(load_state(p),s);same(load_state(p,replayed_state=s),s)
-                    cp=journal.from_state(s);fields={k:np.asarray(v)for k,v in zip(e.CoreState._fields,cp.core)if k!='item_provenance'};fields['volatile_state']=fields['volatile_state'][:,:,:21,:];fields['action_state']=fields['action_state'][:,:,:21]
+                    cp=journal.from_state(s);fields={k:np.asarray(v)for k,v in zip(e.CoreState._fields,cp.core)if k in e.State._fields[:e.State._fields.index('item_provenance')]};fields['volatile_state']=fields['volatile_state'][:,:,:21,:];fields['action_state']=fields['action_state'][:,:,:21]
                     meta={'journal_schema':3,'data_sha256':journal.tables.DATA_SHA256,'pages':[{'rows':page.rows,'recipients':page.recipients}for page in cp.pages]};payload=json.dumps(meta,sort_keys=True,separators=(',',':'))
                     np.savez(p,metadata=np.asarray(payload),journal_sha256=np.asarray(journal._checksum(payload,fields,tuple(fields))),**fields)
                     with self.assertRaisesRegex(ValueError,'replay/provenance'):journal.load(p)

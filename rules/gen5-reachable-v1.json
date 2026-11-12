@@ -1924,10 +1924,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/identity.json.gz",
+          "native": "reference/identity-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_identity_engine.py"
+        }
+      ],
       "field": "onSwitchIn",
       "id": "abilities:imposter:onSwitchIn",
-      "implementation": null,
+      "implementation": {
+        "family": "identity",
+        "file": "simulator/identity.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:imposter",
@@ -1938,7 +1950,7 @@
       "owner": "abilities:imposter",
       "reachability": "candidate",
       "sha256": "e0ab7f9d466d2d6aadd84cb687d88c0e753026c87f327f191a23fd8da5b88be6",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -27099,10 +27111,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/identity.json.gz",
+          "native": "reference/identity-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_identity_engine.py"
+        }
+      ],
       "field": "onHit",
       "id": "moves:transform:onHit",
-      "implementation": null,
+      "implementation": {
+        "family": "identity",
+        "file": "simulator/identity.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:transform",
@@ -27113,7 +27137,7 @@
       "owner": "moves:transform",
       "reachability": "candidate",
       "sha256": "61ae07369d834b58ecceb6b2ab10bc91b2058d26dc3ebc981e7dc87269570cca",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -65643,10 +65667,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/identity.json.gz",
+          "native": "reference/identity-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_identity_engine.py"
         }
       ],
       "id": "moves:transform",
       "implementation": {
+        "behavior": {
+          "family": "identity",
+          "file": "simulator/identity.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "MOVE_TYPE/MOVE_POWER/MOVE_CATEGORY/MOVE_PRIORITY/MOVE_PP",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -68691,10 +68727,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/identity.json.gz",
+          "native": "reference/identity-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_identity_engine.py"
         }
       ],
       "id": "abilities:imposter",
       "implementation": {
+        "behavior": {
+          "family": "identity",
+          "file": "simulator/identity.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"

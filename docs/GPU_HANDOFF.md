@@ -7,6 +7,15 @@ GPU. Preparing this handoff does not run device tests, profiling or benchmarks.
 
 ## Current source and evidence
 
+**Schema17 Transform/Imposter checkpoint:** one focused CPU check passed17
+scenarios/36 boundaries in111.411s; one native fixture contract passed. Base and
+effective identity, virtual PP, copied boosts/abilities, original requests,
+known/apparent type trap queries and live NPZ/journal7 roundtrip are covered.
+See [schema17-checkpoint.json](../test-logs/g4-cpu-conformance/schema17-checkpoint.json).
+The runner now includes `test.test_identity_engine` and the identity native batch.
+Isolated GPU replay: `JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_identity_engine -v -f`.
+Broad execution/migration gates remain pending; no GPU or profiling ran.
+
 **Schema16 item lifecycle checkpoint:** focused CPU parity passed28 scenarios/44
 boundaries in94.580s; one native contract passed. It covers Trick/Switcheroo,
 Gen5 Knock Off, Recycle, Sticky Hold, Choice Start/lock timing, immutable initial
@@ -15,8 +24,8 @@ item/pending provenance and post-exchange NPZ/journal persistence. See
 State schema16 appends item provenance; journal6 binds it. The return-home runner
 includes `test.test_item_lifecycle_engine`; isolated replay is
 `JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_item_lifecycle_engine -v -f`.
-Broad execution/legacy migrations and current preparation remain pending. The
-next Transform native spec is archived but not implemented or in the runner.
+Broad execution/legacy migrations and current preparation remain pending. Transform/Imposter is implemented in schema17 below; the earlier native-only
+specification was preliminary.
 No GPU work or profiling ran.
 
 **Schema15 Pursuit checkpoint:** the focused CPU check passed23 scenarios/41
@@ -112,8 +121,8 @@ The entire matching-source 61-check suite has not been repeated. Historical
 schema8 results remain in
 [schema8-checkpoint.json](../test-logs/g4-cpu-conformance/schema8-checkpoint.json).
 
-The expanded runner expects **77 checks in 21 isolated modules**, using sixteen
-independent native corpora: **723 scenarios / 4530 boundaries**, including
+The expanded runner expects **78 checks in 22 isolated modules**, using seventeen
+independent native corpora: **740 scenarios / 4566 boundaries**, including
 32 complete constructed six-member combat games (plus the neutral switch-only
 turn-limit game and eight historical three-member games). The 73 phase scenarios are in
 `test.test_lock_phase_engine`. The runner recaptures causal state for the prior
@@ -179,7 +188,7 @@ the combined block below:
 2. Freezes all sixteen legacy/current corpora, including move phases, the
    turn-limit witness, trapping/retries, Substitute and partial trapping. Runs the reference/native
    contracts. Unknown/unsupported families stay explicit.
-3. Runs the same current 77-check scope on CPU, then under `JAX_PLATFORMS=cuda`,
+3. Runs the same current 78-check scope on CPU, then under `JAX_PLATFORMS=cuda`,
    with each test module in a fresh process.
    A strict probe verifies actual eager/JIT GPU placement; shared case/lifecycle
    assertions also check device leaves. `cuda` initialization failure is a failure.

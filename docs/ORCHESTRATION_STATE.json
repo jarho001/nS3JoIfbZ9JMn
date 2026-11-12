@@ -538,7 +538,7 @@
       "Schema10 core/journal/hard-turn-limit checkpoint validated on a9d0fbd:3 integrated CPU checks pass in1174.685s, plus5 native/6 helper checks. Complete combat and1000-boundary neutral histories match native; mixed1/8/32,full/lean,core reset,persistence/corruption pass. Full64 suite and full-format G4 pending.",
       "Schema11 trapping/retry checkpoint:8 affected CPU checks plus6 native/6 helper checks pass. New31 scenarios/215 boundaries include two complete six-member games and mirrored private-state episodes. Aggregate558/4110; full68 suite and full-format G4 pending."
     ],
-    "next": "Implement Transform/Imposter with separate base/effective identity, original/virtual moves+PP and known/apparent typing; then Illusion/forms/calling and remaining closure families. Continue sequentially with focused CPU checks only.",
+    "next": "Implement Illusion event-time identity, then forms/called moves and remaining closure families; continue sequentially with focused CPU checks only.",
     "ledger": {
       "path": "rules/gen5-reachable-v1.json",
       "entries": 1768,
@@ -548,7 +548,7 @@
         "indirect-closure",
         "engine-contract"
       ],
-      "status": "Incomplete:207 partial callback mappings/939 unsupported; full closure remains open."
+      "status": "Incomplete:209 partial callback mappings/937 unsupported; full closure remains open."
     },
     "config": "evaluation/g4-cpu-v1.json",
     "campaign": {
@@ -616,7 +616,7 @@
     ],
     "gpu_requirement": "Deferred during travel. Record all G4 device obligations and ready/pending commands in docs/GPU_HANDOFF.md; current checkpoint runner is scripts/g4_gpu_handoff.py. CPU implementation remains active. Later full G4 release still requires matching-source GPU conformance.",
     "acceptance": "G4-CPU-conformance pending. Generic data checkpoint passes; all remaining prepared CPU gates retained, all milestone acceptance/task count unchanged.",
-    "source_identity": "test-logs/g4-cpu-conformance/schema16-checkpoint.json",
+    "source_identity": "test-logs/g4-cpu-conformance/schema17-checkpoint.json",
     "evidence_directory": "test-logs/g4-cpu-conformance",
     "continuation": {
       "status": "schema7_CPU_checkpoint_validated",
@@ -917,6 +917,16 @@
         "native_boundaries": 44,
         "evidence": "test-logs/g4-cpu-conformance/schema16-checkpoint.json",
         "next": "Implement Transform/Imposter with separate base/effective identity, original/virtual moves+PP and known/apparent typing; then Illusion/forms/calling and remaining closure families. Continue sequentially with focused CPU checks only."
+      },
+      "identity": {
+        "status": "completed_focused_CPU_checkpoint_not_full_G4",
+        "source_base": "b289282",
+        "candidate_schema": 17,
+        "core_journal_schema": 7,
+        "native_cases": 17,
+        "native_boundaries": 36,
+        "evidence": "test-logs/g4-cpu-conformance/schema17-checkpoint.json",
+        "next": "Implement Illusion event-time identity, then forms/called moves and remaining closure families; continue sequentially with focused CPU checks only."
       }
     },
     "resolved_failure": "16b5263 preflight rejected ordinary moves because type was missing from its field set; fixed by 4eab254, failed run stopped, all 37 repaired checks pass. Detailed minimized input and source identities are in source.json.",
@@ -1896,17 +1906,17 @@
     "combined_return_home_block": "docs/GPU_HANDOFF.md#one-return-home-block-correctness-plus-g3-v6-measurements",
     "pending_status_checkpoint": "Current status/field/hook GPU checks are wired into the49-check runner; no GPU execution during travel. Preserve matching-source CPU results and do not transfer earlier GPU/CPU evidence across changed source.",
     "expanded_checkpoint": {
-      "status": "schema16_focused_CPU_complete_GPU_deferred",
-      "engine_schema": 16,
-      "modules": 21,
-      "native_scenarios": 723,
-      "native_boundaries": 4530,
+      "status": "schema17_focused_CPU_complete_GPU_deferred",
+      "engine_schema": 17,
+      "modules": 22,
+      "native_scenarios": 740,
+      "native_boundaries": 4566,
       "initial_field_evidence": "test-logs/g4-cpu-conformance/schema5-checkpoint.json",
       "source": "Use latest committed checkout and runner source/fixture fingerprints; earlier source_commit fields describe historical preparation.",
       "handoff_prepared": false,
-      "source_commit": "Publishing commit; exact runtime fingerprints in schema13-checkpoint.json",
-      "source_identity": "test-logs/g4-cpu-conformance/schema16-checkpoint.json",
-      "checks": 77
+      "source_commit": "Publishing commit; exact runtime fingerprints in schema17-checkpoint.json",
+      "source_identity": "test-logs/g4-cpu-conformance/schema17-checkpoint.json",
+      "checks": 78
     }
   }
 }

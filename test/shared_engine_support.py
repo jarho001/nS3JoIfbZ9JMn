@@ -133,6 +133,9 @@ def assert_state(test,s,native,label):
             if 'phaseState' in p:
                 from simulator.shared_engine_io import causal_state
                 test.assertEqual(json.dumps(causal_state(s,side,m,include_pursuit='beingCalledBack'in p['phaseState'],include_items='initialItem'in p['phaseState']),sort_keys=True),json.dumps(p['phaseState'],sort_keys=True),tag+' causal Pokemon')
+            if 'identityState'in p:
+                from simulator.shared_engine_io import identity_state
+                test.assertEqual(identity_state(s,side,m),p['identityState'],tag+' base/effective identity')
             if 'statusState' in p:
                 from simulator.shared_engine_io import effect_states
                 for key,value in effect_states(s,side,m).items():test.assertEqual(value,p[key],tag+' '+key)

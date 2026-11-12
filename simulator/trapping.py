@@ -26,7 +26,9 @@ def refresh(s,e):
     live=~s.fainted[foe,fm]
     actual=jnp.stack((enemy==A['shadowtag'],enemy==A['arenatrap'],enemy==A['magnetpull']),axis=1)
     trapped=jnp.any(actual&predicates,axis=1)&live
-    maybe=jnp.any((QUERY[s.species[foe,fm]]|actual)&predicates,axis=1)&live
+    known=s.known_type[side,mon]
+    query_pred=jnp.stack((ability!=A['shadowtag'],grounded|((~known)&(ability!=A['levitate'])),steel|(~known)),axis=1)
+    maybe=jnp.any((QUERY[s.species[foe,fm]]|actual)&query_pred,axis=1)&live
     binding=s.volatile_state[side,mon,e.partial_ops.SLOT]
     source=jnp.clip(binding[:,2],0,1);sm=jnp.clip(binding[:,3],0,5)
     hard=(binding[:,0]>0)&(s.active[source]==sm)
