@@ -38,10 +38,10 @@ def resolve_reactive_faints(c,actor,target,e):
     return e._when(c[0].hp[actor,c[0].active[actor]]==0,resolve,c)
 
 
-def drain(c,actor,target,move,dealt,e):
+def drain(c,actor,target,move,dealt,e,*,substitute=False):
     def apply(c):
         s,t=c;mon=s.active[actor];tm=s.active[target]
-        amount=jnp.maximum(1,rounded_fraction(dealt,h.DRAIN_NUM[move],h.DRAIN_DEN[move]))
+        amount=jnp.maximum(1,(dealt*h.DRAIN_NUM[move]+h.DRAIN_DEN[move]-1)//h.DRAIN_DEN[move] if substitute else rounded_fraction(dealt,h.DRAIN_NUM[move],h.DRAIN_DEN[move]))
         def ooze(c):
             c=e._damage(c,actor,amount,cause=14,source_side=target,source_mon=tm)
             return resolve_reactive_faints(c,actor,target,e)
@@ -69,3 +69,12 @@ def contact(c,actor,target,move,e):
     s,_=c
     return e._when(h.CONTACT[move]&(s.item[target,tm]==tables.ITEM_IDS['rockyhelmet'])&(s.hp[actor,mon]>0),
                    lambda c:damage(c,s.stats[actor,mon,0]//6,13),c)
+
+
+def spin(c,actor,e):
+    """Shared AfterHit/AfterSubDamage hazard removal in pinned order."""
+    mon=c[0].active[actor]
+    for index,kind in ((1,e.SPIKES),(0,e.STEALTH_ROCK)):
+        c=e._when(c[0].hazards[actor,index]>0,lambda c:e._event(c,e.SIDE_END,actor,mon,move=kind),c)
+    s,trace=c
+    return s._replace(hazards=s.hazards.at[actor].set(0),hazard_meta=s.hazard_meta.at[actor].set(0)),trace

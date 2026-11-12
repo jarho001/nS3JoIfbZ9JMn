@@ -2,7 +2,7 @@
 import jax.numpy as jnp
 from . import gen5_engine_tables as t
 
-VOLATILES=('protect','stall','confusion','choicelock','mustrecharge','lockedmove','twoturnmove','solarbeam','skyattack','skullbash','razorwind','fly','dig','dive','bounce','taunt','encore','disable','torment','flinch')
+VOLATILES=('protect','stall','confusion','choicelock','mustrecharge','lockedmove','twoturnmove','solarbeam','skyattack','skullbash','razorwind','fly','dig','dive','bounce','taunt','encore','disable','torment','flinch','substitute')
 VOLATILE_IDS={key:i for i,key in enumerate(VOLATILES)}
 VOLATILE_WIDTH=12
 SOURCE_MOVE,SOURCE_ITEM,SOURCE_CONDITION,SOURCE_EMPTY=1,2,3,4
@@ -48,7 +48,7 @@ def flinch_supported(row):
     return t.plain(clean)
 
 
-MOVE_IMPLEMENTED=jnp.asarray([False]+[supported(t.MV_ROWS[key]) or rampage_supported(t.MV_ROWS[key]) or key in CHARGE_KEYS or key in RESTRICTIONS or flinch_supported(t.MV_ROWS[key]) for key in t.MOVE_KEYS[1:]],jnp.bool_)
+MOVE_IMPLEMENTED=jnp.asarray([False]+[supported(t.MV_ROWS[key]) or rampage_supported(t.MV_ROWS[key]) or key in CHARGE_KEYS or key in RESTRICTIONS or key=='substitute' or flinch_supported(t.MV_ROWS[key]) for key in t.MOVE_KEYS[1:]],jnp.bool_)
 
 
 
@@ -158,6 +158,10 @@ def valid_phases(s):
             fields=(row[:,:,6]==SOURCE_MOVE)&(row[:,:,4]==t.MOVE_IDS[VOLATILES[kind]])
             fields=fields&((row[:,:,5]>=1)&(row[:,:,5]<=5) if kind!=18 else row[:,:,5]==0)
             if kind in (16,17):fields=fields&(row[:,:,7]>0)&(row[:,:,7]<len(t.MOVE_KEYS))
+        elif kind==VOLATILE_IDS['substitute']:
+            fields=(row[:,:,6]==SOURCE_MOVE)&(row[:,:,4]==t.MOVE_IDS['substitute'])&(row[:,:,5]==0)
+            fields=fields&(row[:,:,7]>0)&(row[:,:,7]<=s.stats[:,:,0]//4)&jnp.all(row[:,:,8:]==0,axis=-1)
+            fields=fields&(row[:,:,2]==jnp.arange(2)[:,None])&(row[:,:,3]==jnp.arange(6)[None,:])
         elif kind==VOLATILE_IDS['flinch']:
             fields=(row[:,:,5]==1)&(row[:,:,6]==SOURCE_MOVE)&(row[:,:,4]>0)&(row[:,:,4]<len(t.MOVE_KEYS))
         else:

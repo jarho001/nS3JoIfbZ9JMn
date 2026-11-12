@@ -856,6 +856,14 @@ history. Choose proportional affected checks once per meaningful revision;
 known-long CPU integration is included in the proposed execution scope. Do not
 rerun all history after each move, rebuild tooling or profile to show progress.
 
+**Validation amendment approved 2026-11-12:** during implementation, use one
+focused CPU differential check per mechanic family and narrowly justified shared
+regressions. Consolidate broad eager/JIT/batch, full/lean, lifecycle and historical
+coverage at agreed milestone gates. The full acceptance table above remains
+required for CPU completion; deferred checks stay pending. The earlier standing
+CPU authorization does not justify repeating the broad matrix after each family.
+The interrupted Substitute gate remains paused; this amendment does not restart it.
+
 Checkpoint and stop on an external access/oracle blocker, a decision that changes
 the pinned game or approved scope, an unresolved minimized semantic divergence,
 a required capacity/campaign cap failure that cannot be repaired within scope,

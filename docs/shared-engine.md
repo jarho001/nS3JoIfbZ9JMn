@@ -14,7 +14,7 @@ Full-format G4
 coverage remains separate acceptance work. Historical evidence keeps its original
 source/schema identity; it does not imply validation of later engine changes.
 
-The current runtime uses [schema 9](../rules/shared-engine-v9.json). Schemas
+The current runtime uses [schema 12](../rules/shared-engine-v12.json). Schemas
 4–6 integrated major statuses and effect provenance, boosts/weather/screens,
 and observed ability/item hooks. Schema7 adds declarative hit counts, per-hit
 updates, capped drain/recoil arithmetic, self-destruction and reactive damage.
@@ -226,6 +226,32 @@ the reachable-mechanics audit, long-history capacity gap or full-format G4 gates
 The [schema9 CPU checkpoint](../test-logs/g4-cpu-conformance/schema9-checkpoint.json)
 records 18 affected checks and exact scalar replay of 526 scenarios and 2895 boundaries.
 The full 61-check checkpoint suite and full-format G4 gates remain pending.
+
+## Gen5 Substitute interception
+
+Schema12 appends volatile slot20 with bounded remaining doll HP in column7;
+other slots and the shared full/core transition kernel stay stable. Creation
+requires HP strictly above one quarter of maxHP and spends its floored quarter
+through native direct damage, preserving `hurtThisTurn` and `lastDamage`.
+Already-present and weak failures retain their distinct messages and move result.
+
+Primary interception respects the pinned `bypasssub` flag. Gen5 sound moves and
+Struggle still hit the doll. Every absorbed hit computes ordinary damage/draws,
+caps it to doll HP, updates the attacker's `lastDamage`, and emits activation or
+end without damaging the target or appending its `attackedBy` record. A later
+hit of the same multi-hit move can hit the real target after the doll breaks.
+Recoil and ceil drain run per absorbed hit; contact and secondary application
+are skipped, while secondary RNG rolls still occur. Native AfterSubDamage
+installs recharge/locked-move effects and lets Rapid Spin clear hazards.
+Blocked status moves retain the native outer move result and hit-loop updates;
+Taunt/Encore/Disable/Torment use their observed bypass behavior.
+
+Legacy state schemas9–11 extend their twenty volatile slots with zero; matching
+independent replay retains the older provenance rules. Journal schema3 binds the
+expanded core shape and complete recipient pages; older journal schemas1/2
+require matching independent replay, including every recorded shape/dtype/value.
+Transform/Illusion, partial trapping, called moves and complete callback closure
+remain separate pending work. Directed cases do not prove generator membership.
 
 ## G4 architecture decisions — 2026-11-12
 

@@ -104,10 +104,11 @@ def project_events(state,trace,audience):
         elif kind==e.ABILITY:line=f'|-activate|{actor}|ability: Synchronize'
         elif kind==e.END_ITEM:line=f'|-enditem|{actor}|Lum Berry|[eat]'
         elif kind==e.CURE:line=f'|-curestatus|{actor}|'+e.STATUS_NAMES[status]+(f'|[from] move: {name}' if move else '|[msg]')
-        elif kind==e.FAIL:line=f'|-fail|{actor}'+('|heal' if aux==1 else '|'+e.STATUS_NAMES[status] if status else '')
+        elif kind==e.FAIL:line=f'|-fail|{actor}'+('|move: Substitute'+('|[weak]' if aux==3 else '') if aux in (2,3) else '|heal' if aux==1 else '|'+e.STATUS_NAMES[status] if status else '')
         elif kind==e.CANT:line=f'|cant|{actor}|'+e.STATUS_NAMES[status]
         elif kind==e.ACTIVATE:
             line=(f'|-supereffective|{actor}' if aux>0 else f'|-resisted|{actor}') if move==-1 else f'|-activate|{actor}|move: {name}'
+        elif kind==e.SUB_DAMAGE:line=f'|-activate|{actor}|Substitute|[damage]'
         elif kind==e.SINGLE:line=f'|-singleturn|{actor}|Protect'
         elif kind==e.SIDE_START:line=f'|-sidestart|p{side+1}: p{side+1}|'+('move: ' if move in (e.STEALTH_ROCK,e.field_tables.SCREEN_MOVES[1]) else '')+name
         elif kind==e.SIDE_END:line=f'|-sideend|p{side+1}: p{side+1}|'+('move: ' if move==e.field_tables.SCREEN_MOVES[1] else '')+name+(f'|[from] move: Rapid Spin|[of] {actor}' if aux==0 else '')
@@ -187,15 +188,15 @@ def load_state(path,*,schema=None,replayed_state=None):
         stored=int(saved['schema']) if 'schema' in saved else None
         if schema is not None and stored is not None and stored!=schema:raise ValueError('schema mismatch')
         version=stored if schema is None else schema
-        if version not in (1,2,3,4,5,6,7,8,9,10,11):raise ValueError('explicit supported state schema required')
+        if version not in (1,2,3,4,5,6,7,8,9,10,11,12):raise ValueError('explicit supported state schema required')
         fields={k:jnp.asarray(saved[k]) for k in saved.files if k not in ('schema','data_sha256')}
-        if version in (3,4,5,6,7,8,9,10,11):
+        if version in (3,4,5,6,7,8,9,10,11,12):
             if 'data_sha256' not in saved or str(saved['data_sha256'])!=generic.DATA_SHA256:
                 raise ValueError('state data table identity mismatch')
-        if version<11 and replayed_state is not None:
+        if version<12 and replayed_state is not None:
             e._validate_structure(replayed_state)
             end='ivs' if version<=2 else 'effect_order' if version==3 else 'weather_state' if version==4 else 'move_history' if version<9 else 'request_state'
-            expected=set(e.State._fields[:e.State._fields.index(end)])
+            expected=set(e.State._fields if version==11 else e.State._fields[:e.State._fields.index(end)])
             if version==1:expected.remove('hazards')
             if set(fields)!=expected:raise ValueError('invalid legacy field set for replay')
             for key,value in fields.items():
@@ -204,6 +205,8 @@ def load_state(path,*,schema=None,replayed_state=None):
                     slots=3 if version<6 else 4 if version<8 else 5
                     if old.shape!=(2,6,slots,6):raise ValueError('invalid legacy volatile shape for replay')
                     replay=replay[:,:,:slots,:6]
+                elif key=='volatile_state':
+                    replay=replay[:,:,:20,:]
                 if old.shape!=replay.shape or old.dtype!=replay.dtype or not np.array_equal(old,replay):
                     raise ValueError('legacy replay/provenance mismatch: '+key)
             return replayed_state
@@ -288,6 +291,10 @@ def load_state(path,*,schema=None,replayed_state=None):
             if np.any(np.asarray(e.trap_ops.QUERY)[species]) or np.any(np.asarray(e.trap_ops.ABILITY_IMPLEMENTED)[ability]):
                 raise ValueError('legacy trapping/disclosure requires replay/provenance')
             fields['request_state']=jnp.zeros((2,2),jnp.int32)
+        if 9<=version<12:
+            v=fields['volatile_state']
+            if v.shape!=(2,6,20,e.phase_ops.VOLATILE_WIDTH):raise ValueError('invalid legacy volatile shape')
+            fields['volatile_state']=jnp.pad(v,((0,0),(0,0),(0,1),(0,0)))
         if set(fields)!=set(e.State._fields):raise ValueError('invalid state field set')
         state=e.State(*(fields[k] for k in e.State._fields))
         e._validate_structure(state)
@@ -326,6 +333,7 @@ def effect_states(state,side,mon):
         if 7<=kind<=14:
             row['targetLoc']=int(s.volatile_state[side,mon,kind,9])
             if key in ('fly','dig','dive','bounce'):row.update(name=e.MOVE_NAMES[tables.MOVE_IDS[key]],duration=time)
+        if key=='substitute':row.update(name='Substitute',hp=int(s.volatile_state[side,mon,kind,7]))
         if key=='flinch':row['duration']=time
         if 15<=kind<=18:
             row['name']=e.MOVE_NAMES[tables.MOVE_IDS[key]]

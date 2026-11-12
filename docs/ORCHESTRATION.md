@@ -43,6 +43,14 @@ it. Reuse existing tests and a shared parity harness. Do not require all prior
 suites, a new timing probe, or every execution-mode matrix after each patch.
 Use representative JIT/batch checks at integration boundaries where relevant.
 
+The 2026-11-12 user-approved default is one focused CPU differential pass for
+the changed mechanic family, plus a narrow regression when a concrete shared
+path needs it. Broad execution-mode, batch, lifecycle, full/lean and historical
+suites are consolidated at agreed milestone checkpoints. Preserve missing
+coverage as pending; do not weaken final acceptance or automatically resume the
+interrupted Substitute gate. The user approved this scope change without
+requesting implementation or test execution to resume in the same turn.
+
 Agree the goal's validation scope in its brief, including known-long runs and
 any actual device requirement. Long integration, exhaustive, GPU, and performance
 runs outside that scope need a separate requested session. No fixed 30/90-second

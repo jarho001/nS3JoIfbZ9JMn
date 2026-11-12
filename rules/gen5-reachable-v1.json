@@ -25889,10 +25889,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/substitute.json.gz",
+          "native": "reference/substitute-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_substitute_engine.py"
+        }
+      ],
       "field": "condition.onEnd",
       "id": "moves:substitute:condition.onEnd",
-      "implementation": null,
+      "implementation": {
+        "family": "substitute",
+        "file": "simulator/substitute.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:substitute",
@@ -25903,7 +25915,7 @@
       "owner": "moves:substitute",
       "reachability": "candidate",
       "sha256": "dfef0000b606cd2002a838c02f371e9bb67e3e67184c5de74339a2c2cc14894f",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -25912,10 +25924,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/substitute.json.gz",
+          "native": "reference/substitute-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_substitute_engine.py"
+        }
+      ],
       "field": "condition.onStart",
       "id": "moves:substitute:condition.onStart",
-      "implementation": null,
+      "implementation": {
+        "family": "substitute",
+        "file": "simulator/substitute.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:substitute",
@@ -25926,7 +25950,7 @@
       "owner": "moves:substitute",
       "reachability": "candidate",
       "sha256": "26703ce12b15f77d14cc6e0c61348680384c017f608fc1769f18e131a9e78459",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -25935,10 +25959,22 @@
           "file": "data/mods/gen5/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/substitute.json.gz",
+          "native": "reference/substitute-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_substitute_engine.py"
+        }
+      ],
       "field": "condition.onTryPrimaryHit",
       "id": "moves:substitute:condition.onTryPrimaryHit",
-      "implementation": null,
+      "implementation": {
+        "family": "substitute",
+        "file": "simulator/substitute.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:substitute",
@@ -25949,7 +25985,7 @@
       "owner": "moves:substitute",
       "reachability": "candidate",
       "sha256": "87dae72d38e9d3ef310b57ebeb1930da03187997704787d460bf50a8bacf79d4",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -25958,10 +25994,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/substitute.json.gz",
+          "native": "reference/substitute-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_substitute_engine.py"
+        }
+      ],
       "field": "onHit",
       "id": "moves:substitute:onHit",
-      "implementation": null,
+      "implementation": {
+        "family": "substitute",
+        "file": "simulator/substitute.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:substitute",
@@ -25972,7 +26020,7 @@
       "owner": "moves:substitute",
       "reachability": "candidate",
       "sha256": "94786faa7cadf99fa795e125f71882d108a074d31952417f2e60bb7ead2d12e6",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -25981,10 +26029,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/substitute.json.gz",
+          "native": "reference/substitute-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_substitute_engine.py"
+        }
+      ],
       "field": "onTryHit",
       "id": "moves:substitute:onTryHit",
-      "implementation": null,
+      "implementation": {
+        "family": "substitute",
+        "file": "simulator/substitute.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:substitute",
@@ -25995,7 +26055,7 @@
       "owner": "moves:substitute",
       "reachability": "candidate",
       "sha256": "4031f00170707b1b2744ab8781a7f3addf590d47357b4dc7c8e13db1a5825cbb",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -64113,10 +64173,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/substitute.json.gz",
+          "native": "reference/substitute-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_substitute_engine.py"
         }
       ],
       "id": "moves:substitute",
       "implementation": {
+        "behavior": {
+          "family": "substitute",
+          "file": "simulator/substitute.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "MOVE_TYPE/MOVE_POWER/MOVE_CATEGORY/MOVE_PRIORITY/MOVE_PP",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"

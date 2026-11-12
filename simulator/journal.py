@@ -15,7 +15,7 @@ from . import shared_engine as e
 from . import shared_engine_io as io
 from . import gen5_tables as tables
 
-CORE_SCHEMA=2
+CORE_SCHEMA=3
 
 @dataclass(frozen=True)
 class Page:
@@ -89,15 +89,18 @@ def load(path,*,replayed=None):
         payload=str(data['metadata'])
         version=json.loads(payload)['journal_schema']
         names=tuple(n for n in e.CoreState._fields if n!='request_state') if version==1 else e.CoreState._fields
-        if version not in (1,CORE_SCHEMA):raise ValueError('unsupported core journal schema')
-        if version==1 and replayed is None:raise ValueError('old core journal requires independent replay/provenance')
+        if version not in (1,2,CORE_SCHEMA):raise ValueError('unsupported core journal schema')
+        if version<CORE_SCHEMA and replayed is None:raise ValueError('old core journal requires independent replay/provenance')
         if _checksum(payload,data,names)!=str(data['journal_sha256']):raise ValueError('journal checksum mismatch')
         metadata=json.loads(payload)
         if metadata['data_sha256']!=tables.DATA_SHA256:raise ValueError('journal schema/table mismatch')
         if set(data.files)!={'metadata','journal_sha256',*names}:raise ValueError('invalid core field set')
-        if version==1:
+        if version<CORE_SCHEMA:
             e._validate_structure(replayed.core)
-            if any(not np.array_equal(data[name],np.asarray(getattr(replayed.core,name)))for name in names):raise ValueError('core replay/provenance mismatch')
+            for name in names:
+                expected=np.asarray(getattr(replayed.core,name))
+                if name=='volatile_state':expected=expected[:,:,:20,:]
+                if data[name].shape!=expected.shape or data[name].dtype!=expected.dtype or not np.array_equal(data[name],expected):raise ValueError('core replay/provenance mismatch')
             core=replayed.core
         else:core=e.CoreState(*(e.jnp.asarray(data[name])for name in names))
         e._validate_structure(core)
@@ -107,5 +110,5 @@ def load(path,*,replayed=None):
             if any(len(row)!=10 or any(type(v)is not int for v in row)for row in rows)or len(views)!=2 or any(type(v)is not str for view in views for v in view):raise ValueError('invalid journal page')
             pages.append(Page(rows,views))
         if not pages:raise ValueError('missing initialization journal')
-        if version==1 and tuple(pages)!=replayed.pages:raise ValueError('journal replay/provenance mismatch')
+        if version<CORE_SCHEMA and tuple(pages)!=replayed.pages:raise ValueError('journal replay/provenance mismatch')
         return Checkpoint(core,tuple(pages))

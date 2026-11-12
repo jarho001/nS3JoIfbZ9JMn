@@ -56,6 +56,16 @@ approved goal's validation scope or a separately requested test session. Do
 not blindly retry slow or failing checks. Missing required evidence remains
 pending, with the exact command, relevant source identity, and blocker.
 
+The user approved a smaller implementation validation policy on 2026-11-12.
+For each mechanic family, default to one focused CPU differential check of the
+changed behavior against pinned native cases. Add a narrow regression only for
+a concrete shared-path concern. Consolidate broad eager/JIT/mixed1/8/32,
+full/lean, lifecycle and historical regression coverage at agreed milestone
+checkpoints; do not repeat that matrix after each family or restart the paused
+Substitute gate automatically. Preserve all final acceptance requirements and
+mark deferred checks as pending. This replaces the earlier broad per-family
+validation practice, including under the standing G4 CPU authorization.
+
 Start on CPU. Require GPU only for a stated acceptance criterion or a concrete
 device-specific property. Missing optional GPU evidence is not a blocker. If
 required GPU execution is unavailable, persist `gpu_block` as `awaiting_gpu`

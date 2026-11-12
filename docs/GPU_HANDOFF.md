@@ -7,6 +7,23 @@ GPU. Preparing this handoff does not run device tests, profiling or benchmarks.
 
 ## Current source and evidence
 
+**Schema12 Substitute checkpoint:** one focused CPU differential check passed
+all51 scenarios/184 boundaries in83.623s. Two completed same-source CPU checks
+cover atomic metadata/persistence and complete-game core/journal/full/lean/reset.
+Six native and six helper checks also passed. Exact sources, inputs and completed
+versus pending evidence are in [schema12-checkpoint.json](../test-logs/g4-cpu-conformance/schema12-checkpoint.json).
+The interrupted eager/JIT/mixed1/8/32 check and broader regressions remain pending;
+they were not restarted under the user-approved reduced validation policy.
+
+The runner includes the51 Substitute scenarios and two complete six-member games.
+`test.test_substitute_engine` covers interception/RNG, native state/requests/both
+histories, recoil/drain/secondary/contact/recharge/pivot/Spin interactions,
+save/resume, full/lean/core/journal execution, reset and atomic rejection.
+State schema12 and journal schema3 add the doll-HP slot with explicit migration.
+Preparation of all twelve corpora passed with matching frozen source identities.
+The return-home commands below are consolidated validation, not routine per-family
+checks. No GPU execution or new profiling workload ran; full G4 remains open.
+
 **Schema11 trapping/retry checkpoint:** eight affected CPU checks passed,
 plus six native and six helper checks. The new31 scenarios/215 boundaries include
 two complete games and mirrored private-state cases. Exact source identities,
@@ -33,9 +50,10 @@ The entire matching-source 61-check suite has not been repeated. Historical
 schema8 results remain in
 [schema8-checkpoint.json](../test-logs/g4-cpu-conformance/schema8-checkpoint.json).
 
-The expanded runner expects **68 checks in 16 isolated modules**, using eleven
-independent native corpora: **558 scenarios / 4110 boundaries**, including
-28 complete constructed six-member games. The new 73 phase scenarios are in
+The expanded runner expects **72 checks in 17 isolated modules**, using twelve
+independent native corpora: **609 scenarios / 4294 boundaries**, including
+32 complete constructed six-member combat games (plus the neutral switch-only
+turn-limit game and eight historical three-member games). The 73 phase scenarios are in
 `test.test_lock_phase_engine`. The runner recaptures causal state for the prior
 corpora too. Use the existing commands below on matching committed source.
 Full G4 remains open: remaining reachable mechanics, closure audit, history and
@@ -96,9 +114,10 @@ the combined block below:
 
 1. Creates a fresh `work/g4-gpu-TIMESTAMP/` and records commit/tree, relevant file
    hashes, selected host affinity and independent native fixture hashes.
-2. Freezes legacy, hazard, generic, status, field/boost, ability/item, hit/thaw and recharge corpora. Runs the
-   reference/native contracts. Unknown/unsupported families stay explicit.
-3. Runs the same current 68-check scope on CPU, then under `JAX_PLATFORMS=cuda`,
+2. Freezes all twelve legacy/current corpora, including move phases, the
+   turn-limit witness, trapping/retries and Substitute. Runs the reference/native
+   contracts. Unknown/unsupported families stay explicit.
+3. Runs the same current 72-check scope on CPU, then under `JAX_PLATFORMS=cuda`,
    with each test module in a fresh process.
    A strict probe verifies actual eager/JIT GPU placement; shared case/lifecycle
    assertions also check device leaves. `cuda` initialization failure is a failure.

@@ -2,7 +2,7 @@
 
 Fixed-shape int32 storage; exact four-limb PRNG; stable mon identity and a
 separate command roster. Strings/protocol rendering belong to the host adapter.
-Schema 8 carries forced recharge, declarative hit loops, reactive damage, ability/item, field, boost and status effects through the same scheduler. Handler masks
+Schema 12 carries Substitute interception, private retry disclosure, move phases and reactive effects through the same scheduler. Handler masks
 remain incomplete and reject unsupported effects; full conformance is pending.
 """
 from __future__ import annotations
@@ -26,6 +26,7 @@ from . import hit_effects as hit_ops
 from . import phase_effects as phase_ops
 from . import battle_tracking as tracking
 from . import trapping as trap_ops
+from . import substitute as sub_ops
 from . import hook_tables
 from . import hook_effects as hook_ops
 import sys
@@ -33,7 +34,7 @@ import sys
 def _engine():
     return sys.modules[__name__]
 
-SCHEMA = 11
+SCHEMA = 12
 ROSTER, SLOTS, QUEUE, EVENTS, DRAWS, HISTORY = 6, 4, 8, 128, 128, 2048
 OK, PENDING, INVALID, UNSUPPORTED, CAPACITY, TERMINAL, STALE = range(7)
 RETRY=7
@@ -64,6 +65,7 @@ PREPARE,ANIM,END_HELD_ITEM,FLINCH_CANT=32,33,34,35
 VOL_START,VOL_END,VOL_CANT=36,37,38
 TURN_WARNING,TURN_LIMIT=39,40
 FRISK_ITEM=41
+SUB_DAMAGE=42
 # Draw contexts; range form stores actual native arguments including offsets.
 INIT, QUEUE_SORT, BEFORE_TURN, UPDATE, HIT_UPDATE, SWITCH_SORT, FIELD_SORT, ACC, CRITICAL, ROLL, PARALYSIS, STALL = range(12)
 SLEEP_DURATION, FREEZE, CONF_DURATION, CONFUSION, CONF_DAMAGE, SECONDARY = range(12,18)
@@ -337,35 +339,33 @@ def _hit(c,actor,move):
         c,final_modifier=hook_ops.damage_modifier(c,actor,target,physical,crit==0,jnp.where(move==STRUGGLE,0,exponent),_engine(),move)
         damage=damage_from_preroll(preroll,roll.astype(jnp.int32),stab,s.ability[actor,mon]==hook_tables.A['adaptability'],move==STRUGGLE,
                                   jnp.where(move==STRUGGLE,0,exponent),s.status[actor,mon]==BRN,physical,s.ability[actor,mon]==hook_tables.A['guts'],final_modifier)
-        dealt=jnp.minimum(s.hp[target,tm],damage)
-        c=_damage(c,target,damage,minimum=0,source_side=actor,source_mon=mon)
-        c=hit_ops.drain(c,actor,target,move,dealt,_engine())
-        c=phase_ops.install(c,actor,move,_engine())
-        c=effects.secondary(c,actor,move,_engine())
-        def spin(c):
-            for index,kind in ((1,SPIKES),(0,STEALTH_ROCK)):
-                c=_when(c[0].hazards[actor,index]>0,
-                        lambda c:_event(c,SIDE_END,actor,mon,move=kind),c)
-            s,t=c
-            return s._replace(hazards=s.hazards.at[actor].set(0),hazard_meta=s.hazard_meta.at[actor].set(0)),t
-        c=hit_ops.contact(c,actor,target,move,_engine())
-        # Native DamagingHit resolves ordered contact callbacks before the
-        # default-order freeze hook, even when a callback has ended the game.
-        c=_when((c[0].status[target,tm]==FRZ)&(move_type==generic.TYPES['fire'])&(c[0].hp[target,tm]>0),
-                lambda c:effects.cure(c,target,_engine(),source=actor),c)
-        # Gen5 Spin is AfterHit, and is skipped if contact damage killed it.
-        c=_when((move==RAPID_SPIN)&(c[0].hp[actor,mon]>0),spin,c)
+        intercepted=sub_ops.intercepts(s,target,move)
+        def normal(c):
+            dealt=jnp.minimum(s.hp[target,tm],damage)
+            c=_damage(c,target,damage,minimum=0,source_side=actor,source_mon=mon)
+            c=hit_ops.drain(c,actor,target,move,dealt,_engine())
+            c=phase_ops.install(c,actor,move,_engine())
+            c=effects.secondary(c,actor,move,_engine())
+            c=hit_ops.contact(c,actor,target,move,_engine())
+            # Native DamagingHit resolves ordered contact callbacks before the
+            # default-order freeze hook, even when a callback has ended the game.
+            c=_when((c[0].status[target,tm]==FRZ)&(move_type==generic.TYPES['fire'])&(c[0].hp[target,tm]>0),
+                    lambda c:effects.cure(c,target,_engine(),source=actor),c)
+            # Gen5 Spin is AfterHit, and is skipped if contact damage killed it.
+            c=_when((move==RAPID_SPIN)&(c[0].hp[actor,mon]>0),lambda c:hit_ops.spin(c,actor,_engine()),c)
+            return c,dealt
+        c,dealt=jax.lax.cond(intercepted,lambda c:sub_ops.absorb(c,actor,target,move,damage,_engine()),normal,c)
         c=_update(c,HIT_UPDATE)
-        return c,dealt
+        return c,dealt,intercepted
     def physical(c):
         c,count=hit_ops.hit_count(c,move,actor,_engine())
         def more(carry):
-            (s,_),hits,total,last=carry
+            (s,_),hits,total,last,last_sub=carry
             return (hits<count)&(s.hp[target,tm]>0)&((s.hp[actor,mon]>0)|((hits==0)&hit_tables.SELF_DESTRUCT[move]))
         def hit(carry):
-            c,hits,total,last=carry;c,dealt=strike(c)
-            return c,hits+1,total+dealt,dealt
-        c,hits,total,last=jax.lax.while_loop(more,hit,(c,i32(0),i32(0),i32(0)))
+            c,hits,total,last,last_sub=carry;c,dealt,sub=strike(c)
+            return c,hits+1,total+jnp.where(sub,0,dealt),dealt,sub
+        c,hits,total,last,last_sub=jax.lax.while_loop(more,hit,(c,i32(0),i32(0),i32(0),jnp.array(False)))
         source_ko=c[0].hp[actor,mon]==0
         # Gen5 resolves the last queued faint first when the source has also
         # fainted. Contact double-KO therefore differs from later recoil KO.
@@ -381,7 +381,7 @@ def _hit(c,actor,move):
                 jnp.maximum(1,hit_ops.rounded_fraction(total,hit_tables.RECOIL_NUM[move],hit_tables.RECOIL_DEN[move])))
             return _damage(c,actor,amount,cause=jnp.where(move==STRUGGLE,3,10))
         c=_when(if_recoil&(total>0)&(c[0].hp[actor,mon]>0),recoil,c)
-        c=tracking.attacked(c,target,actor,move,last,i32(tracking.NUMBER),hits,_engine())
+        c=_when(~last_sub,lambda c:tracking.attacked(c,target,actor,move,last,i32(tracking.NUMBER),hits,_engine()),c)
         c=tracking.outcome(c,actor,i32(tracking.TRUE),move)
         c=_update(c,HIT_UPDATE)
         c=_when((c[0].hp[actor,mon]==0)&(~c[0].fainted[actor,mon]),lambda c:_faint(c,actor),c)
@@ -407,7 +407,9 @@ def _hit(c,actor,move):
         before_count=c[1].ecount
         move_row=jnp.max(jnp.where((jnp.arange(EVENTS)<c[1].ecount)&(c[1].events[:,0]==EV_MOVE),jnp.arange(EVENTS),0))
         c,preblocked=phase_ops.try_hit(c,actor,target,move,move_row,_engine())
-        c=jax.lax.cond(preblocked,lambda c:c,
+        sub_block=(~preblocked)&sub_ops.intercepts(c[0],target,move)
+        c=_when(sub_block,lambda c:sub_ops.block_status(c,actor,move,move_row,_engine()),c)
+        c=jax.lax.cond(preblocked|sub_block,lambda c:c,
             lambda c:jax.lax.cond(phase_ops.RESTRICTION[move]>0,lambda c:phase_ops.status_move(c,actor,target,move,_engine()),
                 lambda c:jax.lax.cond(move==CONFUSE_RAY,confuse,status,c),c),c)
         # Only actual successful application runs the hit-loop updates. Lum can
@@ -416,8 +418,8 @@ def _hit(c,actor,move):
         success=jnp.any(valid&((event==STATUS)|(event==CONF_START)|(event==VOL_START)))
         tracked_success=success|(field_tables.IS_BOOST[move]&(c[0].action_state[actor,mon,tracking.RESULT]==tracking.TRUE))
         c=_when(tracked_success,lambda c:tracking.attacked(c,target,actor,move,i32(0),i32(tracking.TRUE),i32(0),_engine()),c)
-        c=tracking.outcome(c,actor,jnp.where(tracked_success,tracking.TRUE,tracking.FALSE),move)
-        return _when(success,lambda c:_update(_update(c,HIT_UPDATE),HIT_UPDATE),c)
+        c=tracking.outcome(c,actor,jnp.where(tracked_success|sub_block,tracking.TRUE,tracking.FALSE),move)
+        return _when(success|sub_block,lambda c:_update(_update(c,HIT_UPDATE),HIT_UPDATE),c)
     return jax.lax.cond(damaging,physical,status_hit,c)
 
 
@@ -491,9 +493,9 @@ def _attack(c,row):
                         return _event((s,t),FAIL,actor,mon)
                     return jax.lax.cond(success,success_fn,fail_fn,c)
                 c=jax.lax.cond(move==REST,lambda c:effects.rest(c,actor,move_row,_engine()),
-                    lambda c:jax.lax.cond(move==RECOVER,recover,protect,c),c)
+                    lambda c:jax.lax.cond(move==sub_ops.MOVE,lambda c:sub_ops.create(c,actor,move_row,_engine()),lambda c:jax.lax.cond(move==RECOVER,recover,protect,c),c),c)
                 # Successful self moves run both hit-loop Updates.
-                s,t=c;failed=(t.events[move_row,7]==2)|((move==REST)&(original.hp[actor,mon]==original.stats[actor,mon,0]))
+                s,t=c;failed=(t.events[move_row,7]==2)|((move==REST)&(original.hp[actor,mon]==original.stats[actor,mon,0]))|((move==sub_ops.MOVE)&(s.action_state[actor,mon,tracking.RESULT]!=tracking.TRUE))
                 c=_when(~failed,lambda c:_update(_update(c,HIT_UPDATE),HIT_UPDATE),c)
                 return c
             def foe_move(c):
