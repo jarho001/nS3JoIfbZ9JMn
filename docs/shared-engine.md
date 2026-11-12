@@ -14,7 +14,7 @@ Full-format G4
 coverage remains separate acceptance work. Historical evidence keeps its original
 source/schema identity; it does not imply validation of later engine changes.
 
-The current runtime uses [schema 13](../rules/shared-engine-v13.json). Schemas
+The current runtime uses [schema 14](../rules/shared-engine-v14.json). Schemas
 4–6 integrated major statuses and effect provenance, boosts/weather/screens,
 and observed ability/item hooks. Schema7 adds declarative hit counts, per-hit
 updates, capped drain/recoil arithmetic, self-destruction and reactive damage.
@@ -226,6 +226,19 @@ the reachable-mechanics audit, long-history capacity gap or full-format G4 gates
 The [schema9 CPU checkpoint](../test-logs/g4-cpu-conformance/schema9-checkpoint.json)
 records 18 affected checks and exact scalar replay of 526 scenarios and 2895 boundaries.
 The full 61-check checkpoint suite and full-format G4 gates remain pending.
+
+## Gen5 phazing
+
+Schema14 adds transient force-switch flags to Trace and resolves drag entry
+synchronously after the move, sharing entry callbacks with normal queued switches.
+Drag cancels the outgoing actor's queued move, samples the native command roster,
+and applies hazards/entry abilities before the action's Update. The flag is set
+before contact callbacks, so even lethal Rough Skin or Life Orb can be followed
+by a drag. Native terminal histories can contain drag after the win message.
+Roar/Whirlwind bypass Substitute and fail without reserves; Dragon Tail/Circle
+Throw still damage a doll or a target without reserves. Suction Cups and
+Soundproof preserve their observed stage and messages; type immunity precedes
+Soundproof. This is focused36/46 evidence, not full callback or G4 closure.
 
 ## Gen5 partial trapping
 

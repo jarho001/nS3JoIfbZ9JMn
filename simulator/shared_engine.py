@@ -28,6 +28,7 @@ from . import battle_tracking as tracking
 from . import trapping as trap_ops
 from . import substitute as sub_ops
 from . import partial_trap as partial_ops
+from . import phazing as phaze_ops
 from . import hook_tables
 from . import hook_effects as hook_ops
 import sys
@@ -35,7 +36,7 @@ import sys
 def _engine():
     return sys.modules[__name__]
 
-SCHEMA = 13
+SCHEMA = 14
 ROSTER, SLOTS, QUEUE, EVENTS, DRAWS, HISTORY = 6, 4, 8, 128, 128, 2048
 OK, PENDING, INVALID, UNSUPPORTED, CAPACITY, TERMINAL, STALE = range(7)
 RETRY=7
@@ -68,6 +69,7 @@ TURN_WARNING,TURN_LIMIT=39,40
 FRISK_ITEM=41
 SUB_DAMAGE=42
 PARTIAL_START,PARTIAL_END,PARTIAL_DAMAGE=43,44,45
+DRAG,PHAZE_ABILITY=46,47
 # Draw contexts; range form stores actual native arguments including offsets.
 INIT, QUEUE_SORT, BEFORE_TURN, UPDATE, HIT_UPDATE, SWITCH_SORT, FIELD_SORT, ACC, CRITICAL, ROLL, PARALYSIS, STALL = range(12)
 SLEEP_DURATION, FREEZE, CONF_DURATION, CONFUSION, CONF_DAMAGE, SECONDARY = range(12,18)
@@ -77,8 +79,9 @@ MULTIHIT_COUNT = 21
 RAMPAGE_DURATION = 22
 FRISK_TARGET=23
 VOLATILE_DURATION=24
+PHAZE_SELECTION=25
 MOVE_ACTOR_TARGET=field_tables.ACTOR_TARGET
-DRAW_CONTEXTS=('initialization','queue-sort','before-turn','update','hit-update','switch-order','residual-handlers','accuracy','critical','damage','paralysis','stall','sleep-duration','freeze','confusion-duration','confusion','confusion-damage','secondary','weather-change','weather-order','damage-modifiers','multihit-count','rampage-duration','frisk-target','volatile-duration')
+DRAW_CONTEXTS=('initialization','queue-sort','before-turn','update','hit-update','switch-order','residual-handlers','accuracy','critical','damage','paralysis','stall','sleep-duration','freeze','confusion-duration','confusion','confusion-damage','secondary','weather-change','weather-order','damage-modifiers','multihit-count','rampage-duration','frisk-target','volatile-duration','phazing-selection')
 # Queue kinds, order values mirror the pinned scheduler.
 BEFORE, ATTACK, SWAP, INSTANT, RUN_SWITCH, RESIDUAL = range(1,7)
 QORDER=jnp.array([999,4,200,103,3,101,300],jnp.int32)
@@ -169,6 +172,7 @@ class Trace(NamedTuple):
     dcount: jax.Array
     overflow: jax.Array
     private_errors: jax.Array
+    force_switch: jax.Array
 
 
 class Result(NamedTuple):
@@ -184,7 +188,7 @@ def i32(value):
 def empty_trace():
     return Trace(jnp.zeros((EVENTS,10),jnp.int32),i32(0),jnp.zeros((DRAWS,3),jnp.uint32),
                  jnp.zeros(DRAWS,jnp.uint32),jnp.zeros(DRAWS,jnp.int32),
-                 jnp.zeros((DRAWS,4),jnp.uint16),jnp.zeros((DRAWS,4),jnp.uint16),i32(0),jnp.array(False),jnp.zeros(2,jnp.int32))
+                 jnp.zeros((DRAWS,4),jnp.uint16),jnp.zeros((DRAWS,4),jnp.uint16),i32(0),jnp.array(False),jnp.zeros(2,jnp.int32),jnp.zeros(2,jnp.bool_))
 
 
 def _event(c, kind, side=0, mon=0, move=0, target=0, targetmon=0, value=0, aux=0, status=0):
@@ -350,6 +354,7 @@ def _hit(c,actor,move):
             c=partial_ops.install(c,actor,target,move,_engine())
             c=phase_ops.install(c,actor,move,_engine())
             c=effects.secondary(c,actor,move,_engine())
+            c=phaze_ops.mark(c,actor,target,move,_engine())
             c=hit_ops.contact(c,actor,target,move,_engine())
             # Native DamagingHit resolves ordered contact callbacks before the
             # default-order freeze hook, even when a callback has ended the game.
@@ -414,16 +419,16 @@ def _hit(c,actor,move):
         sub_block=(~preblocked)&sub_ops.intercepts(c[0],target,move)
         c=_when(sub_block,lambda c:sub_ops.block_status(c,actor,move,move_row,_engine()),c)
         c=jax.lax.cond(preblocked|sub_block,lambda c:c,
-            lambda c:jax.lax.cond(phase_ops.RESTRICTION[move]>0,lambda c:phase_ops.status_move(c,actor,target,move,_engine()),
-                lambda c:jax.lax.cond(move==CONFUSE_RAY,confuse,status,c),c),c)
+            lambda c:jax.lax.cond(phaze_ops.STATUS[move],lambda c:phaze_ops.status_hit(c,actor,target,move,move_row,_engine()),lambda c:jax.lax.cond(phase_ops.RESTRICTION[move]>0,lambda c:phase_ops.status_move(c,actor,target,move,_engine()),
+                lambda c:jax.lax.cond(move==CONFUSE_RAY,confuse,status,c),c),c),c)
         # Only actual successful application runs the hit-loop updates. Lum can
         # immediately cure it, so inspect the emitted status/start event.
         event=c[1].events[:,0];valid=(jnp.arange(EVENTS)>=before_count)&(jnp.arange(EVENTS)<c[1].ecount)
         success=jnp.any(valid&((event==STATUS)|(event==CONF_START)|(event==VOL_START)))
         tracked_success=success|(field_tables.IS_BOOST[move]&(c[0].action_state[actor,mon,tracking.RESULT]==tracking.TRUE))
         c=_when(tracked_success,lambda c:tracking.attacked(c,target,actor,move,i32(0),i32(tracking.TRUE),i32(0),_engine()),c)
-        c=tracking.outcome(c,actor,jnp.where(tracked_success|sub_block,tracking.TRUE,tracking.FALSE),move)
-        return _when(success|sub_block,lambda c:_update(_update(c,HIT_UPDATE),HIT_UPDATE),c)
+        c=_when(~phaze_ops.STATUS[move],lambda c:tracking.outcome(c,actor,jnp.where(tracked_success|sub_block,tracking.TRUE,tracking.FALSE),move),c)
+        return _when((success|sub_block)&(~phaze_ops.STATUS[move]),lambda c:_update(_update(c,HIT_UPDATE),HIT_UPDATE),c)
     return jax.lax.cond(damaging,physical,status_hit,c)
 
 
@@ -523,7 +528,7 @@ def _attack(c,row):
                             return _event((s,t),MISS,actor,mon,move,target,tm)
                         def hit_fn(c):
                             s,t=c
-                            existing=(tables.CATEGORY[move]==0)&(~field_tables.IS_BOOST[move])&(move!=CONFUSE_RAY)&(s.status[target,tm]!=NONE)&(s.status[target,tm]!=jnp.where(move==WISP,BRN,jnp.where(move==TOXIC,TOX,jnp.where(move==POISON_POWDER,PSN,jnp.where(move==SPORE,SLP,PAR)))))
+                            existing=(~phaze_ops.STATUS[move])&(tables.CATEGORY[move]==0)&(~field_tables.IS_BOOST[move])&(move!=CONFUSE_RAY)&(s.status[target,tm]!=NONE)&(s.status[target,tm]!=jnp.where(move==WISP,BRN,jnp.where(move==TOXIC,TOX,jnp.where(move==POISON_POWDER,PSN,jnp.where(move==SPORE,SLP,PAR)))))
                             t=t._replace(events=t.events.at[move_row,7].set(jnp.where(existing,2,t.events[move_row,7])))
                             return _hit((s,t),actor,move)
                         return jax.lax.cond(hit,hit_fn,miss,c)
@@ -533,7 +538,8 @@ def _attack(c,row):
                 def semi_miss(c):
                     s,t=c;t=t._replace(events=t.events.at[move_row,7].set(1))
                     return _event((s,t),MISS,actor,mon,move,target,tm)
-                return jax.lax.cond(phase_ops.invulnerable(s,target,move),semi_miss,lambda c:jax.lax.cond(immune,immunity,try_hit,c),c)
+                sound=phaze_ops.SOUND[move]&(s.ability[target,tm]==tables.ABILITY_IDS['soundproof'])
+                return jax.lax.cond(phase_ops.invulnerable(s,target,move),semi_miss,lambda c:jax.lax.cond(immune,immunity,lambda c:jax.lax.cond(sound,lambda c:_event(c,IMMUNE,target,tm,aux=3),try_hit,c),c),c)
             def no_target(c):
                 s,t=c;t=t._replace(events=t.events.at[move_row,7].set(3))
                 return _event((s,t),FAIL,actor,mon)
@@ -575,10 +581,14 @@ def _attack(c,row):
                  lambda c:jax.lax.cond(action==phase_ops.RECHARGE_ACTION,lambda c:phase_ops.consume((tracking.attempted(c[0],actor),c[1]),actor,_engine()),execute,c),c)
 
 
-def _switch(c,row):
+def _switch(c,row,drag=False):
     s,t=c;side=row[1];old=s.active[side];slot=row[3]-4;incoming=s.order[side,slot]
     c=_when((row[0]==SWAP)&(s.hp[side,old]>0),lambda c:_update(c,UPDATE),c)
     s,t=c
+    if drag:
+        keep=(jnp.arange(QUEUE)<s.qcount)&(~((s.queue[:,0]==ATTACK)&(s.queue[:,1]==side)&(s.queue[:,2]==old)))
+        ix=jnp.nonzero(keep,size=QUEUE,fill_value=0)[0];count=jnp.sum(keep).astype(jnp.int32)
+        s=s._replace(queue=jnp.where((jnp.arange(QUEUE)<count)[:,None],s.queue[ix],0),qcount=count)
     s=jax.lax.cond(s.hp[side,old]>0,lambda s:tracking.clear_volatile(s,side),lambda s:s,s)
     oldslot=jnp.argmax(s.order[side]==old)
     order=s.order.at[side,oldslot].set(incoming).at[side,slot].set(old)
@@ -590,15 +600,49 @@ def _switch(c,row):
     s=s._replace(volatile_state=s.volatile_state.at[side,old].set(0),boosts=s.boosts.at[side,old].set(0))
     s=tracking.switched(s,side,old,incoming)
     c=effects.activate((s,t),side,_engine());s,t=c
-    c=_event((s,t),SWITCH,side,incoming,value=s.hp[side,incoming],aux=s.stats[side,incoming,0],
+    c=_event((s,t),DRAG if drag else SWITCH,side,incoming,value=s.hp[side,incoming],aux=s.stats[side,incoming,0],
              status=s.status[side,incoming],move=row[6])
     s,t=c
     # runSwitch precedes ordinary moves and remaining simultaneous swaps.
     # Native queue.insertChoice updates the incoming Pokemon's Speed before
     # resolving/sorting its runSwitch callback, including forced replacements.
     s=s._replace(speed=s.speed.at[side,incoming].set(_speeds(s)[side,incoming]))
+    if drag:return _run_switch((s,t),jnp.arange(2)==side)
     s=_qappend(s,jnp.array([RUN_SWITCH,0,0,0,0,0,0],jnp.int32).at[1].set(side).at[2].set(incoming).at[5].set(s.speed[side,incoming]))
     return _qsort((s,t))
+
+
+def _run_switch(c,entrants):
+    s,t=c
+    speeds=s.speed[jnp.arange(2),s.active]
+    c,value=jax.lax.cond(speeds[0]==speeds[1],lambda c:_draw(c,0,2,SWITCH_SORT,2),
+                         lambda c:(c,jnp.uint32(0)),(s,t))
+    first=jnp.where(speeds[0]==speeds[1],value.astype(jnp.int32),jnp.argmax(speeds))
+    for k in range(2):
+        side=jnp.where(k==0,first,1-first)
+        def entry(c):
+            s,t=c;m=s.active[side]
+            c=effects.sleep_switch(c,side,_engine());s,t=c
+            for n in range(2):
+                index=jnp.where(n==0,s.hazards[side,2]-1,2-s.hazards[side,2])
+                index=jnp.clip(index,0,1)
+                layers=s.hazards[side,index]
+                grounded=(s.ability[side,m]!=3)&(~jnp.any(s.types[side,m]==generic.TYPES['flying']))
+                rock_exp,_=generic.type_matchup(i32(generic.TYPES['rock']),s.types[side,m])
+                rock=s.stats[side,m,0]*jnp.left_shift(i32(1),jnp.maximum(0,rock_exp))//(8*jnp.left_shift(i32(1),jnp.maximum(0,-rock_exp)))
+                amount=jnp.where(index==0,rock,
+                                 s.stats[side,m,0]//jnp.maximum(1,10-2*layers))
+                c=_when((layers>0)&((index==0)|grounded)&(c[0].hp[side,m]>0),
+                        lambda c:_damage(c,side,jnp.maximum(1,amount),cause=jnp.where(index==0,4,5)),c)
+            return c
+        c=_when(entrants[side],entry,c)
+        c=_when(entrants[side]&(c[0].hp[side,c[0].active[side]]>0),lambda c:hook_ops.start(c,side,_engine()),c)
+    # Native resolves entry faint/win after the SwitchIn callbacks,
+    # before the ordinary per-action Update and pending attacks.
+    for k in range(2):
+        side=jnp.where(k==0,first,1-first);s,t=c;m=s.active[side]
+        c=_when(entrants[side]&(s.hp[side,m]==0)&(~s.fainted[side,m]),lambda c:_win(_faint(c,side),side),c)
+    return c
 
 
 def _residual(c):
@@ -739,36 +783,9 @@ def _run_queue(c):
             entrants=jnp.any(run[:,None]&(q[:,1,None]==jnp.arange(2)),axis=0).at[row[1]].set(True)
             q=jnp.where((jnp.arange(QUEUE)+count)[:,None]<s.qcount,q[jnp.minimum(jnp.arange(QUEUE)+count,QUEUE-1)],0)
             s=s._replace(queue=q,qcount=s.qcount-count)
-            speeds=s.speed[jnp.arange(2),s.active]
-            c,value=jax.lax.cond(speeds[0]==speeds[1],lambda c:_draw(c,0,2,SWITCH_SORT,2),
-                                 lambda c:(c,jnp.uint32(0)),(s,t))
-            first=jnp.where(speeds[0]==speeds[1],value.astype(jnp.int32),jnp.argmax(speeds))
-            for k in range(2):
-                side=jnp.where(k==0,first,1-first)
-                def entry(c):
-                    s,t=c;m=s.active[side]
-                    c=effects.sleep_switch(c,side,_engine());s,t=c
-                    for n in range(2):
-                        index=jnp.where(n==0,s.hazards[side,2]-1,2-s.hazards[side,2])
-                        index=jnp.clip(index,0,1)
-                        layers=s.hazards[side,index]
-                        grounded=(s.ability[side,m]!=3)&(~jnp.any(s.types[side,m]==generic.TYPES['flying']))
-                        rock_exp,_=generic.type_matchup(i32(generic.TYPES['rock']),s.types[side,m])
-                        rock=s.stats[side,m,0]*jnp.left_shift(i32(1),jnp.maximum(0,rock_exp))//(8*jnp.left_shift(i32(1),jnp.maximum(0,-rock_exp)))
-                        amount=jnp.where(index==0,rock,
-                                         s.stats[side,m,0]//jnp.maximum(1,10-2*layers))
-                        c=_when((layers>0)&((index==0)|grounded)&(c[0].hp[side,m]>0),
-                                lambda c:_damage(c,side,jnp.maximum(1,amount),cause=jnp.where(index==0,4,5)),c)
-                    return c
-                c=_when(entrants[side],entry,c)
-                c=_when(entrants[side]&(c[0].hp[side,c[0].active[side]]>0),lambda c:hook_ops.start(c,side,_engine()),c)
-            # Native resolves entry faint/win after the SwitchIn callbacks,
-            # before the ordinary per-action Update and pending attacks.
-            for k in range(2):
-                side=jnp.where(k==0,first,1-first);s,t=c;m=s.active[side]
-                c=_when(entrants[side]&(s.hp[side,m]==0)&(~s.fainted[side,m]),lambda c:_win(_faint(c,side),side),c)
-            return c
+            return _run_switch((s,t),entrants)
         c=jax.lax.switch(jnp.clip(kind-1,0,5),(before,move,swap,swap,run_switch,_residual),c)
+        c=phaze_ops.resolve(c,_engine())
         s,t=c
         # A skipped fainted action returns before the native per-action Update.
         skipped=(kind==ATTACK)&((s.active[row[1]]!=row[2])|s.fainted[row[1],row[2]])
@@ -839,10 +856,10 @@ def _supported(s,initializing=False):
             &jnp.all((s.species>=0)&(s.species<len(SPECIES)))&jnp.all(jnp.any(occupied,axis=1))
             &jnp.all((~occupied)|tables.SPECIES_IMPLEMENTED[safe_species])
             &jnp.all((s.moves>=0)&(s.moves<len(MOVE_KEYS))&(s.moves!=STRUGGLE))
-            &jnp.all((s.moves==0)|(tables.MOVE_IMPLEMENTED|field_tables.MOVE_IMPLEMENTED|hit_tables.MOVE_IMPLEMENTED|phase_ops.MOVE_IMPLEMENTED|partial_ops.MOVE_IMPLEMENTED)[jnp.clip(s.moves,0,len(MOVE_KEYS)-1)])
+            &jnp.all((s.moves==0)|(tables.MOVE_IMPLEMENTED|field_tables.MOVE_IMPLEMENTED|hit_tables.MOVE_IMPLEMENTED|phase_ops.MOVE_IMPLEMENTED|partial_ops.MOVE_IMPLEMENTED|phaze_ops.MOVE_IMPLEMENTED)[jnp.clip(s.moves,0,len(MOVE_KEYS)-1)])
             &jnp.all((s.item>=0)&(s.item<len(ITEMS)))
             &jnp.all((hook_tables.ITEM_IMPLEMENTED|hit_tables.ITEM_IMPLEMENTED|phase_ops.ITEM_IMPLEMENTED|partial_ops.ITEM_IMPLEMENTED)[jnp.clip(s.item,0,len(ITEMS)-1)])
-            &jnp.all((s.ability>=0)&(s.ability<len(ABILITIES)))&jnp.all((hook_tables.ABILITY_IMPLEMENTED|hit_tables.ABILITY_IMPLEMENTED|trap_ops.ABILITY_IMPLEMENTED)[jnp.clip(s.ability,0,len(ABILITIES)-1)])
+            &jnp.all((s.ability>=0)&(s.ability<len(ABILITIES)))&jnp.all((hook_tables.ABILITY_IMPLEMENTED|hit_tables.ABILITY_IMPLEMENTED|trap_ops.ABILITY_IMPLEMENTED|phaze_ops.ABILITY_IMPLEMENTED)[jnp.clip(s.ability,0,len(ABILITIES)-1)])
             &jnp.all((s.ivs>=0)&(s.ivs<=31))&jnp.all((s.evs>=0)&(s.evs<=255))
             &jnp.all((s.nature>=1)&(s.nature<=len(generic.NATURES)))
             &jnp.all(s.types==tables.SPECIES_TYPES[safe_species])&jnp.all((s.boosts>=-6)&(s.boosts<=6))

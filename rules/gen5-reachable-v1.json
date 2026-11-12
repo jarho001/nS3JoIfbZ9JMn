@@ -4488,10 +4488,22 @@
           "file": "data/mods/gen7/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/phazing.json.gz",
+          "native": "reference/phazing-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_phazing_engine.py"
+        }
+      ],
       "field": "onTryHit",
       "id": "abilities:soundproof:onTryHit",
-      "implementation": null,
+      "implementation": {
+        "family": "phazing",
+        "file": "simulator/phazing.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:soundproof",
@@ -4502,7 +4514,7 @@
       "owner": "abilities:soundproof",
       "reachability": "candidate",
       "sha256": "e744d863635bffdfe4cd46ee345cce0e576e98fbdcd18f23bede0f5f66abd9cc",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -4718,10 +4730,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/phazing.json.gz",
+          "native": "reference/phazing-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_phazing_engine.py"
+        }
+      ],
       "field": "onDragOut",
       "id": "abilities:suctioncups:onDragOut",
-      "implementation": null,
+      "implementation": {
+        "family": "phazing",
+        "file": "simulator/phazing.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:suctioncups",
@@ -4732,7 +4756,7 @@
       "owner": "abilities:suctioncups",
       "reachability": "candidate",
       "sha256": "7821be3249b6a4cdc04659782a2a940468f414ad0760ac153b3d15a6d5f06e18",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -70953,10 +70977,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/phazing.json.gz",
+          "native": "reference/phazing-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_phazing_engine.py"
         }
       ],
       "id": "abilities:soundproof",
       "implementation": {
+        "behavior": {
+          "family": "phazing",
+          "file": "simulator/phazing.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -71223,10 +71259,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/phazing.json.gz",
+          "native": "reference/phazing-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_phazing_engine.py"
         }
       ],
       "id": "abilities:suctioncups",
       "implementation": {
+        "behavior": {
+          "family": "phazing",
+          "file": "simulator/phazing.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"

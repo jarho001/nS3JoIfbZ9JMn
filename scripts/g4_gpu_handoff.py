@@ -25,15 +25,15 @@ MODULES = (
     'test.test_shared_engine_cases', 'test.test_shared_engine_battles',
     'test.test_shared_engine_lifecycle', 'test.test_rollout', 'test.test_g3_fixtures',
     'test.test_status_engine', 'test.test_field_engine',
-    'test.test_hook_engine', 'test.test_hit_engine', 'test.test_recharge_engine', 'test.test_lock_phase_engine', 'test.test_core_journal', 'test.test_trapping_engine', 'test.test_substitute_engine', 'test.test_partial_trap_engine',
+    'test.test_hook_engine', 'test.test_hit_engine', 'test.test_recharge_engine', 'test.test_lock_phase_engine', 'test.test_core_journal', 'test.test_trapping_engine', 'test.test_substitute_engine', 'test.test_partial_trap_engine', 'test.test_phazing_engine',
 )
 NATIVE_TESTS = (
     'test/reference.test.cjs', 'test/gen5-reachability.test.cjs',
     'test/shared-engine.test.cjs', 'test/status-duration-native.test.cjs',
     'test/field-boost-native.test.cjs',
-    'test/ability-item-native.test.cjs', 'test/hit-effect-native.test.cjs', 'test/recharge-native.test.cjs', 'test/lock-phase-native.test.cjs', 'test/g4-design-native.test.cjs', 'test/trapping-native.test.cjs', 'test/substitute-native.test.cjs', 'test/partial-trap-native.test.cjs',
+    'test/ability-item-native.test.cjs', 'test/hit-effect-native.test.cjs', 'test/recharge-native.test.cjs', 'test/lock-phase-native.test.cjs', 'test/g4-design-native.test.cjs', 'test/trapping-native.test.cjs', 'test/substitute-native.test.cjs', 'test/partial-trap-native.test.cjs', 'test/phazing-native.test.cjs',
 )
-BATCHES = {'legacy': 'all', 'hazards': 'g4', 'generic': 'generic', 'status': 'status', 'field': 'field', 'hooks': 'hooks', 'hits': 'hits', 'recharge': 'recharge', 'locks': 'locks', 'turnlimit': 'turnlimit', 'trapping': 'trapping', 'substitute': 'substitute', 'partialtrap': 'partialtrap'}
+BATCHES = {'legacy': 'all', 'hazards': 'g4', 'generic': 'generic', 'status': 'status', 'field': 'field', 'hooks': 'hooks', 'hits': 'hits', 'recharge': 'recharge', 'locks': 'locks', 'turnlimit': 'turnlimit', 'trapping': 'trapping', 'substitute': 'substitute', 'partialtrap': 'partialtrap', 'phazing': 'phazing'}
 SOURCE_PATHS = (
     'simulator', 'mechanics', 'rules', 'reference', 'test', 'environment',
     'evaluation', 'scripts', 'requirements-jax-cpu.txt', 'reference-lock.json',
@@ -67,7 +67,7 @@ def run(command, log, env, timeout, records):
     keys = ('JAX_PLATFORMS', 'CUDA_VISIBLE_DEVICES', 'OMP_NUM_THREADS', 'OPENBLAS_NUM_THREADS',
             'XLA_PYTHON_CLIENT_PREALLOCATE', 'JAX_ENABLE_COMPILATION_CACHE',
             'G3_NATIVE_CASES', 'G4_NATIVE_CASES', 'GEN5_NATIVE_CASES', 'STATUS_NATIVE_CASES',
-            'FIELD_NATIVE_CASES', 'HOOK_NATIVE_CASES', 'HIT_NATIVE_CASES', 'RECHARGE_NATIVE_CASES', 'LOCK_NATIVE_CASES', 'TURN_LIMIT_NATIVE_CASE', 'TRAP_NATIVE_CASES', 'SUB_NATIVE_CASES', 'PARTIAL_NATIVE_CASES', 'G4_PROBE_OUTPUT')
+            'FIELD_NATIVE_CASES', 'HOOK_NATIVE_CASES', 'HIT_NATIVE_CASES', 'RECHARGE_NATIVE_CASES', 'LOCK_NATIVE_CASES', 'TURN_LIMIT_NATIVE_CASE', 'TRAP_NATIVE_CASES', 'SUB_NATIVE_CASES', 'PARTIAL_NATIVE_CASES', 'PHAZE_NATIVE_CASES', 'G4_PROBE_OUTPUT')
     record = {'argv': list(map(str, command)), 'log': log.name, 'timeout_seconds': timeout,
               'environment':{key:env[key] for key in keys if key in env}}
     records.append(record)
@@ -150,7 +150,7 @@ def main(argv=None):
         env = dict(os.environ, OMP_NUM_THREADS=str(len(selected)), OPENBLAS_NUM_THREADS=str(len(selected)),
                    XLA_PYTHON_CLIENT_PREALLOCATE='false', JAX_ENABLE_COMPILATION_CACHE='false')
         # Ignore inherited test-fixture overrides; every test uses this bundle.
-        for key in ('G3_NATIVE_CASES', 'G4_NATIVE_CASES', 'GEN5_NATIVE_CASES', 'STATUS_NATIVE_CASES', 'FIELD_NATIVE_CASES', 'HOOK_NATIVE_CASES', 'HIT_NATIVE_CASES', 'RECHARGE_NATIVE_CASES', 'LOCK_NATIVE_CASES', 'TURN_LIMIT_NATIVE_CASE', 'TRAP_NATIVE_CASES', 'SUB_NATIVE_CASES', 'PARTIAL_NATIVE_CASES'):
+        for key in ('G3_NATIVE_CASES', 'G4_NATIVE_CASES', 'GEN5_NATIVE_CASES', 'STATUS_NATIVE_CASES', 'FIELD_NATIVE_CASES', 'HOOK_NATIVE_CASES', 'HIT_NATIVE_CASES', 'RECHARGE_NATIVE_CASES', 'LOCK_NATIVE_CASES', 'TURN_LIMIT_NATIVE_CASE', 'TRAP_NATIVE_CASES', 'SUB_NATIVE_CASES', 'PARTIAL_NATIVE_CASES', 'PHAZE_NATIVE_CASES'):
             env.pop(key, None)
         identity = source_identity()
         dirty = git('status','--porcelain','--untracked-files=all','--',*SOURCE_PATHS)
@@ -186,7 +186,8 @@ def main(argv=None):
                    TURN_LIMIT_NATIVE_CASE=str(out/'native-turnlimit.json'),
                    TRAP_NATIVE_CASES=str(out/'native-trapping.json'),
                    SUB_NATIVE_CASES=str(out/'native-substitute.json'),
-                   PARTIAL_NATIVE_CASES=str(out/'native-partialtrap.json'))
+                   PARTIAL_NATIVE_CASES=str(out/'native-partialtrap.json'),
+                   PHAZE_NATIVE_CASES=str(out/'native-phazing.json'))
         summary['modules'] = list(MODULES)
         summary['fixtures'] = fixtures
         summary['future_full_format_gate'] = 'Pending implementation of V7 and remaining mechanics; see docs/GPU_HANDOFF.md'
