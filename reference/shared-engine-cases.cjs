@@ -323,6 +323,7 @@ function semanticContext(draw) {
  if(draw.eventId==='WeatherChange')return 'weather-change';
  if(draw.eventId==='Weather')return 'weather-order';
  if(draw.effectId==='lockedmove')return 'rampage-duration';
+ if(draw.effectId==='sleeptalk')return 'sleep-talk-selection';
  if(draw.effectId==='slp')return 'sleep-duration';
  if(draw.effectId==='frz')return 'freeze';
  if(draw.effectId==='confusion') {

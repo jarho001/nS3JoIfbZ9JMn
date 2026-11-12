@@ -536,7 +536,7 @@
       "Schema8 recharge:four focused execution/lifecycle checks and 12 prior scalar/migration checks pass on unchanged source/fixtures;34 new scenarios/169 boundaries. Current corpus453/2524; two more constructed six-member games. GPU and full-format conformance remain pending.",
       "Schema9: hidden typed causal state, ordered attacks/counters and move snapshots; rampages/eight charge moves/semi-invulnerability/Power Herb/restrictions/flinching. Four phase execution/lifecycle checks and14 prior scalar/migration/rollout checks pass on unchanged source/fixture hashes; all526 scenarios/2895 boundaries replay exactly. No full-format acceptance, GPU or profiling."
     ],
-    "next": "Repair native long-history/turn-limit behavior and justify capacity bounds; complete Substitute boundary specification and integrate remaining reachable move/ability/item/form/calling families. Close the ledger before fixed64/128 campaigns. GPU/profiling remain deferred.",
+    "next": "Follow docs/shared-engine.md G4 architecture implementation order on Medium: shared core/lossless journal and native terminal rules; private retry/disclosure; Substitute/trapping/Pursuit; base/effective identities/item lineage; called/reflected frames; close worklists and final CPU gates. Keep GPU and profiling deferred.",
     "ledger": {
       "path": "rules/gen5-reachable-v1.json",
       "entries": 1768,
@@ -834,7 +834,22 @@
       "previous_published_head": "4248af5",
       "scope": "Schema8 forced recharge integration, CPU evidence and deferred GPU commands; publishing commit contains this record."
     },
-    "reasoning_effort": "medium (user preference,2026-11-10; no automatic escalation)"
+    "reasoning_effort": "medium (user preference,2026-11-10; no automatic escalation)",
+    "design_pass": {
+      "date": "2026-11-12",
+      "status": "architecture_decisions_recorded_not_G4_closure",
+      "reasoning": "High explicitly selected by user for design pass; repository Medium default unchanged; direct work without delegation",
+      "source_base": "e42ad98",
+      "decisions": "docs/shared-engine.md#g4-architecture-decisions--2026-11-12",
+      "evidence": "test-logs/g4-cpu-conformance/g4-design-record.json",
+      "implemented_runtime_change": false,
+      "next_effort": "Medium for documented implementation order; return to High only for an unclassified identity/call edge or concrete unresolved semantic/design blocker",
+      "remaining_proofs": [
+        "Generator eligibility and complete engine/rule/helper dependency closure; initial absence is not final exclusion",
+        "Final per-advance event/draw/queue/call-stack and attackedBy capacity bounds",
+        "Native branches and interactions for newly implemented families"
+      ]
+    }
   },
   "optional_gpu_validation_history": [
     {

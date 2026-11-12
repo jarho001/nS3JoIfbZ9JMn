@@ -367,3 +367,24 @@ Attach the printed `.tar.gz` (or make its directory available), then use:
 The travel deferral does not block the active CPU goal or waive G4 GPU release
 evidence. Update this same document and the compact deferred-GPU record as new
 G3/G4 work adds obligations; do not create a handoff per mechanic.
+
+## Architecture pass: future device obligations
+
+The [2026-11-12 decisions](shared-engine.md#g4-architecture-decisions--2026-11-12)
+add no implemented GPU tests yet. The current 61-check runner scope is unchanged.
+Once implemented, extend that same runner with core/journal full-versus-lean
+parity across 16-boundary chunk flushes, save/restore including private disclosure
+and journal pages, and mixed-lane called/reflected/transformed states. Verify
+recipient histories and per-lane isolation as well as mechanics; never accept
+truncated journals or a missing-page resume. Keep all JIT kernels device-resident
+inside a chunk. These commands remain pending until those tests are implemented
+and included in the runner; do not infer device correctness from native probes.
+
+The design evidence itself can be checked now on CPU without JAX or profiling:
+
+```sh
+node --test test/g4-design-native.test.cjs test/gen5-reachability.test.cjs test/shared-engine.test.cjs
+```
+
+This command passed five native/source-contract checks. Its five constructed
+native cases are design witnesses, not additions to the 526 implemented JAX cases.

@@ -1,0 +1,13 @@
+✔ design source frontier reproduces with typed query and mutation obligations (1375.26624ms)
+✔ native witnesses preserve hidden-trap retry disclosure and Transform identity (447.890904ms)
+✔ pinned resolved export and conservative inventory reproduce exactly (2103.464324ms)
+✔ native BattleStream replacement/undo and direct snapshots share recipient boundaries (503.940188ms)
+✔ native paired histories hide reserves, items and pending opposing choice (5.936916ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4703.372091

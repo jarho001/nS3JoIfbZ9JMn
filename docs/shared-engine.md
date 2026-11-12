@@ -226,3 +226,195 @@ the reachable-mechanics audit, long-history capacity gap or full-format G4 gates
 The [schema9 CPU checkpoint](../test-logs/g4-cpu-conformance/schema9-checkpoint.json)
 records 18 affected checks and exact scalar replay of 526 scenarios and 2895 boundaries.
 The full 61-check checkpoint suite and full-format G4 gates remain pending.
+
+## G4 architecture decisions — 2026-11-12
+
+This is the design pass for the remaining CPU goal on engine `567f02c` /
+record `e42ad98`. It does not enable mechanics or accept G4. The user selected
+High for this pass; the repository's Medium default remains unchanged.
+Independent source and native evidence are frozen in
+[g4-design-frontier.json.gz](../test-logs/g4-cpu-conformance/g4-design-frontier.json.gz)
+and [g4-design-native.json.gz](../test-logs/g4-cpu-conformance/g4-design-native.json.gz).
+Reproduce them with `reference/gen5-closure-audit.cjs OUTPUT.json` and
+`reference/g4-design-cases.cjs OUTPUT.json`, run through Node. Both refuse to
+overwrite an existing output. `test/g4-design-native.test.cjs` checks reproduction.
+
+### Reachability and exclusions
+
+Use a typed dependency worklist. Keep four independent facts per entry:
+identity candidate/reachability, callback execution or query precondition,
+implementation coverage, and independent validation. A partial implementation
+mapping never proves reachability, and candidate absence never proves exclusion.
+The existing ledger remains open; its callback totals are a conservative universe,
+not a percentage of the game completed.
+
+The audited initial bounds are 223 move IDs, 127 ability IDs and 45 possible item
+IDs from generator return expressions. Generator eligibility remains a separate
+proof obligation. Add implicit Struggle. Nature Power calls Earthquake; Sleep
+Talk selects eligible current move slots, including virtual slots after Transform.
+Transform and Imposter copy existing opposing move IDs rather than draw arbitrary
+Dex moves. Pursuit reuses its queued move, and Magic Bounce reuses the incoming
+move with `hasBounced` preventing repeated reflection. Do not expand to every
+Dex move merely because these mechanisms exist.
+
+Metronome, Assist, Sketch, Copycat, Mimic, Mirror Move, Me First and Instruct are
+absent from the initial move bound. This is a checked initial fact, **not yet a
+transitive exclusion**. The expanded audit enumerates mutations/calls in root
+moves, abilities, items, discovered conditions and exported rules. Resolve every
+computed argument and helper/engine edge before promoting absence to exclusion.
+The previous narrower scan missed obligations such as Color Change, Cursed Body,
+Bug Bite/Pluck and Knock Off. Literal method scanning alone cannot close the graph.
+
+Track item lineage separately from current ownership: Trick/Switcheroo transfer
+existing items; consumption/removal, Bug Bite/Pluck and Harvest need original
+item identity, last item and berry-use provenance. Do not infer that an item
+mentioned in an immunity check can be created. Any Leppa/restoration or endlessly
+recycled-item exclusion requires this complete lineage proof, not sampled teams.
+Forms need explicit species guards and transition outputs: Forecast/Castform,
+Flower Gift/Cherrim, Relic Song/Meloetta, Multitype/type and initial forme helpers.
+Transform/Illusion expose current/apparent species without granting arbitrary
+forme abilities. Keep dynamic form edges open until their guards are audited.
+
+**Engine queries are separate roots.** `Battle.nextTurn` invokes
+`FoeMaybeTrapPokemon` on alternate abilities of a foe's apparent species, subject
+to its rule/release checks. The audit finds Arena Trap, Magnet Pull and Shadow Tag
+queries. These callbacks can affect disclosure even when the actual ability is
+Frisk or another non-trapping ability. Querying them does not make those ability
+IDs transferable by Trace. Use current/apparent species for this lookup, preserve
+unknown-type conditions and Gen5 rules; Ghost immunity to trapping must not be
+imported from later generations. The native Frisk/Gothitelle and Ghost/Shadow Tag
+witnesses establish these distinctions on constructed sets, not generator membership.
+
+Medium implementation should discharge one worklist edge with its source hash,
+argument bound/precondition and native witness at a time. An unclassified identity
+creator or recursive call edge is the reason to return to High. Do not require
+High for routine callback implementation once those edges are classified.
+
+### History, capacity and terminal behavior
+
+**Separate mechanical state from the lossless event journal before increasing
+full-battle history arrays.** Keep one transition kernel and one numeric event
+format. A new core advance returns the mechanical/request state and bounded
+trace; the existing full-history API becomes a compatibility adapter over that
+same kernel. No second mechanics implementation or altered policy observations.
+Version this state/API migration explicitly; historical schema9 evidence stays
+attached to its original source.
+
+Keep immutable journal pages outside the scan carry. Use the already approved
+16-boundary conformance chunk, a page budget of `16 * E` event rows per lane,
+and flush initialization separately; `E` is the audited per-advance event bound.
+The current `E=128` is provisional. Pages may remain on device until the chunk
+boundary; no host callback is required inside JIT. A chunk boundary is not a
+battle terminal. GPU policies consume recipient-safe requests/events inside the
+chunk; journal persistence and CPU differential comparison happen between chunks.
+The compatibility adapter must reconstruct the complete player history, including
+after save/restore. Full and lean rollout modes use the same core and differ only
+in explicitly retained outputs. Default lean carry must not contain whole-game
+history or allocate all intermediate core states.
+
+The authoritative checkpoint is `(core, private request/disclosure state, journal
+pages/cursor, generation/episode)`. Commit all outputs transactionally; failure
+must not append half a trace. Never evict a page silently or substitute a digest
+for required history. Digests validate resumed pages but do not replace them.
+Persist enough event-time identity/display information for Transform and Illusion;
+rendering old events against the final transformed species can corrupt history.
+A legacy schema9 save is valid input to the migration only with its complete
+recorded prefix; absent pages or causal state require replay/provenance.
+
+This avoids guessing a whole-battle event constant from the 6541-row generated
+witness (or the 6041-row neutral witness). Do not enlarge 2048 to an arbitrary
+power of two and call the capacity audit done. The 4096 campaign boundary cap
+bounds a test run, not native game semantics. Audit queue, draw, trace, call-frame,
+volatile and attack-record capacities separately. Retain atomic guarded failures
+until each accepted bound has a source proof; a required reachable overflow still
+fails G4. The existing 1024 attack records are not an accepted final bound.
+Do not replace ordered `attackedBy` with only the latest hit without proving all
+consumers, including Assurance/Avalanche/Revenge, Counter/Mirror Coat and abilities.
+
+Use an explicit bounded active-move frame stack, not Python recursion or another
+queued turn, for called/reflected moves. Frame fields include source effect,
+actor/target, original chosen target location, active-move mutation flags,
+PP/action-accounting mode, and return phase. Sleep Talk -> Taunt -> Magic Bounce reflection
+requires three frames including the outer move. Nature Power -> Earthquake is
+a separate two-frame path: Gen5 Nature Power has `nosleeptalk`, so Sleep Talk
+cannot select it. The called/reflected native witness also checks PP accounting.
+Three is a witnessed structural requirement,
+not a final bound until all call edges and interrupted Pursuit paths are closed.
+Charge locks/rampages reuse the ordinary scheduler. Never charge called-move PP
+or increment root action counters by applying `runMove` rules indiscriminately
+to `useMove`; pinned `BattleActions` distinguishes those paths.
+
+Implement native turn-limit behavior at the next-turn boundary: increment/reset
+causal fields, evaluate clauses, then emit a turn/request only if still live.
+Warnings occur at 500/600/700/800, every ten turns from 900, and every turn from
+990 through 1000. At turn 1001 emit the native message and tie before another
+turn event/request. Preserve exact ordering and recipient histories from the
+existing witnesses. Earlier Endless Battle Clause outcomes require staleness and
+item/PP-restoration provenance; implementing the hard turn limit alone does not
+close terminal rules.
+
+### Mutable identity and retry disclosure
+
+Store immutable original set/base identity separately from mutable battle
+identity: base species/stats/ability/move slots versus effective species, non-HP
+stats, types, ability and virtual move slots. Keep stable team indices for source
+references across switches, forms, Transform and Illusion. Base identity is not
+necessarily player-visible identity. Current single arrays cannot safely serve
+all three purposes.
+
+The native Transform witness keeps Mew's HP/max HP, level and Gen5 Hidden Power
+identity, copies Snorlax's non-HP stats/ability/moves, installs virtual PP capped
+at five, and retains original `baseAbility`. Implement native failure guards,
+boost and `timesAttacked` copying, virtual move metadata, reset on switch and
+ability End/Start ordering. Add capture fields for original/virtual state,
+transformed and illusion identity before differential acceptance. Item/form-driven
+base changes must follow native permanence flags; a generic switch reset must
+not undo permanent changes. Save/restore must retain both identities.
+
+**A native unavailable choice can change private disclosure without advancing
+the battle.** In the frozen hidden-Shadow-Tag witness, `switch 2` is rejected,
+RNG/draws stay unchanged and the mechanical `trapped` value remains `hidden`,
+but the player's request changes from `maybeTrapped` to `trapped` and a private
+error/resend is emitted. This is observable state, not removable transport noise.
+
+Add an explicit retry/disclosure result (for example `RETRY`) distinct from
+syntactic `INVALID`, stale tokens, unsupported mechanics and capacity failures.
+Keep existing no-change guarantees for those errors. For a native retry, preserve
+mechanics and RNG while updating only the affected private request/disclosure
+and native commitment state; retain the opponent's accepted commitment exactly.
+Specify token advancement and reset behavior before exposing the API: advance
+the episode token for any accepted private-state transition so old request tokens
+cannot apply to a new disclosure revision. This is adapter bookkeeping, not a
+native battle RNG/action increment. Use ordered per-side submissions for retry
+fixtures, never an ambiguous mixed invalid/valid atomic batch. Existing commands
+remain compatible; add the result handling to rollout/policy adapters explicitly.
+
+Trapping state needs source/escape conditions, effective hidden trap truth,
+`maybeTrapped`/`maybeLocked`/`maybeDisabled` and recipient disclosure state. Do not
+compute all legal switch availability from publicly disclosed `request.trapped`.
+Keep the distinction between selectable candidates, privately rejected commands
+and actions that actually resolve. Return to native cases for switch/undo/retry,
+Pursuit, pivot and forced replacement interactions; do not reveal an opponent's
+ability simply to make an action mask exact.
+
+### Implementation order and acceptance
+
+1. Implement the shared core/journal adapter and native turn-limit path; replay
+   both long witnesses to genuine terminal with exact RNG, requests and histories.
+   Check chunk continuation, save/restore and atomic page failures on CPU.
+2. Add private retry/disclosure state and results; cover Frisk query, actual hidden
+   traps, Gen5 Ghost, rejected switch followed by a valid choice, undo and an
+   already-pending opponent. Preserve existing INVALID/stale/overflow guarantees.
+3. Integrate Substitute/per-hit interception, trapping/phazing and interrupted
+   Pursuit/pivots. Extend native branch/interaction witnesses before implementation.
+4. Introduce base/effective/virtual identity, ability lifecycle and item provenance;
+   implement Transform/Imposter/Illusion, forms, transfer/consumption/restoration.
+5. Execute called/reflected moves with the shared frame stack. Close identity,
+   callback/query and engine/rule worklists; prove each final capacity or keep it open.
+6. Freeze the candidate and run the existing full directed, eager/JIT/1/8/32,
+   lifecycle, 64-development and 128-held-out gates unchanged. Do not open held-out
+   starts to develop these designs. Later GPU correctness remains in GPU_HANDOFF.
+
+These decisions are ready for Medium implementation. Unknown native branches
+remain evidence obligations, not architecture debates to settle by approximation.
+No throughput claim or profiling run is needed for this pass.

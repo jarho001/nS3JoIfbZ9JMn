@@ -1,0 +1,36 @@
+{
+  "status": "design_decisions_recorded_not_full_closure_or_G4_acceptance",
+  "date": "2026-11-12",
+  "source_base": "e42ad98",
+  "pin": "1242c1e2d9763ba5b85d33f13aecb89bae19ae3d",
+  "engine_changed": false,
+  "native_witness_cases": 5,
+  "native_witness_boundaries": 4,
+  "generator_membership_proven": false,
+  "checks": {
+    "command": "node --test test/g4-design-native.test.cjs test/gen5-reachability.test.cjs test/shared-engine.test.cjs",
+    "passed": 5,
+    "log": "g4-design-contracts.log"
+  },
+  "source_and_fixture_sha256": {
+    "reference/gen5-closure-audit.cjs": "0aa3da1b9b98641bad4ef1fbf98cb94cb330267da0477cdee3479a42c0d1b059",
+    "reference/g4-design-cases.cjs": "53bc144201621ce05465365a93e9ca3e80e1a91c91710c13a03602a6c5f61273",
+    "reference/shared-engine-cases.cjs": "d4fc8ef1b227686cd3f6842cdb32d5687093841acd9846dfc7206809b045d830",
+    "test/g4-design-native.test.cjs": "a2d3740117c865f7e36e9233dddb0b9b2cf6f5b77e053e56a77942331d2bad13",
+    "test-logs/g4-cpu-conformance/g4-design-frontier.json.gz": "6aa9deeab23c4c648d8028cfd5014edbe58dff14fdd9c28dd319b75f28207ff7",
+    "test-logs/g4-cpu-conformance/g4-design-native.json.gz": "fe1b9e5af362b16b454dfd5f583ac5e59bc56d12cc944817324b39a07630daee"
+  },
+  "audit": {
+    "mutation_sites": 47,
+    "species_trap_query_edges": 6,
+    "initial_moves": 223,
+    "initial_abilities": 127,
+    "initial_items_upper_bound": 45,
+    "complete_closure": false
+  },
+  "decisions": "docs/shared-engine.md#g4-architecture-decisions--2026-11-12",
+  "gpu_executed": false,
+  "profiling_executed": false,
+  "jax_regressions_rerun": false,
+  "historical_cpu_evidence": "schema9-checkpoint.json remains attached to its original exact source; design source/capture additions do not constitute a new full matching-source runtime gate."
+}

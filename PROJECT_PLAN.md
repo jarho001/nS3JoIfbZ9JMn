@@ -822,6 +822,14 @@ add a fresh campaign or claim statistical strength. Progress survives interrupti
 only with unchanged relevant source/fixture/config/policy hashes; invalidated
 shards rerun after relevant repairs. No endless automatic campaign repetition.
 
+The 2026-11-12 High design pass records the remaining implementation decisions in
+[the shared-engine architecture decisions](docs/shared-engine.md#g4-architecture-decisions--2026-11-12).
+Implement the shared core/lossless journal, native terminal path and private retry
+state before identity/calling families. An unavailable native command that updates
+private disclosure is a distinct retry transition; existing syntactic INVALID,
+stale, unsupported and overflow no-change guarantees remain required. This
+clarifies exact native parity and does not accept inventory, capacities or G4.
+
 ### Integrated checkpoints and stopping
 
 1. **Inventory and generic schema:** enumerate the pinned generator/effect roots,

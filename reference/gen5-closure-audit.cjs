@@ -130,8 +130,48 @@ while(priorOwners!==seenOwners.size){
 const conditionClosure={status:'provisional_dynamic_edges_and_engine_paths_pending',
  ids:[...conditionIds].sort(),edges:conditionEdges,dynamicEdges:dynamicConditionEdges,unresolvedDynamicEdges:dynamicConditionEdges.filter(e=>!e.resolution),
  note:'Static methods/declarative fields are a conservative discovery fixed point, not complete dependency acceptance. Audit computed arguments, state-installed species/rule hooks and all engine entry paths before exclusions.'};
+// Architecture audit: distinguish executed ability roots from engine queries.
+// Querying a species' alternate trapping ability does not grant that ability.
+const queryAbilities=[];
+for(const id of speciesForms){
+ const species=dex.species.get(id);
+ for(const name of Object.values(species.abilities??{})){
+  const ability=dex.abilities.get(name);
+  if(typeof ability.onFoeMaybeTrapPokemon==='function')queryAbilities.push({species:id,ability:ability.id,
+   callbackSha256:sha(ability.onFoeMaybeTrapPokemon.toString()),actualRoot:abilities.includes(ability.id)});
+ }
+}
+const mutationMethods=new Set(['useMove','runMove','transformInto','setAbility','setItem','takeItem',
+ 'formeChange','setSpecies','setType','addType','clearVolatile','addVolatile','addSideCondition','addSlotCondition']);
+const mutationSites=[];
+function frontier(value,owner,field=''){
+ if(typeof value==='function'){
+  const text=value.toString();let tree;
+  try{tree=acorn.parse('({'+text+'})',{ecmaVersion:'latest'});}catch{tree=acorn.parse('('+text+')',{ecmaVersion:'latest'});}
+  walk(tree,node=>{
+   if(node.type!=='CallExpression'||node.callee.type!=='MemberExpression')return;
+   const name=node.callee.property.name;if(!mutationMethods.has(name))return;
+   mutationSites.push({owner,field,method:name,callbackSha256:sha(text),
+    literalArguments:strings(node.arguments[0]),argumentKind:node.arguments[0]?.type??'missing'});
+  });return;
+ }
+ if(value&&typeof value==='object')for(const [key,child]of Object.entries(value))if(key!=='ruleTable')frontier(child,owner,field?field+'.'+key:key);
+}
+for(const id of moves)frontier(dex.moves.get(id),'moves:'+id);
+for(const id of abilities)frontier(dex.abilities.get(id),'abilities:'+id);
+for(const id of literalItems)frontier(dex.items.get(id),'items:'+id);
+for(const id of conditionIds)frontier(dex.conditions.get(id),'conditions:'+id);
+for(const row of require('../rules/gen5-data-v1.json').rules)frontier(dex.formats.get(row.id),'rules:'+row.id);
+const engineFiles=['sim/battle.ts','sim/battle-actions.ts','sim/pokemon.ts','sim/side.ts','sim/field.ts'];
+const designFrontier={status:'source_frontier_not_complete_closure_proof',
+ engineSources:Object.fromEntries(engineFiles.map(file=>[file,sha(fs.readFileSync(path.join(__dirname,'vendor/pokemon-showdown',file)))])),
+ implicitMoveRoots:['struggle'],queryAbilities,mutationSites,
+ sleepTalkEligibility:Object.fromEntries(moves.map(id=>[id,!dex.moves.get(id).flags.nosleeptalk&&!dex.moves.get(id).flags.charge])),
+ absentInitialMoveNames:['metronome','assist','sketch','copycat','mimic','mirrormove','mefirst','instruct'].filter(id=>!moves.includes(id)),
+ absentInitialAbilityNames:['dancer'].filter(id=>!abilities.includes(id)),
+ note:'Initial absence is checked, not promoted to transitive exclusion. Resolve every mutation site, helper and engine/rule edge before closing the ledger. Query-only abilities add callback obligations, not transferable ability identities.'};
 const output={status:'provisional_source_bound_not_full_reachability_acceptance',pin:require('../reference-lock.json').commit,
- conditionClosure,rootMoveIds:moves,rootAbilityIds:abilities,initialFormBound:[...speciesForms].sort(),initialItemReturnBound:[...literalItems].sort(),methodEvidence,
+ designFrontier,conditionClosure,rootMoveIds:moves,rootAbilityIds:abilities,initialFormBound:[...speciesForms].sort(),initialItemReturnBound:[...literalItems].sort(),methodEvidence,
  indirectMoveCallbacks:calls,indirectAbilityCallbacks:abilityEdges,
  findings:['230 set-file spellings resolve to223 move IDs. The only direct calling/copy roots among the candidate pools are Nature Power, Sleep Talk and Transform; broad Metronome/Assist/Sketch/Copycat expansion is not justified by these roots.',
  'Pinned Gen5 Nature Power calls Earthquake. Sleep Talk selects from the user set; Transform/Imposter copy opponent moves. Pursuit and Magic Bounce reuse existing move IDs. These observations still require a complete source/engine/ability/item closure audit before exclusions enter the accepted ledger.',
