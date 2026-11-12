@@ -91,7 +91,7 @@ def project_events(state,trace,audience):
             if kind==e.DAMAGE and move in (11,12,13,14):line+='|[of] '+foe
             if kind==e.HEAL and move:line+='|[silent]' if move==-1 else '|[from] ability: Ice Body' if move==2 else '|[from] drain|[of] '+foe if move==3 else '|[from] item: Leftovers'
         elif kind==e.CRIT:line=f'|-crit|{actor}'
-        elif kind==e.IMMUNE:line=f'|-immune|{actor}'+({0:'',1:'|[from] ability: Immunity',2:'|[from] ability: Levitate',3:'|[from] ability: Soundproof'}[aux])
+        elif kind==e.IMMUNE:line=f'|-immune|{actor}'+('|[from] ability: '+e.hook_tables.ABILITY_NAMES[value]if aux==4 else {0:'',1:'|[from] ability: Immunity',2:'|[from] ability: Levitate',3:'|[from] ability: Soundproof'}[aux])
         elif kind==e.MISS:line=f'|-miss|{actor}|{foe}'
         elif kind==e.FAINT:line=f'|faint|{actor}'
         elif kind==e.TURN_WARNING:
@@ -101,6 +101,8 @@ def project_events(state,trace,audience):
         elif kind==e.WIN:line=f'|win|p{value}' if value else '|tie'
         elif kind==e.TURN:line=f'|turn|{value}'
         elif kind==e.UPKEEP:line='|upkeep'
+        elif kind==e.STATUS_ABILITY:line=f'|-activate|{actor}|ability: '+e.hook_tables.ABILITY_NAMES[value]
+        elif kind==e.REST_ABILITY:line=f'|-fail|{actor}|[from] ability: '+e.hook_tables.ABILITY_NAMES[value]+f'|[of] {actor}'
         elif kind==e.ABILITY_CHANGE:line=f'|-ability|{actor}|'+e.hook_tables.ABILITY_NAMES[value]+'|'+e.hook_tables.ABILITY_NAMES[aux]+f'|[from] move: {name}|[of] {foe}'
         elif kind==e.ABILITY_SWAP:line=f'|-activate|{actor}|Skill Swap|'+e.hook_tables.ABILITY_NAMES[value]+'|'+e.hook_tables.ABILITY_NAMES[aux]+f'|[of] {foe}'
         elif kind==e.FORM_CHANGE:line=f'|-formechange|{actor}|'+e.SPECIES[value]+('|[msg]' if status in (0,1) else '|[silent]'if status==3 else '|')+('|[from] ability: '+e.hook_tables.ABILITY_NAMES[aux]if aux else '')
@@ -205,9 +207,9 @@ def load_state(path,*,schema=None,replayed_state=None):
         stored=int(saved['schema']) if 'schema' in saved else None
         if schema is not None and stored is not None and stored!=schema:raise ValueError('schema mismatch')
         version=stored if schema is None else schema
-        if version not in (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21):raise ValueError('explicit supported state schema required')
+        if version not in (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22):raise ValueError('explicit supported state schema required')
         fields={k:jnp.asarray(saved[k]) for k in saved.files if k not in ('schema','data_sha256')}
-        if version in (3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21):
+        if version in (3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22):
             if 'data_sha256' not in saved or str(saved['data_sha256'])!=generic.DATA_SHA256:
                 raise ValueError('state data table identity mismatch')
         if version<21 and replayed_state is not None:
@@ -385,7 +387,7 @@ def effect_states(state,side,mon):
         if 15<=kind<=18:
             row['name']=e.MOVE_NAMES[tables.MOVE_IDS[key]]
             if kind!=18:row['duration']=time
-            if kind in (16,17,18,19,20,21):row['move']=e.MOVE_KEYS[int(s.volatile_state[side,mon,kind,7])]
+            if kind in (16,17,18,19,20,21,22):row['move']=e.MOVE_KEYS[int(s.volatile_state[side,mon,kind,7])]
         volatiles[key]=row
     return {'statusState':status,'volatiles':volatiles,
         'abilityState':{'id':e.ABILITIES[int(s.ability_effect_id[side,mon])],'effectOrder':int(s.ability_order[side,mon]),'target':target},

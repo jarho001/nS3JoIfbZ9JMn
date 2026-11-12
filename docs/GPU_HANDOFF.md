@@ -7,6 +7,15 @@ GPU. Preparing this handoff does not run device tests, profiling or benchmarks.
 
 ## Current source and evidence
 
+**Schema22 status immunity checkpoint:** focused CPU parity passed18
+scenarios/39 boundaries in195.922s; one native contract passed.
+Status prevention, acquisition cures before queued actions, simultaneous cure order,
+Rest denial and live NPZ/journal10 persistence are covered.
+See [schema22-checkpoint.json](../test-logs/g4-cpu-conformance/schema22-checkpoint.json).
+The runner includes `test.test_status_immunity_engine` and the `statusimmunity` batch.
+Isolated replay: `JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_status_immunity_engine -v -f`.
+Broad execution/migration and current runner preparation remain pending.
+
 **Schema21 ability exchange checkpoint:** focused CPU parity passed29 scenarios/58
 boundaries in176.860s; one native contract passed. Role Play, Skill Swap and
 Entrainment cover callback order, original private ability, Illusion End,
@@ -160,8 +169,8 @@ The entire matching-source 61-check suite has not been repeated. Historical
 schema8 results remain in
 [schema8-checkpoint.json](../test-logs/g4-cpu-conformance/schema8-checkpoint.json).
 
-The expanded runner expects **82 checks in 26 isolated modules**, using twenty-one
-independent native corpora: **814 scenarios / 4722 boundaries**, including
+The expanded runner expects **83 checks in 27 isolated modules**, using 22
+independent native corpora: **832 scenarios / 4761 boundaries**, including
 32 complete constructed six-member combat games (plus the neutral switch-only
 turn-limit game and eight historical three-member games). The 73 phase scenarios are in
 `test.test_lock_phase_engine`. The runner recaptures causal state for the prior
@@ -227,7 +236,7 @@ the combined block below:
 2. Freezes all sixteen legacy/current corpora, including move phases, the
    turn-limit witness, trapping/retries, Substitute and partial trapping. Runs the reference/native
    contracts. Unknown/unsupported families stay explicit.
-3. Runs the same current 82-check scope on CPU, then under `JAX_PLATFORMS=cuda`,
+3. Runs the same current 83-check scope on CPU, then under `JAX_PLATFORMS=cuda`,
    with each test module in a fresh process.
    A strict probe verifies actual eager/JIT GPU placement; shared case/lifecycle
    assertions also check device leaves. `cuda` initialization failure is a failure.

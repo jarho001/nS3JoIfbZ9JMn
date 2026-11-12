@@ -14,7 +14,7 @@ Full-format G4
 coverage remains separate acceptance work. Historical evidence keeps its original
 source/schema identity; it does not imply validation of later engine changes.
 
-The current runtime uses [schema 21](../rules/shared-engine-v21.json). Schemas
+The current runtime uses [schema 22](../rules/shared-engine-v22.json). Schemas
 4–6 integrated major statuses and effect provenance, boosts/weather/screens,
 and observed ability/item hooks. Schema7 adds declarative hit counts, per-hit
 updates, capped drain/recoil arithmetic, self-destruction and reactive damage.
@@ -624,3 +624,9 @@ saved continuation. Skill Swap starts the recipient of the source ability first;
 acquiring Imposter does not invoke its SwitchIn callback. Move protection respects
 the resolved move flag. Journal10 binds ability provenance. Focused29/58 CPU parity
 passes; suppression/ability creation and broad/full-format gates remain pending.
+
+Schema22 adds six status-immunity abilities and acquisition-time Update cures.
+The shared Update scheduler visits holders in native speed/shuffle order. Rest
+respects Insomnia/Vital Spirit; primary and secondary prevention retain exact
+visibility and RNG. Focused18/39 CPU parity and live persistence pass. Yawn/Own
+Tempo, broad execution/migration and full G4 conformance remain pending.

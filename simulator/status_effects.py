@@ -71,7 +71,7 @@ def inflict(c,source,target,status,e,reflect=True,move=0,secondary=False,overwri
     ice=jnp.any(s.types[target,m]==e.generic.TYPES['ice'])
     freeze_weather=(s.weather_state[0]==2)
     natural_immunity=(((status==e.TOX)|(status==e.PSN))&poison)|((status==e.BRN)&fire)|((status==e.FRZ)&ice)
-    immunity=natural_immunity|(((status==e.TOX)|(status==e.PSN))&(ability==2))|((status==e.FRZ)&freeze_weather)
+    immunity=natural_immunity|e.immunity_ops.blocks(ability,status,e)|((status==e.FRZ)&freeze_weather)
     failed=(s.status[target,m]!=e.NONE)&(~jnp.asarray(overwrite))
     asleep=(s.status[target]==e.SLP)&(s.status_state[target,:,2]!=target)
     clause=(status==e.SLP)&(source!=target)&jnp.any(asleep)
@@ -88,7 +88,7 @@ def inflict(c,source,target,status,e,reflect=True,move=0,secondary=False,overwri
         return e._event(c,e.SLEEP_CLAUSE,value=1)
     def blocked(c):
         if secondary:return c
-        return e._event(c,e.IMMUNE,target,m,aux=jnp.where((ability==2)&((status==e.TOX)|(status==e.PSN)),1,0))
+        return e._event(c,e.IMMUNE,target,m,value=jnp.where(e.immunity_ops.blocks(ability,status,e),ability,0),aux=jnp.where((ability==2)&((status==e.TOX)|(status==e.PSN)),1,jnp.where(e.immunity_ops.blocks(ability,status,e),4,0)))
     def apply(c):
         s,t=c
         meta=jnp.stack((status,s.effect_order,source,sm,e.i32(1),e.i32(-1),e.i32(-1)))
@@ -206,4 +206,4 @@ def rest(c,actor,move_row,e):
         # Rest installs its fixed timers after the immediate Lum update.
         s=s._replace(status_state=s.status_state.at[actor,m,5:7].set(3),hp=s.hp.at[actor,m].set(maxhp))
         return e._event((s,t),e.HEAL,actor,m,value=maxhp,aux=maxhp,status=s.status[actor,m],move=-1)
-    return jax.lax.cond(hp==maxhp,fail,success,c)
+    return jax.lax.cond(hp==maxhp,fail,lambda c:jax.lax.cond(e.immunity_ops.SLEEP[c[0].ability[actor,m]],lambda c:e.immunity_ops.rest_fail(c,actor,e),success,c),c)

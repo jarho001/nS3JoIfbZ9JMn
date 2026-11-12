@@ -1988,17 +1988,17 @@
       ],
       "evidence": [
         {
-          "fixture": "test-logs/g4-cpu-conformance/status-v5.json.gz",
-          "native": "reference/status-duration-cases.cjs",
+          "fixture": "test-logs/g4-cpu-conformance/status-immunity.json.gz",
+          "native": "reference/status-immunity-cases.cjs",
           "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
-          "test": "test/test_status_engine.py"
+          "test": "test/test_status_immunity_engine.py"
         }
       ],
       "field": "onSetStatus",
       "id": "abilities:immunity:onSetStatus",
       "implementation": {
-        "family": "status",
-        "file": "simulator/status_effects.py",
+        "family": "status_immunity",
+        "file": "simulator/status_immunity.py",
         "scheduler": "simulator/shared_engine.py",
         "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
       },
@@ -2021,10 +2021,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-immunity.json.gz",
+          "native": "reference/status-immunity-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_immunity_engine.py"
+        }
+      ],
       "field": "onUpdate",
       "id": "abilities:immunity:onUpdate",
-      "implementation": null,
+      "implementation": {
+        "family": "status_immunity",
+        "file": "simulator/status_immunity.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:immunity",
@@ -2035,7 +2047,7 @@
       "owner": "abilities:immunity",
       "reachability": "candidate",
       "sha256": "ab8291d075cff55a06f2a08cfc2c25dbd47cd853dfc64be0389f640d9ed4e819",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -2125,10 +2137,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-immunity.json.gz",
+          "native": "reference/status-immunity-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_immunity_engine.py"
+        }
+      ],
       "field": "onSetStatus",
       "id": "abilities:insomnia:onSetStatus",
-      "implementation": null,
+      "implementation": {
+        "family": "status_immunity",
+        "file": "simulator/status_immunity.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:insomnia",
@@ -2139,7 +2163,7 @@
       "owner": "abilities:insomnia",
       "reachability": "candidate",
       "sha256": "d560339e8478abaf15989c37dea93a80c67b75c74c2dff1a247f9db46d344150",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -2171,10 +2195,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-immunity.json.gz",
+          "native": "reference/status-immunity-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_immunity_engine.py"
+        }
+      ],
       "field": "onUpdate",
       "id": "abilities:insomnia:onUpdate",
-      "implementation": null,
+      "implementation": {
+        "family": "status_immunity",
+        "file": "simulator/status_immunity.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:insomnia",
@@ -2185,7 +2221,7 @@
       "owner": "abilities:insomnia",
       "reachability": "candidate",
       "sha256": "259090f315b83537cc5d7091bc08a37a051007304d7392fb6e8ac90a5d4fca66",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -2471,10 +2507,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-immunity.json.gz",
+          "native": "reference/status-immunity-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_immunity_engine.py"
+        }
+      ],
       "field": "onSetStatus",
       "id": "abilities:limber:onSetStatus",
-      "implementation": null,
+      "implementation": {
+        "family": "status_immunity",
+        "file": "simulator/status_immunity.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:limber",
@@ -2485,7 +2533,7 @@
       "owner": "abilities:limber",
       "reachability": "candidate",
       "sha256": "60da459401ee4a61664e9e02b30d4e3f6694151655c5e63f2aad5c64a33f5bc4",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -2494,10 +2542,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-immunity.json.gz",
+          "native": "reference/status-immunity-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_immunity_engine.py"
+        }
+      ],
       "field": "onUpdate",
       "id": "abilities:limber:onUpdate",
-      "implementation": null,
+      "implementation": {
+        "family": "status_immunity",
+        "file": "simulator/status_immunity.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:limber",
@@ -2508,7 +2568,7 @@
       "owner": "abilities:limber",
       "reachability": "candidate",
       "sha256": "087c0d1cbf7a25ef68b740a4f53bfdb778edd7319dd717c9a78136fb0e4bc6e9",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -2621,10 +2681,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-immunity.json.gz",
+          "native": "reference/status-immunity-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_immunity_engine.py"
+        }
+      ],
       "field": "onImmunity",
       "id": "abilities:magmaarmor:onImmunity",
-      "implementation": null,
+      "implementation": {
+        "family": "status_immunity",
+        "file": "simulator/status_immunity.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:magmaarmor",
@@ -2635,7 +2707,7 @@
       "owner": "abilities:magmaarmor",
       "reachability": "candidate",
       "sha256": "ea8f74228bafd9bd47b270620d8148cc3eba508544dded73d899a6c76d81b918",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -2644,10 +2716,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-immunity.json.gz",
+          "native": "reference/status-immunity-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_immunity_engine.py"
+        }
+      ],
       "field": "onUpdate",
       "id": "abilities:magmaarmor:onUpdate",
-      "implementation": null,
+      "implementation": {
+        "family": "status_immunity",
+        "file": "simulator/status_immunity.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:magmaarmor",
@@ -2658,7 +2742,7 @@
       "owner": "abilities:magmaarmor",
       "reachability": "candidate",
       "sha256": "6260cc3b385f1ec8e44f6927a0f9473a93bc5dfe33d2566320a95c606170d6fc",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -5706,10 +5790,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-immunity.json.gz",
+          "native": "reference/status-immunity-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_immunity_engine.py"
+        }
+      ],
       "field": "onSetStatus",
       "id": "abilities:vitalspirit:onSetStatus",
-      "implementation": null,
+      "implementation": {
+        "family": "status_immunity",
+        "file": "simulator/status_immunity.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:vitalspirit",
@@ -5720,7 +5816,7 @@
       "owner": "abilities:vitalspirit",
       "reachability": "candidate",
       "sha256": "a727f32cc43fbb7ffffff3e05b7f7b24cef27c57b2d4eccc29e2e42ce08e62e2",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -5752,10 +5848,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-immunity.json.gz",
+          "native": "reference/status-immunity-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_immunity_engine.py"
+        }
+      ],
       "field": "onUpdate",
       "id": "abilities:vitalspirit:onUpdate",
-      "implementation": null,
+      "implementation": {
+        "family": "status_immunity",
+        "file": "simulator/status_immunity.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:vitalspirit",
@@ -5766,7 +5874,7 @@
       "owner": "abilities:vitalspirit",
       "reachability": "candidate",
       "sha256": "f58007d8ca70faa99d07f85781f1426d3f0596f2af67e2dd8e457ba7981ab86d",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -5821,10 +5929,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-immunity.json.gz",
+          "native": "reference/status-immunity-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_immunity_engine.py"
+        }
+      ],
       "field": "onSetStatus",
       "id": "abilities:waterveil:onSetStatus",
-      "implementation": null,
+      "implementation": {
+        "family": "status_immunity",
+        "file": "simulator/status_immunity.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:waterveil",
@@ -5835,7 +5955,7 @@
       "owner": "abilities:waterveil",
       "reachability": "candidate",
       "sha256": "711e1928baacc247b829e2aba1f7380d9d65341cb33336163cb04223394b8412",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -5844,10 +5964,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/status-immunity.json.gz",
+          "native": "reference/status-immunity-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_status_immunity_engine.py"
+        }
+      ],
       "field": "onUpdate",
       "id": "abilities:waterveil:onUpdate",
-      "implementation": null,
+      "implementation": {
+        "family": "status_immunity",
+        "file": "simulator/status_immunity.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:waterveil",
@@ -5858,7 +5990,7 @@
       "owner": "abilities:waterveil",
       "reachability": "candidate",
       "sha256": "c139d7793bf804a6007e300d9ecda1a5f0632b32c404cbe5158e08d447308a76",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [

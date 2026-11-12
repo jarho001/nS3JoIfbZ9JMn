@@ -36,6 +36,7 @@ from . import illusion as illusion_ops
 from . import forms as form_ops
 from . import trigger_forms as trigger_form_ops
 from . import ability_changes as ability_ops
+from . import status_immunity as immunity_ops
 from . import hook_tables
 from . import hook_effects as hook_ops
 import sys
@@ -43,7 +44,7 @@ import sys
 def _engine():
     return sys.modules[__name__]
 
-SCHEMA = 21
+SCHEMA = 22
 ROSTER, SLOTS, QUEUE, EVENTS, DRAWS, HISTORY = 6, 4, 8, 128, 128, 2048
 OK, PENDING, INVALID, UNSUPPORTED, CAPACITY, TERMINAL, STALE = range(7)
 RETRY=7
@@ -83,6 +84,7 @@ TRANSFORM=52
 ILLUSION_END=53
 FORM_CHANGE=54
 ABILITY_CHANGE,ABILITY_SWAP=55,56
+STATUS_ABILITY,REST_ABILITY=57,58
 EVENT_COLUMNS=16
 # Draw contexts; range form stores actual native arguments including offsets.
 INIT, QUEUE_SORT, BEFORE_TURN, UPDATE, HIT_UPDATE, SWITCH_SORT, FIELD_SORT, ACC, CRITICAL, ROLL, PARALYSIS, STALL = range(12)
@@ -272,9 +274,12 @@ def _update(c,context=UPDATE,sort_all=False):
     active_speed=s.speed[jnp.arange(2),s.active]
     alive=~s.fainted[jnp.arange(2),s.active]
     tie=(active_speed[0]==active_speed[1]) & (jnp.all(alive)|sort_all)
-    c=_when(tie,lambda x:_draw(x,0,2,context,2)[0],c)
-    # Lum's onUpdate handler fires in native speed order, no random cure draw.
-    for side in range(2):
+    c,word=jax.lax.cond(tie,lambda c:_draw(c,0,2,context,2),lambda c:(c,jnp.uint32(0)),c)
+    first=jnp.where(tie,word.astype(jnp.int32),jnp.argmax(active_speed))
+    # Each Update visits holders in native speed/shuffle order.
+    for k in range(2):
+        side=jnp.where(k==0,first,1-first)
+        c=immunity_ops.update(c,side,_engine())
         def cure(c):
             s,t=c;m=s.active[side];old=s.status[side,m]
             c=_event(c,END_ITEM,side,m)
@@ -541,7 +546,7 @@ def _attack(c,row):
                 c=jax.lax.cond(move==REST,lambda c:effects.rest(c,actor,move_row,_engine()),
                     lambda c:jax.lax.cond(move==item_ops.RECYCLE,lambda c:item_ops.recycle(c,actor,move_row,_engine()),lambda c:jax.lax.cond(move==sub_ops.MOVE,lambda c:sub_ops.create(c,actor,move_row,_engine()),lambda c:jax.lax.cond(move==RECOVER,recover,protect,c),c),c),c)
                 # Successful self moves run both hit-loop Updates.
-                s,t=c;failed=(t.events[move_row,7]==2)|((move==REST)&(original.hp[actor,mon]==original.stats[actor,mon,0]))|((move==sub_ops.MOVE)&(s.action_state[actor,mon,tracking.RESULT]!=tracking.TRUE))
+                s,t=c;failed=(t.events[move_row,7]==2)|((move==REST)&((original.hp[actor,mon]==original.stats[actor,mon,0])|immunity_ops.SLEEP[original.ability[actor,mon]]))|((move==sub_ops.MOVE)&(s.action_state[actor,mon,tracking.RESULT]!=tracking.TRUE))
                 c=_when(~failed,lambda c:_update(_update(c,HIT_UPDATE),HIT_UPDATE),c)
                 return c
             def foe_move(c):
@@ -920,7 +925,7 @@ def _supported(s,initializing=False):
             &jnp.all((s.moves==0)|(tables.MOVE_IMPLEMENTED|field_tables.MOVE_IMPLEMENTED|hit_tables.MOVE_IMPLEMENTED|phase_ops.MOVE_IMPLEMENTED|partial_ops.MOVE_IMPLEMENTED|phaze_ops.MOVE_IMPLEMENTED|pursuit_ops.MOVE_IMPLEMENTED|item_ops.MOVE_IMPLEMENTED|identity_ops.MOVE_IMPLEMENTED|trigger_form_ops.MOVE_IMPLEMENTED|ability_ops.MOVE_IMPLEMENTED)[jnp.clip(s.moves,0,len(MOVE_KEYS)-1)])
             &jnp.all((s.item>=0)&(s.item<len(ITEMS)))
             &jnp.all((hook_tables.ITEM_IMPLEMENTED|hit_tables.ITEM_IMPLEMENTED|phase_ops.ITEM_IMPLEMENTED|partial_ops.ITEM_IMPLEMENTED)[jnp.clip(s.item,0,len(ITEMS)-1)])
-            &jnp.all((s.ability>=0)&(s.ability<len(ABILITIES)))&jnp.all((hook_tables.ABILITY_IMPLEMENTED|hit_tables.ABILITY_IMPLEMENTED|trap_ops.ABILITY_IMPLEMENTED|phaze_ops.ABILITY_IMPLEMENTED|item_ops.ABILITY_IMPLEMENTED|identity_ops.ABILITY_IMPLEMENTED|illusion_ops.ABILITY_IMPLEMENTED|form_ops.ABILITY_IMPLEMENTED|trigger_form_ops.ABILITY_IMPLEMENTED)[jnp.clip(s.ability,0,len(ABILITIES)-1)])
+            &jnp.all((s.ability>=0)&(s.ability<len(ABILITIES)))&jnp.all((hook_tables.ABILITY_IMPLEMENTED|hit_tables.ABILITY_IMPLEMENTED|trap_ops.ABILITY_IMPLEMENTED|phaze_ops.ABILITY_IMPLEMENTED|item_ops.ABILITY_IMPLEMENTED|identity_ops.ABILITY_IMPLEMENTED|illusion_ops.ABILITY_IMPLEMENTED|form_ops.ABILITY_IMPLEMENTED|trigger_form_ops.ABILITY_IMPLEMENTED|immunity_ops.ABILITY_IMPLEMENTED)[jnp.clip(s.ability,0,len(ABILITIES)-1)])
             &jnp.all((s.ivs>=0)&(s.ivs<=31))&jnp.all((s.evs>=0)&(s.evs<=255))
             &jnp.all((s.nature>=1)&(s.nature<=len(generic.NATURES)))
             &jnp.all(s.types==tables.SPECIES_TYPES[safe_species])&jnp.all((s.boosts>=-6)&(s.boosts<=6))
