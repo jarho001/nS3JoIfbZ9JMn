@@ -70,6 +70,6 @@ def valid(s,e):
     occupied=s.species>0
     common=jnp.all((s.base_species>=0)&(s.base_species<len(t.SPECIES)))&jnp.all((s.base_ability>=0)&(s.base_ability<len(t.ABILITIES)))
     common=common&jnp.all((s.base_moves>=0)&(s.base_moves<len(t.MOVE_KEYS)))&jnp.all((s.base_pp>=0)&(s.base_pp<=t.PP[jnp.clip(s.base_moves,0,len(t.MOVE_KEYS)-1)]))&jnp.all((s.base_used>=0)&(s.base_used<=15))
-    ordinary=((s.species==s.base_species)|e.form_ops.valid_pair(s))&(s.ability==s.base_ability)&jnp.all(s.stats==actual,axis=-1)&jnp.all(s.base_stats==s.stats,axis=-1)&jnp.all(s.base_moves==s.moves,axis=-1)&jnp.all(s.base_pp==s.pp,axis=-1)
+    ordinary=((s.species==s.base_species)|e.form_ops.valid_pair(s)|e.trigger_form_ops.valid_pair(s))&(s.ability==s.base_ability)&jnp.all(s.stats==actual,axis=-1)&jnp.all(s.base_stats==s.stats,axis=-1)&jnp.all(s.base_moves==s.moves,axis=-1)&jnp.all(s.base_pp==s.pp,axis=-1)
     virtual=(s.stats[:,:,0]==s.base_stats[:,:,0])&jnp.all((s.stats[:,:,1:]>0)&(s.stats[:,:,1:]<=1000),axis=-1)
     return common&jnp.all(jnp.where(occupied,jnp.where(s.transformed,virtual,ordinary),~s.transformed))&jnp.all(s.apparent_types==s.types)

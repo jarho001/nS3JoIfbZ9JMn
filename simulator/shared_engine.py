@@ -34,6 +34,7 @@ from . import item_lifecycle as item_ops
 from . import identity as identity_ops
 from . import illusion as illusion_ops
 from . import forms as form_ops
+from . import trigger_forms as trigger_form_ops
 from . import hook_tables
 from . import hook_effects as hook_ops
 import sys
@@ -41,7 +42,7 @@ import sys
 def _engine():
     return sys.modules[__name__]
 
-SCHEMA = 19
+SCHEMA = 20
 ROSTER, SLOTS, QUEUE, EVENTS, DRAWS, HISTORY = 6, 4, 8, 128, 128, 2048
 OK, PENDING, INVALID, UNSUPPORTED, CAPACITY, TERMINAL, STALE = range(7)
 RETRY=7
@@ -422,6 +423,7 @@ def _hit(c,actor,move):
         c=tracking.outcome(c,actor,i32(tracking.TRUE),move)
         c=_update(c,HIT_UPDATE)
         c=_when((c[0].hp[actor,mon]==0)&(~c[0].fainted[actor,mon]),lambda c:_faint(c,actor),c)
+        c=trigger_form_ops.after_hit(c,actor,move,_engine())
         def life_orb(c):
             s,t=c;c=_damage(c,actor,s.stats[actor,mon,0]//10,cause=9)
             return _when(c[0].hp[actor,mon]==0,lambda c:_faint(c,actor),c)
@@ -628,6 +630,7 @@ def _switch_entry(c,row,drag=False):
         keep=(jnp.arange(QUEUE)<s.qcount)&(~((s.queue[:,0]==ATTACK)&(s.queue[:,1]==side)&(s.queue[:,2]==old)))
         ix=jnp.nonzero(keep,size=QUEUE,fill_value=0)[0];count=jnp.sum(keep).astype(jnp.int32)
         s=s._replace(queue=jnp.where((jnp.arange(QUEUE)<count)[:,None],s.queue[ix],0),qcount=count)
+    c=trigger_form_ops.end((s,t),side,_engine());s,t=c
     s=identity_ops.restore(s,side,_engine())
     s=jax.lax.cond(s.hp[side,old]>0,lambda s:tracking.clear_volatile(s,side),lambda s:s,s)
     oldslot=jnp.argmax(s.order[side]==old)
@@ -716,6 +719,9 @@ def _residual(c):
         for kind in range(6,len(phase_ops.VOLATILES)):
             rows.append(i32([9,side,0,10000,0,0 if kind==partial_ops.SLOT else 2,kind]).at[3].set(phase_ops.RESIDUAL_ORDER[kind]).at[2].set(mon).at[4].set(s.speed[side,mon]))
             valid.append((~s.fainted[side,mon])&(s.volatile_state[side,mon,kind,0]>0)&(s.volatile_state[side,mon,kind,5]>0))
+    for side in range(2):
+        mon=s.active[side]
+        rows.append(i32([10,side,0,29,0,0,0]).at[2].set(mon).at[4].set(s.speed[side,mon]));valid.append(s.ability[side,mon]==trigger_form_ops.ZEN)
     handlers=len(rows)
     rows=jnp.stack(rows);valid=jnp.stack(valid);count=jnp.sum(valid).astype(jnp.int32)
     order=jnp.where(valid,rows[:,3],20000)
@@ -762,12 +768,12 @@ def _residual(c):
                     s,t=c;newhp=jnp.minimum(maxhp,hp+jnp.maximum(1,maxhp//16));s=s._replace(hp=s.hp.at[side,m].set(newhp))
                     return _event((s,t),HEAL,side,m,value=newhp,aux=maxhp,status=s.status[side,m],move=1)
                 return _when(hp<maxhp,heal,c)
-            return jax.lax.cond(kind==9,lambda c:jax.lax.cond(row[6]==partial_ops.SLOT,lambda c:partial_ops.tick(c,side,_engine()),lambda c:phase_ops.extra_tick(c,side,row[6],_engine()),c),
+            return jax.lax.cond(kind==10,lambda c:trigger_form_ops.residual(c,side,_engine()),lambda c:jax.lax.cond(kind==9,lambda c:jax.lax.cond(row[6]==partial_ops.SLOT,lambda c:partial_ops.tick(c,side,_engine()),lambda c:phase_ops.extra_tick(c,side,row[6],_engine()),c),
                 lambda c:jax.lax.cond(kind==8,lambda c:phase_ops.tick_phase(c,side,5,_engine()),
                 lambda c:jax.lax.cond(kind==7,lambda c:phase_ops.tick(c,side,m),
                 lambda c:jax.lax.cond(kind==5,lambda c:field_ops.weather_tick(c,_engine()),
                 lambda c:jax.lax.cond(kind==6,lambda c:field_ops.screen_tick(c,side,m,_engine()),
-                    lambda c:jax.lax.cond(kind==1,status_tick,lambda c:jax.lax.cond(kind==4,leftovers,duration,c),c),c),c),c),c),c)
+                    lambda c:jax.lax.cond(kind==1,status_tick,lambda c:jax.lax.cond(kind==4,leftovers,duration,c),c),c),c),c),c),c),c)
         return _when((k<count)&((kind==5)|(kind==6)|(~s.fainted[side,m]))&(s.winner<0),apply,c)
     c=jax.lax.fori_loop(0,handlers,effect,c)
     s,t=c
@@ -901,12 +907,12 @@ def _supported(s,initializing=False):
             &jnp.all((s.qcount>=0)&(s.qcount<=QUEUE))&(s.episode>=0)&(s.generation>=0)
             &jnp.all(jnp.where(occupied,jnp.any(s.moves>0,axis=-1),jnp.all(s.moves==0,axis=-1)))
             &jnp.all((s.species>=0)&(s.species<len(SPECIES)))&jnp.all(jnp.any(occupied,axis=1))
-            &jnp.all((~occupied)|(tables.SPECIES_IMPLEMENTED|form_ops.SPECIES_IMPLEMENTED)[safe_species])
+            &jnp.all((~occupied)|(tables.SPECIES_IMPLEMENTED|form_ops.SPECIES_IMPLEMENTED|trigger_form_ops.SPECIES_IMPLEMENTED)[safe_species])
             &jnp.all((s.moves>=0)&(s.moves<len(MOVE_KEYS))&(s.moves!=STRUGGLE))
-            &jnp.all((s.moves==0)|(tables.MOVE_IMPLEMENTED|field_tables.MOVE_IMPLEMENTED|hit_tables.MOVE_IMPLEMENTED|phase_ops.MOVE_IMPLEMENTED|partial_ops.MOVE_IMPLEMENTED|phaze_ops.MOVE_IMPLEMENTED|pursuit_ops.MOVE_IMPLEMENTED|item_ops.MOVE_IMPLEMENTED|identity_ops.MOVE_IMPLEMENTED)[jnp.clip(s.moves,0,len(MOVE_KEYS)-1)])
+            &jnp.all((s.moves==0)|(tables.MOVE_IMPLEMENTED|field_tables.MOVE_IMPLEMENTED|hit_tables.MOVE_IMPLEMENTED|phase_ops.MOVE_IMPLEMENTED|partial_ops.MOVE_IMPLEMENTED|phaze_ops.MOVE_IMPLEMENTED|pursuit_ops.MOVE_IMPLEMENTED|item_ops.MOVE_IMPLEMENTED|identity_ops.MOVE_IMPLEMENTED|trigger_form_ops.MOVE_IMPLEMENTED)[jnp.clip(s.moves,0,len(MOVE_KEYS)-1)])
             &jnp.all((s.item>=0)&(s.item<len(ITEMS)))
             &jnp.all((hook_tables.ITEM_IMPLEMENTED|hit_tables.ITEM_IMPLEMENTED|phase_ops.ITEM_IMPLEMENTED|partial_ops.ITEM_IMPLEMENTED)[jnp.clip(s.item,0,len(ITEMS)-1)])
-            &jnp.all((s.ability>=0)&(s.ability<len(ABILITIES)))&jnp.all((hook_tables.ABILITY_IMPLEMENTED|hit_tables.ABILITY_IMPLEMENTED|trap_ops.ABILITY_IMPLEMENTED|phaze_ops.ABILITY_IMPLEMENTED|item_ops.ABILITY_IMPLEMENTED|identity_ops.ABILITY_IMPLEMENTED|illusion_ops.ABILITY_IMPLEMENTED|form_ops.ABILITY_IMPLEMENTED)[jnp.clip(s.ability,0,len(ABILITIES)-1)])
+            &jnp.all((s.ability>=0)&(s.ability<len(ABILITIES)))&jnp.all((hook_tables.ABILITY_IMPLEMENTED|hit_tables.ABILITY_IMPLEMENTED|trap_ops.ABILITY_IMPLEMENTED|phaze_ops.ABILITY_IMPLEMENTED|item_ops.ABILITY_IMPLEMENTED|identity_ops.ABILITY_IMPLEMENTED|illusion_ops.ABILITY_IMPLEMENTED|form_ops.ABILITY_IMPLEMENTED|trigger_form_ops.ABILITY_IMPLEMENTED)[jnp.clip(s.ability,0,len(ABILITIES)-1)])
             &jnp.all((s.ivs>=0)&(s.ivs<=31))&jnp.all((s.evs>=0)&(s.evs<=255))
             &jnp.all((s.nature>=1)&(s.nature<=len(generic.NATURES)))
             &jnp.all(s.types==tables.SPECIES_TYPES[safe_species])&jnp.all((s.boosts>=-6)&(s.boosts<=6))

@@ -1,0 +1,23 @@
+'use strict';
+module.exports=function(){
+ const m=(species,moves,extra={})=>({species,moves,ability:'Synchronize',item:'',level:50,nature:'Hardy',gender:'M',ivs:{hp:31,atk:31,def:31,spa:31,spd:31,spe:31},evs:{hp:0,atk:0,def:0,spa:0,spd:0,spe:0},...extra});
+ const b=(a=1,c=1)=>({p1:`move ${a}`,p2:`move ${c}`}),cases=[],add=(id,x={})=>cases.push({id:'G4-trigger-forms-'+id,seed:1,generic:true,identityFamily:true,triggerFormFamily:true,hitFamily:true,p1:[m('Meloetta',['Relic Song','Tackle']),m('Mew',['Tackle'])],p2:[m('Mew',['Recover','Tackle'])],steps:[b(),b()],...x});
+ add('song');add('song-switch',{steps:[b(),{p1:'switch 2',p2:'move 1'},{p1:'switch 2',p2:'move 1'}]});
+ add('song-sub',{p2:[m('Mew',['Substitute','Recover'],{evs:{spe:252}})],steps:[b(),b(1,2)]});
+ add('song-protect',{p2:[m('Mew',['Protect','Recover'])],steps:[b(),b(1,2)]});
+ add('song-soundproof',{p2:[m('Mew',['Recover'],{ability:'Soundproof'})],steps:[b()]});
+ add('song-immune',{p2:[m('Gengar',['Recover'],{ability:'Levitate'})],steps:[b()]});
+ add('song-wrong',{p1:[m('Mew',['Relic Song'])],steps:[b()]});
+ add('song-transformed',{p1:[m('Meloetta',['Transform'],{evs:{spe:252}})],p2:[m('Meloetta',['Relic Song','Tackle'])],steps:[b(1,2),b()]});
+ const zen=(extra={})=>m('Darmanitan',['Recover','Tackle'],{ability:'Zen Mode',...extra});
+ add('zen-low',{p1:[zen(),m('Mew',['Tackle'])],setup:[{side:'p1',hp:80}],steps:[b(2,1),b(1,1),{p1:'switch 2',p2:'move 1'},{p1:'switch 2',p2:'move 1'}]});
+ add('zen-switch',{p1:[zen(),m('Mew',['Tackle'])],setup:[{side:'p1',hp:80}],steps:[b(2,1),{p1:'switch 2',p2:'move 1'}]});
+ add('zen-base-form',{p1:[m('Darmanitan-Zen',['Tackle','Recover'],{ability:'Zen Mode'})],steps:[b(),b(2,1)]});
+ add('song-base-form',{p1:[m('Meloetta-Pirouette',['Relic Song','Tackle'])],steps:[b()]});
+ add('zen-threshold',{p1:[zen()],setup:[{side:'p1',hp:90}],steps:[b(2,1)]});
+ add('zen-wrong',{p1:[m('Mew',['Tackle'],{ability:'Zen Mode'})],setup:[{side:'p1',hp:50}],steps:[b()]});
+ add('zen-poison',{p1:[zen()],setup:[{side:'p1',hp:95,status:'psn'}],steps:[b(2,1),b(1,1)]});
+ add('zen-lethal',{p1:[zen(),m('Mew',['Tackle'])],setup:[{side:'p1',hp:1}],p2:[m('Mew',['Tackle'])],steps:[b(2,1)]});
+ add('zen-mirrored',{p1:[m('Mew',['Recover'])],p2:[zen()],setup:[{side:'p2',hp:80}],steps:[b(1,2),b()]});
+ return cases;
+};

@@ -5959,10 +5959,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/trigger-forms.json.gz",
+          "native": "reference/trigger-form-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_trigger_form_engine.py"
+        }
+      ],
       "field": "condition.onEnd",
       "id": "abilities:zenmode:condition.onEnd",
-      "implementation": null,
+      "implementation": {
+        "family": "trigger_form",
+        "file": "simulator/trigger_forms.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:zenmode",
@@ -5973,7 +5985,7 @@
       "owner": "abilities:zenmode",
       "reachability": "candidate",
       "sha256": "b0c86fe851fe9c192caedf3ad3f14bf51977f6cb7c2cca0a762c66116bcb69df",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -5982,10 +5994,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/trigger-forms.json.gz",
+          "native": "reference/trigger-form-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_trigger_form_engine.py"
+        }
+      ],
       "field": "condition.onStart",
       "id": "abilities:zenmode:condition.onStart",
-      "implementation": null,
+      "implementation": {
+        "family": "trigger_form",
+        "file": "simulator/trigger_forms.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:zenmode",
@@ -5996,7 +6020,7 @@
       "owner": "abilities:zenmode",
       "reachability": "candidate",
       "sha256": "ffe9d198834aabf36a1d94b648d0d33ec59e86533605413c0deb007585c56f16",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -6005,10 +6029,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/trigger-forms.json.gz",
+          "native": "reference/trigger-form-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_trigger_form_engine.py"
+        }
+      ],
       "field": "onEnd",
       "id": "abilities:zenmode:onEnd",
-      "implementation": null,
+      "implementation": {
+        "family": "trigger_form",
+        "file": "simulator/trigger_forms.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:zenmode",
@@ -6019,7 +6055,7 @@
       "owner": "abilities:zenmode",
       "reachability": "candidate",
       "sha256": "232028cfaa6dd4ea78427bcd9610d2971f83c72f7032dcbf0b40229743cbcf1a",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -6028,10 +6064,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/trigger-forms.json.gz",
+          "native": "reference/trigger-form-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_trigger_form_engine.py"
+        }
+      ],
       "field": "onResidual",
       "id": "abilities:zenmode:onResidual",
-      "implementation": null,
+      "implementation": {
+        "family": "trigger_form",
+        "file": "simulator/trigger_forms.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:zenmode",
@@ -6042,7 +6090,7 @@
       "owner": "abilities:zenmode",
       "reachability": "candidate",
       "sha256": "701679abaf69f4e2064d8f55ef8e860307275e4f3a8ee270a95478cf2d4dd935",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -24378,10 +24426,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/trigger-forms.json.gz",
+          "native": "reference/trigger-form-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_trigger_form_engine.py"
+        }
+      ],
       "field": "onAfterMoveSecondarySelf",
       "id": "moves:relicsong:onAfterMoveSecondarySelf",
-      "implementation": null,
+      "implementation": {
+        "family": "trigger_form",
+        "file": "simulator/trigger_forms.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:relicsong",
@@ -24392,7 +24452,7 @@
       "owner": "moves:relicsong",
       "reachability": "candidate",
       "sha256": "6adc288b535ab1c2ae1f4c5db38a4adb04927eb0425a41ebf806bff44be986f8",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -61497,10 +61557,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/trigger-forms.json.gz",
+          "native": "reference/trigger-form-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_trigger_form_engine.py"
         }
       ],
       "id": "moves:relicsong",
       "implementation": {
+        "behavior": {
+          "family": "trigger_form",
+          "file": "simulator/trigger_forms.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "MOVE_TYPE/MOVE_POWER/MOVE_CATEGORY/MOVE_PRIORITY/MOVE_PP",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -72591,10 +72663,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/trigger-forms.json.gz",
+          "native": "reference/trigger-form-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_trigger_form_engine.py"
         }
       ],
       "id": "abilities:zenmode",
       "implementation": {
+        "behavior": {
+          "family": "trigger_form",
+          "file": "simulator/trigger_forms.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"

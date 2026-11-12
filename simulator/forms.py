@@ -23,12 +23,16 @@ def change(c,side,e):
     flower=(ability==FLOWER)&FLOWER_GROUP[s.base_species[side,mon]]
     species=jnp.where(cast,CAST_FORMS[weather],jnp.where(weather==2,S['cherrimsunshine'],CHERRIM))
     allowed=(cast|flower)&(~s.transformed[side,mon])&(s.hp[side,mon]>0)&(species!=s.species[side,mon])
-    def apply(c):
-        s,tr=c;stats=e.derive_stored_stats(t.BASE_STATS[species],s.level[side,mon],s.ivs[side,mon],s.evs[side,mon],e.generic.NATURE_MULTIPLIERS[s.nature[side,mon]],t.SHEDINJA[species])
-        stats=stats.at[0].set(s.stats[side,mon,0])
-        s=s._replace(species=s.species.at[side,mon].set(species),stats=s.stats.at[side,mon].set(stats),base_stats=s.base_stats.at[side,mon].set(stats),speed=s.speed.at[side,mon].set(stats[5]),types=s.types.at[side,mon].set(t.SPECIES_TYPES[species]),apparent_types=s.apparent_types.at[side,mon].set(t.SPECIES_TYPES[species]),known_type=s.known_type.at[side,mon].set(True))
-        return e._event((s,tr),e.FORM_CHANGE,side,mon,value=species,aux=ability)
-    return e._when(allowed,apply,c)
+    return e._when(allowed,lambda c:set_form(c,side,species,e,ability=ability),c)
+
+
+def set_form(c,side,species,e,ability=0,message=0):
+    s,tr=c;mon=s.active[side]
+    stats=e.derive_stored_stats(t.BASE_STATS[species],s.level[side,mon],s.ivs[side,mon],s.evs[side,mon],e.generic.NATURE_MULTIPLIERS[s.nature[side,mon]],t.SHEDINJA[species])
+    stats=stats.at[0].set(s.stats[side,mon,0])
+    s=s._replace(species=s.species.at[side,mon].set(species),stats=s.stats.at[side,mon].set(stats),base_stats=s.base_stats.at[side,mon].set(stats),speed=s.speed.at[side,mon].set(stats[5]),types=s.types.at[side,mon].set(t.SPECIES_TYPES[species]),apparent_types=s.apparent_types.at[side,mon].set(t.SPECIES_TYPES[species]),known_type=s.known_type.at[side,mon].set(True))
+    return e._event((s,tr),e.FORM_CHANGE,side,mon,value=species,aux=ability,status=message)
+
 
 def weather_change(c,e,context):
     s,_=c;speeds=s.speed[jnp.arange(2),s.active];tie=(speeds[0]==speeds[1])&jnp.all(~s.fainted[jnp.arange(2),s.active])

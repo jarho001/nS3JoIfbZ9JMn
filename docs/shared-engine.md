@@ -14,7 +14,7 @@ Full-format G4
 coverage remains separate acceptance work. Historical evidence keeps its original
 source/schema identity; it does not imply validation of later engine changes.
 
-The current runtime uses [schema 19](../rules/shared-engine-v19.json). Schemas
+The current runtime uses [schema 20](../rules/shared-engine-v20.json). Schemas
 4–6 integrated major statuses and effect provenance, boosts/weather/screens,
 and observed ability/item hooks. Schema7 adds declarative hit counts, per-hit
 updates, capped drain/recoil arithmetic, self-destruction and reactive damage.
@@ -609,3 +609,10 @@ original switch details persist. WeatherChange callbacks follow the existing
 native speed shuffle; Transform suppresses these form changes, and switching
 restores the base species. Focused16/43 CPU parity and live persistence pass.
 Other forms, broad execution/migration gates and full-format acceptance remain open.
+
+Schema20 adds Relic Song and Zen Mode through the same effective-form operation.
+Successful Relic Song toggles Meloetta before held-item AfterMove callbacks. Zen
+Mode runs in residual order29, persists an ability-source volatile, reverses on
+recovery and emits the native silent form restoration on ability End at switching.
+Volatile slot23 and journal9 preserve its source/order and live continuation.
+Focused17/30 CPU parity passes; broader regressions and full G4 remain pending.

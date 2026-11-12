@@ -7,6 +7,16 @@ GPU. Preparing this handoff does not run device tests, profiling or benchmarks.
 
 ## Current source and evidence
 
+**Schema20 triggered forms checkpoint:** focused CPU parity passed17 scenarios/30
+boundaries in161.755s; one native contract passed. Relic Song/Meloetta and
+Zen Mode/Darmanitan triggers, recovery reversal, silent End on switching,
+base-form starts, failure/Transform interactions and live Zen NPZ/journal9
+persistence are covered. See
+[schema20-checkpoint.json](../test-logs/g4-cpu-conformance/schema20-checkpoint.json).
+The runner includes `test.test_trigger_form_engine` and the triggerforms batch.
+Isolated replay: `JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_trigger_form_engine -v -f`.
+Broad execution/migration and current runner preparation remain pending.
+
 **Schema19 weather forms checkpoint:** one focused CPU check passed16 scenarios/43
 boundaries in155.306s; one native contract passed. Forecast/Flower Gift,
 weather cycle/expiry/startup/entry, original requests, Transform exclusions,
@@ -140,8 +150,8 @@ The entire matching-source 61-check suite has not been repeated. Historical
 schema8 results remain in
 [schema8-checkpoint.json](../test-logs/g4-cpu-conformance/schema8-checkpoint.json).
 
-The expanded runner expects **80 checks in 24 isolated modules**, using nineteen
-independent native corpora: **768 scenarios / 4634 boundaries**, including
+The expanded runner expects **81 checks in 25 isolated modules**, using twenty
+independent native corpora: **785 scenarios / 4664 boundaries**, including
 32 complete constructed six-member combat games (plus the neutral switch-only
 turn-limit game and eight historical three-member games). The 73 phase scenarios are in
 `test.test_lock_phase_engine`. The runner recaptures causal state for the prior
@@ -207,7 +217,7 @@ the combined block below:
 2. Freezes all sixteen legacy/current corpora, including move phases, the
    turn-limit witness, trapping/retries, Substitute and partial trapping. Runs the reference/native
    contracts. Unknown/unsupported families stay explicit.
-3. Runs the same current 80-check scope on CPU, then under `JAX_PLATFORMS=cuda`,
+3. Runs the same current 81-check scope on CPU, then under `JAX_PLATFORMS=cuda`,
    with each test module in a fresh process.
    A strict probe verifies actual eager/JIT GPU placement; shared case/lifecycle
    assertions also check device leaves. `cuda` initialization failure is a failure.
