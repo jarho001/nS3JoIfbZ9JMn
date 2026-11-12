@@ -19056,10 +19056,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/ability-change.json.gz",
+          "native": "reference/ability-change-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_ability_change_engine.py"
+        }
+      ],
       "field": "onHit",
       "id": "moves:entrainment:onHit",
-      "implementation": null,
+      "implementation": {
+        "family": "ability_change",
+        "file": "simulator/ability_changes.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:entrainment",
@@ -19070,7 +19082,7 @@
       "owner": "moves:entrainment",
       "reachability": "candidate",
       "sha256": "d05cc3c2272accb5a8c96b8705adb380d5131f661f1811b56bd7ad99fd629195",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -19079,10 +19091,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/ability-change.json.gz",
+          "native": "reference/ability-change-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_ability_change_engine.py"
+        }
+      ],
       "field": "onTryHit",
       "id": "moves:entrainment:onTryHit",
-      "implementation": null,
+      "implementation": {
+        "family": "ability_change",
+        "file": "simulator/ability_changes.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:entrainment",
@@ -19093,7 +19117,7 @@
       "owner": "moves:entrainment",
       "reachability": "candidate",
       "sha256": "0b5f893c6fef34b1d08cb6d4c6c87c8d37334a7f75d567d8107ff48e59bf3822",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -24623,10 +24647,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/ability-change.json.gz",
+          "native": "reference/ability-change-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_ability_change_engine.py"
+        }
+      ],
       "field": "onHit",
       "id": "moves:roleplay:onHit",
-      "implementation": null,
+      "implementation": {
+        "family": "ability_change",
+        "file": "simulator/ability_changes.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:roleplay",
@@ -24637,7 +24673,7 @@
       "owner": "moves:roleplay",
       "reachability": "candidate",
       "sha256": "0b5b08005ca583b2f1456c5dcdc0c0d957b4ed0fb45375f9dd52f04abb498082",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -24646,10 +24682,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/ability-change.json.gz",
+          "native": "reference/ability-change-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_ability_change_engine.py"
+        }
+      ],
       "field": "onTryHit",
       "id": "moves:roleplay:onTryHit",
-      "implementation": null,
+      "implementation": {
+        "family": "ability_change",
+        "file": "simulator/ability_changes.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:roleplay",
@@ -24660,7 +24708,7 @@
       "owner": "moves:roleplay",
       "reachability": "candidate",
       "sha256": "9d6f1eca7d6d18736645d70c6b98f34fa9d1568e05a80b03ee4f4c02944408ca",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -25106,10 +25154,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/ability-change.json.gz",
+          "native": "reference/ability-change-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_ability_change_engine.py"
+        }
+      ],
       "field": "onHit",
       "id": "moves:skillswap:onHit",
-      "implementation": null,
+      "implementation": {
+        "family": "ability_change",
+        "file": "simulator/ability_changes.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:skillswap",
@@ -25120,7 +25180,7 @@
       "owner": "moves:skillswap",
       "reachability": "candidate",
       "sha256": "332422cda2e45b246102c515cb7a284b20047acc6f29962172e9f6835fc98db5",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -54291,10 +54351,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/ability-change.json.gz",
+          "native": "reference/ability-change-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_ability_change_engine.py"
         }
       ],
       "id": "moves:entrainment",
       "implementation": {
+        "behavior": {
+          "family": "ability_change",
+          "file": "simulator/ability_changes.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "MOVE_TYPE/MOVE_POWER/MOVE_CATEGORY/MOVE_PRIORITY/MOVE_PP",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -62061,10 +62133,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/ability-change.json.gz",
+          "native": "reference/ability-change-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_ability_change_engine.py"
         }
       ],
       "id": "moves:roleplay",
       "implementation": {
+        "behavior": {
+          "family": "ability_change",
+          "file": "simulator/ability_changes.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "MOVE_TYPE/MOVE_POWER/MOVE_CATEGORY/MOVE_PRIORITY/MOVE_PP",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -63171,10 +63255,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/ability-change.json.gz",
+          "native": "reference/ability-change-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_ability_change_engine.py"
         }
       ],
       "id": "moves:skillswap",
       "implementation": {
+        "behavior": {
+          "family": "ability_change",
+          "file": "simulator/ability_changes.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "MOVE_TYPE/MOVE_POWER/MOVE_CATEGORY/MOVE_PRIORITY/MOVE_PP",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"

@@ -7,6 +7,16 @@ GPU. Preparing this handoff does not run device tests, profiling or benchmarks.
 
 ## Current source and evidence
 
+**Schema21 ability exchange checkpoint:** focused CPU parity passed29 scenarios/58
+boundaries in176.860s; one native contract passed. Role Play, Skill Swap and
+Entrainment cover callback order, original private ability, Illusion End,
+protection/Substitute, Imposter Start semantics and switch/faint provenance.
+Live acquired-ability NPZ/journal10 persistence is covered. See
+[schema21-checkpoint.json](../test-logs/g4-cpu-conformance/schema21-checkpoint.json).
+The runner includes `test.test_ability_change_engine` and the abilitychange batch.
+Isolated replay: `JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_ability_change_engine -v -f`.
+Broad execution/migration and current runner preparation remain pending.
+
 **Schema20 triggered forms checkpoint:** focused CPU parity passed17 scenarios/30
 boundaries in161.755s; one native contract passed. Relic Song/Meloetta and
 Zen Mode/Darmanitan triggers, recovery reversal, silent End on switching,
@@ -150,8 +160,8 @@ The entire matching-source 61-check suite has not been repeated. Historical
 schema8 results remain in
 [schema8-checkpoint.json](../test-logs/g4-cpu-conformance/schema8-checkpoint.json).
 
-The expanded runner expects **81 checks in 25 isolated modules**, using twenty
-independent native corpora: **785 scenarios / 4664 boundaries**, including
+The expanded runner expects **82 checks in 26 isolated modules**, using twenty-one
+independent native corpora: **814 scenarios / 4722 boundaries**, including
 32 complete constructed six-member combat games (plus the neutral switch-only
 turn-limit game and eight historical three-member games). The 73 phase scenarios are in
 `test.test_lock_phase_engine`. The runner recaptures causal state for the prior
@@ -217,7 +227,7 @@ the combined block below:
 2. Freezes all sixteen legacy/current corpora, including move phases, the
    turn-limit witness, trapping/retries, Substitute and partial trapping. Runs the reference/native
    contracts. Unknown/unsupported families stay explicit.
-3. Runs the same current 81-check scope on CPU, then under `JAX_PLATFORMS=cuda`,
+3. Runs the same current 82-check scope on CPU, then under `JAX_PLATFORMS=cuda`,
    with each test module in a fresh process.
    A strict probe verifies actual eager/JIT GPU placement; shared case/lifecycle
    assertions also check device leaves. `cuda` initialization failure is a failure.

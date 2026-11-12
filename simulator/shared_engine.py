@@ -35,6 +35,7 @@ from . import identity as identity_ops
 from . import illusion as illusion_ops
 from . import forms as form_ops
 from . import trigger_forms as trigger_form_ops
+from . import ability_changes as ability_ops
 from . import hook_tables
 from . import hook_effects as hook_ops
 import sys
@@ -42,7 +43,7 @@ import sys
 def _engine():
     return sys.modules[__name__]
 
-SCHEMA = 20
+SCHEMA = 21
 ROSTER, SLOTS, QUEUE, EVENTS, DRAWS, HISTORY = 6, 4, 8, 128, 128, 2048
 OK, PENDING, INVALID, UNSUPPORTED, CAPACITY, TERMINAL, STALE = range(7)
 RETRY=7
@@ -81,6 +82,7 @@ ITEM_SWAP,ITEM_GAIN,ITEM_LOSS=49,50,51
 TRANSFORM=52
 ILLUSION_END=53
 FORM_CHANGE=54
+ABILITY_CHANGE,ABILITY_SWAP=55,56
 EVENT_COLUMNS=16
 # Draw contexts; range form stores actual native arguments including offsets.
 INIT, QUEUE_SORT, BEFORE_TURN, UPDATE, HIT_UPDATE, SWITCH_SORT, FIELD_SORT, ACC, CRITICAL, ROLL, PARALYSIS, STALL = range(12)
@@ -175,6 +177,7 @@ class State(NamedTuple):
     apparent_types: jax.Array
     ability_effect_id: jax.Array
     illusion: jax.Array
+    ability_staleness: jax.Array
 
 
 
@@ -313,6 +316,7 @@ def _faint(c,side):
     s,t=c;m=s.active[side]
     c=_event(c,FAINT,side,m);s,t=c
     s=illusion_ops.clear(s,side,_engine())
+    s=s._replace(ability_staleness=s.ability_staleness.at[side,s.active[side]].set(0))
     s=identity_ops.restore(s,side,_engine())
     s=tracking.faint(s,side)
     s=s._replace(volatile_state=s.volatile_state.at[side,m].set(0),boosts=s.boosts.at[side,m].set(0))
@@ -446,19 +450,21 @@ def _hit(c,actor,move):
         before_count=c[1].ecount
         move_row=jnp.max(jnp.where((jnp.arange(EVENTS)<c[1].ecount)&(c[1].events[:,0]==EV_MOVE),jnp.arange(EVENTS),0))
         c,preblocked=phase_ops.try_hit(c,actor,target,move,move_row,_engine())
+        c,ability_denied=ability_ops.try_hit(c,actor,target,move,move_row,_engine())
+        preblocked=preblocked|ability_denied
         sub_block=(~preblocked)&sub_ops.intercepts(c[0],target,move)
         c=_when(sub_block,lambda c:sub_ops.block_status(c,actor,move,move_row,_engine()),c)
         c=jax.lax.cond(preblocked|sub_block,lambda c:c,
-            lambda c:jax.lax.cond(move==identity_ops.MOVE,lambda c:identity_ops.move(c,actor,target,move_row,_engine()),lambda c:jax.lax.cond(item_ops.EXCHANGE[move],lambda c:item_ops.exchange(c,actor,target,move,move_row,_engine()),lambda c:jax.lax.cond(phaze_ops.STATUS[move],lambda c:phaze_ops.status_hit(c,actor,target,move,move_row,_engine()),lambda c:jax.lax.cond(phase_ops.RESTRICTION[move]>0,lambda c:phase_ops.status_move(c,actor,target,move,_engine()),
-                lambda c:jax.lax.cond(move==CONFUSE_RAY,confuse,status,c),c),c),c),c),c)
+            lambda c:jax.lax.cond(ability_ops.MOVE_IMPLEMENTED[move],lambda c:ability_ops.hit(c,actor,target,move,move_row,_engine()),lambda c:jax.lax.cond(move==identity_ops.MOVE,lambda c:identity_ops.move(c,actor,target,move_row,_engine()),lambda c:jax.lax.cond(item_ops.EXCHANGE[move],lambda c:item_ops.exchange(c,actor,target,move,move_row,_engine()),lambda c:jax.lax.cond(phaze_ops.STATUS[move],lambda c:phaze_ops.status_hit(c,actor,target,move,move_row,_engine()),lambda c:jax.lax.cond(phase_ops.RESTRICTION[move]>0,lambda c:phase_ops.status_move(c,actor,target,move,_engine()),
+                lambda c:jax.lax.cond(move==CONFUSE_RAY,confuse,status,c),c),c),c),c),c),c)
         # Only actual successful application runs the hit-loop updates. Lum can
         # immediately cure it, so inspect the emitted status/start event.
         event=c[1].events[:,0];valid=(jnp.arange(EVENTS)>=before_count)&(jnp.arange(EVENTS)<c[1].ecount)
         success=jnp.any(valid&((event==STATUS)|(event==CONF_START)|(event==VOL_START)))
-        tracked_success=success|((field_tables.IS_BOOST[move]|item_ops.EXCHANGE[move])&(c[0].action_state[actor,mon,tracking.RESULT]==tracking.TRUE))
+        tracked_success=success|((field_tables.IS_BOOST[move]|item_ops.EXCHANGE[move]|ability_ops.MOVE_IMPLEMENTED[move])&(c[0].action_state[actor,mon,tracking.RESULT]==tracking.TRUE))
         c=_when(tracked_success,lambda c:tracking.attacked(c,target,actor,move,i32(0),i32(tracking.TRUE),i32(0),_engine()),c)
         c=_when((~phaze_ops.STATUS[move])&((move!=identity_ops.MOVE)|sub_block),lambda c:tracking.outcome(c,actor,jnp.where(tracked_success|sub_block,tracking.TRUE,tracking.FALSE),move),c)
-        return _when((success|sub_block|(item_ops.EXCHANGE[move]&tracked_success))&(~phaze_ops.STATUS[move])&((move!=identity_ops.MOVE)|sub_block),lambda c:_update(_update(c,HIT_UPDATE),HIT_UPDATE),c)
+        return _when((success|sub_block|((item_ops.EXCHANGE[move]|ability_ops.MOVE_IMPLEMENTED[move])&tracked_success))&(~phaze_ops.STATUS[move])&((move!=identity_ops.MOVE)|sub_block),lambda c:_update(_update(c,HIT_UPDATE),HIT_UPDATE),c)
     return jax.lax.cond(damaging,physical,status_hit,c)
 
 
@@ -545,7 +551,7 @@ def _attack(c,row):
                 levitate=(s.ability[target,tm]==3)&(move_type==generic.TYPES['ground'])
                 damaging=tables.CATEGORY[move]>0
                 immune=(item_ops.EXCHANGE[move]&(s.ability[target,tm]==tables.ABILITY_IDS['stickyhold']))|((move!=STRUGGLE)&(((damaging|(move==THUNDER_WAVE))&type_immune)|(damaging&levitate)))
-                blocked=s.protected[target,tm]
+                blocked=s.protected[target,tm]&ability_ops.PROTECT[move]
                 def block(c):return _event(tracking.outcome(c,actor,i32(tracking.NULL),move),ACTIVATE,target,tm,move=PROTECT)
                 def immunity(c):return _event(c,IMMUNE,target,tm,aux=jnp.where(levitate,2,0))
                 def try_hit(c):
@@ -559,7 +565,7 @@ def _attack(c,row):
                             return _event((s,t),MISS,actor,mon,move,target,tm)
                         def hit_fn(c):
                             s,t=c
-                            existing=(move!=identity_ops.MOVE)&(~item_ops.EXCHANGE[move])&(~phaze_ops.STATUS[move])&(tables.CATEGORY[move]==0)&(~field_tables.IS_BOOST[move])&(move!=CONFUSE_RAY)&(s.status[target,tm]!=NONE)&(s.status[target,tm]!=jnp.where(move==WISP,BRN,jnp.where(move==TOXIC,TOX,jnp.where(move==POISON_POWDER,PSN,jnp.where(move==SPORE,SLP,PAR)))))
+                            existing=(~ability_ops.MOVE_IMPLEMENTED[move])&(move!=identity_ops.MOVE)&(~item_ops.EXCHANGE[move])&(~phaze_ops.STATUS[move])&(tables.CATEGORY[move]==0)&(~field_tables.IS_BOOST[move])&(move!=CONFUSE_RAY)&(s.status[target,tm]!=NONE)&(s.status[target,tm]!=jnp.where(move==WISP,BRN,jnp.where(move==TOXIC,TOX,jnp.where(move==POISON_POWDER,PSN,jnp.where(move==SPORE,SLP,PAR)))))
                             t=t._replace(events=t.events.at[move_row,7].set(jnp.where(existing,2,t.events[move_row,7])))
                             return _hit((s,t),actor,move)
                         return jax.lax.cond(hit,hit_fn,miss,c)
@@ -631,6 +637,7 @@ def _switch_entry(c,row,drag=False):
         ix=jnp.nonzero(keep,size=QUEUE,fill_value=0)[0];count=jnp.sum(keep).astype(jnp.int32)
         s=s._replace(queue=jnp.where((jnp.arange(QUEUE)<count)[:,None],s.queue[ix],0),qcount=count)
     c=trigger_form_ops.end((s,t),side,_engine());s,t=c
+    s=s._replace(ability_staleness=s.ability_staleness.at[side,s.active[side]].set(0))
     s=identity_ops.restore(s,side,_engine())
     s=jax.lax.cond(s.hp[side,old]>0,lambda s:tracking.clear_volatile(s,side),lambda s:s,s)
     oldslot=jnp.argmax(s.order[side]==old)
@@ -875,7 +882,7 @@ def _supported(s,initializing=False):
     safe_species=jnp.clip(s.species,0,len(SPECIES)-1)
     base=derive_stored_stats(BASE_STATS[safe_species],s.level,s.ivs,s.evs,
                             generic.NATURE_MULTIPLIERS[s.nature],tables.SHEDINJA[safe_species])
-    stat_ok=identity_ops.valid(s,_engine())&jnp.all((s.illusion>=-1)&(s.illusion<ROSTER))&jnp.all((s.ability_effect_id>=0)&(s.ability_effect_id<len(ABILITIES)))
+    stat_ok=jnp.all((s.ability_staleness>=0)&(s.ability_staleness<=1))&identity_ops.valid(s,_engine())&jnp.all((s.illusion>=-1)&(s.illusion<ROSTER))&jnp.all((s.ability_effect_id>=0)&(s.ability_effect_id<len(ABILITIES)))
     slots=jnp.arange(4)
     duplicate=(s.moves[:,:,:,None]==s.moves[:,:,None,:])&(s.moves[:,:,:,None]>0)&(slots[:,None]<slots[None,:])
     valid_order=jnp.all(jnp.sort(s.order,axis=1)==jnp.arange(ROSTER))
@@ -883,8 +890,9 @@ def _supported(s,initializing=False):
     weather_sources=(source>=0)&(source<2)&(source_mon>=0)&(source_mon<ROSTER)&(source_move>=0)&(source_move<len(MOVE_KEYS))
     weather_sources=weather_sources&(s.species[jnp.clip(source,0,1),jnp.clip(source_mon,0,ROSTER-1)]>0)
     move_weather=(source_move>0)&(field_tables.WEATHER[jnp.clip(source_move,0,len(MOVE_KEYS)-1)]==weather)&(duration>=1)
-    weather_ability=s.ability[jnp.clip(source,0,1),jnp.clip(source_mon,0,ROSTER-1)]
-    ability_weather=(source_move==0)&(hook_tables.ABILITY_WEATHER[jnp.clip(weather_ability,0,len(ABILITIES)-1)]==weather)&(duration==0)
+    # Native permanent weather retains its creator after that mon loses the
+    # weather ability. Creation-time source occupancy survives ability mutation.
+    ability_weather=(source_move==0)&(duration==0)
     weather_ok=jnp.where(weather>0,weather_sources&(move_weather|ability_weather),
                          (source==-1)&(source_mon==-1)&(source_move==0)&(duration==0))
     screen_side=s.screens[:,:,1];screen_mon=s.screens[:,:,2];screen_move=s.screens[:,:,3]
@@ -909,7 +917,7 @@ def _supported(s,initializing=False):
             &jnp.all((s.species>=0)&(s.species<len(SPECIES)))&jnp.all(jnp.any(occupied,axis=1))
             &jnp.all((~occupied)|(tables.SPECIES_IMPLEMENTED|form_ops.SPECIES_IMPLEMENTED|trigger_form_ops.SPECIES_IMPLEMENTED)[safe_species])
             &jnp.all((s.moves>=0)&(s.moves<len(MOVE_KEYS))&(s.moves!=STRUGGLE))
-            &jnp.all((s.moves==0)|(tables.MOVE_IMPLEMENTED|field_tables.MOVE_IMPLEMENTED|hit_tables.MOVE_IMPLEMENTED|phase_ops.MOVE_IMPLEMENTED|partial_ops.MOVE_IMPLEMENTED|phaze_ops.MOVE_IMPLEMENTED|pursuit_ops.MOVE_IMPLEMENTED|item_ops.MOVE_IMPLEMENTED|identity_ops.MOVE_IMPLEMENTED|trigger_form_ops.MOVE_IMPLEMENTED)[jnp.clip(s.moves,0,len(MOVE_KEYS)-1)])
+            &jnp.all((s.moves==0)|(tables.MOVE_IMPLEMENTED|field_tables.MOVE_IMPLEMENTED|hit_tables.MOVE_IMPLEMENTED|phase_ops.MOVE_IMPLEMENTED|partial_ops.MOVE_IMPLEMENTED|phaze_ops.MOVE_IMPLEMENTED|pursuit_ops.MOVE_IMPLEMENTED|item_ops.MOVE_IMPLEMENTED|identity_ops.MOVE_IMPLEMENTED|trigger_form_ops.MOVE_IMPLEMENTED|ability_ops.MOVE_IMPLEMENTED)[jnp.clip(s.moves,0,len(MOVE_KEYS)-1)])
             &jnp.all((s.item>=0)&(s.item<len(ITEMS)))
             &jnp.all((hook_tables.ITEM_IMPLEMENTED|hit_tables.ITEM_IMPLEMENTED|phase_ops.ITEM_IMPLEMENTED|partial_ops.ITEM_IMPLEMENTED)[jnp.clip(s.item,0,len(ITEMS)-1)])
             &jnp.all((s.ability>=0)&(s.ability<len(ABILITIES)))&jnp.all((hook_tables.ABILITY_IMPLEMENTED|hit_tables.ABILITY_IMPLEMENTED|trap_ops.ABILITY_IMPLEMENTED|phaze_ops.ABILITY_IMPLEMENTED|item_ops.ABILITY_IMPLEMENTED|identity_ops.ABILITY_IMPLEMENTED|illusion_ops.ABILITY_IMPLEMENTED|form_ops.ABILITY_IMPLEMENTED|trigger_form_ops.ABILITY_IMPLEMENTED)[jnp.clip(s.ability,0,len(ABILITIES)-1)])
@@ -957,7 +965,7 @@ def _supported(s,initializing=False):
 def _validate_structure(s):
     if not isinstance(s,(State,CoreState)):raise ValueError('expected shared-engine State or CoreState')
     roster_fields={'species','level','speed','gender','hp','item','status','toxic','stall','stall_duration',
-                   'illusion','ability_effect_id','base_species','base_ability','base_used','transformed','known_type','nature','ability','hp_type','hp_power','shiny','happiness','name','ability_order','item_order'}
+                   'ability_staleness','illusion','ability_effect_id','base_species','base_ability','base_used','transformed','known_type','nature','ability','hp_type','hp_power','shiny','happiness','name','ability_order','item_order'}
     vector_fields={'active','pending','request','pivot'}
     bool_fields={'fainted','protected','pivot','midturn','shiny','sleep_clause_target','transformed','known_type'}
     for name,value in zip(type(s)._fields,s):
@@ -1144,7 +1152,7 @@ def _initialize(species,level,moves,item,evs,seed,generation,ivs,nature,ability,
             jnp.where(occupied,generic.hidden_power(ivs)[1],0),shiny,happiness,name,jnp.zeros((2,6,7),jnp.int32),i32(0),effects.empty_status(),
             jnp.zeros((2,6,len(phase_ops.VOLATILES),phase_ops.VOLATILE_WIDTH),jnp.int32),zeros,zeros,field_ops.empty_weather(),jnp.zeros((2,2,5),jnp.int32),jnp.zeros((2,2,3),jnp.int32),jnp.array(False),jnp.zeros((2,6,3,4),jnp.int32),
             tracking.empty().at[:,:,tracking.NEWLY_SWITCHED].set(occupied.astype(jnp.int32)),
-            jnp.zeros((2,6,tracking.ATTACK_RECORDS,7),jnp.int32),jnp.full((2,2),-1,jnp.int32),jnp.zeros(4,jnp.int32),i32(0),i32(0),jnp.zeros((2,2),jnp.int32),jnp.stack((item,zeros),axis=-1),species,ability,stats,moves,PP[moves],zeros,jnp.zeros((2,6),jnp.bool_),occupied,tables.SPECIES_TYPES[species],ability,jnp.full((2,6),-1,jnp.int32))
+            jnp.zeros((2,6,tracking.ATTACK_RECORDS,7),jnp.int32),jnp.full((2,2),-1,jnp.int32),jnp.zeros(4,jnp.int32),i32(0),i32(0),jnp.zeros((2,2),jnp.int32),jnp.stack((item,zeros),axis=-1),species,ability,stats,moves,PP[moves],zeros,jnp.zeros((2,6),jnp.bool_),occupied,tables.SPECIES_TYPES[species],ability,jnp.full((2,6),-1,jnp.int32),zeros)
     return jax.lax.cond(_supported(s,initializing=True),_initialize_events,lambda s:Result(s,i32(UNSUPPORTED),empty_trace()),s)
 
 

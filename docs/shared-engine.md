@@ -14,7 +14,7 @@ Full-format G4
 coverage remains separate acceptance work. Historical evidence keeps its original
 source/schema identity; it does not imply validation of later engine changes.
 
-The current runtime uses [schema 20](../rules/shared-engine-v20.json). Schemas
+The current runtime uses [schema 21](../rules/shared-engine-v21.json). Schemas
 4–6 integrated major statuses and effect provenance, boosts/weather/screens,
 and observed ability/item hooks. Schema7 adds declarative hit counts, per-hit
 updates, capped drain/recoil arithmetic, self-destruction and reactive damage.
@@ -616,3 +616,11 @@ Mode runs in residual order29, persists an ability-source volatile, reverses on
 recovery and emits the native silent form restoration on ability End at switching.
 Volatile slot23 and journal9 preserve its source/order and live continuation.
 Focused17/30 CPU parity passes; broader regressions and full G4 remain pending.
+
+Schema21 implements Role Play, Skill Swap and Entrainment over separate base and
+effective abilities. Start/End ordering, Illusion reveal, private original ability
+and native external volatile staleness persist through switching/fainting and
+saved continuation. Skill Swap starts the recipient of the source ability first;
+acquiring Imposter does not invoke its SwitchIn callback. Move protection respects
+the resolved move flag. Journal10 binds ability provenance. Focused29/58 CPU parity
+passes; suppression/ability creation and broad/full-format gates remain pending.

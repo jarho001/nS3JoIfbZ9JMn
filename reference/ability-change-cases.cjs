@@ -1,0 +1,20 @@
+'use strict';
+module.exports=function(){
+ const m=(species,moves,extra={})=>({species,moves,ability:'Synchronize',item:'',level:50,nature:'Hardy',gender:'M',ivs:{hp:31,atk:31,def:31,spa:31,spd:31,spe:31},evs:{hp:0,atk:0,def:0,spa:0,spd:0,spe:0},...extra});
+ const b=(a=1,c=1)=>({p1:`move ${a}`,p2:`move ${c}`}),cases=[],add=(id,move='Role Play',extra={})=>cases.push({id:'G4-ability-change-'+id,seed:1,generic:true,identityFamily:true,abilityChangeFamily:true,hitFamily:true,p1:[m('Mew',[move,'Tackle'],{evs:{spe:252}}),m('Mew',['Tackle'])],p2:[m('Mew',['Recover','Tackle'],{ability:'Pressure'}),m('Mew',['Tackle'])],steps:[b(),b(2,2),{p1:'switch 2',p2:'move 1'}],...extra});
+ for(const [id,ability]of [['intimidate','Intimidate'],['frisk','Frisk'],['drought','Drought'],['same','Synchronize'],['forbidden','Illusion'],['imposter','Imposter']])add('role-'+id,'Role Play',{p2:[m('Mew',['Recover','Tackle'],{ability,item:'Leftovers'}),m('Snorlax',['Tackle'])],steps:[b(),b(2,2)]});
+ add('role-sub','Role Play',{p2:[m('Mew',['Substitute','Tackle'],{ability:'Pressure',evs:{spe:252},nature:'Timid'})],steps:[b(),b()]});
+ add('role-illusion-end','Role Play',{p1:[m('Zoroark',['Role Play','Tackle'],{ability:'Illusion',evs:{spe:252}}),m('Snorlax',['Tackle'])],steps:[b(),b(2,2)]});
+ add('role-restore');
+ for(const [id,ability]of [['pressure','Pressure'],['intimidate','Intimidate'],['frisk','Frisk'],['drought','Drought'],['same','Synchronize'],['forbidden','Illusion'],['imposter','Imposter']])add('swap-'+id,'Skill Swap',{p2:[m('Mew',['Recover','Tackle'],{ability,item:'Leftovers'}),m('Snorlax',['Tackle'])],steps:[b(),b(2,2)]});
+ add('swap-protect','Skill Swap',{p2:[m('Mew',['Protect','Tackle'],{ability:'Pressure'})],steps:[b()]});
+ for(const [id,ability]of [['pressure','Pressure'],['intimidate','Intimidate'],['frisk','Frisk'],['drought','Drought'],['imposter','Imposter']])add('entrain-'+id,'Entrainment',{p1:[m('Mew',['Entrainment','Tackle'],{ability,evs:{spe:252},item:'Leftovers'}),m('Snorlax',['Tackle'])],p2:[m('Mew',['Recover','Tackle'])],steps:[b(),b(2,2)]});
+ add('entrain-sub','Entrainment',{p2:[m('Mew',['Substitute','Tackle'],{ability:'Pressure',evs:{spe:252},nature:'Timid'})],steps:[b(),b()]});
+ add('entrain-illusion-end','Entrainment',{p2:[m('Zoroark',['Recover','Tackle'],{ability:'Illusion'}),m('Snorlax',['Tackle'])],steps:[b(),b(2,2)]});
+ add('swap-sub','Skill Swap',{p2:[m('Mew',['Substitute','Tackle'],{ability:'Pressure',evs:{spe:252},nature:'Timid'})],steps:[b(),b()]});
+ add('swap-start-order','Skill Swap',{p1:[m('Mew',['Skill Swap','Tackle'],{ability:'Drought',evs:{spe:252}})],p2:[m('Mew',['Recover','Tackle'],{ability:'Drizzle'})],steps:[b()]});
+ add('swap-imposter-start','Skill Swap',{p1:[m('Mew',['Skill Swap','Substitute'],{evs:{spe:252}})],p2:[m('Mew',['Recover']),m('Ditto',['Transform'],{ability:'Imposter'})],steps:[b(2),{p1:'move 2',p2:'switch 2'},b()]});
+ add('entrain-target-switch','Entrainment',{p2:[m('Mew',['Tackle'],{ability:'Pressure'}),m('Mew',['Tackle'])],steps:[b(),{p1:'move 2',p2:'switch 2'}]});
+ add('entrain-target-faint','Entrainment',{p2:[m('Mew',['Tackle'],{ability:'Pressure'}),m('Mew',['Tackle'])],setup:[{side:'p2',hp:1}],steps:[b(),b(2)]});
+ return cases;
+};
