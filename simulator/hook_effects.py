@@ -62,10 +62,12 @@ def stats(attack,defense,s,actor,target,physical,move_type,e):
     thick=(defender==h.A['thickfat'])&((move_type==e.generic.TYPES['fire'])|(move_type==e.generic.TYPES['ice']))
     atk_modifier=chain(atk_modifier,jnp.where(thick,2048,4096))
     choice=((item==h.I['choiceband'])&physical)|((item==h.I['choicespecs'])&(~physical))
+    atk_modifier=chain(atk_modifier,jnp.where(physical&e.form_ops.flower(s,actor),6144,4096))
     atk_modifier=chain(atk_modifier,jnp.where(choice,6144,4096))
     marvel=(defender==h.A['marvelscale'])&physical&(s.status[target,tm]!=e.NONE)
     def_modifier=jnp.where(marvel,6144,4096).astype(jnp.int32)
     eviolite=(s.item[target,tm]==h.I['eviolite'])&h.NFE[s.species[target,tm]]
+    def_modifier=chain(def_modifier,jnp.where((~physical)&e.form_ops.flower(s,target),6144,4096))
     def_modifier=chain(def_modifier,jnp.where(eviolite,6144,4096))
     sand=(s.weather_state[0]==3)&(~physical)&jnp.any(s.types[target,tm]==e.generic.TYPES['rock'])
     def_modifier=chain(def_modifier,jnp.where(sand,6144,4096))
@@ -123,10 +125,9 @@ def ability_start(c,side,e,initial=False):
         c=e._event((s._replace(weather_state=state),t),e.WEATHER,side,m,move=ability,value=weather,aux=2)
         s,t=c;speeds=s.speed[jnp.arange(2),s.active]
         context=e.INIT if initial else e.WEATHER_CHANGE
-        return e._when((speeds[0]==speeds[1])&jnp.all(~s.fainted[jnp.arange(2),s.active]),
-                       lambda c:e._draw(c,0,2,context,2)[0],c)
+        return e.form_ops.weather_change(c,e,context)
     c=e._when((weather>0)&((c[0].weather_state[0]!=weather)|(c[0].weather_state[4]>0)),set_weather,c)
-    return c
+    return e.form_ops.change(c,side,e)
 
 
 def start(c,side,e,initial=False):

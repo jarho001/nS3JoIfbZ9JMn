@@ -1138,10 +1138,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/forms.json.gz",
+          "native": "reference/form-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_form_engine.py"
+        }
+      ],
       "field": "onAllyModifyAtk",
       "id": "abilities:flowergift:onAllyModifyAtk",
-      "implementation": null,
+      "implementation": {
+        "family": "form",
+        "file": "simulator/forms.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:flowergift",
@@ -1152,7 +1164,7 @@
       "owner": "abilities:flowergift",
       "reachability": "candidate",
       "sha256": "915d1073b25c727d5cb14d2b4e41e0440cc63395c9a870850e291160816455ab",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -1161,10 +1173,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/forms.json.gz",
+          "native": "reference/form-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_form_engine.py"
+        }
+      ],
       "field": "onAllyModifySpD",
       "id": "abilities:flowergift:onAllyModifySpD",
-      "implementation": null,
+      "implementation": {
+        "family": "form",
+        "file": "simulator/forms.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:flowergift",
@@ -1175,7 +1199,7 @@
       "owner": "abilities:flowergift",
       "reachability": "candidate",
       "sha256": "db12452d39b74198bcbeae0465604e06f5984498b32a9001fa276ac9f3286631",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -1184,10 +1208,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/forms.json.gz",
+          "native": "reference/form-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_form_engine.py"
+        }
+      ],
       "field": "onStart",
       "id": "abilities:flowergift:onStart",
-      "implementation": null,
+      "implementation": {
+        "family": "form",
+        "file": "simulator/forms.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:flowergift",
@@ -1198,7 +1234,7 @@
       "owner": "abilities:flowergift",
       "reachability": "candidate",
       "sha256": "9f731f151b7ef4e2a5f17bf9409874c79922bffe2789d10b169ac38743a167c0",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -1207,10 +1243,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/forms.json.gz",
+          "native": "reference/form-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_form_engine.py"
+        }
+      ],
       "field": "onWeatherChange",
       "id": "abilities:flowergift:onWeatherChange",
-      "implementation": null,
+      "implementation": {
+        "family": "form",
+        "file": "simulator/forms.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:flowergift",
@@ -1221,7 +1269,7 @@
       "owner": "abilities:flowergift",
       "reachability": "candidate",
       "sha256": "31f0562330d02f717f000af7e92fda57463b6e37f7dde852a76630393dca278e",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -1230,10 +1278,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/forms.json.gz",
+          "native": "reference/form-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_form_engine.py"
+        }
+      ],
       "field": "onStart",
       "id": "abilities:forecast:onStart",
-      "implementation": null,
+      "implementation": {
+        "family": "form",
+        "file": "simulator/forms.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:forecast",
@@ -1244,7 +1304,7 @@
       "owner": "abilities:forecast",
       "reachability": "candidate",
       "sha256": "9f731f151b7ef4e2a5f17bf9409874c79922bffe2789d10b169ac38743a167c0",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -1253,10 +1313,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/forms.json.gz",
+          "native": "reference/form-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_form_engine.py"
+        }
+      ],
       "field": "onWeatherChange",
       "id": "abilities:forecast:onWeatherChange",
-      "implementation": null,
+      "implementation": {
+        "family": "form",
+        "file": "simulator/forms.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:forecast",
@@ -1267,7 +1339,7 @@
       "owner": "abilities:forecast",
       "reachability": "candidate",
       "sha256": "802ac34d19088f800575aa198852938a9ab05e9d1b7ed016315829c3588bdf84",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -68115,10 +68187,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/forms.json.gz",
+          "native": "reference/form-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_form_engine.py"
         }
       ],
       "id": "abilities:flowergift",
       "implementation": {
+        "behavior": {
+          "family": "form",
+          "file": "simulator/forms.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -68145,10 +68229,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/forms.json.gz",
+          "native": "reference/form-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_form_engine.py"
         }
       ],
       "id": "abilities:forecast",
       "implementation": {
+        "behavior": {
+          "family": "form",
+          "file": "simulator/forms.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"

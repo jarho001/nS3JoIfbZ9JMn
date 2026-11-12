@@ -64,6 +64,8 @@ def initialize_case(case):
         if 'stall' in setup:
             s,_=e.effects.add_volatile((s,e.empty_trace()),e.i32(side),1,e.i32(side),e.i32(0),e)
             s=s._replace(stall=s.stall.at[side,mon].set(setup['stall']),stall_duration=s.stall_duration.at[side,mon].set(2))
+    # Trusted PP installations affect original slots, before any virtual copies.
+    s=s._replace(base_pp=e.jnp.where(s.transformed[:,:,None],s.base_pp,s.pp))
     assert_placement((s,init.trace))
     return s,init.trace
 

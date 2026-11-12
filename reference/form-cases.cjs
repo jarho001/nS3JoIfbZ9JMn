@@ -1,0 +1,20 @@
+'use strict';
+module.exports=function(){
+ const m=(species,moves,extra={})=>({species,moves,ability:'Synchronize',item:'',level:50,nature:'Hardy',gender:'M',ivs:{hp:31,atk:31,def:31,spa:31,spd:31,spe:31},evs:{hp:0,atk:0,def:0,spa:0,spd:0,spe:0},...extra});
+ const b=(a=1,c=1)=>({p1:`move ${a}`,p2:`move ${c}`}),cast=(extra={})=>m('Castform',['Tackle','Recover'],{ability:'Forecast',...extra}),flower=()=>m('Cherrim',['Tackle','Recover'],{ability:'Flower Gift'}),cases=[];
+ const add=(id,x={})=>cases.push({id:'G4-forms-'+id,seed:1,generic:true,identityFamily:true,formFamily:true,hitFamily:true,p1:[cast(),m('Mew',['Tackle'])],p2:[m('Mew',['Sunny Day','Recover'])],steps:[b(),b(1,2)],...x});
+ for(const [id,weather]of [['sun','Sunny Day'],['rain','Rain Dance'],['hail','Hail'],['sand','Sandstorm']])add(id,{p2:[m('Mew',[weather,'Recover'])]});
+ add('cycle',{p2:[m('Mew',['Sunny Day','Rain Dance','Hail','Sandstorm'])],steps:[b(),b(1,2),b(1,3),b(1,4)]});
+ add('expiry',{steps:[b(),b(2,2),b(2,2),b(2,2),b(2,2),b(1,2)]});
+ add('startup',{p2:[m('Mew',['Tackle','Recover'],{ability:'Drought'})]});
+ add('entry',{p1:[m('Mew',['Tackle']),cast()],steps:[b(),{p1:'switch 2',p2:'move 2'},b()]});
+ add('restore',{steps:[b(),{p1:'switch 2',p2:'move 2'},{p1:'switch 2',p2:'move 2'}]});
+ add('flower',{p1:[flower()],p2:[m('Mew',['Sunny Day','Flamethrower'])],steps:[b(),b(1,2)]});
+ add('flower-expiry',{p1:[flower()],steps:[b(),b(2,2),b(2,2),b(2,2),b(2,2)]});
+ add('wrong-species',{p1:[m('Mew',['Tackle'],{ability:'Forecast'})]});
+ add('wrong-flower',{p1:[m('Mew',['Tackle'],{ability:'Flower Gift'})]});
+ add('transformed',{p1:[m('Mew',['Transform','Tackle'],{evs:{spe:252}})],p2:[m('Castform',['Sunny Day','Tackle'],{ability:'Forecast'})],steps:[b(),b(2,2)]});
+ add('both',{p1:[cast()],p2:[m('Castform',['Sunny Day','Tackle'],{ability:'Forecast'})]});
+ add('mirrored',{p1:[m('Mew',['Sunny Day','Recover'])],p2:[flower()]});
+ return cases;
+};

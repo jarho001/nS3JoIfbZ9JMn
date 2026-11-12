@@ -42,8 +42,7 @@ def move(c,actor,move,move_row,e):
             c=e._event(e.tracking.outcome((s._replace(weather_state=state),t),actor,e.i32(e.tracking.TRUE),move),e.WEATHER,value=weather)
             # Field.setWeather broadcasts WeatherChange before hit resolution.
             s,t=c;speeds=s.speed[jnp.arange(2),s.active]
-            return e._when((speeds[0]==speeds[1])&jnp.all(~s.fainted[jnp.arange(2),s.active]),
-                           lambda c:e._draw(c,0,2,e.WEATHER_CHANGE,2)[0],c)
+            return e.form_ops.weather_change(c,e,e.WEATHER_CHANGE)
         return jax.lax.cond(c[0].weather_state[0]==weather,lambda c:_fail(c,actor,move_row,e),start,c)
     def screen_move(c):
         index=screen-1
@@ -91,8 +90,7 @@ def weather_tick(c,e):
         s,t=c;state=empty_weather().at[5].set(1)
         c=e._event((s._replace(weather_state=state),t),e.WEATHER,value=0)
         speeds=s.speed[jnp.arange(2),s.active]
-        return e._when((speeds[0]==speeds[1])&jnp.all(~s.fainted[jnp.arange(2),s.active]),
-                       lambda c:e._draw(c,0,2,e.WEATHER_CHANGE,2)[0],c)
+        return e.form_ops.weather_change(c,e,e.WEATHER_CHANGE)
     def active(c):
         s,t=c;s=s._replace(weather_state=s.weather_state.at[4].set(remaining));c=(s,t)
         c=e._event(c,e.WEATHER,value=weather,aux=1)

@@ -14,7 +14,7 @@ Full-format G4
 coverage remains separate acceptance work. Historical evidence keeps its original
 source/schema identity; it does not imply validation of later engine changes.
 
-The current runtime uses [schema 18](../rules/shared-engine-v18.json). Schemas
+The current runtime uses [schema 19](../rules/shared-engine-v19.json). Schemas
 4–6 integrated major statuses and effect provenance, boosts/weather/screens,
 and observed ability/item hooks. Schema7 adds declarative hit counts, per-hit
 updates, capped drain/recoil arithmetic, self-destruction and reactive damage.
@@ -602,3 +602,10 @@ format includes Illusion Level Mod. Private requests retain true identities.
 Journal8 binds the new field and16-column pages; older journal promotion requires
 independent matching replay. Focused12/25 CPU parity and live persistence pass;
 broad migration/execution gates remain pending.
+
+Schema19 adds weather-driven Castform/Cherrim forms and Flower Gift stat hooks.
+Effective species/types/stored and request stats change while base identity and
+original switch details persist. WeatherChange callbacks follow the existing
+native speed shuffle; Transform suppresses these form changes, and switching
+restores the base species. Focused16/43 CPU parity and live persistence pass.
+Other forms, broad execution/migration gates and full-format acceptance remain open.
