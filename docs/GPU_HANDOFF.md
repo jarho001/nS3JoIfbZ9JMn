@@ -7,28 +7,29 @@ GPU. Preparing this handoff does not run device tests, profiling or benchmarks.
 
 ## Current source and evidence
 
-The engine is schema 8, adding forced recharge after schema7's hit/thaw
-integration. Four recharge CPU integration checks and 12 prior scalar/migration checks pass.
-Exact source, commands and results are in
+The schema9 candidate adds hidden causal state and integrated move phases after
+schema8's recharge checkpoint. Its CPU validation is in progress; do not treat
+this as a passing source checkpoint yet. Historical schema8 results remain in
 [schema8-checkpoint.json](../test-logs/g4-cpu-conformance/schema8-checkpoint.json).
-The entire 57-check matching-source suite was not repeated; run the handoff on
-matching committed source. Historical schema7 evidence remains in
-[schema7-checkpoint.json](../test-logs/g4-cpu-conformance/schema7-checkpoint.json).
 
-The expanded runner expects **57 checks in 13 isolated modules**, using eight
-independent native corpora: **453 scenarios / 2524 boundaries**, including
-26 complete constructed six-member games. The 34 recharge scenarios are in
-`test.test_recharge_engine`. Full G4 remains open: remaining reachable mechanics,
-closure audit, causal counters, history/terminal repair and the fixed full-format
-campaigns are still required. A genuine reference-generated switch-only game
-already proves the existing history bound insufficient (6541 visible rows).
-That native-only witness is not an implemented GPU test.
+The expanded runner expects **61 checks in 14 isolated modules**, using nine
+independent native corpora: **526 scenarios / 2895 boundaries**, including
+28 complete constructed six-member games. The new 73 phase scenarios are in
+`test.test_lock_phase_engine`. The runner recaptures causal state for the prior
+corpora too. Use the existing commands below on matching committed source.
+Full G4 remains open: remaining reachable mechanics, closure audit, history and
+terminal repair and fixed full-format campaigns are still required. A genuine
+reference-generated switch-only game proves the existing history bound
+insufficient (6541 visible rows). That witness is not an implemented GPU test.
+The 1024-row per-holder attack list is guarded atomically; its final reachable
+capacity audit also remains pending. No device run or performance result is
+claimed by this update.
 
 The preceding **49-check schema 6 CPU checkpoint passed on `7631872`**, with
 unchanged source/input hashes and actual CPU placement. Its
 [record](../test-logs/g4-cpu-conformance/schema6-checkpoint.json) and regression
 archive retain commands, fixture/source identities and every module log.
-That result is historical evidence for schema 8. Earlier incomplete/OOM and
+That result is historical evidence for schema 9. Earlier incomplete/OOM and
 schema3/5 evidence remain in [active progress](ORCHESTRATION_STATE.json).
 The runner isolates modules and integration suites release compiled caches;
 cases and batch sizes are retained.
@@ -76,7 +77,7 @@ the combined block below:
    hashes, selected host affinity and independent native fixture hashes.
 2. Freezes legacy, hazard, generic, status, field/boost, ability/item, hit/thaw and recharge corpora. Runs the
    reference/native contracts. Unknown/unsupported families stay explicit.
-3. Runs the same current 57-check scope on CPU, then under `JAX_PLATFORMS=cuda`,
+3. Runs the same current 61-check scope on CPU, then under `JAX_PLATFORMS=cuda`,
    with each test module in a fresh process.
    A strict probe verifies actual eager/JIT GPU placement; shared case/lifecycle
    assertions also check device leaves. `cuda` initialization failure is a failure.

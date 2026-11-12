@@ -61,7 +61,9 @@ def initialize_case(case):
                 key=e.MOVE_KEYS[int(move)]
                 if key in setup['ppByMove']:s=s._replace(pp=s.pp.at[side,mon,slot].set(setup['ppByMove'][key]))
         if 'toxicStage' in setup:s=s._replace(toxic=s.toxic.at[side,mon].set(setup['toxicStage']))
-        if 'stall' in setup:s=s._replace(stall=s.stall.at[side,mon].set(setup['stall']),stall_duration=s.stall_duration.at[side,mon].set(2))
+        if 'stall' in setup:
+            s,_=e.effects.add_volatile((s,e.empty_trace()),e.i32(side),1,e.i32(side),e.i32(0),e)
+            s=s._replace(stall=s.stall.at[side,mon].set(setup['stall']),stall_duration=s.stall_duration.at[side,mon].set(2))
     assert_placement((s,init.trace))
     return s,init.trace
 
@@ -86,12 +88,18 @@ def assert_state(test,s,native,label):
     test.assertEqual(int(s.turn),native['turn'],label+' turn')
     test.assertEqual(int(s.winner),native['winner'],label+' winner')
     test.assertEqual(bool(s.midturn),native['midTurn'],label+' midTurn')
+    if 'phaseState' in native:
+        from simulator.shared_engine_io import causal_battle
+        test.assertEqual(json.dumps(causal_battle(s),sort_keys=True),json.dumps(native['phaseState'],sort_keys=True),label+' causal battle')
     if 'effectOrder' in native:test.assertEqual(int(s.effect_order),native['effectOrder'],label+' global effectOrder')
     if 'field' in native:
         from simulator.shared_engine_io import field_state
         test.assertEqual(field_state(s),native['field'],label+' field state')
     for side,n in enumerate(native['sides']):
         prefix=label+f' p{side+1}'
+        if 'phaseState' in n:
+            from simulator.shared_engine_io import causal_side
+            test.assertEqual(json.dumps(causal_side(s,side),sort_keys=True),json.dumps(n['phaseState'],sort_keys=True),prefix+' causal side')
         if 'sideConditions' in n:
             from simulator.shared_engine_io import side_conditions
             test.assertEqual(side_conditions(s,side),n['sideConditions'],prefix+' side conditions')
@@ -121,6 +129,9 @@ def assert_state(test,s,native,label):
             stall=None if not int(s.stall_duration[side,m]) else {'counter':int(s.stall[side,m]),'duration':int(s.stall_duration[side,m])}
             test.assertEqual(stall,p['stall'],tag+' stall')
             test.assertEqual(bool(s.protected[side,m]),p['protect'],tag+' protect')
+            if 'phaseState' in p:
+                from simulator.shared_engine_io import causal_state
+                test.assertEqual(json.dumps(causal_state(s,side,m),sort_keys=True),json.dumps(p['phaseState'],sort_keys=True),tag+' causal Pokemon')
             if 'statusState' in p:
                 from simulator.shared_engine_io import effect_states
                 for key,value in effect_states(s,side,m).items():test.assertEqual(value,p[key],tag+' '+key)
@@ -135,7 +146,7 @@ def assert_state(test,s,native,label):
             if action>=0:
                 switch=4<=action<10
                 pending=[{'choice':'switch' if switch else 'move','actor':{'side':side,'mon':mon},
-                          'move':None if switch else 'recharge' if bool(e.phase_ops.locked(s)[side]) else e.MOVE_KEYS[e.STRUGGLE if action==10 else int(s.moves[side,mon,action])],
+                          'move':None if switch else 'recharge' if int(e.phase_ops.forced_move(s)[side])<0 else e.MOVE_KEYS[int(e.phase_ops.forced_move(s)[side])] if int(e.phase_ops.forced_move(s)[side])>0 else e.MOVE_KEYS[e.STRUGGLE if action==10 else int(s.moves[side,mon,action])],
                           'target':{'side':side,'mon':int(s.order[side,action-4])} if switch else None}]
             test.assertEqual(pending,n['pending'],prefix+' private pending choice')
             test.assertEqual(bool(s.request[side]>=e.WAIT or action>=0),n['choiceDone'],prefix+' ready')

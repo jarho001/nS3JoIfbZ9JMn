@@ -159,6 +159,7 @@ cases.push(...require('./field-boost-cases.cjs')(mon));
 cases.push(...require('./ability-item-cases.cjs')(mon));
 cases.push(...require('./hit-effect-cases.cjs')(mon));
 cases.push(...require('./recharge-cases.cjs')(mon));
+cases.push(...require('./lock-phase-cases.cjs')(mon));
 
 function scriptedChoices(battle,scenario,boundary) {
  const choices={};
@@ -180,6 +181,12 @@ function scriptedChoices(battle,scenario,boundary) {
   if(scenario.family==='hazards') {
    const wanted=battle.turn===1?'stealthrock':battle.turn===2?'spikes':(side.sideConditions.spikes||side.sideConditions.stealthrock)?'rapidspin':null;
    if(wanted&&moveCommand(wanted)){choices[side.id]=moveCommand(wanted);continue;}
+  }
+  if(scenario.family==='move-phases') {
+   const wanted=battle.turn%5===1?['taunt','encore','disable','torment','sunnyday','reflect']:[];
+   const status=wanted.map(moveCommand).find(Boolean);if(status){choices[side.id]=status;continue;}
+   const attacks=req.active[0].moves.map((m,i)=>!m.disabled&&battle.dex.moves.get(m.id).category!=='Status'?`move ${i+1}`:null).filter(Boolean);
+   choices[side.id]=attacks[0]??commands.find(c=>c.startsWith('move '))??commands[0];continue;
   }
   if(scenario.family==='ability-item') {
    if(!side.sideConditions.reflect&&moveCommand('reflect')){choices[side.id]=moveCommand('reflect');continue;}
@@ -240,6 +247,15 @@ function observeInitialization(ps, action) {
 }
 function capture(battle, ids, options={}) {
  const ref=p=>p?{side:p.side.n,mon:ids.get(p)}:null;
+ // Side.emitRequest(...,true) adds a resend notification to the mutable request.
+ // Freeze its decision data now; raw notifications remain in privatePackets.
+ const requestSnapshot=request=>{
+  if(!request)return request;
+  const snapshot=structuredClone(request);delete snapshot.update;
+  // Empty means no disabled-source information. Preserve every nonempty source.
+  for(const active of snapshot.active??[])for(const move of active.moves??[])if(move.disabledSource==='')delete move.disabledSource;
+  return snapshot;
+ };
  function effectState(value,depth=0) {
   if(depth>32)throw Error('Effect-state capture depth exceeded');
   if(value===null||typeof value!=='object') {
@@ -255,23 +271,35 @@ function capture(battle, ids, options={}) {
   if(Object.getPrototypeOf(value)!==Object.prototype&&Object.getPrototypeOf(value)!==null)throw Error('Uncaptured effect-state object '+value.constructor?.name);
   return Object.fromEntries(Object.keys(value).sort().map(k=>[k,effectState(value[k],depth+1)]));
  }
+ const typed=x=>x===undefined?{$undefined:true}:x;
+ const moveState=x=>x?{id:x.id,type:x.type,category:x.category,basePower:x.basePower}:null;
+ const tracking=p=>({lastMove:moveState(p.lastMove),lastMoveEncore:moveState(p.lastMoveEncore),lastMoveUsed:moveState(p.lastMoveUsed),
+  lastMoveTargetLoc:typed(p.lastMoveTargetLoc),lastDamage:p.lastDamage,activeTurns:p.activeTurns,activeMoveActions:p.activeMoveActions,
+  moveThisTurn:p.moveThisTurn,moveThisTurnResult:typed(p.moveThisTurnResult),moveLastTurnResult:typed(p.moveLastTurnResult),
+  hurtThisTurn:p.hurtThisTurn,timesAttacked:p.timesAttacked,trapped:p.trapped,maybeTrapped:p.maybeTrapped,maybeDisabled:p.maybeDisabled,
+  newlySwitched:p.newlySwitched,usedItemThisTurn:p.usedItemThisTurn,lastItem:p.lastItem,statsRaisedThisTurn:p.statsRaisedThisTurn,
+  statsLoweredThisTurn:p.statsLoweredThisTurn,moveSlotsUsed:p.moveSlots.map(m=>m.used),ateBerry:p.ateBerry,previouslySwitchedIn:p.previouslySwitchedIn,
+  attackedBy:p.attackedBy.map(a=>({source:ref(a.source),damage:a.damage,move:a.move,thisTurn:a.thisTurn,slot:a.slot,damageValue:typed(a.damageValue)}))});
  const queue=battle.queue.list.map(a=>({choice:a.choice,order:a.order,priority:a.priority??0,speed:a.speed??0,
   actor:ref(a.pokemon),target:ref(a.target),move:a.moveid??null,source:a.sourceEffect?.id??null}));
  return {
   rng:battle.prng.getSeed().split(',').map(Number),turn:battle.turn,terminal:battle.ended,
   winner:battle.ended?(battle.winner==='p1'?1:battle.winner==='p2'?2:0):-1,
   midTurn:battle.midTurn,requestState:battle.requestState,queue,
+  ...(options.tracking?{phaseState:{lastMove:moveState(battle.lastMove),lastSuccessfulMoveThisTurn:battle.lastSuccessfulMoveThisTurn,lastDamage:battle.lastDamage}}:{}),
   ...(options.effects?{effectOrder:battle.effectOrder}:{}),
   ...(options.field?{field:{weather:battle.field.weather,weatherState:effectState(battle.field.weatherState),
     pseudoWeather:effectState(battle.field.pseudoWeather),terrain:battle.field.terrain,terrainState:effectState(battle.field.terrainState)}}:{}),
   sides:battle.sides.map(side=>({
+   ...(options.tracking?{phaseState:{faintedThisTurn:ref(side.faintedThisTurn),faintedLastTurn:ref(side.faintedLastTurn)}}:{}),
    ...(options.field?{sideConditions:effectState(side.sideConditions)}:{}),
    hazards:[Number(!!side.sideConditions.stealthrock),side.sideConditions.spikes?.layers??0,({stealthrock:1,spikes:2})[Object.keys(side.sideConditions).find(k=>['stealthrock','spikes'].includes(k))]??0],
    active:ids.get(side.active[0]),order:side.pokemon.map(p=>ids.get(p)),
-   request:side.activeRequest,actions:side.activeRequest?actionSpace(side.activeRequest):null,
+   request:requestSnapshot(side.activeRequest),actions:side.activeRequest?actionSpace(side.activeRequest):null,
    pending:side.choice.actions.map(a=>({choice:a.choice,actor:ref(a.pokemon),move:a.moveid??null,target:ref(a.target)})),
    choiceDone:side.isChoiceDone(),
    pokemon:[...side.pokemon].sort((a,b)=>ids.get(a)-ids.get(b)).map(p=>({
+    ...(options.tracking?{phaseState:tracking(p)}:{}),
     id:ids.get(p),species:p.species.name,level:p.level,gender:p.gender,hp:p.hp,maxhp:p.maxhp,
     name:p.name,types:p.getTypes(),ivs:p.set.ivs,evs:p.set.evs,nature:p.set.nature??'Hardy',
     hpType:p.hpType,hpPower:p.hpPower,shiny:!!p.set.shiny,baseAbility:p.baseAbility,
@@ -294,6 +322,7 @@ function semanticContext(draw) {
  if(stack.includes('BattleActions.modifyDamage')&&draw.context==='speed-sort')return 'damage-modifiers';
  if(draw.eventId==='WeatherChange')return 'weather-change';
  if(draw.eventId==='Weather')return 'weather-order';
+ if(draw.effectId==='lockedmove')return 'rampage-duration';
  if(draw.effectId==='slp')return 'sleep-duration';
  if(draw.effectId==='frz')return 'freeze';
  if(draw.effectId==='confusion') {
@@ -314,7 +343,8 @@ function semanticContext(draw) {
  if(draw.eventId==='Update'||stack.includes('runPursuitActivation'))return 'update';
  throw Error('Unclassified native draw context: '+JSON.stringify(draw));
 }
-function runCase(ps, scenario) {
+function runCase(ps, scenario, {tracking=true}={}) {
+ tracking=tracking||!!scenario.lockFamily;
  const {battle,draws:initializationDraws}=observeInitialization(ps,()=>new ps.Battle({formatid:'gen5randombattle',seed:scenario.seedWords??[scenario.seed,2,3,4],
   p1:{name:'p1',team:scenario.p1},p2:{name:'p2',team:scenario.p2}}));
  try {
@@ -331,7 +361,7 @@ function runCase(ps, scenario) {
   }
   if(scenario.setup)battle.makeRequest('move');
   assert.equal(battle.prng.getSeed(),rng,'trusted boundary setup must not consume RNG');
-  const snapshot=()=>capture(battle,ids,{effects:scenario.statusFamily||scenario.fieldFamily||scenario.hookFamily||scenario.hitFamily||scenario.rechargeFamily,field:scenario.fieldFamily||scenario.statusFamily||scenario.hookFamily||scenario.hitFamily||scenario.rechargeFamily});
+  const snapshot=()=>capture(battle,ids,{tracking,effects:tracking||scenario.statusFamily||scenario.fieldFamily||scenario.hookFamily||scenario.hitFamily||scenario.rechargeFamily||scenario.lockFamily,field:tracking||scenario.fieldFamily||scenario.statusFamily||scenario.hookFamily||scenario.hitFamily||scenario.rechargeFamily||scenario.lockFamily});
   const record={id:scenario.id,classification:scenario.setup?'synthetic':'native-constructed',setup:scenario,initializationDraws,
    initial:snapshot(),initialEvents:events(battle),steps:[]};
   let boundary=0;
@@ -349,7 +379,7 @@ function runCase(ps, scenario) {
    try {observed=withObservedBattleDraws(ps,battle,()=>Object.entries(choices).map(([side,choice])=>{
     if(choice==='undo'){battle.undoChoice(side);return {side,choice,accepted:!battle[side].choice.actions.length};}
     return {side,choice,accepted:battle.choose(side,choice)};
-   }),{includeEffects:scenario.statusFamily||scenario.fieldFamily||scenario.hookFamily||scenario.hitFamily||scenario.rechargeFamily});} finally {battle.send=oldSend;}
+   }),{includeEffects:tracking||scenario.statusFamily||scenario.fieldFamily||scenario.hookFamily||scenario.hitFamily||scenario.rechargeFamily||scenario.lockFamily});} finally {battle.send=oldSend;}
    record.steps.push({choices,accepted:observed.result,before,after:snapshot(),
     draws:observed.draws.map(draw=>({...draw,semanticContext:semanticContext(draw)})),events:events(battle,start),privatePackets:acks});
   }
@@ -402,9 +432,20 @@ function main(argv) {
   if(coverageOutput)fs.writeFileSync(coverageOutput,JSON.stringify(coverage,null,2)+'\n',{flag:'wx'});
   return;
  }
- const selected=batch==='recharge'?cases.filter(c=>c.rechargeFamily):batch==='hits'?cases.filter(c=>c.hitFamily):batch==='hooks'?cases.filter(c=>c.hookFamily&&!c.hitFamily&&!c.rechargeFamily):batch==='field'?cases.filter(c=>c.fieldFamily):batch==='status'?cases.filter(c=>c.statusFamily):batch==='generic'?cases.filter(c=>c.generic&&!c.statusFamily&&!c.fieldFamily&&!c.hookFamily&&!c.hitFamily&&!c.rechargeFamily):batch==='g4'?cases.filter(c=>c.g4):batch==='all'?cases.filter(c=>!c.g4&&!c.generic):batch==='boundaries'?cases.filter(c=>!c.g4&&!c.generic&&!c.fullBattle):batch==='battles'?cases.filter(c=>!c.g4&&!c.generic&&c.fullBattle):cases.filter(c=>c.id===batch);
+ if(batch==='tracking') {
+  if(!output)throw Error('Tracking requires a fresh NDJSON output path');
+  const fd=fs.openSync(output,'wx');let boundaries=0;
+  const write=x=>fs.writeSync(fd,JSON.stringify(x)+'\n');
+  try {
+   write({kind:'header',schemaVersion:1,pin,format:'gen5randombattle',caseSchema:'gen5-causal-v1'});
+   for(const c of cases){const record=runCase(ps,c,{tracking:true});boundaries+=record.steps.length;write({kind:'case',...record});}
+   write({kind:'summary',cases:cases.length,boundaries});
+  } finally {fs.closeSync(fd);}
+  return;
+ }
+ const selected=batch==='locks'?cases.filter(c=>c.lockFamily):batch==='recharge'?cases.filter(c=>c.rechargeFamily):batch==='hits'?cases.filter(c=>c.hitFamily):batch==='hooks'?cases.filter(c=>c.hookFamily&&!c.hitFamily&&!c.rechargeFamily&&!c.lockFamily):batch==='field'?cases.filter(c=>c.fieldFamily):batch==='status'?cases.filter(c=>c.statusFamily):batch==='generic'?cases.filter(c=>c.generic&&!c.statusFamily&&!c.fieldFamily&&!c.hookFamily&&!c.hitFamily&&!c.rechargeFamily&&!c.lockFamily):batch==='g4'?cases.filter(c=>c.g4):batch==='all'?cases.filter(c=>!c.g4&&!c.generic):batch==='boundaries'?cases.filter(c=>!c.g4&&!c.generic&&!c.fullBattle):batch==='battles'?cases.filter(c=>!c.g4&&!c.generic&&c.fullBattle):cases.filter(c=>c.id===batch);
  if(!selected.length)throw Error('Empty native case selection: '+batch);
- const result={schemaVersion:1,pin,format:'gen5randombattle',caseSchema:selected.some(c=>c.rechargeFamily)?'gen5-recharge-v1':selected.some(c=>c.hitFamily)?'gen5-hit-effects-v1':selected.some(c=>c.hookFamily)?'gen5-ability-item-v1':selected.some(c=>c.fieldFamily)?'gen5-field-boost-v1':selected.some(c=>c.statusFamily)?'gen5-status-duration-v1':selected.some(c=>c.generic)?'shared-engine-v3':selected.some(c=>c.g4)?'shared-engine-v2':'shared-engine-v1',cases:selected.map(c=>runCase(ps,c))};
+ const result={schemaVersion:1,pin,format:'gen5randombattle',caseSchema:selected.some(c=>c.lockFamily)?'gen5-lock-phase-v1':selected.some(c=>c.rechargeFamily)?'gen5-recharge-v1':selected.some(c=>c.hitFamily)?'gen5-hit-effects-v1':selected.some(c=>c.hookFamily)?'gen5-ability-item-v1':selected.some(c=>c.fieldFamily)?'gen5-field-boost-v1':selected.some(c=>c.statusFamily)?'gen5-status-duration-v1':selected.some(c=>c.generic)?'shared-engine-v3':selected.some(c=>c.g4)?'shared-engine-v2':'shared-engine-v1',cases:selected.map(c=>runCase(ps,c))};
  const json=JSON.stringify(result,null,2)+'\n';
  if(output)fs.writeFileSync(output,json,{flag:'wx'});else process.stdout.write(json);
 }

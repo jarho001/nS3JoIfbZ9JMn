@@ -39,7 +39,7 @@ class HookEngineTest(unittest.TestCase):
 
     def test_native_states_draws_requests_and_histories(self):
         self.assertEqual(len(self.cases),70)
-        manifest=json.loads(Path('rules/shared-engine-v8.json').read_text())
+        manifest=json.loads(Path('rules/shared-engine-v9.json').read_text())
         self.assertEqual(manifest['schema_version'],e.SCHEMA)
         self.assertEqual(manifest['draw_contexts'],list(e.DRAW_CONTEXTS))
         for case in self.cases:
@@ -115,8 +115,8 @@ class HookEngineTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             path=Path(tmp)/'schema5.npz'
             def old_snapshot(state):
-                fields={k:np.asarray(getattr(state,k)) for k in e.State._fields}
-                fields['volatile_state']=fields['volatile_state'][:,:,:3,:]
+                fields={k:np.asarray(getattr(state,k)) for k in e.State._fields[:e.State._fields.index('move_history')]}
+                fields['volatile_state']=fields['volatile_state'][:,:,:3,:6]
                 np.savez(path,schema=5,data_sha256=np.asarray(g.DATA_SHA256),**fields)
             old_snapshot(s)
             with self.assertRaisesRegex(ValueError,'replay/provenance'):load_state(path)
@@ -126,6 +126,8 @@ class HookEngineTest(unittest.TestCase):
             s,_=initialize_case(case)
             for step in case['steps']:
                 s=COMPILED(s,choices_array(s,step['choices'])).state
-            old_snapshot(s);same(load_state(path),s)
+            old_snapshot(s)
+            with self.assertRaisesRegex(ValueError,'replay/provenance'):load_state(path)
+            same(load_state(path,replayed_state=s),s)
 
 if __name__=='__main__':unittest.main()

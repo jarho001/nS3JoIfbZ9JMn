@@ -44,12 +44,12 @@ def accuracy(base,s,actor,physical):
     return modify(base,modifier)
 
 
-def power(value,ability,item,physical,move_type,e):
+def power(value,ability,item,physical,move_type,e,phase_modifier=4096):
     modifier=jnp.where((ability==h.A['technician'])&(value<=60),6144,4096).astype(jnp.int32)
     band=((item==h.I['muscleband'])&physical)|((item==h.I['wiseglasses'])&(~physical))
     typed=((item==h.I['silkscarf'])&(move_type==e.generic.TYPES['normal']))|((item==h.I['mysticwater'])&(move_type==e.generic.TYPES['water']))
     modifier=chain(modifier,jnp.where(band,4505,jnp.where(typed,4915,4096)))
-    return modify(value,modifier)
+    return modify(value,chain(modifier,phase_modifier))
 
 
 def stats(attack,defense,s,actor,target,physical,move_type,e):
@@ -72,9 +72,10 @@ def stats(attack,defense,s,actor,target,physical,move_type,e):
     return modify(attack,atk_modifier),modify(defense,def_modifier)
 
 
-def damage_modifier(c,actor,target,physical,critical,exponent,e):
+def damage_modifier(c,actor,target,physical,critical,exponent,e,move):
     s,t=c;m=s.active[actor];tm=s.active[target];ability=s.ability[actor,m];defender=s.ability[target,tm];item=s.item[actor,m]
-    rows=[];valid=[]
+    extra,modifier=e.phase_ops.damage_modifier(s,target,move)
+    rows=[jnp.stack((modifier,s.speed[target,tm],e.i32(2)))];valid=[extra]
     for side in range(2):
         for index in range(2):
             applies=(side==target)&(index==jnp.where(physical,0,1))&(~critical)
@@ -109,6 +110,7 @@ def start(c,side,e,initial=False):
     def intimidate(c):
         s,t=c;foe=1-side;fm=s.active[foe];old=s.boosts[foe,fm,0];new=jnp.maximum(-6,old-1)
         s=s._replace(boosts=s.boosts.at[foe,fm,0].set(new))
+        s=e.tracking.boosted(s,foe,new>old,new<old)
         return e._event((s,t),e.BOOST,foe,fm,value=new-old,aux=0,status=1)
     c=e._when((ability==h.A['intimidate'])&(c[0].hp[1-side,c[0].active[1-side]]>0),intimidate,c)
     def set_weather(c):

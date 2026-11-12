@@ -18,6 +18,9 @@ def boost(c,actor,target,move,e):
         def apply(c):
             s,t=c;old=s.boosts[target,m,k];new=jnp.clip(old+change[k],-6,6)
             s=s._replace(boosts=s.boosts.at[target,m,k].set(new))
+            s=e.tracking.boosted(s,target,new>old,new<old)
+            value=jnp.where(new!=old,e.tracking.TRUE,s.action_state[actor,s.active[actor],e.tracking.RESULT])
+            s, t=e.tracking.outcome((s,t),actor,value,move)
             # Even a capped raise emits its zero-sized native boost event.
             return e._event((s,t),e.BOOST,target,m,value=new-old,aux=k,status=(change[k]<0).astype(jnp.int32))
         c=e._when(change[k]!=0,apply,c)
@@ -36,7 +39,7 @@ def move(c,actor,move,move_row,e):
             s,t=c;m=s.active[actor]
             duration=jnp.where(s.item[actor,m]==f.WEATHER_ROCKS[weather],8,5)
             state=jnp.stack((weather,actor,m,move,duration,e.i32(0)))
-            c=e._event((s._replace(weather_state=state),t),e.WEATHER,value=weather)
+            c=e._event(e.tracking.outcome((s._replace(weather_state=state),t),actor,e.i32(e.tracking.TRUE),move),e.WEATHER,value=weather)
             # Field.setWeather broadcasts WeatherChange before hit resolution.
             s,t=c;speeds=s.speed[jnp.arange(2),s.active]
             return e._when((speeds[0]==speeds[1])&jnp.all(~s.fainted[jnp.arange(2),s.active]),
@@ -48,7 +51,7 @@ def move(c,actor,move,move_row,e):
             s,t=c;m=s.active[actor];duration=jnp.where(s.item[actor,m]==f.LIGHT_CLAY,8,5)
             row=jnp.stack((duration,actor,m,move,s.effect_order))
             s=s._replace(screens=s.screens.at[actor,index].set(row),effect_order=s.effect_order+1)
-            return e._event((s,t),e.SIDE_START,actor,move=move)
+            return e._event(e.tracking.outcome((s,t),actor,e.i32(e.tracking.TRUE),move),e.SIDE_START,actor,move=move)
         return jax.lax.cond(c[0].screens[actor,index,0]>0,lambda c:_fail(c,actor,move_row,e),start,c)
     return jax.lax.cond(weather>0,weather_move,screen_move,c)
 
@@ -86,7 +89,10 @@ def weather_tick(c,e):
     s,t=c;weather=s.weather_state[0];remaining=jnp.maximum(0,s.weather_state[4]-1);timed=s.weather_state[4]>0
     def end(c):
         s,t=c;state=empty_weather().at[5].set(1)
-        return e._event((s._replace(weather_state=state),t),e.WEATHER,value=0)
+        c=e._event((s._replace(weather_state=state),t),e.WEATHER,value=0)
+        speeds=s.speed[jnp.arange(2),s.active]
+        return e._when((speeds[0]==speeds[1])&jnp.all(~s.fainted[jnp.arange(2),s.active]),
+                       lambda c:e._draw(c,0,2,e.WEATHER_CHANGE,2)[0],c)
     def active(c):
         s,t=c;s=s._replace(weather_state=s.weather_state.at[4].set(remaining));c=(s,t)
         c=e._event(c,e.WEATHER,value=weather,aux=1)
@@ -99,6 +105,7 @@ def weather_tick(c,e):
                 (s.types[side,m]==e.generic.TYPES['rock'])|(s.types[side,m]==e.generic.TYPES['ground'])|(s.types[side,m]==e.generic.TYPES['steel']),
                 s.types[side,m]==e.generic.TYPES['ice']))
             ability=s.ability[side,m]
+            immune=immune|(s.volatile_state[side,m,e.phase_ops.VOLATILE_IDS['dig'],0]>0)|(s.volatile_state[side,m,e.phase_ops.VOLATILE_IDS['dive'],0]>0)
             immune=immune|((weather==3)&(ability==e.hook_tables.A['sandrush']))|((weather==4)&(ability==e.hook_tables.A['icebody']))
             def ice_body(c):
                 s,t=c;hp=s.hp[side,m];maximum=s.stats[side,m,0];newhp=jnp.minimum(maximum,hp+jnp.maximum(1,maximum//16))

@@ -60,23 +60,24 @@ def project_request(state,side):
                 happy=int(s.happiness[side,mon]);name+=' '+str(max(1,(happy if mid==e.RETURN else 255-happy)*10//25))
             rows.append({'move':name,'id':e.MOVE_KEYS[mid],'pp':int(s.pp[side,mon,slot]),
                          'maxpp':int(e.PP[mid]),'target':tables.TARGETS[mid],
-                         'disabled':bool(e.hook_ops.disabled(s)[side,mon,slot])})
+                         'disabled':bool((e.hook_ops.disabled(s)|e.phase_ops.disabled(s))[side,mon,slot])})
         if all(row['disabled'] for row in rows):rows=[{'move':'Struggle','id':'struggle','target':'randomNormal','disabled':False}]
-        req['active']=[{'moves':[{'move':'Recharge','id':'recharge'}],'trapped':True} if bool(e.phase_ops.locked(s)[side]) else {'moves':rows}]
+        forced=int(e.phase_ops.forced_move(s)[side])
+        req['active']=[{'moves':[{'move':'Recharge' if forced<0 else e.MOVE_NAMES[forced],'id':'recharge' if forced<0 else e.MOVE_KEYS[forced]}],'trapped':True} if forced else {'moves':rows}]
     return req
 
 
 def project_events(state,trace,audience):
     s=jax.device_get(state);t=jax.device_get(trace);out=[]
     for row in t.events[:int(t.ecount)]:
-        kind,side,mon,move,target,tm,value,aux,status,_=map(int,row)
+        kind,side,mon,move,target,tm,value,aux,status,from_lock=map(int,row)
         ident=lambda side,mon:f'p{side+1}a: '+e.SPECIES[int(s.name[side,mon])]
         actor=ident(side,mon);foe=ident(target,tm);name=e.MOVE_NAMES[move] if 0<=move<len(e.MOVE_NAMES) else ''
         if kind==e.BLANK:line='|'
-        elif kind==e.EV_MOVE:
+        elif kind in (e.EV_MOVE,e.ANIM):
             shown='' if aux==2 else foe.replace('a: ',': ') if aux in (3,4) else foe
             annotation={0:'',1:'|[miss]',2:'|[still]',3:'|[notarget]',4:''}[aux]
-            line=f'|move|{actor}|{name}|'+shown+annotation
+            line='|'+('move' if kind==e.EV_MOVE else '-anim')+f'|{actor}|{name}|'+shown+('|[from] lockedmove' if from_lock else '')+annotation
         elif kind in (e.DAMAGE,e.HEAL):
             line=f'|-'+('damage' if kind==e.DAMAGE else 'heal')+f'|{actor}|'+condition(value,aux,status,side!=audience)
             if kind==e.DAMAGE and move:line+='|[from] '+{1:'brn',2:'psn',3:'recoil',4:'Stealth Rock',5:'Spikes',6:'confusion',7:'Sandstorm',8:'Hail',9:'item: Life Orb',10:'Recoil',11:'ability: Rough Skin',12:'ability: Iron Barbs',13:'item: Rocky Helmet',14:'ability: Liquid Ooze'}[move]
@@ -101,7 +102,7 @@ def project_events(state,trace,audience):
         elif kind==e.SINGLE:line=f'|-singleturn|{actor}|Protect'
         elif kind==e.SIDE_START:line=f'|-sidestart|p{side+1}: p{side+1}|'+('move: ' if move in (e.STEALTH_ROCK,e.field_tables.SCREEN_MOVES[1]) else '')+name
         elif kind==e.SIDE_END:line=f'|-sideend|p{side+1}: p{side+1}|'+('move: ' if move==e.field_tables.SCREEN_MOVES[1] else '')+name+(f'|[from] move: Rapid Spin|[of] {actor}' if aux==0 else '')
-        elif kind==e.CONF_START:line=f'|-start|{actor}|confusion'
+        elif kind==e.CONF_START:line=f'|-start|{actor}|confusion'+('|[fatigue]' if aux else '')
         elif kind==e.CONF_END:line=f'|-end|{actor}|confusion'
         elif kind==e.CONF_ACTIVATE:line=f'|-activate|{actor}|confusion'
         elif kind==e.SLEEP_CLAUSE:
@@ -110,6 +111,12 @@ def project_events(state,trace,audience):
             continue
         elif kind==e.BOOST:line=f'|-'+('unboost' if status else 'boost')+f'|{actor}|{e.field_tables.STATS[aux]}|{abs(value)}'
         elif kind==e.WEATHER:line='|-weather|'+e.field_tables.WEATHER_NAMES[value]+(f'|[from] ability: {e.hook_tables.ABILITY_NAMES[move]}|[of] {actor}' if aux==2 else '|[upkeep]' if aux==1 else '')
+        elif kind==e.VOL_START:line=f'|-start|{actor}|'+('move: Taunt' if value==15 else e.MOVE_NAMES[tables.MOVE_IDS[e.phase_ops.VOLATILES[value]]])+('|'+name if value==17 else '')
+        elif kind==e.VOL_END:line=f'|-end|{actor}|'+('move: Taunt' if value==15 else e.MOVE_NAMES[tables.MOVE_IDS[e.phase_ops.VOLATILES[value]]])
+        elif kind==e.VOL_CANT:line=f'|cant|{actor}|'+('move: Taunt' if value==15 else 'Disable')+'|'+name
+        elif kind==e.PREPARE:line=f'|-prepare|{actor}|{name}'
+        elif kind==e.END_HELD_ITEM:line=f'|-enditem|{actor}|'+next(r['name'] for r in generic.DATA['items']if r['id']==e.ITEMS[value])
+        elif kind==e.FLINCH_CANT:line=f'|cant|{actor}|flinch'
         elif kind==e.MUST_RECHARGE:line=f'|-mustrecharge|{actor}'
         elif kind==e.RECHARGE_CANT:line=f'|cant|{actor}|recharge'
         elif kind==e.HIT_COUNT:line=f'|-hitcount|'+(actor.replace('a: ',': ') if aux else actor)+f'|{value}'
@@ -144,18 +151,51 @@ def save_state(path,state):
              **dict(zip(e.State._fields,jax.device_get(state),strict=True)))
 
 
-def load_state(path,*,schema=None):
-    """Load current states with explicit provenance-preserving legacy migrations."""
+_CAUSAL_FIELDS=('move_history','action_state','attacked_by','side_faints','battle_move','battle_success','battle_damage')
+
+
+def _initial_causal(fields):
+    occupied=fields['species']>0;active=fields['active'];side=jnp.arange(2)
+    a=e.tracking.empty().at[:,:,e.tracking.NEWLY_SWITCHED].set(occupied.astype(jnp.int32))
+    a=a.at[side,active,e.tracking.ACTIVE_TURNS].set(1).at[side,active,e.tracking.NEWLY_SWITCHED].set(0)
+    a=a.at[side,active,e.tracking.SWITCH_COUNT].set(1)
+    return dict(move_history=jnp.zeros((2,6,3,4),jnp.int32),action_state=a,
+                attacked_by=jnp.zeros((2,6,e.tracking.ATTACK_RECORDS,7),jnp.int32),
+                side_faints=jnp.full((2,2),-1,jnp.int32),battle_move=jnp.zeros(4,jnp.int32),battle_success=e.i32(0),battle_damage=e.i32(0))
+
+
+def load_state(path,*,schema=None,replayed_state=None):
+    """Load keyed states; advanced pre-causal states need an independent replay.
+
+    replayed_state must be initialized/replayed from the original inputs and
+    commands. Every field the old schema recorded must agree exactly. Missing
+    causal fields are taken from that replay, never inferred from visible logs.
+    """
     with np.load(path,allow_pickle=False) as saved:
         stored=int(saved['schema']) if 'schema' in saved else None
         if schema is not None and stored is not None and stored!=schema:raise ValueError('schema mismatch')
         version=stored if schema is None else schema
-        if version not in (1,2,3,4,5,6,7,8):raise ValueError('explicit supported state schema required')
+        if version not in (1,2,3,4,5,6,7,8,9):raise ValueError('explicit supported state schema required')
         fields={k:jnp.asarray(saved[k]) for k in saved.files if k not in ('schema','data_sha256')}
-        if version in (3,4,5,6,7,8):
+        if version in (3,4,5,6,7,8,9):
             if 'data_sha256' not in saved or str(saved['data_sha256'])!=generic.DATA_SHA256:
                 raise ValueError('state data table identity mismatch')
-        else:
+        if version<9 and replayed_state is not None:
+            e._validate_structure(replayed_state)
+            end='ivs' if version<=2 else 'effect_order' if version==3 else 'weather_state' if version==4 else 'move_history'
+            expected=set(e.State._fields[:e.State._fields.index(end)])
+            if version==1:expected.remove('hazards')
+            if set(fields)!=expected:raise ValueError('invalid legacy field set for replay')
+            for key,value in fields.items():
+                replay=np.asarray(getattr(replayed_state,key));old=np.asarray(value)
+                if key=='volatile_state':
+                    slots=3 if version<6 else 4 if version<8 else 5
+                    if old.shape!=(2,6,slots,6):raise ValueError('invalid legacy volatile shape for replay')
+                    replay=replay[:,:,:slots,:6]
+                if old.shape!=replay.shape or old.dtype!=replay.dtype or not np.array_equal(old,replay):
+                    raise ValueError('legacy replay/provenance mismatch: '+key)
+            return replayed_state
+        if version<3:
             legacy=set(e.State._fields[:e.State._fields.index('ivs')])
             if version==1:legacy.remove('hazards')
             if set(fields)!=legacy:raise ValueError('invalid legacy state fields')
@@ -192,11 +232,13 @@ def load_state(path,*,schema=None):
             fields.update(effect_order=e.i32(0),status_state=e.effects.empty_status(),
                 volatile_state=jnp.zeros((2,6,3,6),jnp.int32),ability_order=jnp.zeros((2,6),jnp.int32),
                 item_order=jnp.zeros((2,6),jnp.int32))
-            fields['volatile_state']=jnp.pad(fields['volatile_state'],((0,0),(0,0),(0,2),(0,0)))
+            fields.update(_initial_causal(fields))
+            fields['volatile_state']=jnp.pad(fields['volatile_state'],((0,0),(0,0),(0,len(e.phase_ops.VOLATILES)-3),(0,e.phase_ops.VOLATILE_WIDTH-6)))
             migrated=e.State(*(fields[k] for k in e.State._fields))
             for side in range(2):migrated,_=e.effects.activate((migrated,e.empty_trace()),e.i32(side),e)
             fields=dict(zip(e.State._fields,migrated,strict=True))
-            fields['volatile_state']=fields['volatile_state'][:,:,:3,:]
+            fields['volatile_state']=fields['volatile_state'][:,:,:3,:6]
+            for key in _CAUSAL_FIELDS:fields.pop(key)
         if version<6:
             # Earlier engines explicitly rejected these hooks. Promoting an old
             # unsupported initializer would fabricate its startup/lock history.
@@ -213,6 +255,20 @@ def load_state(path,*,schema=None):
             safe=np.clip(old_moves,0,len(e.MOVE_KEYS)-1)
             if np.any(np.asarray(e.phase_ops.RECHARGE)[safe]):raise ValueError('legacy recharge requires replay/provenance')
             fields['volatile_state']=jnp.pad(fields['volatile_state'],((0,0),(0,0),(0,1),(0,0)))
+        if version<9:
+            expected=set(e.State._fields[:e.State._fields.index('move_history')])
+            if set(fields)!=expected:raise ValueError('invalid legacy state field set')
+            history=np.asarray(fields['history'])[:int(fields['hcount'])]
+            quiet=(int(fields['turn'])==1 and int(fields['hcount'])==3 and int(fields['qcount'])==0 and not bool(fields['midturn'])
+                   and not np.any(np.asarray(fields['status'])) and not np.any(np.asarray(fields['boosts']))
+                   and np.array_equal(history[:,0],[e.SWITCH,e.SWITCH,e.TURN]))
+            if not quiet:raise ValueError('advanced legacy state requires replay/provenance for causal counters')
+            fields.update(_initial_causal(fields))
+            v=fields['volatile_state']
+            if v.shape!=(2,6,5,6):raise ValueError('invalid legacy volatile shape')
+            v=jnp.pad(v,((0,0),(0,0),(0,len(e.phase_ops.VOLATILES)-5),(0,e.phase_ops.VOLATILE_WIDTH-6)))
+            kind=jnp.where(v[:,:,:,4]>0,e.phase_ops.SOURCE_MOVE,jnp.where(v[:,:,:,4]<0,e.phase_ops.SOURCE_ITEM,e.phase_ops.SOURCE_EMPTY))
+            fields['volatile_state']=v.at[:,:,:,6].set(jnp.where(v[:,:,:,0]>0,kind,0))
         if set(fields)!=set(e.State._fields):raise ValueError('invalid state field set')
         state=e.State(*(fields[k] for k in e.State._fields))
         e._validate_structure(state)
@@ -231,18 +287,31 @@ def effect_states(state,side,mon):
     if start>=0:status['startTime']=start
     if mid==e.TOX:status['stage']=int(s.toxic[side,mon])
     volatiles={}
-    for kind,key in enumerate(('protect','stall','confusion','choicelock','mustrecharge')):
-        exists,order,ss,sm,move,time=map(int,s.volatile_state[side,mon,kind])
+    for kind,key in enumerate(e.phase_ops.VOLATILES):
+        exists,order,ss,sm,move,time=map(int,s.volatile_state[side,mon,kind,:6])
         if not exists:continue
         row={'id':key,'name':e.MOVE_NAMES[e.PROTECT] if kind==0 else key,'effectOrder':order,'target':target,
              'source':{'$pokemon':{'side':ss,'mon':sm}},'sourceSlot':f'p{ss+1}a'}
-        if move>0:row['sourceEffect']={'$effect':e.MOVE_KEYS[move],'type':'Move'}
+        source_kind=int(s.volatile_state[side,mon,kind,6])
+        if source_kind==e.phase_ops.SOURCE_EMPTY:row['sourceEffect']={'id':''}
+        if source_kind==e.phase_ops.SOURCE_CONDITION:row['sourceEffect']={'$effect':e.phase_ops.VOLATILES[move],'type':'Condition'}
+        if move>0 and source_kind==e.phase_ops.SOURCE_MOVE:row['sourceEffect']={'$effect':e.MOVE_KEYS[move],'type':'Move'}
         if move<0:row['sourceEffect']={'$effect':e.ITEMS[-move],'type':'Item'}
         if kind==0:row['duration']=1
         if kind==1:row.update(counter=int(s.stall[side,mon]),duration=int(s.stall_duration[side,mon]))
         if kind==2:row['time']=time
         if kind==3:row['move']=e.MOVE_KEYS[time]
         if kind==4:row['duration']=time
+        if kind==5:row.update(duration=time,move=e.MOVE_KEYS[int(s.volatile_state[side,mon,kind,7])],trueDuration=int(s.volatile_state[side,mon,kind,8]))
+        if kind==6:row.update(duration=time,move=e.MOVE_KEYS[int(s.volatile_state[side,mon,kind,7])])
+        if 7<=kind<=14:
+            row['targetLoc']=int(s.volatile_state[side,mon,kind,9])
+            if key in ('fly','dig','dive','bounce'):row.update(name=e.MOVE_NAMES[tables.MOVE_IDS[key]],duration=time)
+        if key=='flinch':row['duration']=time
+        if 15<=kind<=18:
+            row['name']=e.MOVE_NAMES[tables.MOVE_IDS[key]]
+            if kind!=18:row['duration']=time
+            if kind in (16,17):row['move']=e.MOVE_KEYS[int(s.volatile_state[side,mon,kind,7])]
         volatiles[key]=row
     return {'statusState':status,'volatiles':volatiles,
         'abilityState':{'id':e.ABILITIES[int(s.ability[side,mon])],'effectOrder':int(s.ability_order[side,mon]),'target':target},
@@ -278,3 +347,45 @@ def side_conditions(state,side):
         out[key]={'id':key,'effectOrder':order,'duration':duration,
                   'source':{'$pokemon':{'side':source,'mon':mon}},'sourceSlot':f'p{source+1}a','target':{'$side':side}}
     return out
+
+
+def move_snapshot(row):
+    mid,kind,category,power=map(int,row)
+    if mid==0:return None
+    return {'id':e.MOVE_KEYS[mid],'type':'???' if kind==0 else generic.DATA['types'][kind-1]['name'],
+            'category':('Status','Physical','Special')[category],'basePower':power}
+
+
+def causal_state(state,side,mon):
+    """Trusted mechanics projection; deliberately absent from player_view."""
+    s=jax.device_get(state);tr=e.tracking;a=s.action_state[side,mon]
+    value=lambda k:int(a[k])
+    typed=lambda x:({'$undefined':True},None,False,True)[int(x)]
+    snapshots=[move_snapshot(row) for row in s.move_history[side,mon]]
+    result={'lastMove':snapshots[0],'lastMoveEncore':snapshots[1],'lastMoveUsed':snapshots[2],
+      'lastMoveTargetLoc':{'$undefined':True} if value(tr.TARGET_LOC)==-2 else value(tr.TARGET_LOC),
+      'lastDamage':value(tr.LAST_DAMAGE),'activeTurns':value(tr.ACTIVE_TURNS),'activeMoveActions':value(tr.ACTIONS),
+      'moveThisTurn':e.MOVE_KEYS[value(tr.MOVE_THIS_TURN)],'moveThisTurnResult':typed(a[tr.RESULT]),
+      'moveLastTurnResult':typed(a[tr.PREV_RESULT]),'hurtThisTurn':None if value(tr.HURT)==-1 else value(tr.HURT),
+      'timesAttacked':value(tr.TIMES_ATTACKED),'lastItem':e.ITEMS[value(tr.LAST_ITEM)],'attackedBy':[]}
+    for key,column in [('trapped',tr.TRAPPED),('maybeTrapped',tr.MAYBE_TRAPPED),('maybeDisabled',tr.MAYBE_DISABLED),
+         ('newlySwitched',tr.NEWLY_SWITCHED),('usedItemThisTurn',tr.USED_ITEM),('statsRaisedThisTurn',tr.RAISED),('statsLoweredThisTurn',tr.LOWERED),('ateBerry',tr.ATE_BERRY)]:result[key]=bool(a[column])
+    if value(tr.TRAPPED)==2:result['trapped']='hidden'
+    result['moveSlotsUsed']=[bool(value(tr.USED_SLOTS)&(1<<slot))for slot,move in enumerate(s.moves[side,mon])if move]
+    result['previouslySwitchedIn']=value(tr.SWITCH_COUNT)
+    for row in s.attacked_by[side,mon,:value(tr.ATTACK_COUNT)]:
+        source,sm,move,damage,this_turn,tag,number=map(int,row)
+        result['attackedBy'].append({'source':{'side':source,'mon':sm},'move':e.MOVE_KEYS[move],'damage':damage,
+            'thisTurn':bool(this_turn),'slot':f'p{source+1}a','damageValue':number if tag==tr.NUMBER else typed(tag)})
+    return result
+
+
+def causal_side(state,side):
+    s=jax.device_get(state)
+    ref=lambda mon:None if int(mon)==-1 else {'side':side,'mon':int(mon)}
+    return {'faintedThisTurn':ref(s.side_faints[side,0]),'faintedLastTurn':ref(s.side_faints[side,1])}
+
+
+def causal_battle(state):
+    s=jax.device_get(state)
+    return {'lastMove':move_snapshot(s.battle_move),'lastSuccessfulMoveThisTurn':e.MOVE_KEYS[int(s.battle_success)] or None,'lastDamage':int(s.battle_damage)}

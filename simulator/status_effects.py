@@ -41,13 +41,17 @@ def lum(c,side,e,emit_item=True):
         return s._replace(volatile_state=s.volatile_state.at[side,m,2].set(0)),t
     c=e._when(c[0].volatile_state[side,m,2,0]>0,end,c)
     s,t=c
+    s=e.tracking.item_used(s,side,s.item[side,m])
     return s._replace(item=s.item.at[side,m].set(0),item_order=s.item_order.at[side,m].set(0)),t
 
 
-def add_volatile(c,side,kind,source,move,e):
+def add_volatile(c,side,kind,source,move,e,source_kind=None):
     s,t=c;m=s.active[side];sm=s.active[source]
     present=s.volatile_state[side,m,kind,0]>0
-    row=jnp.stack((e.i32(1),s.effect_order,source,sm,move,e.i32(0)))
+    visited=(~present)&(s.hp[side,m]>0)&(s.weather_state[0]==2)
+    s=s._replace(weather_state=s.weather_state.at[5].set(jnp.where(visited,1,s.weather_state[5])))
+    source_kind=jnp.where(move>0,e.phase_ops.SOURCE_MOVE,jnp.where(move<0,e.phase_ops.SOURCE_ITEM,e.phase_ops.SOURCE_EMPTY)) if source_kind is None else e.i32(source_kind)
+    row=jnp.stack((e.i32(1),s.effect_order,source,sm,move,e.i32(0),source_kind,*[e.i32(0)]*5))
     row=jnp.where(present,s.volatile_state[side,m,kind],row)
     return s._replace(volatile_state=s.volatile_state.at[side,m,kind].set(row),
                       effect_order=s.effect_order+(~present).astype(jnp.int32)),t
@@ -120,7 +124,7 @@ def inflict(c,source,target,status,e,reflect=True,move=0,secondary=False,overwri
     return e._when(s.hp[target,m]>0,attempt,c)
 
 
-def confuse(c,actor,target,move,e):
+def confuse(c,actor,target,move,e,*,fatigue=False):
     s,t=c;m=s.active[target]
     def fail(c):
         s,t=c
@@ -128,8 +132,8 @@ def confuse(c,actor,target,move,e):
         t=t._replace(events=t.events.at[last,7].set(2))
         return e._event((s,t),e.FAIL,actor,s.active[actor])
     def success(c):
-        c=add_volatile(c,target,2,actor,move,e)
-        c=e._event(c,e.CONF_START,target,m)
+        c=add_volatile(c,target,2,actor,move,e,source_kind=e.phase_ops.SOURCE_CONDITION if fatigue else None)
+        c=e._event(c,e.CONF_START,target,m,aux=1 if fatigue else 0)
         c,value=e._draw(c,2,6,e.CONF_DURATION,2);s,t=c
         c=(s._replace(volatile_state=s.volatile_state.at[target,m,2,5].set(value.astype(jnp.int32))),t)
         return e._when(s.item[target,m]==2,lambda c:lum(c,target,e),c)
@@ -137,11 +141,11 @@ def confuse(c,actor,target,move,e):
 
 
 def secondary(c,actor,move,e):
-    chance=e.tables.SECONDARY_CHANCE[move];status=e.tables.SECONDARY_STATUS[move]
+    chance=jnp.maximum(e.tables.SECONDARY_CHANCE[move],e.phase_ops.FLINCH_CHANCE[move]);status=e.tables.SECONDARY_STATUS[move]
     def attempt(c):
         c,value=e._draw(c,0,100,e.SECONDARY)
         return e._when(value<chance.astype(jnp.uint32),
-            lambda c:inflict(c,actor,1-actor,status,e,move=move,secondary=True),c)
+            lambda c:jax.lax.cond(e.phase_ops.FLINCH_CHANCE[move]>0,lambda c:e.phase_ops.flinch(c,actor,1-actor,move,e),lambda c:inflict(c,actor,1-actor,status,e,move=move,secondary=True),c),c)
     return e._when(chance>0,attempt,c)
 
 
@@ -159,6 +163,7 @@ def before_move(c,actor,move,e):
         def frozen(c):return e._event(c,e.CANT,actor,m,status=e.FRZ),jnp.array(True)
         return jax.lax.cond(value==0,lambda c:(cure(c,actor,e,source=event_source),jnp.array(False)),frozen,c)
     c,blocked=jax.lax.cond((~blocked)&(c[0].status[actor,m]==e.FRZ)&(~e.hit_tables.DEFROST[move]),freeze,lambda c:(c,blocked),c)
+    c,blocked=jax.lax.cond(~blocked,lambda c:e.phase_ops.before_move(c,actor,move,e),lambda c:(c,blocked),c)
     def confusion(c):
         s,t=c;remaining=s.volatile_state[actor,m,2,5]-1
         s=s._replace(volatile_state=s.volatile_state.at[actor,m,2,5].set(remaining));c=(s,t)
@@ -175,7 +180,7 @@ def before_move(c,actor,move,e):
                 core=e.base_damage_core(s.level[actor,m],e.i32(40),attack,defense)+2
                 c,roll=e._draw(c,0,16,e.CONF_DAMAGE)
                 damage=jnp.maximum(1,(core&65535)*(100-roll.astype(jnp.int32))//100)
-                c=e._damage(c,actor,damage,cause=6);s,t=c
+                c=e._damage(c,actor,damage,cause=6,source_side=actor,source_mon=m);s,t=c
                 c=e._when(s.hp[actor,m]==0,lambda c:e._win(e._faint(c,actor),actor),c)
                 return c,jnp.array(True)
             return jax.lax.cond(value==0,lambda c:(c,jnp.array(False)),self_hit,c)
@@ -195,6 +200,7 @@ def rest(c,actor,move_row,e):
         s,t=c
         return e._event((s,t),e.FAIL,actor,m,aux=1)
     def success(c):
+        c=e.tracking.outcome(c,actor,e.i32(e.tracking.TRUE),e.REST)
         c=inflict(c,actor,actor,e.SLP,e,move=e.REST,overwrite=True)
         s,t=c
         # Rest installs its fixed timers after the immediate Lum update.

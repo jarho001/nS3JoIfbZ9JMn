@@ -34,7 +34,7 @@ class FieldEngineTest(unittest.TestCase):
 
     def test_native_states_draws_requests_and_histories(self):
         self.assertEqual(len(self.cases),40)
-        manifest=json.loads(Path('rules/shared-engine-v8.json').read_text())
+        manifest=json.loads(Path('rules/shared-engine-v9.json').read_text())
         self.assertEqual(manifest['schema_version'],e.SCHEMA)
         self.assertEqual(manifest['draw_contexts'],list(e.DRAW_CONTEXTS))
         contexts={d['semanticContext'] for c in self.cases for step in c['steps'] for d in step['draws']}
@@ -106,14 +106,15 @@ class FieldEngineTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             path=Path(tmp)/'schema4.npz'
             fields={k:np.asarray(getattr(s,k)) for k in e.State._fields[:e.State._fields.index('weather_state')]}
-            fields['volatile_state']=fields['volatile_state'][:,:,:3,:]
+            fields['volatile_state']=fields['volatile_state'][:,:,:3,:6]
             np.savez(path,schema=4,data_sha256=np.asarray(g.DATA_SHA256),**fields)
             with self.assertRaisesRegex(ValueError,'replay/provenance'):load_state(path)
             # Schema 4's non-hazard status histories encode the rule-target flag.
             case=next(c for c in self.cases if c['id']=='G4-field-status-residuals');s,_=initialize_case(case)
             fields={k:np.asarray(getattr(s,k)) for k in e.State._fields[:e.State._fields.index('weather_state')]}
-            fields['volatile_state']=fields['volatile_state'][:,:,:3,:]
+            fields['volatile_state']=fields['volatile_state'][:,:,:3,:6]
             np.savez(path,schema=4,data_sha256=np.asarray(g.DATA_SHA256),**fields)
-            same(load_state(path),s)
+            with self.assertRaisesRegex(ValueError,'replay/provenance'):load_state(path)
+            same(load_state(path,replayed_state=s),s)
 
 if __name__=='__main__':unittest.main()

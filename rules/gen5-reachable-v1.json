@@ -6596,10 +6596,22 @@
           "file": "data/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
+        }
+      ],
       "field": "onBeforeMove",
       "id": "conditions:flinch:onBeforeMove",
-      "implementation": null,
+      "implementation": {
+        "family": "lock_phase",
+        "file": "simulator/phase_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:flinch",
@@ -6610,7 +6622,7 @@
       "owner": "conditions:flinch",
       "reachability": "candidate",
       "sha256": "f97b5b89f113b6c75be548ece4b8f2c0464f33e237f5bce19e596dbe8d065f5f",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -7118,10 +7130,22 @@
           "file": "data/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
+        }
+      ],
       "field": "onAfterMove",
       "id": "conditions:lockedmove:onAfterMove",
-      "implementation": null,
+      "implementation": {
+        "family": "lock_phase",
+        "file": "simulator/phase_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:lockedmove",
@@ -7132,7 +7156,7 @@
       "owner": "conditions:lockedmove",
       "reachability": "candidate",
       "sha256": "987dd8794d4a62a82752b6d0529141697ef987d76bfe2924dce6d4c49db70529",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -7141,10 +7165,22 @@
           "file": "data/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
+        }
+      ],
       "field": "onEnd",
       "id": "conditions:lockedmove:onEnd",
-      "implementation": null,
+      "implementation": {
+        "family": "lock_phase",
+        "file": "simulator/phase_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:lockedmove",
@@ -7155,7 +7191,7 @@
       "owner": "conditions:lockedmove",
       "reachability": "candidate",
       "sha256": "948b01b16d9013cb67966608c14a82e0c2a6cc25104b634dc2d9d2f350c1c83f",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -7164,10 +7200,22 @@
           "file": "data/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
+        }
+      ],
       "field": "onLockMove",
       "id": "conditions:lockedmove:onLockMove",
-      "implementation": null,
+      "implementation": {
+        "family": "lock_phase",
+        "file": "simulator/phase_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:lockedmove",
@@ -7178,7 +7226,7 @@
       "owner": "conditions:lockedmove",
       "reachability": "candidate",
       "sha256": "fe2f9f5ceb2e9dcfe038946b8795f311ea1220b762de242ea0d42fd3d8fa8f64",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -7187,10 +7235,22 @@
           "file": "data/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
+        }
+      ],
       "field": "onResidual",
       "id": "conditions:lockedmove:onResidual",
-      "implementation": null,
+      "implementation": {
+        "family": "lock_phase",
+        "file": "simulator/phase_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:lockedmove",
@@ -7201,7 +7261,7 @@
       "owner": "conditions:lockedmove",
       "reachability": "candidate",
       "sha256": "4d8b69862d85831a6d415fa2daf03b03d7328d04d6de242fb6f55e5f7fc95fec",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -7210,10 +7270,22 @@
           "file": "data/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
+        }
+      ],
       "field": "onRestart",
       "id": "conditions:lockedmove:onRestart",
-      "implementation": null,
+      "implementation": {
+        "family": "lock_phase",
+        "file": "simulator/phase_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:lockedmove",
@@ -7224,7 +7296,7 @@
       "owner": "conditions:lockedmove",
       "reachability": "candidate",
       "sha256": "f2cc374c75158ad2f21ad47409940a3f6b563ff43e835984946a80c45bd230ca",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -7233,10 +7305,22 @@
           "file": "data/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
+        }
+      ],
       "field": "onStart",
       "id": "conditions:lockedmove:onStart",
-      "implementation": null,
+      "implementation": {
+        "family": "lock_phase",
+        "file": "simulator/phase_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:lockedmove",
@@ -7247,7 +7331,7 @@
       "owner": "conditions:lockedmove",
       "reachability": "candidate",
       "sha256": "88cc783b0355456d9ec9c880902981bbedb47b927979c244e92e87e261749e9a",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -8812,10 +8896,22 @@
           "file": "data/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
+        }
+      ],
       "field": "onEnd",
       "id": "conditions:twoturnmove:onEnd",
-      "implementation": null,
+      "implementation": {
+        "family": "lock_phase",
+        "file": "simulator/phase_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:twoturnmove",
@@ -8826,7 +8922,7 @@
       "owner": "conditions:twoturnmove",
       "reachability": "candidate",
       "sha256": "951da003c18a190d78cef43349757567d4349e2616fddbe05dbb1d6b514c692b",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -8835,10 +8931,22 @@
           "file": "data/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
+        }
+      ],
       "field": "onLockMove",
       "id": "conditions:twoturnmove:onLockMove",
-      "implementation": null,
+      "implementation": {
+        "family": "lock_phase",
+        "file": "simulator/phase_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:twoturnmove",
@@ -8849,7 +8957,7 @@
       "owner": "conditions:twoturnmove",
       "reachability": "candidate",
       "sha256": "9336a6c919a915c0138f51e7944c212f91b1878f8c751c376ee20e1fc77c7e2f",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -8858,10 +8966,22 @@
           "file": "data/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
+        }
+      ],
       "field": "onMoveAborted",
       "id": "conditions:twoturnmove:onMoveAborted",
-      "implementation": null,
+      "implementation": {
+        "family": "lock_phase",
+        "file": "simulator/phase_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:twoturnmove",
@@ -8872,7 +8992,7 @@
       "owner": "conditions:twoturnmove",
       "reachability": "candidate",
       "sha256": "84eb9ea9ecc544f5f5528590f3f2467e97117b7ea60202c446a65948555b19c2",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -8881,10 +9001,22 @@
           "file": "data/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
+        }
+      ],
       "field": "onStart",
       "id": "conditions:twoturnmove:onStart",
-      "implementation": null,
+      "implementation": {
+        "family": "lock_phase",
+        "file": "simulator/phase_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:twoturnmove",
@@ -8895,7 +9027,7 @@
       "owner": "conditions:twoturnmove",
       "reachability": "candidate",
       "sha256": "88b7dea7a80770b682af442a9b26c1f3d30d59e75c5d7dba710886680ddb96b2",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -13790,10 +13922,22 @@
           "file": "data/items.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
+        }
+      ],
       "field": "onChargeMove",
       "id": "items:powerherb:onChargeMove",
-      "implementation": null,
+      "implementation": {
+        "family": "lock_phase",
+        "file": "simulator/phase_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "items:powerherb",
@@ -13804,7 +13948,7 @@
       "owner": "items:powerherb",
       "reachability": "candidate",
       "sha256": "24778622599c6dc12d8f8e73a58f7bf50d4668ceea8101d18a4fcd068d8b9c7f",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -16598,10 +16742,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
+        }
+      ],
       "field": "condition.onInvulnerability",
       "id": "moves:bounce:condition.onInvulnerability",
-      "implementation": null,
+      "implementation": {
+        "family": "lock_phase",
+        "file": "simulator/phase_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:bounce",
@@ -16612,7 +16768,7 @@
       "owner": "moves:bounce",
       "reachability": "candidate",
       "sha256": "dbb2a178be902f78cf3d2e1d1db12000603fa8708b839aed416d1183689124e1",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -16621,10 +16777,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
+        }
+      ],
       "field": "condition.onSourceBasePower",
       "id": "moves:bounce:condition.onSourceBasePower",
-      "implementation": null,
+      "implementation": {
+        "family": "lock_phase",
+        "file": "simulator/phase_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:bounce",
@@ -16635,7 +16803,7 @@
       "owner": "moves:bounce",
       "reachability": "candidate",
       "sha256": "39e47c02283ced4bcc51c3d07c612ab34011b2882d223810e2d9347170756fd7",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -16644,10 +16812,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
+        }
+      ],
       "field": "onTryMove",
       "id": "moves:bounce:onTryMove",
-      "implementation": null,
+      "implementation": {
+        "family": "lock_phase",
+        "file": "simulator/phase_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:bounce",
@@ -16658,7 +16838,7 @@
       "owner": "moves:bounce",
       "reachability": "candidate",
       "sha256": "35b58cad91877c806b636f7068d8226ed78cb982ae544b7ca9421a16c00f2959",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -17541,10 +17721,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
+        }
+      ],
       "field": "condition.onImmunity",
       "id": "moves:dig:condition.onImmunity",
-      "implementation": null,
+      "implementation": {
+        "family": "lock_phase",
+        "file": "simulator/phase_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:dig",
@@ -17555,7 +17747,7 @@
       "owner": "moves:dig",
       "reachability": "candidate",
       "sha256": "e95c14c9392c70769dad303d6131254a89703a2acf656ab147d4f415fd976440",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -17564,10 +17756,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
+        }
+      ],
       "field": "condition.onInvulnerability",
       "id": "moves:dig:condition.onInvulnerability",
-      "implementation": null,
+      "implementation": {
+        "family": "lock_phase",
+        "file": "simulator/phase_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:dig",
@@ -17578,7 +17782,7 @@
       "owner": "moves:dig",
       "reachability": "candidate",
       "sha256": "5fbc0f447a90629ef5ba0b8f1e0f907888fb2ff3345575299998460bd2007b21",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -17587,10 +17791,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
+        }
+      ],
       "field": "condition.onSourceModifyDamage",
       "id": "moves:dig:condition.onSourceModifyDamage",
-      "implementation": null,
+      "implementation": {
+        "family": "lock_phase",
+        "file": "simulator/phase_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:dig",
@@ -17601,7 +17817,7 @@
       "owner": "moves:dig",
       "reachability": "candidate",
       "sha256": "f7903ccf7b51b62d13b7d99c86a40de9d3558610b2076ceb6931f36952e04e51",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -17610,10 +17826,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
+        }
+      ],
       "field": "onTryMove",
       "id": "moves:dig:onTryMove",
-      "implementation": null,
+      "implementation": {
+        "family": "lock_phase",
+        "file": "simulator/phase_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:dig",
@@ -17624,7 +17852,7 @@
       "owner": "moves:dig",
       "reachability": "candidate",
       "sha256": "35b58cad91877c806b636f7068d8226ed78cb982ae544b7ca9421a16c00f2959",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -17633,10 +17861,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
+        }
+      ],
       "field": "condition.onBeforeMove",
       "id": "moves:disable:condition.onBeforeMove",
-      "implementation": null,
+      "implementation": {
+        "family": "lock_phase",
+        "file": "simulator/phase_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:disable",
@@ -17647,7 +17887,7 @@
       "owner": "moves:disable",
       "reachability": "candidate",
       "sha256": "8190842df3aa15bdb391ab7a0450252f49be64e7ff413a09746ffcd8a7173f37",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -17656,10 +17896,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
+        }
+      ],
       "field": "condition.onDisableMove",
       "id": "moves:disable:condition.onDisableMove",
-      "implementation": null,
+      "implementation": {
+        "family": "lock_phase",
+        "file": "simulator/phase_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:disable",
@@ -17670,7 +17922,7 @@
       "owner": "moves:disable",
       "reachability": "candidate",
       "sha256": "3da1ee9fff84df7c3d1dd68e0ac6a08f717048b0a486b79afa79ca5542813801",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -17679,10 +17931,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
+        }
+      ],
       "field": "condition.onEnd",
       "id": "moves:disable:condition.onEnd",
-      "implementation": null,
+      "implementation": {
+        "family": "lock_phase",
+        "file": "simulator/phase_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:disable",
@@ -17693,7 +17957,7 @@
       "owner": "moves:disable",
       "reachability": "candidate",
       "sha256": "720177af5841597106030875a40c88fe63f28858cdebc4ca23ae490e1f7711f3",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -17702,10 +17966,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
+        }
+      ],
       "field": "condition.onStart",
       "id": "moves:disable:condition.onStart",
-      "implementation": null,
+      "implementation": {
+        "family": "lock_phase",
+        "file": "simulator/phase_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:disable",
@@ -17716,7 +17992,7 @@
       "owner": "moves:disable",
       "reachability": "candidate",
       "sha256": "af27d923ed3689fc0b3780c92b7385ed5588225f81dedf0ddf3fbd4a780ef407",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -17725,10 +18001,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
+        }
+      ],
       "field": "onTryHit",
       "id": "moves:disable:onTryHit",
-      "implementation": null,
+      "implementation": {
+        "family": "lock_phase",
+        "file": "simulator/phase_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:disable",
@@ -17739,7 +18027,7 @@
       "owner": "moves:disable",
       "reachability": "candidate",
       "sha256": "3dd671366f4e62d07dbf23dca1848a1c20487bff7d3ec77f640dea41f79ea8b4",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -17748,10 +18036,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
+        }
+      ],
       "field": "condition.onImmunity",
       "id": "moves:dive:condition.onImmunity",
-      "implementation": null,
+      "implementation": {
+        "family": "lock_phase",
+        "file": "simulator/phase_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:dive",
@@ -17762,7 +18062,7 @@
       "owner": "moves:dive",
       "reachability": "candidate",
       "sha256": "e95c14c9392c70769dad303d6131254a89703a2acf656ab147d4f415fd976440",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -17771,10 +18071,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
+        }
+      ],
       "field": "condition.onInvulnerability",
       "id": "moves:dive:condition.onInvulnerability",
-      "implementation": null,
+      "implementation": {
+        "family": "lock_phase",
+        "file": "simulator/phase_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:dive",
@@ -17785,7 +18097,7 @@
       "owner": "moves:dive",
       "reachability": "candidate",
       "sha256": "0ac6a7bf6d306438a37ba72f6dbc516d38793a21c79cfc5b05694f0b5cd4c0a0",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -17794,10 +18106,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
+        }
+      ],
       "field": "condition.onSourceModifyDamage",
       "id": "moves:dive:condition.onSourceModifyDamage",
-      "implementation": null,
+      "implementation": {
+        "family": "lock_phase",
+        "file": "simulator/phase_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:dive",
@@ -17808,7 +18132,7 @@
       "owner": "moves:dive",
       "reachability": "candidate",
       "sha256": "a9c3e2b7051809c448b0af82eba8c24793cd3efb95a6d3afe6ff89fd14ddabb1",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -17817,10 +18141,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
+        }
+      ],
       "field": "onTryMove",
       "id": "moves:dive:onTryMove",
-      "implementation": null,
+      "implementation": {
+        "family": "lock_phase",
+        "file": "simulator/phase_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:dive",
@@ -17831,7 +18167,7 @@
       "owner": "moves:dive",
       "reachability": "candidate",
       "sha256": "4f76bdbef6c8a4173f37c25ec0e1d87b8b40ea7800e5de9140844e7bed633aed",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -18047,10 +18383,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
+        }
+      ],
       "field": "condition.onDisableMove",
       "id": "moves:encore:condition.onDisableMove",
-      "implementation": null,
+      "implementation": {
+        "family": "lock_phase",
+        "file": "simulator/phase_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:encore",
@@ -18061,7 +18409,7 @@
       "owner": "moves:encore",
       "reachability": "candidate",
       "sha256": "85258aafd68ffe84c3ffe47548d3b8335d6e8989fe4d143ecee987416d21deb8",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -18070,10 +18418,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
+        }
+      ],
       "field": "condition.onEnd",
       "id": "moves:encore:condition.onEnd",
-      "implementation": null,
+      "implementation": {
+        "family": "lock_phase",
+        "file": "simulator/phase_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:encore",
@@ -18084,7 +18444,7 @@
       "owner": "moves:encore",
       "reachability": "candidate",
       "sha256": "b44a4536112a28dc5d572d3f77186bfd6290da2bafadd437339594765fe0928b",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -18093,10 +18453,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
+        }
+      ],
       "field": "condition.onOverrideAction",
       "id": "moves:encore:condition.onOverrideAction",
-      "implementation": null,
+      "implementation": {
+        "family": "lock_phase",
+        "file": "simulator/phase_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:encore",
@@ -18107,7 +18479,7 @@
       "owner": "moves:encore",
       "reachability": "candidate",
       "sha256": "b843dacd8a49e1eeb2a0642e0ce357047ff21de3bc9dc2af86dfcd9d48de9f7a",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -18116,10 +18488,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
+        }
+      ],
       "field": "condition.onResidual",
       "id": "moves:encore:condition.onResidual",
-      "implementation": null,
+      "implementation": {
+        "family": "lock_phase",
+        "file": "simulator/phase_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:encore",
@@ -18130,7 +18514,7 @@
       "owner": "moves:encore",
       "reachability": "candidate",
       "sha256": "0632f332d720858a486eccf54c96f01311485a4d84db53bb4bde9e7bc36011e8",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -18139,10 +18523,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
+        }
+      ],
       "field": "condition.onStart",
       "id": "moves:encore:condition.onStart",
-      "implementation": null,
+      "implementation": {
+        "family": "lock_phase",
+        "file": "simulator/phase_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:encore",
@@ -18153,7 +18549,7 @@
       "owner": "moves:encore",
       "reachability": "candidate",
       "sha256": "65cca25468443dea05dd74c855318f3668d29f5a791838ef10d845536937eeca",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -18714,10 +19110,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
+        }
+      ],
       "field": "condition.onInvulnerability",
       "id": "moves:fly:condition.onInvulnerability",
-      "implementation": null,
+      "implementation": {
+        "family": "lock_phase",
+        "file": "simulator/phase_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:fly",
@@ -18728,7 +19136,7 @@
       "owner": "moves:fly",
       "reachability": "candidate",
       "sha256": "dbb2a178be902f78cf3d2e1d1db12000603fa8708b839aed416d1183689124e1",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -18737,10 +19145,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
+        }
+      ],
       "field": "condition.onSourceModifyDamage",
       "id": "moves:fly:condition.onSourceModifyDamage",
-      "implementation": null,
+      "implementation": {
+        "family": "lock_phase",
+        "file": "simulator/phase_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:fly",
@@ -18751,7 +19171,7 @@
       "owner": "moves:fly",
       "reachability": "candidate",
       "sha256": "7043aaa5cc2ebfc4b036459a0b7f34f9e61a1d5782f465790d81286435a74a4f",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -18760,10 +19180,22 @@
           "file": "data/mods/gen7/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
+        }
+      ],
       "field": "onTryMove",
       "id": "moves:fly:onTryMove",
-      "implementation": null,
+      "implementation": {
+        "family": "lock_phase",
+        "file": "simulator/phase_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:fly",
@@ -18774,7 +19206,7 @@
       "owner": "moves:fly",
       "reachability": "candidate",
       "sha256": "35b58cad91877c806b636f7068d8226ed78cb982ae544b7ca9421a16c00f2959",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -23318,10 +23750,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
+        }
+      ],
       "field": "onTryMove",
       "id": "moves:razorwind:onTryMove",
-      "implementation": null,
+      "implementation": {
+        "family": "lock_phase",
+        "file": "simulator/phase_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:razorwind",
@@ -23332,7 +23776,7 @@
       "owner": "moves:razorwind",
       "reachability": "candidate",
       "sha256": "35b58cad91877c806b636f7068d8226ed78cb982ae544b7ca9421a16c00f2959",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -24241,10 +24685,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
+        }
+      ],
       "field": "onTryMove",
       "id": "moves:skullbash:onTryMove",
-      "implementation": null,
+      "implementation": {
+        "family": "lock_phase",
+        "file": "simulator/phase_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:skullbash",
@@ -24255,7 +24711,7 @@
       "owner": "moves:skullbash",
       "reachability": "candidate",
       "sha256": "d35fa6de74ee5f415f55bbe9a67cd87eebebe7ed4d93e87ed9e613a844754bb3",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -24264,10 +24720,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
+        }
+      ],
       "field": "onTryMove",
       "id": "moves:skyattack:onTryMove",
-      "implementation": null,
+      "implementation": {
+        "family": "lock_phase",
+        "file": "simulator/phase_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:skyattack",
@@ -24278,7 +24746,7 @@
       "owner": "moves:skyattack",
       "reachability": "candidate",
       "sha256": "35b58cad91877c806b636f7068d8226ed78cb982ae544b7ca9421a16c00f2959",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -24793,10 +25261,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
+        }
+      ],
       "field": "onBasePower",
       "id": "moves:solarbeam:onBasePower",
-      "implementation": null,
+      "implementation": {
+        "family": "lock_phase",
+        "file": "simulator/phase_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:solarbeam",
@@ -24807,7 +25287,7 @@
       "owner": "moves:solarbeam",
       "reachability": "candidate",
       "sha256": "1404b6571671c695421a3e01bb8c93172449df5fa1c7409b229765d658ccbec9",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -24816,10 +25296,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
+        }
+      ],
       "field": "onTryMove",
       "id": "moves:solarbeam:onTryMove",
-      "implementation": null,
+      "implementation": {
+        "family": "lock_phase",
+        "file": "simulator/phase_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:solarbeam",
@@ -24830,7 +25322,7 @@
       "owner": "moves:solarbeam",
       "reachability": "candidate",
       "sha256": "6e5ee0de21895ae1e2af0f4611abb2272b39717ca01099ed049d4037c3554747",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -25704,10 +26196,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
+        }
+      ],
       "field": "condition.onBeforeMove",
       "id": "moves:taunt:condition.onBeforeMove",
-      "implementation": null,
+      "implementation": {
+        "family": "lock_phase",
+        "file": "simulator/phase_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:taunt",
@@ -25718,7 +26222,7 @@
       "owner": "moves:taunt",
       "reachability": "candidate",
       "sha256": "75d3fe00f183aa0527ec795449bdf85b65618bd0e6ea22fc7b9fbb962ebf612f",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -25727,10 +26231,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
+        }
+      ],
       "field": "condition.onDisableMove",
       "id": "moves:taunt:condition.onDisableMove",
-      "implementation": null,
+      "implementation": {
+        "family": "lock_phase",
+        "file": "simulator/phase_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:taunt",
@@ -25741,7 +26257,7 @@
       "owner": "moves:taunt",
       "reachability": "candidate",
       "sha256": "c368cbc27a206af70f38bb40c5a974c86209ced5b3dae6e5c4c90eda3a8e7228",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -25750,10 +26266,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
+        }
+      ],
       "field": "condition.onEnd",
       "id": "moves:taunt:condition.onEnd",
-      "implementation": null,
+      "implementation": {
+        "family": "lock_phase",
+        "file": "simulator/phase_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:taunt",
@@ -25764,7 +26292,7 @@
       "owner": "moves:taunt",
       "reachability": "candidate",
       "sha256": "b8bc6470815a7aced45c301bf9986dad70fdc351cf493e6b469c122a1c610deb",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -25773,10 +26301,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
+        }
+      ],
       "field": "condition.onStart",
       "id": "moves:taunt:condition.onStart",
-      "implementation": null,
+      "implementation": {
+        "family": "lock_phase",
+        "file": "simulator/phase_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:taunt",
@@ -25787,7 +26327,7 @@
       "owner": "moves:taunt",
       "reachability": "candidate",
       "sha256": "db863fc04e325f9c2b2f55645249515cada593e1b06c010ff939c170e382c88d",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -26003,10 +26543,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
+        }
+      ],
       "field": "condition.onDisableMove",
       "id": "moves:torment:condition.onDisableMove",
-      "implementation": null,
+      "implementation": {
+        "family": "lock_phase",
+        "file": "simulator/phase_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:torment",
@@ -26017,7 +26569,7 @@
       "owner": "moves:torment",
       "reachability": "candidate",
       "sha256": "6ab680d708b717b457a44e5b4bb52bd93d8ccdb5d6a52999634786f35472f97d",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -26026,10 +26578,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
+        }
+      ],
       "field": "condition.onEnd",
       "id": "moves:torment:condition.onEnd",
-      "implementation": null,
+      "implementation": {
+        "family": "lock_phase",
+        "file": "simulator/phase_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:torment",
@@ -26040,7 +26604,7 @@
       "owner": "moves:torment",
       "reachability": "candidate",
       "sha256": "db942c93f79a3a871713eca94c520fc35f1263f6f62284810159399f76b3afdd",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -26049,10 +26613,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
+        }
+      ],
       "field": "condition.onStart",
       "id": "moves:torment:condition.onStart",
-      "implementation": null,
+      "implementation": {
+        "family": "lock_phase",
+        "file": "simulator/phase_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:torment",
@@ -26063,7 +26639,7 @@
       "owner": "moves:torment",
       "reachability": "candidate",
       "sha256": "01109d2b33e50577b4520d6e4657dc7456be35932576323c7f64055c005bb1d3",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -50421,10 +50997,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
         }
       ],
       "id": "moves:bounce",
       "implementation": {
+        "behavior": {
+          "family": "lock_phase",
+          "file": "simulator/phase_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "MOVE_TYPE/MOVE_POWER/MOVE_CATEGORY/MOVE_PRIORITY/MOVE_PP",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -51981,10 +52569,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
         }
       ],
       "id": "moves:dig",
       "implementation": {
+        "behavior": {
+          "family": "lock_phase",
+          "file": "simulator/phase_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "MOVE_TYPE/MOVE_POWER/MOVE_CATEGORY/MOVE_PRIORITY/MOVE_PP",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -52011,10 +52611,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
         }
       ],
       "id": "moves:disable",
       "implementation": {
+        "behavior": {
+          "family": "lock_phase",
+          "file": "simulator/phase_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "MOVE_TYPE/MOVE_POWER/MOVE_CATEGORY/MOVE_PRIORITY/MOVE_PP",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -52071,10 +52683,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
         }
       ],
       "id": "moves:dive",
       "implementation": {
+        "behavior": {
+          "family": "lock_phase",
+          "file": "simulator/phase_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "MOVE_TYPE/MOVE_POWER/MOVE_CATEGORY/MOVE_PRIORITY/MOVE_PP",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -52971,10 +53595,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
         }
       ],
       "id": "moves:encore",
       "implementation": {
+        "behavior": {
+          "family": "lock_phase",
+          "file": "simulator/phase_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "MOVE_TYPE/MOVE_POWER/MOVE_CATEGORY/MOVE_PRIORITY/MOVE_PP",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -53991,10 +54627,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
         }
       ],
       "id": "moves:fly",
       "implementation": {
+        "behavior": {
+          "family": "lock_phase",
+          "file": "simulator/phase_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "MOVE_TYPE/MOVE_POWER/MOVE_CATEGORY/MOVE_PRIORITY/MOVE_PP",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -60105,10 +60753,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
         }
       ],
       "id": "moves:razorwind",
       "implementation": {
+        "behavior": {
+          "family": "lock_phase",
+          "file": "simulator/phase_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "MOVE_TYPE/MOVE_POWER/MOVE_CATEGORY/MOVE_PRIORITY/MOVE_PP",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -61929,10 +62589,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
         }
       ],
       "id": "moves:skullbash",
       "implementation": {
+        "behavior": {
+          "family": "lock_phase",
+          "file": "simulator/phase_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "MOVE_TYPE/MOVE_POWER/MOVE_CATEGORY/MOVE_PRIORITY/MOVE_PP",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -61959,10 +62631,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
         }
       ],
       "id": "moves:skyattack",
       "implementation": {
+        "behavior": {
+          "family": "lock_phase",
+          "file": "simulator/phase_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "MOVE_TYPE/MOVE_POWER/MOVE_CATEGORY/MOVE_PRIORITY/MOVE_PP",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -62559,10 +63243,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
         }
       ],
       "id": "moves:solarbeam",
       "implementation": {
+        "behavior": {
+          "family": "lock_phase",
+          "file": "simulator/phase_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "MOVE_TYPE/MOVE_POWER/MOVE_CATEGORY/MOVE_PRIORITY/MOVE_PP",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -63993,10 +64689,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
         }
       ],
       "id": "moves:taunt",
       "implementation": {
+        "behavior": {
+          "family": "lock_phase",
+          "file": "simulator/phase_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "MOVE_TYPE/MOVE_POWER/MOVE_CATEGORY/MOVE_PRIORITY/MOVE_PP",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -64413,10 +65121,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
         }
       ],
       "id": "moves:torment",
       "implementation": {
+        "behavior": {
+          "family": "lock_phase",
+          "file": "simulator/phase_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "MOVE_TYPE/MOVE_POWER/MOVE_CATEGORY/MOVE_PRIORITY/MOVE_PP",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -76431,10 +77151,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
         }
       ],
       "id": "items:powerherb",
       "implementation": {
+        "behavior": {
+          "family": "lock_phase",
+          "file": "simulator/phase_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ITEMS canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -79100,9 +79832,21 @@
         "resolver": "Dex.mod('gen5').conditions",
         "sha256": "42e1cef64f7cc8a9cbb70238b4a711d9dbc1c3568d88a90225f3a7da487aa5f5"
       },
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
+        }
+      ],
       "id": "conditions:flinch",
-      "implementation": null,
+      "implementation": {
+        "family": "lock_phase",
+        "file": "simulator/phase_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "kind": "conservative-superset",
@@ -79111,7 +79855,7 @@
       ],
       "kind": "conditions",
       "reachability": "candidate",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definition": {
@@ -79232,9 +79976,21 @@
         "resolver": "Dex.mod('gen5').conditions",
         "sha256": "057f4d44c90316be55bb267a0f5055888cc1f5a65d7ae1fed03b48e737779bf5"
       },
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
+        }
+      ],
       "id": "conditions:lockedmove",
-      "implementation": null,
+      "implementation": {
+        "family": "lock_phase",
+        "file": "simulator/phase_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "kind": "conservative-superset",
@@ -79243,7 +79999,7 @@
       ],
       "kind": "conditions",
       "reachability": "candidate",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definition": {
@@ -79634,9 +80390,21 @@
         "resolver": "Dex.mod('gen5').conditions",
         "sha256": "27448a5c5dff2189a92cd377cd475ee6fe346f387e4336e65ce43d5e6fd8a942"
       },
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/locks.json.gz",
+          "native": "reference/lock-phase-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_lock_phase_engine.py"
+        }
+      ],
       "id": "conditions:twoturnmove",
-      "implementation": null,
+      "implementation": {
+        "family": "lock_phase",
+        "file": "simulator/phase_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "kind": "conservative-superset",
@@ -79645,7 +80413,7 @@
       ],
       "kind": "conditions",
       "reachability": "candidate",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definition": {

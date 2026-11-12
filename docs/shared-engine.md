@@ -14,7 +14,7 @@ Full-format G4
 coverage remains separate acceptance work. Historical evidence keeps its original
 source/schema identity; it does not imply validation of later engine changes.
 
-The current runtime uses [schema 8](../rules/shared-engine-v8.json). Schemas
+The current runtime uses [schema 9](../rules/shared-engine-v9.json). Schemas
 4–6 integrated major statuses and effect provenance, boosts/weather/screens,
 and observed ability/item hooks. Schema7 adds declarative hit counts, per-hit
 updates, capped drain/recoil arithmetic, self-destruction and reactive damage.
@@ -203,3 +203,22 @@ G4_NATIVE_CASES=/tmp/g4-new.json JAX_PLATFORMS=cpu \
 ordered draws and recipient events. The G4 checks add complete six-member games,
 hazard placement/removal/entry KOs, mixed batches, saved continuation/reset and
 lean/full rollout agreement. These correctness checks are not performance runs.
+
+The trusted native snapshot copies each request at capture time. It omits
+`request.update`, the resend notification added by native `Side.emitRequest` on
+an unavailable command; the raw notification/error packet remains in each case's
+`privatePackets`. The same decision projection omits an empty `disabledSource`
+string, which carries no source disclosure; every nonempty source is preserved.
+No request move, PP, disabled/trapped disclosure, side data or
+action mask is omitted. This prevents later native notifications from mutating
+an earlier captured request. It does not accept G1's broader transport protocol.
+
+Schema9 stores ordered attacks received, typed move outcomes, move snapshots,
+per-turn/lifetime action counters and side faint references as hidden JAX state.
+It integrates rampages, eight charge moves, semi-invulnerability, Power Herb,
+Taunt/Encore/Disable/Torment and declarative flinching under explicit capability
+masks. Volatile records retain source kind, move, target location and duration.
+Advanced pre-schema9 saves cannot reconstruct this causal history: loading them
+requires an independently replayed state that matches every recorded old field.
+Fresh initial states retain automatic migration. These additions do not close
+the reachable-mechanics audit, long-history capacity gap or full-format G4 gates.

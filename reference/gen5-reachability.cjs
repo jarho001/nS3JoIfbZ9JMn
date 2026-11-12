@@ -35,23 +35,24 @@ const HOOK_OWNERS=new Set([
 ]);
 const HIT_OWNERS=new Set(['skilllink','rockhead','roughskin','ironbarbs','liquidooze'].map(id=>`abilities:${id}`).concat(['items:rockyhelmet']));
 const UNMAPPED_BRANCHES=new Set(['conditions:frz:onAfterMoveSecondary']);
+const PHASE_OWNERS=new Set(['conditions:lockedmove','conditions:twoturnmove','conditions:flinch',...['solarbeam','skyattack','skullbash','razorwind','fly','dig','dive','bounce','taunt','encore','disable','torment'].map(id=>`moves:${id}`),'items:powerherb']);
 function partialBehavior(owner,field) {
   if(UNMAPPED_BRANCHES.has(`${owner}:${field}`))return null;
-  const family=owner==='conditions:mustrecharge'?'recharge':owner==='conditions:frz'&&['onModifyMove','onDamagingHit'].includes(field)?'hit':STATUS_OWNERS.has(owner)?'status':FIELD_OWNERS.has(owner)?'field':HOOK_OWNERS.has(owner)?'hook':HIT_OWNERS.has(owner)?'hit':
+  const family=PHASE_OWNERS.has(owner)?'lock_phase':owner==='conditions:mustrecharge'?'recharge':owner==='conditions:frz'&&['onModifyMove','onDamagingHit'].includes(field)?'hit':STATUS_OWNERS.has(owner)?'status':FIELD_OWNERS.has(owner)?'field':HOOK_OWNERS.has(owner)?'hook':HIT_OWNERS.has(owner)?'hit':
     owner==='abilities:immunity'&&field==='onSetStatus'?'status':null;
   if(!family)return null;
   const weatherHook=(owner==='abilities:sandrush'&&field==='onImmunity')||
     (owner==='abilities:icebody'&&['onImmunity','onWeather'].includes(field));
   const fieldModifier=(['moves:reflect','moves:lightscreen'].includes(owner)&&field==='condition.onAnyModifyDamage')||
     (owner==='conditions:sandstorm'&&field==='onModifySpD');
-  return {family,file:family==='recharge'?'simulator/phase_effects.py':family==='hit'?(owner==='abilities:rockhead'||owner==='conditions:frz'&&field==='onDamagingHit'?'simulator/shared_engine.py':owner==='conditions:frz'?'simulator/status_effects.py':'simulator/hit_effects.py'):family==='status'?'simulator/status_effects.py':weatherHook||family==='field'&&!fieldModifier?'simulator/field_effects.py':'simulator/hook_effects.py',
+  return {family,file:family==='lock_phase'||family==='recharge'?'simulator/phase_effects.py':family==='hit'?(owner==='abilities:rockhead'||owner==='conditions:frz'&&field==='onDamagingHit'?'simulator/shared_engine.py':owner==='conditions:frz'?'simulator/status_effects.py':'simulator/hit_effects.py'):family==='status'?'simulator/status_effects.py':weatherHook||family==='field'&&!fieldModifier?'simulator/field_effects.py':'simulator/hook_effects.py',
     scheduler:'simulator/shared_engine.py',
     scope:'Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending'};
 }
 function familyEvidence(family) {
   return [{test:`test/test_${family}_engine.py`,
-    native:`reference/${family==='recharge'?'recharge':family==='status'?'status-duration':family==='field'?'field-boost':family==='hit'?'hit-effect':'ability-item'}-cases.cjs`,
-    fixture:`test-logs/g4-cpu-conformance/${family==='recharge'?'recharge':family==='status'?'status-v5':family==='field'?'field':family==='hit'?'hits':'hooks'}.json.gz`,
+    native:`reference/${family==='lock_phase'?'lock-phase':family==='recharge'?'recharge':family==='status'?'status-duration':family==='field'?'field-boost':family==='hit'?'hit-effect':'ability-item'}-cases.cjs`,
+    fixture:`test-logs/g4-cpu-conformance/${family==='lock_phase'?'locks':family==='recharge'?'recharge':family==='status'?'status-v5':family==='field'?'field':family==='hit'?'hits':'hooks'}.json.gz`,
     scope:'Independent directed family cases and complete constructed games; not generator membership or full-format acceptance'}];
 }
 function canonical(value) {

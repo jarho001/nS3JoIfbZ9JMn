@@ -85,8 +85,10 @@ def plain(row):
         'overrideOffensiveStat','overrideDefensiveStat','overrideOffensivePokemon','overrideDefensivePokemon',
         'forceSTAB','ignoreImmunity','spreadHit','isZ','isMax')
     if any(row.get(k) for k in effects): return False
+    # Wind consumers are Gen9 Wind Power/Wind Rider and gen9ssb conditions;
+    # neither ability/condition can enter the pinned Gen5 data/format.
     if set(row.get('flags',{}))-{'protect','mirror','contact','sound','punch','pulse','bite','authentic',
-                                'slicing','bullet','distance','metronome','nonsky'}:return False
+                                'slicing','bullet','distance','metronome','nonsky','wind'}:return False
     return True
 
 
