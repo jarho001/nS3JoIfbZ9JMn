@@ -7599,10 +7599,22 @@
           "file": "data/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/partial-trap.json.gz",
+          "native": "reference/partial-trap-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_partial_trap_engine.py"
+        }
+      ],
       "field": "durationCallback",
       "id": "conditions:partiallytrapped:durationCallback",
-      "implementation": null,
+      "implementation": {
+        "family": "partial_trap",
+        "file": "simulator/partial_trap.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:partiallytrapped",
@@ -7613,7 +7625,7 @@
       "owner": "conditions:partiallytrapped",
       "reachability": "candidate",
       "sha256": "f245652ab0ac1ed918f775ed883cd3e32dcb3a04abcd259620b4e6dbae18617a",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -7622,10 +7634,22 @@
           "file": "data/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/partial-trap.json.gz",
+          "native": "reference/partial-trap-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_partial_trap_engine.py"
+        }
+      ],
       "field": "onEnd",
       "id": "conditions:partiallytrapped:onEnd",
-      "implementation": null,
+      "implementation": {
+        "family": "partial_trap",
+        "file": "simulator/partial_trap.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:partiallytrapped",
@@ -7636,7 +7660,7 @@
       "owner": "conditions:partiallytrapped",
       "reachability": "candidate",
       "sha256": "f1bab5d22fcdd61fdcab495d8e0bd2e8ae6603db83e97bae2f7fcd6b5837707c",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -7645,10 +7669,22 @@
           "file": "data/mods/gen5/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/partial-trap.json.gz",
+          "native": "reference/partial-trap-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_partial_trap_engine.py"
+        }
+      ],
       "field": "onResidual",
       "id": "conditions:partiallytrapped:onResidual",
-      "implementation": null,
+      "implementation": {
+        "family": "partial_trap",
+        "file": "simulator/partial_trap.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:partiallytrapped",
@@ -7659,7 +7695,7 @@
       "owner": "conditions:partiallytrapped",
       "reachability": "candidate",
       "sha256": "7cd59c555136862a2a5e0e3acb7e061ad42f178e797119bdaa664222b739660c",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -7668,10 +7704,22 @@
           "file": "data/mods/gen5/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/partial-trap.json.gz",
+          "native": "reference/partial-trap-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_partial_trap_engine.py"
+        }
+      ],
       "field": "onStart",
       "id": "conditions:partiallytrapped:onStart",
-      "implementation": null,
+      "implementation": {
+        "family": "partial_trap",
+        "file": "simulator/partial_trap.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:partiallytrapped",
@@ -7682,7 +7730,7 @@
       "owner": "conditions:partiallytrapped",
       "reachability": "candidate",
       "sha256": "3f6230e8fba60de860eb04c65657e76f8214752a2e4b82b83c6de35127e25395",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -7691,10 +7739,22 @@
           "file": "data/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/partial-trap.json.gz",
+          "native": "reference/partial-trap-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_partial_trap_engine.py"
+        }
+      ],
       "field": "onTrapPokemon",
       "id": "conditions:partiallytrapped:onTrapPokemon",
-      "implementation": null,
+      "implementation": {
+        "family": "partial_trap",
+        "file": "simulator/partial_trap.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:partiallytrapped",
@@ -7705,7 +7765,7 @@
       "owner": "conditions:partiallytrapped",
       "reachability": "candidate",
       "sha256": "be26fa15849c4caf06fd6f3955f58d35895959201b3be89747116ffbef509f4a",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -80270,9 +80330,21 @@
         "resolver": "Dex.mod('gen5').conditions",
         "sha256": "fa7712bb970979236e7a3468ef455e3db8448842c2370b556ec421b9e9602976"
       },
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/partial-trap.json.gz",
+          "native": "reference/partial-trap-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_partial_trap_engine.py"
+        }
+      ],
       "id": "conditions:partiallytrapped",
-      "implementation": null,
+      "implementation": {
+        "family": "partial_trap",
+        "file": "simulator/partial_trap.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "kind": "conservative-superset",
@@ -80281,7 +80353,7 @@
       ],
       "kind": "conditions",
       "reachability": "candidate",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definition": {

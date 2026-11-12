@@ -74,6 +74,7 @@ cases.push(
 );
 
 cases.push(...require('./substitute-cases.cjs')());
+cases.push(...require('./partial-trap-cases.cjs')());
 
 // Migrate the accepted v6/v7 boundary inputs without modifying their old APIs.
 const legacyAccuracy=[
@@ -331,6 +332,7 @@ function semanticContext(draw) {
  if(stack.includes('BattleActions.modifyDamage')&&draw.context==='speed-sort')return 'damage-modifiers';
  if(draw.eventId==='WeatherChange')return 'weather-change';
  if(draw.eventId==='Weather')return 'weather-order';
+ if(stack.includes('Battle.durationCallback')&&stack.includes('Pokemon.addVolatile'))return 'volatile-duration';
  if(draw.effectId==='lockedmove')return 'rampage-duration';
  if(draw.effectId==='sleeptalk')return 'sleep-talk-selection';
  if(draw.effectId==='frisk')return 'frisk-target';
@@ -454,7 +456,7 @@ function main(argv) {
   } finally {fs.closeSync(fd);}
   return;
  }
- const selected=batch==='substitute'?cases.filter(c=>c.substituteFamily):batch==='trapping'?cases.filter(c=>c.trappingFamily):batch==='locks'?cases.filter(c=>c.lockFamily):batch==='recharge'?cases.filter(c=>c.rechargeFamily):batch==='hits'?cases.filter(c=>c.hitFamily&&!c.substituteFamily):batch==='hooks'?cases.filter(c=>c.hookFamily&&!c.hitFamily&&!c.rechargeFamily&&!c.lockFamily&&!c.trappingFamily):batch==='field'?cases.filter(c=>c.fieldFamily):batch==='status'?cases.filter(c=>c.statusFamily):batch==='generic'?cases.filter(c=>c.generic&&!c.statusFamily&&!c.fieldFamily&&!c.hookFamily&&!c.hitFamily&&!c.rechargeFamily&&!c.lockFamily&&!c.trappingFamily):batch==='g4'?cases.filter(c=>c.g4):batch==='all'?cases.filter(c=>!c.g4&&!c.generic):batch==='boundaries'?cases.filter(c=>!c.g4&&!c.generic&&!c.fullBattle):batch==='battles'?cases.filter(c=>!c.g4&&!c.generic&&c.fullBattle):cases.filter(c=>c.id===batch);
+ const selected=batch==='partialtrap'?cases.filter(c=>c.partialTrapFamily):batch==='substitute'?cases.filter(c=>c.substituteFamily):batch==='trapping'?cases.filter(c=>c.trappingFamily):batch==='locks'?cases.filter(c=>c.lockFamily):batch==='recharge'?cases.filter(c=>c.rechargeFamily):batch==='hits'?cases.filter(c=>c.hitFamily&&!c.substituteFamily&&!c.partialTrapFamily):batch==='hooks'?cases.filter(c=>c.hookFamily&&!c.hitFamily&&!c.rechargeFamily&&!c.lockFamily&&!c.trappingFamily):batch==='field'?cases.filter(c=>c.fieldFamily):batch==='status'?cases.filter(c=>c.statusFamily):batch==='generic'?cases.filter(c=>c.generic&&!c.statusFamily&&!c.fieldFamily&&!c.hookFamily&&!c.hitFamily&&!c.rechargeFamily&&!c.lockFamily&&!c.trappingFamily):batch==='g4'?cases.filter(c=>c.g4):batch==='all'?cases.filter(c=>!c.g4&&!c.generic):batch==='boundaries'?cases.filter(c=>!c.g4&&!c.generic&&!c.fullBattle):batch==='battles'?cases.filter(c=>!c.g4&&!c.generic&&c.fullBattle):cases.filter(c=>c.id===batch);
  if(!selected.length)throw Error('Empty native case selection: '+batch);
  const result={schemaVersion:1,pin,format:'gen5randombattle',caseSchema:selected.some(c=>c.lockFamily)?'gen5-lock-phase-v1':selected.some(c=>c.rechargeFamily)?'gen5-recharge-v1':selected.some(c=>c.hitFamily)?'gen5-hit-effects-v1':selected.some(c=>c.hookFamily)?'gen5-ability-item-v1':selected.some(c=>c.fieldFamily)?'gen5-field-boost-v1':selected.some(c=>c.statusFamily)?'gen5-status-duration-v1':selected.some(c=>c.generic)?'shared-engine-v3':selected.some(c=>c.g4)?'shared-engine-v2':'shared-engine-v1',cases:selected.map(c=>runCase(ps,c))};
  const json=JSON.stringify(result,null,2)+'\n';

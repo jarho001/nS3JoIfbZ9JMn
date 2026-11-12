@@ -27,6 +27,7 @@ from . import phase_effects as phase_ops
 from . import battle_tracking as tracking
 from . import trapping as trap_ops
 from . import substitute as sub_ops
+from . import partial_trap as partial_ops
 from . import hook_tables
 from . import hook_effects as hook_ops
 import sys
@@ -34,7 +35,7 @@ import sys
 def _engine():
     return sys.modules[__name__]
 
-SCHEMA = 12
+SCHEMA = 13
 ROSTER, SLOTS, QUEUE, EVENTS, DRAWS, HISTORY = 6, 4, 8, 128, 128, 2048
 OK, PENDING, INVALID, UNSUPPORTED, CAPACITY, TERMINAL, STALE = range(7)
 RETRY=7
@@ -66,6 +67,7 @@ VOL_START,VOL_END,VOL_CANT=36,37,38
 TURN_WARNING,TURN_LIMIT=39,40
 FRISK_ITEM=41
 SUB_DAMAGE=42
+PARTIAL_START,PARTIAL_END,PARTIAL_DAMAGE=43,44,45
 # Draw contexts; range form stores actual native arguments including offsets.
 INIT, QUEUE_SORT, BEFORE_TURN, UPDATE, HIT_UPDATE, SWITCH_SORT, FIELD_SORT, ACC, CRITICAL, ROLL, PARALYSIS, STALL = range(12)
 SLEEP_DURATION, FREEZE, CONF_DURATION, CONFUSION, CONF_DAMAGE, SECONDARY = range(12,18)
@@ -74,8 +76,9 @@ DAMAGE_MODIFIERS = 20
 MULTIHIT_COUNT = 21
 RAMPAGE_DURATION = 22
 FRISK_TARGET=23
+VOLATILE_DURATION=24
 MOVE_ACTOR_TARGET=field_tables.ACTOR_TARGET
-DRAW_CONTEXTS=('initialization','queue-sort','before-turn','update','hit-update','switch-order','residual-handlers','accuracy','critical','damage','paralysis','stall','sleep-duration','freeze','confusion-duration','confusion','confusion-damage','secondary','weather-change','weather-order','damage-modifiers','multihit-count','rampage-duration','frisk-target')
+DRAW_CONTEXTS=('initialization','queue-sort','before-turn','update','hit-update','switch-order','residual-handlers','accuracy','critical','damage','paralysis','stall','sleep-duration','freeze','confusion-duration','confusion','confusion-damage','secondary','weather-change','weather-order','damage-modifiers','multihit-count','rampage-duration','frisk-target','volatile-duration')
 # Queue kinds, order values mirror the pinned scheduler.
 BEFORE, ATTACK, SWAP, INSTANT, RUN_SWITCH, RESIDUAL = range(1,7)
 QORDER=jnp.array([999,4,200,103,3,101,300],jnp.int32)
@@ -344,6 +347,7 @@ def _hit(c,actor,move):
             dealt=jnp.minimum(s.hp[target,tm],damage)
             c=_damage(c,target,damage,minimum=0,source_side=actor,source_mon=mon)
             c=hit_ops.drain(c,actor,target,move,dealt,_engine())
+            c=partial_ops.install(c,actor,target,move,_engine())
             c=phase_ops.install(c,actor,move,_engine())
             c=effects.secondary(c,actor,move,_engine())
             c=hit_ops.contact(c,actor,target,move,_engine())
@@ -624,7 +628,7 @@ def _residual(c):
     for side in range(2):
         mon=s.active[side]
         for kind in range(6,len(phase_ops.VOLATILES)):
-            rows.append(i32([9,side,0,10000,0,2,kind]).at[3].set(phase_ops.RESIDUAL_ORDER[kind]).at[2].set(mon).at[4].set(s.speed[side,mon]))
+            rows.append(i32([9,side,0,10000,0,0 if kind==partial_ops.SLOT else 2,kind]).at[3].set(phase_ops.RESIDUAL_ORDER[kind]).at[2].set(mon).at[4].set(s.speed[side,mon]))
             valid.append((~s.fainted[side,mon])&(s.volatile_state[side,mon,kind,0]>0)&(s.volatile_state[side,mon,kind,5]>0))
     handlers=len(rows)
     rows=jnp.stack(rows);valid=jnp.stack(valid);count=jnp.sum(valid).astype(jnp.int32)
@@ -672,7 +676,7 @@ def _residual(c):
                     s,t=c;newhp=jnp.minimum(maxhp,hp+jnp.maximum(1,maxhp//16));s=s._replace(hp=s.hp.at[side,m].set(newhp))
                     return _event((s,t),HEAL,side,m,value=newhp,aux=maxhp,status=s.status[side,m],move=1)
                 return _when(hp<maxhp,heal,c)
-            return jax.lax.cond(kind==9,lambda c:phase_ops.extra_tick(c,side,row[6],_engine()),
+            return jax.lax.cond(kind==9,lambda c:jax.lax.cond(row[6]==partial_ops.SLOT,lambda c:partial_ops.tick(c,side,_engine()),lambda c:phase_ops.extra_tick(c,side,row[6],_engine()),c),
                 lambda c:jax.lax.cond(kind==8,lambda c:phase_ops.tick_phase(c,side,5,_engine()),
                 lambda c:jax.lax.cond(kind==7,lambda c:phase_ops.tick(c,side,m),
                 lambda c:jax.lax.cond(kind==5,lambda c:field_ops.weather_tick(c,_engine()),
@@ -835,9 +839,9 @@ def _supported(s,initializing=False):
             &jnp.all((s.species>=0)&(s.species<len(SPECIES)))&jnp.all(jnp.any(occupied,axis=1))
             &jnp.all((~occupied)|tables.SPECIES_IMPLEMENTED[safe_species])
             &jnp.all((s.moves>=0)&(s.moves<len(MOVE_KEYS))&(s.moves!=STRUGGLE))
-            &jnp.all((s.moves==0)|(tables.MOVE_IMPLEMENTED|field_tables.MOVE_IMPLEMENTED|hit_tables.MOVE_IMPLEMENTED|phase_ops.MOVE_IMPLEMENTED)[jnp.clip(s.moves,0,len(MOVE_KEYS)-1)])
+            &jnp.all((s.moves==0)|(tables.MOVE_IMPLEMENTED|field_tables.MOVE_IMPLEMENTED|hit_tables.MOVE_IMPLEMENTED|phase_ops.MOVE_IMPLEMENTED|partial_ops.MOVE_IMPLEMENTED)[jnp.clip(s.moves,0,len(MOVE_KEYS)-1)])
             &jnp.all((s.item>=0)&(s.item<len(ITEMS)))
-            &jnp.all((hook_tables.ITEM_IMPLEMENTED|hit_tables.ITEM_IMPLEMENTED|phase_ops.ITEM_IMPLEMENTED)[jnp.clip(s.item,0,len(ITEMS)-1)])
+            &jnp.all((hook_tables.ITEM_IMPLEMENTED|hit_tables.ITEM_IMPLEMENTED|phase_ops.ITEM_IMPLEMENTED|partial_ops.ITEM_IMPLEMENTED)[jnp.clip(s.item,0,len(ITEMS)-1)])
             &jnp.all((s.ability>=0)&(s.ability<len(ABILITIES)))&jnp.all((hook_tables.ABILITY_IMPLEMENTED|hit_tables.ABILITY_IMPLEMENTED|trap_ops.ABILITY_IMPLEMENTED)[jnp.clip(s.ability,0,len(ABILITIES)-1)])
             &jnp.all((s.ivs>=0)&(s.ivs<=31))&jnp.all((s.evs>=0)&(s.evs<=255))
             &jnp.all((s.nature>=1)&(s.nature<=len(generic.NATURES)))

@@ -27,7 +27,10 @@ def refresh(s,e):
     actual=jnp.stack((enemy==A['shadowtag'],enemy==A['arenatrap'],enemy==A['magnetpull']),axis=1)
     trapped=jnp.any(actual&predicates,axis=1)&live
     maybe=jnp.any((QUERY[s.species[foe,fm]]|actual)&predicates,axis=1)&live
-    state=s.action_state.at[side,mon,e.tracking.TRAPPED].set(jnp.where(trapped,2,0))
+    binding=s.volatile_state[side,mon,e.partial_ops.SLOT]
+    source=jnp.clip(binding[:,2],0,1);sm=jnp.clip(binding[:,3],0,5)
+    hard=(binding[:,0]>0)&(s.active[source]==sm)
+    state=s.action_state.at[side,mon,e.tracking.TRAPPED].set(jnp.where(hard,1,jnp.where(trapped,2,0)))
     state=state.at[side,mon,e.tracking.MAYBE_TRAPPED].set(maybe.astype(jnp.int32))
     return s._replace(action_state=state)
 

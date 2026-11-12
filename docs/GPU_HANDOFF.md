@@ -7,6 +7,32 @@ GPU. Preparing this handoff does not run device tests, profiling or benchmarks.
 
 ## Current source and evidence
 
+**Schema13 partial-trapping checkpoint:** the focused CPU check passed27
+scenarios/105 boundaries in76.862s; one pinned native contract also passed.
+Seven binding moves, Binding Band/Grip Claw, expiry/source cleanup, disclosed
+switch rejection, Substitute/Spin/pivot interactions and current/legacy
+persistence are covered. Exact source/input identities and remaining checks are
+in [schema13-checkpoint.json](../test-logs/g4-cpu-conformance/schema13-checkpoint.json).
+State schema13 adds binding duration/divisor/source state; journal schema4 binds
+that shape. Broad eager/JIT/mixed/full-lean/reset testing was added for the
+consolidated gate and has **not run**. Current-source preparation of all13 corpora
+has **not been repeated**; the return-home runner regenerates them automatically.
+
+The existing return-home block includes both new methods. For isolated device
+replay after selecting the documented CUDA interpreter:
+
+```bash
+JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_partial_trap_engine -v -f
+```
+
+The pending CPU matrix can be run at the agreed milestone gate with:
+
+```bash
+JAX_PLATFORMS=cpu "$JAX_PYTHON" -m unittest test.test_partial_trap_engine.PartialTrapEngineTest.test_deferred_eager_mixed_rollout_and_reset -v -f
+```
+
+These are correctness obligations; no extra profiling/ablation workload is added.
+
 **Schema12 Substitute checkpoint:** one focused CPU differential check passed
 all51 scenarios/184 boundaries in83.623s. Two completed same-source CPU checks
 cover atomic metadata/persistence and complete-game core/journal/full/lean/reset.
@@ -50,8 +76,8 @@ The entire matching-source 61-check suite has not been repeated. Historical
 schema8 results remain in
 [schema8-checkpoint.json](../test-logs/g4-cpu-conformance/schema8-checkpoint.json).
 
-The expanded runner expects **72 checks in 17 isolated modules**, using twelve
-independent native corpora: **609 scenarios / 4294 boundaries**, including
+The expanded runner expects **74 checks in 18 isolated modules**, using thirteen
+independent native corpora: **636 scenarios / 4399 boundaries**, including
 32 complete constructed six-member combat games (plus the neutral switch-only
 turn-limit game and eight historical three-member games). The 73 phase scenarios are in
 `test.test_lock_phase_engine`. The runner recaptures causal state for the prior
@@ -114,10 +140,10 @@ the combined block below:
 
 1. Creates a fresh `work/g4-gpu-TIMESTAMP/` and records commit/tree, relevant file
    hashes, selected host affinity and independent native fixture hashes.
-2. Freezes all twelve legacy/current corpora, including move phases, the
-   turn-limit witness, trapping/retries and Substitute. Runs the reference/native
+2. Freezes all thirteen legacy/current corpora, including move phases, the
+   turn-limit witness, trapping/retries, Substitute and partial trapping. Runs the reference/native
    contracts. Unknown/unsupported families stay explicit.
-3. Runs the same current 72-check scope on CPU, then under `JAX_PLATFORMS=cuda`,
+3. Runs the same current 74-check scope on CPU, then under `JAX_PLATFORMS=cuda`,
    with each test module in a fresh process.
    A strict probe verifies actual eager/JIT GPU placement; shared case/lifecycle
    assertions also check device leaves. `cuda` initialization failure is a failure.

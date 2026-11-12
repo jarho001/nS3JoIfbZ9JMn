@@ -77,4 +77,5 @@ def spin(c,actor,e):
     for index,kind in ((1,e.SPIKES),(0,e.STEALTH_ROCK)):
         c=e._when(c[0].hazards[actor,index]>0,lambda c:e._event(c,e.SIDE_END,actor,mon,move=kind),c)
     s,trace=c
-    return s._replace(hazards=s.hazards.at[actor].set(0),hazard_meta=s.hazard_meta.at[actor].set(0)),trace
+    c=(s._replace(hazards=s.hazards.at[actor].set(0),hazard_meta=s.hazard_meta.at[actor].set(0)),trace)
+    return e.partial_ops.end(c,actor,e)

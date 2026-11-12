@@ -14,7 +14,7 @@ Full-format G4
 coverage remains separate acceptance work. Historical evidence keeps its original
 source/schema identity; it does not imply validation of later engine changes.
 
-The current runtime uses [schema 12](../rules/shared-engine-v12.json). Schemas
+The current runtime uses [schema 13](../rules/shared-engine-v13.json). Schemas
 4–6 integrated major statuses and effect provenance, boosts/weather/screens,
 and observed ability/item hooks. Schema7 adds declarative hit counts, per-hit
 updates, capped drain/recoil arithmetic, self-destruction and reactive damage.
@@ -226,6 +226,26 @@ the reachable-mechanics audit, long-history capacity gap or full-format G4 gates
 The [schema9 CPU checkpoint](../test-logs/g4-cpu-conformance/schema9-checkpoint.json)
 records 18 affected checks and exact scalar replay of 526 scenarios and 2895 boundaries.
 The full 61-check checkpoint suite and full-format G4 gates remain pending.
+
+## Gen5 partial trapping
+
+Schema13 appends volatile slot21 for binding moves, preserving source identity,
+move, creation order, duration in column5 and captured damage divisor in column7.
+Ordinary counters sample5/6 before the first residual decrement; Grip Claw uses8
+without a draw. Residual order13 deals maxHP/16, or maxHP/8 for Binding Band,
+until expiration. Source departure/faint/new-entry cleanup emits the native
+silent end. Reapplication does not refresh the timer. Substitute creation clears
+binding silently; an existing doll prevents binding installation. Rapid Spin
+clears binding on both actual hits and AfterSubDamage, and U-turn can escape.
+New-turn requests disclose the hard trap and reject switching without battle RNG.
+
+The focused27-case/105-boundary CPU check includes all seven moves, tied timers,
+item variants, mirrored private retries and save/restore. State schemas9–12 pad
+missing slots with zero; journal schema4 requires matching replay for older
+journals and validates each recorded shape/dtype/value. This is a reduced
+implementation checkpoint; broad execution modes and full G4 acceptance remain
+pending. Exact evidence is in
+[schema13-checkpoint.json](../test-logs/g4-cpu-conformance/schema13-checkpoint.json).
 
 ## Gen5 Substitute interception
 

@@ -2,7 +2,7 @@
 import jax.numpy as jnp
 from . import gen5_engine_tables as t
 
-VOLATILES=('protect','stall','confusion','choicelock','mustrecharge','lockedmove','twoturnmove','solarbeam','skyattack','skullbash','razorwind','fly','dig','dive','bounce','taunt','encore','disable','torment','flinch','substitute')
+VOLATILES=('protect','stall','confusion','choicelock','mustrecharge','lockedmove','twoturnmove','solarbeam','skyattack','skullbash','razorwind','fly','dig','dive','bounce','taunt','encore','disable','torment','flinch','substitute','partiallytrapped')
 VOLATILE_IDS={key:i for i,key in enumerate(VOLATILES)}
 VOLATILE_WIDTH=12
 SOURCE_MOVE,SOURCE_ITEM,SOURCE_CONDITION,SOURCE_EMPTY=1,2,3,4
@@ -36,7 +36,7 @@ FLINCH_CHANCE=t.mv(lambda row:(row.get('secondary') or {}).get('chance',0) if (r
 RESTRICTIONS=('taunt','encore','disable','torment')
 RESTRICTION=t.mv(lambda row:VOLATILE_IDS.get(row['id'],0) if row['id'] in RESTRICTIONS else 0)
 ENCORE_BLOCKED=t.mv(lambda row:bool(row.get('flags',{}).get('failencore'))).astype(jnp.bool_)
-RESIDUAL_ORDER=jnp.asarray([15 if key=='taunt' else 16 if key=='encore' else 17 if key=='disable' else 10000 for key in VOLATILES],jnp.int32)
+RESIDUAL_ORDER=jnp.asarray([15 if key=='taunt' else 16 if key=='encore' else 17 if key=='disable' else 13 if key=='partiallytrapped' else 10000 for key in VOLATILES],jnp.int32)
 POWER_HERB=t.ITEM_IDS['powerherb']
 ITEM_IMPLEMENTED=jnp.asarray([key=='powerherb' for key in t.ITEMS],jnp.bool_)
 
@@ -134,6 +134,9 @@ def tick_phase(c,side,kind,e):
 
 
 
+PARTIAL_MOVES=t.mv(lambda row:row.get('volatileStatus')=='partiallytrapped').astype(jnp.bool_)
+
+
 def valid_phases(s):
     head=s.volatile_state[:,:,:5];present=head[:,:,:,0]>0
     active=(s.active[:,None]==jnp.arange(6)[None,:])&(~s.fainted)
@@ -158,6 +161,12 @@ def valid_phases(s):
             fields=(row[:,:,6]==SOURCE_MOVE)&(row[:,:,4]==t.MOVE_IDS[VOLATILES[kind]])
             fields=fields&((row[:,:,5]>=1)&(row[:,:,5]<=5) if kind!=18 else row[:,:,5]==0)
             if kind in (16,17):fields=fields&(row[:,:,7]>0)&(row[:,:,7]<len(t.MOVE_KEYS))
+        elif kind==VOLATILE_IDS['partiallytrapped']:
+            effect=jnp.clip(row[:,:,4],0,len(t.MOVE_KEYS)-1)
+            fields=(row[:,:,6]==SOURCE_MOVE)&PARTIAL_MOVES[effect]&(row[:,:,4]>0)&(row[:,:,4]<len(t.MOVE_KEYS))
+            fields=fields&(row[:,:,5]>=1)&(row[:,:,5]<=8)&((row[:,:,7]==8)|(row[:,:,7]==16))&jnp.all(row[:,:,8:]==0,axis=-1)
+            source=jnp.clip(row[:,:,2],0,1);sm=jnp.clip(row[:,:,3],0,5)
+            fields=fields&(s.species[source,sm]>0)
         elif kind==VOLATILE_IDS['substitute']:
             fields=(row[:,:,6]==SOURCE_MOVE)&(row[:,:,4]==t.MOVE_IDS['substitute'])&(row[:,:,5]==0)
             fields=fields&(row[:,:,7]>0)&(row[:,:,7]<=s.stats[:,:,0]//4)&jnp.all(row[:,:,8:]==0,axis=-1)

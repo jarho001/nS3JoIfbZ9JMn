@@ -20,6 +20,7 @@ def create(c,actor,move_row,e):
         s,trace=c;cost=maxhp//4
         s=s._replace(volatile_state=s.volatile_state.at[actor,mon,SLOT,7].set(cost),hp=s.hp.at[actor,mon].add(-cost))
         c=e._event((s,trace),e.VOL_START,actor,mon,value=SLOT)
+        c=e.partial_ops.end(c,actor,e,silent=True)
         # Native directDamage changes neither hurtThisTurn nor lastDamage.
         c=e._event(c,e.DAMAGE,actor,mon,value=s.hp[actor,mon],aux=maxhp,status=s.status[actor,mon])
         return e.tracking.outcome(c,actor,e.i32(e.tracking.TRUE),MOVE)
