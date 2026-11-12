@@ -36,7 +36,7 @@ def restore(s,side,e):
 
 def transform(c,actor,target,e,imposter=False,initial=False):
     s,_=c;mon=s.active[actor];tm=s.active[target]
-    allowed=(~s.fainted[target,tm])&(~s.transformed[actor,mon])&(~s.transformed[target,tm])&(s.volatile_state[target,tm,e.sub_ops.SLOT,0]==0)
+    allowed=(s.illusion[actor,mon]<0)&(s.illusion[target,tm]<0)&(~s.fainted[target,tm])&(~s.transformed[actor,mon])&(~s.transformed[target,tm])&(s.volatile_state[target,tm,e.sub_ops.SLOT,0]==0)
     def copy(c):
         s,tr=c;old=s.ability[actor,mon];new=s.ability[target,tm];species=s.species[target,tm]
         # setSpecies caches stats from the copier's genotype before target stats

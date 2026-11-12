@@ -34,7 +34,7 @@ class StatusEngineTest(unittest.TestCase):
 
     def test_native_states_draws_requests_and_histories(self):
         self.assertEqual(len(self.cases),55)
-        manifest=json.loads(Path('rules/shared-engine-v17.json').read_text())
+        manifest=json.loads(Path('rules/shared-engine-v18.json').read_text())
         self.assertEqual(manifest['schema_version'],e.SCHEMA)
         self.assertEqual(manifest['draw_contexts'],list(e.DRAW_CONTEXTS))
         contexts={d['semanticContext'] for c in self.cases for step in c['steps'] for d in step['draws']}
@@ -99,7 +99,7 @@ class StatusEngineTest(unittest.TestCase):
         c=next(c for c in self.cases if c['id']=='G4-status-rest-lum');s,_=initialize_case(c)
         # A stored old state cannot encode retained empty-status Rest timers.
         s=COMPILED(s,choices_array(s,c['steps'][0]['choices'])).state
-        fields={k:np.asarray(getattr(s,k)) for k in e.State._fields[:e.State._fields.index('effect_order')]}
+        fields={k:(np.asarray(getattr(s,k))[:,:10] if k=='history' else np.asarray(getattr(s,k))) for k in e.State._fields[:e.State._fields.index('effect_order')]}
         from simulator import gen5_tables as g
         for field,value in [('status_state',s.status_state.at[0,0,5].set(999)),
                             ('volatile_state',s.volatile_state.at[0,0,2,2].set(9))]:

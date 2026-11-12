@@ -39,7 +39,7 @@ class HookEngineTest(unittest.TestCase):
 
     def test_native_states_draws_requests_and_histories(self):
         self.assertEqual(len(self.cases),70)
-        manifest=json.loads(Path('rules/shared-engine-v17.json').read_text())
+        manifest=json.loads(Path('rules/shared-engine-v18.json').read_text())
         self.assertEqual(manifest['schema_version'],e.SCHEMA)
         self.assertEqual(manifest['draw_contexts'],list(e.DRAW_CONTEXTS))
         for case in self.cases:
@@ -115,7 +115,7 @@ class HookEngineTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             path=Path(tmp)/'schema5.npz'
             def old_snapshot(state):
-                fields={k:np.asarray(getattr(state,k)) for k in e.State._fields[:e.State._fields.index('move_history')]}
+                fields={k:(np.asarray(getattr(state,k))[:,:10] if k=='history' else np.asarray(getattr(state,k))) for k in e.State._fields[:e.State._fields.index('move_history')]}
                 fields['volatile_state']=fields['volatile_state'][:,:,:3,:6]
                 np.savez(path,schema=5,data_sha256=np.asarray(g.DATA_SHA256),**fields)
             old_snapshot(s)

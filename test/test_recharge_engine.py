@@ -35,7 +35,7 @@ class RechargeEngineTest(unittest.TestCase):
 
     def test_native_requests_effects_draws_and_histories(self):
         self.assertEqual(len(self.cases),34)
-        manifest=json.loads(Path('rules/shared-engine-v17.json').read_text())
+        manifest=json.loads(Path('rules/shared-engine-v18.json').read_text())
         self.assertEqual(manifest['schema_version'],e.SCHEMA)
         self.assertEqual(manifest['draw_contexts'],list(e.DRAW_CONTEXTS))
         for case in self.cases:
@@ -115,7 +115,7 @@ class RechargeEngineTest(unittest.TestCase):
         normal=e.make_state([[{'species':'Mew','moves':['Tackle']}],[{'species':'Snorlax','moves':['Pound']}]],[0,2,3,4]).state
         normal=STEP(normal,e.i32([0,0])).state
         for state,accepted in [(normal,True),(s,False)]:
-            fields={k:np.asarray(v)[:,:,:4,:6] if k=='volatile_state' else np.asarray(v) for k,v in zip(e.State._fields,state) if k not in ('move_history','action_state','attacked_by','side_faints','battle_move','battle_success','battle_damage')}
+            fields={k:np.asarray(v)[:,:,:4,:6] if k=='volatile_state' else np.asarray(v)[:,:10]if k=='history'else np.asarray(v) for k,v in zip(e.State._fields,state) if k in e.State._fields[:e.State._fields.index('move_history')]}
             with tempfile.TemporaryDirectory() as tmp:
                 p=Path(tmp)/'old.npz';np.savez(p,schema=7,data_sha256=np.asarray(g.DATA_SHA256),**fields)
                 if accepted:

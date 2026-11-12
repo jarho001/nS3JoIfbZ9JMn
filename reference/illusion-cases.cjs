@@ -1,0 +1,20 @@
+'use strict';
+module.exports=function(){
+ const m=(species,moves,extra={})=>({species,moves,ability:'Synchronize',item:'',level:50,nature:'Hardy',gender:'M',ivs:{hp:31,atk:31,def:31,spa:31,spd:31,spe:31},evs:{hp:0,atk:0,def:0,spa:0,spd:0,spe:0},...extra});
+ const z=(moves=['Tackle','Recover'],extra={})=>m('Zoroark',moves,{ability:'Illusion',...extra});
+ const disguise=()=>m('Snorlax',['Tackle'],{gender:'F',shiny:true,level:60});
+ const b=(a=1,c=1)=>({p1:`move ${a}`,p2:`move ${c}`}),cases=[];
+ const add=(id,x={})=>cases.push({id:'G4-illusion-'+id,seed:1,generic:true,identityFamily:true,illusionFamily:true,hitFamily:true,p1:[z(),disguise()],p2:[m('Mew',['Tackle','Recover'])],steps:[b(),b(2,2)],...x});
+ add('ordinary');add('mirrored',{p1:[m('Mew',['Tackle','Recover'])],p2:[z(),disguise()]});
+ add('status',{p2:[m('Mew',['Will-O-Wisp','Recover'])],steps:[b(),b(2,2)]});
+ add('multihit',{p2:[m('Mew',['Double Hit','Recover'])]});
+ add('substitute',{p1:[z(['Substitute','Tackle'],{evs:{spe:252}}),disguise()],steps:[b(),b(2,1)]});
+ add('last-slot',{p1:[m('Mew',['Tackle']),z()],steps:[{p1:'switch 2',p2:'move 2'},b(1,2)]});
+ add('switch-restore',{steps:[{p1:'switch 2',p2:'move 2'},{p1:'switch 2',p2:'move 2'},b()]});
+ add('phazing',{p2:[m('Mew',['Roar','Recover'])],steps:[b(),{p1:'switch 2',p2:'move 2'},b()]});
+ add('transform-block',{p2:[m('Mew',['Transform','Tackle'],{evs:{spe:252}})],steps:[b(),b(2,1)]});
+ add('hazards',{p1:[m('Mew',['Tackle']),z(),disguise()],p2:[m('Mew',['Stealth Rock','Recover'])],steps:[b(),{p1:'switch 2',p2:'move 2'},b(2,2)]});
+ add('lethal',{p1:[z(),disguise()],p2:[m('Mew',['Earthquake','Recover'],{evs:{spe:252}})],setup:[{side:'p1',hp:1}],steps:[b()]});
+ add('self-last',{p1:[z()],steps:[b()]});
+ return cases;
+};

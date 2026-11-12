@@ -257,7 +257,12 @@
     "test/test_type_effectiveness.py": "adc117789b6b72a327a9923c825306e23dee132bf5cbfe56dfa249b63b52d0da",
     "test/trace.test.cjs": "497880b4876f42214b102a0db1b3603659f14e660bb67e4272cf60a8f4d5bd95",
     "test/trapping-native.test.cjs": "a99198516565482006a58fb803d13192d429741d93c719559f55b208c3f20498",
-    "test/type-effectiveness-oracle.test.cjs": "772887a4aa407cd5e452f5c6384b42b51422ab897d49f517d53bb40aaa2f590e"
+    "test/type-effectiveness-oracle.test.cjs": "772887a4aa407cd5e452f5c6384b42b51422ab897d49f517d53bb40aaa2f590e",
+    "simulator/identity.py": "926b32fc2841347b55d8cc5eaf1dbbb251b91cd07871fb7229471763a5064287",
+    "reference/identity-cases.cjs": "632dc11b6cfb0bf9767ca025b558029662b8d54cc73849e3227dc378735522af",
+    "test/test_identity_engine.py": "291dce0ed31577cd28fea79ccfb3239eb789ab387f5de708840d24ab646b9205",
+    "test/identity-native.test.cjs": "18b911f130210f0b44a9df29b25462830b2720c2c4e28e79f5eed74642b2111c",
+    "rules/shared-engine-v17.json": "014eca3379571b08a23b16f0cffd80e891913dd1037d69c40065d7be1a09f0f6"
   },
   "validation": {
     "status": "passed_focused_CPU_not_full_G4",
@@ -281,5 +286,6 @@
   "changes": "Separate base/effective species, ability, original/virtual moves+PP, known/apparent types and cached effect identity. Transform/Imposter copy/restore, copied ability Start timing, private requests/trap queries and live NPZ/journal7 persistence.",
   "deferred": "Broad execution and historical migration regressions; Illusion/forms/calling; rules/capacity closure; fixed64/128 campaigns; GPU and profiling.",
   "archive": "schema17-validation.tar.gz",
-  "archive_sha256": "9085df06e7a1960d783056b277cb268880a71a517efc03ad61145bc607fbf82f"
+  "archive_sha256": "9085df06e7a1960d783056b277cb268880a71a517efc03ad61145bc607fbf82f",
+  "source_commit": "1642596"
 }

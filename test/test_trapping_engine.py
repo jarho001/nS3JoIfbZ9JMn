@@ -114,13 +114,13 @@ class TrappingEngineTest(unittest.TestCase):
             # replay and preserve every recorded core field and journal page.
             names=tuple(n for n in e.CoreState._fields[:e.CoreState._fields.index('item_provenance')] if n!='request_state')
             fields={n:np.asarray(getattr(cp.core,n))[:,:,:20,:] if n=='volatile_state' else np.asarray(getattr(cp.core,n))[:,:,:21] if n=='action_state' else np.asarray(getattr(cp.core,n))for n in names}
-            meta={'journal_schema':1,'data_sha256':journal.tables.DATA_SHA256,'pages':[{'rows':p.rows,'recipients':p.recipients}for p in cp.pages]}
+            meta={'journal_schema':1,'data_sha256':journal.tables.DATA_SHA256,'pages':[{'rows':[r[:10]for r in p.rows],'recipients':p.recipients}for p in cp.pages]}
             payload=json.dumps(meta,sort_keys=True,separators=(',',':'));np.savez(path,metadata=np.asarray(payload),journal_sha256=np.asarray(journal._checksum(payload,fields,names)),**fields)
             with self.assertRaisesRegex(ValueError,'replay/provenance'):journal.load(path)
             same(journal.load(path,replayed=cp).core,cp.core)
             wrong=journal.Checkpoint(cp.core._replace(rng=cp.core.rng.at[0].add(1)),cp.pages)
             with self.assertRaisesRegex(ValueError,'mismatch'):journal.load(path,replayed=wrong)
-            legacy=Path(tmp)/'legacy.npz';old={n:np.asarray(getattr(s,n))[:,:,:20,:] if n=='volatile_state' else np.asarray(getattr(s,n))[:,:,:21] if n=='action_state' else np.asarray(getattr(s,n))for n in e.State._fields[:e.State._fields.index('item_provenance')] if n!='request_state'}
+            legacy=Path(tmp)/'legacy.npz';old={n:(np.asarray(getattr(s,n))[:,:10] if n=='history' else np.asarray(getattr(s,n)))[:,:,:20,:] if n=='volatile_state' else (np.asarray(getattr(s,n))[:,:10] if n=='history' else np.asarray(getattr(s,n)))[:,:,:21] if n=='action_state' else (np.asarray(getattr(s,n))[:,:10] if n=='history' else np.asarray(getattr(s,n)))for n in e.State._fields[:e.State._fields.index('item_provenance')] if n!='request_state'}
             np.savez(legacy,schema=10,data_sha256=np.asarray(journal.tables.DATA_SHA256),**old)
             with self.assertRaisesRegex(ValueError,'replay/provenance'):load_state(legacy)
             same(load_state(legacy,replayed_state=s),s)

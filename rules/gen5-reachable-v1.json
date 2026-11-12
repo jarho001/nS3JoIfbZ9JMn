@@ -1774,10 +1774,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/illusion.json.gz",
+          "native": "reference/illusion-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_illusion_engine.py"
+        }
+      ],
       "field": "onBeforeSwitchIn",
       "id": "abilities:illusion:onBeforeSwitchIn",
-      "implementation": null,
+      "implementation": {
+        "family": "illusion",
+        "file": "simulator/illusion.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:illusion",
@@ -1788,7 +1800,7 @@
       "owner": "abilities:illusion",
       "reachability": "candidate",
       "sha256": "61a6b9adf00e44f0692ca98f521974b199a9b46c28bab3a550ae20eb591bb4c2",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -1797,10 +1809,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/illusion.json.gz",
+          "native": "reference/illusion-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_illusion_engine.py"
+        }
+      ],
       "field": "onDamagingHit",
       "id": "abilities:illusion:onDamagingHit",
-      "implementation": null,
+      "implementation": {
+        "family": "illusion",
+        "file": "simulator/illusion.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:illusion",
@@ -1811,7 +1835,7 @@
       "owner": "abilities:illusion",
       "reachability": "candidate",
       "sha256": "2e84e3337d486a3bc64ef8894b80bdb4c3ef838685709599b4cfb0a0991adb2f",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -1820,10 +1844,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/illusion.json.gz",
+          "native": "reference/illusion-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_illusion_engine.py"
+        }
+      ],
       "field": "onEnd",
       "id": "abilities:illusion:onEnd",
-      "implementation": null,
+      "implementation": {
+        "family": "illusion",
+        "file": "simulator/illusion.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:illusion",
@@ -1834,7 +1870,7 @@
       "owner": "abilities:illusion",
       "reachability": "candidate",
       "sha256": "8610e328b303c65c66a7323f23ccf9888a9b722adb421464c59f30191e8b998d",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -1843,10 +1879,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/illusion.json.gz",
+          "native": "reference/illusion-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_illusion_engine.py"
+        }
+      ],
       "field": "onFaint",
       "id": "abilities:illusion:onFaint",
-      "implementation": null,
+      "implementation": {
+        "family": "illusion",
+        "file": "simulator/illusion.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:illusion",
@@ -1857,7 +1905,7 @@
       "owner": "abilities:illusion",
       "reachability": "candidate",
       "sha256": "39e6802a35f10bcaf4fe8418dfdfb73ed2c32ea4fa9d2927790d60a6b01e9fe4",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -68667,10 +68715,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/illusion.json.gz",
+          "native": "reference/illusion-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_illusion_engine.py"
         }
       ],
       "id": "abilities:illusion",
       "implementation": {
+        "behavior": {
+          "family": "illusion",
+          "file": "simulator/illusion.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"

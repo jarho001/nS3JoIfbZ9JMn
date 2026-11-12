@@ -109,6 +109,7 @@ def assert_state(test,s,native,label):
         test.assertEqual(s.order[side,:len(n['order'])].tolist(),n['order'],prefix+' command roster')
         for p in n['pokemon']:
             m=p['id'];tag=prefix+f' mon{m}'
+            if 'illusion'in p:test.assertEqual(None if int(s.illusion[side,m])<0 else {'side':side,'mon':int(s.illusion[side,m])},p['illusion'],tag+' disguise')
             for ours,theirs in [('hp','hp'),('status','status'),('toxic','toxicStage'),('item','item'),('speed','speed'),('fainted','fainted')]:
                 v={'status':e.STATUS_NAMES[int(s.status[side,m])],'item':e.ITEMS[int(s.item[side,m])]}.get(ours,np.asarray(getattr(s,ours)[side,m]).item())
                 test.assertEqual(v,p[theirs],tag+' '+ours)

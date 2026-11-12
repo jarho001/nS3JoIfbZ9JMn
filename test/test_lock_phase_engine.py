@@ -36,7 +36,7 @@ class LockPhaseEngineTest(unittest.TestCase):
     def test_native_causal_state_effects_draws_requests_and_histories(self):
         self.assertEqual(len(self.cases),73)
         self.assertEqual(sum(len(c['steps'])for c in self.cases),371)
-        manifest=json.loads(Path('rules/shared-engine-v17.json').read_text())
+        manifest=json.loads(Path('rules/shared-engine-v18.json').read_text())
         self.assertEqual(manifest['schema_version'],e.SCHEMA)
         self.assertEqual(manifest['draw_contexts'],list(e.DRAW_CONTEXTS))
         for case in self.cases:
@@ -124,7 +124,7 @@ class LockPhaseEngineTest(unittest.TestCase):
         source=e.make_gen5_state([[{'species':'Mew','moves':['Hyper Beam'],'ability':'Synchronize','evs':{'spe':252}}],
                                   [{'species':'Mew','moves':['Recover'],'ability':'Synchronize'}]],[1,2,3,4]).state
         source=STEP(source,e.i32([0,0])).state
-        fields={k:np.asarray(getattr(source,k)) for k in e.State._fields[:e.State._fields.index('move_history')]}
+        fields={k:(np.asarray(getattr(source,k))[:,:10] if k=='history' else np.asarray(getattr(source,k))) for k in e.State._fields[:e.State._fields.index('move_history')]}
         fields['volatile_state']=fields['volatile_state'][:,:,:5,:6]
         with tempfile.TemporaryDirectory() as tmp:
             p=Path(tmp)/'schema8.npz';np.savez(p,schema=8,data_sha256=np.asarray(g.DATA_SHA256),**fields)

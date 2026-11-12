@@ -14,7 +14,7 @@ Full-format G4
 coverage remains separate acceptance work. Historical evidence keeps its original
 source/schema identity; it does not imply validation of later engine changes.
 
-The current runtime uses [schema 17](../rules/shared-engine-v17.json). Schemas
+The current runtime uses [schema 18](../rules/shared-engine-v18.json). Schemas
 4–6 integrated major statuses and effect provenance, boosts/weather/screens,
 and observed ability/item hooks. Schema7 adds declarative hit counts, per-hit
 updates, capped drain/recoil arithmetic, self-destruction and reactive damage.
@@ -593,3 +593,12 @@ Start and cached effect identity follow native lifecycle timing. Known/apparent
 types preserve speculative private trap queries. Switch/faint restore the base
 identity. Focused17/36 CPU parity and live persistence pass; Illusion/event-time
 identity, forms, calls, broad regressions and full G4 acceptance remain pending.
+
+Schema18 adds Illusion and captures display names plus switch details in six
+additional event columns at emission time. A damaging-hit reveal cannot rewrite
+earlier moves, damage or recipient history. Disguise references survive switching
+out, are reselected on entry, and clear on damaging-hit reveal/faint. The pinned
+format includes Illusion Level Mod. Private requests retain true identities.
+Journal8 binds the new field and16-column pages; older journal promotion requires
+independent matching replay. Focused12/25 CPU parity and live persistence pass;
+broad migration/execution gates remain pending.

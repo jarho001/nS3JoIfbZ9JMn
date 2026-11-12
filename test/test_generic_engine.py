@@ -84,7 +84,7 @@ class GenericEngineTest(unittest.TestCase):
             same(result.state,attempted.state)
 
     def test_schema_migration_saved_continuation_and_rollouts(self):
-        manifest=json.loads(Path('rules/shared-engine-v17.json').read_text())
+        manifest=json.loads(Path('rules/shared-engine-v18.json').read_text())
         self.assertEqual(manifest['schema_version'],e.SCHEMA)
         self.assertEqual(manifest['reference_commit'],g.PIN)
         self.assertEqual(e.SPECIES[:len(e.LEGACY_SPECIES)],e.LEGACY_SPECIES)
@@ -115,7 +115,7 @@ class GenericEngineTest(unittest.TestCase):
         legacy=e.make_state([[{'species':'Snorlax','moves':['Tackle'],'speed_evs':252}],
                              [{'species':'Mew','moves':['Tackle']}]]).state
         pending=COMPILED(legacy,e.i32([0,-1])).state
-        fields={name:np.asarray(getattr(pending,name)) for name in e.State._fields[:e.State._fields.index('ivs')]}
+        fields={name:(np.asarray(getattr(pending,name))[:,:10] if name=='history' else np.asarray(getattr(pending,name))) for name in e.State._fields[:e.State._fields.index('ivs')]}
         for schema in (1,2):
             old=dict(fields)
             if schema==1:old.pop('hazards')

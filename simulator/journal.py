@@ -15,7 +15,7 @@ from . import shared_engine as e
 from . import shared_engine_io as io
 from . import gen5_tables as tables
 
-CORE_SCHEMA=7
+CORE_SCHEMA=8
 
 @dataclass(frozen=True)
 class Page:
@@ -88,8 +88,8 @@ def load(path,*,replayed=None):
     with np.load(path,allow_pickle=False)as data:
         payload=str(data['metadata'])
         version=json.loads(payload)['journal_schema']
-        names=tuple(n for n in e.CoreState._fields if not(version==1 and n=='request_state') and not(version<6 and n=='item_provenance') and not(version<7 and n in e.identity_ops.FIELDS))
-        if version not in (1,2,3,4,5,6,CORE_SCHEMA):raise ValueError('unsupported core journal schema')
+        names=tuple(n for n in e.CoreState._fields if not(version==1 and n=='request_state') and not(version<6 and n=='item_provenance') and not(version<7 and n in e.identity_ops.FIELDS) and not(version<8 and n=='illusion'))
+        if version not in (1,2,3,4,5,6,7,CORE_SCHEMA):raise ValueError('unsupported core journal schema')
         if version<CORE_SCHEMA and replayed is None:raise ValueError('old core journal requires independent replay/provenance')
         if _checksum(payload,data,names)!=str(data['journal_sha256']):raise ValueError('journal checksum mismatch')
         metadata=json.loads(payload)
@@ -108,8 +108,11 @@ def load(path,*,replayed=None):
         pages=[]
         for page in metadata['pages']:
             rows=tuple(tuple(row)for row in page['rows']);views=tuple(tuple(v)for v in page['recipients'])
-            if any(len(row)!=10 or any(type(v)is not int for v in row)for row in rows)or len(views)!=2 or any(type(v)is not str for view in views for v in view):raise ValueError('invalid journal page')
+            if any(len(row)!=(10 if version<8 else e.EVENT_COLUMNS) or any(type(v)is not int for v in row)for row in rows)or len(views)!=2 or any(type(v)is not str for view in views for v in view):raise ValueError('invalid journal page')
             pages.append(Page(rows,views))
         if not pages:raise ValueError('missing initialization journal')
-        if version<CORE_SCHEMA and tuple(pages)!=replayed.pages:raise ValueError('journal replay/provenance mismatch')
+        if version<CORE_SCHEMA:
+            expected=tuple(Page(tuple(row[:10] for row in p.rows),p.recipients)for p in replayed.pages)
+            if tuple(pages)!=expected:raise ValueError('journal replay/provenance mismatch')
+            pages=list(replayed.pages)
         return Checkpoint(core,tuple(pages))

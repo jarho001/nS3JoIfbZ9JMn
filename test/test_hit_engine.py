@@ -40,7 +40,7 @@ class HitEngineTest(unittest.TestCase):
 
     def test_native_state_rng_requests_histories_and_outcomes(self):
         self.assertEqual(len(self.cases),97)
-        manifest=json.loads(Path('rules/shared-engine-v17.json').read_text())
+        manifest=json.loads(Path('rules/shared-engine-v18.json').read_text())
         self.assertEqual(manifest['schema_version'],e.SCHEMA)
         self.assertEqual(manifest['draw_contexts'],list(e.DRAW_CONTEXTS))
         for case in self.cases:
@@ -109,7 +109,7 @@ class HitEngineTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             path=Path(tmp)/'old.npz'
             from simulator import gen5_tables as g
-            np.savez(path,schema=6,data_sha256=np.asarray(g.DATA_SHA256),**{k:np.asarray(getattr(s,k))[:,:,:4,:6] if k=='volatile_state' else np.asarray(getattr(s,k)) for k in e.State._fields[:e.State._fields.index('move_history')]})
+            np.savez(path,schema=6,data_sha256=np.asarray(g.DATA_SHA256),**{k:(np.asarray(getattr(s,k))[:,:10] if k=='history' else np.asarray(getattr(s,k)))[:,:,:4,:6] if k=='volatile_state' else (np.asarray(getattr(s,k))[:,:10] if k=='history' else np.asarray(getattr(s,k))) for k in e.State._fields[:e.State._fields.index('move_history')]})
             with self.assertRaisesRegex(ValueError,'replay/provenance'):load_state(path)
             restored=load_state(path,replayed_state=s);same(restored,s);same(STEP(restored,e.i32([0,0])),STEP(s,e.i32([0,0])))
 
