@@ -524,7 +524,7 @@
     "brief": "PROJECT_PLAN.md#proposed-g4-cpu-implementation-and-conformance-goal",
     "source_base": "f37067e",
     "scope": "Complete pinned gen5randombattle reachable mechanics and every prepared CPU gate. Integrated checkpoints, resumable progress and commit/push authorized. GPU execution, profiling, benchmarks, training, delegation and scored research excluded.",
-    "checkpoint": "Schema33 Mummy contact replacement: focused CPU22 scenarios/27 boundaries passed in274.177s;2 native/inventory checks passed. Live changed ability/form NPZ/journal16 persistence. Full G4 and deferred broad gates pending.",
+    "checkpoint": "Magic Guard schema34 focused CPU checkpoint passed:26 scenarios/42 boundaries; remaining reachable mechanics and inventory closure continue.",
     "completed_checkpoints": [
       "Pinned resolved data and source-owned conservative candidate inventory exported; 605 role roots, 1768 data/effect entries, 1146 callback slots. Data-only mappings remain partial; transitive closure and complete callback implementation are not claimed.",
       "Generic species/set/type/stat/physical-special/Hidden Power/happiness/priority/hazard integration passes 37 affected CPU checks on 4eab254, retaining all 133 baseline scenarios and validating 24 added scenarios: 157 scenarios / 1059 boundaries, including 20 complete battles (eight six-member games). Eager/JIT/1-8-32 mixed batches, serialized continuation/reset, explicit schema 1/2 migration and full/lean rollouts pass.",
@@ -538,7 +538,7 @@
       "Schema10 core/journal/hard-turn-limit checkpoint validated on a9d0fbd:3 integrated CPU checks pass in1174.685s, plus5 native/6 helper checks. Complete combat and1000-boundary neutral histories match native; mixed1/8/32,full/lean,core reset,persistence/corruption pass. Full64 suite and full-format G4 pending.",
       "Schema11 trapping/retry checkpoint:8 affected CPU checks plus6 native/6 helper checks pass. New31 scenarios/215 boundaries include two complete six-member games and mirrored private-state episodes. Aggregate558/4110; full68 suite and full-format G4 pending."
     ],
-    "next": "Audit-only checkpoint complete; before further mechanic work complete the reachability precheck. Magic Guard membership is witnessed; callback cases and shared paths still require the family precheck. Preserve unaccepted Trace and deferred acceptance.",
+    "next": "Continue reachable ability families, including low-HP type-power hooks (Overgrow membership already witnessed); establish family reachability and pinned native cases first. Then complete callback/indirect/rule inventory closure. Focused CPU validation only; broad/device/campaign/profiling work remains deferred.",
     "ledger": {
       "path": "rules/gen5-reachable-v1.json",
       "entries": 1768,
@@ -1104,14 +1104,24 @@
         "native_boundaries": 27,
         "evidence": "test-logs/g4-cpu-conformance/schema33-checkpoint.json",
         "next": "Remaining reachable ability families, starting Magic Guard, then complete callback/indirect/rule inventory closure."
+      },
+      "magic_guard": {
+        "status": "completed_focused_CPU_checkpoint_not_full_G4",
+        "source_base": "43f17fc",
+        "candidate_schema": 34,
+        "core_journal_schema": 16,
+        "native_cases": 26,
+        "native_boundaries": 42,
+        "evidence": "test-logs/g4-cpu-conformance/schema34-checkpoint.json",
+        "next": "Continue reachable ability families, including low-HP type-power hooks (Overgrow membership already witnessed); establish family reachability and pinned native cases first. Then complete callback/indirect/rule inventory closure. Focused CPU validation only; broad/device/campaign/profiling work remains deferred."
       }
     },
     "resolved_failure": "16b5263 preflight rejected ordinary moves because type was missing from its field set; fixed by 4eab254, failed run stopped, all 37 repaired checks pass. Detailed minimized input and source identities are in source.json.",
     "publication": {
       "status": "checkpoint_publication_authorized",
       "target": "origin/main",
-      "previous_published_head": "a3427c6",
-      "scope": "Mummy schema33 focused CPU checkpoint; remaining reachable mechanics/inventory closure continue."
+      "previous_published_head": "43f17fc",
+      "scope": "Magic Guard schema34 focused CPU checkpoint; remaining reachable mechanics/inventory closure continue."
     },
     "reasoning_effort": "medium (user preference,2026-11-10; no automatic escalation)",
     "design_pass": {
@@ -1139,18 +1149,22 @@
     "implementation_wip": null,
     "cpu_block": null,
     "reachability_precheck": {
-      "family": "Magic Guard (next candidate; no implementation in this audit)",
-      "status": "membership_confirmed_shared_path_and_dependency_cases_pending",
+      "family": "Magic Guard",
+      "status": "completed_focused_CPU_checkpoint_not_full_G4",
       "required": [
-        "abilities:magicguard; native-team-positive-witness includes Magic Guard Clefable at seed [1,2,3,4]"
+        "abilities:magicguard is required: positive native generator witness seed [1,2,3,4], Clefable",
+        "onDamage activation witnessed by native indirect residual/contact/recoil/hazard cases; callback activation classification remains unresolved in global closure audit"
       ],
       "shared_behavior": [
-        "Review simulator/shared_engine.py damage/recoil/residual paths and simulator/hook_effects.py Life Orb handling against existing native evidence before changes. No new coverage claimed."
+        "Reuse effective ability suppression queries and shared _damage with explicit cause IDs; keep direct/confusion/Struggle paths distinct",
+        "Existing recoil, Life Orb, hazard, weather, status and binding timers remain authoritative shared paths"
       ],
       "new_dependencies": [
-        "Magic Guard damage-source distinctions, Life Orb recoil, hazards/weather/status and contact damage interaction cases remain pending."
+        "No new identity or state fields; suppression/acquisition, Mummy loss and Trace acquisition covered",
+        "Partial-trap event annotation must only edit a newly emitted damage event",
+        "Remaining damage-source callbacks and final inventory/indirect closure remain pending"
       ],
-      "guidance": "docs/SHOWDOWN_BEHAVIOR_CASES.md#reachability-audit-and-family-precheck-2026-11-13"
+      "native_spec": "test-logs/g4-cpu-conformance/magic-guard.json.gz:26 cases/42 boundaries; frozen before engine changes"
     },
     "scope_audit": {
       "date": "2026-11-13",
@@ -2179,17 +2193,17 @@
     "combined_return_home_block": "docs/GPU_HANDOFF.md#one-return-home-block-correctness-plus-g3-v6-measurements",
     "pending_status_checkpoint": "Current status/field/hook GPU checks are wired into the49-check runner; no GPU execution during travel. Preserve matching-source CPU results and do not transfer earlier GPU/CPU evidence across changed source.",
     "expanded_checkpoint": {
-      "status": "schema33_focused_CPU_complete_GPU_deferred",
-      "engine_schema": 33,
-      "modules": 39,
-      "native_scenarios": 1055,
-      "native_boundaries": 5134,
+      "status": "schema34_focused_CPU_complete_GPU_deferred",
+      "engine_schema": 34,
+      "modules": 40,
+      "native_scenarios": 1081,
+      "native_boundaries": 5176,
       "initial_field_evidence": "test-logs/g4-cpu-conformance/schema5-checkpoint.json",
       "source": "Use latest committed checkout and runner source/fixture fingerprints; earlier source_commit fields describe historical preparation.",
       "handoff_prepared": false,
-      "source_commit": "Publishing commit; exact relevant source fingerprints in schema33-checkpoint.json",
-      "source_identity": "test-logs/g4-cpu-conformance/schema33-checkpoint.json",
-      "checks": 95
+      "source_commit": "Publishing commit; exact relevant source fingerprints in schema34-checkpoint.json",
+      "source_identity": "test-logs/g4-cpu-conformance/schema34-checkpoint.json",
+      "checks": 96
     },
     "pending_candidate": null
   }

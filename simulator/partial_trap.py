@@ -39,9 +39,10 @@ def tick(c,side,e):
     source,sm=row[2],row[3]
     gone=(s.active[source]!=sm)|(s.hp[source,sm]<=0)|(s.action_state[source,sm,e.tracking.ACTIVE_TURNS]==0)
     def damage(c):
+        previous=c[1].ecount
         c=e._damage(c,side,s.stats[side,mon,0]//row[7],cause=15,source_side=source,source_mon=sm)
         state,trace=c;ix=trace.ecount-1
-        c=(state,trace._replace(events=trace.events.at[ix,0].set(e.PARTIAL_DAMAGE).at[ix,3].set(row[4])))
+        c=e._when(trace.ecount>previous,lambda c:(c[0],c[1]._replace(events=c[1].events.at[ix,0].set(e.PARTIAL_DAMAGE).at[ix,3].set(row[4]))),c)
         c=e._when(c[0].hp[side,mon]==0,lambda c:e._faint(c,side),c)
         return e._win(c,side)
     return e.jax.lax.cond(row[5]<=0,lambda c:end(c,side,e),lambda c:e.jax.lax.cond(gone,lambda c:end(c,side,e,silent=True),damage,c),c)

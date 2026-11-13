@@ -50,7 +50,7 @@ import sys
 def _engine():
     return sys.modules[__name__]
 
-SCHEMA = 33
+SCHEMA = 34
 ROSTER, SLOTS, QUEUE, EVENTS, DRAWS, HISTORY = 6, 4, 8, 128, 128, 2048
 OK, PENDING, INVALID, UNSUPPORTED, CAPACITY, TERMINAL, STALE = range(7)
 RETRY=7
@@ -358,10 +358,17 @@ def _win(c,last_side):
 
 
 def _damage(c,side,amount,cause=0,minimum=1,source_side=0,source_mon=0):
-    s,t=c;m=s.active[side];hp=jnp.maximum(0,s.hp[side,m]-jnp.maximum(minimum,amount))
-    s=tracking.damaged(s,side,s.hp[side,m]-hp,hp,source_side,cause)
-    s=s._replace(hp=s.hp.at[side,m].set(hp))
-    return _event((s,t),DAMAGE,side,m,value=hp,aux=s.stats[side,m,0],status=s.status[side,m],move=cause,target=source_side,targetmon=source_mon)
+    # Cause0 is a Move. Struggle and confusion use native directDamage and
+    # bypass Damage callbacks. Every other currently implemented cause is a
+    # Condition, Item or Ability and Gen5 Magic Guard silently cancels it.
+    s,_=c;m=s.active[side]
+    blocked=(suppression_ops.abilities(s)[side,m]==tables.ABILITY_IDS['magicguard'])&(cause!=0)&(cause!=3)&(cause!=6)
+    def apply(c):
+        s,t=c;hp=jnp.maximum(0,s.hp[side,m]-jnp.maximum(minimum,amount))
+        s=tracking.damaged(s,side,s.hp[side,m]-hp,hp,source_side,cause)
+        s=s._replace(hp=s.hp.at[side,m].set(hp))
+        return _event((s,t),DAMAGE,side,m,value=hp,aux=s.stats[side,m,0],status=s.status[side,m],move=cause,target=source_side,targetmon=source_mon)
+    return _when(~blocked,apply,c)
 
 
 def _status(c,source,target,status,reflect=True,move=0,secondary=False,overwrite=False):

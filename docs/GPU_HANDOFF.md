@@ -12,11 +12,30 @@ all acceptance requirements and commands below remain pending.
 
 ## Current source and evidence
 
+**Schema34 Magic Guard checkpoint passed focused CPU validation.** Native26
+scenarios/42 boundaries agree exactly in330.331s, including live binding and
+suppression NPZ/journal16 persistence;2 native/inventory checks and3 handoff
+retention checks pass. See [schema34-checkpoint.json](../test-logs/g4-cpu-conformance/schema34-checkpoint.json).
+Current runner includes96 checks/40 modules,1081 scenarios/5176 boundaries,
+`test.test_magic_guard_engine` and the `magicguard` batch. Preparation, broad
+CPU, device and campaign gates remain deferred until reachable mechanics and
+inventory closure. Pending device command on matching committed source:
+
+```sh
+JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_magic_guard_engine -v -f
+```
+
+Check silent indirect-damage prevention, advancing Toxic/binding timers,
+contact/Liquid Ooze/Life Orb/recoil/hazard/weather ordering and direct-damage
+exceptions. Preserve suppression/acquisition/Mummy/Trace, private state and
+recipient histories. State fields and journal16 remain unchanged. Consolidated
+mixed-lane, full/lean, lifecycle and final campaign obligations remain pending.
+
 **Schema33 Mummy checkpoint passed focused CPU validation.** Native22 scenarios/
 27 boundaries agree exactly in274.177s, including live changed ability/form
 NPZ/journal16 persistence;2 native/inventory checks pass.
 See [schema33-checkpoint.json](../test-logs/g4-cpu-conformance/schema33-checkpoint.json).
-Current runner includes95 checks/39 modules,1055 scenarios/5134 boundaries,
+The schema33 checkpoint runner included95 checks/39 modules,1055 scenarios/5134 boundaries,
 `test.test_mummy_engine` and the `mummy` batch. Runner preparation and broad/device
 checks remain deferred until reachable mechanics and inventory closure.
 

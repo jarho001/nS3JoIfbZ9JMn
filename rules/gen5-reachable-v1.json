@@ -2803,10 +2803,22 @@
           "file": "data/mods/gen6/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/magic-guard.json.gz",
+          "native": "reference/magic-guard-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_magic_guard_engine.py"
+        }
+      ],
       "field": "onDamage",
       "id": "abilities:magicguard:onDamage",
-      "implementation": null,
+      "implementation": {
+        "family": "magic_guard",
+        "file": "simulator/shared_engine.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:magicguard",
@@ -2818,7 +2830,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "ec42cf905649feb63e0167048df3b5230467badbcad9fe22287170892ce4902e",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -72709,10 +72721,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/magic-guard.json.gz",
+          "native": "reference/magic-guard-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_magic_guard_engine.py"
         }
       ],
       "id": "abilities:magicguard",
       "implementation": {
+        "behavior": {
+          "family": "magic_guard",
+          "file": "simulator/shared_engine.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"

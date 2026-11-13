@@ -44,7 +44,7 @@ test('pinned resolved export and conservative inventory reproduce exactly',()=>{
   for(const id of ['conditions:slp:onBeforeMove','moves:rest:onHit',
     'moves:reflect:condition.onAnyModifyDamage','conditions:sandstorm:onWeather',
     'abilities:pressure:onDeductPP','abilities:prankster:onModifyPriority',
-    'abilities:immunity:onUpdate','abilities:trace:onStart','abilities:trace:onUpdate','abilities:mummy:onDamagingHit',
+    'abilities:magicguard:onDamage','abilities:immunity:onUpdate','abilities:trace:onStart','abilities:trace:onUpdate','abilities:mummy:onDamagingHit',
     'abilities:icebody:onWeather','items:lifeorb:onAfterMoveSecondarySelf',
     'conditions:mustrecharge:onStart','conditions:mustrecharge:onBeforeMove','conditions:choicelock:onStart','conditions:frz:onModifyMove',
     'abilities:skilllink:onModifyMove','abilities:rockhead:onDamage',
@@ -55,13 +55,12 @@ test('pinned resolved export and conservative inventory reproduce exactly',()=>{
     assert.ok(cb.evidence.every(e=>fs.existsSync(e.native)&&fs.existsSync(e.test)));
     assert.match(cb.implementation.scope,/complete .*validation pending/);
   }
-  for(const id of ['conditions:frz:onAfterMoveSecondary',
-    'abilities:magicguard:onDamage']) {
+  for(const id of ['conditions:frz:onAfterMoveSecondary']) {
     const cb=slots.get(id);assert.equal(cb.status,'unsupported');assert.equal(cb.implementation,null);
   }
   assert.ok(ledger.callbacks.every(c=>['partial','unsupported'].includes(c.status)));
-  assert.equal(ledger.callbacks.filter(c=>c.status==='partial').length,271);
-  assert.equal(ledger.callbacks.filter(c=>c.status==='unsupported').length,875);
+  assert.equal(ledger.callbacks.filter(c=>c.status==='partial').length,272);
+  assert.equal(ledger.callbacks.filter(c=>c.status==='unsupported').length,874);
   const audit=ledger.reachabilityAudit;
   const entries=new Map(ledger.entries.map(e=>[e.id,e]));
   assert.equal(audit.proofs['move-identity-bound'].bound.length,224);

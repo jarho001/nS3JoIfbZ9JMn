@@ -1,0 +1,8 @@
+test_existing_output_is_preserved (test.test_gpu_handoff.GpuHandoffTest.test_existing_output_is_preserved) ... ok
+test_native_failure_retains_failed_summary_and_archive (test.test_gpu_handoff.GpuHandoffTest.test_native_failure_retains_failed_summary_and_archive) ... ok
+test_timeout_stops_child_and_records_exit (test.test_gpu_handoff.GpuHandoffTest.test_timeout_stops_child_and_records_exit) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 2.849s
+
+OK

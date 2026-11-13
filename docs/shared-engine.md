@@ -722,3 +722,19 @@ schema33-checkpoint.json. Native cases also cover multi-hit, protection,
 Struggle, suppression, Trace acquisition, recoil/Life Orb and switch reset.
 Remaining reachable mechanics, full inventory and broad/final/GPU gates stay
 pending.
+
+Schema34 adds Magic Guard at the shared Damage boundary, using effective ability
+queries. Native Gen5 inherits the Gen6 callback, which silently cancels non-Move
+damage; it does not emit the modern base callback's ability activation. Toxic
+stages and binding durations still advance. Struggle and confusion use native
+directDamage; Substitute creation and self-destruction also bypass the guard.
+Contact damage, Liquid Ooze, hazards, weather, recoil and Life Orb retain their
+existing ordering and arithmetic. Binding residual annotation now requires a
+new damage event, preserving the preceding event when damage is cancelled.
+State fields and core journal16 are unchanged; schema33 NPZ loads directly.
+Focused scalar-JIT CPU parity passes all26 scenarios/42 boundaries in330.331s,
+including live binding/suppression NPZ/journal16 persistence; see
+[schema34-checkpoint.json](../test-logs/g4-cpu-conformance/schema34-checkpoint.json).
+The native fixture includes suppression,
+Role Play, Mummy, Trace and mirrored seats. Full inventory and final/device
+conformance remain pending.
