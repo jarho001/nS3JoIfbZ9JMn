@@ -65,7 +65,7 @@ def sleep_switch(c,side,e):
 
 
 def inflict(c,source,target,status,e,reflect=True,move=0,secondary=False,overwrite=False):
-    s,t=c;m=s.active[target];sm=s.active[source];ability=s.ability[target,m]
+    s,t=c;m=s.active[target];sm=s.active[source];ability=e.suppression_ops.abilities(s)[target,m]
     poison=jnp.any((s.types[target,m]==e.generic.TYPES['poison'])|(s.types[target,m]==e.generic.TYPES['steel']))
     fire=jnp.any(s.types[target,m]==e.generic.TYPES['fire'])
     ice=jnp.any(s.types[target,m]==e.generic.TYPES['ice'])
@@ -206,4 +206,4 @@ def rest(c,actor,move_row,e):
         # Rest installs its fixed timers after the immediate Lum update.
         s=s._replace(status_state=s.status_state.at[actor,m,5:7].set(3),hp=s.hp.at[actor,m].set(maxhp))
         return e._event((s,t),e.HEAL,actor,m,value=maxhp,aux=maxhp,status=s.status[actor,m],move=-1)
-    return jax.lax.cond(hp==maxhp,fail,lambda c:jax.lax.cond(e.immunity_ops.SLEEP[c[0].ability[actor,m]],lambda c:e.immunity_ops.rest_fail(c,actor,e),success,c),c)
+    return jax.lax.cond(hp==maxhp,fail,lambda c:jax.lax.cond(e.immunity_ops.SLEEP[e.suppression_ops.abilities(c[0])[actor,m]],lambda c:e.immunity_ops.rest_fail(c,actor,e),success,c),c)

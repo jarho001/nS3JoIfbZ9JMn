@@ -20284,10 +20284,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/suppression.json.gz",
+          "native": "reference/suppression-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_suppression_engine.py"
+        }
+      ],
       "field": "condition.onStart",
       "id": "moves:gastroacid:condition.onStart",
-      "implementation": null,
+      "implementation": {
+        "family": "suppression",
+        "file": "simulator/suppression.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:gastroacid",
@@ -20298,7 +20310,7 @@
       "owner": "moves:gastroacid",
       "reachability": "candidate",
       "sha256": "cc569f0bf661c95aef10dd68eba5e3f32e04671eeafab69921858be5e6b2799d",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -20307,10 +20319,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/suppression.json.gz",
+          "native": "reference/suppression-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_suppression_engine.py"
+        }
+      ],
       "field": "onTryHit",
       "id": "moves:gastroacid:onTryHit",
-      "implementation": null,
+      "implementation": {
+        "family": "suppression",
+        "file": "simulator/suppression.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:gastroacid",
@@ -20321,7 +20345,7 @@
       "owner": "moves:gastroacid",
       "reachability": "candidate",
       "sha256": "611ea1fffa0b25054e0daf2cae0cab3f9b2e2106503f8398a337b66298059c4c",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [

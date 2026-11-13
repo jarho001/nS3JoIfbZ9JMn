@@ -7,6 +7,16 @@ GPU. Preparing this handoff does not run device tests, profiling or benchmarks.
 
 ## Current source and evidence
 
+**Schema24 Gastro Acid suppression checkpoint:** focused CPU parity passed23
+scenarios/47 boundaries in195.494s; one native contract passed.
+Raw/base ability is retained while modifiers/callbacks are suppressed. PP,
+trapping, forms, copying, suppressed Start, restoration and live NPZ/journal11
+persistence are covered.
+See [schema24-checkpoint.json](../test-logs/g4-cpu-conformance/schema24-checkpoint.json).
+The runner includes `test.test_suppression_engine` and the `suppression` batch.
+Isolated replay: `JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_suppression_engine -v -f`.
+Broad execution/migration and current runner preparation remain pending.
+
 **Schema23 ability creation and boost changes checkpoint:** focused CPU parity passed23
 scenarios/48 boundaries in190.058s; one native contract passed.
 Worry Seed/Simple Beam lifecycle, existing sleep cure, Zen/Illusion End, Simple/
@@ -178,8 +188,8 @@ The entire matching-source 61-check suite has not been repeated. Historical
 schema8 results remain in
 [schema8-checkpoint.json](../test-logs/g4-cpu-conformance/schema8-checkpoint.json).
 
-The expanded runner expects **84 checks in 28 isolated modules**, using 23
-independent native corpora: **855 scenarios / 4809 boundaries**, including
+The expanded runner expects **85 checks in 29 isolated modules**, using 24
+independent native corpora: **878 scenarios / 4856 boundaries**, including
 32 complete constructed six-member combat games (plus the neutral switch-only
 turn-limit game and eight historical three-member games). The 73 phase scenarios are in
 `test.test_lock_phase_engine`. The runner recaptures causal state for the prior
@@ -245,7 +255,7 @@ the combined block below:
 2. Freezes all sixteen legacy/current corpora, including move phases, the
    turn-limit witness, trapping/retries, Substitute and partial trapping. Runs the reference/native
    contracts. Unknown/unsupported families stay explicit.
-3. Runs the same current 84-check scope on CPU, then under `JAX_PLATFORMS=cuda`,
+3. Runs the same current 85-check scope on CPU, then under `JAX_PLATFORMS=cuda`,
    with each test module in a fresh process.
    A strict probe verifies actual eager/JIT GPU placement; shared case/lifecycle
    assertions also check device leaves. `cuda` initialization failure is a failure.

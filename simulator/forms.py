@@ -1,5 +1,6 @@
 """Weather-driven Gen5 Castform/Cherrim effective forms."""
 import jax.numpy as jnp
+from . import suppression as suppression_ops
 from . import gen5_engine_tables as t
 A=t.ABILITY_IDS;S=t.SPECIES_IDS
 FORECAST=A['forecast'];FLOWER=A['flowergift']
@@ -15,10 +16,10 @@ def valid_pair(s):
 
 def flower(s,side):
     mon=s.active[side]
-    return (s.ability[side,mon]==FLOWER)&FLOWER_GROUP[s.base_species[side,mon]]&(s.weather_state[0]==2)
+    return (suppression_ops.abilities(s)[side,mon]==FLOWER)&FLOWER_GROUP[s.base_species[side,mon]]&(s.weather_state[0]==2)
 
 def change(c,side,e):
-    s,_=c;mon=s.active[side];ability=s.ability[side,mon];weather=s.weather_state[0]
+    s,_=c;mon=s.active[side];ability=suppression_ops.abilities(s)[side,mon];weather=s.weather_state[0]
     cast=(ability==FORECAST)&CAST_GROUP[s.base_species[side,mon]]
     flower=(ability==FLOWER)&FLOWER_GROUP[s.base_species[side,mon]]
     species=jnp.where(cast,CAST_FORMS[weather],jnp.where(weather==2,S['cherrimsunshine'],CHERRIM))

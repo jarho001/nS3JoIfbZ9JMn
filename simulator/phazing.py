@@ -21,7 +21,7 @@ def mark(c,actor,target,move,e):
         def held(c):return e._event(c,e.PHAZE_ABILITY,target,tm,value=t.ABILITY_IDS['suctioncups'])
         def flag(c):
             s,tr=c;return s,tr._replace(force_switch=tr.force_switch.at[target].set(True))
-        return e.jax.lax.cond(s.ability[target,tm]==t.ABILITY_IDS['suctioncups'],held,flag,c)
+        return e.jax.lax.cond(e.suppression_ops.abilities(s)[target,tm]==t.ABILITY_IDS['suctioncups'],held,flag,c)
     return e._when(MOVES[move]&can,attempt,c)
 
 

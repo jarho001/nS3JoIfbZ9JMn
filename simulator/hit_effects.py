@@ -11,7 +11,7 @@ def rounded_fraction(amount,numerator,denominator):
 
 
 def hit_count(c,move,actor,e):
-    s,_=c;skill=s.ability[actor,s.active[actor]]==tables.ABILITY_IDS['skilllink']
+    s,_=c;skill=e.suppression_ops.abilities(s)[actor,s.active[actor]]==tables.ABILITY_IDS['skilllink']
     minimum=h.MIN_HITS[move];maximum=h.MAX_HITS[move]
     def sample(c):
         def gen5(c):
@@ -50,13 +50,13 @@ def drain(c,actor,target,move,dealt,e,*,substitute=False):
             s=s._replace(hp=s.hp.at[actor,mon].set(hp))
             return e._event((s,t),e.HEAL,actor,mon,move=3,target=target,targetmon=tm,
                             value=hp,aux=s.stats[actor,mon,0],status=s.status[actor,mon])
-        is_ooze=s.ability[target,tm]==tables.ABILITY_IDS['liquidooze']
+        is_ooze=e.suppression_ops.abilities(s)[target,tm]==tables.ABILITY_IDS['liquidooze']
         return jax.lax.cond(is_ooze,ooze,lambda c:e._when(s.hp[actor,mon]<s.stats[actor,mon,0],heal,c),c)
     return e._when((h.DRAIN_NUM[move]>0)&(dealt>0)&(c[0].hp[actor,c[0].active[actor]]>0),apply,c)
 
 
 def contact(c,actor,target,move,e):
-    s,_=c;mon=s.active[actor];tm=s.active[target];ability=s.ability[target,tm]
+    s,_=c;mon=s.active[actor];tm=s.active[target];ability=e.suppression_ops.abilities(s)[target,tm]
     # Native onDamagingHitOrder1 (ability), then2 (item). These orders cannot
     # tie, so there is no event-sort PRNG draw for these two handlers.
     thorn=(ability==tables.ABILITY_IDS['roughskin'])|(ability==tables.ABILITY_IDS['ironbarbs'])

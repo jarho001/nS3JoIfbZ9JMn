@@ -40,7 +40,7 @@ def absorb(c,actor,target,move,damage,e):
     s=s._replace(volatile_state=s.volatile_state.at[target,tm,SLOT].set(jnp.where(hp>0,row,0)))
     s=e.tracking.put(s,actor,e.tracking.LAST_DAMAGE,dealt)
     c=e.jax.lax.cond(hp>0,lambda c:e._event(c,e.SUB_DAMAGE,target,tm),lambda c:e._event(c,e.VOL_END,target,tm,value=SLOT),(s,trace))
-    regular=(e.hit_tables.RECOIL_NUM[move]>0)&(s.ability[actor,mon]!=t.ABILITY_IDS['rockhead'])
+    regular=(e.hit_tables.RECOIL_NUM[move]>0)&(e.suppression_ops.abilities(s)[actor,mon]!=t.ABILITY_IDS['rockhead'])
     def recoil(c):
         amount=jnp.where(move==e.STRUGGLE,(s.stats[actor,mon,0]+2)//4,jnp.maximum(1,e.hit_ops.rounded_fraction(dealt,e.hit_tables.RECOIL_NUM[move],e.hit_tables.RECOIL_DEN[move])))
         return e._damage(c,actor,amount,cause=jnp.where(move==e.STRUGGLE,3,10))

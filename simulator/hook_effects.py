@@ -5,6 +5,7 @@ and independent integration acceptance remain separate from this module.
 """
 import jax
 import jax.numpy as jnp
+from . import suppression as suppression_ops
 from mechanics.fixedpoint import apply_fixedpoint_modifier as modify
 from . import hook_tables as h
 
@@ -15,7 +16,7 @@ def chain(previous,next_modifier):
 
 
 def speeds(s,staged,e):
-    ability=s.ability;item=s.item;weather=s.weather_state[0]
+    ability=suppression_ops.abilities(s);item=s.item;weather=s.weather_state[0]
     doubled=((ability==h.A['swiftswim'])&(weather==1))|((ability==h.A['chlorophyll'])&(weather==2))|((ability==h.A['sandrush'])&(weather==3))
     quick=(ability==h.A['quickfeet'])&(s.status!=e.NONE)&(s.status!=e.FNT)
     modifier=jnp.where(doubled,8192,jnp.where(quick,6144,4096)).astype(jnp.int32)
@@ -39,7 +40,7 @@ def critical_blocked(ability):
 
 
 def accuracy(base,s,actor,physical):
-    m=s.active[actor];ability=s.ability[actor,m]
+    m=s.active[actor];ability=suppression_ops.abilities(s)[actor,m]
     modifier=jnp.where(ability==h.A['compoundeyes'],5325,jnp.where((ability==h.A['hustle'])&physical,3277,4096)).astype(jnp.int32)
     return modify(base,modifier)
 
@@ -53,7 +54,7 @@ def power(value,ability,item,physical,move_type,e,phase_modifier=4096):
 
 
 def stats(attack,defense,s,actor,target,physical,move_type,e):
-    m=s.active[actor];tm=s.active[target];ability=s.ability[actor,m];defender=s.ability[target,tm];item=s.item[actor,m]
+    m=s.active[actor];tm=s.active[target];ability=suppression_ops.abilities(s)[actor,m];defender=suppression_ops.abilities(s)[target,tm];item=s.item[actor,m]
     # Hustle returns a direct stat value before the queued chain modifiers.
     attack=jnp.where((ability==h.A['hustle'])&physical,modify(attack,e.i32(6144)),attack)
     huge=(ability==h.A['hugepower'])|(ability==h.A['purepower'])
@@ -75,7 +76,7 @@ def stats(attack,defense,s,actor,target,physical,move_type,e):
 
 
 def damage_modifier(c,actor,target,physical,critical,exponent,e,move):
-    s,t=c;m=s.active[actor];tm=s.active[target];ability=s.ability[actor,m];defender=s.ability[target,tm];item=s.item[actor,m]
+    s,t=c;m=s.active[actor];tm=s.active[target];ability=suppression_ops.abilities(s)[actor,m];defender=suppression_ops.abilities(s)[target,tm];item=s.item[actor,m]
     extra,modifier=e.phase_ops.damage_modifier(s,target,move)
     rows=[jnp.stack((modifier,s.speed[target,tm],e.i32(2)))];valid=[extra]
     for side in range(2):
@@ -106,7 +107,7 @@ def damage_modifier(c,actor,target,physical,critical,exponent,e,move):
 
 
 def ability_start(c,side,e,initial=False):
-    s,t=c;m=s.active[side];ability=s.ability[side,m];weather=h.ABILITY_WEATHER[ability]
+    s,t=c;m=s.active[side];ability=suppression_ops.abilities(s)[side,m];weather=h.ABILITY_WEATHER[ability]
     c=e._when((ability==h.A['pressure'])|((ability==h.A['intimidate'])&(s.hp[1-side,s.active[1-side]]>0)),
         lambda c:e._event(c,e.REVEAL,side,m,value=ability,aux=(ability==h.A['intimidate']).astype(jnp.int32)),c)
     def frisk(c):
@@ -131,7 +132,7 @@ def ability_start(c,side,e,initial=False):
 
 
 def start(c,side,e,initial=False):
-    ability=c[0].ability[side,c[0].active[side]]
+    ability=suppression_ops.abilities(c[0])[side,c[0].active[side]]
     def copy(c):return e.identity_ops.transform(c,side,1-side,e,imposter=True,initial=initial)[0]
     c=e.jax.lax.cond(ability==e.identity_ops.IMPOSTER,copy,lambda c:ability_start(c,side,e,initial=initial),c)
     return item_start(c,side,e)

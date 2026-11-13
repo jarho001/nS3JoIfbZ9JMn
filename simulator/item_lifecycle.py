@@ -50,7 +50,7 @@ def recycle(c,actor,move_row,e):
 def knock(c,actor,target,move,e):
     s,_=c;mon=s.active[actor];tm=s.active[target];item=s.item[target,tm]
     def remove(c):
-        sticky=(s.ability[target,tm]==t.ABILITY_IDS['stickyhold'])&(s.hp[target,tm]>0)
+        sticky=(e.suppression_ops.abilities(s)[target,tm]==t.ABILITY_IDS['stickyhold'])&(s.hp[target,tm]>0)
         def held(c):return e._event(c,e.PHAZE_ABILITY,target,tm,value=t.ABILITY_IDS['stickyhold'])
         def lost(c):return e._event(take(c,target),e.ITEM_LOSS,target,tm,move=KNOCK,value=item,target=actor,targetmon=mon)
         return e.jax.lax.cond(sticky,held,lost,c)

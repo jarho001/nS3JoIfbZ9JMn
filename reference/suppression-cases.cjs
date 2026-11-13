@@ -1,0 +1,24 @@
+'use strict';
+module.exports=function(){
+ const m=(species,moves,extra={})=>({species,moves,ability:'Pressure',item:'',level:50,nature:'Hardy',gender:'M',ivs:{hp:31,atk:31,def:31,spa:31,spd:31,spe:31},evs:{hp:0,atk:0,def:0,spa:0,spd:0,spe:0},...extra});
+ const b=(a=1,c=1)=>({p1:`move ${a}`,p2:`move ${c}`}),cases=[],add=(id,x={})=>cases.push({id:'G4-suppression-'+id,seed:1,generic:true,identityFamily:true,abilityChangeFamily:true,suppressionFamily:true,hitFamily:true,p1:[m('Mew',['Gastro Acid','Tackle'],{evs:{spe:252}}),m('Mew',['Tackle'])],p2:[m('Mew',['Tackle','Recover'])],steps:[b(),b(2)],...x});
+ add('pressure');add('repeat',{steps:[b(),b()]});
+ for(const [id,ability,move]of [['levitate','Levitate','Earthquake'],['thickfat','Thick Fat','Flamethrower'],['roughskin','Rough Skin','Tackle'],['sticky','Sticky Hold','Knock Off'],['liquidooze','Liquid Ooze','Drain Punch']])add(id,{p1:[m('Mew',['Gastro Acid',move],{evs:{spe:252}})],p2:[m('Mew',['Tackle','Recover'],{ability,item:'Leftovers'})],steps:[b(1,2),b(2,2)]});
+ add('rockhead',{p2:[m('Mew',['Double-Edge','Recover'],{ability:'Rock Head'})]});
+ add('skilllink',{p2:[m('Mew',['Double Slap','Recover'],{ability:'Skill Link'})]});
+ add('prankster',{p2:[m('Mew',['Growl','Recover'],{ability:'Prankster'})]});
+ add('rain-speed',{p1:[m('Mew',['Gastro Acid','Tackle'],{ability:'Drizzle',evs:{spe:252}})],p2:[m('Mew',['Tackle'],{ability:'Swift Swim'})]});
+ add('drought',{p2:[m('Mew',['Tackle'],{ability:'Drought'})]});
+ add('immunity',{p1:[m('Mew',['Gastro Acid','Toxic'],{evs:{spe:252}})],p2:[m('Mew',['Tackle'],{ability:'Immunity'})]});
+ add('simple',{p2:[m('Mew',['Calm Mind'],{ability:'Simple'})]});
+ add('illusion',{p2:[m('Zoroark',['Tackle'],{ability:'Illusion'}),m('Snorlax',['Tackle'])]});
+ add('zen',{p2:[m('Darmanitan',['Tackle'],{ability:'Zen Mode'})],setup:[{side:'p2',hp:80}],steps:[b(2),b()]});
+ add('substitute',{p2:[m('Mew',['Substitute','Tackle'],{evs:{spe:252},nature:'Timid'})],steps:[b(),b()]});
+ add('protect',{p2:[m('Mew',['Protect','Tackle'])],steps:[b()]});
+ add('switch-restore',{p2:[m('Mew',['Tackle'],{ability:'Levitate'}),m('Mew',['Tackle'])],steps:[b(),{p1:'move 2',p2:'switch 2'},{p1:'move 2',p2:'switch 2'}]});
+ add('copy-raw',{p1:[m('Mew',['Gastro Acid','Transform'],{evs:{spe:252}})],p2:[m('Mew',['Tackle'],{ability:'Technician'})],steps:[b(),b(2),b()]});
+ add('copy-suppressed',{p1:[m('Mew',['Transform','Tackle'])],p2:[m('Mew',['Gastro Acid','Tackle'],{ability:'Technician',evs:{spe:252}})],steps:[b(),b(2,2)]});
+ add('start-suppressed',{p1:[m('Mew',['Gastro Acid','Rain Dance'],{ability:'Drought',evs:{spe:252}})],p2:[m('Mew',['Tackle','Role Play'])],steps:[b(),b(2,2)]});
+ add('trap',{p2:[m('Gothitelle',['Tackle'],{ability:'Shadow Tag'})],steps:[b(),{p1:'switch 2',p2:'move 1'}]});
+ return cases;
+};

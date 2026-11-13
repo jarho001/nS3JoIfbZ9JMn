@@ -18,7 +18,7 @@ QUERY=jnp.asarray([[False,False,False]]+[
 
 def refresh(s,e):
     side=jnp.arange(2);mon=s.active;foe=1-side;fm=s.active[foe]
-    ability=s.ability[side,mon];enemy=s.ability[foe,fm]
+    ability=e.suppression_ops.abilities(s)[side,mon];enemy=e.suppression_ops.abilities(s)[foe,fm]
     types=s.types[side,mon]
     grounded=(~jnp.any(types==e.generic.TYPES['flying'],axis=1))&(ability!=A['levitate'])
     steel=jnp.any(types==e.generic.TYPES['steel'],axis=1)

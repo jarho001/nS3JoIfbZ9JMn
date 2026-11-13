@@ -14,7 +14,7 @@ Full-format G4
 coverage remains separate acceptance work. Historical evidence keeps its original
 source/schema identity; it does not imply validation of later engine changes.
 
-The current runtime uses [schema 23](../rules/shared-engine-v23.json). Schemas
+The current runtime uses [schema 24](../rules/shared-engine-v24.json). Schemas
 4–6 integrated major statuses and effect provenance, boosts/weather/screens,
 and observed ability/item hooks. Schema7 adds declarative hit counts, per-hit
 updates, capped drain/recoil arithmetic, self-destruction and reactive damage.
@@ -638,3 +638,10 @@ existing sleep before Update. Zen/Illusion End and early Worry Seed immunity are
 covered. The old numeric Immunity event value is retained for legacy history.
 Focused23/48 CPU parity and live persistence pass; suppression, broad execution/
 migration and full-format acceptance remain pending.
+
+Schema24 adds Gastro Acid with separate stored and effective ability queries.
+Modifiers/callbacks use effective identity; copying, flags, provenance and
+private requests retain raw identity. Ability End still runs, including Illusion
+reveal and Zen Mode reversion. Copied abilities remain suppressed until the
+volatile clears. Slot24 and journal11 bind continuation. Focused23/47 CPU parity
+passes; Baton Pass Copy, broad regressions and full-format acceptance remain open.

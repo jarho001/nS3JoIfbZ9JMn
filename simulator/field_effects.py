@@ -102,7 +102,7 @@ def weather_tick(c,e):
             immune=jnp.any(jnp.where(weather==3,
                 (s.types[side,m]==e.generic.TYPES['rock'])|(s.types[side,m]==e.generic.TYPES['ground'])|(s.types[side,m]==e.generic.TYPES['steel']),
                 s.types[side,m]==e.generic.TYPES['ice']))
-            ability=s.ability[side,m]
+            ability=e.suppression_ops.abilities(s)[side,m]
             immune=immune|(s.volatile_state[side,m,e.phase_ops.VOLATILE_IDS['dig'],0]>0)|(s.volatile_state[side,m,e.phase_ops.VOLATILE_IDS['dive'],0]>0)
             immune=immune|((weather==3)&(ability==e.hook_tables.A['sandrush']))|((weather==4)&(ability==e.hook_tables.A['icebody']))
             def ice_body(c):
