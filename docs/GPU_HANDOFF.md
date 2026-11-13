@@ -12,6 +12,23 @@ all acceptance requirements and commands below remain pending.
 
 ## Current source and evidence
 
+**Schema33 Mummy checkpoint passed focused CPU validation.** Native22 scenarios/
+27 boundaries agree exactly in274.177s, including live changed ability/form
+NPZ/journal16 persistence;2 native/inventory checks pass.
+See [schema33-checkpoint.json](../test-logs/g4-cpu-conformance/schema33-checkpoint.json).
+Current runner includes95 checks/39 modules,1055 scenarios/5134 boundaries,
+`test.test_mummy_engine` and the `mummy` batch. Runner preparation and broad/device
+checks remain deferred until reachable mechanics and inventory closure.
+
+```sh
+JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_mummy_engine -v -f
+```
+
+Mummy preserves ordered Helmet/status-thaw/End/activation behavior, including
+source/target KO, Substitute, suppression, Trace, Illusion and Zen Mode.
+Schema32 state layout and journal16 remain unchanged. Retain the broad/migration,
+full/lean and final campaign obligations below; no device run is claimed.
+
 **Schema32 Trace checkpoint passed focused CPU validation.** Native21 scenarios/
 26 boundaries agree exactly in305.122s, including saved seek NPZ/journal16.
 Two native/inventory checks and one narrow both-holder Update status-cure order
@@ -21,7 +38,7 @@ Peak focused-process RSS was7,292,972KiB; this host has no cgroup memory cap,
 so this does not claim a replay under the original8GiB cap. Historical exit137
 and OOM records remain in schema32-wip.json and its archive.
 
-The runner now includes94 checks/38 modules and1033 scenarios/5107 boundaries,
+The schema32 checkpoint runner included94 checks/38 modules and1033 scenarios/5107 boundaries,
 including `test.test_trace_engine`, `test.test_trace_update_regression` and the
 `trace` batch. Preparation and all device checks remain deferred. Exact isolated
 commands, pending until mechanics and inventory closure:
@@ -31,9 +48,8 @@ JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_trace_engine -v -f
 JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_trace_update_regression -v -f
 ```
 
-Retain the final migration/full-lean gates below. Preliminary Mummy witnesses
-remain archived under `next-mummy/` in schema32-wip-validation.tar.gz; Mummy is
-not yet implemented or counted in this completed checkpoint.
+Retain the final migration/full-lean gates below. The original preliminary Mummy witnesses remain archived under `next-mummy/`
+in schema32-wip-validation.tar.gz; the completed schema33 expansion is above.
 
 **Schema31 Wonder Guard direct immunity checkpoint:** focused CPU parity passed18
 scenarios/22 boundaries in303.667s; one native contract passed.

@@ -14,7 +14,7 @@ Full-format G4
 coverage remains separate acceptance work. Historical evidence keeps its original
 source/schema identity; it does not imply validation of later engine changes.
 
-The current runtime uses [schema 32](../rules/shared-engine-v32.json). Schemas
+The current runtime uses [schema 33](../rules/shared-engine-v33.json). Schemas
 4–6 integrated major statuses and effect provenance, boosts/weather/screens,
 and observed ability/item hooks. Schema7 adds declarative hit counts, per-hit
 updates, capped drain/recoil arithmetic, self-destruction and reactive damage.
@@ -710,3 +710,15 @@ cgroup memory cap; this is not an8GiB-cgroup replay. Historical OOM evidence is
 preserved in schema32-wip.json; current fingerprints/results are in
 schema32-checkpoint.json. Remaining reachable mechanics, inventory closure,
 broad/final and GPU evidence stay pending.
+
+Schema33 adds Mummy contact ability replacement in the shared hit pipeline.
+Ordered contact damage resolves first, then default-order status hooks, then
+Mummy. The attacker must survive, but a target KO still triggers transfer;
+Substitute blocks it. Ordinary ability End runs before assignment and activation,
+including Illusion reveal and Zen Mode restoration. Resolved Mummy has no Start
+callback. The schema32 state layout and journal16 are retained. Focused22/27
+CPU parity and live changed-ability/form NPZ/journal16 persistence pass; see
+schema33-checkpoint.json. Native cases also cover multi-hit, protection,
+Struggle, suppression, Trace acquisition, recoil/Life Orb and switch reset.
+Remaining reachable mechanics, full inventory and broad/final/GPU gates stay
+pending.

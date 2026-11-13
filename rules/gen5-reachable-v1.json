@@ -3065,10 +3065,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/mummy.json.gz",
+          "native": "reference/mummy-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_mummy_engine.py"
+        }
+      ],
       "field": "onDamagingHit",
       "id": "abilities:mummy:onDamagingHit",
-      "implementation": null,
+      "implementation": {
+        "family": "mummy",
+        "file": "simulator/mummy.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:mummy",
@@ -3079,7 +3091,7 @@
       "owner": "abilities:mummy",
       "reachability": "candidate",
       "sha256": "0bcee030f31134b3c877615d4495bf4a38fb5bac9dc90480146f2cb58b401dfa",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -70575,10 +70587,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/mummy.json.gz",
+          "native": "reference/mummy-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_mummy_engine.py"
         }
       ],
       "id": "abilities:mummy",
       "implementation": {
+        "behavior": {
+          "family": "mummy",
+          "file": "simulator/mummy.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"

@@ -1,0 +1,26 @@
+'use strict';
+module.exports=function(){
+ const m=(moves,extra={})=>({species:'Mew',moves,ability:'Pressure',item:'',level:50,nature:'Hardy',gender:'M',ivs:{hp:31,atk:31,def:31,spa:31,spd:31,spe:31},evs:{hp:0,atk:0,def:0,spa:0,spd:0,spe:0},...extra});
+ const b=(a=1,c=1)=>({p1:`move ${a}`,p2:`move ${c}`}),cases=[],add=(id,move='Tackle',x={})=>cases.push({id:'G4-mummy-'+id,seed:1,generic:true,identityFamily:true,abilityChangeFamily:true,mummyFamily:true,hitFamily:true,p1:[m([move,'Recover'],{evs:{spe:252}})],p2:[m(['Tackle'],{ability:'Mummy'})],steps:[b()],...x});
+ add('contact');add('non-contact','Flamethrower');add('already-mummy','Tackle',{p1:[m(['Tackle'],{ability:'Mummy',evs:{spe:252}})]});
+ add('helmet','Tackle',{p2:[m(['Tackle'],{ability:'Mummy',item:'Rocky Helmet'})]});
+ add('helmet-ko','Tackle',{p2:[m(['Tackle'],{ability:'Mummy',item:'Rocky Helmet'})],setup:[{side:'p1',hp:1}]});
+ add('multihit','Double Slap');
+ add('substitute','Tackle',{p1:[m(['Recover','Tackle'])],p2:[m(['Substitute','Tackle'],{ability:'Mummy',evs:{spe:252}})],steps:[b(),b(2,2)]});
+ add('protected','Tackle',{p2:[m(['Protect'],{ability:'Mummy'})]});
+ add('struggle','Tackle',{setup:[{side:'p1',pp:0}]});
+ add('suppressed','Gastro Acid',{p1:[m(['Gastro Acid','Tackle'],{evs:{spe:252}})],steps:[b(),b(2)]});
+ add('rock-head','Double-Edge',{p1:[m(['Double-Edge'],{ability:'Rock Head',evs:{spe:252}})]});
+ add('life-orb','Tackle',{p1:[m(['Tackle'],{item:'Life Orb',evs:{spe:252}})]});
+ add('illusion','Tackle',{p1:[m(['Tackle'],{species:'Zoroark',ability:'Illusion',evs:{spe:252}}),m(['Tackle'])]});
+ add('switch-reset','Tackle',{p1:[m(['Tackle'],{evs:{spe:252}}),m(['Tackle'])],steps:[b(),{p1:'switch 2',p2:'move 1'},{p1:'switch 2',p2:'move 1'}]});
+ add('entry-trace','Tackle',{p1:[m(['Tackle'],{ability:'Trace',evs:{spe:252}})],p2:[m(['Tackle'],{ability:'Forecast'}),m(['Tackle'],{ability:'Mummy'})],steps:[{p1:'move 1',p2:'switch 2'}]});
+ add('zen-end','Tackle',{p1:[m(['Growl','Tackle'],{species:'Darmanitan',ability:'Zen Mode',evs:{spe:252}})],p2:[m(['Recover'],{ability:'Mummy'})],setup:[{side:'p1',hp:80}],steps:[b(),b(2)]});
+ add('target-ko','Tackle',{setup:[{side:'p2',hp:1}]});
+ add('mirrored','Tackle',{p1:[m(['Tackle'],{ability:'Mummy'})],p2:[m(['Tackle'],{evs:{spe:252}})]});
+ add('frozen-fire','Fire Punch',{setup:[{side:'p2',status:'frz'}]});
+ add('frozen-normal','Tackle',{setup:[{side:'p2',status:'frz'}]});
+ add('frozen-helmet','Fire Punch',{p2:[m(['Tackle'],{ability:'Mummy',item:'Rocky Helmet'})],setup:[{side:'p2',status:'frz'}]});
+ add('frozen-helmet-ko','Fire Punch',{p2:[m(['Tackle'],{ability:'Mummy',item:'Rocky Helmet'})],setup:[{side:'p1',hp:1},{side:'p2',status:'frz'}]});
+ return cases;
+};

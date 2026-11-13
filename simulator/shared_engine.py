@@ -42,6 +42,7 @@ from . import suppression as suppression_ops
 from . import sleep_control as sleep_ops
 from . import called_moves as called_ops
 from . import trace_ability as trace_ops
+from . import mummy as mummy_ops
 from . import hook_tables
 from . import hook_effects as hook_ops
 import sys
@@ -49,7 +50,7 @@ import sys
 def _engine():
     return sys.modules[__name__]
 
-SCHEMA = 32
+SCHEMA = 33
 ROSTER, SLOTS, QUEUE, EVENTS, DRAWS, HISTORY = 6, 4, 8, 128, 128, 2048
 OK, PENDING, INVALID, UNSUPPORTED, CAPACITY, TERMINAL, STALE = range(7)
 RETRY=7
@@ -415,6 +416,9 @@ def _hit(c,actor,move):
             # default-order freeze hook, even when a callback has ended the game.
             c=_when((c[0].status[target,tm]==FRZ)&(move_type==generic.TYPES['fire'])&(c[0].hp[target,tm]>0),
                     lambda c:effects.cure(c,target,_engine(),source=actor),c)
+            # Default-order status hooks precede Mummy in native stable
+            # left-to-right DamagingHit order, after ordered contact damage.
+            c=mummy_ops.contact(c,actor,target,move,_engine())
             c=item_ops.knock(c,actor,target,move,_engine())
             # Gen5 Spin is AfterHit, and is skipped if contact damage killed it.
             c=_when((move==RAPID_SPIN)&(c[0].hp[actor,mon]>0),lambda c:hit_ops.spin(c,actor,_engine()),c)
