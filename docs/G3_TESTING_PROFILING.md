@@ -1,5 +1,13 @@
 # G3 intermediate matched-battle diagnostic
 
+**Historical diagnostic assignments (2026-11-07).** Preserve the original scopes,
+commands and resource limits below as evidence. They are not a current execution
+prompt. Results are in [G3_TESTING_PROFILING_RESULTS.md](G3_TESTING_PROFILING_RESULTS.md);
+all current pending G3 device/measurement obligations and commands are maintained
+only in [GPU_HANDOFF.md](GPU_HANDOFF.md). Follow current AGENTS.md authorization
+and deferrals before running anything; original model/effort references below
+are historical. The opening implementation update describes that revision only.
+
 2026-11-07 implementation follow-up: the optional lean wrapper and portable CLIs
 are implemented, with validation/measurement pending. No tests or benchmarks were
 run for that change by explicit user instruction. Use the current commands and

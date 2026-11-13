@@ -667,7 +667,7 @@
       },
       "next_native_family": {
         "status": "native_raw_investigation_only",
-        "inputs": "reference/move-phase-cases.cjs (untracked; do not stage until frozen regression completes)",
+        "inputs": "reference/move-phase-cases.cjs (tracked; historical phase-investigation snapshot)",
         "fixture": "test-logs/g4-cpu-conformance/phase-native-investigation.json.gz",
         "scenarios": 53,
         "boundaries": 113,
@@ -1174,6 +1174,62 @@
         "rules/gen5-reachable-v1.json": "31b1344ceee33abd1fe8607d965c107b9c781cb6b9b1466442a42842e439af29"
       },
       "source_sha256_normalization": "LF (working audit files); normalize CRLF to LF before comparison after checkout"
+    },
+    "record_usage": "checkpoint/next/blockers/reachability_precheck describe current work. continuation and completed_checkpoints preserve earlier checkpoint snapshots, not a rerun checklist. source_identity is retained historical evidence; latest checkpoint/source records are linked by checkpoint and GPU_HANDOFF.md. Trace focused CPU results do not accept its deferred broad/device gates or full G4.",
+    "maintenance_cleanup": {
+      "date": "2026-11-13",
+      "source_base": "cf42488f102783953f1b866e4c0ec97da5199f80",
+      "scope": "Bounded documentation/test-maintenance pass; no simulator/test/fixture/ledger changes.",
+      "consolidated": [
+        "AGENTS.md owns execution/validation policy; workflow links it instead of repeating policy history.",
+        "Stable milestone-preparation entrypoint now covers new/changed goals; original completed first-G3 assignment archived byte-for-byte.",
+        "README/scheduled/current plan use configured model policy; historical G3 plan is explicitly not an execution prompt.",
+        "GPU runner overview points to MODULES/BATCHES rather than stale duplicated counts; all commands stay in GPU_HANDOFF.md."
+      ],
+      "tests_removed": [],
+      "deferred_candidates": [
+        {
+          "paths": [
+            "test/test_trace_update_regression.py",
+            "test/test_status_immunity_engine.py"
+          ],
+          "reason": "Both replay G4-status-immunity-both-cure; isolated narrow JIT regression has a different compile/workload purpose. No equivalent coverage/runtime proof for deletion; retain both."
+        },
+        {
+          "paths": [
+            "test/test_trace_engine.py",
+            "test/test_mummy_engine.py",
+            "test/trace-native.test.cjs",
+            "test/mummy-native.test.cjs"
+          ],
+          "reason": "Similar loops consume different fixtures and callback/lifecycle/event-order assertions. Shared-harness consolidation would be test architecture work; retain unique cases."
+        },
+        {
+          "paths": [
+            "docs/G3_TESTING_PROFILING.md",
+            "docs/G3_TESTING_PROFILING_RESULTS.md",
+            "docs/GPU_HANDOFF.md"
+          ],
+          "reason": "Repeated commands in historical plans/results preserve original source/output/resource contracts. Only GPU_HANDOFF owns future execution; remove no evidence commands."
+        }
+      ],
+      "validation": {
+        "result": "passed",
+        "checks": [
+          "102 local Markdown links and anchors across modified documents resolve.",
+          "Original preparation assignment matches archive exactly as tracked (LF; working checkout CRLF normalized).",
+          "Acceptance/review/completed-goal/deferred-validation/deferred-GPU records and active ledger/Trace/precheck/audit/checkpoint fields unchanged.",
+          "Only docs/state changed; no simulator, tests, fixtures, ledger, source fingerprints or scheduler configuration changed.",
+          "GPU overview MODULES/BATCHES references verified by AST read only; runner not executed.",
+          "git diff --check passed."
+        ],
+        "executed_commands": [
+          "Inline Python local Markdown path/anchor check over modified Markdown files.",
+          "Inline Python git-show/state/archive preservation assertions and AST inspection of scripts/g4_gpu_handoff.py.",
+          "git diff --check"
+        ],
+        "not_run": "No tests removed or changed; no mechanic tests, Trace compilation, runner preparation, GPU, profiling, broad suites or battle campaigns."
+      }
     }
   },
   "optional_gpu_validation_history": [
@@ -1428,7 +1484,7 @@
     },
     "preparation_handoff": "docs/MILESTONE_PREPARATION.md",
     "goal_mode_status": "user_approved_sustained_cpu_execution",
-    "note": "G4 CPU execution is proposed, not active. The completed roster/hazard goal remains in active_task; repository records do not switch the execution-surface mode.",
+    "note": "G4 CPU execution was approved 2026-11-08; active_task owns current progress/next action. Preparation records below are historical snapshots, not pending approval gates. Repository records do not switch execution-surface mode.",
     "g4_cpu_preparation": {
       "status": "prepared_awaiting_goal_approval",
       "prepared_at": "2026-11-08",
@@ -1515,7 +1571,8 @@
           "git diff --check",
           "Inline read-only Python assertions against git show 44759e6:docs/ORCHESTRATION_STATE.json, pinned sets.json, local Markdown links and proposed/actual entrypoint paths."
         ]
-      }
+      },
+      "record_usage": "Historical preparation snapshot from before approval; execution_started/active_goal_changed/authorization/next describe that phase only. Current execution and acceptance are in active_task and PROJECT_PLAN.md."
     },
     "gpu_travel_handoff": "docs/GPU_HANDOFF.md; keep ready/pending commands current without blocking CPU-only work"
   },

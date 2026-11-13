@@ -273,7 +273,7 @@ Optional human matches and public-server play come after local transfer and late
 Prepared 2026-11-06 against source base `7068c36975fbe713d55c52c2c07659cf0fcefcbb`.
 Only **G0 is accepted**. Each open milestone describes its own completion
 evidence; neither an internal checkpoint nor this preparation accepts one.
-Sol 6.1/high works directly under [AGENTS.md](AGENTS.md), without automatic
+The configured primary works directly under [AGENTS.md](AGENTS.md), without automatic
 delegation or independent review gates. No fixed dates or new wall-clock budget
 are imposed. The [behavior catalog](docs/SHOWDOWN_BEHAVIOR_CASES.md) owns case
 IDs, evidence levels, native probe recipes, and later case-family gaps.

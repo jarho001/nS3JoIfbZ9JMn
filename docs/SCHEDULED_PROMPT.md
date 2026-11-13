@@ -11,8 +11,8 @@ current state in docs/ORCHESTRATION_STATE.json, and relevant PROJECT_PLAN.md
 sections. Inspect Git status and safely synchronize with the remote default
 branch while preserving local and unrelated work. Read archives only as needed.
 
-Use GPT-6.1 Sol/high as the primary, configured in .codex/config.toml. If it is
-unavailable, report the blocker rather than substituting. Work directly; do not
+Use the primary model/effort specified by AGENTS.md and .codex/config.toml.
+If it is unavailable, report the blocker rather than substituting. Work directly; do not
 invoke Luna, Janitor, or another agent unless the user explicitly requested it.
 There are no automatic Astra or task-count/milestone independent-review gates.
 

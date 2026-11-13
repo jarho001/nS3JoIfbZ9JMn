@@ -4,11 +4,11 @@ This repository is beginning a JAX self-play project against Pokémon Showdown's
 
 ## Development workflow
 
-Sol 6.1/high handles implementation and validation directly. Luna and Janitor
+The configured primary handles implementation and validation directly. Luna and Janitor
 are explicit-only roles; automatic Astra reviews are retired. See
 [AGENTS.md](AGENTS.md) and [the workflow](docs/ORCHESTRATION.md).
-Before starting Goal mode, use [the milestone preparation handoff](docs/MILESTONE_PREPARATION.md)
-to sharpen the goals and native behavior cases. Current progress is in
+For a new or materially changed goal, use [milestone preparation](docs/MILESTONE_PREPARATION.md)
+to sharpen its scope and native behavior cases. Current progress is in
 [orchestration state](docs/ORCHESTRATION_STATE.json); the
 [manual/scheduled entry point](docs/SCHEDULED_PROMPT.md) resumes approved goals.
 Commit/push authorization is recorded in AGENTS.md.
@@ -30,8 +30,10 @@ node reference/oracle.cjs format
 node reference/oracle.cjs smoke
 node reference/oracle.cjs smoke --team-seed-p1=1,2,3,4 --team-seed-p2=5,6,7,8 --battle-seed=9,10,11,12
 node reference/oracle.cjs provenance
-node --test test/reference.test.cjs
-node --test test/protocol.test.cjs
+# Focused reference/protocol checks:
+node --test test/reference.test.cjs test/protocol.test.cjs
+
+# Alternative broad native suite, only within an approved validation scope:
 node --test test/*.test.cjs
 ```
 

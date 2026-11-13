@@ -8,13 +8,11 @@ diff and evidence. Independent review happens only when the user requests it.
 
 ## Prepare, then pursue a goal
 
-First use [MILESTONE_PREPARATION.md](MILESTONE_PREPARATION.md) to sharpen G0–G8,
-identify behavior families, and propose the first coherent G3 goal. This is
-planning work; it does not start implementation or grant milestone acceptance.
-The user then selects Goal mode with Sol 6.1/medium on the execution surface and
-assigns the prepared goal. Configuration changes do not switch a running agent
-or start Goal mode. If the requested model/effort is unavailable, stop and report
-it. Experiment with this workflow before adding wall-clock budgets.
+Use [MILESTONE_PREPARATION.md](MILESTONE_PREPARATION.md) for new or materially
+changed goals. Initial milestone preparation is complete; resume an approved
+goal from `active_task`, not from the historical first-G3 assignment. Model/effort
+and Goal-mode rules are in [AGENTS.md](../AGENTS.md); repository edits do not
+change the execution surface.
 
 For an approved goal, investigate, implement, validate, and finish directly.
 Internal checkpoints should produce useful integrated behavior, not another
@@ -43,32 +41,15 @@ prose specification for the whole game or build another oracle per tiny slice.
 
 ## Validate proportionally
 
-Choose meaningful checks for the changed behavior and shared dependencies. Run
-them once per meaningful revision; rerun only when changes or failures justify
-it. Reuse existing tests and a shared parity harness. Do not require all prior
-suites, a new timing probe, or every execution-mode matrix after each patch.
-Use representative JIT/batch checks at integration boundaries where relevant.
+[AGENTS.md — Validation and stopping](../AGENTS.md#validation-and-stopping)
+owns the validation policy: focused CPU checks during family implementation,
+checkpoint consolidation and the current deferrals. Reuse existing tests and
+native cases; do not turn example or historical command lists into a per-patch
+checklist. Final milestone acceptance remains in PROJECT_PLAN.md.
 
-The 2026-11-12 user-approved default is one focused CPU differential pass for
-the changed mechanic family, plus a narrow regression when a concrete shared
-path needs it. Broad execution-mode, batch, lifecycle, full/lean and historical
-suites are consolidated at agreed milestone checkpoints. Preserve missing
-coverage as pending; do not weaken final acceptance or automatically resume the
-interrupted Substitute gate. The user approved this scope change without
-requesting implementation or test execution to resume in the same turn.
-
-The 2026-11-13 continuation resumes sequential mechanic families. Defer GPU
-correctness, broad CPU matrices, complete-battle campaigns and profiling until
-reachable mechanics and inventory closure are complete. Keep their acceptance
-requirements and exact commands in [GPU_HANDOFF.md](GPU_HANDOFF.md).
-
-Agree the goal's validation scope in its brief, including known-long runs and
-any actual device requirement. Long integration, exhaustive, GPU, and performance
-runs outside that scope need a separate requested session. No fixed 30/90-second
-microtask budget applies. Set practical command timeouts; investigate failures
-instead of extending limits blindly. A performance claim still needs measured
-performance evidence. Start with CPU; apply AGENTS.md's required GPU blocking
-rules without treating optional GPU absence as failure.
+[GPU_HANDOFF.md](GPU_HANDOFF.md) is the single maintained home for exact deferred
+G3/G4 device, broad-check and campaign commands. Historical plans/results retain
+their reproducible commands as evidence, not fresh authorization to execute them.
 
 For executed evidence keep the command/result and relevant source commit/tree
 identity; include pin, environment/device versions and output location when
