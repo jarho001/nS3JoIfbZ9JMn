@@ -198,7 +198,7 @@ def valid_phases(s):
     return good&jnp.all(forced<=1)&jnp.all(children<=1)
 
 
-def charge(c,actor,move,move_row,e):
+def charge(c,actor,move,move_row,e,target_loc=None):
     """Return (carry, charging). The real move is still used on charge turns."""
     s,trace=c;mon=s.active[actor];child=CHARGE_SLOT[move]
     def release(c):
@@ -227,7 +227,7 @@ def charge(c,actor,move,move_row,e):
             s,trace=c;row=s.volatile_state[actor,mon,6].at[5].set(2).at[7].set(move)
             s=s._replace(volatile_state=s.volatile_state.at[actor,mon,6].set(row));c=(s,trace)
             c=e.effects.add_volatile(c,actor,child,1-actor,e.i32(6),e,source_kind=SOURCE_CONDITION)
-            s,trace=c;row=s.volatile_state[actor,mon,child].at[9].set(s.action_state[actor,mon,e.tracking.TARGET_LOC])
+            s,trace=c;row=s.volatile_state[actor,mon,child].at[9].set(s.action_state[actor,mon,e.tracking.TARGET_LOC]if target_loc is None else target_loc)
             semi=(child>=VOLATILE_IDS['fly'])&(child<=VOLATILE_IDS['bounce'])
             row=row.at[5].set(jnp.where(semi,2,0))
             s=s._replace(volatile_state=s.volatile_state.at[actor,mon,child].set(row))

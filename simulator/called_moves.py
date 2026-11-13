@@ -1,12 +1,13 @@
 """Explicit active-move frames sharing the ordinary useMove kernel."""
 import jax.numpy as jnp
 from . import gen5_engine_tables as t
-SLEEP_TALK=t.MOVE_IDS['sleeptalk'];NATURE_POWER=t.MOVE_IDS['naturepower'];FRAMES=8;WIDTH=16
+SLEEP_TALK=t.MOVE_IDS['sleeptalk'];NATURE_POWER=t.MOVE_IDS['naturepower'];COPYCAT=t.MOVE_IDS['copycat'];MIRROR_MOVE=t.MOVE_IDS['mirrormove'];FRAMES=8;WIDTH=20
 # Move, actor/mon, target/mon, source kind/id, original location, selected
 # slot, accounting mode, return phase, root move/slot, lock, event tag, flags.
-MOVE,ACTOR,MON,TARGET,TM,SOURCE_KIND,SOURCE_ID,LOCATION,SLOT,MODE,PHASE,ROOT_MOVE,ROOT_SLOT,LOCKED,TAG,FLAGS=range(WIDTH)
+MOVE,ACTOR,MON,TARGET,TM,SOURCE_KIND,SOURCE_ID,LOCATION,SLOT,MODE,PHASE,ROOT_MOVE,ROOT_SLOT,LOCKED,TAG,FLAGS=range(16)
+PREVIOUS_MOVE=16
 FIELDS=('call_frames','call_depth')
-MOVE_IMPLEMENTED=jnp.asarray([k in ('sleeptalk','naturepower')for k in t.MOVE_KEYS],jnp.bool_)
+MOVE_IMPLEMENTED=jnp.asarray([k in ('sleeptalk','naturepower','copycat','mirrormove')for k in t.MOVE_KEYS],jnp.bool_)
 ELIGIBLE=t.mv(lambda r:not(r.get('flags',{}).get('nosleeptalk')or r.get('flags',{}).get('charge'))).astype(jnp.bool_).at[0].set(False)
 
 def empty(e):return jnp.zeros((FRAMES,WIDTH),jnp.int32)
@@ -22,9 +23,9 @@ def pop(c):
     s,tr=c;n=s.call_depth-1
     return s._replace(call_frames=s.call_frames.at[n].set(0),call_depth=n),tr
 
-def root(c,actor,mon,move,location,slot,locked,tag,e):
+def root(c,actor,mon,move,location,slot,locked,tag,previous,e):
     s,_=c;target=jnp.where(e.MOVE_ACTOR_TARGET[move],actor,1-actor)
-    frame=jnp.stack([e.i32(v)for v in (move,actor,mon,target,s.active[target],0,0,location,slot,0,0,move,slot,locked,tag,0)])
+    frame=jnp.stack([e.i32(v)for v in (move,actor,mon,target,s.active[target],0,0,location,slot,0,0,move,slot,locked,tag,0,*previous)])
     c=push(c,frame,e)
     def condition(c):return(c[0].call_depth>0)&(~c[1].overflow)
     def step(c):
@@ -36,8 +37,9 @@ def root(c,actor,mon,move,location,slot,locked,tag,e):
             # child and leaves its own return phase underneath it.
             return e.jax.lax.cond(c[0].call_depth==depth,pop,lambda c:c,c)
         def resume(c):
-            c=e._update(e._update(c,e.HIT_UPDATE),e.HIT_UPDATE)
-            s,tr=c;s=s._replace(battle_success=s.battle_move[0])
+            mirror=frame[PHASE]==2
+            c=e._when(~mirror,lambda c:e._update(e._update(c,e.HIT_UPDATE),e.HIT_UPDATE),c)
+            s,tr=c;s=s._replace(battle_success=jnp.where(mirror,0,s.battle_move[0]))
             return pop((s,tr))
         return e.jax.lax.cond(frame[PHASE]==0,enter,resume,c)
     return e.jax.lax.while_loop(condition,step,c)
@@ -76,5 +78,20 @@ def child(c,frame,move,slot,e):
     return push((s,tr),nested,e)
 
 
+NO_COPY=t.mv(lambda r:bool(r.get('flags',{}).get('failcopycat'))).astype(jnp.bool_)
+MIRRORABLE=t.mv(lambda r:bool(r.get('flags',{}).get('mirror'))).astype(jnp.bool_)
+
+
+def copy_move(c,frame,move_row,e,mirror=False):
+    s,_=c;actor=frame[ACTOR];target=frame[TARGET]
+    move=s.move_history[target,s.active[target],0,0]if mirror else frame[PREVIOUS_MOVE]
+    allowed=(move>0)&(MIRRORABLE[move]if mirror else ~NO_COPY[move])
+    def use(c):
+        if mirror:
+            s,tr=c;s=s._replace(call_frames=s.call_frames.at[s.call_depth-1,PHASE].set(2));c=(s,tr)
+        return child(c,frame,move,e.i32(-1),e)
+    return e.jax.lax.cond(allowed,use,lambda c:e.ability_ops.fail(c,actor,frame[MOVE],move_row,e),c)
+
+
 def call(c,frame,move_row,e):
-    return e.jax.lax.cond(frame[MOVE]==NATURE_POWER,lambda c:child(c,frame,e.i32(t.MOVE_IDS['earthquake']),e.i32(-1),e),lambda c:sleep_talk(c,frame,move_row,e),c)
+    return e.jax.lax.cond(frame[MOVE]==NATURE_POWER,lambda c:child(c,frame,e.i32(t.MOVE_IDS['earthquake']),e.i32(-1),e),lambda c:e.jax.lax.cond(frame[MOVE]==COPYCAT,lambda c:copy_move(c,frame,move_row,e),lambda c:sleep_talk(c,frame,move_row,e),c),c)

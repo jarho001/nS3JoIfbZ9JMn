@@ -17768,10 +17768,22 @@
           "file": "data/mods/gen5/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/copy-moves.json.gz",
+          "native": "reference/copy-move-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_copy_move_engine.py"
+        }
+      ],
       "field": "onHit",
       "id": "moves:copycat:onHit",
-      "implementation": null,
+      "implementation": {
+        "family": "copy_move",
+        "file": "simulator/called_moves.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:copycat",
@@ -17782,7 +17794,7 @@
       "owner": "moves:copycat",
       "reachability": "candidate",
       "sha256": "c041f20189b947f6e8b838ad444e5005d89bc127dffecd4dd37eef0065cef059",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -23119,10 +23131,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/copy-moves.json.gz",
+          "native": "reference/copy-move-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_copy_move_engine.py"
+        }
+      ],
       "field": "onTryHit",
       "id": "moves:mirrormove:onTryHit",
-      "implementation": null,
+      "implementation": {
+        "family": "copy_move",
+        "file": "simulator/called_moves.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:mirrormove",
@@ -23133,7 +23157,7 @@
       "owner": "moves:mirrormove",
       "reachability": "candidate",
       "sha256": "e1f43758a9a686dac42561898d88c6aadaf89a16dabc8446714dcf35198f59a1",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -52935,10 +52959,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/copy-moves.json.gz",
+          "native": "reference/copy-move-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_copy_move_engine.py"
         }
       ],
       "id": "moves:copycat",
       "implementation": {
+        "behavior": {
+          "family": "copy_move",
+          "file": "simulator/called_moves.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "MOVE_TYPE/MOVE_POWER/MOVE_CATEGORY/MOVE_PRIORITY/MOVE_PP",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -59721,10 +59757,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/copy-moves.json.gz",
+          "native": "reference/copy-move-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_copy_move_engine.py"
         }
       ],
       "id": "moves:mirrormove",
       "implementation": {
+        "behavior": {
+          "family": "copy_move",
+          "file": "simulator/called_moves.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "MOVE_TYPE/MOVE_POWER/MOVE_CATEGORY/MOVE_PRIORITY/MOVE_PP",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"

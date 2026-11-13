@@ -154,7 +154,7 @@ def assert_state(test,s,native,label):
             if action>=0:
                 switch=4<=action<10
                 pending=[{'choice':'switch' if switch else 'move','actor':{'side':side,'mon':mon},
-                          'move':None if switch else 'recharge' if int(e.phase_ops.forced_move(s)[side])<0 else e.MOVE_KEYS[int(e.phase_ops.forced_move(s)[side])] if int(e.phase_ops.forced_move(s)[side])>0 else e.MOVE_KEYS[e.STRUGGLE if action==10 else int(s.moves[side,mon,action])],
+                          'move':None if switch else 'recharge' if int(e.phase_ops.forced_move(s)[side])<0 else e.MOVE_KEYS[int(e.phase_ops.forced_move(s)[side])] if int(e.phase_ops.forced_move(s)[side])>0 else e.MOVE_KEYS[action-e.FORCED_MOVE_ACTION if action>=e.FORCED_MOVE_ACTION else e.STRUGGLE if action==10 else int(s.moves[side,mon,action])],
                           'target':{'side':side,'mon':int(s.order[side,action-4])} if switch else None}]
             test.assertEqual(pending,n['pending'],prefix+' private pending choice')
             test.assertEqual(bool(s.request[side]>=e.WAIT or action>=0),n['choiceDone'],prefix+' ready')
@@ -162,7 +162,7 @@ def assert_state(test,s,native,label):
     for row in s.queue[:int(s.qcount)]:
         kind,side,mon,action,priority,speed,source=map(int,row)
         if kind==e.ATTACK:
-            move='recharge' if action==e.phase_ops.RECHARGE_ACTION else e.MOVE_KEYS[e.STRUGGLE if action==10 else int(s.moves[side,mon,action])]
+            move='recharge' if action==e.phase_ops.RECHARGE_ACTION else e.MOVE_KEYS[action-e.FORCED_MOVE_ACTION if action>=e.FORCED_MOVE_ACTION else e.STRUGGLE if action==10 else int(s.moves[side,mon,action])]
         else:move=None
         q.append({'choice':{e.BEFORE:'beforeTurn',e.ATTACK:'move',e.SWAP:'switch',e.INSTANT:'instaswitch',e.RUN_SWITCH:'runSwitch',e.RESIDUAL:'residual',e.BEFORE_MOVE:'beforeTurnMove'}[kind],
                   'order':int(e.QORDER[kind]),'priority':priority,'speed':speed,

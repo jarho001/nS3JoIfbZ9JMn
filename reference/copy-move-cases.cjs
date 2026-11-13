@@ -1,0 +1,28 @@
+'use strict';
+module.exports=function(){
+ const m=(species,moves,extra={})=>({species,moves,ability:'Pressure',item:'',level:50,nature:'Hardy',gender:'M',ivs:{hp:31,atk:31,def:31,spa:31,spd:31,spe:31},evs:{hp:0,atk:0,def:0,spa:0,spd:0,spe:0},...extra});
+ const b=(a=1,c=1)=>({p1:`move ${a}`,p2:`move ${c}`}),cases=[],add=(id,move='Copycat',x={})=>cases.push({id:'G4-copy-moves-'+id,seed:1,generic:true,identityFamily:true,abilityChangeFamily:true,copyMoveFamily:true,hitFamily:true,p1:[m('Mew',[move,'Tackle']),m('Mew',['Tackle'])],p2:[m('Mew',['Tackle','Recover'],{evs:{spe:252}}),m('Mew',['Tackle'])],steps:[b(),b()],...x});
+ add('copycat');add('copycat-empty','Copycat',{p1:[m('Mew',['Copycat'],{evs:{spe:252},nature:'Timid'})]});
+ add('copycat-protect','Copycat',{p2:[m('Mew',['Protect'])],steps:[b()]});
+ add('copycat-recover','Copycat',{p2:[m('Mew',['Recover'],{evs:{spe:252}})],steps:[b()]});
+ add('copycat-prankster','Copycat',{p1:[m('Mew',['Tackle','Copycat'],{ability:'Prankster'})],p2:[m('Mew',['Recover'],{evs:{spe:252}})],steps:[b(),b(2)]});
+ add('copycat-choice','Copycat',{p1:[m('Mew',['Copycat','Tackle'],{item:'Choice Band'})]});
+ add('copycat-nature','Copycat',{p1:[m('Mew',['Copycat','Mirror Move'])],p2:[m('Mew',['Nature Power'],{evs:{spe:252}})],steps:[b(),b(2)]});
+ add('copycat-pivot','Copycat',{p1:[m('Mew',['Copycat','Tackle']),m('Mew',['Tackle'])],p2:[m('Mew',['U-turn','Tackle'],{evs:{spe:252}})],steps:[b(),{p1:'switch 2'}]});
+ add('copycat-charge','Copycat',{p1:[m('Mew',['Tackle','Copycat'])],p2:[m('Mew',['Fly','Recover'],{evs:{spe:252}})],steps:[b(2,1),b(1,1),b(2,2)]});
+ add('copycat-rampage','Copycat',{p1:[m('Mew',['Copycat','Tackle'])],p2:[m('Mew',['Outrage'],{evs:{spe:252}})],steps:[b(),b(),b()]});
+ add('mirror','Mirror Move');add('mirror-empty','Mirror Move',{p1:[m('Mew',['Mirror Move'],{evs:{spe:252},nature:'Timid'})]});
+ add('mirror-protect','Mirror Move',{p2:[m('Mew',['Protect'])],steps:[b()]});
+ add('mirror-status','Mirror Move',{p2:[m('Mew',['Growl'],{evs:{spe:252}})],steps:[b()]});
+ add('mirror-substitute','Mirror Move',{p2:[m('Mew',['Substitute','Tackle'],{evs:{spe:252}})],steps:[b(2),b(1,2)]});
+ add('mirror-charge','Mirror Move',{p1:[m('Mew',['Mirror Move','Tackle'])],p2:[m('Mew',['Fly','Recover'],{evs:{spe:252}})],steps:[b(),b(1,1),b(1,2)]});
+ add('mirror-pivot','Mirror Move',{p1:[m('Mew',['Tackle','Mirror Move'],{ability:'Prankster'}),m('Mew',['Tackle'])],p2:[m('Mew',['U-turn','Tackle'],{evs:{spe:252}})],steps:[b(),b(2,2),{p1:'switch 2'}]});
+ add('mirror-tie','Mirror Move',{p1:[m('Mew',['Mirror Move'])],p2:[m('Mew',['Tackle'])],steps:[b(),b()]});
+ add('copycat-tie','Copycat',{p1:[m('Mew',['Copycat'])],p2:[m('Mew',['Tackle'])],steps:[b(),b()]});
+ add('mirrored','Copycat',{p1:[m('Mew',['Tackle'],{evs:{spe:252}})],p2:[m('Mew',['Copycat'])],steps:[b()]});
+ add('copycat-charge-slot0','Copycat',{p1:[m('Mew',['Copycat','Tackle'])],p2:[m('Mew',['Fly','Recover'],{evs:{spe:252}})],steps:[b(),b(),b(1,2)]});
+ add('copycat-solar','Copycat',{p1:[m('Mew',['Copycat','Tackle'])],p2:[m('Mew',['Solar Beam','Recover'],{evs:{spe:252}})],steps:[b(),b(),b(1,2)]});
+ add('copycat-torment','Copycat',{p2:[m('Mew',['Torment','Tackle'],{evs:{spe:252}})],steps:[b(),b(2,2)]});
+ add('mirror-statused','Mirror Move',{setup:[{side:'p2',status:'psn'}],steps:[b()]});
+ return cases;
+};

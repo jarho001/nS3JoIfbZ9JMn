@@ -25,15 +25,15 @@ MODULES = (
     'test.test_shared_engine_cases', 'test.test_shared_engine_battles',
     'test.test_shared_engine_lifecycle', 'test.test_rollout', 'test.test_g3_fixtures',
     'test.test_status_engine', 'test.test_field_engine',
-    'test.test_hook_engine', 'test.test_hit_engine', 'test.test_recharge_engine', 'test.test_lock_phase_engine', 'test.test_core_journal', 'test.test_trapping_engine', 'test.test_substitute_engine', 'test.test_partial_trap_engine', 'test.test_phazing_engine', 'test.test_pursuit_engine', 'test.test_item_lifecycle_engine', 'test.test_identity_engine', 'test.test_illusion_engine', 'test.test_form_engine', 'test.test_trigger_form_engine', 'test.test_ability_change_engine', 'test.test_status_immunity_engine', 'test.test_ability_create_engine', 'test.test_suppression_engine', 'test.test_sleep_control_engine', 'test.test_called_move_engine', 'test.test_nature_power_engine',
+    'test.test_hook_engine', 'test.test_hit_engine', 'test.test_recharge_engine', 'test.test_lock_phase_engine', 'test.test_core_journal', 'test.test_trapping_engine', 'test.test_substitute_engine', 'test.test_partial_trap_engine', 'test.test_phazing_engine', 'test.test_pursuit_engine', 'test.test_item_lifecycle_engine', 'test.test_identity_engine', 'test.test_illusion_engine', 'test.test_form_engine', 'test.test_trigger_form_engine', 'test.test_ability_change_engine', 'test.test_status_immunity_engine', 'test.test_ability_create_engine', 'test.test_suppression_engine', 'test.test_sleep_control_engine', 'test.test_called_move_engine', 'test.test_nature_power_engine', 'test.test_copy_move_engine',
 )
 NATIVE_TESTS = (
     'test/reference.test.cjs', 'test/gen5-reachability.test.cjs',
     'test/shared-engine.test.cjs', 'test/status-duration-native.test.cjs',
     'test/field-boost-native.test.cjs',
-    'test/ability-item-native.test.cjs', 'test/hit-effect-native.test.cjs', 'test/recharge-native.test.cjs', 'test/lock-phase-native.test.cjs', 'test/g4-design-native.test.cjs', 'test/trapping-native.test.cjs', 'test/substitute-native.test.cjs', 'test/partial-trap-native.test.cjs', 'test/phazing-native.test.cjs', 'test/pursuit-native.test.cjs', 'test/item-lifecycle-native.test.cjs', 'test/identity-native.test.cjs', 'test/illusion-native.test.cjs', 'test/form-native.test.cjs', 'test/trigger-form-native.test.cjs', 'test/ability-change-native.test.cjs', 'test/status-immunity-native.test.cjs', 'test/ability-create-native.test.cjs', 'test/suppression-native.test.cjs', 'test/sleep-control-native.test.cjs', 'test/called-move-native.test.cjs', 'test/nature-power-native.test.cjs',
+    'test/ability-item-native.test.cjs', 'test/hit-effect-native.test.cjs', 'test/recharge-native.test.cjs', 'test/lock-phase-native.test.cjs', 'test/g4-design-native.test.cjs', 'test/trapping-native.test.cjs', 'test/substitute-native.test.cjs', 'test/partial-trap-native.test.cjs', 'test/phazing-native.test.cjs', 'test/pursuit-native.test.cjs', 'test/item-lifecycle-native.test.cjs', 'test/identity-native.test.cjs', 'test/illusion-native.test.cjs', 'test/form-native.test.cjs', 'test/trigger-form-native.test.cjs', 'test/ability-change-native.test.cjs', 'test/status-immunity-native.test.cjs', 'test/ability-create-native.test.cjs', 'test/suppression-native.test.cjs', 'test/sleep-control-native.test.cjs', 'test/called-move-native.test.cjs', 'test/nature-power-native.test.cjs', 'test/copy-move-native.test.cjs',
 )
-BATCHES = {'legacy': 'all', 'hazards': 'g4', 'generic': 'generic', 'status': 'status', 'field': 'field', 'hooks': 'hooks', 'hits': 'hits', 'recharge': 'recharge', 'locks': 'locks', 'turnlimit': 'turnlimit', 'trapping': 'trapping', 'substitute': 'substitute', 'partialtrap': 'partialtrap', 'phazing': 'phazing', 'pursuit': 'pursuit', 'items': 'items', 'identity': 'identity', 'illusion': 'illusion', 'forms': 'forms', 'triggerforms': 'triggerforms', 'abilitychange': 'abilitychange', 'statusimmunity': 'statusimmunity', 'abilitycreate': 'abilitycreate', 'suppression': 'suppression', 'sleepcontrol': 'sleepcontrol', 'calledmoves': 'calledmoves', 'naturepower': 'naturepower'}
+BATCHES = {'legacy': 'all', 'hazards': 'g4', 'generic': 'generic', 'status': 'status', 'field': 'field', 'hooks': 'hooks', 'hits': 'hits', 'recharge': 'recharge', 'locks': 'locks', 'turnlimit': 'turnlimit', 'trapping': 'trapping', 'substitute': 'substitute', 'partialtrap': 'partialtrap', 'phazing': 'phazing', 'pursuit': 'pursuit', 'items': 'items', 'identity': 'identity', 'illusion': 'illusion', 'forms': 'forms', 'triggerforms': 'triggerforms', 'abilitychange': 'abilitychange', 'statusimmunity': 'statusimmunity', 'abilitycreate': 'abilitycreate', 'suppression': 'suppression', 'sleepcontrol': 'sleepcontrol', 'calledmoves': 'calledmoves', 'naturepower': 'naturepower', 'copymoves': 'copymoves'}
 SOURCE_PATHS = (
     'simulator', 'mechanics', 'rules', 'reference', 'test', 'environment',
     'evaluation', 'scripts', 'requirements-jax-cpu.txt', 'reference-lock.json',
@@ -200,7 +200,8 @@ def main(argv=None):
                    SUPPRESSION_NATIVE_CASES=str(out/'native-suppression.json'),
                    SLEEP_CONTROL_NATIVE_CASES=str(out/'native-sleepcontrol.json'),
                    CALLED_NATIVE_CASES=str(out/'native-calledmoves.json'),
-                   NATURE_POWER_NATIVE_CASES=str(out/'native-naturepower.json'))
+                   NATURE_POWER_NATIVE_CASES=str(out/'native-naturepower.json'),
+                   COPY_MOVE_NATIVE_CASES=str(out/'native-copymoves.json'))
         summary['modules'] = list(MODULES)
         summary['fixtures'] = fixtures
         summary['future_full_format_gate'] = 'Pending implementation of V7 and remaining mechanics; see docs/GPU_HANDOFF.md'

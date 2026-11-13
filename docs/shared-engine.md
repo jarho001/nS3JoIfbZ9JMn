@@ -14,7 +14,7 @@ Full-format G4
 coverage remains separate acceptance work. Historical evidence keeps its original
 source/schema identity; it does not imply validation of later engine changes.
 
-The current runtime uses [schema 27](../rules/shared-engine-v27.json). Schemas
+The current runtime uses [schema 28](../rules/shared-engine-v28.json). Schemas
 4–6 integrated major statuses and effect provenance, boosts/weather/screens,
 and observed ability/item hooks. Schema7 adds declarative hit counts, per-hit
 updates, capped drain/recoil arithmetic, self-destruction and reactive damage.
@@ -668,3 +668,12 @@ resolved nosleeptalk flag excludes Nature Power from Sleep Talk selection. Root
 PP/action/lastMove and called lastMoveUsed remain distinct. Focused14/19 CPU
 parity and live persistence pass; other callers/reflection, full frame capacity
 proof, broad regressions and full-format acceptance remain pending.
+
+Schema28 adds Copycat and Mirror Move using shared frames. Copycat snapshots the
+previous global move; Mirror Move reads its target root lastMove. Their native
+return phases and Pressure accounting differ. Forced copied charges/rampages
+use literal move queue actions when absent from own slots, retaining original
+locations and slot-use accounting. Cached moves are capability-guarded; Torment
+projection no longer invents a move property. Focused24/48 CPU parity and live
+NPZ/journal14 persistence pass. Reflection, complete frame bounds and broad
+execution/migration/final acceptance remain pending.

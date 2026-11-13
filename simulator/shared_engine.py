@@ -48,7 +48,7 @@ import sys
 def _engine():
     return sys.modules[__name__]
 
-SCHEMA = 27
+SCHEMA = 28
 ROSTER, SLOTS, QUEUE, EVENTS, DRAWS, HISTORY = 6, 4, 8, 128, 128, 2048
 OK, PENDING, INVALID, UNSUPPORTED, CAPACITY, TERMINAL, STALE = range(7)
 RETRY=7
@@ -107,6 +107,7 @@ MOVE_ACTOR_TARGET=field_tables.ACTOR_TARGET
 DRAW_CONTEXTS=('initialization','queue-sort','before-turn','update','hit-update','switch-order','residual-handlers','accuracy','critical','damage','paralysis','stall','sleep-duration','freeze','confusion-duration','confusion','confusion-damage','secondary','weather-change','weather-order','damage-modifiers','multihit-count','rampage-duration','frisk-target','volatile-duration','phazing-selection','sleep-talk-selection')
 # Queue kinds, order values mirror the pinned scheduler.
 BEFORE, ATTACK, SWAP, INSTANT, RUN_SWITCH, RESIDUAL, BEFORE_MOVE, FINISH_SWITCH = range(1,9)
+FORCED_MOVE_ACTION=12
 QORDER=jnp.array([999,4,200,103,3,101,300,5,3],jnp.int32)
 
 
@@ -484,15 +485,24 @@ def _hit(c,actor,move):
         c=_when(tracked_success,lambda c:tracking.attacked(c,target,actor,move,i32(0),i32(tracking.TRUE),i32(0),_engine()),c)
         c=_when((~phaze_ops.STATUS[move])&((move!=identity_ops.MOVE)|sub_block),lambda c:tracking.outcome(c,actor,jnp.where(tracked_success|sub_block,tracking.TRUE,tracking.FALSE),move),c)
         return _when((success|sub_block|((item_ops.EXCHANGE[move]|ability_ops.MOVE_IMPLEMENTED[move]|suppression_ops.MOVE_IMPLEMENTED[move]|sleep_ops.MOVE_IMPLEMENTED[move])&tracked_success))&(~phaze_ops.STATUS[move])&((move!=identity_ops.MOVE)|sub_block),lambda c:_update(_update(c,HIT_UPDATE),HIT_UPDATE),c)
-    return jax.lax.cond(damaging,physical,status_hit,c)
+    def mirror(c):
+        s,tr=c;frame=s.call_frames[s.call_depth-1]
+        move_row=jnp.max(jnp.where((jnp.arange(EVENTS)<tr.ecount)&(tr.events[:,0]==EV_MOVE),jnp.arange(EVENTS),0))
+        return called_ops.copy_move(c,frame,move_row,_engine(),mirror=True)
+    return jax.lax.cond(move==called_ops.MIRROR_MOVE,mirror,lambda c:jax.lax.cond(damaging,physical,status_hit,c),c)
 
 
 def _attack(c,row):
     s,t=c;actor=row[1];mon=row[2];action=phase_ops.override_action(s,actor,row[3])
-    selected=jnp.where(row[3]==10,STRUGGLE,s.moves[actor,mon,jnp.clip(row[3],0,3)])
+    selected=jnp.where(row[3]>=FORCED_MOVE_ACTION,row[3]-FORCED_MOVE_ACTION,jnp.where(row[3]==10,STRUGGLE,s.moves[actor,mon,jnp.clip(row[3],0,3)]))
     target_loc=jnp.where(MOVE_ACTOR_TARGET[selected],-1,1)
-    move=jnp.where(action==10,STRUGGLE,s.moves[actor,mon,jnp.clip(action,0,3)])
+    move=jnp.where(action>=FORCED_MOVE_ACTION,action-FORCED_MOVE_ACTION,jnp.where(action==10,STRUGGLE,s.moves[actor,mon,jnp.clip(action,0,3)]))
     locked_before=phase_ops.forced_move(s)[actor]>0
+    oldloc=s.action_state[actor,mon,tracking.TARGET_LOC]
+    oldloc=jnp.where(oldloc==-2,0,oldloc)
+    charge=s.volatile_state[actor,mon,6,0]>0
+    child=phase_ops.CHARGE_SLOT[move];storedloc=s.volatile_state[actor,mon,child,9]
+    target_loc=jnp.where(locked_before,jnp.where(charge&(storedloc!=0),storedloc,oldloc),target_loc)
     target=jnp.where(MOVE_ACTOR_TARGET[move],actor,1-actor)
     tm=s.active[target]
     def execute(c):
@@ -501,15 +511,15 @@ def _attack(c,row):
         c=_when(full,lambda c:phase_ops.abort_move(c,actor,_engine()),c)
         def cannot(c):return _when(~c[0].fainted[actor,mon],lambda c:tracking.result(c,actor,i32(tracking.FALSE)),c)
         def act(c):
-            s,t=c;slot=jnp.clip(action,0,3)
-            s=tracking.used(s,actor,move,slot,_engine(),target_loc)
+            s,t=c;slot=jnp.clip(action,0,3);previous=s.battle_move
+            s=tracking.used(s,actor,move,slot,_engine(),target_loc,mark_slot=(~locked_before)&(s.moves[actor,mon,slot]==move))
             s=s._replace(battle_success=i32(0))
             pressured=hook_tables.PRESSURE_TARGET[move].astype(jnp.bool_)&(suppression_ops.abilities(s)[1-actor,s.active[1-actor]]==hook_tables.A['pressure'])&(~s.fainted[1-actor,s.active[1-actor]])
             cost=1+pressured.astype(jnp.int32)
             s=s._replace(pp=s.pp.at[actor,mon,slot].set(jnp.where((move==STRUGGLE)|locked_before,s.pp[actor,mon,slot],jnp.maximum(0,s.pp[actor,mon,slot]-cost))))
             s=identity_ops.sync(s,actor,_engine())
             tag=jnp.where(row[6]==pursuit_ops.MOVE,2,locked_before.astype(jnp.int32))
-            return called_ops.root((s,t),actor,mon,move,target_loc,slot,locked_before,tag,_engine())
+            return called_ops.root((s,t),actor,mon,move,target_loc,slot,locked_before,tag,previous,_engine())
         return jax.lax.cond(full,cannot,act,c)
     # A queued actor remains tied to its original mon, and cannot act after KO.
     return _when((s.active[actor]==mon)&(s.hp[actor,mon]>0),
@@ -597,7 +607,7 @@ def _use_move(c,frame):
                     return _event((s,t),MISS,actor,mon,move,target,tm)
                 def hit_fn(c):
                     s,t=c
-                    existing=(phase_ops.RESTRICTION[move]==0)&(move!=sleep_ops.YAWN)&(move!=suppression_ops.MOVE)&(~ability_ops.MOVE_IMPLEMENTED[move])&(move!=identity_ops.MOVE)&(~item_ops.EXCHANGE[move])&(~phaze_ops.STATUS[move])&(tables.CATEGORY[move]==0)&(~field_tables.IS_BOOST[move])&(move!=CONFUSE_RAY)&(s.status[target,tm]!=NONE)&(s.status[target,tm]!=jnp.where(move==WISP,BRN,jnp.where(move==TOXIC,TOX,jnp.where(move==POISON_POWDER,PSN,jnp.where(move==SPORE,SLP,PAR)))))
+                    existing=(~called_ops.MOVE_IMPLEMENTED[move])&(phase_ops.RESTRICTION[move]==0)&(move!=sleep_ops.YAWN)&(move!=suppression_ops.MOVE)&(~ability_ops.MOVE_IMPLEMENTED[move])&(move!=identity_ops.MOVE)&(~item_ops.EXCHANGE[move])&(~phaze_ops.STATUS[move])&(tables.CATEGORY[move]==0)&(~field_tables.IS_BOOST[move])&(move!=CONFUSE_RAY)&(s.status[target,tm]!=NONE)&(s.status[target,tm]!=jnp.where(move==WISP,BRN,jnp.where(move==TOXIC,TOX,jnp.where(move==POISON_POWDER,PSN,jnp.where(move==SPORE,SLP,PAR)))))
                     t=t._replace(events=t.events.at[move_row,7].set(jnp.where(existing,2,t.events[move_row,7])))
                     return _hit((s,t),actor,move)
                 return jax.lax.cond(hit,hit_fn,miss,c)
@@ -638,11 +648,11 @@ def _use_move(c,frame):
         lambda c:field_ops.move(c,actor,move,move_row,_engine()),
         lambda c:jax.lax.cond(field_tables.IS_BOOST[move]&(target==actor),
             lambda c:field_ops.boost(c,actor,target,move,_engine()),ordinary,c),c)
-    c,charging=jax.lax.cond(phase_ops.CHARGE[move],lambda c:phase_ops.charge(c,actor,move,move_row,_engine()),lambda c:(c,jnp.array(False)),c)
+    c,charging=jax.lax.cond(phase_ops.CHARGE[move],lambda c:phase_ops.charge(c,actor,move,move_row,_engine(),target_loc=jnp.where(target==actor,-1,1)),lambda c:(c,jnp.array(False)),c)
     move_row=jnp.max(jnp.where((jnp.arange(EVENTS)<c[1].ecount)&((c[1].events[:,0]==EV_MOVE)|(c[1].events[:,0]==ANIM)),jnp.arange(EVENTS),0))
     blocked_rest=(move==REST)&(c[0].status[actor,mon]==SLP)
     c=_when(blocked_rest,lambda c:ability_ops.fail(c,actor,move,move_row,_engine()),c)
-    c=_when((~charging)&(~blocked_rest),lambda c:jax.lax.cond(called_ops.MOVE_IMPLEMENTED[move],lambda c:called_ops.call(c,frame,move_row,_engine()),resolve_move,c),c)
+    c=_when((~charging)&(~blocked_rest),lambda c:jax.lax.cond((called_ops.MOVE_IMPLEMENTED[move]&(move!=called_ops.MIRROR_MOVE)),lambda c:called_ops.call(c,frame,move_row,_engine()),resolve_move,c),c)
     c=_when(hit_tables.SELF_DESTRUCT[move]&(~c[0].fainted[actor,mon]),lambda c:_faint(c,actor),c)
     c=_when(hit_tables.SELF_DESTRUCT[move]&(c[0].winner<0),lambda c:_win(c,actor),c)
     return phase_ops.after_move(c,actor,_engine())
@@ -941,13 +951,19 @@ def _supported(s,initializing=False):
     lock_ok=lock_ok&(source_item==s.item)&(lock[:,:,5]>0)&(lock[:,:,5]<len(MOVE_KEYS))
     lock_ok=lock_ok&(lock[:,:,1]<s.effect_order)
     lock_ok=jnp.all((lock[:,:,0]==0)|lock_ok)
-    return (jnp.all((s.item_provenance[:,:,0]>=0)&(s.item_provenance[:,:,0]<len(ITEMS)))&jnp.all((s.item_provenance[:,:,1]>=0)&(s.item_provenance[:,:,1]<=2))&jnp.all((s.request_state>=0)&(s.request_state<=1))&tracking.valid(s,_engine())&stat_ok&valid_order&weather_ok&screen_ok&hazard_ok&lock_ok&(~jnp.any(duplicate))&(jnp.all((s.hcount>=0)&(s.hcount<=HISTORY)) if isinstance(s,State) else jnp.array(True))
+    move_mask=(tables.MOVE_IMPLEMENTED|field_tables.MOVE_IMPLEMENTED|hit_tables.MOVE_IMPLEMENTED|phase_ops.MOVE_IMPLEMENTED|partial_ops.MOVE_IMPLEMENTED|phaze_ops.MOVE_IMPLEMENTED|pursuit_ops.MOVE_IMPLEMENTED|item_ops.MOVE_IMPLEMENTED|identity_ops.MOVE_IMPLEMENTED|trigger_form_ops.MOVE_IMPLEMENTED|ability_ops.MOVE_IMPLEMENTED|suppression_ops.MOVE_IMPLEMENTED|sleep_ops.MOVE_IMPLEMENTED|called_ops.MOVE_IMPLEMENTED)
+    cached=jnp.concatenate((s.move_history[:,:,:,0].reshape(-1),s.battle_move[:1]))
+    cached_ok=jnp.all((cached==0)|(cached==STRUGGLE)|move_mask[jnp.clip(cached,0,len(MOVE_KEYS)-1)])
+    literal=s.queue[:,3]-FORCED_MOVE_ACTION
+    used_literal=(jnp.arange(QUEUE)<s.qcount)&(s.queue[:,0]==ATTACK)&(s.queue[:,3]>=FORCED_MOVE_ACTION)
+    literal_ok=jnp.all((~used_literal)|((literal>0)&(literal<len(MOVE_KEYS))&move_mask[jnp.clip(literal,0,len(MOVE_KEYS)-1)]))
+    return (jnp.all((s.item_provenance[:,:,0]>=0)&(s.item_provenance[:,:,0]<len(ITEMS)))&jnp.all((s.item_provenance[:,:,1]>=0)&(s.item_provenance[:,:,1]<=2))&jnp.all((s.request_state>=0)&(s.request_state<=1))&tracking.valid(s,_engine())&stat_ok&cached_ok&literal_ok&valid_order&weather_ok&screen_ok&hazard_ok&lock_ok&(~jnp.any(duplicate))&(jnp.all((s.hcount>=0)&(s.hcount<=HISTORY)) if isinstance(s,State) else jnp.array(True))
             &jnp.all((s.qcount>=0)&(s.qcount<=QUEUE))&(s.episode>=0)&(s.generation>=0)
             &jnp.all(jnp.where(occupied,jnp.any(s.moves>0,axis=-1),jnp.all(s.moves==0,axis=-1)))
             &jnp.all((s.species>=0)&(s.species<len(SPECIES)))&jnp.all(jnp.any(occupied,axis=1))
             &jnp.all((~occupied)|(tables.SPECIES_IMPLEMENTED|form_ops.SPECIES_IMPLEMENTED|trigger_form_ops.SPECIES_IMPLEMENTED)[safe_species])
             &jnp.all((s.moves>=0)&(s.moves<len(MOVE_KEYS))&(s.moves!=STRUGGLE))
-            &jnp.all((s.moves==0)|(tables.MOVE_IMPLEMENTED|field_tables.MOVE_IMPLEMENTED|hit_tables.MOVE_IMPLEMENTED|phase_ops.MOVE_IMPLEMENTED|partial_ops.MOVE_IMPLEMENTED|phaze_ops.MOVE_IMPLEMENTED|pursuit_ops.MOVE_IMPLEMENTED|item_ops.MOVE_IMPLEMENTED|identity_ops.MOVE_IMPLEMENTED|trigger_form_ops.MOVE_IMPLEMENTED|ability_ops.MOVE_IMPLEMENTED|suppression_ops.MOVE_IMPLEMENTED|sleep_ops.MOVE_IMPLEMENTED|called_ops.MOVE_IMPLEMENTED)[jnp.clip(s.moves,0,len(MOVE_KEYS)-1)])
+            &jnp.all((s.moves==0)|move_mask[jnp.clip(s.moves,0,len(MOVE_KEYS)-1)])
             &jnp.all((s.item>=0)&(s.item<len(ITEMS)))
             &jnp.all((hook_tables.ITEM_IMPLEMENTED|hit_tables.ITEM_IMPLEMENTED|phase_ops.ITEM_IMPLEMENTED|partial_ops.ITEM_IMPLEMENTED)[jnp.clip(s.item,0,len(ITEMS)-1)])
             &jnp.all((s.ability>=0)&(s.ability<len(ABILITIES)))&jnp.all((hook_tables.ABILITY_IMPLEMENTED|hit_tables.ABILITY_IMPLEMENTED|trap_ops.ABILITY_IMPLEMENTED|phaze_ops.ABILITY_IMPLEMENTED|item_ops.ABILITY_IMPLEMENTED|identity_ops.ABILITY_IMPLEMENTED|illusion_ops.ABILITY_IMPLEMENTED|form_ops.ABILITY_IMPLEMENTED|trigger_form_ops.ABILITY_IMPLEMENTED|immunity_ops.ABILITY_IMPLEMENTED|creation_ops.ABILITY_IMPLEMENTED|sleep_ops.ABILITY_IMPLEMENTED)[jnp.clip(s.ability,0,len(ABILITIES)-1)])
@@ -1044,7 +1060,10 @@ def advance(s,choices,token=None):
                     kind=jnp.where(action>=4,jnp.where(action==10,ATTACK,jnp.where(normal,SWAP,INSTANT)),ATTACK)
                     forced=phase_ops.forced_move(s)[side]
                     actual_slot=jnp.argmax(s.moves[side,mon]==forced)
-                    action=jnp.where((kind==ATTACK)&(forced>0),actual_slot,action)
+                    owns_forced=jnp.any(s.moves[side,mon]==forced)
+                    forced_action=jnp.where(owns_forced,actual_slot,FORCED_MOVE_ACTION+forced)
+                    action=jnp.where((kind==ATTACK)&(forced>0),forced_action,action)
+                    move=jnp.where((kind==ATTACK)&(forced>0),forced,move)
                     recharge=(kind==ATTACK)&(forced<0)
                     action=jnp.where(recharge,phase_ops.RECHARGE_ACTION,action)
                     priority=jnp.where((kind==ATTACK)&(action!=10)&(~recharge),hook_ops.priority(move,suppression_ops.abilities(s)[side,mon],_engine()),0)

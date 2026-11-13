@@ -36,7 +36,7 @@ def result(c,side,value):
     return put(s,side,RESULT,value),trace
 
 
-def used(s,side,move,slot,e,target_loc):
+def used(s,side,move,slot,e,target_loc,mark_slot=True):
     mon=s.active[side]
     move_type=jnp.where(move==e.HIDDEN_POWER,s.hp_type[side,mon],t.MOVE_TYPE[move])
     move_type=jnp.where(move==e.STRUGGLE,0,move_type)
@@ -45,7 +45,7 @@ def used(s,side,move,slot,e,target_loc):
     a=s.action_state.at[side,mon,TARGET_LOC].set(target_loc).at[side,mon,MOVE_THIS_TURN].set(move)
     a=a.at[side,mon,LAST_DAMAGE].set(0).at[side,mon,RESULT].set(FALSE)
     bit=jnp.left_shift(jnp.int32(1),jnp.clip(slot,0,3))
-    bits=jnp.where(move==e.STRUGGLE,a[side,mon,USED_SLOTS],a[side,mon,USED_SLOTS]|bit)
+    bits=jnp.where((move==e.STRUGGLE)|(~jnp.asarray(mark_slot)),a[side,mon,USED_SLOTS],a[side,mon,USED_SLOTS]|bit)
     a=a.at[side,mon,USED_SLOTS].set(bits)
     # clearActiveMove records attempted used moves even on miss/immunity.
     return s._replace(move_history=history,action_state=a,battle_move=row)

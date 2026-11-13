@@ -210,15 +210,15 @@ def load_state(path,*,schema=None,replayed_state=None):
         stored=int(saved['schema']) if 'schema' in saved else None
         if schema is not None and stored is not None and stored!=schema:raise ValueError('schema mismatch')
         version=stored if schema is None else schema
-        if version not in (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27):raise ValueError('explicit supported state schema required')
+        if version not in (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28):raise ValueError('explicit supported state schema required')
         fields={k:jnp.asarray(saved[k]) for k in saved.files if k not in ('schema','data_sha256')}
-        if version in (3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27):
+        if version in (3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28):
             if 'data_sha256' not in saved or str(saved['data_sha256'])!=generic.DATA_SHA256:
                 raise ValueError('state data table identity mismatch')
-        if version<26 and replayed_state is not None:
+        if version<28 and replayed_state is not None:
             e._validate_structure(replayed_state)
             end='ivs' if version<=2 else 'effect_order' if version==3 else 'weather_state' if version==4 else 'move_history' if version<9 else 'request_state'
-            expected=set(e.State._fields[:e.State._fields.index('call_frames')] if version>=21 else e.State._fields[:e.State._fields.index('ability_staleness')] if version>=18 else e.State._fields[:e.State._fields.index('illusion')] if version==17 else e.State._fields[:e.State._fields.index('base_species')] if version==16 else e.State._fields[:e.State._fields.index('item_provenance')] if version>=11 else e.State._fields[:e.State._fields.index(end)])
+            expected=set(e.State._fields if version>=26 else e.State._fields[:e.State._fields.index('call_frames')] if version>=21 else e.State._fields[:e.State._fields.index('ability_staleness')] if version>=18 else e.State._fields[:e.State._fields.index('illusion')] if version==17 else e.State._fields[:e.State._fields.index('base_species')] if version==16 else e.State._fields[:e.State._fields.index('item_provenance')] if version>=11 else e.State._fields[:e.State._fields.index(end)])
             if version==1:expected.remove('hazards')
             if set(fields)!=expected:raise ValueError('invalid legacy field set for replay')
             for key,value in fields.items():
@@ -228,7 +228,8 @@ def load_state(path,*,schema=None,replayed_state=None):
                     if old.shape!=(2,6,slots,6):raise ValueError('invalid legacy volatile shape for replay')
                     replay=replay[:,:,:slots,:6]
                 elif key=='volatile_state':
-                    replay=replay[:,:,:25 if version>=24 else 24 if version>=20 else 23 if version>=15 else 22 if version>=13 else 21 if version==12 else 20,:]
+                    replay=replay[:,:,:26 if version>=25 else 25 if version>=24 else 24 if version>=20 else 23 if version>=15 else 22 if version>=13 else 21 if version==12 else 20,:]
+                if key=='call_frames' and version<28:replay=replay[:,:16]
                 if key=='history' and version<18:replay=replay[:,:10]
                 if key=='action_state' and version<15:replay=replay[:,:,:21]
                 if old.shape!=replay.shape or old.dtype!=replay.dtype or not np.array_equal(old,replay):
@@ -344,6 +345,10 @@ def load_state(path,*,schema=None,replayed_state=None):
             fields['history']=history
         if version<21:fields['ability_staleness']=jnp.zeros((2,6),jnp.int32)
         if version<26:fields.update(call_frames=e.called_ops.empty(e),call_depth=e.i32(0))
+        elif version<28:
+            if int(fields['call_depth']) or np.any(np.asarray(fields['call_frames'])):raise ValueError('legacy active call frames require replay/provenance')
+            if fields['call_frames'].shape!=(e.called_ops.FRAMES,16):raise ValueError('invalid legacy call frame shape')
+            fields['call_frames']=jnp.pad(fields['call_frames'],((0,0),(0,4)))
         if set(fields)!=set(e.State._fields):raise ValueError('invalid state field set')
         state=e.State(*(fields[k] for k in e.State._fields))
         e._validate_structure(state)
@@ -393,7 +398,7 @@ def effect_states(state,side,mon):
         if 15<=kind<=18:
             row['name']=e.MOVE_NAMES[tables.MOVE_IDS[key]]
             if kind!=18:row['duration']=time
-            if kind in (16,17,18,19,20,21,22,23,24,25,26,27):row['move']=e.MOVE_KEYS[int(s.volatile_state[side,mon,kind,7])]
+            if kind in (16,17):row['move']=e.MOVE_KEYS[int(s.volatile_state[side,mon,kind,7])]
         volatiles[key]=row
     return {'statusState':status,'volatiles':volatiles,
         'abilityState':{'id':e.ABILITIES[int(s.ability_effect_id[side,mon])],'effectOrder':int(s.ability_order[side,mon]),'target':target},
