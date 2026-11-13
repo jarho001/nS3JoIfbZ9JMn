@@ -14,7 +14,7 @@ Full-format G4
 coverage remains separate acceptance work. Historical evidence keeps its original
 source/schema identity; it does not imply validation of later engine changes.
 
-The current runtime uses [schema 28](../rules/shared-engine-v28.json). Schemas
+The current runtime uses [schema 29](../rules/shared-engine-v29.json). Schemas
 4–6 integrated major statuses and effect provenance, boosts/weather/screens,
 and observed ability/item hooks. Schema7 adds declarative hit counts, per-hit
 updates, capped drain/recoil arithmetic, self-destruction and reactive damage.
@@ -677,3 +677,11 @@ locations and slot-use accounting. Cached moves are capability-guarded; Torment
 projection no longer invents a move property. Focused24/48 CPU parity and live
 NPZ/journal14 persistence pass. Reflection, complete frame bounds and broad
 execution/migration/final acceptance remain pending.
+
+Schema29 adds Magic Bounce ability-sourced reflection frames. The original
+hit path is bypassed; reflected useMove does not deduct Pressure PP, and a
+frame flag prevents repeated bouncing. Protect/type immunity/air gates and
+Gen5 hazard reflection in air retain native ordering. Focused22/26 CPU parity
+includes three-frame Sleep Talk and live reflected-phazing persistence. Magic
+Coat, remaining callers, complete frame bounds and broad/final gates remain
+pending.

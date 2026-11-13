@@ -2636,10 +2636,22 @@
           "file": "data/mods/gen5/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/reflection.json.gz",
+          "native": "reference/reflection-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_reflection_engine.py"
+        }
+      ],
       "field": "onAllyTryHitSide",
       "id": "abilities:magicbounce:onAllyTryHitSide",
-      "implementation": null,
+      "implementation": {
+        "family": "reflection",
+        "file": "simulator/called_moves.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:magicbounce",
@@ -2650,7 +2662,7 @@
       "owner": "abilities:magicbounce",
       "reachability": "candidate",
       "sha256": "a63bb4cc02654f9ff99dec5d36bd2a8e374d9b57357062f45344a46aa56ea714",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -2659,10 +2671,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/reflection.json.gz",
+          "native": "reference/reflection-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_reflection_engine.py"
+        }
+      ],
       "field": "onTryHit",
       "id": "abilities:magicbounce:onTryHit",
-      "implementation": null,
+      "implementation": {
+        "family": "reflection",
+        "file": "simulator/called_moves.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:magicbounce",
@@ -2673,7 +2697,7 @@
       "owner": "abilities:magicbounce",
       "reachability": "candidate",
       "sha256": "78c327b7cc465905533c549d925ccbf0e7c95cd3dae16708abefb5cd5bed7cac",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -70071,10 +70095,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/reflection.json.gz",
+          "native": "reference/reflection-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_reflection_engine.py"
         }
       ],
       "id": "abilities:magicbounce",
       "implementation": {
+        "behavior": {
+          "family": "reflection",
+          "file": "simulator/called_moves.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"

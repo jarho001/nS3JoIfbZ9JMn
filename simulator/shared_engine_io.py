@@ -84,7 +84,7 @@ def project_events(state,trace,audience):
         elif kind in (e.EV_MOVE,e.ANIM):
             shown='' if aux==2 else foe.replace('a: ',': ') if aux in (3,4) else foe
             annotation={0:'',1:'|[miss]',2:'|[still]',3:'|[notarget]',4:''}[aux]
-            line='|'+('move' if kind==e.EV_MOVE else '-anim')+f'|{actor}|{name}|'+shown+('|[from] move: '+e.MOVE_NAMES[-from_lock-1]if from_lock<0 else '|[from] lockedmove' if from_lock==1 else '|[from] move: Pursuit' if from_lock==2 else '')+annotation
+            line='|'+('move' if kind==e.EV_MOVE else '-anim')+f'|{actor}|{name}|'+shown+('|[from] move: '+e.MOVE_NAMES[-from_lock-1]if from_lock<0 else '|[from] lockedmove' if from_lock==1 else '|[from] move: Pursuit' if from_lock==2 else '|[from] ability: '+e.hook_tables.ABILITY_NAMES[from_lock-e.called_ops.ABILITY_TAG]if from_lock>=e.called_ops.ABILITY_TAG else '')+annotation
         elif kind in (e.DAMAGE,e.HEAL):
             line=f'|-'+('damage' if kind==e.DAMAGE else 'heal')+f'|{actor}|'+condition(value,aux,status,side!=audience)
             if kind==e.DAMAGE and move:line+='|[from] '+{1:'brn',2:'psn',3:'recoil',4:'Stealth Rock',5:'Spikes',6:'confusion',7:'Sandstorm',8:'Hail',9:'item: Life Orb',10:'Recoil',11:'ability: Rough Skin',12:'ability: Iron Barbs',13:'item: Rocky Helmet',14:'ability: Liquid Ooze'}[move]
@@ -210,9 +210,9 @@ def load_state(path,*,schema=None,replayed_state=None):
         stored=int(saved['schema']) if 'schema' in saved else None
         if schema is not None and stored is not None and stored!=schema:raise ValueError('schema mismatch')
         version=stored if schema is None else schema
-        if version not in (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28):raise ValueError('explicit supported state schema required')
+        if version not in (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29):raise ValueError('explicit supported state schema required')
         fields={k:jnp.asarray(saved[k]) for k in saved.files if k not in ('schema','data_sha256')}
-        if version in (3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28):
+        if version in (3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29):
             if 'data_sha256' not in saved or str(saved['data_sha256'])!=generic.DATA_SHA256:
                 raise ValueError('state data table identity mismatch')
         if version<28 and replayed_state is not None:

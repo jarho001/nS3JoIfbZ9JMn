@@ -37,7 +37,7 @@ def root(c,actor,mon,move,location,slot,locked,tag,previous,e):
             # child and leaves its own return phase underneath it.
             return e.jax.lax.cond(c[0].call_depth==depth,pop,lambda c:c,c)
         def resume(c):
-            mirror=frame[PHASE]==2
+            mirror=(frame[PHASE]==2)|(frame[PHASE]==3)
             c=e._when(~mirror,lambda c:e._update(e._update(c,e.HIT_UPDATE),e.HIT_UPDATE),c)
             s,tr=c;s=s._replace(battle_success=jnp.where(mirror,0,s.battle_move[0]))
             return pop((s,tr))
@@ -57,7 +57,7 @@ def enter(c,frame,e):
         extra=e.hook_tables.PRESSURE_TARGET[move].astype(jnp.bool_)&(e.suppression_ops.abilities(s)[enemy,em]==e.hook_tables.A['pressure'])&(~s.fainted[enemy,em])
         slot=frame[ROOT_SLOT];s=s._replace(pp=s.pp.at[actor,mon,slot].set(jnp.maximum(0,s.pp[actor,mon,slot]-extra.astype(jnp.int32))))
         return e.identity_ops.sync(s,actor,e)
-    s=e.jax.lax.cond(frame[MODE]>0,pressure,lambda s:s,s)
+    s=e.jax.lax.cond(frame[MODE]==1,pressure,lambda s:s,s)
     return s,tr
 
 def sleep_talk(c,frame,move_row,e):
@@ -95,3 +95,23 @@ def copy_move(c,frame,move_row,e,mirror=False):
 
 def call(c,frame,move_row,e):
     return e.jax.lax.cond(frame[MOVE]==NATURE_POWER,lambda c:child(c,frame,e.i32(t.MOVE_IDS['earthquake']),e.i32(-1),e),lambda c:e.jax.lax.cond(frame[MOVE]==COPYCAT,lambda c:copy_move(c,frame,move_row,e),lambda c:sleep_talk(c,frame,move_row,e),c),c)
+
+
+MAGIC_BOUNCE=t.ABILITY_IDS['magicbounce']
+ABILITY_IMPLEMENTED=jnp.asarray([k=='magicbounce'for k in t.ABILITIES],jnp.bool_)
+REFLECTABLE=t.mv(lambda r:bool(r.get('flags',{}).get('reflectable'))).astype(jnp.bool_)
+ABILITY_TAG=1000
+
+def reflect(c,frame,e):
+    s,tr=c;actor=frame[ACTOR];target=frame[TARGET];move=frame[MOVE];mon=s.active[target]
+    side_move=(move==e.STEALTH_ROCK)|(move==e.SPIKES)
+    semi=jnp.any(s.volatile_state[target,mon,11:15,0]>0)
+    protected=s.protected[target,mon]&e.ability_ops.PROTECT[move]
+    _,type_immune=e.generic.type_matchup(t.MOVE_TYPE[move],s.types[target,mon])
+    denied=(~side_move)&(protected|((move==e.THUNDER_WAVE)&type_immune))
+    allowed=(~denied)&(s.hp[target,mon]>0)&(actor!=target)&REFLECTABLE[move]&(frame[FLAGS]==0)&(e.suppression_ops.abilities(s)[target,mon]==MAGIC_BOUNCE)&(side_move|(~semi))
+    def bounce(c):
+        s,tr=c;s=s._replace(call_frames=s.call_frames.at[s.call_depth-1,PHASE].set(3))
+        nested=frame.at[ACTOR].set(target).at[MON].set(mon).at[TARGET].set(actor).at[TM].set(frame[MON]).at[SOURCE_KIND].set(2).at[SOURCE_ID].set(MAGIC_BOUNCE).at[LOCATION].set(1).at[SLOT].set(-1).at[MODE].set(2).at[PHASE].set(0).at[LOCKED].set(0).at[TAG].set(ABILITY_TAG+MAGIC_BOUNCE).at[FLAGS].set(1)
+        return push((s,tr),nested,e)
+    return e._when(allowed,bounce,c),allowed

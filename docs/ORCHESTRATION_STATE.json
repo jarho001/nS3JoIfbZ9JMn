@@ -524,7 +524,7 @@
     "brief": "PROJECT_PLAN.md#proposed-g4-cpu-implementation-and-conformance-goal",
     "source_base": "f37067e",
     "scope": "Complete pinned gen5randombattle reachable mechanics and every prepared CPU gate. Integrated checkpoints, resumable progress and commit/push authorized. GPU execution, profiling, benchmarks, training, delegation and scored research excluded.",
-    "checkpoint": "Schema28 Copycat and Mirror Move frames: 24/48 focused CPU parity in280.722s,1 native contract and live NPZ/journal14 persistence. Full G4 and broad gates pending.",
+    "checkpoint": "Schema29 Magic Bounce reflected frames: 22/26 focused CPU parity in275.568s,1 native contract and live NPZ/journal14 persistence. Full G4 and broad gates pending.",
     "completed_checkpoints": [
       "Pinned resolved data and source-owned conservative candidate inventory exported; 605 role roots, 1768 data/effect entries, 1146 callback slots. Data-only mappings remain partial; transitive closure and complete callback implementation are not claimed.",
       "Generic species/set/type/stat/physical-special/Hidden Power/happiness/priority/hazard integration passes 37 affected CPU checks on 4eab254, retaining all 133 baseline scenarios and validating 24 added scenarios: 157 scenarios / 1059 boundaries, including 20 complete battles (eight six-member games). Eager/JIT/1-8-32 mixed batches, serialized continuation/reset, explicit schema 1/2 migration and full/lean rollouts pass.",
@@ -538,7 +538,7 @@
       "Schema10 core/journal/hard-turn-limit checkpoint validated on a9d0fbd:3 integrated CPU checks pass in1174.685s, plus5 native/6 helper checks. Complete combat and1000-boundary neutral histories match native; mixed1/8/32,full/lean,core reset,persistence/corruption pass. Full64 suite and full-format G4 pending.",
       "Schema11 trapping/retry checkpoint:8 affected CPU checks plus6 native/6 helper checks pass. New31 scenarios/215 boundaries include two complete six-member games and mirrored private-state episodes. Aggregate558/4110; full68 suite and full-format G4 pending."
     ],
-    "next": "Implement Magic Bounce/Magic Coat reflection through shared frames from pinned native cases, then remaining identity and closure work. Continue sequential focused CPU checks.",
+    "next": "Implement Magic Coat on shared reflection frames, then remaining identity/caller and closure families. Continue sequential focused CPU checks.",
     "ledger": {
       "path": "rules/gen5-reachable-v1.json",
       "entries": 1768,
@@ -548,7 +548,7 @@
         "indirect-closure",
         "engine-contract"
       ],
-      "status": "Incomplete:262 partial callback mappings/884 unsupported; full closure remains open."
+      "status": "Incomplete:264 partial callback mappings/882 unsupported; full closure remains open."
     },
     "config": "evaluation/g4-cpu-v1.json",
     "campaign": {
@@ -616,7 +616,7 @@
     ],
     "gpu_requirement": "Deferred during travel. Record all G4 device obligations and ready/pending commands in docs/GPU_HANDOFF.md; current checkpoint runner is scripts/g4_gpu_handoff.py. CPU implementation remains active. Later full G4 release still requires matching-source GPU conformance.",
     "acceptance": "G4-CPU-conformance pending. Generic data checkpoint passes; all remaining prepared CPU gates retained, all milestone acceptance/task count unchanged.",
-    "source_identity": "test-logs/g4-cpu-conformance/schema28-checkpoint.json",
+    "source_identity": "test-logs/g4-cpu-conformance/schema29-checkpoint.json",
     "evidence_directory": "test-logs/g4-cpu-conformance",
     "continuation": {
       "status": "schema7_CPU_checkpoint_validated",
@@ -1037,6 +1037,16 @@
         "native_boundaries": 48,
         "evidence": "test-logs/g4-cpu-conformance/schema28-checkpoint.json",
         "next": "Implement Magic Bounce/Magic Coat reflection through shared frames from pinned native cases, then remaining identity and closure work. Continue sequential focused CPU checks."
+      },
+      "reflection": {
+        "status": "completed_focused_CPU_checkpoint_not_full_G4",
+        "source_base": "8c6c089",
+        "candidate_schema": 29,
+        "core_journal_schema": 14,
+        "native_cases": 22,
+        "native_boundaries": 26,
+        "evidence": "test-logs/g4-cpu-conformance/schema29-checkpoint.json",
+        "next": "Implement Magic Coat on shared reflection frames, then remaining identity/caller and closure families. Continue sequential focused CPU checks."
       }
     },
     "resolved_failure": "16b5263 preflight rejected ordinary moves because type was missing from its field set; fixed by 4eab254, failed run stopped, all 37 repaired checks pass. Detailed minimized input and source identities are in source.json.",
@@ -2016,17 +2026,17 @@
     "combined_return_home_block": "docs/GPU_HANDOFF.md#one-return-home-block-correctness-plus-g3-v6-measurements",
     "pending_status_checkpoint": "Current status/field/hook GPU checks are wired into the49-check runner; no GPU execution during travel. Preserve matching-source CPU results and do not transfer earlier GPU/CPU evidence across changed source.",
     "expanded_checkpoint": {
-      "status": "schema28_focused_CPU_complete_GPU_deferred",
-      "engine_schema": 28,
-      "modules": 33,
-      "native_scenarios": 954,
-      "native_boundaries": 5010,
+      "status": "schema29_focused_CPU_complete_GPU_deferred",
+      "engine_schema": 29,
+      "modules": 34,
+      "native_scenarios": 976,
+      "native_boundaries": 5036,
       "initial_field_evidence": "test-logs/g4-cpu-conformance/schema5-checkpoint.json",
       "source": "Use latest committed checkout and runner source/fixture fingerprints; earlier source_commit fields describe historical preparation.",
       "handoff_prepared": false,
-      "source_commit": "Publishing commit; exact runtime fingerprints in schema28-checkpoint.json",
-      "source_identity": "test-logs/g4-cpu-conformance/schema28-checkpoint.json",
-      "checks": 89
+      "source_commit": "Publishing commit; exact runtime fingerprints in schema29-checkpoint.json",
+      "source_identity": "test-logs/g4-cpu-conformance/schema29-checkpoint.json",
+      "checks": 90
     }
   }
 }
