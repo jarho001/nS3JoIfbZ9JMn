@@ -14,7 +14,7 @@ Full-format G4
 coverage remains separate acceptance work. Historical evidence keeps its original
 source/schema identity; it does not imply validation of later engine changes.
 
-The current runtime uses [schema 31](../rules/shared-engine-v31.json). Schemas
+The current runtime uses [schema 32](../rules/shared-engine-v32.json). Schemas
 4–6 integrated major statuses and effect provenance, boosts/weather/screens,
 and observed ability/item hooks. Schema7 adds declarative hit counts, per-hit
 updates, capped drain/recoil arithmetic, self-destruction and reactive damage.
@@ -699,3 +699,13 @@ indirect damage paths retain their behavior, including Shedinja hazard/weather
 KOs. Focused18/22 CPU parity and live suppressed-state NPZ/journal15 persistence
 pass. Trace and remaining identity/caller closure, complete inventory and
 broad/final gates remain pending.
+
+Schema32 is an unaccepted Trace candidate. It appends ability_seek to preserve
+native Start/Update and suppressed-acquisition state, runs copied callbacks
+through the ordinary Start dispatcher, and updates journal16. Native21/26
+capture and contract pass; the focused CPU process was killed (exit137) while
+compiling jit_advance in an8GiB cgroup reporting an OOM kill. Source fingerprints,
+logs and the exact command are in schema32-wip.json. Schema31 is the last
+completed focused CPU checkpoint. Resolve compilation memory growth or use
+adequate CPU memory before repeating the focused check; broad/final and GPU
+evidence remain pending. No milestone acceptance or unchanged-source retry.

@@ -26,7 +26,7 @@ def end(c,side,e):
 
 def assign(s,side,ability,e):
     mon=s.active[side]
-    return s._replace(ability=s.ability.at[side,mon].set(ability),ability_effect_id=s.ability_effect_id.at[side,mon].set(ability),ability_order=s.ability_order.at[side,mon].set(s.effect_order),effect_order=s.effect_order+1)
+    return s._replace(ability_seek=s.ability_seek.at[side,mon].set(0),ability=s.ability.at[side,mon].set(ability),ability_effect_id=s.ability_effect_id.at[side,mon].set(ability),ability_order=s.ability_order.at[side,mon].set(s.effect_order),effect_order=s.effect_order+1)
 
 def hit(c,actor,target,move,move_row,e):
     s,_=c;old=s.ability[actor,s.active[actor]];other=s.ability[target,s.active[target]]

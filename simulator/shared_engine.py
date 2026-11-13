@@ -41,6 +41,7 @@ from . import ability_creation as creation_ops
 from . import suppression as suppression_ops
 from . import sleep_control as sleep_ops
 from . import called_moves as called_ops
+from . import trace_ability as trace_ops
 from . import hook_tables
 from . import hook_effects as hook_ops
 import sys
@@ -48,7 +49,7 @@ import sys
 def _engine():
     return sys.modules[__name__]
 
-SCHEMA = 31
+SCHEMA = 32
 ROSTER, SLOTS, QUEUE, EVENTS, DRAWS, HISTORY = 6, 4, 8, 128, 128, 2048
 OK, PENDING, INVALID, UNSUPPORTED, CAPACITY, TERMINAL, STALE = range(7)
 RETRY=7
@@ -103,8 +104,9 @@ FRISK_TARGET=23
 VOLATILE_DURATION=24
 PHAZE_SELECTION=25
 CALLED_SELECTION=26
+TRACE_TARGET=27
 MOVE_ACTOR_TARGET=field_tables.ACTOR_TARGET
-DRAW_CONTEXTS=('initialization','queue-sort','before-turn','update','hit-update','switch-order','residual-handlers','accuracy','critical','damage','paralysis','stall','sleep-duration','freeze','confusion-duration','confusion','confusion-damage','secondary','weather-change','weather-order','damage-modifiers','multihit-count','rampage-duration','frisk-target','volatile-duration','phazing-selection','sleep-talk-selection')
+DRAW_CONTEXTS=('initialization','queue-sort','before-turn','update','hit-update','switch-order','residual-handlers','accuracy','critical','damage','paralysis','stall','sleep-duration','freeze','confusion-duration','confusion','confusion-damage','secondary','weather-change','weather-order','damage-modifiers','multihit-count','rampage-duration','frisk-target','volatile-duration','phazing-selection','sleep-talk-selection','trace-target')
 # Queue kinds, order values mirror the pinned scheduler.
 BEFORE, ATTACK, SWAP, INSTANT, RUN_SWITCH, RESIDUAL, BEFORE_MOVE, FINISH_SWITCH = range(1,9)
 FORCED_MOVE_ACTION=12
@@ -190,6 +192,7 @@ class State(NamedTuple):
     ability_staleness: jax.Array
     call_frames: jax.Array
     call_depth: jax.Array
+    ability_seek: jax.Array
 
 
 
@@ -291,6 +294,7 @@ def _update(c,context=UPDATE,sort_all=False):
         side=jnp.where(k==0,first,1-first)
         c=immunity_ops.update(c,side,_engine())
         c=sleep_ops.update(c,side,_engine())
+        c=trace_ops.update(c,side,_engine(),initial=context==INIT)
         def cure(c):
             s,t=c;m=s.active[side];old=s.status[side,m]
             c=_event(c,END_ITEM,side,m)
@@ -960,7 +964,7 @@ def _supported(s,initializing=False):
     literal=s.queue[:,3]-FORCED_MOVE_ACTION
     used_literal=(jnp.arange(QUEUE)<s.qcount)&(s.queue[:,0]==ATTACK)&(s.queue[:,3]>=FORCED_MOVE_ACTION)
     literal_ok=jnp.all((~used_literal)|((literal>0)&(literal<len(MOVE_KEYS))&move_mask[jnp.clip(literal,0,len(MOVE_KEYS)-1)]))
-    return (jnp.all((s.item_provenance[:,:,0]>=0)&(s.item_provenance[:,:,0]<len(ITEMS)))&jnp.all((s.item_provenance[:,:,1]>=0)&(s.item_provenance[:,:,1]<=2))&jnp.all((s.request_state>=0)&(s.request_state<=1))&tracking.valid(s,_engine())&stat_ok&cached_ok&literal_ok&valid_order&weather_ok&screen_ok&hazard_ok&lock_ok&(~jnp.any(duplicate))&(jnp.all((s.hcount>=0)&(s.hcount<=HISTORY)) if isinstance(s,State) else jnp.array(True))
+    return (jnp.all((s.ability_seek>=0)&(s.ability_seek<=1)&((s.ability_seek==0)|(s.ability_effect_id==trace_ops.TRACE)))&jnp.all((s.item_provenance[:,:,0]>=0)&(s.item_provenance[:,:,0]<len(ITEMS)))&jnp.all((s.item_provenance[:,:,1]>=0)&(s.item_provenance[:,:,1]<=2))&jnp.all((s.request_state>=0)&(s.request_state<=1))&tracking.valid(s,_engine())&stat_ok&cached_ok&literal_ok&valid_order&weather_ok&screen_ok&hazard_ok&lock_ok&(~jnp.any(duplicate))&(jnp.all((s.hcount>=0)&(s.hcount<=HISTORY)) if isinstance(s,State) else jnp.array(True))
             &jnp.all((s.qcount>=0)&(s.qcount<=QUEUE))&(s.episode>=0)&(s.generation>=0)
             &jnp.all(jnp.where(occupied,jnp.any(s.moves>0,axis=-1),jnp.all(s.moves==0,axis=-1)))
             &jnp.all((s.species>=0)&(s.species<len(SPECIES)))&jnp.all(jnp.any(occupied,axis=1))
@@ -969,7 +973,7 @@ def _supported(s,initializing=False):
             &jnp.all((s.moves==0)|move_mask[jnp.clip(s.moves,0,len(MOVE_KEYS)-1)])
             &jnp.all((s.item>=0)&(s.item<len(ITEMS)))
             &jnp.all((hook_tables.ITEM_IMPLEMENTED|hit_tables.ITEM_IMPLEMENTED|phase_ops.ITEM_IMPLEMENTED|partial_ops.ITEM_IMPLEMENTED)[jnp.clip(s.item,0,len(ITEMS)-1)])
-            &jnp.all((s.ability>=0)&(s.ability<len(ABILITIES)))&jnp.all((hook_tables.ABILITY_IMPLEMENTED|hit_tables.ABILITY_IMPLEMENTED|trap_ops.ABILITY_IMPLEMENTED|phaze_ops.ABILITY_IMPLEMENTED|item_ops.ABILITY_IMPLEMENTED|identity_ops.ABILITY_IMPLEMENTED|illusion_ops.ABILITY_IMPLEMENTED|form_ops.ABILITY_IMPLEMENTED|trigger_form_ops.ABILITY_IMPLEMENTED|immunity_ops.ABILITY_IMPLEMENTED|creation_ops.ABILITY_IMPLEMENTED|sleep_ops.ABILITY_IMPLEMENTED|called_ops.ABILITY_IMPLEMENTED)[jnp.clip(s.ability,0,len(ABILITIES)-1)])
+            &jnp.all((s.ability>=0)&(s.ability<len(ABILITIES)))&jnp.all((hook_tables.ABILITY_IMPLEMENTED|hit_tables.ABILITY_IMPLEMENTED|trap_ops.ABILITY_IMPLEMENTED|phaze_ops.ABILITY_IMPLEMENTED|item_ops.ABILITY_IMPLEMENTED|identity_ops.ABILITY_IMPLEMENTED|illusion_ops.ABILITY_IMPLEMENTED|form_ops.ABILITY_IMPLEMENTED|trigger_form_ops.ABILITY_IMPLEMENTED|immunity_ops.ABILITY_IMPLEMENTED|creation_ops.ABILITY_IMPLEMENTED|sleep_ops.ABILITY_IMPLEMENTED|called_ops.ABILITY_IMPLEMENTED|trace_ops.ABILITY_IMPLEMENTED)[jnp.clip(s.ability,0,len(ABILITIES)-1)])
             &jnp.all((s.ivs>=0)&(s.ivs<=31))&jnp.all((s.evs>=0)&(s.evs<=255))
             &jnp.all((s.nature>=1)&(s.nature<=len(generic.NATURES)))
             &jnp.all(s.types==tables.SPECIES_TYPES[safe_species])&jnp.all((s.boosts>=-6)&(s.boosts<=6))
@@ -1014,7 +1018,7 @@ def _supported(s,initializing=False):
 def _validate_structure(s):
     if not isinstance(s,(State,CoreState)):raise ValueError('expected shared-engine State or CoreState')
     roster_fields={'species','level','speed','gender','hp','item','status','toxic','stall','stall_duration',
-                   'ability_staleness','illusion','ability_effect_id','base_species','base_ability','base_used','transformed','known_type','nature','ability','hp_type','hp_power','shiny','happiness','name','ability_order','item_order'}
+                   'ability_seek','ability_staleness','illusion','ability_effect_id','base_species','base_ability','base_used','transformed','known_type','nature','ability','hp_type','hp_power','shiny','happiness','name','ability_order','item_order'}
     vector_fields={'active','pending','request','pivot'}
     bool_fields={'fainted','protected','pivot','midturn','shiny','sleep_clause_target','transformed','known_type'}
     for name,value in zip(type(s)._fields,s):
@@ -1204,7 +1208,7 @@ def _initialize(species,level,moves,item,evs,seed,generation,ivs,nature,ability,
             jnp.where(occupied,generic.hidden_power(ivs)[1],0),shiny,happiness,name,jnp.zeros((2,6,7),jnp.int32),i32(0),effects.empty_status(),
             jnp.zeros((2,6,len(phase_ops.VOLATILES),phase_ops.VOLATILE_WIDTH),jnp.int32),zeros,zeros,field_ops.empty_weather(),jnp.zeros((2,2,5),jnp.int32),jnp.zeros((2,2,3),jnp.int32),jnp.array(False),jnp.zeros((2,6,3,4),jnp.int32),
             tracking.empty().at[:,:,tracking.NEWLY_SWITCHED].set(occupied.astype(jnp.int32)),
-            jnp.zeros((2,6,tracking.ATTACK_RECORDS,7),jnp.int32),jnp.full((2,2),-1,jnp.int32),jnp.zeros(4,jnp.int32),i32(0),i32(0),jnp.zeros((2,2),jnp.int32),jnp.stack((item,zeros),axis=-1),species,ability,stats,moves,PP[moves],zeros,jnp.zeros((2,6),jnp.bool_),occupied,tables.SPECIES_TYPES[species],ability,jnp.full((2,6),-1,jnp.int32),zeros,called_ops.empty(_engine()),i32(0))
+            jnp.zeros((2,6,tracking.ATTACK_RECORDS,7),jnp.int32),jnp.full((2,2),-1,jnp.int32),jnp.zeros(4,jnp.int32),i32(0),i32(0),jnp.zeros((2,2),jnp.int32),jnp.stack((item,zeros),axis=-1),species,ability,stats,moves,PP[moves],zeros,jnp.zeros((2,6),jnp.bool_),occupied,tables.SPECIES_TYPES[species],ability,jnp.full((2,6),-1,jnp.int32),zeros,called_ops.empty(_engine()),i32(0),zeros)
     return jax.lax.cond(_supported(s,initializing=True),_initialize_events,lambda s:Result(s,i32(UNSUPPORTED),empty_trace()),s)
 
 

@@ -7,6 +7,32 @@ GPU. Preparing this handoff does not run device tests, profiling or benchmarks.
 
 ## Current source and evidence
 
+**Current schema32 candidate is blocked on CPU compilation resources.**
+Preserved on `wip/g4-trace-cpu-memory`; `main` remains at the completed schema31
+checkpoint (`823e3bf`). Trace's
+native contract passes21 cases/26 boundaries, but its focused CPU process was
+killed (exit137) compiling `jit_advance`. The8GiB cgroup reported an OOM kill;
+no CPU parity pass is claimed. See [schema32-wip.json](../test-logs/g4-cpu-conformance/schema32-wip.json).
+Schema31 remains the last completed focused CPU checkpoint. The current runner
+also contains the pending Trace module (candidate93 checks/37 modules,
+1033 scenarios/5107 boundaries); that expansion is **not ready for GPU acceptance**.
+Resolve the CPU compilation growth or supply adequate CPU memory before retrying.
+Do not blindly rerun unchanged source on the same8GiB machine.
+
+After that concrete fix/resource change, run this one focused CPU comparison:
+
+```sh
+JAX_PLATFORMS=cpu OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 XLA_PYTHON_CLIENT_PREALLOCATE=false JAX_ENABLE_COMPILATION_CACHE=false .venv-jax/bin/python -c 'import os,unittest;os.sched_setaffinity(0,sorted(os.sched_getaffinity(0))[:3]);unittest.main(module="test.test_trace_engine",verbosity=2,failfast=True)'
+```
+
+Once that comparison passes, the corresponding device obligation is:
+`JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_trace_engine -v -f`.
+This CUDA command is pending CPU validation; no device run or profiling was done.
+Trace adds saved seek state and journal16, so retain the final migration and
+full/lean execution gates already listed below. Native-only preliminary Mummy
+witnesses are archived under `next-mummy/` in schema32-wip-validation.tar.gz;
+Mummy is not implemented or included in runner counts.
+
 **Schema31 Wonder Guard direct immunity checkpoint:** focused CPU parity passed18
 scenarios/22 boundaries in303.667s; one native contract passed.
 Wonder Guard covers direct immunity ordering, effective Hidden Power type,

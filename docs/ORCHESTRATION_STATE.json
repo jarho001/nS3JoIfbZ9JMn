@@ -538,7 +538,7 @@
       "Schema10 core/journal/hard-turn-limit checkpoint validated on a9d0fbd:3 integrated CPU checks pass in1174.685s, plus5 native/6 helper checks. Complete combat and1000-boundary neutral histories match native; mixed1/8/32,full/lean,core reset,persistence/corruption pass. Full64 suite and full-format G4 pending.",
       "Schema11 trapping/retry checkpoint:8 affected CPU checks plus6 native/6 helper checks pass. New31 scenarios/215 boundaries include two complete six-member games and mirrored private-state episodes. Aggregate558/4110; full68 suite and full-format G4 pending."
     ],
-    "next": "Implement Trace ability lifecycle from pinned native cases, then remaining identity/caller and closure families with focused CPU checks.",
+    "next": "Resolve compilation memory growth from Trace calling ordinary Start inside frequent Update paths; preserve exact callback order and assertions. Do not blindly retry unchanged source on the same8GiB environment. Resume one focused comparison after a concrete structural fix or adequate CPU resources. Then continue Mummy and remaining families.",
     "ledger": {
       "path": "rules/gen5-reachable-v1.json",
       "entries": 1768,
@@ -1098,6 +1098,31 @@
       "consolidate": "Broad eager/JIT/1/8/32, full/lean, lifecycle and historical regression suites at agreed milestone checkpoints.",
       "acceptance": "Final G4 CPU acceptance unchanged; unrun checks remain pending.",
       "resume": "User authorized finishing Substitute with reduced validation; focused pass completed, broad gate not restarted."
+    },
+    "implementation_wip": {
+      "family": "Trace Start/Update lifecycle",
+      "source_base": "823e3bf",
+      "candidate_schema": 32,
+      "core_journal_schema": 16,
+      "native_cases": 21,
+      "native_boundaries": 26,
+      "native_fixture": "test-logs/g4-cpu-conformance/trace.json.gz",
+      "CPU_status": "killed while compiling jit_advance; no parity result",
+      "command_log": "work/g4-trace/cpu.log",
+      "native_contract": "1 passed; work/g4-trace/native-contract.log",
+      "next": "Resolve compilation memory growth from Trace calling ordinary Start inside frequent Update paths; preserve exact callback order and assertions. Do not blindly retry unchanged source on the same8GiB environment. Resume one focused comparison after a concrete structural fix or adequate CPU resources. Then continue Mummy and remaining families.",
+      "evidence": "test-logs/g4-cpu-conformance/schema32-wip.json",
+      "CPU_exit_code": 137,
+      "cgroup_memory_max_bytes": 8589934592
+    },
+    "cpu_block": {
+      "status": "awaiting_compilation_memory_fix_or_resources",
+      "evidence": "test-logs/g4-cpu-conformance/schema32-wip.json",
+      "source_base": "823e3bf",
+      "native_contract_passed": true,
+      "CPU_parity_passed": false,
+      "retry_unchanged_source": false,
+      "preserved_branch": "wip/g4-trace-cpu-memory"
     }
   },
   "optional_gpu_validation_history": [
@@ -2057,6 +2082,16 @@
       "source_commit": "Publishing commit; exact runtime fingerprints in schema31-checkpoint.json",
       "source_identity": "test-logs/g4-cpu-conformance/schema31-checkpoint.json",
       "checks": 92
+    },
+    "pending_candidate": {
+      "engine_schema": 32,
+      "status": "CPU_resource_blocked_not_GPU_ready",
+      "evidence": "test-logs/g4-cpu-conformance/schema32-wip.json",
+      "runner_includes_pending_module": "test.test_trace_engine",
+      "candidate_modules": 37,
+      "candidate_checks": 93,
+      "candidate_native_scenarios": 1033,
+      "candidate_native_boundaries": 5107
     }
   }
 }

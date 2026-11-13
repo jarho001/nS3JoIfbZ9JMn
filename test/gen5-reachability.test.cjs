@@ -59,8 +59,8 @@ test('pinned resolved export and conservative inventory reproduce exactly',()=>{
     const cb=slots.get(id);assert.equal(cb.status,'unsupported');assert.equal(cb.implementation,null);
   }
   assert.ok(ledger.callbacks.every(c=>['partial','unsupported'].includes(c.status)));
-  assert.equal(ledger.callbacks.filter(c=>c.status==='partial').length,268);
-  assert.equal(ledger.callbacks.filter(c=>c.status==='unsupported').length,878);
+  assert.equal(ledger.callbacks.filter(c=>c.status==='partial').length,270);
+  assert.equal(ledger.callbacks.filter(c=>c.status==='unsupported').length,876);
   // Existing native users must not contaminate raw owner provenance.
   require('../reference/vendor/pokemon-showdown/dist/sim').Dex.mod('gen5').moves.all();
   assert.deepEqual(inventory(),{data,ledger});

@@ -5541,10 +5541,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/trace.json.gz",
+          "native": "reference/trace-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_trace_engine.py"
+        }
+      ],
       "field": "onStart",
       "id": "abilities:trace:onStart",
-      "implementation": null,
+      "implementation": {
+        "family": "trace",
+        "file": "simulator/trace_ability.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:trace",
@@ -5555,7 +5567,7 @@
       "owner": "abilities:trace",
       "reachability": "candidate",
       "sha256": "dffd06eba4ed50b18423cba7fbaabb9b77bc3ed7b801dfc31ebe1febd3900f75",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -5564,10 +5576,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/trace.json.gz",
+          "native": "reference/trace-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_trace_engine.py"
+        }
+      ],
       "field": "onUpdate",
       "id": "abilities:trace:onUpdate",
-      "implementation": null,
+      "implementation": {
+        "family": "trace",
+        "file": "simulator/trace_ability.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:trace",
@@ -5578,7 +5602,7 @@
       "owner": "abilities:trace",
       "reachability": "candidate",
       "sha256": "0b552b1b9361cb2c849c0e3c0cea59760c6ebe1ea0e05385675f77c80d56b0ef",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -72921,10 +72945,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/trace.json.gz",
+          "native": "reference/trace-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_trace_engine.py"
         }
       ],
       "id": "abilities:trace",
       "implementation": {
+        "behavior": {
+          "family": "trace",
+          "file": "simulator/trace_ability.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"

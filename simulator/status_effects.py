@@ -19,7 +19,7 @@ def activate(c,side,e):
     order=order+(s.ability[side,m]>0).astype(jnp.int32)
     item=jnp.where(s.item[side,m]>0,order,0)
     order=order+(s.item[side,m]>0).astype(jnp.int32)
-    return s._replace(effect_order=order,ability_order=s.ability_order.at[side,m].set(ability),ability_effect_id=s.ability_effect_id.at[side,m].set(s.ability[side,m]),
+    return s._replace(ability_seek=s.ability_seek.at[side,m].set(0),effect_order=order,ability_order=s.ability_order.at[side,m].set(ability),ability_effect_id=s.ability_effect_id.at[side,m].set(s.ability[side,m]),
                       item_order=s.item_order.at[side,m].set(item)),t
 
 

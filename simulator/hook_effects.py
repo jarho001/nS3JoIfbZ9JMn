@@ -106,7 +106,7 @@ def damage_modifier(c,actor,target,physical,critical,exponent,e,move):
     return c,modifier
 
 
-def ability_start(c,side,e,initial=False):
+def ordinary_ability_start(c,side,e,initial=False):
     s,t=c;m=s.active[side];ability=suppression_ops.abilities(s)[side,m];weather=h.ABILITY_WEATHER[ability]
     c=e._when((ability==h.A['pressure'])|((ability==h.A['intimidate'])&(s.hp[1-side,s.active[1-side]]>0)),
         lambda c:e._event(c,e.REVEAL,side,m,value=ability,aux=(ability==h.A['intimidate']).astype(jnp.int32)),c)
@@ -129,6 +129,11 @@ def ability_start(c,side,e,initial=False):
         return e.form_ops.weather_change(c,e,context)
     c=e._when((weather>0)&((c[0].weather_state[0]!=weather)|(c[0].weather_state[4]>0)),set_weather,c)
     return e.form_ops.change(c,side,e)
+
+
+def ability_start(c,side,e,initial=False):
+    s,_=c;mon=s.active[side]
+    return e.jax.lax.cond((suppression_ops.abilities(s)[side,mon]==e.trace_ops.TRACE)&(s.hp[side,mon]>0),lambda c:e.trace_ops.start(c,side,e,initial=initial),lambda c:ordinary_ability_start(c,side,e,initial=initial),c)
 
 
 def start(c,side,e,initial=False):
