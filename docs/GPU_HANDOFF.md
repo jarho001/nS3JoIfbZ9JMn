@@ -7,6 +7,16 @@ GPU. Preparing this handoff does not run device tests, profiling or benchmarks.
 
 ## Current source and evidence
 
+**Schema25 Own Tempo and Yawn checkpoint:** focused CPU parity passed18
+scenarios/36 boundaries in214.526s; one native contract passed.
+Delayed Yawn sleep retains the original caster through switching. Own Tempo
+block/cure/fatigue, Sleep Clause, immunity/Lum and live NPZ/journal12 persistence
+are covered.
+See [schema25-checkpoint.json](../test-logs/g4-cpu-conformance/schema25-checkpoint.json).
+The runner includes `test.test_sleep_control_engine` and the `sleepcontrol` batch.
+Isolated replay: `JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_sleep_control_engine -v -f`.
+Broad execution/migration and current runner preparation remain pending.
+
 **Schema24 Gastro Acid suppression checkpoint:** focused CPU parity passed23
 scenarios/47 boundaries in195.494s; one native contract passed.
 Raw/base ability is retained while modifiers/callbacks are suppressed. PP,
@@ -188,8 +198,8 @@ The entire matching-source 61-check suite has not been repeated. Historical
 schema8 results remain in
 [schema8-checkpoint.json](../test-logs/g4-cpu-conformance/schema8-checkpoint.json).
 
-The expanded runner expects **85 checks in 29 isolated modules**, using 24
-independent native corpora: **878 scenarios / 4856 boundaries**, including
+The expanded runner expects **86 checks in 30 isolated modules**, using 25
+independent native corpora: **896 scenarios / 4892 boundaries**, including
 32 complete constructed six-member combat games (plus the neutral switch-only
 turn-limit game and eight historical three-member games). The 73 phase scenarios are in
 `test.test_lock_phase_engine`. The runner recaptures causal state for the prior
@@ -255,7 +265,7 @@ the combined block below:
 2. Freezes all sixteen legacy/current corpora, including move phases, the
    turn-limit witness, trapping/retries, Substitute and partial trapping. Runs the reference/native
    contracts. Unknown/unsupported families stay explicit.
-3. Runs the same current 85-check scope on CPU, then under `JAX_PLATFORMS=cuda`,
+3. Runs the same current 86-check scope on CPU, then under `JAX_PLATFORMS=cuda`,
    with each test module in a fresh process.
    A strict probe verifies actual eager/JIT GPU placement; shared case/lifecycle
    assertions also check device leaves. `cuda` initialization failure is a failure.

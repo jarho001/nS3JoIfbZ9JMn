@@ -2184,10 +2184,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/sleep-control.json.gz",
+          "native": "reference/sleep-control-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_sleep_control_engine.py"
+        }
+      ],
       "field": "onTryAddVolatile",
       "id": "abilities:insomnia:onTryAddVolatile",
-      "implementation": null,
+      "implementation": {
+        "family": "sleep_control",
+        "file": "simulator/sleep_control.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:insomnia",
@@ -2198,7 +2210,7 @@
       "owner": "abilities:insomnia",
       "reachability": "candidate",
       "sha256": "92ed56763735840830c5c7f27bd89d4488d7f5bda8c51b184862c6394e7d0fab",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -3328,10 +3340,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/sleep-control.json.gz",
+          "native": "reference/sleep-control-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_sleep_control_engine.py"
+        }
+      ],
       "field": "onHit",
       "id": "abilities:owntempo:onHit",
-      "implementation": null,
+      "implementation": {
+        "family": "sleep_control",
+        "file": "simulator/sleep_control.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:owntempo",
@@ -3342,7 +3366,7 @@
       "owner": "abilities:owntempo",
       "reachability": "candidate",
       "sha256": "e89796b838326e915cb369976ace2a5067a2e05e5ae4270c9870ffb02a101c61",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -3351,10 +3375,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/sleep-control.json.gz",
+          "native": "reference/sleep-control-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_sleep_control_engine.py"
+        }
+      ],
       "field": "onTryAddVolatile",
       "id": "abilities:owntempo:onTryAddVolatile",
-      "implementation": null,
+      "implementation": {
+        "family": "sleep_control",
+        "file": "simulator/sleep_control.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:owntempo",
@@ -3365,7 +3401,7 @@
       "owner": "abilities:owntempo",
       "reachability": "candidate",
       "sha256": "7d81c3354002da0207a13e6a4760b8cdde1607889c9eaca7c2ae471420daf912",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -3374,10 +3410,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/sleep-control.json.gz",
+          "native": "reference/sleep-control-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_sleep_control_engine.py"
+        }
+      ],
       "field": "onUpdate",
       "id": "abilities:owntempo:onUpdate",
-      "implementation": null,
+      "implementation": {
+        "family": "sleep_control",
+        "file": "simulator/sleep_control.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:owntempo",
@@ -3388,7 +3436,7 @@
       "owner": "abilities:owntempo",
       "reachability": "candidate",
       "sha256": "5243847c2cfa47c10e5a335ca923119b4fd02109a52a7d7c052df42cd64486fc",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -5849,10 +5897,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/sleep-control.json.gz",
+          "native": "reference/sleep-control-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_sleep_control_engine.py"
+        }
+      ],
       "field": "onTryAddVolatile",
       "id": "abilities:vitalspirit:onTryAddVolatile",
-      "implementation": null,
+      "implementation": {
+        "family": "sleep_control",
+        "file": "simulator/sleep_control.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:vitalspirit",
@@ -5863,7 +5923,7 @@
       "owner": "abilities:vitalspirit",
       "reachability": "candidate",
       "sha256": "582bf57d1184433a3bc366a5fe101799e334fba1eaa335e3a44d34c14a5be46f",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -28708,10 +28768,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/sleep-control.json.gz",
+          "native": "reference/sleep-control-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_sleep_control_engine.py"
+        }
+      ],
       "field": "condition.onEnd",
       "id": "moves:yawn:condition.onEnd",
-      "implementation": null,
+      "implementation": {
+        "family": "sleep_control",
+        "file": "simulator/sleep_control.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:yawn",
@@ -28722,7 +28794,7 @@
       "owner": "moves:yawn",
       "reachability": "candidate",
       "sha256": "867226c0e8f01f46f5451b91340c5b9997c2016285a075c2debb484c7a4ba276",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -28731,10 +28803,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/sleep-control.json.gz",
+          "native": "reference/sleep-control-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_sleep_control_engine.py"
+        }
+      ],
       "field": "condition.onStart",
       "id": "moves:yawn:condition.onStart",
-      "implementation": null,
+      "implementation": {
+        "family": "sleep_control",
+        "file": "simulator/sleep_control.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:yawn",
@@ -28745,7 +28829,7 @@
       "owner": "moves:yawn",
       "reachability": "candidate",
       "sha256": "dcce52ba6ce353eb36def3f4a0bbcf45791038041b2d73949b7adfc26a06ad30",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -28754,10 +28838,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/sleep-control.json.gz",
+          "native": "reference/sleep-control-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_sleep_control_engine.py"
+        }
+      ],
       "field": "onTryHit",
       "id": "moves:yawn:onTryHit",
-      "implementation": null,
+      "implementation": {
+        "family": "sleep_control",
+        "file": "simulator/sleep_control.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:yawn",
@@ -28768,7 +28864,7 @@
       "owner": "moves:yawn",
       "reachability": "candidate",
       "sha256": "5fe818c48ef1e476df41881a356e5e5fd2f106133afc267ee0da84b9b65504b1",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -67473,10 +67569,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/sleep-control.json.gz",
+          "native": "reference/sleep-control-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_sleep_control_engine.py"
         }
       ],
       "id": "moves:yawn",
       "implementation": {
+        "behavior": {
+          "family": "sleep_control",
+          "file": "simulator/sleep_control.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "MOVE_TYPE/MOVE_POWER/MOVE_CATEGORY/MOVE_PRIORITY/MOVE_PP",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -70479,10 +70587,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/sleep-control.json.gz",
+          "native": "reference/sleep-control-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_sleep_control_engine.py"
         }
       ],
       "id": "abilities:owntempo",
       "implementation": {
+        "behavior": {
+          "family": "sleep_control",
+          "file": "simulator/sleep_control.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"

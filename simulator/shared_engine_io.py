@@ -91,7 +91,7 @@ def project_events(state,trace,audience):
             if kind==e.DAMAGE and move in (11,12,13,14):line+='|[of] '+foe
             if kind==e.HEAL and move:line+='|[silent]' if move==-1 else '|[from] ability: Ice Body' if move==2 else '|[from] drain|[of] '+foe if move==3 else '|[from] item: Leftovers'
         elif kind==e.CRIT:line=f'|-crit|{actor}'
-        elif kind==e.IMMUNE:line=f'|-immune|{actor}'+('|[from] ability: '+e.hook_tables.ABILITY_NAMES[value]if aux==4 else {0:'',1:'|[from] ability: Immunity',2:'|[from] ability: Levitate',3:'|[from] ability: Soundproof'}[aux])
+        elif kind==e.IMMUNE:line=f'|-immune|{actor}'+('|confusion|[from] ability: Own Tempo'if aux==5 else '|[from] ability: '+e.hook_tables.ABILITY_NAMES[value]if aux==4 else {0:'',1:'|[from] ability: Immunity',2:'|[from] ability: Levitate',3:'|[from] ability: Soundproof'}[aux])
         elif kind==e.MISS:line=f'|-miss|{actor}|{foe}'
         elif kind==e.FAINT:line=f'|faint|{actor}'
         elif kind==e.TURN_WARNING:
@@ -101,6 +101,8 @@ def project_events(state,trace,audience):
         elif kind==e.WIN:line=f'|win|p{value}' if value else '|tie'
         elif kind==e.TURN:line=f'|turn|{value}'
         elif kind==e.UPKEEP:line='|upkeep'
+        elif kind==e.YAWN_START:line=f'|-start|{actor}|move: Yawn|[of] {foe}'
+        elif kind==e.YAWN_END:line=f'|-end|{actor}|move: Yawn|[silent]'
         elif kind==e.SUPPRESS_ABILITY:line=f'|-endability|{actor}'
         elif kind==e.STATUS_ABILITY:line=f'|-activate|{actor}|ability: '+e.hook_tables.ABILITY_NAMES[value]
         elif kind==e.REST_ABILITY:line=f'|-fail|{actor}|[from] ability: '+e.hook_tables.ABILITY_NAMES[value]+f'|[of] {actor}'
@@ -208,12 +210,12 @@ def load_state(path,*,schema=None,replayed_state=None):
         stored=int(saved['schema']) if 'schema' in saved else None
         if schema is not None and stored is not None and stored!=schema:raise ValueError('schema mismatch')
         version=stored if schema is None else schema
-        if version not in (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24):raise ValueError('explicit supported state schema required')
+        if version not in (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25):raise ValueError('explicit supported state schema required')
         fields={k:jnp.asarray(saved[k]) for k in saved.files if k not in ('schema','data_sha256')}
-        if version in (3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24):
+        if version in (3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25):
             if 'data_sha256' not in saved or str(saved['data_sha256'])!=generic.DATA_SHA256:
                 raise ValueError('state data table identity mismatch')
-        if version<24 and replayed_state is not None:
+        if version<25 and replayed_state is not None:
             e._validate_structure(replayed_state)
             end='ivs' if version<=2 else 'effect_order' if version==3 else 'weather_state' if version==4 else 'move_history' if version<9 else 'request_state'
             expected=set(e.State._fields if version>=21 else e.State._fields[:e.State._fields.index('ability_staleness')] if version>=18 else e.State._fields[:e.State._fields.index('illusion')] if version==17 else e.State._fields[:e.State._fields.index('base_species')] if version==16 else e.State._fields[:e.State._fields.index('item_provenance')] if version>=11 else e.State._fields[:e.State._fields.index(end)])
@@ -226,7 +228,7 @@ def load_state(path,*,schema=None,replayed_state=None):
                     if old.shape!=(2,6,slots,6):raise ValueError('invalid legacy volatile shape for replay')
                     replay=replay[:,:,:slots,:6]
                 elif key=='volatile_state':
-                    replay=replay[:,:,:24 if version>=20 else 23 if version>=15 else 22 if version>=13 else 21 if version==12 else 20,:]
+                    replay=replay[:,:,:25 if version>=24 else 24 if version>=20 else 23 if version>=15 else 22 if version>=13 else 21 if version==12 else 20,:]
                 if key=='history' and version<18:replay=replay[:,:10]
                 if key=='action_state' and version<15:replay=replay[:,:,:21]
                 if old.shape!=replay.shape or old.dtype!=replay.dtype or not np.array_equal(old,replay):
@@ -316,9 +318,9 @@ def load_state(path,*,schema=None,replayed_state=None):
             if np.any(np.asarray(e.trap_ops.QUERY)[species]) or np.any(np.asarray(e.trap_ops.ABILITY_IMPLEMENTED)[ability]):
                 raise ValueError('legacy trapping/disclosure requires replay/provenance')
             fields['request_state']=jnp.zeros((2,2),jnp.int32)
-        if 9<=version<24:
+        if 9<=version<25:
             v=fields['volatile_state']
-            slots=24 if version>=20 else 23 if version>=15 else 22 if version>=13 else 21 if version==12 else 20
+            slots=25 if version>=24 else 24 if version>=20 else 23 if version>=15 else 22 if version>=13 else 21 if version==12 else 20
             if v.shape!=(2,6,slots,e.phase_ops.VOLATILE_WIDTH):raise ValueError('invalid legacy volatile shape')
             fields['volatile_state']=jnp.pad(v,((0,0),(0,0),(0,len(e.phase_ops.VOLATILES)-slots),(0,0)))
         if 9<=version<15:
@@ -369,6 +371,7 @@ def effect_states(state,side,mon):
         if source_kind==e.phase_ops.SOURCE_ABILITY:row['sourceEffect']={'$effect':e.ABILITIES[move],'type':'Ability'}
         if kind==e.phase_ops.VOLATILE_IDS['zenmode']:row['name']='Zen Mode'
         if kind==e.phase_ops.VOLATILE_IDS['gastroacid']:row['name']='Gastro Acid'
+        if kind==e.phase_ops.VOLATILE_IDS['yawn']:row.update(name='Yawn',duration=time)
         if source_kind==e.phase_ops.SOURCE_CONDITION:row['sourceEffect']={'$effect':e.phase_ops.VOLATILES[move],'type':'Condition'}
         if move>0 and source_kind==e.phase_ops.SOURCE_MOVE:row['sourceEffect']={'$effect':e.MOVE_KEYS[move],'type':'Move'}
         if move<0:row['sourceEffect']={'$effect':e.ITEMS[-move],'type':'Item'}
@@ -389,7 +392,7 @@ def effect_states(state,side,mon):
         if 15<=kind<=18:
             row['name']=e.MOVE_NAMES[tables.MOVE_IDS[key]]
             if kind!=18:row['duration']=time
-            if kind in (16,17,18,19,20,21,22,23,24):row['move']=e.MOVE_KEYS[int(s.volatile_state[side,mon,kind,7])]
+            if kind in (16,17,18,19,20,21,22,23,24,25):row['move']=e.MOVE_KEYS[int(s.volatile_state[side,mon,kind,7])]
         volatiles[key]=row
     return {'statusState':status,'volatiles':volatiles,
         'abilityState':{'id':e.ABILITIES[int(s.ability_effect_id[side,mon])],'effectOrder':int(s.ability_order[side,mon]),'target':target},

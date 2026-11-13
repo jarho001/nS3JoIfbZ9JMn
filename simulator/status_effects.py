@@ -64,8 +64,8 @@ def sleep_switch(c,side,e):
     return s._replace(status_state=s.status_state.at[side,m].set(meta)),t
 
 
-def inflict(c,source,target,status,e,reflect=True,move=0,secondary=False,overwrite=False):
-    s,t=c;m=s.active[target];sm=s.active[source];ability=e.suppression_ops.abilities(s)[target,m]
+def inflict(c,source,target,status,e,reflect=True,move=0,secondary=False,overwrite=False,source_mon=None):
+    s,t=c;m=s.active[target];sm=s.active[source]if source_mon is None else source_mon;ability=e.suppression_ops.abilities(s)[target,m]
     poison=jnp.any((s.types[target,m]==e.generic.TYPES['poison'])|(s.types[target,m]==e.generic.TYPES['steel']))
     fire=jnp.any(s.types[target,m]==e.generic.TYPES['fire'])
     ice=jnp.any(s.types[target,m]==e.generic.TYPES['ice'])
@@ -137,7 +137,9 @@ def confuse(c,actor,target,move,e,*,fatigue=False):
         c,value=e._draw(c,2,6,e.CONF_DURATION,2);s,t=c
         c=(s._replace(volatile_state=s.volatile_state.at[target,m,2,5].set(value.astype(jnp.int32))),t)
         return e._when(s.item[target,m]==2,lambda c:lum(c,target,e),c)
-    return jax.lax.cond(s.volatile_state[target,m,2,0]>0,fail,success,c)
+    immune=e.suppression_ops.abilities(s)[target,m]==e.sleep_ops.OWN
+    def blocked(c):return c if fatigue else e._event(c,e.IMMUNE,target,m,aux=5)
+    return jax.lax.cond(immune,blocked,lambda c:jax.lax.cond(s.volatile_state[target,m,2,0]>0,fail,success,c),c)
 
 
 def secondary(c,actor,move,e):

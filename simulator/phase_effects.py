@@ -2,7 +2,7 @@
 import jax.numpy as jnp
 from . import gen5_engine_tables as t
 
-VOLATILES=('protect','stall','confusion','choicelock','mustrecharge','lockedmove','twoturnmove','solarbeam','skyattack','skullbash','razorwind','fly','dig','dive','bounce','taunt','encore','disable','torment','flinch','substitute','partiallytrapped','pursuit','zenmode','gastroacid')
+VOLATILES=('protect','stall','confusion','choicelock','mustrecharge','lockedmove','twoturnmove','solarbeam','skyattack','skullbash','razorwind','fly','dig','dive','bounce','taunt','encore','disable','torment','flinch','substitute','partiallytrapped','pursuit','zenmode','gastroacid','yawn')
 VOLATILE_IDS={key:i for i,key in enumerate(VOLATILES)}
 VOLATILE_WIDTH=12
 SOURCE_MOVE,SOURCE_ITEM,SOURCE_CONDITION,SOURCE_EMPTY,SOURCE_ABILITY=1,2,3,4,5
@@ -36,7 +36,7 @@ FLINCH_CHANCE=t.mv(lambda row:(row.get('secondary') or {}).get('chance',0) if (r
 RESTRICTIONS=('taunt','encore','disable','torment')
 RESTRICTION=t.mv(lambda row:VOLATILE_IDS.get(row['id'],0) if row['id'] in RESTRICTIONS else 0)
 ENCORE_BLOCKED=t.mv(lambda row:bool(row.get('flags',{}).get('failencore'))).astype(jnp.bool_)
-RESIDUAL_ORDER=jnp.asarray([15 if key=='taunt' else 16 if key=='encore' else 17 if key=='disable' else 13 if key=='partiallytrapped' else 10000 for key in VOLATILES],jnp.int32)
+RESIDUAL_ORDER=jnp.asarray([15 if key=='taunt' else 16 if key=='encore' else 17 if key=='disable' else 23 if key=='yawn' else 13 if key=='partiallytrapped' else 10000 for key in VOLATILES],jnp.int32)
 POWER_HERB=t.ITEM_IDS['powerherb']
 ITEM_IMPLEMENTED=jnp.asarray([key=='powerherb' for key in t.ITEMS],jnp.bool_)
 
@@ -161,6 +161,10 @@ def valid_phases(s):
             fields=(row[:,:,6]==SOURCE_MOVE)&(row[:,:,4]==t.MOVE_IDS[VOLATILES[kind]])
             fields=fields&((row[:,:,5]>=1)&(row[:,:,5]<=5) if kind!=18 else row[:,:,5]==0)
             if kind in (16,17):fields=fields&(row[:,:,7]>0)&(row[:,:,7]<len(t.MOVE_KEYS))
+        elif kind==VOLATILE_IDS['yawn']:
+            fields=(row[:,:,6]==SOURCE_MOVE)&(row[:,:,4]==t.MOVE_IDS['yawn'])&(row[:,:,5]>=1)&(row[:,:,5]<=2)&jnp.all(row[:,:,7:]==0,axis=-1)
+            source=jnp.clip(row[:,:,2],0,1);sm=jnp.clip(row[:,:,3],0,5)
+            fields=fields&(row[:,:,2]>=0)&(row[:,:,2]<2)&(row[:,:,3]>=0)&(row[:,:,3]<6)&(s.species[source,sm]>0)
         elif kind==VOLATILE_IDS['gastroacid']:
             fields=(row[:,:,6]==SOURCE_MOVE)&(row[:,:,4]==t.MOVE_IDS['gastroacid'])&(row[:,:,5]==0)&jnp.all(row[:,:,7:]==0,axis=-1)
             source=jnp.clip(row[:,:,2],0,1);sm=jnp.clip(row[:,:,3],0,5)

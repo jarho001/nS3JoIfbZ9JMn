@@ -14,7 +14,7 @@ Full-format G4
 coverage remains separate acceptance work. Historical evidence keeps its original
 source/schema identity; it does not imply validation of later engine changes.
 
-The current runtime uses [schema 24](../rules/shared-engine-v24.json). Schemas
+The current runtime uses [schema 25](../rules/shared-engine-v25.json). Schemas
 4–6 integrated major statuses and effect provenance, boosts/weather/screens,
 and observed ability/item hooks. Schema7 adds declarative hit counts, per-hit
 updates, capped drain/recoil arithmetic, self-destruction and reactive damage.
@@ -645,3 +645,10 @@ private requests retain raw identity. Ability End still runs, including Illusion
 reveal and Zen Mode reversion. Copied abilities remain suppressed until the
 volatile clears. Slot24 and journal11 bind continuation. Focused23/47 CPU parity
 passes; Baton Pass Copy, broad regressions and full-format acceptance remain open.
+
+Schema25 adds Own Tempo and Yawn. Primary confusion immunity emits its native
+disclosure; fatigue prevention is silent, and acquisition removes confusion in
+Update. Gen5 Own Tempo still permits Intimidate. Yawn runs in residual order23
+and retains its original caster even after switching; its sleep transition uses
+the shared status/Sleep Clause/Lum path. Slot25 and journal12 bind continuation.
+Focused18/36 CPU parity passes; broad regressions and full G4 remain pending.

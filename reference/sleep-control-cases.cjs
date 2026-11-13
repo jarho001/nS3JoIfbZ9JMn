@@ -1,0 +1,22 @@
+'use strict';
+module.exports=function(){
+ const m=(species,moves,extra={})=>({species,moves,ability:'Pressure',item:'',level:50,nature:'Hardy',gender:'M',ivs:{hp:31,atk:31,def:31,spa:31,spd:31,spe:31},evs:{hp:0,atk:0,def:0,spa:0,spd:0,spe:0},...extra});
+ const b=(a=1,c=1)=>({p1:`move ${a}`,p2:`move ${c}`}),cases=[],add=(id,x={})=>cases.push({id:'G4-sleep-control-'+id,seed:1,generic:true,identityFamily:true,abilityChangeFamily:true,sleepControlFamily:true,hitFamily:true,p1:[m('Mew',['Yawn','Tackle'],{evs:{spe:252}}),m('Mew',['Tackle'])],p2:[m('Mew',['Tackle','Recover']),m('Mew',['Tackle'])],steps:[b(),b(2),b(2)],...x});
+ add('yawn');add('repeat',{steps:[b(),b(),b(2)]});
+ for(const ability of ['Insomnia','Vital Spirit'])add(ability,{p2:[m('Mew',['Tackle'],{ability})],steps:[b()]});
+ add('status',{setup:[{side:'p2',status:'brn'}],steps:[b()]});
+ add('substitute',{p2:[m('Mew',['Substitute'],{evs:{spe:252},nature:'Timid'})],steps:[b()]});
+ add('protect',{p2:[m('Mew',['Protect'])],steps:[b()]});
+ add('source-switch',{steps:[b(),{p1:'switch 2',p2:'move 1'},b()]});
+ add('target-switch',{steps:[b(),{p1:'move 2',p2:'switch 2'},b(2)]});
+ add('later-status',{p1:[m('Mew',['Yawn','Toxic'],{evs:{spe:252}})],steps:[b(),b(2)]});
+ add('sleep-immunity-later',{p1:[m('Mew',['Yawn','Worry Seed'],{evs:{spe:252}})],steps:[b(),b(2)]});
+ add('clause',{p1:[m('Mew',['Spore','Yawn'],{evs:{spe:252}})],steps:[b(),{p1:'move 2',p2:'switch 2'},b(2)]});
+ add('lum',{p2:[m('Mew',['Tackle'],{item:'Lum Berry'})],steps:[b(),b(2)]});
+ add('own-block',{p1:[m('Mew',['Confuse Ray'],{evs:{spe:252}})],p2:[m('Mew',['Tackle'],{ability:'Own Tempo'})],steps:[b()]});
+ add('own-acquire',{p1:[m('Mew',['Confuse Ray','Entrainment'],{ability:'Own Tempo',evs:{spe:252}})],steps:[b(),b(2)]});
+ add('own-fatigue',{p1:[m('Mew',['Outrage'],{ability:'Own Tempo',level:1})],p2:[m('Mew',['Recover'])],steps:[b(),b(),b(),b()]});
+ add('own-suppressed',{p1:[m('Mew',['Gastro Acid','Confuse Ray'],{evs:{spe:252}})],p2:[m('Mew',['Tackle'],{ability:'Own Tempo'})],steps:[b(),b(2)]});
+ add('own-intimidate',{p1:[m('Mew',['Tackle'],{ability:'Own Tempo'})],p2:[m('Mew',['Tackle'],{ability:'Intimidate'})],steps:[b()]});
+ return cases;
+};
