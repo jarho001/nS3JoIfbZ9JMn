@@ -22350,10 +22350,22 @@
           "file": "data/mods/gen5/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/magic-coat.json.gz",
+          "native": "reference/magic-coat-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_magic_coat_engine.py"
+        }
+      ],
       "field": "condition.onAllyTryHitSide",
       "id": "moves:magiccoat:condition.onAllyTryHitSide",
-      "implementation": null,
+      "implementation": {
+        "family": "magic_coat",
+        "file": "simulator/called_moves.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:magiccoat",
@@ -22364,7 +22376,7 @@
       "owner": "moves:magiccoat",
       "reachability": "candidate",
       "sha256": "33ed443da0d20682a44c2b046ceece04d4f8cb140a04bc5565869ae791221be8",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -22373,10 +22385,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/magic-coat.json.gz",
+          "native": "reference/magic-coat-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_magic_coat_engine.py"
+        }
+      ],
       "field": "condition.onStart",
       "id": "moves:magiccoat:condition.onStart",
-      "implementation": null,
+      "implementation": {
+        "family": "magic_coat",
+        "file": "simulator/called_moves.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:magiccoat",
@@ -22387,7 +22411,7 @@
       "owner": "moves:magiccoat",
       "reachability": "candidate",
       "sha256": "0d2ffc1bba537611023d110af32b29a6c322ad293d94c2e9ef0563d913b07094",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -22396,10 +22420,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/magic-coat.json.gz",
+          "native": "reference/magic-coat-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_magic_coat_engine.py"
+        }
+      ],
       "field": "condition.onTryHit",
       "id": "moves:magiccoat:condition.onTryHit",
-      "implementation": null,
+      "implementation": {
+        "family": "magic_coat",
+        "file": "simulator/called_moves.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:magiccoat",
@@ -22410,7 +22446,7 @@
       "owner": "moves:magiccoat",
       "reachability": "candidate",
       "sha256": "62b8f916a365921fbf7230cd47dd591db293f96577d37ed831cd690f05e96843",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -59031,10 +59067,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/magic-coat.json.gz",
+          "native": "reference/magic-coat-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_magic_coat_engine.py"
         }
       ],
       "id": "moves:magiccoat",
       "implementation": {
+        "behavior": {
+          "family": "magic_coat",
+          "file": "simulator/called_moves.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "MOVE_TYPE/MOVE_POWER/MOVE_CATEGORY/MOVE_PRIORITY/MOVE_PP",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"

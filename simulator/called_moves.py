@@ -7,7 +7,7 @@ SLEEP_TALK=t.MOVE_IDS['sleeptalk'];NATURE_POWER=t.MOVE_IDS['naturepower'];COPYCA
 MOVE,ACTOR,MON,TARGET,TM,SOURCE_KIND,SOURCE_ID,LOCATION,SLOT,MODE,PHASE,ROOT_MOVE,ROOT_SLOT,LOCKED,TAG,FLAGS=range(16)
 PREVIOUS_MOVE=16
 FIELDS=('call_frames','call_depth')
-MOVE_IMPLEMENTED=jnp.asarray([k in ('sleeptalk','naturepower','copycat','mirrormove')for k in t.MOVE_KEYS],jnp.bool_)
+MOVE_IMPLEMENTED=jnp.asarray([k in ('sleeptalk','naturepower','copycat','mirrormove','magiccoat')for k in t.MOVE_KEYS],jnp.bool_)
 ELIGIBLE=t.mv(lambda r:not(r.get('flags',{}).get('nosleeptalk')or r.get('flags',{}).get('charge'))).astype(jnp.bool_).at[0].set(False)
 
 def empty(e):return jnp.zeros((FRAMES,WIDTH),jnp.int32)
@@ -23,9 +23,9 @@ def pop(c):
     s,tr=c;n=s.call_depth-1
     return s._replace(call_frames=s.call_frames.at[n].set(0),call_depth=n),tr
 
-def root(c,actor,mon,move,location,slot,locked,tag,previous,e):
+def root(c,actor,mon,move,location,slot,locked,tag,previous,e,prankster=False):
     s,_=c;target=jnp.where(e.MOVE_ACTOR_TARGET[move],actor,1-actor)
-    frame=jnp.stack([e.i32(v)for v in (move,actor,mon,target,s.active[target],0,0,location,slot,0,0,move,slot,locked,tag,0,*previous)])
+    frame=jnp.stack([e.i32(v)for v in (move,actor,mon,target,s.active[target],0,0,location,slot,0,0,move,slot,locked,tag,e.i32(prankster)*2,*previous)])
     c=push(c,frame,e)
     def condition(c):return(c[0].call_depth>0)&(~c[1].overflow)
     def step(c):
@@ -97,6 +97,7 @@ def call(c,frame,move_row,e):
     return e.jax.lax.cond(frame[MOVE]==NATURE_POWER,lambda c:child(c,frame,e.i32(t.MOVE_IDS['earthquake']),e.i32(-1),e),lambda c:e.jax.lax.cond(frame[MOVE]==COPYCAT,lambda c:copy_move(c,frame,move_row,e),lambda c:sleep_talk(c,frame,move_row,e),c),c)
 
 
+MAGIC_COAT=t.MOVE_IDS['magiccoat'];COAT_SLOT=26;CONDITION_TAG=2000
 MAGIC_BOUNCE=t.ABILITY_IDS['magicbounce']
 ABILITY_IMPLEMENTED=jnp.asarray([k=='magicbounce'for k in t.ABILITIES],jnp.bool_)
 REFLECTABLE=t.mv(lambda r:bool(r.get('flags',{}).get('reflectable'))).astype(jnp.bool_)
@@ -109,9 +110,21 @@ def reflect(c,frame,e):
     protected=s.protected[target,mon]&e.ability_ops.PROTECT[move]
     _,type_immune=e.generic.type_matchup(t.MOVE_TYPE[move],s.types[target,mon])
     denied=(~side_move)&(protected|((move==e.THUNDER_WAVE)&type_immune))
-    allowed=(~denied)&(s.hp[target,mon]>0)&(actor!=target)&REFLECTABLE[move]&(frame[FLAGS]==0)&(e.suppression_ops.abilities(s)[target,mon]==MAGIC_BOUNCE)&(side_move|(~semi))
+    coat=s.volatile_state[target,mon,COAT_SLOT,0]>0
+    enabled=coat|(e.suppression_ops.abilities(s)[target,mon]==MAGIC_BOUNCE)
+    allowed=(~denied)&(s.hp[target,mon]>0)&(actor!=target)&REFLECTABLE[move]&((frame[FLAGS]&1)==0)&enabled&(side_move|(~semi))
     def bounce(c):
         s,tr=c;s=s._replace(call_frames=s.call_frames.at[s.call_depth-1,PHASE].set(3))
-        nested=frame.at[ACTOR].set(target).at[MON].set(mon).at[TARGET].set(actor).at[TM].set(frame[MON]).at[SOURCE_KIND].set(2).at[SOURCE_ID].set(MAGIC_BOUNCE).at[LOCATION].set(1).at[SLOT].set(-1).at[MODE].set(2).at[PHASE].set(0).at[LOCKED].set(0).at[TAG].set(ABILITY_TAG+MAGIC_BOUNCE).at[FLAGS].set(1)
+        nested=frame.at[ACTOR].set(target).at[MON].set(mon).at[TARGET].set(actor).at[TM].set(frame[MON]).at[SOURCE_KIND].set(jnp.where(coat,3,2)).at[SOURCE_ID].set(jnp.where(coat,COAT_SLOT,MAGIC_BOUNCE)).at[LOCATION].set(1).at[SLOT].set(-1).at[MODE].set(2).at[PHASE].set(0).at[LOCKED].set(0).at[TAG].set(jnp.where(coat,CONDITION_TAG+COAT_SLOT,ABILITY_TAG+MAGIC_BOUNCE)).at[FLAGS].set(1+jnp.where(coat&(~side_move),2*s.volatile_state[target,mon,COAT_SLOT,10],0))
         return push((s,tr),nested,e)
     return e._when(allowed,bounce,c),allowed
+
+
+def coat(c,frame,e):
+    actor=frame[ACTOR];mon=frame[MON]
+    c=e.effects.add_volatile(c,actor,COAT_SLOT,actor,MAGIC_COAT,e)
+    s,tr=c;row=s.volatile_state[actor,mon,COAT_SLOT].at[5].set(1).at[10].set((frame[FLAGS]&2)//2)
+    c=(s._replace(volatile_state=s.volatile_state.at[actor,mon,COAT_SLOT].set(row)),tr)
+    c=e._event(c,e.SINGLE,actor,mon,move=MAGIC_COAT)
+    c=e.tracking.outcome(c,actor,e.i32(e.tracking.TRUE),MAGIC_COAT)
+    return e._update(e._update(c,e.HIT_UPDATE),e.HIT_UPDATE)

@@ -1,0 +1,325 @@
+{
+  "schema_version": 30,
+  "id": "gen5-shared-singles-v30",
+  "reference_commit": "1242c1e2d9763ba5b85d33f13aecb89bae19ae3d",
+  "native_format": "gen5randombattle",
+  "status": "G4 implementation in progress; full-format conformance pending",
+  "data": "gen5-data-v1.json",
+  "ledger": "gen5-reachable-v1.json",
+  "table_namespace": "Preserve schema 1/2 species/move/item IDs; append remaining canonical resolved-data entries in export order. Ability IDs 0 empty, 1 synchronize, 2 immunity, 3 levitate, then remaining canonical data IDs.",
+  "storage": {
+    "sides": 2,
+    "roster_slots": 6,
+    "move_slots": 4,
+    "queue_rows": 8,
+    "events_per_advance": 128,
+    "draws_per_advance": 128,
+    "history_events": 2048,
+    "new_fields": {
+      "ivs": "int32[2,6,6]",
+      "evs": "int32[2,6,6]",
+      "nature": "int32[2,6], gen5-data nature ID",
+      "ability": "int32[2,6]",
+      "types": "int32[2,6,2], gen5-data type IDs; zero masks missing type",
+      "hp_type": "int32[2,6], gen5-data type ID",
+      "hp_power": "int32[2,6]",
+      "shiny": "bool[2,6]",
+      "happiness": "int32[2,6]",
+      "name": "int32[2,6], species-name ID for current generated base-species nicknames",
+      "boosts": "int32[2,6,7], atk/def/spa/spd/spe/accuracy/evasion",
+      "effect_order": "int32 scalar; native global creation order",
+      "status_state": "int32[2,6,7]: id/order/source-side/source-mon/target-present/time/startTime; -1 marks absent timer/source",
+      "volatile_state": "int32[2,6,27,12]: presence/order/source-side/source-mon/source-effect/time/source-kind/move/true-duration/target-location/aux/reserved. First five slot IDs preserved; source kinds Move/Item/Condition/empty are explicit.",
+      "ability_order": "int32[2,6]",
+      "item_order": "int32[2,6]",
+      "weather_state": "int32[6]: id/source-side/source-mon/source-move/duration/target-present",
+      "screens": "int32[2,2,5]: duration/source-side/source-mon/source-move/effectOrder",
+      "hazard_meta": "int32[2,2,3]: effectOrder/source-side/source-mon",
+      "sleep_clause_target": "bool scalar: SetStatus has invoked the field rule handler",
+      "move_history": "int32[2,6,3,4]: lastMove/lastMoveEncore/lastMoveUsed snapshots of id/type/category/basePower",
+      "action_state": "int32[2,6,24]: columns in simulator/battle_tracking.py; typed move results and undefined target location remain distinct from native null/false/true and self -1.",
+      "attacked_by": "int32[2,6,1024,7]: ordered source-side/source-mon/move/damage/thisTurn/value-kind/value; cursor in action_state",
+      "side_faints": "int32[2,2]: native current/previous-turn faint mon refs; -1 null",
+      "battle_move": "int32[4]: native battle.lastMove snapshot",
+      "battle_success": "int32 scalar: lastSuccessfulMoveThisTurn; 0 null",
+      "battle_damage": "int32 scalar: native battle.lastDamage",
+      "request_state": "int32[2,2]: per-side trap disclosed/cannot undo accepted speculative switch",
+      "item_provenance": "int32[2,6,2]: immutable initial item; pendingStaleness0 undefined/1 internal/2 external"
+    },
+    "capacity_audit": "History2048 remains insufficient for full G4. Ordered attack1024 bound is explicit and atomically guarded; full turn/call/history capacity audit remains pending."
+  },
+  "initialization": "make_state retains the frozen custom-set input contract; make_gen5_state decodes general sets and atomically diagnoses unsupported handlers before RNG/event mutation.",
+  "capabilities": "Complete immutable tables are distinct from MOVE_IMPLEMENTED and species/ability/item callback preflight. Current masks are partial implementation progress, not a reduced goal or reachability proof.",
+  "serialization": "Schema11 appends request_state. Legacy9/10 trapping/query-species states need independent matching replay; trap-free legacy states use zero disclosure. Core journal schema2 binds private state; schema1 requires matching replay with complete pages.",
+  "execution": "Same shared advance/request/scheduler/trace/rollout/reset functions for legacy and general sets; no native or Python callback fallback.",
+  "pending": [
+    "Remaining reachable data/callback/engine audit and implementation",
+    "Remaining status-related ability/item hooks, field/hooks, complex moves/phases and indirect effects",
+    "Complete generated battles and fixed CPU conformance campaigns",
+    "Capacity and terminal-clause proof",
+    "Later separately scoped GPU correctness"
+  ],
+  "statuses": {
+    "none": 0,
+    "brn": 1,
+    "par": 2,
+    "tox": 3,
+    "fnt": 4,
+    "psn": 5,
+    "slp": 6,
+    "frz": 7
+  },
+  "draw_contexts": [
+    "initialization",
+    "queue-sort",
+    "before-turn",
+    "update",
+    "hit-update",
+    "switch-order",
+    "residual-handlers",
+    "accuracy",
+    "critical",
+    "damage",
+    "paralysis",
+    "stall",
+    "sleep-duration",
+    "freeze",
+    "confusion-duration",
+    "confusion",
+    "confusion-damage",
+    "secondary",
+    "weather-change",
+    "weather-order",
+    "damage-modifiers",
+    "multihit-count",
+    "rampage-duration",
+    "frisk-target",
+    "volatile-duration",
+    "phazing-selection",
+    "sleep-talk-selection"
+  ],
+  "status_capabilities": "Shared scheduler supports sleep/waking/switch reset, freeze/thaw by Fire hits, confusion, ordinary poison, Rest, Sleep Clause, Lum, and plain damaging moves with a single declarative major-status secondary. Other ability/item/move hooks remain explicitly unsupported until implemented.",
+  "field_capabilities": "Declarative self/foe stat boosts with native event order, accuracy/evasion, critical stage bypass and cached Speed timing; move-set Rain/Sun/Sand/Hail with type immunities/damage hooks and weather rocks; Reflect/Light Screen with Light Clay and native handler draws; exact hazard source/order. Weather-affected move callbacks and remaining field/side hooks are pending.",
+  "hook_capabilities": "Observed startup/PP/priority/speed/stat/power/critical/accuracy/final-damage/Choice/LifeOrb/permanent-weather/IceBody branches integrated through the shared scheduler. Remaining callbacks and indirect interactions stay pending.",
+  "hit_capabilities": "Declarative fixed/variable multi-hit, recoil, drain and self-destruction; Skill Link, Rock Head, Rough Skin, Iron Barbs, Rocky Helmet and Liquid Ooze. Native family observed first; exact CPU evidence is recorded separately in ORCHESTRATION_STATE.json. Multiaccuracy, locks and charge remain unsupported. Native Gen5 move-driven self thaw is handled after BeforeMove succeeds; frozen Scald targets remain frozen. Secondary effects precede contact damage and Fire-hit thaw; Gen5 Rapid Spin is skipped after lethal contact damage. Complete callback/interaction audit remains pending.",
+  "phase_capabilities": "Recharge; Outrage/Thrash/Petal Dance duration/restart/fatigue; eight two-turn moves including Power Herb, Sun/Rain Solar Beam, Skull Bash preparation boosts, semi-invulnerability/counter damage/weather immunity; Taunt/Encore/Disable/Torment expiry, override and PP exhaustion; declarative flinch with native BeforeMove precedence. Remaining indirect/ability/item interactions and full closure remain pending.",
+  "history_architecture": {
+    "core_schema": 14,
+    "legacy_history_rows": 2048,
+    "core": "Same transition kernel without history/hcount; external lossless journal",
+    "terminal": "Native turn warnings and hard tie at1001; earlier Endless Battle Clause still pending",
+    "events": {
+      "39": "turn warning; value is new turn",
+      "40": "hard turn-limit message"
+    }
+  },
+  "private_retry": {
+    "code": 7,
+    "trace_private_errors": "int32[2]:0 none,1 unavailable trap with request resend,2 known trap invalid error,3 cannot undo/replace",
+    "episode": "increments on disclosure/pending changes; no battle RNG or action progress",
+    "atomic_combined": "retry episodes isolate one side; ambiguous combined invalid/valid commands remain atomic INVALID",
+    "abilities": [
+      "Shadow Tag",
+      "Arena Trap",
+      "Magnet Pull",
+      "Frisk"
+    ],
+    "known_types_only": "Known/apparent type state supports Transform/Imposter and Illusion; type-changing moves remain unsupported."
+  },
+  "substitute": {
+    "volatile_slot": 20,
+    "hp_column": 7,
+    "creation": "floor(maxHP/4) direct damage, strict hp>maxHP/4",
+    "interception": "Gen5 onTryPrimaryHit; bypasssub only; per absorbed hit recoil and ceil drain; no real-target contact, secondary or attackedBy",
+    "event_id": 42
+  },
+  "partial_trapping": {
+    "slot": 21,
+    "duration_column": 5,
+    "bound_divisor_column": 7,
+    "items": [
+      "bindingband",
+      "gripclaw"
+    ],
+    "events": {
+      "43": "binding activation",
+      "44": "binding end;aux silent",
+      "45": "binding residual damage"
+    },
+    "draw_context": 24,
+    "scope": "Seven declarative Gen5 binding moves; move-blocking traps and phazing remain pending"
+  },
+  "phazing": {
+    "trace_force_switch": "bool[2], cleared after synchronous drag entry before public boundary",
+    "moves": [
+      "roar",
+      "whirlwind",
+      "dragontail",
+      "circlethrow"
+    ],
+    "abilities": [
+      "suctioncups",
+      "soundproof"
+    ],
+    "events": {
+      "46": "drag",
+      "47": "Suction Cups activation"
+    },
+    "selection_context": 25,
+    "entry": "shared synchronous switch-entry callbacks; cancel dragged actor action"
+  },
+  "pursuit": {
+    "volatile_slot": 22,
+    "queue_kind": 7,
+    "order": 5,
+    "action_columns": [
+      "beingCalledBack",
+      "pursuitActivated",
+      "skipPursuit"
+    ],
+    "called_move_event_annotation": 2,
+    "switch_cancel_hint_event": 48,
+    "scope": "Queued Pursuit interception before voluntary switches or pivot prompts; phazing bypasses interception",
+    "finish_queue_kind": 8,
+    "interception": "Queued source Attack with sourceEffect Pursuit plus optional finish-switch work; one shared move dispatcher, no nested full-engine call."
+  },
+  "item_lifecycle": {
+    "moves": [
+      "trick",
+      "switcheroo",
+      "knockoff",
+      "recycle"
+    ],
+    "ability": "stickyhold",
+    "events": {
+      "49": "Trick activation (also Switcheroo, native convention)",
+      "50": "gain item from move",
+      "51": "lose item from move; aux silent"
+    },
+    "scope": "Current supported held-item masks; species-locked/unimplemented item callbacks remain unsupported"
+  },
+  "identity": {
+    "base_fields": [
+      "base_species",
+      "base_ability",
+      "base_stats",
+      "base_moves",
+      "base_pp",
+      "base_used"
+    ],
+    "virtual_fields": [
+      "transformed",
+      "known_type",
+      "apparent_types",
+      "ability_effect_id"
+    ],
+    "event": 52,
+    "moves": [
+      "transform"
+    ],
+    "ability": "imposter",
+    "scope": "Current supported forms/types/items; Illusion, form changes and type-changing moves remain unsupported"
+  },
+  "illusion": {
+    "field": "int32[2,6]: disguise roster index, -1 absent",
+    "events": {
+      "53": "replace/end/Illusion Level Mod hint"
+    },
+    "event_columns": 16,
+    "display": "Per-event actor/target name and species/level/gender/shiny; private requests keep true identity"
+  },
+  "forms": {
+    "abilities": [
+      "forecast",
+      "flowergift"
+    ],
+    "event": 54,
+    "scope": "Weather-driven Castform and Cherrim; nonpermanent effective stats/types, original species requests, switch/faint restoration. Other forms pending."
+  },
+  "trigger_forms": {
+    "moves": [
+      "relicsong"
+    ],
+    "ability": "zenmode",
+    "volatile_slot": 23,
+    "source_kind_ability": 5,
+    "scope": "Meloetta and Darmanitan effective forms, move/HP triggers and restoration. Other species and ability/item identity families pending."
+  },
+  "ability_changes": {
+    "moves": [
+      "roleplay",
+      "skillswap",
+      "entrainment"
+    ],
+    "field": "ability_staleness int32[2,6]:0 undefined/1 external",
+    "events": {
+      "55": "set ability with original and source",
+      "56": "Skill Swap activation"
+    },
+    "scope": "Current supported ability masks; separate base/effective ability and lifecycle callbacks; suppression and ability creation remain pending."
+  },
+  "status_immunity": {
+    "abilities": [
+      "immunity",
+      "limber",
+      "waterveil",
+      "magmaarmor",
+      "insomnia",
+      "vitalspirit"
+    ],
+    "events": {
+      "57": "ability activation before cure",
+      "58": "Rest denied by sleep immunity"
+    },
+    "scope": "Primary/secondary status immunity and speed-ordered Update cures on acquisition; Yawn/confusion/other immunity callbacks remain pending."
+  },
+  "ability_creation": {
+    "moves": [
+      "simplebeam",
+      "worryseed"
+    ],
+    "abilities": [
+      "simple",
+      "contrary"
+    ],
+    "scope": "Native acquisition/immune/End/cure timing and current declarative, Intimidate and Skull Bash boost paths. Suppression and other boost hooks pending."
+  },
+  "suppression": {
+    "move": "gastroacid",
+    "volatile_slot": 24,
+    "event": 59,
+    "scope": "Stored ability and base ability remain intact; shared effective-ability queries disable callbacks/modifiers. Ability End still runs; copy/flags/provenance retain raw identity. Baton Pass Copy and remaining suppression interactions pending."
+  },
+  "sleep_control": {
+    "move": "yawn",
+    "ability": "owntempo",
+    "volatile_slot": 25,
+    "events": {
+      "60": "Yawn start with source",
+      "61": "Yawn silent end"
+    },
+    "scope": "Delayed sleep, status/ability/Substitute/Protect/Sleep Clause/Lum, source switching; Own Tempo block/acquisition/fatigue and Gen5 Intimidate behavior. Remaining indirect interactions pending."
+  },
+  "called_moves": {
+    "moves": [
+      "sleeptalk",
+      "naturepower",
+      "copycat",
+      "mirrormove",
+      "magiccoat"
+    ],
+    "fields": {
+      "call_frames": "int32[8,20]: move/actor/mon/target/target-mon/source-kind/source-ID/original-location/slot/accounting/phase/root-move/root-slot/lock/tag/flags; columns16..19 retain previous completed battle move snapshot",
+      "call_depth": "int32 scalar; frames drain before public boundary"
+    },
+    "dispatcher": "One useMove kernel in explicit frame loop; no recursion or extra queued turn",
+    "accounting": "Root moveUsed/PP/action count; called lastMoveUsed and extra Pressure charge to caller",
+    "event_source": "Negative source tag -(moveID+1) renders caller move; tags>=1000 encode ability source",
+    "capacity": "8 guarded frames is provisional; Sleep Talk alone needs2; full call/reflection closure proof pending",
+    "nature_power": "Gen5 fixed Earthquake through shared child frame; nosleeptalk excludes Nature Power from Sleep Talk selection",
+    "copying": "Copycat uses prior completed battle move; Mirror Move uses target lastMove and onTryHit return phase without parent hit Updates. Forced copied charge/rampage can be absent from own slots.",
+    "forced_queue_action": "action>=12 encodes literal forced move ID as action-12 when absent from own move slots",
+    "reflection": "Magic Bounce uses ability-sourced child frames without Pressure PP, one-bounce flags, no parent hit Updates, original caller result false. Targeted moves respect Protect/type immunity/air; Gen5 side hazards can reflect in air.",
+    "magic_coat": "Slot26 one-turn condition, captures Prankster flag in column10, source Condition event tag>=2000, shares reflection without PP accounting. Root Prankster flag2 and one-bounce flag1 are independent."
+  }
+}

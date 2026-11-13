@@ -48,7 +48,7 @@ import sys
 def _engine():
     return sys.modules[__name__]
 
-SCHEMA = 29
+SCHEMA = 30
 ROSTER, SLOTS, QUEUE, EVENTS, DRAWS, HISTORY = 6, 4, 8, 128, 128, 2048
 OK, PENDING, INVALID, UNSUPPORTED, CAPACITY, TERMINAL, STALE = range(7)
 RETRY=7
@@ -520,7 +520,7 @@ def _attack(c,row):
             s=s._replace(pp=s.pp.at[actor,mon,slot].set(jnp.where((move==STRUGGLE)|locked_before,s.pp[actor,mon,slot],jnp.maximum(0,s.pp[actor,mon,slot]-cost))))
             s=identity_ops.sync(s,actor,_engine())
             tag=jnp.where(row[6]==pursuit_ops.MOVE,2,locked_before.astype(jnp.int32))
-            return called_ops.root((s,t),actor,mon,move,target_loc,slot,locked_before,tag,previous,_engine())
+            return called_ops.root((s,t),actor,mon,move,target_loc,slot,locked_before,tag,previous,_engine(),prankster=(row[4]>tables.PRIORITY[selected])&(tables.CATEGORY[selected]==0))
         return jax.lax.cond(full,cannot,act,c)
     # A queued actor remains tied to its original mon, and cannot act after KO.
     return _when((s.active[actor]==mon)&(s.hp[actor,mon]>0),
@@ -648,13 +648,13 @@ def _use_move(c,frame):
         return jax.lax.cond((field_tables.WEATHER[move]>0)|(field_tables.SCREEN[move]>0),
         lambda c:field_ops.move(c,actor,move,move_row,_engine()),
         lambda c:jax.lax.cond(field_tables.IS_BOOST[move]&(target==actor),
-            lambda c:field_ops.boost(c,actor,target,move,_engine()),ordinary,c),c)
+            lambda c:field_ops.boost(c,actor,target,move,_engine()),lambda c:jax.lax.cond(move==called_ops.MAGIC_COAT,lambda c:called_ops.coat(c,frame,_engine()),ordinary,c),c),c)
     c,charging=jax.lax.cond(phase_ops.CHARGE[move],lambda c:phase_ops.charge(c,actor,move,move_row,_engine(),target_loc=jnp.where(target==actor,-1,1)),lambda c:(c,jnp.array(False)),c)
     move_row=jnp.max(jnp.where((jnp.arange(EVENTS)<c[1].ecount)&((c[1].events[:,0]==EV_MOVE)|(c[1].events[:,0]==ANIM)),jnp.arange(EVENTS),0))
     blocked_rest=(move==REST)&(c[0].status[actor,mon]==SLP)
     c=_when(blocked_rest,lambda c:ability_ops.fail(c,actor,move,move_row,_engine()),c)
     c,reflected=called_ops.reflect(c,frame,_engine())
-    c=_when((~charging)&(~blocked_rest)&(~reflected),lambda c:jax.lax.cond((called_ops.MOVE_IMPLEMENTED[move]&(move!=called_ops.MIRROR_MOVE)),lambda c:called_ops.call(c,frame,move_row,_engine()),resolve_move,c),c)
+    c=_when((~charging)&(~blocked_rest)&(~reflected),lambda c:jax.lax.cond((called_ops.MOVE_IMPLEMENTED[move]&(move!=called_ops.MIRROR_MOVE)&(move!=called_ops.MAGIC_COAT)),lambda c:called_ops.call(c,frame,move_row,_engine()),resolve_move,c),c)
     c=_when(hit_tables.SELF_DESTRUCT[move]&(~c[0].fainted[actor,mon]),lambda c:_faint(c,actor),c)
     c=_when(hit_tables.SELF_DESTRUCT[move]&(c[0].winner<0),lambda c:_win(c,actor),c)
     return phase_ops.after_move(c,actor,_engine())
@@ -867,6 +867,7 @@ def _run_queue(c):
     def step(c):
         s,t=c;row=s.queue[0];kind=row[0]
         s=s._replace(queue=jnp.concatenate((s.queue[1:],jnp.zeros((1,7),jnp.int32))),qcount=s.qcount-1)
+        started_move=(s.active[row[1]]==row[2])&(~s.fainted[row[1],row[2]])
         scheduling=((kind==SWAP)|(kind==INSTANT))&pursuit_ops.eligible(s,row[1],_engine())
         intercepted=(kind==ATTACK)&(row[6]==pursuit_ops.MOVE)
         c=(s,t)
@@ -888,7 +889,7 @@ def _run_queue(c):
         c=phaze_ops.resolve(c,_engine())
         s,t=c
         # A skipped fainted action returns before the native per-action Update.
-        skipped=(kind==ATTACK)&((s.active[row[1]]!=row[2])|s.fainted[row[1],row[2]])
+        skipped=(kind==ATTACK)&((~started_move)|s.fainted[row[1],row[2]])
         next_instant=(s.qcount>0)&(s.queue[0,0]==INSTANT)
         c=_when((s.winner<0)&(~skipped)&(~next_instant)&(~scheduling),lambda c:_update(c,UPDATE),c)
         s,t=c

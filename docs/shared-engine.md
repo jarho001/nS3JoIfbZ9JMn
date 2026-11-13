@@ -14,7 +14,7 @@ Full-format G4
 coverage remains separate acceptance work. Historical evidence keeps its original
 source/schema identity; it does not imply validation of later engine changes.
 
-The current runtime uses [schema 29](../rules/shared-engine-v29.json). Schemas
+The current runtime uses [schema 30](../rules/shared-engine-v30.json). Schemas
 4–6 integrated major statuses and effect provenance, boosts/weather/screens,
 and observed ability/item hooks. Schema7 adds declarative hit counts, per-hit
 updates, capped drain/recoil arithmetic, self-destruction and reactive damage.
@@ -685,3 +685,10 @@ Gen5 hazard reflection in air retain native ordering. Focused22/26 CPU parity
 includes three-frame Sleep Talk and live reflected-phazing persistence. Magic
 Coat, remaining callers, complete frame bounds and broad/final gates remain
 pending.
+
+Schema30 adds Magic Coat as volatile slot26 with one-turn residual expiry.
+Its condition-sourced reflection takes priority over Magic Bounce and keeps
+the distinct native event source. Frame flag bits retain Prankster separately
+from the one-bounce guard; pending pivot saves preserve that condition state.
+Focused18/23 CPU parity and live NPZ/journal15 persistence pass. Remaining
+identity/call closure, frame capacity proof and broad/final gates stay pending.
