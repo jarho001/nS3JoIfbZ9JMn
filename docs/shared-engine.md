@@ -14,7 +14,7 @@ Full-format G4
 coverage remains separate acceptance work. Historical evidence keeps its original
 source/schema identity; it does not imply validation of later engine changes.
 
-The current runtime uses [schema 25](../rules/shared-engine-v25.json). Schemas
+The current runtime uses [schema 26](../rules/shared-engine-v26.json). Schemas
 4–6 integrated major statuses and effect provenance, boosts/weather/screens,
 and observed ability/item hooks. Schema7 adds declarative hit counts, per-hit
 updates, capped drain/recoil arithmetic, self-destruction and reactive damage.
@@ -652,3 +652,12 @@ Update. Gen5 Own Tempo still permits Intimidate. Yawn runs in residual order23
 and retains its original caster even after switching; its sleep transition uses
 the shared status/Sleep Clause/Lum path. Slot25 and journal12 bind continuation.
 Focused18/36 CPU parity passes; broad regressions and full G4 remain pending.
+
+Schema26 moves root and called moves through one useMove kernel and explicit
+active-move frame loop, without Python recursion or another queued turn. Sleep
+Talk retains root action/slot/PP/lastMove while updating called lastMoveUsed and
+charging extra Pressure to the caller. Parent return phases run their native
+hit Updates before a pivot request. Frames drain at public boundaries; journal13
+binds their schema. Native draw classification distinguishes selection from
+nested accuracy/damage/Update draws. Focused20/51 CPU parity passes; the guarded
+eight-frame capacity, remaining call/reflection handlers and broad gates remain open.

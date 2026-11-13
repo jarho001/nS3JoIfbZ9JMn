@@ -25799,10 +25799,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/called-moves.json.gz",
+          "native": "reference/called-move-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_called_move_engine.py"
+        }
+      ],
       "field": "onHit",
       "id": "moves:sleeptalk:onHit",
-      "implementation": null,
+      "implementation": {
+        "family": "called_move",
+        "file": "simulator/called_moves.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:sleeptalk",
@@ -25813,7 +25825,7 @@
       "owner": "moves:sleeptalk",
       "reachability": "candidate",
       "sha256": "d8db421120bb8ec7523a29d2574b7e76a18c2a687070c779770d37d190e32782",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -25822,10 +25834,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/called-moves.json.gz",
+          "native": "reference/called-move-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_called_move_engine.py"
+        }
+      ],
       "field": "onTry",
       "id": "moves:sleeptalk:onTry",
-      "implementation": null,
+      "implementation": {
+        "family": "called_move",
+        "file": "simulator/called_moves.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:sleeptalk",
@@ -25836,7 +25860,7 @@
       "owner": "moves:sleeptalk",
       "reachability": "candidate",
       "sha256": "aef2554ca54ab070bcb041558d16e30eeaa63310c528d71d0c7ab6b40d79542d",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -63909,10 +63933,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/called-moves.json.gz",
+          "native": "reference/called-move-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_called_move_engine.py"
         }
       ],
       "id": "moves:sleeptalk",
       "implementation": {
+        "behavior": {
+          "family": "called_move",
+          "file": "simulator/called_moves.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "MOVE_TYPE/MOVE_POWER/MOVE_CATEGORY/MOVE_PRIORITY/MOVE_PP",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"

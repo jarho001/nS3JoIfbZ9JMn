@@ -157,7 +157,7 @@ def before_move(c,actor,move,e):
     def sleep(c):
         s,t=c;time=s.status_state[actor,m,5]-1
         s=s._replace(status_state=s.status_state.at[actor,m,5].set(time))
-        def asleep(c):return e._event(c,e.CANT,actor,m,status=e.SLP),jnp.array(True)
+        def asleep(c):return e._event(c,e.CANT,actor,m,status=e.SLP),move!=e.called_ops.SLEEP_TALK
         return jax.lax.cond(time<=0,lambda c:(cure(c,actor,e,source=event_source),jnp.array(False)),asleep,(s,t))
     c,blocked=jax.lax.cond(s.status[actor,m]==e.SLP,sleep,lambda c:(c,jnp.array(False)),c)
     def freeze(c):

@@ -84,7 +84,7 @@ class GenericEngineTest(unittest.TestCase):
             same(result.state,attempted.state)
 
     def test_schema_migration_saved_continuation_and_rollouts(self):
-        manifest=json.loads(Path('rules/shared-engine-v25.json').read_text())
+        manifest=json.loads(Path('rules/shared-engine-v26.json').read_text())
         self.assertEqual(manifest['schema_version'],e.SCHEMA)
         self.assertEqual(manifest['reference_commit'],g.PIN)
         self.assertEqual(e.SPECIES[:len(e.LEGACY_SPECIES)],e.LEGACY_SPECIES)
