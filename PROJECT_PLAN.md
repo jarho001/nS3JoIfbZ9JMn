@@ -774,6 +774,13 @@ exhaustive battle histories and all combinations of effects are not required.
 
 ### Acceptance and bounded CPU validation
 
+**Implementation order, 2026-11-13:** Continue reachable mechanic families
+sequentially, with one focused CPU differential per family and narrow regression
+only for a concrete shared-path concern. Defer GPU correctness, broad CPU
+matrices, complete-battle campaigns and profiling until reachable mechanics and
+inventory closure are complete. The gates below remain required; exact deferred
+commands live in [GPU_HANDOFF.md](docs/GPU_HANDOFF.md).
+
 All conditions below are required; never replace a failed start, drop a reachable
 family, weaken equality or turn a harness cap into a native draw.
 

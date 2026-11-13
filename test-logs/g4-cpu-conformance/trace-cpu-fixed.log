@@ -1,0 +1,6 @@
+test_native_trace_start_update_and_seek_state (test.test_trace_engine.TraceEngineTest.test_native_trace_start_update_and_seek_state) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 305.122s
+
+OK

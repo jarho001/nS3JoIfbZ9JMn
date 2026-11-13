@@ -44,6 +44,7 @@ test('pinned resolved export and conservative inventory reproduce exactly',()=>{
   for(const id of ['conditions:slp:onBeforeMove','moves:rest:onHit',
     'moves:reflect:condition.onAnyModifyDamage','conditions:sandstorm:onWeather',
     'abilities:pressure:onDeductPP','abilities:prankster:onModifyPriority',
+    'abilities:immunity:onUpdate','abilities:trace:onStart','abilities:trace:onUpdate',
     'abilities:icebody:onWeather','items:lifeorb:onAfterMoveSecondarySelf',
     'conditions:mustrecharge:onStart','conditions:mustrecharge:onBeforeMove','conditions:choicelock:onStart','conditions:frz:onModifyMove',
     'abilities:skilllink:onModifyMove','abilities:rockhead:onDamage',
@@ -55,7 +56,7 @@ test('pinned resolved export and conservative inventory reproduce exactly',()=>{
     assert.match(cb.implementation.scope,/complete .*validation pending/);
   }
   for(const id of ['conditions:frz:onAfterMoveSecondary',
-    'abilities:immunity:onUpdate','abilities:magicguard:onDamage']) {
+    'abilities:magicguard:onDamage']) {
     const cb=slots.get(id);assert.equal(cb.status,'unsupported');assert.equal(cb.implementation,null);
   }
   assert.ok(ledger.callbacks.every(c=>['partial','unsupported'].includes(c.status)));

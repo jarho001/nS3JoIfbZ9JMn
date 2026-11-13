@@ -1,0 +1,10 @@
+{
+  "command": [
+    ".venv-jax/bin/python",
+    "-c",
+    "import os,unittest;os.sched_setaffinity(0,sorted(os.sched_getaffinity(0))[:3]);unittest.main(module=\"test.test_trace_engine\",verbosity=2,failfast=True)"
+  ],
+  "exit_code": 0,
+  "elapsed_seconds": 310.5781167630048,
+  "max_rss_kib": 7292972
+}

@@ -1,0 +1,10 @@
+✔ pinned resolved export and conservative inventory reproduce exactly (7528.628107ms)
+✔ native Gen5 Trace preserves seek, suppression and delayed copying (2185.014073ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7640.336139

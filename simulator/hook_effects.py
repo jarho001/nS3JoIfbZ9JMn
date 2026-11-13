@@ -133,7 +133,10 @@ def ordinary_ability_start(c,side,e,initial=False):
 
 def ability_start(c,side,e,initial=False):
     s,_=c;mon=s.active[side]
-    return e.jax.lax.cond((suppression_ops.abilities(s)[side,mon]==e.trace_ops.TRACE)&(s.hp[side,mon]>0),lambda c:e.trace_ops.start(c,side,e,initial=initial),lambda c:ordinary_ability_start(c,side,e,initial=initial),c)
+    c=e._when((suppression_ops.abilities(s)[side,mon]==e.trace_ops.TRACE)&(s.hp[side,mon]>0),lambda c:e.trace_ops.start(c,side,e,initial=initial),c)
+    # A Trace with no candidate has no ordinary Start effect. Factor this call
+    # out of the branches so acquisition does not duplicate the dispatcher.
+    return ordinary_ability_start(c,side,e,initial=initial)
 
 
 def start(c,side,e,initial=False):

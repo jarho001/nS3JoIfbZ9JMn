@@ -5,33 +5,35 @@ home and can give the result bundle to an agent. This document is the living
 record for all GPU work arising from G3 and G4. CPU implementation continues without a
 GPU. Preparing this handoff does not run device tests, profiling or benchmarks.
 
+**Validation order, 2026-11-13:** GPU correctness, broad CPU matrices,
+complete-battle campaigns and profiling remain deferred until reachable mechanics
+and inventory closure are complete. This supersedes earlier checkpoint timing;
+all acceptance requirements and commands below remain pending.
+
 ## Current source and evidence
 
-**Current schema32 candidate is blocked on CPU compilation resources.**
-Preserved on `wip/g4-trace-cpu-memory`; `main` remains at the completed schema31
-checkpoint (`823e3bf`). Trace's
-native contract passes21 cases/26 boundaries, but its focused CPU process was
-killed (exit137) compiling `jit_advance`. The8GiB cgroup reported an OOM kill;
-no CPU parity pass is claimed. See [schema32-wip.json](../test-logs/g4-cpu-conformance/schema32-wip.json).
-Schema31 remains the last completed focused CPU checkpoint. The current runner
-also contains the pending Trace module (candidate93 checks/37 modules,
-1033 scenarios/5107 boundaries); that expansion is **not ready for GPU acceptance**.
-Resolve the CPU compilation growth or supply adequate CPU memory before retrying.
-Do not blindly rerun unchanged source on the same8GiB machine.
+**Schema32 Trace checkpoint passed focused CPU validation.** Native21 scenarios/
+26 boundaries agree exactly in305.122s, including saved seek NPZ/journal16.
+Two native/inventory checks and one narrow both-holder Update status-cure order
+regression pass. See [schema32-checkpoint.json](../test-logs/g4-cpu-conformance/schema32-checkpoint.json).
+The compilation fix shares the holder-loop body and ordinary Start dispatch.
+Peak focused-process RSS was7,292,972KiB; this host has no cgroup memory cap,
+so this does not claim a replay under the original8GiB cap. Historical exit137
+and OOM records remain in schema32-wip.json and its archive.
 
-After that concrete fix/resource change, run this one focused CPU comparison:
+The runner now includes94 checks/38 modules and1033 scenarios/5107 boundaries,
+including `test.test_trace_engine`, `test.test_trace_update_regression` and the
+`trace` batch. Preparation and all device checks remain deferred. Exact isolated
+commands, pending until mechanics and inventory closure:
 
 ```sh
-JAX_PLATFORMS=cpu OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 XLA_PYTHON_CLIENT_PREALLOCATE=false JAX_ENABLE_COMPILATION_CACHE=false .venv-jax/bin/python -c 'import os,unittest;os.sched_setaffinity(0,sorted(os.sched_getaffinity(0))[:3]);unittest.main(module="test.test_trace_engine",verbosity=2,failfast=True)'
+JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_trace_engine -v -f
+JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_trace_update_regression -v -f
 ```
 
-Once that comparison passes, the corresponding device obligation is:
-`JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_trace_engine -v -f`.
-This CUDA command is pending CPU validation; no device run or profiling was done.
-Trace adds saved seek state and journal16, so retain the final migration and
-full/lean execution gates already listed below. Native-only preliminary Mummy
-witnesses are archived under `next-mummy/` in schema32-wip-validation.tar.gz;
-Mummy is not implemented or included in runner counts.
+Retain the final migration/full-lean gates below. Preliminary Mummy witnesses
+remain archived under `next-mummy/` in schema32-wip-validation.tar.gz; Mummy is
+not yet implemented or counted in this completed checkpoint.
 
 **Schema31 Wonder Guard direct immunity checkpoint:** focused CPU parity passed18
 scenarios/22 boundaries in303.667s; one native contract passed.
@@ -312,6 +314,32 @@ Use the **latest committed checkout** and retain its recorded identities. The
 runner fingerprints engine, tables, IO, tests, oracle, configuration and benchmark
 code; it separately hashes each freshly captured native fixture. Device results
 cannot transfer across changed relevant source or fixtures.
+
+## Deferred broad CPU and campaign checks
+
+Run only after reachable mechanics and inventory closure. The current checkpoint
+modules (including eager/JIT/mixed batches, lifecycle and full/lean checks) run in
+isolated processes; this does not replace inventory or fixed-campaign acceptance.
+
+```bash
+JAX_PLATFORMS=cpu OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 XLA_PYTHON_CLIENT_PREALLOCATE=false JAX_ENABLE_COMPILATION_CACHE=false .venv-jax/bin/python - <<'PYCPU'
+import os,runpy,subprocess,sys
+os.sched_setaffinity(0,sorted(os.sched_getaffinity(0))[:3])
+for module in runpy.run_path('scripts/g4_gpu_handoff.py')['MODULES']:
+    subprocess.run([sys.executable,'-m','unittest',module,'-v','-f'],check=True)
+PYCPU
+```
+
+Fixed 64-development / 128-held-out starts retain every acceptance condition in
+PROJECT_PLAN.md. The exact intended CPU command is below; **pending harness
+implementation**, since `evaluation.full_format_conformance` does not yet exist.
+Keep source/fixture/config/policy identities and held-out reuse history. Never
+substitute the checkpoint modules or truncated battles for this gate.
+
+```bash
+JAX_PLATFORMS=cpu "$JAX_PYTHON" -m evaluation.full_format_conformance \
+  --config evaluation/g4-cpu-v1.json --suite acceptance --output NEW_CPU_DIRECTORY
+```
 
 ## Return-home setup
 

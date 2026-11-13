@@ -325,5 +325,5 @@
   },
   "wonder_guard": "Damaging neutral/resisted attacks blocked after type immunity and Protect; effective Hidden Power type used. Status, Struggle, weather, hazard, confusion and suppression/replacement bypasses retain ordinary paths. No new state fields.",
   "trace": "Native notrace flags, initial/Start and delayed Update copying, raw target ability, own suppression, separate ordinary Start dispatcher avoids recursion. No Ability and Ability Shield are outside pinned Gen5 data.",
-  "candidate_validation": "WIP: native21/26 contract passes, CPU jit_advance compilation killed exit137 with8GiB memory limit; no CPU parity acceptance. See schema32-wip.json."
+  "candidate_validation": "Focused CPU21/26 Trace exact comparison and native/inventory contract plus narrow shared Update holder-order regression passed. Full G4 and broad/final/GPU gates remain pending; see schema32-checkpoint.json."
 }

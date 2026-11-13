@@ -289,8 +289,10 @@ def _update(c,context=UPDATE,sort_all=False):
     tie=(active_speed[0]==active_speed[1]) & (jnp.all(alive)|sort_all)
     c,word=jax.lax.cond(tie,lambda c:_draw(c,0,2,context,2),lambda c:(c,jnp.uint32(0)),c)
     first=jnp.where(tie,word.astype(jnp.int32),jnp.argmax(active_speed))
-    # Each Update visits holders in native speed/shuffle order.
-    for k in range(2):
+    # Keep one compiled callback body, visiting holders in native speed/shuffle
+    # order. Python unrolling duplicates Trace and its ordinary Start subtree
+    # at every Update call site.
+    def visit(k,c):
         side=jnp.where(k==0,first,1-first)
         c=immunity_ops.update(c,side,_engine())
         c=sleep_ops.update(c,side,_engine())
@@ -301,8 +303,8 @@ def _update(c,context=UPDATE,sort_all=False):
             s,t=c
             return effects.lum((s,t),side,_engine(),emit_item=False)
         s,t=c;m=s.active[side]
-        c=_when((s.item[side,m]==2)&((s.status[side,m]!=NONE)&(s.status[side,m]!=FNT)|(s.volatile_state[side,m,2,0]>0))&(s.hp[side,m]>0),cure,c)
-    return c
+        return _when((s.item[side,m]==2)&((s.status[side,m]!=NONE)&(s.status[side,m]!=FNT)|(s.volatile_state[side,m,2,0]>0))&(s.hp[side,m]>0),cure,c)
+    return jax.lax.fori_loop(0,2,visit,c)
 
 
 def _qappend(s,row):

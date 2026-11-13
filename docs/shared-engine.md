@@ -700,12 +700,13 @@ KOs. Focused18/22 CPU parity and live suppressed-state NPZ/journal15 persistence
 pass. Trace and remaining identity/caller closure, complete inventory and
 broad/final gates remain pending.
 
-Schema32 is an unaccepted Trace candidate. It appends ability_seek to preserve
-native Start/Update and suppressed-acquisition state, runs copied callbacks
-through the ordinary Start dispatcher, and updates journal16. Native21/26
-capture and contract pass; the focused CPU process was killed (exit137) while
-compiling jit_advance in an8GiB cgroup reporting an OOM kill. Source fingerprints,
-logs and the exact command are in schema32-wip.json. Schema31 is the last
-completed focused CPU checkpoint. Resolve compilation memory growth or use
-adequate CPU memory before repeating the focused check; broad/final and GPU
-evidence remain pending. No milestone acceptance or unchanged-source retry.
+Schema32 adds ability_seek for native Trace Start/Update and suppressed
+acquisition, with journal16 persistence. The two-holder Update visit uses one
+JAX loop body, and ordinary Start is shared after acquisition at Start sites;
+copied Start effects still run immediately in native order. Focused21/26 CPU
+parity, two native/inventory checks and a narrow both-holder status-cure ordering
+regression pass. Peak focused-process RSS was7,292,972KiB on a host without a
+cgroup memory cap; this is not an8GiB-cgroup replay. Historical OOM evidence is
+preserved in schema32-wip.json; current fingerprints/results are in
+schema32-checkpoint.json. Remaining reachable mechanics, inventory closure,
+broad/final and GPU evidence stay pending.

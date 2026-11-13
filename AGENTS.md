@@ -65,6 +65,10 @@ checkpoints; do not repeat that matrix after each family or restart the paused
 Substitute gate automatically. Preserve all final acceptance requirements and
 mark deferred checks as pending. This replaces the earlier broad per-family
 validation practice, including under the standing G4 CPU authorization.
+The 2026-11-13 continuation defers GPU correctness, broad CPU matrices,
+complete-battle campaigns and profiling until reachable mechanics and inventory
+closure are complete. Preserve final acceptance and exact pending commands in
+`docs/GPU_HANDOFF.md`; continue families sequentially with focused CPU checks.
 
 Start on CPU. Require GPU only for a stated acceptance criterion or a concrete
 device-specific property. Missing optional GPU evidence is not a blocker. If

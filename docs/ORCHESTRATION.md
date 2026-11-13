@@ -1,6 +1,6 @@
 # Development workflow
 
-[AGENTS.md](../AGENTS.md) governs execution. Sol 6.1/high owns the work directly;
+[AGENTS.md](../AGENTS.md) governs execution. Sol 6.1/medium owns the work directly;
 [configuration](../.codex/config.toml) retains only the explicitly requested Luna
 implementer and Janitor. There is no automatic delegation, escalation role,
 Astra review, or periodic independent-review gate. The primary reviews its own
@@ -11,7 +11,7 @@ diff and evidence. Independent review happens only when the user requests it.
 First use [MILESTONE_PREPARATION.md](MILESTONE_PREPARATION.md) to sharpen G0–G8,
 identify behavior families, and propose the first coherent G3 goal. This is
 planning work; it does not start implementation or grant milestone acceptance.
-The user then selects Goal mode with Sol 6.1/high on the execution surface and
+The user then selects Goal mode with Sol 6.1/medium on the execution surface and
 assigns the prepared goal. Configuration changes do not switch a running agent
 or start Goal mode. If the requested model/effort is unavailable, stop and report
 it. Experiment with this workflow before adding wall-clock budgets.
@@ -50,6 +50,11 @@ suites are consolidated at agreed milestone checkpoints. Preserve missing
 coverage as pending; do not weaken final acceptance or automatically resume the
 interrupted Substitute gate. The user approved this scope change without
 requesting implementation or test execution to resume in the same turn.
+
+The 2026-11-13 continuation resumes sequential mechanic families. Defer GPU
+correctness, broad CPU matrices, complete-battle campaigns and profiling until
+reachable mechanics and inventory closure are complete. Keep their acceptance
+requirements and exact commands in [GPU_HANDOFF.md](GPU_HANDOFF.md).
 
 Agree the goal's validation scope in its brief, including known-long runs and
 any actual device requirement. Long integration, exhaustive, GPU, and performance
