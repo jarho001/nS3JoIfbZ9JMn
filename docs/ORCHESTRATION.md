@@ -26,6 +26,12 @@ stays deferred. Do not infer milestone completion from task counts.
 
 ## Establish behavior in families
 
+Before coding a family, complete the lightweight reachability precheck in
+[SHOWDOWN_BEHAVIOR_CASES.md](SHOWDOWN_BEHAVIOR_CASES.md#reachability-audit-and-family-precheck-2026-11-13).
+Record the required branch/witness, existing shared implementation/evidence and
+new dependency edges in `active_task.reachability_precheck`; unresolved membership
+calls for investigation first. This does not add a review or approval gate.
+
 Before coding a family, collect a compact set of expected cases from pinned
 Showdown. Cover ordinary behavior, boundaries, and interactions with existing
 mechanics. Distinguish a native reachable battle from a synthetic injected

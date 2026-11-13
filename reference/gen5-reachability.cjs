@@ -215,7 +215,7 @@ function buildInventory() {
       {id:'indirect-closure',status:'unresolved',detail:'Resolve called/copied effects, Transform/Imposter, changed abilities, item exchange/creation, forms and recursively referenced conditions to a fixed point. The exported superset does not prove closure.'},
       {id:'engine-contract',status:'unresolved',detail:'Scheduler, requests/retries, visibility, active rules/terminal paths and capacities require implementation/evidence entries.'},
     ]};
-  return {data:canonical(data),ledger:canonical(ledger)};
+  return {data:canonical(data),ledger:canonical(require('./gen5-closure-audit.cjs').classify(ledger))};
 }
 function inventory() {
   // Dex mutates require-cached raw tables while inheriting. An isolated reader

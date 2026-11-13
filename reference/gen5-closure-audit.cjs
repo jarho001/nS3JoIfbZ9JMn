@@ -2,9 +2,9 @@
 // Source-backed bound investigation, not a replacement for the full ledger.
 const fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto');
 const {assertReady}=require('./neutral-turn-oracle.cjs');
+function audit(ledger) {
 assertReady();const ps=require('./vendor/pokemon-showdown/dist/sim');
 const dex=ps.Dex.mod('gen5'),gen=ps.Teams.getGenerator('gen5randombattle',[1,2,3,4]);
-const ledger=require('../rules/gen5-reachable-v1.json');
 const sha=s=>crypto.createHash('sha256').update(s).digest('hex');
 const moves=[...new Set(ledger.roots.flatMap(r=>r.moves.map(m=>m.id)))].sort();
 const abilities=[...new Set(ledger.roots.flatMap(r=>r.abilities))].sort();
@@ -177,5 +177,106 @@ const output={status:'provisional_source_bound_not_full_reachability_acceptance'
  'Pinned Gen5 Nature Power calls Earthquake. Sleep Talk selects from the user set; Transform/Imposter copy opponent moves. Pursuit and Magic Bounce reuse existing move IDs. These observations still require a complete source/engine/ability/item closure audit before exclusions enter the accepted ledger.',
  'All pinned getPriorityItem/getItem return expressions and all randomSet item assignments are structurally bounded by the recorded expressions and species.requiredItems. This initial item upper bound is not proof of generator eligibility or transitive closure.'],
  remaining:['Generator branch/source audit and initial eligibility','All127 ability callback bodies and item transfer/creation edges','Forms from Forecast/Flower Gift/Relic Song/Multitype and Transform','Engine/rule injection and complete dependency fixed point']};
-if(!process.argv[2])throw Error('Pass a fresh output path');fs.writeFileSync(process.argv[2],JSON.stringify(output,null,2)+'\n',{flag:'wx'});
-console.log(JSON.stringify({moveIds:moves.length,abilityIds:abilities.length,initialItemReturnBound:output.initialItemReturnBound,calls:Object.keys(calls)}));
+return output;
+}
+if(require.main===module){
+ const output=audit(require('../rules/gen5-reachable-v1.json'));
+ if(!process.argv[2])throw Error('Pass a fresh output path');
+ fs.writeFileSync(process.argv[2],JSON.stringify(output,null,2)+'\n',{flag:'wx'});
+ console.log(JSON.stringify({moveIds:output.rootMoveIds.length,abilityIds:output.rootAbilityIds.length,initialItemReturnBound:output.initialItemReturnBound}));
+}
+module.exports={audit};
+
+// Identity bounds are narrower than behavioral closure. Keep conditions, forms,
+// alternate-ability queries and individual callback activation open explicitly.
+function classify(ledger) {
+ const sha=s=>crypto.createHash('sha256').update(s).digest('hex');
+ const output=audit(ledger);
+ const ps=require('./vendor/pokemon-showdown/dist/sim'),dex=ps.Dex.mod('gen5');
+ const assert=require('node:assert/strict');
+ const moveBound=new Set([...output.rootMoveIds,'struggle']);
+ const itemBound=new Set(output.initialItemReturnBound);
+ for(const root of ledger.roots){
+  const required=dex.species.get(root.species).requiredMove;
+  if(required)assert.ok(moveBound.has(dex.moves.get(required).id),'new required move');
+ }
+ // Inspect the larger legal ability universe as a safety bound even though
+ // alternate identity eligibility remains open. Extra identity mutation sites
+ // are Pickup/Pickpocket (existing items) and Zen Mode (forms), not new moves.
+ const supplementalAbilityCallbacks=[];
+ for(const ability of dex.abilities.all()){
+  if(ability.gen>5||ability.isNonstandard||output.rootAbilityIds.includes(ability.id))continue;
+  for(const [field,value] of Object.entries(ability))if(typeof value==='function'&&
+   /useMove|runMove|setItem|setAbility|formeChange|transformInto|\.item\s*=|moveSlots\s*=/.test(value.toString())){
+   assert.ok(['pickup','pickpocket','zenmode'].includes(ability.id),'Unreviewed alternate ability mutation: '+ability.id);
+   supplementalAbilityCallbacks.push({owner:'abilities:'+ability.id,field,sha256:sha(value.toString()),body:value.toString()});
+  }
+ }
+ const seed=[1,2,3,4];
+ const team=ps.Teams.getGenerator('gen5randombattle',seed).getTeam();
+ const required=new Set(team.flatMap(s=>[
+  'species:'+dex.species.get(s.species).id,'abilities:'+dex.abilities.get(s.ability).id,
+  'items:'+dex.items.get(s.item).id,...s.moves.map(m=>'moves:'+dex.moves.get(m).id)]));
+ const refs={
+  generator:['data/random-battles/gen5/teams.ts:103-494 (cullMovePool/randomMoveset)',
+   'data/random-battles/gen5/teams.ts:496-566 (ability filters/fallback)',
+   'data/random-battles/gen5/teams.ts:568-816 (item returns and randomSet)',
+   'data/random-battles/gen5/teams.ts:850-1014 (team eligibility)',
+   'data/random-battles/gen9/teams.ts:675-693 (addMove)',
+   'data/random-battles/gen9/teams.ts:1442-1497 (getLevel/getForme)',
+   'data/random-battles/gen9/teams.ts:1641-1683 (getPokemonPool)'],
+  engine:['sim/pokemon.ts:1291-1395 (Transform copies slots/ability, not item)',
+   'sim/pokemon.ts:1448-1510 (only permanent forme changes replace ability)',
+   'sim/pokemon.ts:1800-1983 (consume/take/set item and ability)',
+   'sim/pokemon.ts:1125 (Struggle request)',
+   'sim/battle-actions.ts:267-408 (OverrideAction, Z/Max and Dancer guards)'],
+ };
+ const proofs={
+  'move-identity-bound':{
+   conclusion:'proven_unreachable',kind:'moves',bound:[...moveBound].sort(),references:[...refs.generator,...refs.engine],
+   reasoning:'Initial moves come only from role pools plus requiredMove (checked within the bound). Sleep Talk chooses current slots; Transform/Imposter copy existing opponent slots. Gen5 Nature Power calls Earthquake, already in the bound; Pursuit and Magic Bounce reuse the current ID. Encore/locked requests reuse slots; Struggle is the engine exception. No reachable callback introduces Metronome/Assist/Sketch/Mimic/Copycat/Mirror Move/Me First. Z/Max/Mega and post-Gen5 ability injections lack their generation/item/species prerequisites. By induction these paths cannot introduce another move ID; synthetic trusted installs are outside this proof.'},
+  'item-identity-bound':{
+   conclusion:'proven_unreachable',kind:'items',bound:[...itemBound].sort(),references:[...refs.generator,...refs.engine],
+   reasoning:'All getPriorityItem/getItem return expressions (including requiredItems) and all randomSet item assignments are structurally bounded. Black Sludge conversion is included. Trick/Switcheroo transfer existing items, with failure restoration; consumption/Knock Off remove them; Harvest restores lastItem only if a berry. Transform copies no item. No initial/called move adds Recycle/Bestow/Thief/Covet/Fling or an item-creation path; no reachable ability creates a new item ID. Thus item identity remains inside this upper bound. This does not prove each of the 45 branches feasible.'},
+ };
+ for(const entry of ledger.entries){
+  entry.reachability='unresolved';
+  entry.reachabilityAudit='unresolved-membership';
+  const key=entry.kind==='moves'?'move-identity-bound':entry.kind==='items'?'item-identity-bound':null;
+  if(key&&!proofs[key].bound.includes(entry.id.split(':')[1])){
+   entry.reachability='proven_unreachable';entry.reachabilityAudit=key;
+  }
+  if(required.has(entry.id)){
+   assert.notEqual(entry.reachability,'proven_unreachable',entry.id);
+   entry.reachability='required';entry.reachabilityAudit='native-team-positive-witness';
+  }
+ }
+ for(const root of ledger.roots){
+  const witness=team.find(s=>s.speciesId===root.species&&s.role===root.role&&s.moves.every(m=>root.moves.some(x=>x.id===dex.moves.get(m).id)));
+  root.reachability=witness?'required':'unresolved';
+  root.proof=witness?'native-team-positive-witness':null;
+ }
+ const entries=new Map(ledger.entries.map(e=>[e.id,e]));
+ for(const cb of ledger.callbacks){
+  const owner=entries.get(cb.owner);
+  cb.reachability=owner?.reachability==='proven_unreachable'?'proven_unreachable':'unresolved';
+  cb.reachabilityAudit=cb.reachability==='proven_unreachable'?owner.reachabilityAudit:'unresolved-callback-activation';
+ }
+ function counts(rows){return Object.fromEntries(['required','proven_unreachable','unresolved'].map(k=>[k,rows.filter(r=>r.reachability===k).length]));}
+ ledger.reachabilityAudit={date:'2026-11-13',status:'partial_identity_bounds_behavioral_closure_open',
+  classificationNotes:{'unresolved-membership':'Candidate membership is insufficient; no positive branch witness or complete exclusion proof.', 'unresolved-callback-activation':'Required owner membership does not prove each callback trigger or nested branch.'},
+  proofs,positiveWitness:{id:'native-team-positive-witness',seed,format:ledger.format,team,
+   reason:'Unmodified pinned generator output is positive membership evidence only; absence supplies no exclusions.'},
+  references:refs,supplementalAbilityCallbacks,initialFormBound:output.initialFormBound,
+  indirectMoveCallbacks:output.indirectMoveCallbacks,indirectAbilityCallbacks:output.indirectAbilityCallbacks,
+  itemMethodEvidence:output.methodEvidence,
+  summary:{entries:counts(ledger.entries),callbacks:counts(ledger.callbacks),roots:counts(ledger.roots)},
+  unresolved:[
+   'Feasibility of every role/move/ability/item branch, including teamDetails and ordered item precedence; no upper bound is promoted to required.',
+   'Species/form exclusions: Forecast, Flower Gift, Relic Song, freeze Shaymin-Sky reversion, Multitype/plate initialization and Transform targets; permanent reversion can reset ability.',
+   'Abilities outside initial pools remain unresolved, including engine species-based FoeMaybeTrapPokemon queries; queries do not grant transferable abilities.',
+   'Condition/rule/engine callback activation and all behavioral branches, RNG/request/event/visibility/terminal/capacity obligations remain unresolved.'
+  ]};
+ return ledger;
+}
+module.exports.classify=classify;

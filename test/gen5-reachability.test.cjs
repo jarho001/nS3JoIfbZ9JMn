@@ -62,6 +62,23 @@ test('pinned resolved export and conservative inventory reproduce exactly',()=>{
   assert.ok(ledger.callbacks.every(c=>['partial','unsupported'].includes(c.status)));
   assert.equal(ledger.callbacks.filter(c=>c.status==='partial').length,271);
   assert.equal(ledger.callbacks.filter(c=>c.status==='unsupported').length,875);
+  const audit=ledger.reachabilityAudit;
+  const entries=new Map(ledger.entries.map(e=>[e.id,e]));
+  assert.equal(audit.proofs['move-identity-bound'].bound.length,224);
+  assert.equal(audit.proofs['item-identity-bound'].bound.length,45);
+  for(const id of ['moves:metronome','moves:copycat','moves:recycle','items:powerherb','items:iceberry']) {
+    assert.equal(entries.get(id).reachability,'proven_unreachable',id);
+    assert.ok(audit.proofs[entries.get(id).reachabilityAudit].references.length);
+  }
+  for(const id of ['abilities:magicguard','moves:doubleedge','species:clefable'])
+    assert.equal(entries.get(id).reachability,'required',id);
+  assert.equal(entries.get('abilities:zenmode').reachability,'unresolved');
+  assert.equal(slots.get('abilities:magicguard:onDamage').reachability,'unresolved');
+  for(const row of [...ledger.entries,...ledger.callbacks,...ledger.roots])
+    assert.ok(['required','proven_unreachable','unresolved'].includes(row.reachability));
+  // Exclusion narrows scope without discarding synthetic implementation/evidence.
+  assert.ok(entries.get('moves:copycat').implementation);
+  assert.ok(entries.get('moves:copycat').evidence.length);
   // Existing native users must not contaminate raw owner provenance.
   require('../reference/vendor/pokemon-showdown/dist/sim').Dex.mod('gen5').moves.all();
   assert.deepEqual(inventory(),{data,ledger});

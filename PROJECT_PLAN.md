@@ -738,6 +738,10 @@ Retain frozen schema 1/2 contracts and evidence; version expanded tables, state,
 serialization and bounds explicitly. Required request/protocol changes belong
 in this goal without claiming completion of unrelated G1 work.
 
+The 2026-11-13 scope audit precedes further mechanic implementation. Use the
+[reachability precheck](docs/SHOWDOWN_BEHAVIOR_CASES.md#reachability-audit-and-family-precheck-2026-11-13)
+before each family; preserve unresolved dependencies and all final acceptance.
+
 ### Inventory and implementation scope
 
 The [G4 inventory and behavior contract](docs/SHOWDOWN_BEHAVIOR_CASES.md#proposed-g4-cpu-inventory-and-behavior-contract)

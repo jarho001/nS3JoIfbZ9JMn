@@ -538,7 +538,7 @@
       "Schema10 core/journal/hard-turn-limit checkpoint validated on a9d0fbd:3 integrated CPU checks pass in1174.685s, plus5 native/6 helper checks. Complete combat and1000-boundary neutral histories match native; mixed1/8/32,full/lean,core reset,persistence/corruption pass. Full64 suite and full-format G4 pending.",
       "Schema11 trapping/retry checkpoint:8 affected CPU checks plus6 native/6 helper checks pass. New31 scenarios/215 boundaries include two complete six-member games and mirrored private-state episodes. Aggregate558/4110; full68 suite and full-format G4 pending."
     ],
-    "next": "Remaining reachable ability families, starting Magic Guard, then complete callback/indirect/rule inventory closure.",
+    "next": "Audit-only checkpoint complete; before further mechanic work complete the reachability precheck. Magic Guard membership is witnessed; callback cases and shared paths still require the family precheck. Preserve unaccepted Trace and deferred acceptance.",
     "ledger": {
       "path": "rules/gen5-reachable-v1.json",
       "entries": 1768,
@@ -548,7 +548,24 @@
         "indirect-closure",
         "engine-contract"
       ],
-      "status": "Incomplete:271 partial callback mappings/875 unsupported; full closure remains open."
+      "status": "Partial source audit:335 move/207 item exclusions,34 positive entity memberships; all implementation/evidence mappings retained. Callback counts are audit slots, not mechanic counts. Three closure gaps remain unresolved.",
+      "reachability_summary": {
+        "callbacks": {
+          "proven_unreachable": 546,
+          "required": 0,
+          "unresolved": 600
+        },
+        "entries": {
+          "proven_unreachable": 542,
+          "required": 34,
+          "unresolved": 1192
+        },
+        "roots": {
+          "proven_unreachable": 0,
+          "required": 6,
+          "unresolved": 599
+        }
+      }
     },
     "config": "evaluation/g4-cpu-v1.json",
     "campaign": {
@@ -674,11 +691,11 @@
         }
       },
       "reachability_investigation": {
-        "status": "provisional_not_ledger_acceptance",
+        "status": "partial_source_bounds_recorded_in_ledger",
         "file": "work/g4-phase-investigation/closure-source-investigation.json",
-        "script": "reference/gen5-closure-audit.cjs (untracked until regression finishes)",
+        "script": "reference/gen5-closure-audit.cjs",
         "findings": "230 spellings normalize to223 move IDs. Calling roots are Sleep Talk/Nature Power/Transform; pinned Gen5 Nature Power calls Earthquake. No Metronome/Assist/Sketch/Copycat root. Move callbacks with direct mutation/call edges: Nature Power, Pursuit, Relic Song, Sleep Talk, Switcheroo, Transform, Trick. Ability edges found in Forecast/Flower Gift/Harvest/Imposter/Magic Bounce/Mummy/Trace plus conditional item checks. Lexical item bound has46 IDs including a false-positive Ice Berry from the Hidden Power Ice string; do not treat lexical matches as reachability proof. Structural AST audit now bounds every getPriorityItem/getItem return and all three randomSet item assignments:45 initial item IDs, eliminating the lexical Ice Berry false positive; generator eligibility and transitive closure remain open. Recursive declarative/static condition references plus reviewed Tri Attack/Synchronize/twoturnmove argument bounds discover45 condition IDs. Still provisional: engine entry paths (including species-based FoeMaybeTrapPokemon hooks), forms and full callback closure remain unaudited; no exclusions accepted.",
-        "next": "Complete source-backed item-return, form, rule/engine and ability mutation audit before excluding candidates or closing ledger gaps.",
+        "next": "Use ledger reachabilityAudit and family precheck; historical provisional output preserved, superseded for move/item identity exclusions only.",
         "frozen_output": "test-logs/g4-cpu-conformance/closure-source-investigation.json.gz"
       },
       "next_hit_family": {
@@ -1120,7 +1137,44 @@
       "resume": "Trace resumed after concrete structural compilation fix; one focused CPU differential passed, plus narrow shared Update holder-order regression."
     },
     "implementation_wip": null,
-    "cpu_block": null
+    "cpu_block": null,
+    "reachability_precheck": {
+      "family": "Magic Guard (next candidate; no implementation in this audit)",
+      "status": "membership_confirmed_shared_path_and_dependency_cases_pending",
+      "required": [
+        "abilities:magicguard; native-team-positive-witness includes Magic Guard Clefable at seed [1,2,3,4]"
+      ],
+      "shared_behavior": [
+        "Review simulator/shared_engine.py damage/recoil/residual paths and simulator/hook_effects.py Life Orb handling against existing native evidence before changes. No new coverage claimed."
+      ],
+      "new_dependencies": [
+        "Magic Guard damage-source distinctions, Life Orb recoil, hazards/weather/status and contact damage interaction cases remain pending."
+      ],
+      "guidance": "docs/SHOWDOWN_BEHAVIOR_CASES.md#reachability-audit-and-family-precheck-2026-11-13"
+    },
+    "scope_audit": {
+      "date": "2026-11-13",
+      "source_base": "96fad81",
+      "status": "audit_only_partial_closure",
+      "commands": [
+        "node --test test/gen5-reachability.test.cjs",
+        "git diff --check",
+        "focused Python assertions comparing HEAD ledger mappings, source/data hashes, retained gaps and unchanged simulator/test-logs"
+      ],
+      "validation": "passed: focused inventory reproduction/classification check (1 test, 9.79s), mapping/data/source preservation assertions and git diff --check. Initial helper run exposed an out-of-scope hash helper; fixed before successful final regeneration/check.",
+      "limits": [
+        "No mechanic changes, GPU, profiling, broad matrices or battle campaigns.",
+        "Trace remains unaccepted; no milestone/task-count acceptance."
+      ],
+      "remaining": "All branch feasibility, ability/form exclusions, callback activation and condition/rule/engine behavioral closure remain unresolved; see ledger.reachabilityAudit.",
+      "source_sha256": {
+        "reference/gen5-closure-audit.cjs": "2445220123d1adfdd4d4fab6de97640e0f70dd922f79578a49c71a3c2e1098f9",
+        "reference/gen5-reachability.cjs": "7d4063ed84284c302bbfa9aa7790efc2954081e0fa301bfef0d4c8664b2be80f",
+        "test/gen5-reachability.test.cjs": "e32bc4b0d1ceb59aa9aa105fadcbb235946e5891f8379b0b3f58ebeacd41885f",
+        "rules/gen5-reachable-v1.json": "31b1344ceee33abd1fe8607d965c107b9c781cb6b9b1466442a42842e439af29"
+      },
+      "source_sha256_normalization": "LF (working audit files); normalize CRLF to LF before comparison after checkout"
+    }
   },
   "optional_gpu_validation_history": [
     {

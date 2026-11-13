@@ -432,6 +432,63 @@ unsupported effect or unvalidated required implementation. Every newly discovere
 callee reopens closure until accounted for. Implementing a conservative candidate
 superset is permitted; silently deleting uncertainty is not.
 
+### Reachability audit and family precheck (2026-11-13)
+
+The ledger now separates **required**, **proven unreachable** (machine label
+`proven_unreachable`), and **unresolved** from implementation status. Rows and
+existing evidence are retained, including implemented synthetic behavior outside
+the format. `reachabilityAudit.proofs` records pinned source references and the
+inductive identity bounds: 223 pool move IDs plus engine Struggle; 45 possible
+initial item IDs. This excludes 335 move and 207 item entries. The 546 callback
+rows owned by excluded entries inherit that exclusion; they are **not 546
+mechanics**. All 600 other callback activation obligations remain unresolved.
+
+`native-team-positive-witness` records one unmodified generator output at seed
+`[1,2,3,4]`: Swanna, Golduck, Maractus, Primeape, Magic Guard Clefable and Sceptile.
+It proves 34 entity memberships and six role roots, not callback completeness.
+The remaining 1,192 entity entries and 599 role roots stay unresolved. Absence
+from that witness supplies no exclusion. This is a membership check, not a
+battle campaign or acceptance test.
+
+Generator eligibility follows Gen5 `randomTeam` and inherited Gen9
+`getPokemonPool`: set-file base-species grouping, team type/weakness/compatibility
+limits, Zoroark slot restriction and no-lead species. No set-file species was
+removed merely because a team-composition branch may reject it. Roles are
+sampled in `randomSet`; move culling/enforcement and ability culling/weather
+fallback depend on the selected role, moves and accumulated team details.
+`getPriorityItem` precedes `getItem`, followed by Poison Leftovers → Black Sludge.
+The AST item-return bound includes `requiredItems`; it proves an upper bound,
+not feasibility of every item return. EV/IV/level, Hidden Power, Attack/Speed
+minimization and HP optimization remain generated-set obligations.
+
+The identity proofs follow Sleep Talk (current slots), Nature Power (Earthquake),
+Transform/Imposter (opponent slots and ability, retaining own item), Pursuit and
+Magic Bounce (same move ID), Trace (opponent ability), Mummy (Mummy), and Harvest
+(previous berry). Trick/Switcheroo exchange existing items. This excludes broad
+call/copy expansion and item creation through otherwise absent moves. Ability
+exclusions remain open: permanent form changes can reset ability, and native
+species-based trapping queries can invoke an alternate ability callback without
+granting that ability. Form bounds are provisional: inherited `getForme`,
+Forecast/Flower Gift/Relic Song, Multitype/plates, freeze reversion of Shaymin-Sky
+and Transform all need branch-level closure. Conditions, rules and engine paths
+still need full activation/behavior proofs. All three ledger gaps remain open.
+
+Before each implementation family, update the existing compact state field
+`active_task.reachability_precheck` with:
+
+- Why this family is required: ledger IDs plus a pinned branch proof or positive
+  native membership witness; distinguish entity membership from callback triggers.
+- Shared behavior already implemented: existing handlers, capability limits and
+  native evidence; reuse these before adding a new representation or handler.
+- Newly exposed dependencies: called/copied identities, ability/item/form changes,
+  conditions, scheduler/request/RNG/view/terminal paths. Add ledger edges or leave
+  the exact uncertainty unresolved before coding.
+
+An unresolved candidate needs a reachability investigation before implementation.
+Do not count callbacks as mechanic families, infer exclusions from sampling, or
+upgrade preserved synthetic cases into generator membership evidence. Keep the
+precheck in this guidance, the ledger and compact state; no per-mechanic documents.
+
 ### Families to observe before implementation
 
 All rows below are **required planned observations**, not newly observed facts.
