@@ -14,7 +14,7 @@ Full-format G4
 coverage remains separate acceptance work. Historical evidence keeps its original
 source/schema identity; it does not imply validation of later engine changes.
 
-The current runtime uses [schema 30](../rules/shared-engine-v30.json). Schemas
+The current runtime uses [schema 31](../rules/shared-engine-v31.json). Schemas
 4–6 integrated major statuses and effect provenance, boosts/weather/screens,
 and observed ability/item hooks. Schema7 adds declarative hit counts, per-hit
 updates, capped drain/recoil arithmetic, self-destruction and reactive damage.
@@ -692,3 +692,10 @@ the distinct native event source. Frame flag bits retain Prankster separately
 from the one-bounce guard; pending pivot saves preserve that condition state.
 Focused18/23 CPU parity and live NPZ/journal15 persistence pass. Remaining
 identity/call closure, frame capacity proof and broad/final gates stay pending.
+
+Schema31 adds Wonder Guard to the direct hit pipeline after native type
+immunity and Protect checks, using effective Hidden Power type. Status and
+indirect damage paths retain their behavior, including Shedinja hazard/weather
+KOs. Focused18/22 CPU parity and live suppressed-state NPZ/journal15 persistence
+pass. Trace and remaining identity/caller closure, complete inventory and
+broad/final gates remain pending.

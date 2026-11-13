@@ -48,7 +48,7 @@ import sys
 def _engine():
     return sys.modules[__name__]
 
-SCHEMA = 30
+SCHEMA = 31
 ROSTER, SLOTS, QUEUE, EVENTS, DRAWS, HISTORY = 6, 4, 8, 128, 128, 2048
 OK, PENDING, INVALID, UNSUPPORTED, CAPACITY, TERMINAL, STALE = range(7)
 RETRY=7
@@ -612,7 +612,7 @@ def _use_move(c,frame):
                     t=t._replace(events=t.events.at[move_row,7].set(jnp.where(existing,2,t.events[move_row,7])))
                     return _hit((s,t),actor,move)
                 return jax.lax.cond(hit,hit_fn,miss,c)
-            return jax.lax.cond(blocked,block,lambda c:jax.lax.cond(creation_ops.immunity(c[0],target,move),lambda c:_event(c,IMMUNE,target,tm),accuracy,c),c)
+            return jax.lax.cond(blocked,block,lambda c:jax.lax.cond(immunity_ops.wonder_guard(c[0],actor,target,move,_engine()),lambda c:_event(c,IMMUNE,target,tm,value=tables.ABILITY_IDS['wonderguard'],aux=4),lambda c:jax.lax.cond(creation_ops.immunity(c[0],target,move),lambda c:_event(c,IMMUNE,target,tm),accuracy,c),c),c)
         # Pinned Gen 5 resolves type/Levitate immunity before Protect;
         # status failure checks still occur after Protect and accuracy.
         def semi_miss(c):

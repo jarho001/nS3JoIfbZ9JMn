@@ -1,0 +1,21 @@
+'use strict';
+module.exports=function(){
+ const m=(moves,extra={})=>({species:'Mew',moves,ability:'Pressure',item:'',level:50,nature:'Hardy',gender:'M',ivs:{hp:31,atk:31,def:31,spa:31,spd:31,spe:31},evs:{hp:0,atk:0,def:0,spa:0,spd:0,spe:0},...extra});
+ const b=(a=1,c=1)=>({p1:`move ${a}`,p2:`move ${c}`}),cases=[],add=(id,move='Tackle',x={})=>cases.push({id:'G4-wonder-guard-'+id,seed:1,generic:true,identityFamily:true,abilityChangeFamily:true,wonderGuardFamily:true,hitFamily:true,p1:[m(move==='Tackle'?['Tackle','Recover']:[move,'Tackle'],{evs:{spe:252}})],p2:[m(['Tackle'],{ability:'Wonder Guard'})],steps:[b()],...x});
+ add('neutral');add('resisted','Flamethrower',{p2:[m(['Tackle'],{species:'Charizard',ability:'Wonder Guard'})]});
+ add('super-effective','Flamethrower',{p2:[m(['Tackle'],{species:'Shedinja',ability:'Wonder Guard'})]});
+ add('type-immunity','Tackle',{p2:[m(['Tackle'],{species:'Shedinja',ability:'Wonder Guard'})]});
+ add('ground-immunity','Earthquake',{p2:[m(['Tackle'],{species:'Charizard',ability:'Wonder Guard'})]});
+ add('struggle','Tackle',{setup:[{side:'p1',pp:0}]});
+ add('protect','Tackle',{p2:[m(['Protect'],{ability:'Wonder Guard'})]});
+ add('super-protect','Flamethrower',{p2:[m(['Protect'],{species:'Shedinja',ability:'Wonder Guard'})]});
+ add('status','Toxic');add('confusion','Confuse Ray',{steps:[b(),b(2)]});
+ add('suppression','Gastro Acid',{steps:[b(),b(2)]});
+ add('creation','Worry Seed',{steps:[b(),b(2)]});
+ add('skill-swap','Skill Swap');add('role-play','Role Play');
+ add('hazards','Stealth Rock',{p2:[m(['Tackle'],{ability:'Wonder Guard'}),m(['Tackle'],{species:'Shedinja',ability:'Wonder Guard'})],steps:[b(),{p1:'move 2',p2:'switch 2'}]});
+ add('weather','Sandstorm',{p2:[m(['Tackle'],{species:'Shedinja',ability:'Wonder Guard'})]});
+ add('hidden-power','Hidden Power Ice');
+ add('mirrored','Tackle',{p1:[m(['Tackle'],{ability:'Wonder Guard'})],p2:[m(['Tackle'],{evs:{spe:252}})]});
+ return cases;
+};
