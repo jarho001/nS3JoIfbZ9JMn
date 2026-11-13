@@ -48,7 +48,7 @@ import sys
 def _engine():
     return sys.modules[__name__]
 
-SCHEMA = 26
+SCHEMA = 27
 ROSTER, SLOTS, QUEUE, EVENTS, DRAWS, HISTORY = 6, 4, 8, 128, 128, 2048
 OK, PENDING, INVALID, UNSUPPORTED, CAPACITY, TERMINAL, STALE = range(7)
 RETRY=7
@@ -642,7 +642,7 @@ def _use_move(c,frame):
     move_row=jnp.max(jnp.where((jnp.arange(EVENTS)<c[1].ecount)&((c[1].events[:,0]==EV_MOVE)|(c[1].events[:,0]==ANIM)),jnp.arange(EVENTS),0))
     blocked_rest=(move==REST)&(c[0].status[actor,mon]==SLP)
     c=_when(blocked_rest,lambda c:ability_ops.fail(c,actor,move,move_row,_engine()),c)
-    c=_when((~charging)&(~blocked_rest),lambda c:jax.lax.cond(move==called_ops.SLEEP_TALK,lambda c:called_ops.sleep_talk(c,frame,move_row,_engine()),resolve_move,c),c)
+    c=_when((~charging)&(~blocked_rest),lambda c:jax.lax.cond(called_ops.MOVE_IMPLEMENTED[move],lambda c:called_ops.call(c,frame,move_row,_engine()),resolve_move,c),c)
     c=_when(hit_tables.SELF_DESTRUCT[move]&(~c[0].fainted[actor,mon]),lambda c:_faint(c,actor),c)
     c=_when(hit_tables.SELF_DESTRUCT[move]&(c[0].winner<0),lambda c:_win(c,actor),c)
     return phase_ops.after_move(c,actor,_engine())

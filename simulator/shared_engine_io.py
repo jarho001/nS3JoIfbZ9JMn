@@ -210,9 +210,9 @@ def load_state(path,*,schema=None,replayed_state=None):
         stored=int(saved['schema']) if 'schema' in saved else None
         if schema is not None and stored is not None and stored!=schema:raise ValueError('schema mismatch')
         version=stored if schema is None else schema
-        if version not in (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26):raise ValueError('explicit supported state schema required')
+        if version not in (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27):raise ValueError('explicit supported state schema required')
         fields={k:jnp.asarray(saved[k]) for k in saved.files if k not in ('schema','data_sha256')}
-        if version in (3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26):
+        if version in (3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27):
             if 'data_sha256' not in saved or str(saved['data_sha256'])!=generic.DATA_SHA256:
                 raise ValueError('state data table identity mismatch')
         if version<26 and replayed_state is not None:
@@ -393,7 +393,7 @@ def effect_states(state,side,mon):
         if 15<=kind<=18:
             row['name']=e.MOVE_NAMES[tables.MOVE_IDS[key]]
             if kind!=18:row['duration']=time
-            if kind in (16,17,18,19,20,21,22,23,24,25,26):row['move']=e.MOVE_KEYS[int(s.volatile_state[side,mon,kind,7])]
+            if kind in (16,17,18,19,20,21,22,23,24,25,26,27):row['move']=e.MOVE_KEYS[int(s.volatile_state[side,mon,kind,7])]
         volatiles[key]=row
     return {'statusState':status,'volatiles':volatiles,
         'abilityState':{'id':e.ABILITIES[int(s.ability_effect_id[side,mon])],'effectOrder':int(s.ability_order[side,mon]),'target':target},

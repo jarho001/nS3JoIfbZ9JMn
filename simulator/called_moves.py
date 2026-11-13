@@ -1,12 +1,12 @@
 """Explicit active-move frames sharing the ordinary useMove kernel."""
 import jax.numpy as jnp
 from . import gen5_engine_tables as t
-SLEEP_TALK=t.MOVE_IDS['sleeptalk'];FRAMES=8;WIDTH=16
+SLEEP_TALK=t.MOVE_IDS['sleeptalk'];NATURE_POWER=t.MOVE_IDS['naturepower'];FRAMES=8;WIDTH=16
 # Move, actor/mon, target/mon, source kind/id, original location, selected
 # slot, accounting mode, return phase, root move/slot, lock, event tag, flags.
 MOVE,ACTOR,MON,TARGET,TM,SOURCE_KIND,SOURCE_ID,LOCATION,SLOT,MODE,PHASE,ROOT_MOVE,ROOT_SLOT,LOCKED,TAG,FLAGS=range(WIDTH)
 FIELDS=('call_frames','call_depth')
-MOVE_IMPLEMENTED=jnp.asarray([k=='sleeptalk'for k in t.MOVE_KEYS],jnp.bool_)
+MOVE_IMPLEMENTED=jnp.asarray([k in ('sleeptalk','naturepower')for k in t.MOVE_KEYS],jnp.bool_)
 ELIGIBLE=t.mv(lambda r:not(r.get('flags',{}).get('nosleeptalk')or r.get('flags',{}).get('charge'))).astype(jnp.bool_).at[0].set(False)
 
 def empty(e):return jnp.zeros((FRAMES,WIDTH),jnp.int32)
@@ -64,8 +64,17 @@ def sleep_talk(c,frame,move_row,e):
     def call(c):
         c,index=e._draw(c,0,count,e.CALLED_SELECTION);s,tr=c
         slots=jnp.nonzero(eligible,size=4,fill_value=0)[0];slot=slots[index.astype(jnp.int32)];move=moves[slot]
-        target=jnp.where(e.MOVE_ACTOR_TARGET[move],actor,1-actor)
-        child=frame.at[MOVE].set(move).at[TARGET].set(target).at[TM].set(s.active[target]).at[SOURCE_KIND].set(1).at[SOURCE_ID].set(SLEEP_TALK).at[SLOT].set(slot).at[MODE].set(1).at[PHASE].set(0).at[LOCKED].set(0).at[TAG].set(-(SLEEP_TALK+1))
-        return push((s,tr),child,e)
+        return child((s,tr),frame,move,slot,e)
     allowed=(s.status[actor,mon]==e.SLP)&(count>0)
     return e.jax.lax.cond(allowed,call,lambda c:e.ability_ops.fail(c,actor,SLEEP_TALK,move_row,e),c)
+
+
+def child(c,frame,move,slot,e):
+    s,tr=c;actor=frame[ACTOR];source=frame[MOVE]
+    target=jnp.where(e.MOVE_ACTOR_TARGET[move],actor,1-actor)
+    nested=frame.at[MOVE].set(move).at[TARGET].set(target).at[TM].set(s.active[target]).at[SOURCE_KIND].set(1).at[SOURCE_ID].set(source).at[SLOT].set(slot).at[MODE].set(1).at[PHASE].set(0).at[LOCKED].set(0).at[TAG].set(-(source+1))
+    return push((s,tr),nested,e)
+
+
+def call(c,frame,move_row,e):
+    return e.jax.lax.cond(frame[MOVE]==NATURE_POWER,lambda c:child(c,frame,e.i32(t.MOVE_IDS['earthquake']),e.i32(-1),e),lambda c:sleep_talk(c,frame,move_row,e),c)

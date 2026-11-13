@@ -14,7 +14,7 @@ Full-format G4
 coverage remains separate acceptance work. Historical evidence keeps its original
 source/schema identity; it does not imply validation of later engine changes.
 
-The current runtime uses [schema 26](../rules/shared-engine-v26.json). Schemas
+The current runtime uses [schema 27](../rules/shared-engine-v27.json). Schemas
 4–6 integrated major statuses and effect provenance, boosts/weather/screens,
 and observed ability/item hooks. Schema7 adds declarative hit counts, per-hit
 updates, capped drain/recoil arithmetic, self-destruction and reactive damage.
@@ -661,3 +661,10 @@ hit Updates before a pivot request. Frames drain at public boundaries; journal13
 binds their schema. Native draw classification distinguishes selection from
 nested accuracy/damage/Update draws. Focused20/51 CPU parity passes; the guarded
 eight-frame capacity, remaining call/reflection handlers and broad gates remain open.
+
+Schema27 adds Gen5 Nature Power through the shared active-move frame path. Its
+onHit calls Earthquake regardless of later-generation terrain behavior. The
+resolved nosleeptalk flag excludes Nature Power from Sleep Talk selection. Root
+PP/action/lastMove and called lastMoveUsed remain distinct. Focused14/19 CPU
+parity and live persistence pass; other callers/reflection, full frame capacity
+proof, broad regressions and full-format acceptance remain pending.
