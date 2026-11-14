@@ -110,6 +110,11 @@ def weather_tick(c,e):
                 s=s._replace(hp=s.hp.at[side,m].set(newhp))
                 return e._event((s,t),e.HEAL,side,m,value=newhp,aux=maximum,status=s.status[side,m],move=2)
             c=e._when((weather==4)&(ability==e.hook_tables.A['icebody'])&(s.hp[side,m]>0)&(s.hp[side,m]<s.stats[side,m,0]),ice_body,c)
+            def rain_dish(c):
+                s,t=c;maximum=s.stats[side,m,0];hp=jnp.minimum(maximum,s.hp[side,m]+jnp.maximum(1,maximum//16))
+                s=s._replace(hp=s.hp.at[side,m].set(hp))
+                return e._event((s,t),e.HEAL,side,m,value=hp,aux=maximum,status=s.status[side,m],move=8)
+            c=e._when((weather==1)&(ability==e.rain_ops.A['raindish'])&(s.hp[side,m]>0)&(s.hp[side,m]<s.stats[side,m,0]),rain_dish,c)
             def dry_heal(c):
                 s,t=c;maximum=s.stats[side,m,0];hp=jnp.minimum(maximum,s.hp[side,m]+maximum//8)
                 s=s._replace(hp=s.hp.at[side,m].set(hp))

@@ -832,6 +832,17 @@ Native22/30 focused CPU parity and NPZ/journal17 persistence pass. Layout unchan
 remaining mechanics/closure and broad/device/final acceptance stay pending.
 
 
+Schema43 adds Rain Dish and Hydration as a single rain-recovery checkpoint.
+Rain Dish uses ordered Weather callbacks; Hydration uses residual order5/suborder3
+after weather duration and before Leftovers and poison/burn. Status rows collected
+before a cure retain their ordering draws but skip the removed status callback.
+Effective ability suppression is checked in both paths. HEAL source tag8 renders
+Rain Dish; storage and core journal17 remain unchanged. The native fixture has
+33 synthetic scenarios/76 boundaries and separate positive generator witnesses
+(Pelipper seed[59,2,3,4], Swanna seed[1,2,3,4]). The one grouped focused CPU
+method uses one compiled advance and trusted persistent caching; final broad,
+device, capacity and full-format acceptance remain pending.
+
 ### Compilation investigation (2026-11-14)
 
 At `b9ce88d`, the focused switch-recovery method spent467.546s in combined

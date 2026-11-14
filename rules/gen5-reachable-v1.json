@@ -1939,10 +1939,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/rain-recovery.json.gz",
+          "native": "reference/rain-recovery-cases.cjs",
+          "scope": "Independent33 synthetic scenarios/76 boundaries; one shared compiled advance, rain healing/cure/expiry/suppression/order and continuation; complete interaction/full-format validation pending",
+          "test": "test/test_rain_recovery_engine.py"
+        }
+      ],
       "field": "onResidual",
       "id": "abilities:hydration:onResidual",
-      "implementation": null,
+      "implementation": {
+        "family": "rain_recovery",
+        "file": "simulator/rain_recovery.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:hydration",
@@ -1954,7 +1966,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "8a8c2db299a1353fc2862cbefbd671fe00cb17b1012f3943e8d18b6394ec6d11",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -4147,10 +4159,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/rain-recovery.json.gz",
+          "native": "reference/rain-recovery-cases.cjs",
+          "scope": "Independent33 synthetic scenarios/76 boundaries; one shared compiled advance, rain healing/cure/expiry/suppression/order and continuation; complete interaction/full-format validation pending",
+          "test": "test/test_rain_recovery_engine.py"
+        }
+      ],
       "field": "onWeather",
       "id": "abilities:raindish:onWeather",
-      "implementation": null,
+      "implementation": {
+        "family": "rain_recovery",
+        "file": "simulator/field_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:raindish",
@@ -4162,7 +4186,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "f7fc236de6baab62015da4017da5e5e60329a35a5130a5ef8749d9d715b3630a",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -72296,10 +72320,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/rain-recovery.json.gz",
+          "native": "reference/rain-recovery-cases.cjs",
+          "scope": "Independent33 synthetic scenarios/76 boundaries; one shared compiled advance, rain healing/cure/expiry/suppression/order and continuation; complete interaction/full-format validation pending",
+          "test": "test/test_rain_recovery_engine.py"
         }
       ],
       "id": "abilities:hydration",
       "implementation": {
+        "behavior": {
+          "family": "rain_recovery",
+          "file": "simulator/rain_recovery.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -72312,7 +72348,7 @@
       ],
       "kind": "abilities",
       "reachability": "required",
-      "reachabilityAudit": "native-team-positive-witness",
+      "reachabilityAudit": "rain-recovery-positive-witness",
       "status": "partial"
     },
     {
@@ -74155,10 +74191,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/rain-recovery.json.gz",
+          "native": "reference/rain-recovery-cases.cjs",
+          "scope": "Independent33 synthetic scenarios/76 boundaries; one shared compiled advance, rain healing/cure/expiry/suppression/order and continuation; complete interaction/full-format validation pending",
+          "test": "test/test_rain_recovery_engine.py"
         }
       ],
       "id": "abilities:raindish",
       "implementation": {
+        "behavior": {
+          "family": "rain_recovery",
+          "file": "simulator/field_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -74170,8 +74218,8 @@
         }
       ],
       "kind": "abilities",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "rain-recovery-positive-witness",
       "status": "partial"
     },
     {
@@ -97556,6 +97604,110 @@
           "sim/battle-actions.ts:267-408 (OverrideAction, Z/Max and Dancer guards)"
         ]
       },
+      "rain-recovery-positive-witness": {
+        "bound": [
+          "abilities:hydration",
+          "abilities:raindish"
+        ],
+        "conclusion": "required",
+        "kind": "abilities",
+        "reasoning": "Pinned generator seeds[59,2,3,4] Pelipper Rain Dish and[1,2,3,4] Swanna Hydration prove membership. Directed synthetic weather/residual cases cover implemented branches, not complete dependency/format closure.",
+        "references": [
+          "data/random-battles/gen5/teams.ts:103-494 (cullMovePool/randomMoveset)",
+          "data/random-battles/gen5/teams.ts:496-566 (ability filters/fallback)",
+          "data/random-battles/gen5/teams.ts:568-816 (item returns and randomSet)",
+          "data/random-battles/gen5/teams.ts:850-1014 (team eligibility)",
+          "data/random-battles/gen9/teams.ts:675-693 (addMove)",
+          "data/random-battles/gen9/teams.ts:1442-1497 (getLevel/getForme)",
+          "data/random-battles/gen9/teams.ts:1641-1683 (getPokemonPool)"
+        ],
+        "witnesses": [
+          {
+            "ability": "raindish",
+            "seed": [
+              59,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Rain Dish",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Leftovers",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 88,
+              "moves": [
+                "uturn",
+                "hurricane",
+                "roost",
+                "scald"
+              ],
+              "name": "Pelipper",
+              "role": "Bulky Attacker",
+              "shiny": false,
+              "species": "Pelipper",
+              "speciesId": "pelipper"
+            }
+          },
+          {
+            "ability": "hydration",
+            "seed": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Hydration",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Leftovers",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 83,
+              "moves": [
+                "toxic",
+                "scald",
+                "roost",
+                "bravebird"
+              ],
+              "name": "Swanna",
+              "role": "Bulky Attacker",
+              "shiny": false,
+              "species": "Swanna",
+              "speciesId": "swanna"
+            }
+          }
+        ]
+      },
       "sap-sipper-positive-witness": {
         "bound": [
           "abilities:sapsipper"
@@ -98104,8 +98256,8 @@
       },
       "entries": {
         "proven_unreachable": 542,
-        "required": 48,
-        "unresolved": 1178
+        "required": 49,
+        "unresolved": 1177
       },
       "roots": {
         "proven_unreachable": 0,

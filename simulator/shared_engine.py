@@ -39,6 +39,7 @@ from . import ability_changes as ability_ops
 from . import status_immunity as immunity_ops
 from . import flash_fire as flash_ops
 from . import switch_recovery as recovery_ops
+from . import rain_recovery as rain_ops
 from . import ability_creation as creation_ops
 from . import suppression as suppression_ops
 from . import sleep_control as sleep_ops
@@ -52,7 +53,7 @@ import sys
 def _engine():
     return sys.modules[__name__]
 
-SCHEMA = 42
+SCHEMA = 43
 ROSTER, SLOTS, QUEUE, EVENTS, DRAWS, HISTORY = 6, 4, 8, 128, 128, 2048
 OK, PENDING, INVALID, UNSUPPORTED, CAPACITY, TERMINAL, STALE = range(7)
 RETRY=7
@@ -797,6 +798,9 @@ def _residual(c):
     for side in range(2):
         mon=s.active[side]
         rows.append(i32([10,side,0,29,0,0,0]).at[2].set(mon).at[4].set(s.speed[side,mon]));valid.append(suppression_ops.abilities(s)[side,mon]==trigger_form_ops.ZEN)
+    for side in range(2):
+        mon=s.active[side]
+        rows.append(i32([11,side,0,5,0,3,0]).at[2].set(mon).at[4].set(s.speed[side,mon]));valid.append(suppression_ops.abilities(s)[side,mon]==rain_ops.A['hydration'])
     handlers=len(rows)
     rows=jnp.stack(rows);valid=jnp.stack(valid);count=jnp.sum(valid).astype(jnp.int32)
     order=jnp.where(valid,rows[:,3],20000)
@@ -843,13 +847,13 @@ def _residual(c):
                     s,t=c;newhp=jnp.minimum(maxhp,hp+jnp.maximum(1,maxhp//16));s=s._replace(hp=s.hp.at[side,m].set(newhp))
                     return _event((s,t),HEAL,side,m,value=newhp,aux=maxhp,status=s.status[side,m],move=1)
                 return _when(hp<maxhp,heal,c)
-            return jax.lax.cond(kind==10,lambda c:trigger_form_ops.residual(c,side,_engine()),lambda c:jax.lax.cond(kind==9,lambda c:jax.lax.cond(row[6]==partial_ops.SLOT,lambda c:partial_ops.tick(c,side,_engine()),lambda c:jax.lax.cond(row[6]==sleep_ops.SLOT,lambda c:sleep_ops.tick(c,side,_engine()),lambda c:phase_ops.extra_tick(c,side,row[6],_engine()),c),c),
+            return jax.lax.cond(kind==11,lambda c:rain_ops.hydration(c,side,_engine()),lambda c:jax.lax.cond(kind==10,lambda c:trigger_form_ops.residual(c,side,_engine()),lambda c:jax.lax.cond(kind==9,lambda c:jax.lax.cond(row[6]==partial_ops.SLOT,lambda c:partial_ops.tick(c,side,_engine()),lambda c:jax.lax.cond(row[6]==sleep_ops.SLOT,lambda c:sleep_ops.tick(c,side,_engine()),lambda c:phase_ops.extra_tick(c,side,row[6],_engine()),c),c),
                 lambda c:jax.lax.cond(kind==8,lambda c:phase_ops.tick_phase(c,side,5,_engine()),
                 lambda c:jax.lax.cond(kind==7,lambda c:phase_ops.tick(c,side,m),
                 lambda c:jax.lax.cond(kind==5,lambda c:field_ops.weather_tick(c,_engine()),
                 lambda c:jax.lax.cond(kind==6,lambda c:field_ops.screen_tick(c,side,m,_engine()),
-                    lambda c:jax.lax.cond(kind==1,status_tick,lambda c:jax.lax.cond(kind==4,leftovers,duration,c),c),c),c),c),c),c),c)
-        return _when((k<count)&((kind==5)|(kind==6)|(~s.fainted[side,m]))&(s.winner<0),apply,c)
+                    lambda c:jax.lax.cond(kind==1,status_tick,lambda c:jax.lax.cond(kind==4,leftovers,duration,c),c),c),c),c),c),c),c),c)
+        return _when((k<count)&((kind==5)|(kind==6)|(~s.fainted[side,m]))&(s.winner<0)&((kind!=1)|((s.status[side,m]==TOX)|(s.status[side,m]==PSN)|(s.status[side,m]==BRN))),apply,c)
     c=jax.lax.fori_loop(0,handlers,effect,c)
     s,t=c
     return _when(s.winner<0,lambda c:_event(c,UPKEEP),c)
@@ -995,7 +999,7 @@ def _supported(s,initializing=False):
             &jnp.all((s.moves==0)|move_mask[jnp.clip(s.moves,0,len(MOVE_KEYS)-1)])
             &jnp.all((s.item>=0)&(s.item<len(ITEMS)))
             &jnp.all((hook_tables.ITEM_IMPLEMENTED|hit_tables.ITEM_IMPLEMENTED|phase_ops.ITEM_IMPLEMENTED|partial_ops.ITEM_IMPLEMENTED)[jnp.clip(s.item,0,len(ITEMS)-1)])
-            &jnp.all((s.ability>=0)&(s.ability<len(ABILITIES)))&jnp.all((hook_tables.ABILITY_IMPLEMENTED|hit_tables.ABILITY_IMPLEMENTED|trap_ops.ABILITY_IMPLEMENTED|phaze_ops.ABILITY_IMPLEMENTED|item_ops.ABILITY_IMPLEMENTED|identity_ops.ABILITY_IMPLEMENTED|illusion_ops.ABILITY_IMPLEMENTED|form_ops.ABILITY_IMPLEMENTED|trigger_form_ops.ABILITY_IMPLEMENTED|immunity_ops.ABILITY_IMPLEMENTED|creation_ops.ABILITY_IMPLEMENTED|sleep_ops.ABILITY_IMPLEMENTED|called_ops.ABILITY_IMPLEMENTED|trace_ops.ABILITY_IMPLEMENTED|flash_ops.ABILITY_IMPLEMENTED|recovery_ops.ABILITY_IMPLEMENTED)[jnp.clip(s.ability,0,len(ABILITIES)-1)])
+            &jnp.all((s.ability>=0)&(s.ability<len(ABILITIES)))&jnp.all((hook_tables.ABILITY_IMPLEMENTED|hit_tables.ABILITY_IMPLEMENTED|trap_ops.ABILITY_IMPLEMENTED|phaze_ops.ABILITY_IMPLEMENTED|item_ops.ABILITY_IMPLEMENTED|identity_ops.ABILITY_IMPLEMENTED|illusion_ops.ABILITY_IMPLEMENTED|form_ops.ABILITY_IMPLEMENTED|trigger_form_ops.ABILITY_IMPLEMENTED|immunity_ops.ABILITY_IMPLEMENTED|creation_ops.ABILITY_IMPLEMENTED|sleep_ops.ABILITY_IMPLEMENTED|called_ops.ABILITY_IMPLEMENTED|trace_ops.ABILITY_IMPLEMENTED|flash_ops.ABILITY_IMPLEMENTED|recovery_ops.ABILITY_IMPLEMENTED|rain_ops.ABILITY_IMPLEMENTED)[jnp.clip(s.ability,0,len(ABILITIES)-1)])
             &jnp.all((s.ivs>=0)&(s.ivs<=31))&jnp.all((s.evs>=0)&(s.evs<=255))
             &jnp.all((s.nature>=1)&(s.nature<=len(generic.NATURES)))
             &jnp.all(s.types==tables.SPECIES_TYPES[safe_species])&jnp.all((s.boosts>=-6)&(s.boosts<=6))

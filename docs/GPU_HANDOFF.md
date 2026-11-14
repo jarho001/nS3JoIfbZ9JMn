@@ -13,11 +13,28 @@ all acceptance requirements and commands below remain pending.
 **Compilation-aware execution, 2026-11-14:** new CPU mechanic packages use small
 groups and persistent correctness caching under the
 [workflow](ORCHESTRATION.md#compilation-aware-g4-checkpoints). Deferred acceptance
-requirements remain unchanged. The existing runner still forces cache off;
-cache-option plumbing is part of the next package, not implemented or validated
-by this instruction update. Keep historical commands/results as provenance.
+requirements remain unchanged. The runner now defaults to a trusted persistent
+correctness cache at `work/jax-cache`; `--cache-dir PATH` selects another trusted
+directory, and explicit `--cold` disables caching. It records effective settings
+in the summary and each command while retaining per-module process isolation.
+Four helper checks passed; no broad/device runner execution is claimed.
+Keep historical commands/results as provenance.
 
 ## Current source and evidence
+
+**Schema43 Rain Dish / Hydration group:** focused CPU33 scenarios/76 boundaries
+passed in313.196s; native fixture/inventory contracts and4 cache/handoff helpers pass.
+See [schema43-checkpoint.json](../test-logs/g4-cpu-conformance/schema43-checkpoint.json).
+One shared compiled `advance` covers both abilities, cure-before-status/Leftovers,
+weather expiry, suppression and tied ordering; NPZ/journal17 layout unchanged.
+
+```sh
+JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_rain_recovery_engine -v -f
+```
+
+Runner includes105 checks/49 modules,1393 scenarios/5661 boundaries.
+Preparation, broad CPU/migration/full-lean, fixed campaigns and device checks
+remain pending until mechanics/inventory closure. No GPU run.
 
 **Schema42 Natural Cure / Regenerator switch-out recovery:** focused CPU22 scenarios/30 boundaries
 passed in502.851s;2 native/inventory checks passed. No GPU run.

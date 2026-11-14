@@ -2,6 +2,7 @@
 import contextlib
 import io
 import json
+import os
 from pathlib import Path
 import subprocess
 import sys
@@ -27,6 +28,29 @@ class GpuHandoffTest(unittest.TestCase):
             self.assertFalse(summary['full_G4_accepted'])
             with tarfile.open(out.with_name('evidence.tar.gz')) as archive:
                 self.assertIsNotNone(archive.getmember('evidence/summary.json'))
+
+    def test_cache_and_cold_options_override_inherited_settings(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            cache=Path(tmp)/'cache';cache.mkdir()
+            marker=cache/'keep';marker.write_text('cached executable')
+            for cold in (False,True):
+                out=Path(tmp)/str(cold);seen=[]
+                def stop_after_environment(command,log,env,timeout,records):
+                    seen.append(env.copy())
+                    raise RuntimeError('stop before native execution')
+                argv=['--prepare-only','--output',str(out)]+(['--cold']if cold else ['--cache-dir',str(cache)])
+                with self.subTest(cold=cold),patch.dict(os.environ,JAX_ENABLE_COMPILATION_CACHE='false',JAX_COMPILATION_CACHE_DIR='inherited'),patch.object(h,'run',side_effect=stop_after_environment):
+                    with contextlib.redirect_stdout(io.StringIO()),contextlib.redirect_stderr(io.StringIO()):
+                        self.assertEqual(h.main(argv),1)
+                    settings=json.loads((out/'summary.json').read_text())['compilation_cache']
+                    self.assertEqual(settings['JAX_ENABLE_COMPILATION_CACHE'],'false'if cold else 'true')
+                    if cold:
+                        self.assertNotIn('JAX_COMPILATION_CACHE_DIR',seen[0])
+                        self.assertNotIn('JAX_COMPILATION_CACHE_DIR',settings)
+                    else:
+                        self.assertEqual(settings['JAX_COMPILATION_CACHE_DIR'],str(cache))
+                        self.assertEqual(seen[0]['JAX_COMPILATION_CACHE_DIR'],str(cache))
+                    self.assertEqual(marker.read_text(),'cached executable')
 
     def test_existing_output_is_preserved(self):
         with tempfile.TemporaryDirectory() as tmp:

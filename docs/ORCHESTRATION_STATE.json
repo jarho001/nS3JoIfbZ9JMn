@@ -524,7 +524,7 @@
     "brief": "PROJECT_PLAN.md#proposed-g4-cpu-implementation-and-conformance-goal",
     "source_base": "f37067e",
     "scope": "Complete pinned gen5randombattle reachable mechanics and every prepared CPU gate. Integrated checkpoints, resumable progress and commit/push authorized. GPU execution, profiling, benchmarks, training, delegation and scored research excluded.",
-    "checkpoint": "Natural Cure / Regenerator switch-out recovery schema42: focused CPU 22 scenarios/30 boundaries passed in502.851s;2 native/inventory checks passed. Full G4 and broad gates pending.",
+    "checkpoint": "Schema43 Rain Dish/Hydration group:33 scenarios/76 native boundaries passed through one compiled advance in313.196s;2 native/inventory contracts and4 cache/handoff helpers passed. Full G4/broad/device gates pending.",
     "completed_checkpoints": [
       "Pinned resolved data and source-owned conservative candidate inventory exported; 605 role roots, 1768 data/effect entries, 1146 callback slots. Data-only mappings remain partial; transitive closure and complete callback implementation are not claimed.",
       "Generic species/set/type/stat/physical-special/Hidden Power/happiness/priority/hazard integration passes 37 affected CPU checks on 4eab254, retaining all 133 baseline scenarios and validating 24 added scenarios: 157 scenarios / 1059 boundaries, including 20 complete battles (eight six-member games). Eager/JIT/1-8-32 mixed batches, serialized continuation/reset, explicit schema 1/2 migration and full/lean rollouts pass.",
@@ -538,7 +538,7 @@
       "Schema10 core/journal/hard-turn-limit checkpoint validated on a9d0fbd:3 integrated CPU checks pass in1174.685s, plus5 native/6 helper checks. Complete combat and1000-boundary neutral histories match native; mixed1/8/32,full/lean,core reset,persistence/corruption pass. Full64 suite and full-format G4 pending.",
       "Schema11 trapping/retry checkpoint:8 affected CPU checks plus6 native/6 helper checks pass. New31 scenarios/215 boundaries include two complete six-member games and mirrored private-state episodes. Aggregate558/4110; full68 suite and full-format G4 pending."
     ],
-    "next": "Implement the rain-recovery group (Rain Dish + Hydration) with a shared focused test executable and persistent correctness-cache plumbing; precheck/freeze native cases for each member first, then one group CPU comparison. Follow docs/ORCHESTRATION.md#compilation-aware-g4-checkpoints; broader/device gates deferred.",
+    "next": "Precheck and implement the residual-recovery group (Shed Skin + Poison Heal), then one shared focused CPU comparison with persistent cache. Candidate witnesses: Arbok seed[4,2,3,4], Breloom seed[38,2,3,4]. Broader/device gates deferred.",
     "ledger": {
       "path": "rules/gen5-reachable-v1.json",
       "entries": 1768,
@@ -1201,14 +1201,30 @@
         "native_boundaries": 30,
         "evidence": "test-logs/g4-cpu-conformance/schema42-checkpoint.json",
         "next": "Next family candidates: Rain Dish/Hydration, repeat native reachability precheck before implementation. Stopped after completed switch-out recovery family at user request; broad/GPU/campaign/profiling gates remain deferred."
+      },
+      "rain_recovery": {
+        "status": "completed_focused_CPU_checkpoint_not_full_G4",
+        "source_base": "0e543e31054c38ebeb5c8598dd940f1d96eb89c5",
+        "candidate_schema": 43,
+        "core_journal_schema": 17,
+        "native_cases": 33,
+        "native_boundaries": 76,
+        "evidence": "test-logs/g4-cpu-conformance/schema43-checkpoint.json",
+        "focused_CPU_runs": 1,
+        "validation_phase_seconds": {
+          "lower_compile": 284.182,
+          "initialization_replay_assertions": 26.39,
+          "unittest_total": 313.196
+        },
+        "next": "Residual recovery group: Shed Skin/Poison Heal; reproduce witnesses and freeze pinned native cases before implementation."
       }
     },
     "resolved_failure": "16b5263 preflight rejected ordinary moves because type was missing from its field set; fixed by 4eab254, failed run stopped, all 37 repaired checks pass. Detailed minimized input and source identities are in source.json.",
     "publication": {
       "status": "checkpoint_publication_authorized",
       "target": "origin/main",
-      "previous_published_head": "73d1c7b",
-      "scope": "Schema42 focused CPU checkpoint; remaining G4 open."
+      "previous_published_head": "0e543e3",
+      "scope": "Schema43 grouped rain-recovery focused CPU checkpoint; full G4 open."
     },
     "reasoning_effort": "medium (user preference,2026-11-10; no automatic escalation)",
     "design_pass": {
@@ -1228,7 +1244,7 @@
     },
     "validation_policy": {
       "approved_at": "2026-11-13",
-      "implementation_default": "One focused CPU differential check per mechanic family; narrow regression only for a concrete shared-path concern.",
+      "implementation_default": "Compilation-aware groups of two to four related reachable families: native precheck per member, then one shared optimized CPU advance for the group, persistent correctness cache; stop on divergence.",
       "consolidate": "GPU correctness, broad CPU matrices, complete-battle campaigns and profiling deferred until reachable mechanics and inventory closure; acceptance requirements and exact commands retained in docs/GPU_HANDOFF.md.",
       "acceptance": "Final G4 CPU acceptance unchanged; unrun checks remain pending.",
       "resume": "Trace resumed after concrete structural compilation fix; one focused CPU differential passed, plus narrow shared Update holder-order regression."
@@ -1236,21 +1252,17 @@
     "implementation_wip": null,
     "cpu_block": null,
     "reachability_precheck": {
-      "family": "Natural Cure / Regenerator",
+      "family": "Rain Dish / Hydration",
       "status": "completed_focused_CPU_checkpoint_not_full_G4",
       "required": [
-        "abilities:regenerator: seed[3,2,3,4] Slowking",
-        "abilities:naturalcure: seed[24,2,3,4] Celebi"
+        "abilities:raindish: seed[59,2,3,4] Pelipper",
+        "abilities:hydration: seed[1,2,3,4] Swanna"
       ],
       "shared_behavior": [
-        "Existing status cure metadata and effective ability suppression",
-        "Shared switch entry after Pursuit and before volatile/base restoration; normal, pivot, phazing"
+        "Ordered weather callbacks, weather expiry",
+        "Residual5/suborder3 cure before Leftovers/poison/burn; keep collected sort draws and skip removed status effects"
       ],
-      "new_dependencies": [
-        "Natural Cure silent ability cure; singles CheckShow format guard is a no-op",
-        "Regenerator silent capped original maximum HP third recovery, living holders only"
-      ],
-      "native_spec": "test-logs/g4-cpu-conformance/switch-recovery.json.gz:22 synthetic scenarios/30 boundaries frozen before implementation"
+      "native_spec": "test-logs/g4-cpu-conformance/rain-recovery.json.gz:33 synthetic scenarios/76 boundaries; native cases frozen before implementation, expiry stimulus changed to deterministic Thunder Wave before CPU run"
     },
     "scope_audit": {
       "date": "2026-11-13",
@@ -1339,41 +1351,24 @@
       "next": "Apply grouped validation and correctness cache in next rain-recovery package; no additional compilation investigation needed."
     },
     "next_work_package": {
-      "id": "g4-rain-recovery-group",
-      "status": "planned_not_implemented_or_CPU_validated",
+      "id": "g4-residual-recovery-group",
+      "status": "planned_native_precheck_pending",
       "members": [
-        "Rain Dish: rain healing/cap/rounding, effective suppression and weather expiry",
-        "Hydration: residual order5/suborder3 status cure, exact activation/cure metadata, rain expiry and suppression"
-      ],
-      "precheck": [
-        "Reproduce positive generator witnesses: Rain Dish Pelipper seed[59,2,3,4]; Hydration Swanna seed[1,2,3,4]; persist ledger proofs, not just prior ignored work files.",
-        "Freeze pinned native ordinary/boundary/interactions per member before implementation; reuse work/g4-rain-recovery scratch inputs only if present and reverified."
+        "Shed Skin residual5/suborder3 chance33/100 status cure",
+        "Poison Heal onDamage priority1 poison/toxic replacement with eighth original-HP healing"
       ],
       "shared_paths": [
-        "Weather duration/expiry and native ordered weather callbacks",
-        "Residual handler collection, ordering and skipping a status callback after Hydration cure",
-        "Exact RNG, HP/status metadata, legal requests and both recipient histories"
+        "Residual handler collection/order and removed status callback guard",
+        "Status cure metadata, capped HP recovery and effective suppression"
       ],
-      "harness": [
-        "One compact rain-recovery fixture/test method shares a single compiled advance for both members; planned module test.test_rain_recovery_engine does not yet exist.",
-        "Enable trusted persistent correctness caching; remove forced cache disable from new commands. Add explicit cache/cold controls and effective-setting provenance to deferred runner without running broad/device suites.",
-        "Preserve process isolation for historical modules; no per-member clear_caches or equivalent duplicate integration compiles."
+      "precheck": [
+        "Reproduce positive Arbok Shed Skin seed[4,2,3,4] and Breloom Poison Heal seed[38,2,3,4]; persist ledger proof",
+        "Freeze ordinary/no-op/success/failure/tie/suppression/status/Leftovers/cross-member native cases before each implementation"
       ],
-      "validation": [
-        "Cheap native fixture/inventory contracts per meaningful revision.",
-        "One focused optimized CPU differential for the entire group after both members are implemented, plus narrow regression only for a concrete shared-path risk.",
-        "Representative NPZ/journal continuation and targeted cure-before-status/Leftovers, expiry, suppression and tied ordering within that same focused method."
-      ],
-      "planned_command": "JAX_PLATFORMS=cpu JAX_ENABLE_COMPILATION_CACHE=true JAX_COMPILATION_CACHE_DIR=\"$PWD/work/jax-cache\" OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 XLA_PYTHON_CLIENT_PREALLOCATE=false timeout 900s .venv-jax/bin/python -m unittest test.test_rain_recovery_engine -v -f",
-      "command_status": "planned; add module first, respect actual host quota, record timing/source identity; not run by this instruction update",
-      "stop_and_save": [
-        "Stop adding members on a divergence; preserve exact assertions and diagnose before rerun.",
-        "If interrupted before group pass, record implemented members as CPU-unvalidated with fixture/source identities and resume command.",
-        "After group pass commit/push coherent evidence, update GPU_HANDOFF and select next small related group; full G4 remains open."
-      ],
+      "planned_command": "JAX_PLATFORMS=cpu JAX_ENABLE_COMPILATION_CACHE=true JAX_COMPILATION_CACHE_DIR=\"$PWD/work/jax-cache\" JAX_EXPLAIN_CACHE_MISSES=true OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 XLA_PYTHON_CLIENT_PREALLOCATE=false timeout 900s .venv-jax/bin/python -m unittest test.test_residual_recovery_engine -v -f",
+      "command_status": "planned; module not yet implemented",
       "excluded": [
-        "Solar Power and other unrelated abilities in this package",
-        "Reduced-optimization experiments, new compile sweeps, broad CPU matrices, GPU execution, complete campaigns and profiling"
+        "Broad CPU matrices, GPU, campaigns, profiling and compile ablations"
       ]
     }
   },
@@ -2339,17 +2334,17 @@
     "combined_return_home_block": "docs/GPU_HANDOFF.md#one-return-home-block-correctness-plus-g3-v6-measurements",
     "pending_status_checkpoint": "Current status/field/hook GPU checks are wired into the49-check runner; no GPU execution during travel. Preserve matching-source CPU results and do not transfer earlier GPU/CPU evidence across changed source.",
     "expanded_checkpoint": {
-      "status": "schema42_focused_CPU_complete_GPU_deferred",
-      "engine_schema": 42,
-      "modules": 48,
-      "native_scenarios": 1360,
-      "native_boundaries": 5585,
+      "status": "schema43_grouped_focused_CPU_complete_GPU_deferred",
+      "engine_schema": 43,
+      "modules": 49,
+      "native_scenarios": 1393,
+      "native_boundaries": 5661,
       "initial_field_evidence": "test-logs/g4-cpu-conformance/schema5-checkpoint.json",
       "source": "Use latest committed checkout and runner source/fixture fingerprints; earlier source_commit fields describe historical preparation.",
       "handoff_prepared": false,
-      "source_commit": "Publishing commit; exact relevant source fingerprints in schema42-checkpoint.json",
-      "source_identity": "test-logs/g4-cpu-conformance/schema42-checkpoint.json",
-      "checks": 104
+      "source_commit": "Publishing commit; exact relevant source fingerprints in schema43-checkpoint.json",
+      "source_identity": "test-logs/g4-cpu-conformance/schema43-checkpoint.json",
+      "checks": 105
     },
     "pending_candidate": null
   }

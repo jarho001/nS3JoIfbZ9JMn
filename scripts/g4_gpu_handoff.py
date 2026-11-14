@@ -25,15 +25,15 @@ MODULES = (
     'test.test_shared_engine_cases', 'test.test_shared_engine_battles',
     'test.test_shared_engine_lifecycle', 'test.test_rollout', 'test.test_g3_fixtures',
     'test.test_status_engine', 'test.test_field_engine',
-    'test.test_hook_engine', 'test.test_hit_engine', 'test.test_recharge_engine', 'test.test_lock_phase_engine', 'test.test_core_journal', 'test.test_trapping_engine', 'test.test_substitute_engine', 'test.test_partial_trap_engine', 'test.test_phazing_engine', 'test.test_pursuit_engine', 'test.test_item_lifecycle_engine', 'test.test_identity_engine', 'test.test_illusion_engine', 'test.test_form_engine', 'test.test_trigger_form_engine', 'test.test_ability_change_engine', 'test.test_status_immunity_engine', 'test.test_ability_create_engine', 'test.test_suppression_engine', 'test.test_sleep_control_engine', 'test.test_called_move_engine', 'test.test_nature_power_engine', 'test.test_copy_move_engine', 'test.test_reflection_engine', 'test.test_magic_coat_engine', 'test.test_wonder_guard_engine', 'test.test_trace_engine', 'test.test_trace_update_regression', 'test.test_mummy_engine', 'test.test_magic_guard_engine', 'test.test_low_hp_engine', 'test.test_absorption_engine', 'test.test_type_boost_engine', 'test.test_sap_sipper_engine', 'test.test_flash_fire_engine', 'test.test_secondary_ability_engine', 'test.test_dry_skin_engine', 'test.test_switch_recovery_engine',
+    'test.test_hook_engine', 'test.test_hit_engine', 'test.test_recharge_engine', 'test.test_lock_phase_engine', 'test.test_core_journal', 'test.test_trapping_engine', 'test.test_substitute_engine', 'test.test_partial_trap_engine', 'test.test_phazing_engine', 'test.test_pursuit_engine', 'test.test_item_lifecycle_engine', 'test.test_identity_engine', 'test.test_illusion_engine', 'test.test_form_engine', 'test.test_trigger_form_engine', 'test.test_ability_change_engine', 'test.test_status_immunity_engine', 'test.test_ability_create_engine', 'test.test_suppression_engine', 'test.test_sleep_control_engine', 'test.test_called_move_engine', 'test.test_nature_power_engine', 'test.test_copy_move_engine', 'test.test_reflection_engine', 'test.test_magic_coat_engine', 'test.test_wonder_guard_engine', 'test.test_trace_engine', 'test.test_trace_update_regression', 'test.test_mummy_engine', 'test.test_magic_guard_engine', 'test.test_low_hp_engine', 'test.test_absorption_engine', 'test.test_type_boost_engine', 'test.test_sap_sipper_engine', 'test.test_flash_fire_engine', 'test.test_secondary_ability_engine', 'test.test_dry_skin_engine', 'test.test_switch_recovery_engine', 'test.test_rain_recovery_engine',
 )
 NATIVE_TESTS = (
     'test/reference.test.cjs', 'test/gen5-reachability.test.cjs',
     'test/shared-engine.test.cjs', 'test/status-duration-native.test.cjs',
     'test/field-boost-native.test.cjs',
-    'test/ability-item-native.test.cjs', 'test/hit-effect-native.test.cjs', 'test/recharge-native.test.cjs', 'test/lock-phase-native.test.cjs', 'test/g4-design-native.test.cjs', 'test/trapping-native.test.cjs', 'test/substitute-native.test.cjs', 'test/partial-trap-native.test.cjs', 'test/phazing-native.test.cjs', 'test/pursuit-native.test.cjs', 'test/item-lifecycle-native.test.cjs', 'test/identity-native.test.cjs', 'test/illusion-native.test.cjs', 'test/form-native.test.cjs', 'test/trigger-form-native.test.cjs', 'test/ability-change-native.test.cjs', 'test/status-immunity-native.test.cjs', 'test/ability-create-native.test.cjs', 'test/suppression-native.test.cjs', 'test/sleep-control-native.test.cjs', 'test/called-move-native.test.cjs', 'test/nature-power-native.test.cjs', 'test/copy-move-native.test.cjs', 'test/reflection-native.test.cjs', 'test/magic-coat-native.test.cjs', 'test/wonder-guard-native.test.cjs', 'test/trace-native.test.cjs', 'test/mummy-native.test.cjs', 'test/magic-guard-native.test.cjs', 'test/low-hp-native.test.cjs', 'test/absorption-native.test.cjs', 'test/type-boost-native.test.cjs', 'test/sap-sipper-native.test.cjs', 'test/flash-fire-native.test.cjs', 'test/secondary-ability-native.test.cjs', 'test/dry-skin-native.test.cjs', 'test/switch-recovery-native.test.cjs',
+    'test/ability-item-native.test.cjs', 'test/hit-effect-native.test.cjs', 'test/recharge-native.test.cjs', 'test/lock-phase-native.test.cjs', 'test/g4-design-native.test.cjs', 'test/trapping-native.test.cjs', 'test/substitute-native.test.cjs', 'test/partial-trap-native.test.cjs', 'test/phazing-native.test.cjs', 'test/pursuit-native.test.cjs', 'test/item-lifecycle-native.test.cjs', 'test/identity-native.test.cjs', 'test/illusion-native.test.cjs', 'test/form-native.test.cjs', 'test/trigger-form-native.test.cjs', 'test/ability-change-native.test.cjs', 'test/status-immunity-native.test.cjs', 'test/ability-create-native.test.cjs', 'test/suppression-native.test.cjs', 'test/sleep-control-native.test.cjs', 'test/called-move-native.test.cjs', 'test/nature-power-native.test.cjs', 'test/copy-move-native.test.cjs', 'test/reflection-native.test.cjs', 'test/magic-coat-native.test.cjs', 'test/wonder-guard-native.test.cjs', 'test/trace-native.test.cjs', 'test/mummy-native.test.cjs', 'test/magic-guard-native.test.cjs', 'test/low-hp-native.test.cjs', 'test/absorption-native.test.cjs', 'test/type-boost-native.test.cjs', 'test/sap-sipper-native.test.cjs', 'test/flash-fire-native.test.cjs', 'test/secondary-ability-native.test.cjs', 'test/dry-skin-native.test.cjs', 'test/switch-recovery-native.test.cjs', 'test/rain-recovery-native.test.cjs',
 )
-BATCHES = {'legacy': 'all', 'hazards': 'g4', 'generic': 'generic', 'status': 'status', 'field': 'field', 'hooks': 'hooks', 'hits': 'hits', 'recharge': 'recharge', 'locks': 'locks', 'turnlimit': 'turnlimit', 'trapping': 'trapping', 'substitute': 'substitute', 'partialtrap': 'partialtrap', 'phazing': 'phazing', 'pursuit': 'pursuit', 'items': 'items', 'identity': 'identity', 'illusion': 'illusion', 'forms': 'forms', 'triggerforms': 'triggerforms', 'abilitychange': 'abilitychange', 'statusimmunity': 'statusimmunity', 'abilitycreate': 'abilitycreate', 'suppression': 'suppression', 'sleepcontrol': 'sleepcontrol', 'calledmoves': 'calledmoves', 'naturepower': 'naturepower', 'copymoves': 'copymoves', 'reflection': 'reflection', 'magiccoat': 'magiccoat', 'wonderguard': 'wonderguard', 'trace': 'trace', 'mummy': 'mummy', 'magicguard': 'magicguard', 'lowhp': 'lowhp', 'absorption': 'absorption', 'typeboost': 'typeboost', 'sapsipper': 'sapsipper', 'flashfire': 'flashfire', 'secondaryability': 'secondaryability', 'dryskin': 'dryskin', 'switchrecovery': 'switchrecovery'}
+BATCHES = {'legacy': 'all', 'hazards': 'g4', 'generic': 'generic', 'status': 'status', 'field': 'field', 'hooks': 'hooks', 'hits': 'hits', 'recharge': 'recharge', 'locks': 'locks', 'turnlimit': 'turnlimit', 'trapping': 'trapping', 'substitute': 'substitute', 'partialtrap': 'partialtrap', 'phazing': 'phazing', 'pursuit': 'pursuit', 'items': 'items', 'identity': 'identity', 'illusion': 'illusion', 'forms': 'forms', 'triggerforms': 'triggerforms', 'abilitychange': 'abilitychange', 'statusimmunity': 'statusimmunity', 'abilitycreate': 'abilitycreate', 'suppression': 'suppression', 'sleepcontrol': 'sleepcontrol', 'calledmoves': 'calledmoves', 'naturepower': 'naturepower', 'copymoves': 'copymoves', 'reflection': 'reflection', 'magiccoat': 'magiccoat', 'wonderguard': 'wonderguard', 'trace': 'trace', 'mummy': 'mummy', 'magicguard': 'magicguard', 'lowhp': 'lowhp', 'absorption': 'absorption', 'typeboost': 'typeboost', 'sapsipper': 'sapsipper', 'flashfire': 'flashfire', 'secondaryability': 'secondaryability', 'dryskin': 'dryskin', 'switchrecovery': 'switchrecovery', 'rainrecovery': 'rainrecovery'}
 SOURCE_PATHS = (
     'simulator', 'mechanics', 'rules', 'reference', 'test', 'environment',
     'evaluation', 'scripts', 'requirements-jax-cpu.txt', 'reference-lock.json',
@@ -65,9 +65,9 @@ def save(path, value):
 def run(command, log, env, timeout, records):
     """One attempt per phase; kill its process group on timeout/interruption."""
     keys = ('JAX_PLATFORMS', 'CUDA_VISIBLE_DEVICES', 'OMP_NUM_THREADS', 'OPENBLAS_NUM_THREADS',
-            'XLA_PYTHON_CLIENT_PREALLOCATE', 'JAX_ENABLE_COMPILATION_CACHE',
+            'XLA_PYTHON_CLIENT_PREALLOCATE', 'JAX_ENABLE_COMPILATION_CACHE', 'JAX_COMPILATION_CACHE_DIR',
             'G3_NATIVE_CASES', 'G4_NATIVE_CASES', 'GEN5_NATIVE_CASES', 'STATUS_NATIVE_CASES',
-            'FIELD_NATIVE_CASES', 'HOOK_NATIVE_CASES', 'HIT_NATIVE_CASES', 'RECHARGE_NATIVE_CASES', 'LOCK_NATIVE_CASES', 'TURN_LIMIT_NATIVE_CASE', 'TRAP_NATIVE_CASES', 'SUB_NATIVE_CASES', 'PARTIAL_NATIVE_CASES', 'PHAZE_NATIVE_CASES', 'PURSUIT_NATIVE_CASES', 'ITEM_NATIVE_CASES', 'IDENTITY_NATIVE_CASES', 'ILLUSION_NATIVE_CASES', 'FORM_NATIVE_CASES', 'TRIGGER_FORM_NATIVE_CASES', 'ABILITY_CHANGE_NATIVE_CASES', 'STATUS_IMMUNITY_NATIVE_CASES', 'ABILITY_CREATE_NATIVE_CASES', 'SUPPRESSION_NATIVE_CASES', 'SLEEP_CONTROL_NATIVE_CASES', 'CALLED_NATIVE_CASES', 'NATURE_POWER_NATIVE_CASES', 'MUMMY_NATIVE_CASES', 'MAGIC_GUARD_NATIVE_CASES', 'LOW_HP_NATIVE_CASES', 'ABSORPTION_NATIVE_CASES', 'G4_PROBE_OUTPUT')
+            'FIELD_NATIVE_CASES', 'HOOK_NATIVE_CASES', 'HIT_NATIVE_CASES', 'RECHARGE_NATIVE_CASES', 'LOCK_NATIVE_CASES', 'TURN_LIMIT_NATIVE_CASE', 'TRAP_NATIVE_CASES', 'SUB_NATIVE_CASES', 'PARTIAL_NATIVE_CASES', 'PHAZE_NATIVE_CASES', 'PURSUIT_NATIVE_CASES', 'ITEM_NATIVE_CASES', 'IDENTITY_NATIVE_CASES', 'ILLUSION_NATIVE_CASES', 'FORM_NATIVE_CASES', 'TRIGGER_FORM_NATIVE_CASES', 'ABILITY_CHANGE_NATIVE_CASES', 'STATUS_IMMUNITY_NATIVE_CASES', 'ABILITY_CREATE_NATIVE_CASES', 'SUPPRESSION_NATIVE_CASES', 'SLEEP_CONTROL_NATIVE_CASES', 'CALLED_NATIVE_CASES', 'NATURE_POWER_NATIVE_CASES', 'MUMMY_NATIVE_CASES', 'MAGIC_GUARD_NATIVE_CASES', 'LOW_HP_NATIVE_CASES', 'ABSORPTION_NATIVE_CASES', 'TYPE_BOOST_NATIVE_CASES', 'SAP_SIPPER_NATIVE_CASES', 'FLASH_FIRE_NATIVE_CASES', 'SECONDARY_ABILITY_NATIVE_CASES', 'DRY_SKIN_NATIVE_CASES', 'SWITCH_RECOVERY_NATIVE_CASES', 'RAIN_RECOVERY_NATIVE_CASES', 'G4_PROBE_OUTPUT')
     record = {'argv': list(map(str, command)), 'log': log.name, 'timeout_seconds': timeout,
               'environment':{key:env[key] for key in keys if key in env}}
     records.append(record)
@@ -119,11 +119,22 @@ print(json.dumps(result,indent=2))
 '''
 
 
+def compilation_cache_settings(directory, *, cold=False):
+    if cold:
+        return {'JAX_ENABLE_COMPILATION_CACHE':'false'}
+    directory=Path(directory).resolve()
+    directory.mkdir(parents=True,exist_ok=True)
+    return {'JAX_ENABLE_COMPILATION_CACHE':'true','JAX_COMPILATION_CACHE_DIR':str(directory)}
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output', type=Path, help='Fresh directory; defaults to work/g4-gpu-TIMESTAMP')
     parser.add_argument('--prepare-only', action='store_true', help='Freeze native inputs and commands; no JAX/GPU execution')
     parser.add_argument('--suite-timeout', type=int, default=3600, help='Seconds per isolated CPU/CUDA test module; default 3600; no automatic retry')
+    cache = parser.add_mutually_exclusive_group()
+    cache.add_argument('--cache-dir', type=Path, default=ROOT/'work'/'jax-cache', help='Trusted persistent correctness cache (default work/jax-cache)')
+    cache.add_argument('--cold', action='store_true', help='Explicitly disable persistent compilation caching')
     args = parser.parse_args(argv)
     if args.suite_timeout <= 0:
         parser.error('--suite-timeout must be positive')
@@ -148,7 +159,12 @@ def main(argv=None):
         os.sched_setaffinity(0, selected)
         summary['host_cpu_affinity'] = selected
         env = dict(os.environ, OMP_NUM_THREADS=str(len(selected)), OPENBLAS_NUM_THREADS=str(len(selected)),
-                   XLA_PYTHON_CLIENT_PREALLOCATE='false', JAX_ENABLE_COMPILATION_CACHE='false')
+                   XLA_PYTHON_CLIENT_PREALLOCATE='false')
+        env.update(compilation_cache_settings(args.cache_dir, cold=args.cold))
+        summary['compilation_cache'] = {key:env[key] for key in ('JAX_ENABLE_COMPILATION_CACHE','JAX_COMPILATION_CACHE_DIR') if key in env}
+        if args.cold:
+            env.pop('JAX_COMPILATION_CACHE_DIR',None)
+            summary['compilation_cache'].pop('JAX_COMPILATION_CACHE_DIR',None)
         # Ignore inherited test-fixture overrides; every test uses this bundle.
         for key in ('G3_NATIVE_CASES', 'G4_NATIVE_CASES', 'GEN5_NATIVE_CASES', 'STATUS_NATIVE_CASES', 'FIELD_NATIVE_CASES', 'HOOK_NATIVE_CASES', 'HIT_NATIVE_CASES', 'RECHARGE_NATIVE_CASES', 'LOCK_NATIVE_CASES', 'TURN_LIMIT_NATIVE_CASE', 'TRAP_NATIVE_CASES', 'SUB_NATIVE_CASES', 'PARTIAL_NATIVE_CASES', 'PHAZE_NATIVE_CASES', 'PURSUIT_NATIVE_CASES', 'ITEM_NATIVE_CASES', 'IDENTITY_NATIVE_CASES', 'ILLUSION_NATIVE_CASES', 'FORM_NATIVE_CASES', 'TRIGGER_FORM_NATIVE_CASES', 'ABILITY_CHANGE_NATIVE_CASES', 'STATUS_IMMUNITY_NATIVE_CASES', 'ABILITY_CREATE_NATIVE_CASES', 'SUPPRESSION_NATIVE_CASES', 'SLEEP_CONTROL_NATIVE_CASES', 'CALLED_NATIVE_CASES', 'NATURE_POWER_NATIVE_CASES'):
             env.pop(key, None)
@@ -205,7 +221,7 @@ def main(argv=None):
                    REFLECTION_NATIVE_CASES=str(out/'native-reflection.json'),
                    MAGIC_COAT_NATIVE_CASES=str(out/'native-magiccoat.json'),
                    WONDER_GUARD_NATIVE_CASES=str(out/'native-wonderguard.json'),
-                   TRACE_NATIVE_CASES=str(out/'native-trace.json'), MUMMY_NATIVE_CASES=str(out/'native-mummy.json'), MAGIC_GUARD_NATIVE_CASES=str(out/'native-magicguard.json'), LOW_HP_NATIVE_CASES=str(out/'native-lowhp.json'), ABSORPTION_NATIVE_CASES=str(out/'native-absorption.json'), TYPE_BOOST_NATIVE_CASES=str(out/'native-typeboost.json'), SAP_SIPPER_NATIVE_CASES=str(out/'native-sapsipper.json'), FLASH_FIRE_NATIVE_CASES=str(out/'native-flashfire.json'), SECONDARY_ABILITY_NATIVE_CASES=str(out/'native-secondaryability.json'), DRY_SKIN_NATIVE_CASES=str(out/'native-dryskin.json'), SWITCH_RECOVERY_NATIVE_CASES=str(out/'native-switchrecovery.json'))
+                   TRACE_NATIVE_CASES=str(out/'native-trace.json'), MUMMY_NATIVE_CASES=str(out/'native-mummy.json'), MAGIC_GUARD_NATIVE_CASES=str(out/'native-magicguard.json'), LOW_HP_NATIVE_CASES=str(out/'native-lowhp.json'), ABSORPTION_NATIVE_CASES=str(out/'native-absorption.json'), TYPE_BOOST_NATIVE_CASES=str(out/'native-typeboost.json'), SAP_SIPPER_NATIVE_CASES=str(out/'native-sapsipper.json'), FLASH_FIRE_NATIVE_CASES=str(out/'native-flashfire.json'), SECONDARY_ABILITY_NATIVE_CASES=str(out/'native-secondaryability.json'), DRY_SKIN_NATIVE_CASES=str(out/'native-dryskin.json'), SWITCH_RECOVERY_NATIVE_CASES=str(out/'native-switchrecovery.json'), RAIN_RECOVERY_NATIVE_CASES=str(out/'native-rainrecovery.json'))
         summary['modules'] = list(MODULES)
         summary['fixtures'] = fixtures
         summary['future_full_format_gate'] = 'Pending implementation of V7 and remaining mechanics; see docs/GPU_HANDOFF.md'
