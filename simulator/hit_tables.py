@@ -19,6 +19,11 @@ ITEM_IMPLEMENTED=jnp.asarray([key=='rockyhelmet' for key in t.ITEMS],jnp.bool_)
 
 
 def supported(row):
+    callback={'suckerpunch':'onTry','payback':'basePowerCallback'}.get(row.get('id'))
+    if callback:
+        if row.get(callback)!={'$callback':f"moves:{row['id']}:{callback}"}:return False
+        clean=dict(row);clean.pop(callback)
+        return t.plain(clean)
     if row.get('id') in ('jumpkick','highjumpkick'):
         if row.get('hasCrashDamage') is not True or row.get('onMoveFail')!={'$callback':f"moves:{row['id']}:onMoveFail"}:return False
         clean=dict(row);clean.pop('hasCrashDamage');clean.pop('onMoveFail')

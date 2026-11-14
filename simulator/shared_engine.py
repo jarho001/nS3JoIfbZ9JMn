@@ -51,6 +51,7 @@ from . import boost_abilities as boost_ability_ops
 from . import faint_abilities as faint_ability_ops
 from . import reactive_abilities as reactive_ability_ops
 from . import contact_status as contact_status_ops
+from . import conditional_attacks as conditional_ops
 from . import species_items as species_item_ops
 from . import ability_creation as creation_ops
 from . import suppression as suppression_ops
@@ -65,7 +66,7 @@ import sys
 def _engine():
     return sys.modules[__name__]
 
-SCHEMA = 59
+SCHEMA = 60
 ROSTER, SLOTS, QUEUE, EVENTS, DRAWS, HISTORY = 6, 4, 8, 128, 128, 2048
 OK, PENDING, INVALID, UNSUPPORTED, CAPACITY, TERMINAL, STALE = range(7)
 RETRY=7
@@ -418,6 +419,7 @@ def _hit(c,actor,move):
         power=jnp.where(move==HIDDEN_POWER,s.hp_power[actor,mon],
                         jnp.where(move==RETURN,s.happiness[actor,mon]*10//25,
                                   jnp.where(move==FRUSTRATION,(255-s.happiness[actor,mon])*10//25,POWER[move])))
+        power=conditional_ops.power(s,target,move,power,_engine())
         power=jnp.maximum(1,power)*jnp.where(pursuit_ops.boosted(s,target,move,_engine()),2,1)
         move_type=jnp.where(move==HIDDEN_POWER,s.hp_type[actor,mon],tables.MOVE_TYPE[move])
         power=hook_ops.power(power,suppression_ops.abilities(s)[actor,mon],s.item[actor,mon],physical,move_type,_engine(),phase_ops.power_modifier(s,target,move),defender_ability=suppression_ops.abilities(s)[target,tm],move=move)
@@ -706,6 +708,8 @@ def _use_move(c,frame):
         lambda c:field_ops.move(c,actor,move,move_row,_engine()),
         lambda c:jax.lax.cond(field_tables.IS_BOOST[move]&(target==actor),
             lambda c:field_ops.boost(c,actor,target,move,_engine()),lambda c:jax.lax.cond(move==called_ops.MAGIC_COAT,lambda c:called_ops.coat(c,frame,_engine()),ordinary,c),c),c)
+    conditional_denied=conditional_ops.denied(c[0],target,move,_engine())
+    c=_when(conditional_denied,lambda c:ability_ops.fail(c,actor,move,move_row,_engine()),c)
     c,charging=jax.lax.cond(phase_ops.CHARGE[move],lambda c:phase_ops.charge(c,actor,move,move_row,_engine(),target_loc=jnp.where(target==actor,-1,1)),lambda c:(c,jnp.array(False)),c)
     move_row=jnp.max(jnp.where((jnp.arange(EVENTS)<c[1].ecount)&((c[1].events[:,0]==EV_MOVE)|(c[1].events[:,0]==ANIM)),jnp.arange(EVENTS),0))
     blocked_rest=(move==REST)&(c[0].status[actor,mon]==SLP)
@@ -713,7 +717,7 @@ def _use_move(c,frame):
     self_accuracy=(target==actor)&(~charging)&(~blocked_rest)&(field_tables.WEATHER[move]==0)&(field_tables.SCREEN[move]==0)
     c=_when(self_accuracy,lambda c:accuracy_ability_ops.modify_sort(c,actor,_engine()),c)
     c,reflected=called_ops.reflect(c,frame,_engine())
-    c=_when((~charging)&(~blocked_rest)&(~reflected),lambda c:jax.lax.cond((called_ops.MOVE_IMPLEMENTED[move]&(move!=called_ops.MIRROR_MOVE)&(move!=called_ops.MAGIC_COAT)),lambda c:called_ops.call(c,frame,move_row,_engine()),resolve_move,c),c)
+    c=_when((~charging)&(~blocked_rest)&(~reflected)&(~conditional_denied),lambda c:jax.lax.cond((called_ops.MOVE_IMPLEMENTED[move]&(move!=called_ops.MIRROR_MOVE)&(move!=called_ops.MAGIC_COAT)),lambda c:called_ops.call(c,frame,move_row,_engine()),resolve_move,c),c)
     c=_when(hit_tables.SELF_DESTRUCT[move]&(~c[0].fainted[actor,mon]),lambda c:_faint(c,actor),c)
     c=_when(hit_tables.SELF_DESTRUCT[move]&(c[0].winner<0),lambda c:_win(c,actor),c)
     return phase_ops.after_move(c,actor,_engine())

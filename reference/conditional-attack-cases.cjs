@@ -5,7 +5,7 @@ module.exports=function(){
  const add=(id,x={})=>cases.push({id:'G4-conditional-attack-'+id,seed:1,generic:true,conditionalAttackFamily:true,p1:[m({evs:{spe:252}})],p2:[m()],steps:[b()],...x});
  for(const move of ['Sucker Punch','Payback']){
   const key=move.toLowerCase().replaceAll(' ','');const source=(x={})=>m({moves:[move,'Recover'],evs:{spe:252},...x});
-  for(const other of ['Tackle','Recover','Protect','Mach Punch','Hyper Beam'])add(key+'-vs-'+other.toLowerCase().replaceAll(' ',''),{p1:[source()],p2:[m({moves:[other,'Recover']})]});
+  for(const other of ['Tackle','Recover','Protect','Mach Punch','Hyper Beam'])add(key+'-vs-'+other.toLowerCase().replaceAll(' ',''),{p1:[source()],p2:[m({moves:[other,other==='Recover'?'Tackle':'Recover']})]});
   add(key+'-slow',{p1:[source({evs:{spe:0}})],p2:[m({evs:{spe:252}})]});
   add(key+'-tie',{p1:[source({evs:{spe:0}})]});
   add(key+'-priority-first',{p1:[source({evs:{spe:0}})],p2:[m({moves:['Mach Punch'],evs:{spe:252}})]});

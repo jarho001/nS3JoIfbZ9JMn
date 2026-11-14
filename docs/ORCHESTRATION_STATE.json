@@ -34,8 +34,8 @@
     "brief": "PROJECT_PLAN.md#proposed-g4-cpu-implementation-and-conformance-goal",
     "source_base": "f37067e",
     "scope": "Complete pinned gen5randombattle reachable mechanics and every prepared CPU gate. Integrated checkpoints, resumable progress and commit/push authorized. GPU execution, profiling, benchmarks, training, delegation and scored research excluded.",
-    "checkpoint": "Schema59 Jump Kick / High Jump Kick group: 44 scenarios/50 boundaries pass one compiled step in420.736s; native/inventory and4 handoff helpers pass. Full G4 remains open.",
-    "next": "Continue Sucker Punch/Payback conditional-attack group from38 scenarios/48 native boundaries; queued-target onTry and dynamic base power before Technician, switch/pivot/recharge and Sleep Talk, then one shared CPU checkpoint.",
+    "checkpoint": "Schema60 Sucker Punch / Payback group: 38 scenarios/48 boundaries pass one compiled step in463.381s; native/inventory and4 handoff helpers pass. Full G4 remains open.",
+    "next": "Continue Foul Play/Psyshock/Psystrike/Secret Sword stat-selection group from66 scenarios/76 native boundaries; raw stat/stage owner versus source modifiers, selected defensive-stat hooks, critical/Unaware/screens/items/weather and source level, then one shared CPU checkpoint.",
     "ledger": {
       "path": "rules/gen5-reachable-v1.json",
       "entries": 1768,
@@ -45,7 +45,7 @@
         "indirect-closure",
         "engine-contract"
       ],
-      "status": "Incomplete:346 partial callback mappings/800 unsupported; full reachability/closure pending.",
+      "status": "Incomplete:348 partial callback mappings/798 unsupported; full reachability/closure pending.",
       "reachability_summary": {
         "callbacks": {
           "proven_unreachable": 546,
@@ -54,8 +54,8 @@
         },
         "entries": {
           "proven_unreachable": 542,
-          "required": 82,
-          "unresolved": 1144
+          "required": 84,
+          "unresolved": 1142
         },
         "roots": {
           "proven_unreachable": 0,
@@ -77,13 +77,13 @@
     "first_divergence": null,
     "gpu_requirement": "Deferred during travel. Record all G4 device obligations and ready/pending commands in docs/GPU_HANDOFF.md; current checkpoint runner is scripts/g4_gpu_handoff.py. CPU implementation remains active. Later full G4 release still requires matching-source GPU conformance.",
     "acceptance": "G4-CPU-conformance pending. Generic data checkpoint passes; all remaining prepared CPU gates retained, all milestone acceptance/task count unchanged.",
-    "source_identity": "test-logs/g4-cpu-conformance/schema59-checkpoint.json",
+    "source_identity": "test-logs/g4-cpu-conformance/schema60-checkpoint.json",
     "evidence_directory": "test-logs/g4-cpu-conformance",
     "publication": {
       "status": "checkpoint_publication_authorized",
       "target": "origin/main",
-      "previous_published_head": "25ab4b9fdd4c6e20ee1d199c8aaa68e2e1b6dafd",
-      "scope": "Schema59 focused CPU checkpoint; sustained CPU execution continues, full G4 open."
+      "previous_published_head": "0e4a0ee367a345d3d711a8aea2ff3d4b23fecad3",
+      "scope": "Schema60 focused CPU checkpoint; sustained CPU execution continues, full G4 open."
     },
     "reasoning_effort": "medium (user preference,2026-11-10; no automatic escalation)",
     "design_pass": {
@@ -150,26 +150,30 @@
     },
     "record_usage": "Start at docs/CURRENT.md and scripts/read_context.py. State is authoritative for live progress; history is archived. Update live checkpoint/next/package/blockers at meaningful checkpoints; do not append completed-family narratives. Detailed results belong in immutable test evidence.",
     "next_work_package": {
-      "id": "g4-conditional-attack-group",
+      "id": "g4-stat-selection-group",
       "status": "native_precheck_passed_implementation_pending",
       "members": [
-        "Sucker Punch queued damaging-action onTry predicate",
-        "Payback target newlySwitched/queued-action base power"
+        "Foul Play target raw Attack/stages with source modifiers",
+        "Psyshock special move selecting Defense",
+        "Psystrike special move selecting Defense",
+        "Secret Sword special move selecting Defense"
       ],
       "shared_paths": [
-        "Opponent queue/action state, conditional failure and pre-modifier base power"
+        "Stored stat/stage selection, source ModifyAtk/SpA and target selected-stat modifiers, category-dependent damage/screens"
       ],
       "membership": [
-        "Sucker Punch Arbok seed[3,2,3,4]",
-        "Payback Ambipom seed[45,2,3,4]"
+        "Psyshock Latios seed[3,2,3,4]",
+        "Foul Play Amoonguss seed[13,2,3,4]",
+        "Psystrike Mewtwo seed[19,2,3,4]",
+        "Secret Sword Keldeo seed[81,2,3,4]"
       ],
-      "native_precheck": "38 scenarios/48 boundaries in test-logs/g4-cpu-conformance/conditional-attack-precheck.json.gz; attack/status/Protect/priority, speed/ties, switch/pivot, recharge, paralyzed target, type matchup, Choice/Technician, Substitute and fast/slow Sleep Talk.",
-      "native_command": "node --test test/conditional-attack-native.test.cjs",
+      "native_precheck": "66 scenarios/76 boundaries in test-logs/g4-cpu-conformance/stat-selection-precheck.json.gz; stat/stage owner, source/target ability/item/burn, differing levels, critical/Unaware, Marvel Scale/Soul Dew/Eviolite, Reflect/Light Screen, Choice items, Sandstorm and suppression.",
+      "native_command": "node --test test/stat-selection-native.test.cjs",
       "native_result": "1 passed; implementation pending",
-      "planned_command": "JAX_PLATFORMS=cpu JAX_ENABLE_COMPILATION_CACHE=true JAX_COMPILATION_CACHE_DIR=\"$PWD/work/jax-cache\" JAX_EXPLAIN_CACHE_MISSES=true OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 XLA_PYTHON_CLIENT_PREALLOCATE=false timeout 900s .venv-jax/bin/python -m unittest test.test_conditional_attack_engine -v -f",
+      "planned_command": "JAX_PLATFORMS=cpu JAX_ENABLE_COMPILATION_CACHE=true JAX_COMPILATION_CACHE_DIR=\"$PWD/work/jax-cache\" JAX_EXPLAIN_CACHE_MISSES=true OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 XLA_PYTHON_CLIENT_PREALLOCATE=false timeout 900s .venv-jax/bin/python -m unittest test.test_stat_selection_engine -v -f",
       "command_status": "planned; module not yet implemented",
       "excluded": [
-        "Me First exception remains behind unsupported Me First move capability",
+        "Other stat overrides and full-format closure remain unsupported/pending",
         "Broad CPU/device/campaign/profiling gates deferred"
       ]
     },
@@ -559,27 +563,27 @@
     "combined_return_home_block": "docs/GPU_HANDOFF.md#one-return-home-block-correctness-plus-g3-v6-measurements",
     "pending_status_checkpoint": "Current status/field/hook GPU checks are wired into the49-check runner; no GPU execution during travel. Preserve matching-source CPU results and do not transfer earlier GPU/CPU evidence across changed source.",
     "expanded_checkpoint": {
-      "status": "schema59_grouped_focused_CPU_complete_GPU_deferred",
-      "engine_schema": 59,
-      "modules": 65,
-      "native_scenarios": 1983,
-      "native_boundaries": 6677,
+      "status": "schema60_grouped_focused_CPU_complete_GPU_deferred",
+      "engine_schema": 60,
+      "modules": 66,
+      "native_scenarios": 2021,
+      "native_boundaries": 6725,
       "initial_field_evidence": "test-logs/g4-cpu-conformance/schema5-checkpoint.json",
       "source": "Use latest committed checkout and runner source/fixture fingerprints; earlier source_commit fields describe historical preparation.",
       "handoff_prepared": false,
-      "source_commit": "Publishing commit; exact fingerprints in schema59-checkpoint.json",
-      "source_identity": "test-logs/g4-cpu-conformance/schema59-checkpoint.json",
-      "checks": 121
+      "source_commit": "Publishing commit; exact fingerprints in schema60-checkpoint.json",
+      "source_identity": "test-logs/g4-cpu-conformance/schema60-checkpoint.json",
+      "checks": 122
     },
     "pending_candidate": {
-      "family": "Sucker Punch / Payback",
+      "family": "Foul Play / Psyshock / Psystrike / Secret Sword",
       "status": "native_only_precheck_passed_implementation_pending",
-      "cases": 38,
-      "boundaries": 48,
-      "fixture": "test-logs/g4-cpu-conformance/conditional-attack-precheck.json.gz",
-      "native_command": "node --test test/conditional-attack-native.test.cjs",
+      "cases": 66,
+      "boundaries": 76,
+      "fixture": "test-logs/g4-cpu-conformance/stat-selection-precheck.json.gz",
+      "native_command": "node --test test/stat-selection-native.test.cjs",
       "included_in_checkpoint_runner": false,
-      "next": "Implement queued-action checks and conditional base power, then grouped CPU checkpoint."
+      "next": "Implement guarded stat owner/selector paths and exact category/source modifier separation, then grouped CPU checkpoint."
     }
   },
   "historical_records": {

@@ -25423,10 +25423,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/conditional-attack.json.gz",
+          "native": "reference/conditional-attack-cases.cjs",
+          "scope": "Independent38 constructed/synthetic scenarios48 boundaries; queued target action onTry, pre-Technician dynamic power, speed/priority/status/Protect, switch/pivot/recharge, paralysis/type matchup, Choice/Technician, Substitute and fast/slow Sleep Talk. Me First remains behind unsupported capability; full-format closure pending",
+          "test": "test/test_conditional_attack_engine.py"
+        }
+      ],
       "field": "basePowerCallback",
       "id": "moves:payback:basePowerCallback",
-      "implementation": null,
+      "implementation": {
+        "family": "conditional_attack",
+        "file": "simulator/conditional_attacks.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:payback",
@@ -25438,7 +25450,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "b348525bb20be7911180e2140d02b4d544efc2c4823ef4ac956a44de33f64630",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -28855,10 +28867,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/conditional-attack.json.gz",
+          "native": "reference/conditional-attack-cases.cjs",
+          "scope": "Independent38 constructed/synthetic scenarios48 boundaries; queued target action onTry, pre-Technician dynamic power, speed/priority/status/Protect, switch/pivot/recharge, paralysis/type matchup, Choice/Technician, Substitute and fast/slow Sleep Talk. Me First remains behind unsupported capability; full-format closure pending",
+          "test": "test/test_conditional_attack_engine.py"
+        }
+      ],
       "field": "onTry",
       "id": "moves:suckerpunch:onTry",
-      "implementation": null,
+      "implementation": {
+        "family": "conditional_attack",
+        "file": "simulator/conditional_attacks.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:suckerpunch",
@@ -28870,7 +28894,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "44bca3986cfa45f78db74cc15548fa4bcd9bb9eeb9b27ef671736ee27e24678f",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -63741,8 +63765,8 @@
         }
       ],
       "kind": "moves",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "conditional-attack-positive-witness",
       "status": "partial"
     },
     {
@@ -68595,8 +68619,8 @@
         }
       ],
       "kind": "moves",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "conditional-attack-positive-witness",
       "status": "partial"
     },
     {
@@ -97745,6 +97769,112 @@
           }
         ]
       },
+      "conditional-attack-positive-witness": {
+        "bound": [
+          "moves:payback",
+          "moves:suckerpunch"
+        ],
+        "conclusion": "required",
+        "kind": "moves",
+        "reasoning": "Pinned Sucker Punch Arbok seed[3,2,3,4] and Payback Ambipom seed[45,2,3,4] prove membership. Me First and full-format closure pending.",
+        "references": [
+          "data/random-battles/gen5/teams.ts:103-494 (cullMovePool/randomMoveset)",
+          "data/random-battles/gen5/teams.ts:496-566 (ability filters/fallback)",
+          "data/random-battles/gen5/teams.ts:568-816 (item returns and randomSet)",
+          "data/random-battles/gen5/teams.ts:850-1014 (team eligibility)",
+          "data/random-battles/gen9/teams.ts:675-693 (addMove)",
+          "data/random-battles/gen9/teams.ts:1442-1497 (getLevel/getForme)",
+          "data/random-battles/gen9/teams.ts:1641-1683 (getPokemonPool)"
+        ],
+        "witnesses": [
+          {
+            "id": "suckerpunch",
+            "kind": "move",
+            "seed": [
+              3,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Intimidate",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Black Sludge",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 90,
+              "moves": [
+                "earthquake",
+                "gunkshot",
+                "suckerpunch",
+                "coil"
+              ],
+              "name": "Arbok",
+              "role": "Bulky Attacker",
+              "shiny": false,
+              "species": "Arbok",
+              "speciesId": "arbok"
+            }
+          },
+          {
+            "id": "payback",
+            "kind": "move",
+            "seed": [
+              45,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Technician",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Choice Band",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 82,
+              "moves": [
+                "return",
+                "payback",
+                "uturn",
+                "lowkick"
+              ],
+              "name": "Ambipom",
+              "role": "Fast Attacker",
+              "shiny": false,
+              "species": "Ambipom",
+              "speciesId": "ambipom"
+            }
+          }
+        ]
+      },
       "contact-status-positive-witness": {
         "bound": [
           "abilities:flamebody",
@@ -100538,8 +100668,8 @@
       },
       "entries": {
         "proven_unreachable": 542,
-        "required": 82,
-        "unresolved": 1144
+        "required": 84,
+        "unresolved": 1142
       },
       "roots": {
         "proven_unreachable": 0,

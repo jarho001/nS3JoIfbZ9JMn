@@ -22,10 +22,29 @@ Keep historical commands/results as provenance.
 
 ## Current source and evidence
 
-**Next group, native only:** Sucker Punch / Payback has38 scenarios/48 boundaries,
-pinned positive witnesses and a passing `node --test test/conditional-attack-native.test.cjs`
-contract. It is not in the CPU/CUDA runner; implementation remains pending.
-Me First and remaining full-format dependencies stay unsupported and pending.
+**Next group, native only:** Foul Play / Psyshock / Psystrike / Secret Sword has66
+scenarios/76 boundaries, pinned positive witnesses and a passing
+`node --test test/stat-selection-native.test.cjs` contract. It is not in the
+CPU/CUDA runner; implementation remains pending. Other stat overrides stay unsupported.
+
+**Schema60 Sucker Punch / Payback group:** focused CPU38 scenarios/48 boundaries
+passed in463.381s;2 native/inventory contracts and4 handoff helpers pass.
+See [schema60-checkpoint.json](../test-logs/g4-cpu-conformance/schema60-checkpoint.json).
+One compiled step covers exact state/RNG/requests/recipient events/histories,
+NPZ continuation and journal17. No GPU execution.
+
+The first CPU attempt rejected duplicate Recover in two constructed teams.
+Corrected unused slots and full native recapture pass. The unchanged-source
+rerun could not parse the JAX0.12.0.1 CPU persistent cache entry and rebuilt;
+failed/interrupted inputs/logs and both full-build timers are retained in the
+checkpoint. No cache speedup or successful reload is claimed.
+
+```sh
+JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_conditional_attack_engine -v -f
+```
+
+Runner includes122 checks/66 modules,2021 scenarios/6725
+boundaries in60 corpora. Current-source broad/device execution remains deferred.
 
 **Schema59 Jump Kick / High Jump Kick group:** focused CPU44 scenarios/50 boundaries
 passed in420.736s;2 native/inventory contracts and4 handoff helpers pass.
