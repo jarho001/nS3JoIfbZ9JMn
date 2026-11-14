@@ -143,6 +143,9 @@ test('pinned resolved export and conservative inventory reproduce exactly',()=>{
   for(const [owner,field]of [['moves:suckerpunch','onTry'],['moves:payback','basePowerCallback']]){
     assert.equal(entries.get(owner).reachability,'required');assert.equal(entries.get(owner).reachabilityAudit,'conditional-attack-positive-witness');assert.ok(slots.get(owner+':'+field).implementation);
   }
+  for(const owner of ['moves:foulplay','moves:psyshock','moves:psystrike','moves:secretsword']){
+    const entry=entries.get(owner);assert.equal(entry.reachability,'required');assert.equal(entry.reachabilityAudit,'stat-selection-positive-witness');assert.equal(entry.implementation.behavior.family,'stat_selection');assert.ok(entry.evidence.some(e=>e.test==='test/test_stat_selection_engine.py'));
+  }
   assert.equal(entries.get('abilities:zenmode').reachability,'unresolved');
   assert.equal(slots.get('abilities:magicguard:onDamage').reachability,'unresolved');
   for(const row of [...ledger.entries,...ledger.callbacks,...ledger.roots])

@@ -22,10 +22,24 @@ Keep historical commands/results as provenance.
 
 ## Current source and evidence
 
-**Next group, native only:** Foul Play / Psyshock / Psystrike / Secret Sword has66
-scenarios/76 boundaries, pinned positive witnesses and a passing
-`node --test test/stat-selection-native.test.cjs` contract. It is not in the
-CPU/CUDA runner; implementation remains pending. Other stat overrides stay unsupported.
+**Next group, native only:** Low Kick / Grass Knot / Heavy Slam has40 scenarios/48
+boundaries, pinned positive witnesses and a passing
+`node --test test/weight-based-native.test.cjs` contract. It is not in the
+CPU/CUDA runner; implementation remains pending. Heat Crash membership remains
+unresolved without a positive seed1..500 witness; weight modifiers stay gated.
+
+**Schema61 Foul Play / Psyshock / Psystrike / Secret Sword group:** focused CPU66 scenarios/76 boundaries
+passed in455.367s;2 native/inventory contracts and4 handoff helpers pass.
+See [schema61-checkpoint.json](../test-logs/g4-cpu-conformance/schema61-checkpoint.json).
+One compiled step covers exact state/RNG/requests/recipient events/histories,
+NPZ continuation and journal17. No GPU execution.
+
+```sh
+JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_stat_selection_engine -v -f
+```
+
+Runner includes123 checks/67 modules,2087 scenarios/6801
+boundaries in61 corpora. Current-source broad/device execution remains deferred.
 
 **Schema60 Sucker Punch / Payback group:** focused CPU38 scenarios/48 boundaries
 passed in463.381s;2 native/inventory contracts and4 handoff helpers pass.

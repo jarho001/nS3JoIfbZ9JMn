@@ -58947,10 +58947,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/stat-selection.json.gz",
+          "native": "reference/stat-selection-cases.cjs",
+          "scope": "Independent66 constructed/synthetic scenarios76 boundaries; guarded declarative raw stat/stage owner and defensive selector, source modifiers/level, critical/Unaware, burn/Huge Power/Guts/Choice, Marvel Scale/Soul Dew/Eviolite, screens/weather and suppression. Category stays independent; other overrides and full-format closure pending",
+          "test": "test/test_stat_selection_engine.py"
         }
       ],
       "id": "moves:foulplay",
       "implementation": {
+        "behavior": {
+          "family": "stat_selection",
+          "file": "simulator/stat_selection.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "MOVE_TYPE/MOVE_POWER/MOVE_CATEGORY/MOVE_PRIORITY/MOVE_PP",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -58962,8 +58974,8 @@
         }
       ],
       "kind": "moves",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "stat-selection-positive-witness",
       "status": "partial"
     },
     {
@@ -64630,10 +64642,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/stat-selection.json.gz",
+          "native": "reference/stat-selection-cases.cjs",
+          "scope": "Independent66 constructed/synthetic scenarios76 boundaries; guarded declarative raw stat/stage owner and defensive selector, source modifiers/level, critical/Unaware, burn/Huge Power/Guts/Choice, Marvel Scale/Soul Dew/Eviolite, screens/weather and suppression. Category stays independent; other overrides and full-format closure pending",
+          "test": "test/test_stat_selection_engine.py"
         }
       ],
       "id": "moves:psyshock",
       "implementation": {
+        "behavior": {
+          "family": "stat_selection",
+          "file": "simulator/stat_selection.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "MOVE_TYPE/MOVE_POWER/MOVE_CATEGORY/MOVE_PRIORITY/MOVE_PP",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -64645,8 +64669,8 @@
         }
       ],
       "kind": "moves",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "stat-selection-positive-witness",
       "status": "partial"
     },
     {
@@ -64661,10 +64685,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/stat-selection.json.gz",
+          "native": "reference/stat-selection-cases.cjs",
+          "scope": "Independent66 constructed/synthetic scenarios76 boundaries; guarded declarative raw stat/stage owner and defensive selector, source modifiers/level, critical/Unaware, burn/Huge Power/Guts/Choice, Marvel Scale/Soul Dew/Eviolite, screens/weather and suppression. Category stays independent; other overrides and full-format closure pending",
+          "test": "test/test_stat_selection_engine.py"
         }
       ],
       "id": "moves:psystrike",
       "implementation": {
+        "behavior": {
+          "family": "stat_selection",
+          "file": "simulator/stat_selection.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "MOVE_TYPE/MOVE_POWER/MOVE_CATEGORY/MOVE_PRIORITY/MOVE_PP",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -64676,8 +64712,8 @@
         }
       ],
       "kind": "moves",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "stat-selection-positive-witness",
       "status": "partial"
     },
     {
@@ -66388,10 +66424,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/stat-selection.json.gz",
+          "native": "reference/stat-selection-cases.cjs",
+          "scope": "Independent66 constructed/synthetic scenarios76 boundaries; guarded declarative raw stat/stage owner and defensive selector, source modifiers/level, critical/Unaware, burn/Huge Power/Guts/Choice, Marvel Scale/Soul Dew/Eviolite, screens/weather and suppression. Category stays independent; other overrides and full-format closure pending",
+          "test": "test/test_stat_selection_engine.py"
         }
       ],
       "id": "moves:secretsword",
       "implementation": {
+        "behavior": {
+          "family": "stat_selection",
+          "file": "simulator/stat_selection.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "MOVE_TYPE/MOVE_POWER/MOVE_CATEGORY/MOVE_PRIORITY/MOVE_PP",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -66403,8 +66451,8 @@
         }
       ],
       "kind": "moves",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "stat-selection-positive-witness",
       "status": "partial"
     },
     {
@@ -100117,6 +100165,200 @@
           }
         ]
       },
+      "stat-selection-positive-witness": {
+        "bound": [
+          "moves:foulplay",
+          "moves:psyshock",
+          "moves:psystrike",
+          "moves:secretsword"
+        ],
+        "conclusion": "required",
+        "kind": "moves",
+        "reasoning": "Pinned Psyshock Latios seed[3,2,3,4], Foul Play Amoonguss seed[13,2,3,4], Psystrike Mewtwo seed[19,2,3,4], Secret Sword Keldeo seed[81,2,3,4] prove membership. Guarded declarative stat selectors only; remaining full-format closure pending.",
+        "references": [
+          "data/random-battles/gen5/teams.ts:103-494 (cullMovePool/randomMoveset)",
+          "data/random-battles/gen5/teams.ts:496-566 (ability filters/fallback)",
+          "data/random-battles/gen5/teams.ts:568-816 (item returns and randomSet)",
+          "data/random-battles/gen5/teams.ts:850-1014 (team eligibility)",
+          "data/random-battles/gen9/teams.ts:675-693 (addMove)",
+          "data/random-battles/gen9/teams.ts:1442-1497 (getLevel/getForme)",
+          "data/random-battles/gen9/teams.ts:1641-1683 (getPokemonPool)"
+        ],
+        "witnesses": [
+          {
+            "id": "psyshock",
+            "kind": "move",
+            "seed": [
+              3,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Levitate",
+              "evs": {
+                "atk": 0,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "M",
+              "item": "Soul Dew",
+              "ivs": {
+                "atk": 0,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 71,
+              "moves": [
+                "psyshock",
+                "calmmind",
+                "dracometeor",
+                "roost"
+              ],
+              "name": "Latios",
+              "role": "Bulky Attacker",
+              "shiny": false,
+              "species": "Latios",
+              "speciesId": "latios"
+            }
+          },
+          {
+            "id": "foulplay",
+            "kind": "move",
+            "seed": [
+              13,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Regenerator",
+              "evs": {
+                "atk": 0,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Black Sludge",
+              "ivs": {
+                "atk": 0,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 82,
+              "moves": [
+                "spore",
+                "clearsmog",
+                "foulplay",
+                "sludgebomb"
+              ],
+              "name": "Amoonguss",
+              "role": "Bulky Attacker",
+              "shiny": false,
+              "species": "Amoonguss",
+              "speciesId": "amoonguss"
+            }
+          },
+          {
+            "id": "psystrike",
+            "kind": "move",
+            "seed": [
+              19,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Unnerve",
+              "evs": {
+                "atk": 0,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "N",
+              "item": "Life Orb",
+              "ivs": {
+                "atk": 0,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 70,
+              "moves": [
+                "psystrike",
+                "calmmind",
+                "signalbeam",
+                "aurasphere"
+              ],
+              "name": "Mewtwo",
+              "role": "Fast Attacker",
+              "shiny": false,
+              "species": "Mewtwo",
+              "speciesId": "mewtwo"
+            }
+          },
+          {
+            "id": "secretsword",
+            "kind": "move",
+            "seed": [
+              81,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Justified",
+              "evs": {
+                "atk": 0,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "N",
+              "item": "Leftovers",
+              "ivs": {
+                "atk": 0,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 77,
+              "moves": [
+                "secretsword",
+                "substitute",
+                "calmmind",
+                "scald"
+              ],
+              "name": "Keldeo",
+              "role": "Bulky Setup",
+              "shiny": false,
+              "species": "Keldeo",
+              "speciesId": "keldeo"
+            }
+          }
+        ]
+      },
       "survival-positive-witness": {
         "bound": [
           "abilities:sturdy",
@@ -100668,8 +100910,8 @@
       },
       "entries": {
         "proven_unreachable": 542,
-        "required": 84,
-        "unresolved": 1142
+        "required": 88,
+        "unresolved": 1138
       },
       "roots": {
         "proven_unreachable": 0,

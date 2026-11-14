@@ -58,19 +58,21 @@ def move(c,actor,move,move_row,e):
     return jax.lax.cond(weather>0,weather_move,screen_move,c)
 
 
-def damage_parameters(c,actor,target,move,crit,physical,attack,defense,e):
+def damage_parameters(c,actor,target,move,crit,physical,attack,defense,e,offensive_side=None,defensive_physical=None):
+    offensive_side=actor if offensive_side is None else offensive_side
+    defensive_physical=physical if defensive_physical is None else defensive_physical
     c=e.unaware_ops.pair(c,e)
     s,t=c;m=s.active[actor];tm=s.active[target]
-    offensive=jnp.where(physical,0,2);defensive=jnp.where(physical,1,3)
-    atkstage=jnp.where(e.unaware_ops.effective(s,target,e),0,s.boosts[actor,m,offensive])
+    offensive=jnp.where(physical,0,2);defensive=jnp.where(defensive_physical,1,3)
+    atkstage=jnp.where(e.unaware_ops.effective(s,target,e),0,s.boosts[offensive_side,s.active[offensive_side],offensive])
     defstage=jnp.where(e.unaware_ops.effective(s,actor,e),0,s.boosts[target,tm,defensive])
     atkstage=jnp.where((crit==0)&(atkstage<0),0,atkstage)
     defstage=jnp.where((crit==0)&(defstage>0),0,defstage)
     attack=scale_stat_stage(attack,atkstage);defense=scale_stat_stage(defense,defstage)
-    sand=(s.weather_state[0]==3)&(~physical)&jnp.any(s.types[target,tm]==e.generic.TYPES['rock'])
+    sand=(s.weather_state[0]==3)&(~defensive_physical)&jnp.any(s.types[target,tm]==e.generic.TYPES['rock'])
     # Collecting any weather damage/stat hook sets the native effect target.
     weather=s.weather_state[0]
-    present=(weather==1)|(weather==2)|((weather==3)&(~physical))
+    present=(weather==1)|(weather==2)|((weather==3)&(~defensive_physical))
     s=s._replace(weather_state=s.weather_state.at[5].set(jnp.where(present,1,s.weather_state[5])))
     return (s,t),attack,defense
 

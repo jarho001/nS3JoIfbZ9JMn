@@ -34,8 +34,8 @@
     "brief": "PROJECT_PLAN.md#proposed-g4-cpu-implementation-and-conformance-goal",
     "source_base": "f37067e",
     "scope": "Complete pinned gen5randombattle reachable mechanics and every prepared CPU gate. Integrated checkpoints, resumable progress and commit/push authorized. GPU execution, profiling, benchmarks, training, delegation and scored research excluded.",
-    "checkpoint": "Schema60 Sucker Punch / Payback group: 38 scenarios/48 boundaries pass one compiled step in463.381s; native/inventory and4 handoff helpers pass. Full G4 remains open.",
-    "next": "Continue Foul Play/Psyshock/Psystrike/Secret Sword stat-selection group from66 scenarios/76 native boundaries; raw stat/stage owner versus source modifiers, selected defensive-stat hooks, critical/Unaware/screens/items/weather and source level, then one shared CPU checkpoint.",
+    "checkpoint": "Schema61 Foul Play / Psyshock / Psystrike / Secret Sword group: 66 scenarios/76 boundaries pass one compiled step in455.367s; native/inventory and4 handoff helpers pass. Full G4 remains open.",
+    "next": "Continue Low Kick/Grass Knot/Heavy Slam weight-based base-power group from40 scenarios/48 native boundaries; hectogram thresholds/ratios, current transformed species, Technician/item/contact interactions and persistence, then one shared CPU checkpoint.",
     "ledger": {
       "path": "rules/gen5-reachable-v1.json",
       "entries": 1768,
@@ -45,7 +45,7 @@
         "indirect-closure",
         "engine-contract"
       ],
-      "status": "Incomplete:348 partial callback mappings/798 unsupported; full reachability/closure pending.",
+      "status": "Incomplete:348 partial callback mappings/798 unsupported; four declarative move behavior mappings added, full reachability/closure pending.",
       "reachability_summary": {
         "callbacks": {
           "proven_unreachable": 546,
@@ -54,8 +54,8 @@
         },
         "entries": {
           "proven_unreachable": 542,
-          "required": 84,
-          "unresolved": 1142
+          "required": 88,
+          "unresolved": 1138
         },
         "roots": {
           "proven_unreachable": 0,
@@ -77,13 +77,13 @@
     "first_divergence": null,
     "gpu_requirement": "Deferred during travel. Record all G4 device obligations and ready/pending commands in docs/GPU_HANDOFF.md; current checkpoint runner is scripts/g4_gpu_handoff.py. CPU implementation remains active. Later full G4 release still requires matching-source GPU conformance.",
     "acceptance": "G4-CPU-conformance pending. Generic data checkpoint passes; all remaining prepared CPU gates retained, all milestone acceptance/task count unchanged.",
-    "source_identity": "test-logs/g4-cpu-conformance/schema60-checkpoint.json",
+    "source_identity": "test-logs/g4-cpu-conformance/schema61-checkpoint.json",
     "evidence_directory": "test-logs/g4-cpu-conformance",
     "publication": {
       "status": "checkpoint_publication_authorized",
       "target": "origin/main",
-      "previous_published_head": "0e4a0ee367a345d3d711a8aea2ff3d4b23fecad3",
-      "scope": "Schema60 focused CPU checkpoint; sustained CPU execution continues, full G4 open."
+      "previous_published_head": "0f2838e8f2071fab46351e215d50c2308240e7e8",
+      "scope": "Schema61 focused CPU checkpoint; sustained CPU execution continues, full G4 open."
     },
     "reasoning_effort": "medium (user preference,2026-11-10; no automatic escalation)",
     "design_pass": {
@@ -150,30 +150,29 @@
     },
     "record_usage": "Start at docs/CURRENT.md and scripts/read_context.py. State is authoritative for live progress; history is archived. Update live checkpoint/next/package/blockers at meaningful checkpoints; do not append completed-family narratives. Detailed results belong in immutable test evidence.",
     "next_work_package": {
-      "id": "g4-stat-selection-group",
+      "id": "g4-weight-based-group",
       "status": "native_precheck_passed_implementation_pending",
       "members": [
-        "Foul Play target raw Attack/stages with source modifiers",
-        "Psyshock special move selecting Defense",
-        "Psystrike special move selecting Defense",
-        "Secret Sword special move selecting Defense"
+        "Low Kick target-weight base power",
+        "Grass Knot target-weight base power",
+        "Heavy Slam source/target weight-ratio base power"
       ],
       "shared_paths": [
-        "Stored stat/stage selection, source ModifyAtk/SpA and target selected-stat modifiers, category-dependent damage/screens"
+        "Current species hectogram weight and pre-Technician dynamic base power; Transform/Imposter identity"
       ],
       "membership": [
-        "Psyshock Latios seed[3,2,3,4]",
-        "Foul Play Amoonguss seed[13,2,3,4]",
-        "Psystrike Mewtwo seed[19,2,3,4]",
-        "Secret Sword Keldeo seed[81,2,3,4]"
+        "Heavy Slam Aggron seed[4,2,3,4]",
+        "Grass Knot Emboar seed[7,2,3,4]",
+        "Low Kick Bisharp seed[21,2,3,4]"
       ],
-      "native_precheck": "66 scenarios/76 boundaries in test-logs/g4-cpu-conformance/stat-selection-precheck.json.gz; stat/stage owner, source/target ability/item/burn, differing levels, critical/Unaware, Marvel Scale/Soul Dew/Eviolite, Reflect/Light Screen, Choice items, Sandstorm and suppression.",
-      "native_command": "node --test test/stat-selection-native.test.cjs",
+      "native_precheck": "40 scenarios/48 boundaries in test-logs/g4-cpu-conformance/weight-based-precheck.json.gz; exact absolute thresholds and ratio boundaries, Technician/items, contact/Substitute, transformed source/target and Imposter. Native scalar callback boundaries independently asserted.",
+      "native_command": "node --test test/weight-based-native.test.cjs",
       "native_result": "1 passed; implementation pending",
-      "planned_command": "JAX_PLATFORMS=cpu JAX_ENABLE_COMPILATION_CACHE=true JAX_COMPILATION_CACHE_DIR=\"$PWD/work/jax-cache\" JAX_EXPLAIN_CACHE_MISSES=true OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 XLA_PYTHON_CLIENT_PREALLOCATE=false timeout 900s .venv-jax/bin/python -m unittest test.test_stat_selection_engine -v -f",
+      "planned_command": "JAX_PLATFORMS=cpu JAX_ENABLE_COMPILATION_CACHE=true JAX_COMPILATION_CACHE_DIR=\"$PWD/work/jax-cache\" JAX_EXPLAIN_CACHE_MISSES=true OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 XLA_PYTHON_CLIENT_PREALLOCATE=false timeout 900s .venv-jax/bin/python -m unittest test.test_weight_based_engine -v -f",
       "command_status": "planned; module not yet implemented",
       "excluded": [
-        "Other stat overrides and full-format closure remain unsupported/pending",
+        "Heat Crash has no positive seed1..500 witness; remains unresolved/unsupported, not excluded",
+        "Heavy Metal/Light Metal/Float Stone/Autotomize and other unsupported weight-modifier dependencies remain gated",
         "Broad CPU/device/campaign/profiling gates deferred"
       ]
     },
@@ -563,27 +562,27 @@
     "combined_return_home_block": "docs/GPU_HANDOFF.md#one-return-home-block-correctness-plus-g3-v6-measurements",
     "pending_status_checkpoint": "Current status/field/hook GPU checks are wired into the49-check runner; no GPU execution during travel. Preserve matching-source CPU results and do not transfer earlier GPU/CPU evidence across changed source.",
     "expanded_checkpoint": {
-      "status": "schema60_grouped_focused_CPU_complete_GPU_deferred",
-      "engine_schema": 60,
-      "modules": 66,
-      "native_scenarios": 2021,
-      "native_boundaries": 6725,
+      "status": "schema61_grouped_focused_CPU_complete_GPU_deferred",
+      "engine_schema": 61,
+      "modules": 67,
+      "native_scenarios": 2087,
+      "native_boundaries": 6801,
       "initial_field_evidence": "test-logs/g4-cpu-conformance/schema5-checkpoint.json",
       "source": "Use latest committed checkout and runner source/fixture fingerprints; earlier source_commit fields describe historical preparation.",
       "handoff_prepared": false,
-      "source_commit": "Publishing commit; exact fingerprints in schema60-checkpoint.json",
-      "source_identity": "test-logs/g4-cpu-conformance/schema60-checkpoint.json",
-      "checks": 122
+      "source_commit": "Publishing commit; exact fingerprints in schema61-checkpoint.json",
+      "source_identity": "test-logs/g4-cpu-conformance/schema61-checkpoint.json",
+      "checks": 123
     },
     "pending_candidate": {
-      "family": "Foul Play / Psyshock / Psystrike / Secret Sword",
+      "family": "Low Kick / Grass Knot / Heavy Slam",
       "status": "native_only_precheck_passed_implementation_pending",
-      "cases": 66,
-      "boundaries": 76,
-      "fixture": "test-logs/g4-cpu-conformance/stat-selection-precheck.json.gz",
-      "native_command": "node --test test/stat-selection-native.test.cjs",
+      "cases": 40,
+      "boundaries": 48,
+      "fixture": "test-logs/g4-cpu-conformance/weight-based-precheck.json.gz",
+      "native_command": "node --test test/weight-based-native.test.cjs",
       "included_in_checkpoint_runner": false,
-      "next": "Implement guarded stat owner/selector paths and exact category/source modifier separation, then grouped CPU checkpoint."
+      "next": "Implement current-species hectogram weights and threshold/ratio power, then grouped CPU checkpoint."
     }
   },
   "historical_records": {

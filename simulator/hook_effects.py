@@ -63,7 +63,8 @@ def power(value,ability,item,physical,move_type,e,phase_modifier=4096,defender_a
     return modify(value,chain(modifier,phase_modifier))
 
 
-def stats(c,attack,defense,actor,target,physical,move_type,e):
+def stats(c,attack,defense,actor,target,physical,move_type,e,defensive_physical=None):
+    defensive_physical=physical if defensive_physical is None else defensive_physical
     s,_=c;m=s.active[actor];tm=s.active[target];ability=suppression_ops.abilities(s)[actor,m];defender=suppression_ops.abilities(s)[target,tm];item=s.item[actor,m]
     # Hustle returns a direct stat value before the queued chain modifiers.
     attack=jnp.where((ability==h.A['hustle'])&physical,modify(attack,e.i32(6144)),attack)
@@ -83,13 +84,13 @@ def stats(c,attack,defense,actor,target,physical,move_type,e):
     atk_modifier=chain(atk_modifier,jnp.where(physical&e.form_ops.flower(s,actor),6144,4096))
     atk_modifier=chain(atk_modifier,jnp.where(choice,6144,4096))
     atk_modifier=chain(atk_modifier,e.species_item_ops.offense(s,actor,physical))
-    marvel=(defender==h.A['marvelscale'])&physical&(s.status[target,tm]!=e.NONE)
+    marvel=(defender==h.A['marvelscale'])&defensive_physical&(s.status[target,tm]!=e.NONE)
     def_modifier=jnp.where(marvel,6144,4096).astype(jnp.int32)
     eviolite=(s.item[target,tm]==h.I['eviolite'])&h.NFE[s.species[target,tm]]
-    def_modifier=chain(def_modifier,jnp.where((~physical)&e.form_ops.flower(s,target),6144,4096))
+    def_modifier=chain(def_modifier,jnp.where((~defensive_physical)&e.form_ops.flower(s,target),6144,4096))
     def_modifier=chain(def_modifier,jnp.where(eviolite,6144,4096))
-    def_modifier=chain(def_modifier,e.species_item_ops.defense(s,target,physical))
-    sand=(s.weather_state[0]==3)&(~physical)&jnp.any(s.types[target,tm]==e.generic.TYPES['rock'])
+    def_modifier=chain(def_modifier,e.species_item_ops.defense(s,target,defensive_physical))
+    sand=(s.weather_state[0]==3)&(~defensive_physical)&jnp.any(s.types[target,tm]==e.generic.TYPES['rock'])
     def_modifier=chain(def_modifier,jnp.where(sand,6144,4096))
     # Native collects both priority5 ModifySpA handlers before checking their
     # HP/type conditions. Equal cached Speed shuffles even inactive modifiers.
