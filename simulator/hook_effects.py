@@ -136,7 +136,10 @@ def ordinary_ability_start(c,side,e,initial=False):
         s=s._replace(boosts=s.boosts.at[foe,fm,0].set(new))
         s=e.tracking.boosted(s,foe,new>old,new<old)
         return e._event((s,t),e.BOOST,foe,fm,value=new-old,aux=0,status=(change<0).astype(jnp.int32))
-    c=e._when((ability==h.A['intimidate'])&(c[0].hp[1-side,c[0].active[1-side]]>0),intimidate,c)
+    def try_intimidate(c):
+        denied=e.stat_drop_ops.blocked(c[0],side,1-side,e.i32(-1),e)
+        return e.jax.lax.cond(denied,lambda c:e.stat_drop_ops.fail(c,1-side,e),intimidate,c)
+    c=e._when((ability==h.A['intimidate'])&(c[0].hp[1-side,c[0].active[1-side]]>0),try_intimidate,c)
     def set_weather(c):
         s,t=c;state=jnp.stack((weather,side,m,e.i32(0),e.i32(0),e.i32(0)))
         c=e._event((s._replace(weather_state=state),t),e.WEATHER,side,m,move=ability,value=weather,aux=2)
@@ -159,15 +162,16 @@ def start(c,side,e,initial=False):
     ability=suppression_ops.abilities(c[0])[side,c[0].active[side]]
     def copy(c):return e.identity_ops.transform(c,side,1-side,e,imposter=True,initial=initial)[0]
     c=e.jax.lax.cond(ability==e.identity_ops.IMPOSTER,copy,lambda c:ability_start(c,side,e,initial=initial),c)
-    return item_start(c,side,e)
+    return item_start(c,side,e,switching=True)
 
 
-def item_start(c,side,e):
+def item_start(c,side,e,switching=False):
     m=c[0].active[side]
     # Choice items' Start hook removes an old lock on acquisition/switch-in.
     def choice(c):
         s,t=c;return s._replace(volatile_state=s.volatile_state.at[side,m,3].set(0)),t
-    return e._when(h.CHOICE[c[0].item[side,m]],choice,c)
+    c=e._when(h.CHOICE[c[0].item[side,m]],choice,c)
+    return c if switching else e.stat_drop_ops.restore(c,side,e)
 
 
 def modify_move(c,actor,target,move,e):

@@ -1,5 +1,5 @@
 'use strict';
-// Native precheck only: complete lifecycle capture/callback audit before implementation.
+// Pinned synthetic boost-filter and item-lifecycle cases; membership separately witnessed.
 module.exports=function(){
  const m=(x={})=>({species:'Mew',moves:['Growl','Shell Smash','Gastro Acid','Tackle'],ability:'Pressure',item:'',level:50,nature:'Hardy',gender:'M',ivs:{hp:31,atk:31,def:31,spa:31,spd:31,spe:31},evs:{hp:0,atk:0,def:0,spa:0,spd:0,spe:0},...x});
  const b=(a=1,c=1)=>({p1:`move ${a}`,p2:`move ${c}`}),cases=[];
@@ -16,6 +16,14 @@ module.exports=function(){
  add('herb-recycle',{p2:[m({item:'White Herb',moves:['Shell Smash','Recycle','Growl']})],steps:[b(),b(1,2),b(1,1)]});
  add('herb-switch-intimidate',{p1:[m({ability:'Intimidate',evs:{spe:252}}),m()],p2:[m({item:'White Herb'}),m({item:'White Herb'})],steps:[{p1:'switch 2',p2:'switch 2'},{p1:'switch 2',p2:'move 1'},b()]});
  add('herb-exchange',{p1:[m({moves:['Growl','Trick'],evs:{spe:252}})],p2:[m({item:'White Herb'})],steps:[b(2),b()]});
+ add('herb-acquire-negative',{p1:[m({moves:['Shell Smash','Trick','Recover'],evs:{spe:252}})],p2:[m({item:'White Herb',moves:['Recover']})],steps:[b(),b(2),b(3)]});
+ add('herb-dual-tie',{p1:[m({item:'White Herb'})],p2:[m({item:'White Herb'})],steps:[b(2,2),b()]});
+ add('herb-dual-idle',{p1:[m({item:'White Herb',moves:['Recover']})],p2:[m({item:'White Herb',moves:['Recover']})],steps:[b()]});
+ add('clear-reflect-source',{p1:[m({moves:['Growl'],ability:'Clear Body',evs:{spe:252}})],p2:[m({ability:'Magic Bounce',moves:['Recover']})],steps:[b()]});
+ add('herb-residual',{seed:17,p1:[m({item:'White Herb',moves:['Recover']})],p2:[m({item:'White Herb',moves:['Recover']})],setup:[{side:'p1',status:'par',boosts:{atk:-2}},{side:'p2',status:'par'}],steps:[b()]});
+ add('herb-switch-existing',{p1:[m({item:'White Herb',moves:['Recover']}),m()],p2:[m({moves:['Recover']}),m({ability:'Intimidate'})],setup:[{side:'p1',boosts:{def:-2}}],steps:[{p1:'move 1',p2:'switch 2'}]});
+ add('herb-dual-switch',{p1:[m({item:'White Herb'}),m({item:'White Herb'})],p2:[m({item:'White Herb'}),m({item:'White Herb'})],steps:[{p1:'switch 2',p2:'switch 2'},b(2,2)]});
+ add('herb-fast-intimidate',{p1:[m({ability:'Intimidate'})],p2:[m({item:'White Herb',evs:{spe:252}})],steps:[b()]});
  return cases;
 };
 module.exports.membershipWitnesses=function(){

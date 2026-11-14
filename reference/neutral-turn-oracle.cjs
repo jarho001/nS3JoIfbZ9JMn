@@ -206,6 +206,8 @@ function withObservedBattleDraws(ps, battle, action, options = {}) {
 	assert.ok(descriptor && typeof descriptor.value === 'function');
 	const original = descriptor.value;
 	const ownRunAction = Object.getOwnPropertyDescriptor(battle, 'runAction');
+	const ownRunEvent = Object.getOwnPropertyDescriptor(battle, 'runEvent');
+	const originalRunEvent = battle.runEvent;
 	const ownEachEvent = Object.getOwnPropertyDescriptor(battle, 'eachEvent');
 	const originalRunAction = battle.runAction;
 	const originalEachEvent = battle.eachEvent;
@@ -227,6 +229,11 @@ function withObservedBattleDraws(ps, battle, action, options = {}) {
 		} finally {
 			eventIds.pop();
 		}
+	};
+	if (options.observeAfterMove) battle.runEvent = function (eventid, ...args) {
+		if (eventid !== 'AfterMove') return originalRunEvent.call(this, eventid, ...args);
+		eventIds.push(eventid);
+		try { return originalRunEvent.call(this, eventid, ...args); } finally { eventIds.pop(); }
 	};
 	ps.PRNG.prototype.random = function (bound, to) {
 		const isBattleRng = this === battle.prng;
@@ -264,6 +271,8 @@ function withObservedBattleDraws(ps, battle, action, options = {}) {
 		Object.defineProperty(ps.PRNG.prototype, 'random', descriptor);
 		if (ownRunAction) Object.defineProperty(battle, 'runAction', ownRunAction);
 		else delete battle.runAction;
+		if (ownRunEvent) Object.defineProperty(battle, 'runEvent', ownRunEvent);
+		else delete battle.runEvent;
 		if (ownEachEvent) Object.defineProperty(battle, 'eachEvent', ownEachEvent);
 		else delete battle.eachEvent;
 	}

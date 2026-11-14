@@ -22,12 +22,24 @@ Keep historical commands/results as provenance.
 
 ## Current source and evidence
 
-**Next group, native only:** White Herb / Clear Body has29 preliminary native
-scenarios/65 boundaries, with pinned generator witnesses and a passing
-`node --test test/stat-drop-native.test.cjs` contract. Complete callback/lifecycle
-capture before implementation. It is not included in the current CPU/CUDA
-runner; no engine or device validation is claimed. Resume details are in
-`active_task.next_work_package` in [compact state](ORCHESTRATION_STATE.json).
+**Next group, native only:** Sturdy / Focus Sash has24 scenarios/31 boundaries,
+pinned generator witnesses, and a passing `node --test test/survival-native.test.cjs`
+contract. It is not in the CPU/CUDA runner; implementation remains pending.
+Resume `active_task.next_work_package` in [compact state](ORCHESTRATION_STATE.json).
+
+**Schema48 White Herb / Clear Body group:** focused CPU37 scenarios/77 boundaries
+passed in329.157s;2 native/inventory contracts and4 handoff helpers pass.
+See [schema48-checkpoint.json](../test-logs/g4-cpu-conformance/schema48-checkpoint.json).
+One shared compiled step covers exact state/RNG/requests/recipient events and
+histories, NPZ continuation and journal17. No GPU execution.
+
+```sh
+JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_stat_drop_engine -v -f
+```
+
+Runner includes110 checks/54 modules,1600 scenarios/6164 boundaries in48 corpora.
+Current-source broad/device preparation and execution remain deferred.
+White Herb Fling/Mega callbacks and White Smoke membership remain unresolved.
 
 **Schema47 Light Ball / Thick Club / Soul Dew group:** focused CPU41 scenarios/94 boundaries
 passed in327.707s;2 native/inventory contracts and4 handoff helpers pass.

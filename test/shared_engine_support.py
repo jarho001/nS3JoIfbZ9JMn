@@ -54,6 +54,8 @@ def initialize_case(case):
                 s,trace=e._status((s,e.empty_trace()),side,side,e.i32(status))
                 count=int(trace.ecount)
                 s=s._replace(history=s.history.at[s.hcount:s.hcount+count].set(trace.events[:count]),hcount=s.hcount+count)
+        if 'boosts' in setup:
+            for stat,value in setup['boosts'].items():s=s._replace(boosts=s.boosts.at[side,mon,e.field_tables.STATS.index(stat)].set(value))
         if 'hp' in setup:s=s._replace(hp=s.hp.at[side,mon].set(setup['hp']))
         if 'pp' in setup:s=s._replace(pp=s.pp.at[side,mon].set(np.where(np.asarray(s.moves[side,mon])>0,setup['pp'],0)))
         if 'ppByMove' in setup:

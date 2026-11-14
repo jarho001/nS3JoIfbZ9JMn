@@ -439,10 +439,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/stat-drop.json.gz",
+          "native": "reference/stat-drop-cases.cjs",
+          "scope": "Independent37 synthetic/constructed cases77 boundaries; external boost filtering, suppression, reflected source, item acquisition/switch/after-move/residual/consumption and persistence. Fling/Mega hooks and remaining full-format closure are not accepted",
+          "test": "test/test_stat_drop_engine.py"
+        }
+      ],
       "field": "onTryBoost",
       "id": "abilities:clearbody:onTryBoost",
-      "implementation": null,
+      "implementation": {
+        "family": "stat_drop",
+        "file": "simulator/stat_drop.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:clearbody",
@@ -454,7 +466,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "8ee2769203d425bbc470e529384c6eef4d56ae4661067f2f10395464bc7c065a",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -17395,10 +17407,22 @@
           "file": "data/items.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/stat-drop.json.gz",
+          "native": "reference/stat-drop-cases.cjs",
+          "scope": "Independent37 synthetic/constructed cases77 boundaries; external boost filtering, suppression, reflected source, item acquisition/switch/after-move/residual/consumption and persistence. Fling/Mega hooks and remaining full-format closure are not accepted",
+          "test": "test/test_stat_drop_engine.py"
+        }
+      ],
       "field": "onAnyAfterMove",
       "id": "items:whiteherb:onAnyAfterMove",
-      "implementation": null,
+      "implementation": {
+        "family": "stat_drop",
+        "file": "simulator/stat_drop.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "items:whiteherb",
@@ -17410,7 +17434,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "2257b71067b1b450bf4d40f95a020b6ee1f3b33c1984fa3c22ebce61d561fd88",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -17419,10 +17443,22 @@
           "file": "data/items.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/stat-drop.json.gz",
+          "native": "reference/stat-drop-cases.cjs",
+          "scope": "Independent37 synthetic/constructed cases77 boundaries; external boost filtering, suppression, reflected source, item acquisition/switch/after-move/residual/consumption and persistence. Fling/Mega hooks and remaining full-format closure are not accepted",
+          "test": "test/test_stat_drop_engine.py"
+        }
+      ],
       "field": "onAnySwitchIn",
       "id": "items:whiteherb:onAnySwitchIn",
-      "implementation": null,
+      "implementation": {
+        "family": "stat_drop",
+        "file": "simulator/stat_drop.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "items:whiteherb",
@@ -17434,7 +17470,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "b32ff7ab6fdef16c7148d8d4a48f2b0ca48661c1ed226c1e6bb9e28de845d8f7",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -17443,10 +17479,22 @@
           "file": "data/items.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/stat-drop.json.gz",
+          "native": "reference/stat-drop-cases.cjs",
+          "scope": "Independent37 synthetic/constructed cases77 boundaries; external boost filtering, suppression, reflected source, item acquisition/switch/after-move/residual/consumption and persistence. Fling/Mega hooks and remaining full-format closure are not accepted",
+          "test": "test/test_stat_drop_engine.py"
+        }
+      ],
       "field": "onResidual",
       "id": "items:whiteherb:onResidual",
-      "implementation": null,
+      "implementation": {
+        "family": "stat_drop",
+        "file": "simulator/stat_drop.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "items:whiteherb",
@@ -17458,7 +17506,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "0e70d7933e4231e2c93c287cbae8ebd98363dbc8a2d9e41915b1fc0b750dfb50",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -17467,10 +17515,22 @@
           "file": "data/items.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/stat-drop.json.gz",
+          "native": "reference/stat-drop-cases.cjs",
+          "scope": "Independent37 synthetic/constructed cases77 boundaries; external boost filtering, suppression, reflected source, item acquisition/switch/after-move/residual/consumption and persistence. Fling/Mega hooks and remaining full-format closure are not accepted",
+          "test": "test/test_stat_drop_engine.py"
+        }
+      ],
       "field": "onStart",
       "id": "items:whiteherb:onStart",
-      "implementation": null,
+      "implementation": {
+        "family": "stat_drop",
+        "file": "simulator/stat_drop.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "items:whiteherb",
@@ -17482,7 +17542,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "7af2cfa767aa5b64c57ab2b21dca2fc836691567134f605128c89c4387c4e5af",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -17491,10 +17551,22 @@
           "file": "data/items.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/stat-drop.json.gz",
+          "native": "reference/stat-drop-cases.cjs",
+          "scope": "Independent37 synthetic/constructed cases77 boundaries; external boost filtering, suppression, reflected source, item acquisition/switch/after-move/residual/consumption and persistence. Fling/Mega hooks and remaining full-format closure are not accepted",
+          "test": "test/test_stat_drop_engine.py"
+        }
+      ],
       "field": "onUse",
       "id": "items:whiteherb:onUse",
-      "implementation": null,
+      "implementation": {
+        "family": "stat_drop",
+        "file": "simulator/stat_drop.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "items:whiteherb",
@@ -17506,7 +17578,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "f139ba5f1b964b522b15aa7b9fc0f1a12d261f0f89c8106b04f149778dbba9c9",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -71305,8 +71377,8 @@
         }
       ],
       "kind": "abilities",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "stat-drop-positive-witness",
       "status": "partial"
     },
     {
@@ -84591,8 +84663,8 @@
         }
       ],
       "kind": "items",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "stat-drop-positive-witness",
       "status": "partial"
     },
     {
@@ -98579,6 +98651,112 @@
           }
         ]
       },
+      "stat-drop-positive-witness": {
+        "bound": [
+          "abilities:clearbody",
+          "items:whiteherb"
+        ],
+        "conclusion": "required",
+        "kind": "mixed",
+        "reasoning": "Pinned Clear Body Klinklang seed[5,2,3,4] and White Herb Crustle seed[14,2,3,4] prove membership. Native lifecycle cases do not close unsupported callback/indirect/full-format obligations; White Smoke membership remains unresolved.",
+        "references": [
+          "data/random-battles/gen5/teams.ts:103-494 (cullMovePool/randomMoveset)",
+          "data/random-battles/gen5/teams.ts:496-566 (ability filters/fallback)",
+          "data/random-battles/gen5/teams.ts:568-816 (item returns and randomSet)",
+          "data/random-battles/gen5/teams.ts:850-1014 (team eligibility)",
+          "data/random-battles/gen9/teams.ts:675-693 (addMove)",
+          "data/random-battles/gen9/teams.ts:1442-1497 (getLevel/getForme)",
+          "data/random-battles/gen9/teams.ts:1641-1683 (getPokemonPool)"
+        ],
+        "witnesses": [
+          {
+            "id": "clearbody",
+            "kind": "ability",
+            "seed": [
+              5,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Clear Body",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "N",
+              "item": "Leftovers",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 84,
+              "moves": [
+                "shiftgear",
+                "geargrind",
+                "return",
+                "substitute"
+              ],
+              "name": "Klinklang",
+              "role": "Setup Sweeper",
+              "shiny": false,
+              "species": "Klinklang",
+              "speciesId": "klinklang"
+            }
+          },
+          {
+            "id": "whiteherb",
+            "kind": "item",
+            "seed": [
+              14,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Sturdy",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "White Herb",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 80,
+              "moves": [
+                "xscissor",
+                "earthquake",
+                "shellsmash",
+                "stoneedge"
+              ],
+              "name": "Crustle",
+              "role": "Setup Sweeper",
+              "shiny": false,
+              "species": "Crustle",
+              "speciesId": "crustle"
+            }
+          }
+        ]
+      },
       "switch-recovery-positive-witness": {
         "bound": [
           "abilities:naturalcure",
@@ -98962,8 +99140,8 @@
       },
       "entries": {
         "proven_unreachable": 542,
-        "required": 59,
-        "unresolved": 1167
+        "required": 61,
+        "unresolved": 1165
       },
       "roots": {
         "proven_unreachable": 0,

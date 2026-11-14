@@ -13,6 +13,8 @@ def empty_weather():
 
 def boost(c,actor,target,move,e):
     s,t=c;m=s.active[target];change=f.BOOSTS[move]
+    denied=e.stat_drop_ops.blocked(s,actor,target,change,e)
+    c=e._when(jnp.any(denied),lambda c:e.stat_drop_ops.fail(c,target,e),c)
     for step in range(7):
         k=f.BOOST_ORDER[move,step]
         def apply(c):
@@ -23,7 +25,7 @@ def boost(c,actor,target,move,e):
             s, t=e.tracking.outcome((s,t),actor,value,move)
             # Even a capped raise emits its zero-sized native boost event.
             return e._event((s,t),e.BOOST,target,m,value=new-old,aux=k,status=(e.creation_ops.delta(s,target,change[k])<0).astype(jnp.int32))
-        c=e._when(change[k]!=0,apply,c)
+        c=e._when((change[k]!=0)&(~denied[k]),apply,c)
     return e._when(c[0].action_state[actor,c[0].active[actor],e.tracking.RESULT]==e.tracking.TRUE,lambda c:e._update(e._update(c,e.HIT_UPDATE),e.HIT_UPDATE),c)
 
 
