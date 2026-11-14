@@ -87,8 +87,8 @@ def project_events(state,trace,audience):
             line='|'+('move' if kind==e.EV_MOVE else '-anim')+f'|{actor}|{name}|'+shown+('|[from] move: '+e.MOVE_NAMES[-from_lock-1]if from_lock<0 else '|[from] lockedmove' if from_lock==1 else '|[from] move: Pursuit' if from_lock==2 else '|[from] '+e.MOVE_NAMES[tables.MOVE_IDS[e.phase_ops.VOLATILES[from_lock-e.called_ops.CONDITION_TAG]]]if from_lock>=e.called_ops.CONDITION_TAG else '|[from] ability: '+e.hook_tables.ABILITY_NAMES[from_lock-e.called_ops.ABILITY_TAG]if from_lock>=e.called_ops.ABILITY_TAG else '')+annotation
         elif kind in (e.DAMAGE,e.HEAL):
             line=f'|-'+('damage' if kind==e.DAMAGE else 'heal')+f'|{actor}|'+condition(value,aux,status,side!=audience)
-            if kind==e.DAMAGE and move:line+='|[from] '+{1:'brn',2:'psn',3:'recoil',4:'Stealth Rock',5:'Spikes',6:'confusion',7:'Sandstorm',8:'Hail',9:'item: Life Orb',10:'Recoil',11:'ability: Rough Skin',12:'ability: Iron Barbs',13:'item: Rocky Helmet',14:'ability: Liquid Ooze',15:'ability: Dry Skin',16:'item: Black Sludge'}[move]
-            if kind==e.DAMAGE and move in (11,12,13,14,15):line+='|[of] '+foe
+            if kind==e.DAMAGE and move:line+='|[from] '+{1:'brn',2:'psn',3:'recoil',4:'Stealth Rock',5:'Spikes',6:'confusion',7:'Sandstorm',8:'Hail',9:'item: Life Orb',10:'Recoil',11:'ability: Rough Skin',12:'ability: Iron Barbs',13:'item: Rocky Helmet',14:'ability: Liquid Ooze',15:'ability: Dry Skin',16:'item: Black Sludge',17:'ability: Aftermath'}[move]
+            if kind==e.DAMAGE and move in (11,12,13,14,15,17):line+='|[of] '+foe
             if kind==e.HEAL and move:line+='|[silent]' if move==-1 else '|[from] ability: Ice Body' if move==2 else '|[from] drain|[of] '+foe if move==3 else '|[from] item: Sitrus Berry'if move==11 else '|[from] item: Black Sludge'if move==10 else '|[from] ability: Poison Heal'if move==9 else '|[from] ability: Rain Dish'if move==8 else '|[from] ability: Dry Skin'if move==7 else '|[from] ability: '+{4:'Water Absorb',5:'Volt Absorb',6:'Dry Skin'}[move]+'|[of] '+foe if move in (4,5,6) else '|[from] item: Leftovers'
         elif kind==e.CRIT:line=f'|-crit|{actor}'
         elif kind==e.IMMUNE:line=f'|-immune|{actor}'+('|confusion|[from] ability: Own Tempo'if aux==5 else '|[from] ability: '+e.hook_tables.ABILITY_NAMES[value]if aux==4 else {0:'',1:'|[from] ability: Immunity',2:'|[from] ability: Levitate',3:'|[from] ability: Soundproof'}[aux])
@@ -214,9 +214,9 @@ def load_state(path,*,schema=None,replayed_state=None):
         stored=int(saved['schema']) if 'schema' in saved else None
         if schema is not None and stored is not None and stored!=schema:raise ValueError('schema mismatch')
         version=stored if schema is None else schema
-        if version not in (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54):raise ValueError('explicit supported state schema required')
+        if version not in (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55):raise ValueError('explicit supported state schema required')
         fields={k:jnp.asarray(saved[k]) for k in saved.files if k not in ('schema','data_sha256')}
-        if version in (3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54):
+        if version in (3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55):
             if 'data_sha256' not in saved or str(saved['data_sha256'])!=generic.DATA_SHA256:
                 raise ValueError('state data table identity mismatch')
         if version<39 and replayed_state is not None:

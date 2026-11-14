@@ -22,10 +22,22 @@ Keep historical commands/results as provenance.
 
 ## Current source and evidence
 
-**Next group, native only:** Moxie / Aftermath has25 scenarios/29 boundaries,
-pinned generator witnesses and a passing `node --test test/faint-ability-native.test.cjs`
+**Next group, native only:** Weak Armor / Cursed Body has29 scenarios/43 boundaries,
+pinned positive witnesses and a passing `node --test test/reactive-ability-native.test.cjs`
 contract. It is not in the CPU/CUDA runner; implementation remains pending.
-Damp membership and its global guard callbacks remain unresolved/unsupported.
+
+**Schema55 Moxie / Aftermath group:** focused CPU25 scenarios/29 boundaries
+passed in392.779s;2 native/inventory contracts and4 handoff helpers pass.
+See [schema55-checkpoint.json](../test-logs/g4-cpu-conformance/schema55-checkpoint.json).
+One compiled step covers exact state/RNG/requests/recipient events/histories,
+NPZ continuation and journal17. No GPU execution.
+
+```sh
+JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_faint_ability_engine -v -f
+```
+
+Runner includes117 checks/61 modules,1828 scenarios/6484
+boundaries in55 corpora. Current-source broad/device execution remains deferred.
 
 **Schema54 Download / Defiant group:** focused CPU30 scenarios/37 boundaries
 passed in391.335s;2 native/inventory contracts and4 handoff helpers pass.

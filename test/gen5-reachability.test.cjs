@@ -59,8 +59,8 @@ test('pinned resolved export and conservative inventory reproduce exactly',()=>{
     const cb=slots.get(id);assert.equal(cb.status,'unsupported');assert.equal(cb.implementation,null);
   }
   assert.ok(ledger.callbacks.every(c=>['partial','unsupported'].includes(c.status)));
-  assert.equal(ledger.callbacks.filter(c=>c.status==='partial').length,336);
-  assert.equal(ledger.callbacks.filter(c=>c.status==='unsupported').length,810);
+  assert.equal(ledger.callbacks.filter(c=>c.status==='partial').length,338);
+  assert.equal(ledger.callbacks.filter(c=>c.status==='unsupported').length,808);
   const audit=ledger.reachabilityAudit;
   const entries=new Map(ledger.entries.map(e=>[e.id,e]));
   assert.equal(audit.proofs['move-identity-bound'].bound.length,224);
@@ -124,6 +124,9 @@ test('pinned resolved export and conservative inventory reproduce exactly',()=>{
   assert.equal(entries.get('abilities:unaware').reachabilityAudit,'unaware-positive-witness');assert.ok(slots.get('abilities:unaware:onAnyModifyBoost').implementation);
   for(const [owner,field]of [['abilities:download','onStart'],['abilities:defiant','onAfterEachBoost']]){
     assert.equal(entries.get(owner).reachability,'required');assert.equal(entries.get(owner).reachabilityAudit,'boost-ability-positive-witness');assert.ok(slots.get(owner+':'+field).implementation);
+  }
+  for(const [owner,field]of [['abilities:moxie','onSourceAfterFaint'],['abilities:aftermath','onDamagingHit']]){
+    assert.equal(entries.get(owner).reachability,'required');assert.equal(entries.get(owner).reachabilityAudit,'faint-ability-positive-witness');assert.ok(slots.get(owner+':'+field).implementation);
   }
   assert.equal(entries.get('abilities:zenmode').reachability,'unresolved');
   assert.equal(slots.get('abilities:magicguard:onDamage').reachability,'unresolved');

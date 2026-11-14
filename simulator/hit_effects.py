@@ -67,6 +67,9 @@ def contact(c,actor,target,move,e):
     c=e._when(h.CONTACT[move]&thorn&(s.hp[actor,mon]>0),
               lambda c:damage(c,s.stats[actor,mon,0]//8,cause),c)
     s,_=c
+    aftermath=(ability==tables.ABILITY_IDS['aftermath'])&(s.hp[target,tm]==0)
+    c=e._when(h.CONTACT[move]&aftermath&(s.hp[actor,mon]>0),lambda c:damage(c,s.stats[actor,mon,0]//4,17),c)
+    s,_=c
     return e._when(h.CONTACT[move]&(s.item[target,tm]==tables.ITEM_IDS['rockyhelmet'])&(s.hp[actor,mon]>0),
                    lambda c:damage(c,s.stats[actor,mon,0]//6,13),c)
 

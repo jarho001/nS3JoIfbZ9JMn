@@ -1,0 +1,20 @@
+'use strict';
+const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),zlib=require('node:zlib');
+const {normalizeStacks}=require('./native-stack-support.cjs');
+test('native-only Weak Armor and Cursed Body precheck preserves Disable metadata and post-terminal callbacks',()=>{
+ require('../reference/neutral-turn-oracle.cjs').assertReady();
+ const ps=require('../reference/vendor/pokemon-showdown/dist/sim'),{runCase}=require('../reference/shared-engine-cases.cjs'),spec=require('../reference/reactive-ability-cases.cjs');
+ const actual={pin:require('../reference-lock.json').commit,witnesses:spec.membershipWitnesses(),cases:spec().map(c=>runCase(ps,c))};
+ assert.deepEqual(normalizeStacks(JSON.parse(JSON.stringify(actual))),normalizeStacks(JSON.parse(zlib.gunzipSync(fs.readFileSync('test-logs/g4-cpu-conformance/reactive-ability-precheck.json.gz')))));
+ assert.equal(actual.cases.length,29);assert.equal(actual.cases.reduce((n,c)=>n+c.steps.length,0),43);
+ assert.ok(actual.cases.every(c=>c.steps.every(s=>s.accepted.every(a=>a.accepted))));
+ const c=id=>actual.cases.find(c=>c.id==='G4-reactive-ability-'+id),first=id=>c(id).steps[0];
+ const disable=first('cursedbody-tackle').after.sides[0].pokemon[0].volatiles.disable;
+ assert.equal(disable.sourceEffect.$effect,'cursedbody');assert.equal(disable.sourceEffect.type,'Ability');assert.equal(disable.duration,3);
+ assert.equal(first('cursedbody-last-pp').after.sides[0].pokemon[0].volatiles.disable,undefined);
+ assert.equal(first('cursedbody-last-pp').after.effectOrder,first('cursedbody-last-pp').before.effectOrder+1);
+ const terminal=first('weakarmor-helmet-source-ko').events.p1.map(e=>e.message);
+ assert.ok(terminal.findIndex(e=>e.includes('|Weak Armor|boost'))>terminal.indexOf('|win|p2'));
+ assert.ok(first('cursedbody-helmet-source-ko').draws.some(d=>d.semanticContext==='cursed-body'));
+ assert.deepEqual(actual.witnesses.map(w=>w.set.species),['Vanilluxe','Froslass']);
+});

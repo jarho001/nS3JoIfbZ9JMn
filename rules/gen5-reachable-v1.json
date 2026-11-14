@@ -43,10 +43,22 @@
           "file": "data/mods/gen6/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/faint-ability.json.gz",
+          "native": "reference/faint-ability-cases.cjs",
+          "scope": "Independent25 constructed/synthetic scenarios29 boundaries; source-Move KO boosts before recoil, fatal contact Aftermath before Helmet and instafaint, caps/Magic Guard/Mummy/suppression, terminal and reserve paths. Damp remains unsupported/unresolved; full-format closure pending",
+          "test": "test/test_faint_ability_engine.py"
+        }
+      ],
       "field": "onDamagingHit",
       "id": "abilities:aftermath:onDamagingHit",
-      "implementation": null,
+      "implementation": {
+        "family": "faint_ability",
+        "file": "simulator/hit_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:aftermath",
@@ -58,7 +70,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "ffb3dfbffae756ed5e4932a4e4261300302368a49bb7d6b18780e02d86f705a5",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -3367,10 +3379,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/faint-ability.json.gz",
+          "native": "reference/faint-ability-cases.cjs",
+          "scope": "Independent25 constructed/synthetic scenarios29 boundaries; source-Move KO boosts before recoil, fatal contact Aftermath before Helmet and instafaint, caps/Magic Guard/Mummy/suppression, terminal and reserve paths. Damp remains unsupported/unresolved; full-format closure pending",
+          "test": "test/test_faint_ability_engine.py"
+        }
+      ],
       "field": "onSourceAfterFaint",
       "id": "abilities:moxie:onSourceAfterFaint",
-      "implementation": null,
+      "implementation": {
+        "family": "faint_ability",
+        "file": "simulator/faint_abilities.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:moxie",
@@ -3382,7 +3406,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "ea8b019ade7b9516ed38a6c6b4abfbe2294df4b08ea0193f1d57a9d119c973e4",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -71144,8 +71168,8 @@
         }
       ],
       "kind": "abilities",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "faint-ability-positive-witness",
       "status": "partial"
     },
     {
@@ -73836,8 +73860,8 @@
         }
       ],
       "kind": "abilities",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "faint-ability-positive-witness",
       "status": "partial"
     },
     {
@@ -97792,6 +97816,112 @@
           }
         ]
       },
+      "faint-ability-positive-witness": {
+        "bound": [
+          "abilities:aftermath",
+          "abilities:moxie"
+        ],
+        "conclusion": "required",
+        "kind": "abilities",
+        "reasoning": "Pinned Aftermath Skuntank seed[6,2,3,4] and Moxie Salamence seed[7,2,3,4] prove membership. Directed contact/faint callbacks do not close remaining indirect/full-format obligations; Damp remains unresolved.",
+        "references": [
+          "data/random-battles/gen5/teams.ts:103-494 (cullMovePool/randomMoveset)",
+          "data/random-battles/gen5/teams.ts:496-566 (ability filters/fallback)",
+          "data/random-battles/gen5/teams.ts:568-816 (item returns and randomSet)",
+          "data/random-battles/gen5/teams.ts:850-1014 (team eligibility)",
+          "data/random-battles/gen9/teams.ts:675-693 (addMove)",
+          "data/random-battles/gen9/teams.ts:1442-1497 (getLevel/getForme)",
+          "data/random-battles/gen9/teams.ts:1641-1683 (getPokemonPool)"
+        ],
+        "witnesses": [
+          {
+            "id": "aftermath",
+            "kind": "ability",
+            "seed": [
+              6,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Aftermath",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Black Glasses",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 85,
+              "moves": [
+                "fireblast",
+                "crunch",
+                "pursuit",
+                "suckerpunch"
+              ],
+              "name": "Skuntank",
+              "role": "Bulky Attacker",
+              "shiny": false,
+              "species": "Skuntank",
+              "speciesId": "skuntank"
+            }
+          },
+          {
+            "id": "moxie",
+            "kind": "ability",
+            "seed": [
+              7,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Moxie",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Lum Berry",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 72,
+              "moves": [
+                "dragondance",
+                "fireblast",
+                "earthquake",
+                "outrage"
+              ],
+              "name": "Salamence",
+              "role": "Setup Sweeper",
+              "shiny": false,
+              "species": "Salamence",
+              "speciesId": "salamence"
+            }
+          }
+        ]
+      },
       "flash-fire-positive-witness": {
         "bound": [
           "abilities:flashfire"
@@ -99888,8 +100018,8 @@
       },
       "entries": {
         "proven_unreachable": 542,
-        "required": 72,
-        "unresolved": 1154
+        "required": 74,
+        "unresolved": 1152
       },
       "roots": {
         "proven_unreachable": 0,

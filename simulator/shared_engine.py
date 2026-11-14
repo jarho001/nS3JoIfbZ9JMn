@@ -48,6 +48,7 @@ from . import survival as survival_ops
 from . import accuracy_abilities as accuracy_ability_ops
 from . import unaware as unaware_ops
 from . import boost_abilities as boost_ability_ops
+from . import faint_abilities as faint_ability_ops
 from . import species_items as species_item_ops
 from . import ability_creation as creation_ops
 from . import suppression as suppression_ops
@@ -62,7 +63,7 @@ import sys
 def _engine():
     return sys.modules[__name__]
 
-SCHEMA = 54
+SCHEMA = 55
 ROSTER, SLOTS, QUEUE, EVENTS, DRAWS, HISTORY = 6, 4, 8, 128, 128, 2048
 OK, PENDING, INVALID, UNSUPPORTED, CAPACITY, TERMINAL, STALE = range(7)
 RETRY=7
@@ -467,7 +468,8 @@ def _hit(c,actor,move):
         # Gen5 resolves the last queued faint first when the source has also
         # fainted. Contact double-KO therefore differs from later recoil KO.
         c=_when(source_ko&(~c[0].fainted[actor,mon]),lambda c:_faint(c,actor),c)
-        c=_when((c[0].hp[target,tm]==0)&(~c[0].fainted[target,tm]),lambda c:_faint(c,target),c)
+        def faint_target(c):return faint_ability_ops.moxie(_faint(c,target),actor,_engine())
+        c=_when((c[0].hp[target,tm]==0)&(~c[0].fainted[target,tm]),faint_target,c)
         c=_when(source_ko&(c[0].winner<0),lambda c:_win(c,target),c)
         c=_when(hit_tables.MAX_HITS[move]>1,lambda c:_event(c,HIT_COUNT,target,tm,value=hits,aux=c[0].fainted[target,tm].astype(jnp.int32)),c)
         regular=(hit_tables.RECOIL_NUM[move]>0)&(suppression_ops.abilities(c[0])[actor,mon]!=tables.ABILITY_IDS['rockhead'])
