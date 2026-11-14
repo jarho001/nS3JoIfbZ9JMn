@@ -26,7 +26,12 @@ reasoning effort; the user selected Medium to control usage.
 
 ## Context and documentation
 
-Read the current goal, relevant plan sections, and compact state.
+Start at [CURRENT.md](docs/CURRENT.md). After Trail preflight, run
+`python scripts/read_context.py` for the live goal/package/blockers. Use its
+`--field`, `--headings` and `--section` modes or bounded rg/sed reads for needed
+detail. Do not load the whole plan, state, case catalog, GPU handoff or archives
+for routine orientation. Read applicable scope/acceptance sections before acting;
+selective loading does not narrow the goal or retire any pending gate.
 
 Trail-code is required in every environment used for this project (local,
 cloud, worktree, and CI when agents perform project work). Before investigation
@@ -44,9 +49,11 @@ model build is required. Setup and host configuration: `docs/TRAIL_SETUP.md`.
 Do not read all archives merely for routine orientation.
 
 Keep useful evidence, not a narrative. The plan owns scope and acceptance;
-`docs/ORCHESTRATION_STATE.json` owns current progress/blockers; tests and their
-referenced outputs own reproducible evidence. Update these existing records
-only when something material changes. Record lasting design decisions once.
+`docs/ORCHESTRATION_STATE.json` owns current progress/blockers; CURRENT.md routes
+bounded reads of it without duplicating status. Tests and their referenced
+outputs own reproducible evidence. Completed records belong in linked history,
+not active state; unfinished obligations and resumable WIP stay live. Update
+these records only when something material changes. Record lasting design decisions once.
 Do not create per-patch TASK documents, duplicate handoffs, repeated manifests,
 or a transcript of investigation. Existing task/review archives remain history,
 not instructions or mandatory reading. Preserve recorded acceptance evidence;

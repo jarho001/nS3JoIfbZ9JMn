@@ -9,8 +9,10 @@ diff and evidence. Independent review happens only when the user requests it.
 ## Prepare, then pursue a goal
 
 Use [MILESTONE_PREPARATION.md](MILESTONE_PREPARATION.md) for new or materially
-changed goals. Initial milestone preparation is complete; resume an approved
-goal from `active_task`, not from the historical first-G3 assignment. Model/effort
+changed goals. Initial milestone preparation is complete; use [CURRENT.md](CURRENT.md) and
+`python scripts/read_context.py` to resume the live `active_task`. Load relevant
+plan/workflow sections rather than whole documents or the historical first-G3
+assignment. Model/effort
 and Goal-mode rules are in [AGENTS.md](../AGENTS.md); repository edits do not
 change the execution surface.
 
@@ -141,9 +143,12 @@ CPU completion and full G4 acceptance criteria do not change.
 
 - [PROJECT_PLAN.md](../PROJECT_PLAN.md): milestone contracts, priorities, and
   lasting decisions; behavior cases live in tests/fixtures or one linked catalog.
-- [ORCHESTRATION_STATE.json](ORCHESTRATION_STATE.json): the current goal,
-  completed/next checkpoint, evidence pointers, and concrete blockers. Reuse
-  `active_task` for the active goal; use a stable milestone/goal identifier.
+- [CURRENT.md](CURRENT.md): small routing entrypoint; its reader selects live
+  state and bounded document sections, without maintaining a second status copy.
+- [ORCHESTRATION_STATE.json](ORCHESTRATION_STATE.json): live goal, current/next
+  checkpoint, evidence pointers, unfinished gates, WIP and concrete blockers.
+  Reuse `active_task`; move completed narratives to linked history instead of
+  accumulating them here. Load archived records only for a concrete need.
 - [TASKS.md](TASKS.md) and existing archives: historical acceptance index and
   pointers. Existing task count and review records stay historical; new goal
   progress does not require new TASK### files or task-count review cycles.

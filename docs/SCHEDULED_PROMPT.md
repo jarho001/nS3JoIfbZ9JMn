@@ -6,10 +6,14 @@ not activate Goal mode or change a saved schedule.
 
 ```text
 Use the existing cloud environment and repository /workspace/nS3JoIfbZ9JMn.
-Read AGENTS.md, applicable runtime guidance, docs/ORCHESTRATION.md, the compact
-current state in docs/ORCHESTRATION_STATE.json, and relevant PROJECT_PLAN.md
-sections. Inspect Git status and safely synchronize with the remote default
-branch while preserving local and unrelated work. Read archives only as needed.
+Read AGENTS.md and applicable runtime guidance; perform its Trail preflight.
+Start at docs/CURRENT.md and run python scripts/read_context.py for the live goal,
+package, blockers and pending acceptance. Read only the applicable workflow,
+plan/acceptance and behavior sections via --section/--field or bounded rg/sed;
+do not cat whole state, plan, case catalog or handoff files. Inspect Git status
+and safely synchronize with the remote default branch while preserving local
+and unrelated work, then refresh the live view if source changed. Load historical
+evidence only to answer a concrete question.
 
 Use the primary model/effort specified by AGENTS.md and .codex/config.toml.
 If it is unavailable, report the blocker rather than substituting. Work directly; do not

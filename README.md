@@ -8,8 +8,8 @@ The configured primary handles implementation and validation directly. Luna and 
 are explicit-only roles; automatic Astra reviews are retired. See
 [AGENTS.md](AGENTS.md) and [the workflow](docs/ORCHESTRATION.md).
 For a new or materially changed goal, use [milestone preparation](docs/MILESTONE_PREPARATION.md)
-to sharpen its scope and native behavior cases. Current progress is in
-[orchestration state](docs/ORCHESTRATION_STATE.json); the
+to sharpen its scope and native behavior cases. Start at the small
+[current-work entrypoint](docs/CURRENT.md) for a live, bounded state view; the
 [manual/scheduled entry point](docs/SCHEDULED_PROMPT.md) resumes approved goals.
 Commit/push authorization is recorded in AGENTS.md.
 
