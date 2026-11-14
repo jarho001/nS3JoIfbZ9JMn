@@ -59,8 +59,8 @@ test('pinned resolved export and conservative inventory reproduce exactly',()=>{
     const cb=slots.get(id);assert.equal(cb.status,'unsupported');assert.equal(cb.implementation,null);
   }
   assert.ok(ledger.callbacks.every(c=>['partial','unsupported'].includes(c.status)));
-  assert.equal(ledger.callbacks.filter(c=>c.status==='partial').length,328);
-  assert.equal(ledger.callbacks.filter(c=>c.status==='unsupported').length,818);
+  assert.equal(ledger.callbacks.filter(c=>c.status==='partial').length,330);
+  assert.equal(ledger.callbacks.filter(c=>c.status==='unsupported').length,816);
   const audit=ledger.reachabilityAudit;
   const entries=new Map(ledger.entries.map(e=>[e.id,e]));
   assert.equal(audit.proofs['move-identity-bound'].bound.length,224);
@@ -113,6 +113,9 @@ test('pinned resolved export and conservative inventory reproduce exactly',()=>{
   assert.equal(slots.get('abilities:sturdy:onTryHit').implementation,null);
   for(const [owner,field]of [['abilities:noguard','onAnyAccuracy'],['abilities:victorystar','onAnyModifyAccuracy']]){
     assert.equal(entries.get(owner).reachability,'required');assert.equal(entries.get(owner).reachabilityAudit,'accuracy-ability-positive-witness');assert.ok(slots.get(owner+':'+field).implementation);
+  }
+  for(const owner of ['abilities:tangledfeet','abilities:wonderskin']){
+    assert.equal(entries.get(owner).reachability,'required');assert.equal(entries.get(owner).reachabilityAudit,'evasion-ability-positive-witness');assert.ok(slots.get(owner+':onModifyAccuracy').implementation);
   }
   assert.equal(entries.get('abilities:zenmode').reachability,'unresolved');
   assert.equal(slots.get('abilities:magicguard:onDamage').reachability,'unresolved');

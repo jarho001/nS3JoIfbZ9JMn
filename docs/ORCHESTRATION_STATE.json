@@ -34,8 +34,8 @@
     "brief": "PROJECT_PLAN.md#proposed-g4-cpu-implementation-and-conformance-goal",
     "source_base": "f37067e",
     "scope": "Complete pinned gen5randombattle reachable mechanics and every prepared CPU gate. Integrated checkpoints, resumable progress and commit/push authorized. GPU execution, profiling, benchmarks, training, delegation and scored research excluded.",
-    "checkpoint": "Schema50 No Guard / Victory Star group: 48 scenarios/70 boundaries pass one compiled step in326.004s; native/inventory and4 handoff helpers pass. Full G4 remains open.",
-    "next": "Continue Tangled Feet/Wonder Skin target-accuracy group from32/59 native precheck; implement combined fixed-point modifiers and tied raw handler collection, then one focused CPU checkpoint.",
+    "checkpoint": "Schema51 Tangled Feet / Wonder Skin group: 32 scenarios/59 boundaries pass one compiled step in327.965s; native/inventory and4 handoff helpers pass. Full G4 remains open.",
+    "next": "Continue Multiscale/Defeatist HP-dependent modifier group from29 scenarios/40 native boundaries; implement source stat and final damage modifiers with raw callback sort preservation, then one grouped CPU checkpoint.",
     "ledger": {
       "path": "rules/gen5-reachable-v1.json",
       "entries": 1768,
@@ -45,7 +45,7 @@
         "indirect-closure",
         "engine-contract"
       ],
-      "status": "Incomplete:328 partial callback mappings/818 unsupported; full reachability/closure pending.",
+      "status": "Incomplete:330 partial callback mappings/816 unsupported; full reachability/closure pending.",
       "reachability_summary": {
         "callbacks": {
           "proven_unreachable": 546,
@@ -54,8 +54,8 @@
         },
         "entries": {
           "proven_unreachable": 542,
-          "required": 65,
-          "unresolved": 1161
+          "required": 67,
+          "unresolved": 1159
         },
         "roots": {
           "proven_unreachable": 0,
@@ -77,13 +77,13 @@
     "first_divergence": null,
     "gpu_requirement": "Deferred during travel. Record all G4 device obligations and ready/pending commands in docs/GPU_HANDOFF.md; current checkpoint runner is scripts/g4_gpu_handoff.py. CPU implementation remains active. Later full G4 release still requires matching-source GPU conformance.",
     "acceptance": "G4-CPU-conformance pending. Generic data checkpoint passes; all remaining prepared CPU gates retained, all milestone acceptance/task count unchanged.",
-    "source_identity": "test-logs/g4-cpu-conformance/schema50-checkpoint.json",
+    "source_identity": "test-logs/g4-cpu-conformance/schema51-checkpoint.json",
     "evidence_directory": "test-logs/g4-cpu-conformance",
     "publication": {
       "status": "checkpoint_publication_authorized",
       "target": "origin/main",
-      "previous_published_head": "11818b0f477d3d81eff01ad365f98b098ab6d384",
-      "scope": "Schema50 focused CPU checkpoint; sustained CPU execution continues, full G4 open."
+      "previous_published_head": "ceb2ef34e915a03503149031f1f5528140347c98",
+      "scope": "Schema51 focused CPU checkpoint; sustained CPU execution continues, full G4 open."
     },
     "reasoning_effort": "medium (user preference,2026-11-10; no automatic escalation)",
     "design_pass": {
@@ -150,26 +150,25 @@
     },
     "record_usage": "Start at docs/CURRENT.md and scripts/read_context.py. State is authoritative for live progress; history is archived. Update live checkpoint/next/package/blockers at meaningful checkpoints; do not append completed-family narratives. Detailed results belong in immutable test evidence.",
     "next_work_package": {
-      "id": "g4-evasion-ability-group",
+      "id": "g4-hp-modifier-group",
       "status": "native_precheck_passed_implementation_pending",
       "members": [
-        "Tangled Feet confusion accuracy modifier",
-        "Wonder Skin status accuracy replacement"
+        "Multiscale full-HP final damage mitigation",
+        "Defeatist half-HP Attack/Special Attack modifiers"
       ],
       "shared_paths": [
-        "Target ModifyAccuracy handlers, fixed-point modifier chaining, raw callback collection and suppression"
+        "HP-dependent modifier chaining, per-hit HP and ability queries, native stat/damage callback sorting"
       ],
       "membership": [
-        "Tangled Feet Chatot seed[29,2,3,4]",
-        "Wonder Skin Delcatty seed[50,2,3,4]"
+        "Multiscale Dragonite seed[10,2,3,4]",
+        "Defeatist Archeops seed[91,2,3,4]"
       ],
-      "native_precheck": "32 cases/59 boundaries with confusion, suppression, switches, source modifier ties, No Guard, stages and a distinguishing composed-rounding case. test-logs/g4-cpu-conformance/evasion-ability-precheck.json.gz",
-      "native_command": "node --test test/evasion-ability-native.test.cjs",
-      "native_result": "1 passed; engine implementation pending",
-      "planned_command": "JAX_PLATFORMS=cpu JAX_ENABLE_COMPILATION_CACHE=true JAX_COMPILATION_CACHE_DIR=\"$PWD/work/jax-cache\" JAX_EXPLAIN_CACHE_MISSES=true OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 XLA_PYTHON_CLIENT_PREALLOCATE=false timeout 900s .venv-jax/bin/python -m unittest test.test_evasion_ability_engine -v -f",
+      "native_precheck": "29 cases/40 boundaries in test-logs/g4-cpu-conformance/hp-modifier-precheck.json.gz. Full/chipped,87/88/89 of176HP, source boosts/Choice/Life Orb, multihit, Rough Skin/Mummy, critical and raw suppressed handler sorting.",
+      "native_command": "node --test test/hp-modifier-native.test.cjs",
+      "native_result": "1 passed; no CPU implementation or comparison",
+      "planned_command": "JAX_PLATFORMS=cpu JAX_ENABLE_COMPILATION_CACHE=true JAX_COMPILATION_CACHE_DIR=\"$PWD/work/jax-cache\" JAX_EXPLAIN_CACHE_MISSES=true OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 XLA_PYTHON_CLIENT_PREALLOCATE=false timeout 900s .venv-jax/bin/python -m unittest test.test_hp_modifier_engine -v -f",
       "command_status": "planned; module not yet implemented",
       "excluded": [
-        "Sand Veil/Snow Cloak have no witness in seed1..500; this is not an exclusion proof",
         "Broad CPU/device/campaign/profiling gates deferred"
       ]
     },
@@ -559,27 +558,27 @@
     "combined_return_home_block": "docs/GPU_HANDOFF.md#one-return-home-block-correctness-plus-g3-v6-measurements",
     "pending_status_checkpoint": "Current status/field/hook GPU checks are wired into the49-check runner; no GPU execution during travel. Preserve matching-source CPU results and do not transfer earlier GPU/CPU evidence across changed source.",
     "expanded_checkpoint": {
-      "status": "schema50_grouped_focused_CPU_complete_GPU_deferred",
-      "engine_schema": 50,
-      "modules": 56,
-      "native_scenarios": 1680,
-      "native_boundaries": 6273,
+      "status": "schema51_grouped_focused_CPU_complete_GPU_deferred",
+      "engine_schema": 51,
+      "modules": 57,
+      "native_scenarios": 1712,
+      "native_boundaries": 6332,
       "initial_field_evidence": "test-logs/g4-cpu-conformance/schema5-checkpoint.json",
       "source": "Use latest committed checkout and runner source/fixture fingerprints; earlier source_commit fields describe historical preparation.",
       "handoff_prepared": false,
-      "source_commit": "Publishing commit; exact fingerprints in schema50-checkpoint.json",
-      "source_identity": "test-logs/g4-cpu-conformance/schema50-checkpoint.json",
-      "checks": 112
+      "source_commit": "Publishing commit; exact fingerprints in schema51-checkpoint.json",
+      "source_identity": "test-logs/g4-cpu-conformance/schema51-checkpoint.json",
+      "checks": 113
     },
     "pending_candidate": {
-      "family": "Tangled Feet / Wonder Skin",
+      "family": "Multiscale / Defeatist",
       "status": "native_only_precheck_passed_implementation_pending",
-      "cases": 32,
-      "boundaries": 59,
-      "fixture": "test-logs/g4-cpu-conformance/evasion-ability-precheck.json.gz",
-      "native_command": "node --test test/evasion-ability-native.test.cjs",
+      "cases": 29,
+      "boundaries": 40,
+      "fixture": "test-logs/g4-cpu-conformance/hp-modifier-precheck.json.gz",
+      "native_command": "node --test test/hp-modifier-native.test.cjs",
       "included_in_checkpoint_runner": false,
-      "next": "Implement target accuracy modifiers and grouped CPU module; preserve matching device command."
+      "next": "Implement HP-dependent modifiers and one grouped CPU checkpoint; preserve matching device command."
     }
   },
   "historical_records": {

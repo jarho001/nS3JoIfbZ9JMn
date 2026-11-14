@@ -5839,10 +5839,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/evasion-ability.json.gz",
+          "native": "reference/evasion-ability-cases.cjs",
+          "scope": "Independent32 constructed/synthetic scenarios59 boundaries; confusion half modifier, status accuracy50, combined fixed-point rounding and raw handler sorting, suppression, switches, stages and No Guard. Remaining full-format closure pending",
+          "test": "test/test_evasion_ability_engine.py"
+        }
+      ],
       "field": "onModifyAccuracy",
       "id": "abilities:tangledfeet:onModifyAccuracy",
-      "implementation": null,
+      "implementation": {
+        "family": "evasion_ability",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:tangledfeet",
@@ -5854,7 +5866,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "a8ff38710f45f8471b461c42e46a87fc051bb2168714b5b1a4b6756baf517011",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -6907,10 +6919,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/evasion-ability.json.gz",
+          "native": "reference/evasion-ability-cases.cjs",
+          "scope": "Independent32 constructed/synthetic scenarios59 boundaries; confusion half modifier, status accuracy50, combined fixed-point rounding and raw handler sorting, suppression, switches, stages and No Guard. Remaining full-format closure pending",
+          "test": "test/test_evasion_ability_engine.py"
+        }
+      ],
       "field": "onModifyAccuracy",
       "id": "abilities:wonderskin:onModifyAccuracy",
-      "implementation": null,
+      "implementation": {
+        "family": "evasion_ability",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:wonderskin",
@@ -6922,7 +6946,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "dfc4c132f6e5c178ed85df4661af6eacccd40cdc0f5750135c7b9d657060f05a",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -76108,8 +76132,8 @@
         }
       ],
       "kind": "abilities",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "evasion-ability-positive-witness",
       "status": "partial"
     },
     {
@@ -76886,8 +76910,8 @@
         }
       ],
       "kind": "abilities",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "evasion-ability-positive-witness",
       "status": "partial"
     },
     {
@@ -97484,6 +97508,112 @@
           }
         ]
       },
+      "evasion-ability-positive-witness": {
+        "bound": [
+          "abilities:tangledfeet",
+          "abilities:wonderskin"
+        ],
+        "conclusion": "required",
+        "kind": "abilities",
+        "reasoning": "Pinned Tangled Feet Chatot seed[29,2,3,4] and Wonder Skin Delcatty seed[50,2,3,4] prove membership. Directed accuracy callbacks do not close remaining indirect/full-format obligations. Absence of Sand Veil/Snow Cloak in a bounded scan does not prove exclusion.",
+        "references": [
+          "data/random-battles/gen5/teams.ts:103-494 (cullMovePool/randomMoveset)",
+          "data/random-battles/gen5/teams.ts:496-566 (ability filters/fallback)",
+          "data/random-battles/gen5/teams.ts:568-816 (item returns and randomSet)",
+          "data/random-battles/gen5/teams.ts:850-1014 (team eligibility)",
+          "data/random-battles/gen9/teams.ts:675-693 (addMove)",
+          "data/random-battles/gen9/teams.ts:1442-1497 (getLevel/getForme)",
+          "data/random-battles/gen9/teams.ts:1641-1683 (getPokemonPool)"
+        ],
+        "witnesses": [
+          {
+            "id": "tangledfeet",
+            "kind": "ability",
+            "seed": [
+              29,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Tangled Feet",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Choice Specs",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 30,
+                "spd": 30,
+                "spe": 31
+              },
+              "level": 93,
+              "moves": [
+                "hypervoice",
+                "hiddenpowerground",
+                "uturn",
+                "chatter"
+              ],
+              "name": "Chatot",
+              "role": "Wallbreaker",
+              "shiny": false,
+              "species": "Chatot",
+              "speciesId": "chatot"
+            }
+          },
+          {
+            "id": "wonderskin",
+            "kind": "ability",
+            "seed": [
+              50,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Wonder Skin",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Silk Scarf",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 100,
+              "moves": [
+                "suckerpunch",
+                "doubleedge",
+                "thunderwave",
+                "fakeout"
+              ],
+              "name": "Delcatty",
+              "role": "Fast Support",
+              "shiny": false,
+              "species": "Delcatty",
+              "speciesId": "delcatty"
+            }
+          }
+        ]
+      },
       "flash-fire-positive-witness": {
         "bound": [
           "abilities:flashfire"
@@ -99412,8 +99542,8 @@
       },
       "entries": {
         "proven_unreachable": 542,
-        "required": 65,
-        "unresolved": 1161
+        "required": 67,
+        "unresolved": 1159
       },
       "roots": {
         "proven_unreachable": 0,

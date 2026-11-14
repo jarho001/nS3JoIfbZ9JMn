@@ -39,9 +39,13 @@ def critical_blocked(ability):
     return (ability==h.A['battlearmor'])|(ability==h.A['shellarmor'])
 
 
-def accuracy(base,s,actor,physical):
-    m=s.active[actor];ability=suppression_ops.abilities(s)[actor,m]
+def accuracy(base,s,actor,target,category):
+    m=s.active[actor];tm=s.active[target];effective=suppression_ops.abilities(s);ability=effective[actor,m];defender=effective[target,tm]
+    physical=category==1
+    base=jnp.where((base>0)&(category==0)&(defender==h.A['wonderskin']),50,base)
     modifier=jnp.where(ability==h.A['compoundeyes'],5325,jnp.where((ability==h.A['hustle'])&physical,3277,jnp.where(ability==h.A['victorystar'],4506,4096))).astype(jnp.int32)
+    tangled=(defender==h.A['tangledfeet'])&(s.volatile_state[target,tm,2,0]>0)
+    modifier=chain(modifier,jnp.where(tangled,2048,4096))
     return modify(base,modifier)
 
 

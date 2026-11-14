@@ -22,10 +22,23 @@ Keep historical commands/results as provenance.
 
 ## Current source and evidence
 
-**Next group, native only:** Tangled Feet / Wonder Skin has32 scenarios/59 boundaries,
-pinned generator witnesses, and a passing `node --test test/evasion-ability-native.test.cjs`
+**Next group, native only:** Multiscale / Defeatist has29 scenarios/40 boundaries,
+pinned generator witnesses, and a passing `node --test test/hp-modifier-native.test.cjs`
 contract. It is not in the CPU/CUDA runner; implementation remains pending.
 Resume `active_task.next_work_package` in [compact state](ORCHESTRATION_STATE.json).
+
+**Schema51 Tangled Feet / Wonder Skin group:** focused CPU32 scenarios/59 boundaries
+passed in327.965s;2 native/inventory contracts and4 handoff helpers pass.
+See [schema51-checkpoint.json](../test-logs/g4-cpu-conformance/schema51-checkpoint.json).
+One compiled step covers exact state/RNG/requests/recipient events/histories,
+NPZ continuation and journal17. No GPU execution.
+
+```sh
+JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_evasion_ability_engine -v -f
+```
+
+Runner includes113 checks/57 modules,1712 scenarios/6332
+boundaries in51 corpora. Current-source broad/device execution remains deferred.
 
 **Schema50 No Guard / Victory Star group:** focused CPU48 scenarios/70 boundaries
 passed in326.004s;2 native/inventory contracts and4 handoff helpers pass.

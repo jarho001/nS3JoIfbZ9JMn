@@ -60,7 +60,7 @@ import sys
 def _engine():
     return sys.modules[__name__]
 
-SCHEMA = 50
+SCHEMA = 51
 ROSTER, SLOTS, QUEUE, EVENTS, DRAWS, HISTORY = 6, 4, 8, 128, 128, 2048
 OK, PENDING, INVALID, UNSUPPORTED, CAPACITY, TERMINAL, STALE = range(7)
 RETRY=7
@@ -640,11 +640,11 @@ def _use_move(c,frame):
         def immunity(c):return _event(c,IMMUNE,target,tm,aux=jnp.where(levitate,2,0))
         def try_hit(c):
             def accuracy(c):
-                c=accuracy_ability_ops.modify_sort(c,actor,_engine())
+                c=accuracy_ability_ops.modify_sort(c,actor,_engine(),target=target)
                 c=accuracy_ability_ops.accuracy_sort(c,_engine())
                 sure=accuracy_ability_ops.sure_hit(c[0],actor,target,_engine())
                 c,roll=jax.lax.cond((ACCURACY[move]>0)&(~sure)&(~pursuit_ops.boosted(c[0],target,move,_engine())),lambda c:_draw(c,0,100,ACC),lambda c:(c,jnp.uint32(0)),c)
-                base_accuracy=hook_ops.accuracy(ACCURACY[move],c[0],actor,tables.CATEGORY[move]==1)
+                base_accuracy=hook_ops.accuracy(ACCURACY[move],c[0],actor,target,tables.CATEGORY[move])
                 threshold=field_ops.accuracy(base_accuracy,c[0],actor,target,_engine())
                 hit=sure|pursuit_ops.boosted(c[0],target,move,_engine())|(ACCURACY[move]==0)|(roll<threshold.astype(jnp.uint32))
                 def miss(c):
