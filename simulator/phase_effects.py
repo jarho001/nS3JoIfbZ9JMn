@@ -2,7 +2,7 @@
 import jax.numpy as jnp
 from . import gen5_engine_tables as t
 
-VOLATILES=('protect','stall','confusion','choicelock','mustrecharge','lockedmove','twoturnmove','solarbeam','skyattack','skullbash','razorwind','fly','dig','dive','bounce','taunt','encore','disable','torment','flinch','substitute','partiallytrapped','pursuit','zenmode','gastroacid','yawn','magiccoat','flashfire')
+VOLATILES=('protect','stall','confusion','choicelock','mustrecharge','lockedmove','twoturnmove','solarbeam','skyattack','skullbash','razorwind','fly','dig','dive','bounce','taunt','encore','disable','torment','flinch','substitute','partiallytrapped','pursuit','zenmode','gastroacid','yawn','magiccoat','flashfire','gem','unburden')
 VOLATILE_IDS={key:i for i,key in enumerate(VOLATILES)}
 VOLATILE_WIDTH=12
 SOURCE_MOVE,SOURCE_ITEM,SOURCE_CONDITION,SOURCE_EMPTY,SOURCE_ABILITY=1,2,3,4,5
@@ -162,6 +162,14 @@ def valid_phases(s):
             if kind==17:fields=fields|((row[:,:,6]==SOURCE_ABILITY)&(row[:,:,4]==t.ABILITY_IDS['cursedbody']))
             fields=fields&((row[:,:,5]>=1)&(row[:,:,5]<=5) if kind!=18 else row[:,:,5]==0)
             if kind in (16,17):fields=fields&(row[:,:,7]>0)&(row[:,:,7]<len(t.MOVE_KEYS))
+        elif kind in (VOLATILE_IDS['gem'],VOLATILE_IDS['unburden']):
+            if kind==VOLATILE_IDS['gem']:
+                fields=(row[:,:,6]==SOURCE_ITEM)&((row[:,:,4]==-t.ITEM_IDS['flyinggem'])|(row[:,:,4]==-t.ITEM_IDS['fightinggem']))&(row[:,:,5]==1)
+                fields=fields&(row[:,:,2]==jnp.arange(2)[:,None])&(row[:,:,3]==jnp.arange(6)[None,:])
+            else:
+                fields=(row[:,:,6]==SOURCE_ABILITY)&(row[:,:,4]==t.ABILITY_IDS['unburden'])&(s.ability==t.ABILITY_IDS['unburden'])&(row[:,:,5]==0)
+            source=jnp.clip(row[:,:,2],0,1);sm=jnp.clip(row[:,:,3],0,5)
+            fields=fields&(row[:,:,2]>=0)&(row[:,:,2]<2)&(row[:,:,3]>=0)&(row[:,:,3]<6)&(s.species[source,sm]>0)&jnp.all(row[:,:,7:]==0,axis=-1)
         elif kind==VOLATILE_IDS['flashfire']:
             fields=(row[:,:,6]==SOURCE_ABILITY)&(row[:,:,4]==t.ABILITY_IDS['flashfire'])&(s.ability==t.ABILITY_IDS['flashfire'])&(row[:,:,5]==0)&jnp.all(row[:,:,7:]==0,axis=-1)
             source=jnp.clip(row[:,:,2],0,1);sm=jnp.clip(row[:,:,3],0,5)
@@ -225,9 +233,8 @@ def charge(c,actor,move,move_row,e,target_loc=None):
         def immediate(c):
             s,trace=c;trace=trace._replace(events=trace.events.at[move_row,7].set(2));c=(s,trace)
             def consume(c):
-                s,trace=c;s=e.tracking.item_used(s,actor,POWER_HERB,berry=False)
-                s=s._replace(item=s.item.at[actor,mon].set(0),item_order=s.item_order.at[actor,mon].set(0))
-                return e._event((s,trace),e.END_HELD_ITEM,actor,mon,value=POWER_HERB)
+                c=e._event(c,e.END_HELD_ITEM,actor,mon,value=POWER_HERB)
+                s,trace=c;return e.item_ops.used(s,actor,POWER_HERB,e,berry=False),trace
             c=e._when(herb,consume,c)
             return e._event(c,e.ANIM,actor,mon,move=move,target=1-actor,targetmon=c[0].active[1-actor]),jnp.array(False)
         def install(c):

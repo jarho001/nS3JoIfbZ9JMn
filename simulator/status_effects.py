@@ -41,12 +41,18 @@ def lum(c,side,e,emit_item=True):
         return s._replace(volatile_state=s.volatile_state.at[side,m,2].set(0)),t
     c=e._when(c[0].volatile_state[side,m,2,0]>0,end,c)
     s,t=c
-    s=e.tracking.item_used(s,side,s.item[side,m])
-    return s._replace(item=s.item.at[side,m].set(0),item_order=s.item_order.at[side,m].set(0)),t
+    s=e.item_ops.used(s,side,s.item[side,m],e)
+    return s,t
 
 
 def add_volatile(c,side,kind,source,move,e,source_kind=None):
-    s,t=c;m=s.active[side];sm=s.active[source]
+    s,t=c
+    return add_volatile_state(s,side,kind,source,move,e,source_kind),t
+
+
+def add_volatile_state(s,side,kind,source,move,e,source_kind=None):
+    """Silent native allocation shared by status and item lifecycle hooks."""
+    m=s.active[side];sm=s.active[source]
     present=s.volatile_state[side,m,kind,0]>0
     visited=(~present)&(s.hp[side,m]>0)&(s.weather_state[0]==2)
     s=s._replace(weather_state=s.weather_state.at[5].set(jnp.where(visited,1,s.weather_state[5])))
@@ -54,7 +60,7 @@ def add_volatile(c,side,kind,source,move,e,source_kind=None):
     row=jnp.stack((e.i32(1),s.effect_order,source,sm,move,e.i32(0),source_kind,*[e.i32(0)]*5))
     row=jnp.where(present,s.volatile_state[side,m,kind],row)
     return s._replace(volatile_state=s.volatile_state.at[side,m,kind].set(row),
-                      effect_order=s.effect_order+(~present).astype(jnp.int32)),t
+                      effect_order=s.effect_order+(~present).astype(jnp.int32))
 
 
 def sleep_switch(c,side,e):

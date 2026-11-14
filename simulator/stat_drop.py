@@ -21,8 +21,8 @@ def restore(c,side,e):
         c=e._event(c,e.END_HELD_ITEM,side,mon,value=HERB)
         s,tr=c;s=s._replace(boosts=s.boosts.at[side,mon].set(jnp.maximum(0,s.boosts[side,mon])))
         c=e._event((s,tr),e.CLEAR_NEGATIVE,side,mon)
-        s,tr=c;s=e.tracking.item_used(s,side,e.i32(HERB),berry=False)
-        return s._replace(item=s.item.at[side,mon].set(0),item_order=s.item_order.at[side,mon].set(0)),tr
+        s,tr=c;s=e.item_ops.used(s,side,e.i32(HERB),e,berry=False)
+        return s,tr
     return e._when((s.item[side,mon]==HERB)&(s.hp[side,mon]>0)&jnp.any(s.boosts[side,mon]<0),consume,c)
 
 

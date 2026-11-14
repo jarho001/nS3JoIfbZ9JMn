@@ -6535,10 +6535,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/gem-unburden.json.gz",
+          "native": "reference/gem-unburden-cases.cjs",
+          "scope": "Independent48 synthetic scenarios89 boundaries, typed Gem primary hit and duration, supported item use/take hooks, Unburden held-item and ability lifecycle, speed and residual ordering, Transform and frozen legacy migration. Other gems and full-format closure pending",
+          "test": "test/test_gem_unburden_engine.py"
+        }
+      ],
       "field": "condition.onModifySpe",
       "id": "abilities:unburden:condition.onModifySpe",
-      "implementation": null,
+      "implementation": {
+        "family": "gem_unburden",
+        "file": "simulator/gem_unburden.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:unburden",
@@ -6550,7 +6562,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "91215f5d41d181d205925f8c5b8f6bdd720da7cbda1b8bb9ee231ab6ea7b1519",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -6559,10 +6571,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/gem-unburden.json.gz",
+          "native": "reference/gem-unburden-cases.cjs",
+          "scope": "Independent48 synthetic scenarios89 boundaries, typed Gem primary hit and duration, supported item use/take hooks, Unburden held-item and ability lifecycle, speed and residual ordering, Transform and frozen legacy migration. Other gems and full-format closure pending",
+          "test": "test/test_gem_unburden_engine.py"
+        }
+      ],
       "field": "onAfterUseItem",
       "id": "abilities:unburden:onAfterUseItem",
-      "implementation": null,
+      "implementation": {
+        "family": "gem_unburden",
+        "file": "simulator/gem_unburden.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:unburden",
@@ -6574,7 +6598,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "0c05b3cf19c5a0d6a3dd5777962f4694f2d5e207f1883cd1a2f87d049cbb9ed6",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -6583,10 +6607,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/gem-unburden.json.gz",
+          "native": "reference/gem-unburden-cases.cjs",
+          "scope": "Independent48 synthetic scenarios89 boundaries, typed Gem primary hit and duration, supported item use/take hooks, Unburden held-item and ability lifecycle, speed and residual ordering, Transform and frozen legacy migration. Other gems and full-format closure pending",
+          "test": "test/test_gem_unburden_engine.py"
+        }
+      ],
       "field": "onEnd",
       "id": "abilities:unburden:onEnd",
-      "implementation": null,
+      "implementation": {
+        "family": "gem_unburden",
+        "file": "simulator/gem_unburden.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:unburden",
@@ -6598,7 +6634,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "7bf6682ea33ade7360b8a2bea6c8d7536f390c344339777229f633988c92cc09",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -6607,10 +6643,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/gem-unburden.json.gz",
+          "native": "reference/gem-unburden-cases.cjs",
+          "scope": "Independent48 synthetic scenarios89 boundaries, typed Gem primary hit and duration, supported item use/take hooks, Unburden held-item and ability lifecycle, speed and residual ordering, Transform and frozen legacy migration. Other gems and full-format closure pending",
+          "test": "test/test_gem_unburden_engine.py"
+        }
+      ],
       "field": "onTakeItem",
       "id": "abilities:unburden:onTakeItem",
-      "implementation": null,
+      "implementation": {
+        "family": "gem_unburden",
+        "file": "simulator/gem_unburden.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:unburden",
@@ -6622,7 +6670,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "87e317d13f7efc6ba4f72ba710074e8ae6d13d4c791d2089da1fbbb1a38200d2",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -8395,10 +8443,22 @@
           "file": "data/mods/gen5/conditions.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/gem-unburden.json.gz",
+          "native": "reference/gem-unburden-cases.cjs",
+          "scope": "Independent48 synthetic scenarios89 boundaries, typed Gem primary hit and duration, supported item use/take hooks, Unburden held-item and ability lifecycle, speed and residual ordering, Transform and frozen legacy migration. Other gems and full-format closure pending",
+          "test": "test/test_gem_unburden_engine.py"
+        }
+      ],
       "field": "onBasePower",
       "id": "conditions:gem:onBasePower",
-      "implementation": null,
+      "implementation": {
+        "family": "gem_unburden",
+        "file": "simulator/gem_unburden.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "conditions:gem",
@@ -8410,7 +8470,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "d6c1a961da20abb2c0393a38b62267ca05997e99593229217da6ca25bd7fa82e",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -12799,10 +12859,22 @@
           "file": "data/items.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/gem-unburden.json.gz",
+          "native": "reference/gem-unburden-cases.cjs",
+          "scope": "Independent48 synthetic scenarios89 boundaries, typed Gem primary hit and duration, supported item use/take hooks, Unburden held-item and ability lifecycle, speed and residual ordering, Transform and frozen legacy migration. Other gems and full-format closure pending",
+          "test": "test/test_gem_unburden_engine.py"
+        }
+      ],
       "field": "onSourceTryPrimaryHit",
       "id": "items:fightinggem:onSourceTryPrimaryHit",
-      "implementation": null,
+      "implementation": {
+        "family": "gem_unburden",
+        "file": "simulator/gem_unburden.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "items:fightinggem",
@@ -12814,7 +12886,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "ba2c7727c29e5dd52d6521ab0dd82c0acaca84586158b11935344e2aa71f22aa",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -13075,10 +13147,22 @@
           "file": "data/items.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/gem-unburden.json.gz",
+          "native": "reference/gem-unburden-cases.cjs",
+          "scope": "Independent48 synthetic scenarios89 boundaries, typed Gem primary hit and duration, supported item use/take hooks, Unburden held-item and ability lifecycle, speed and residual ordering, Transform and frozen legacy migration. Other gems and full-format closure pending",
+          "test": "test/test_gem_unburden_engine.py"
+        }
+      ],
       "field": "onSourceTryPrimaryHit",
       "id": "items:flyinggem:onSourceTryPrimaryHit",
-      "implementation": null,
+      "implementation": {
+        "family": "gem_unburden",
+        "file": "simulator/gem_unburden.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "items:flyinggem",
@@ -13090,7 +13174,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "73cb113e47d8f3bca3d6e6866cf59885576cdc0f39422677d7cfe4c788029be5",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -76888,8 +76972,8 @@
         }
       ],
       "kind": "abilities",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "gem-unburden-positive-witness",
       "status": "partial"
     },
     {
@@ -79414,8 +79498,8 @@
         }
       ],
       "kind": "items",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "gem-unburden-positive-witness",
       "status": "partial"
     },
     {
@@ -79662,8 +79746,8 @@
         }
       ],
       "kind": "items",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "gem-unburden-positive-witness",
       "status": "partial"
     },
     {
@@ -97778,7 +97862,7 @@
         ],
         "conclusion": "required",
         "kind": "abilities",
-        "reasoning": "Pinned Defiant Farfetch’d seed[5,2,3,4] and Download Genesect seed[9,2,3,4] prove membership. Directed boost callbacks do not close remaining indirect/full-format obligations.",
+        "reasoning": "Pinned Defiant Farfetch\u2019d seed[5,2,3,4] and Download Genesect seed[9,2,3,4] prove membership. Directed boost callbacks do not close remaining indirect/full-format obligations.",
         "references": [
           "data/random-battles/gen5/teams.ts:103-494 (cullMovePool/randomMoveset)",
           "data/random-battles/gen5/teams.ts:496-566 (ability filters/fallback)",
@@ -97825,10 +97909,10 @@
                 "leafblade",
                 "bravebird"
               ],
-              "name": "Farfetch’d",
+              "name": "Farfetch\u2019d",
               "role": "Setup Sweeper",
               "shiny": false,
-              "species": "Farfetch’d",
+              "species": "Farfetch\u2019d",
               "speciesId": "farfetchd"
             }
           },
@@ -98631,6 +98715,156 @@
               "shiny": false,
               "species": "Chandelure",
               "speciesId": "chandelure"
+            }
+          }
+        ]
+      },
+      "gem-unburden-positive-witness": {
+        "bound": [
+          "abilities:unburden",
+          "items:fightinggem",
+          "items:flyinggem"
+        ],
+        "conclusion": "required",
+        "kind": "mixed",
+        "reasoning": "Pinned Flying Gem/Unburden Drifblim seed[28,2,3,4] and Fighting Gem Hitmonlee seed[173,2,3,4] prove membership. Other gems unresolved; callback and full-format closure remain pending.",
+        "references": [
+          "data/random-battles/gen5/teams.ts:103-494 (cullMovePool/randomMoveset)",
+          "data/random-battles/gen5/teams.ts:496-566 (ability filters/fallback)",
+          "data/random-battles/gen5/teams.ts:568-816 (item returns and randomSet)",
+          "data/random-battles/gen5/teams.ts:850-1014 (team eligibility)",
+          "data/random-battles/gen9/teams.ts:675-693 (addMove)",
+          "data/random-battles/gen9/teams.ts:1442-1497 (getLevel/getForme)",
+          "data/random-battles/gen9/teams.ts:1641-1683 (getPokemonPool)"
+        ],
+        "witnesses": [
+          {
+            "id": "flyinggem",
+            "kind": "item",
+            "seed": [
+              28,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Unburden",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 81,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Flying Gem",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 81,
+              "moves": [
+                "disable",
+                "shadowball",
+                "acrobatics",
+                "substitute"
+              ],
+              "name": "Drifblim",
+              "role": "Fast Attacker",
+              "shiny": false,
+              "species": "Drifblim",
+              "speciesId": "drifblim"
+            }
+          },
+          {
+            "id": "fightinggem",
+            "kind": "item",
+            "seed": [
+              173,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Unburden",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "M",
+              "item": "Fighting Gem",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 82,
+              "moves": [
+                "closecombat",
+                "stoneedge",
+                "suckerpunch",
+                "bulkup"
+              ],
+              "name": "Hitmonlee",
+              "role": "Fast Attacker",
+              "shiny": false,
+              "species": "Hitmonlee",
+              "speciesId": "hitmonlee"
+            }
+          },
+          {
+            "id": "unburden",
+            "kind": "ability",
+            "seed": [
+              28,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Unburden",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 81,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Flying Gem",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 81,
+              "moves": [
+                "disable",
+                "shadowball",
+                "acrobatics",
+                "substitute"
+              ],
+              "name": "Drifblim",
+              "role": "Fast Attacker",
+              "shiny": false,
+              "species": "Drifblim",
+              "speciesId": "drifblim"
             }
           }
         ]
@@ -101226,8 +101460,8 @@
       },
       "entries": {
         "proven_unreachable": 542,
-        "required": 93,
-        "unresolved": 1133
+        "required": 96,
+        "unresolved": 1130
       },
       "roots": {
         "proven_unreachable": 0,

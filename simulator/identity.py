@@ -49,6 +49,7 @@ def transform(c,actor,target,e,imposter=False,initial=False):
         s=e.tracking.put(s,actor,e.tracking.USED_SLOTS,0);s=e.tracking.put(s,actor,e.tracking.TIMES_ATTACKED,s.action_state[target,tm,e.tracking.TIMES_ATTACKED])
         c=e._event((s,tr),e.TRANSFORM,actor,mon,target=target,targetmon=tm,aux=int(imposter))
         c=e.flash_ops.end(c,actor,e)
+        c=e.gem_ops.end(c,actor,e)
         s,tr=c;s=s._replace(ability_seek=s.ability_seek.at[actor,mon].set(0),ability=s.ability.at[actor,mon].set(new),ability_order=s.ability_order.at[actor,mon].set(s.effect_order),ability_effect_id=s.ability_effect_id.at[actor,mon].set(new),effect_order=s.effect_order+1)
         c=e._when(old!=new,lambda c:e.hook_ops.ability_start(c,actor,e,initial=initial),(s,tr))
         return c,jnp.array(True)

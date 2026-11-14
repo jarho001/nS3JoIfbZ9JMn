@@ -22,12 +22,25 @@ Keep historical commands/results as provenance.
 
 ## Current source and evidence
 
-**Next group, native only:** Flying Gem / Fighting Gem / Unburden has44 scenarios/80
+**Next group, native only:** Eviolite / Expert Belt has39 scenarios/46
 boundaries, pinned positive witnesses and a passing
-`node --test test/gem-unburden-native.test.cjs` contract. It is not in the
-CPU/CUDA runner; implementation remains pending. The group plans appended volatile
-rows and engine64/journal18, using frozen genuine schema63/journal17 baseline files
-for compatibility checks. Other gems remain unresolved/unsupported without positive witnesses.
+`node --test test/damage-item-native.test.cjs` contract. It is not in the
+CPU/CUDA runner; implementation remains pending. Original-base-species defense
+and effective-hit final damage share existing modifier/lifecycle paths.
+Other item families remain unresolved/unsupported without positive witnesses.
+
+**Schema64 Flying Gem / Fighting Gem / Unburden group:** focused CPU48 scenarios/89 boundaries
+passed in455.382s;2 native/inventory contracts and4 handoff helpers pass.
+See [schema64-checkpoint.json](../test-logs/g4-cpu-conformance/schema64-checkpoint.json).
+One compiled step covers exact state/RNG/requests/recipient events/histories,
+NPZ continuation and journal18. No GPU execution.
+
+```sh
+JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_gem_unburden_engine -v -f
+```
+
+Runner includes126 checks/70 modules,2205 scenarios/6977
+boundaries in64 corpora. Current-source broad/device execution remains deferred.
 
 **Schema63 Facade / Acrobatics group:** focused CPU30 scenarios/39 boundaries
 passed in454.794s;2 native/inventory contracts and4 handoff helpers pass.

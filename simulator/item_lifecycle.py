@@ -6,8 +6,15 @@ EXCHANGE=t.mv(lambda r:r['id']in ('trick','switcheroo')).astype(jnp.bool_)
 MOVE_IMPLEMENTED=jnp.asarray([k in ('trick','switcheroo','recycle','knockoff')for k in t.MOVE_KEYS],jnp.bool_)
 ABILITY_IMPLEMENTED=jnp.asarray([k=='stickyhold'for k in t.ABILITIES],jnp.bool_)
 
-def take(c,side):
+def used(s,side,item,e,*,berry=True):
+    s=e.tracking.item_used(s,side,item,berry=berry);mon=s.active[side]
+    s=s._replace(item=s.item.at[side,mon].set(0),item_order=s.item_order.at[side,mon].set(0))
+    return e.gem_ops.after_use(s,side,e)
+
+
+def take(c,side,e,source=None):
     s,tr=c;mon=s.active[side]
+    s=e.gem_ops.taken(s,side,side if source is None else source,e)
     return s._replace(item=s.item.at[side,mon].set(0),item_order=s.item_order.at[side,mon].set(0),item_provenance=s.item_provenance.at[side,mon,1].set(0)),tr
 
 
@@ -25,7 +32,7 @@ def fail(c,actor,move_row,e):
 def exchange(c,actor,target,move,move_row,e):
     s,_=c;mon=s.active[actor];tm=s.active[target];mine=s.item[actor,mon];yours=s.item[target,tm]
     def swap(c):
-        c=take(c,target);c=take(c,actor)
+        c=take(c,target,e,source=actor);c=take(c,actor,e)
         c=e._event(c,e.ITEM_SWAP,actor,mon,move=move,target=target,targetmon=tm)
         for side,item,other in ((target,mine,yours),(actor,yours,mine)):
             def install(c):
@@ -52,6 +59,6 @@ def knock(c,actor,target,move,e):
     def remove(c):
         sticky=(e.suppression_ops.abilities(s)[target,tm]==t.ABILITY_IDS['stickyhold'])&(s.hp[target,tm]>0)
         def held(c):return e._event(c,e.PHAZE_ABILITY,target,tm,value=t.ABILITY_IDS['stickyhold'])
-        def lost(c):return e._event(take(c,target),e.ITEM_LOSS,target,tm,move=KNOCK,value=item,target=actor,targetmon=mon)
+        def lost(c):return e._event(take(c,target,e),e.ITEM_LOSS,target,tm,move=KNOCK,value=item,target=actor,targetmon=mon)
         return e.jax.lax.cond(sticky,held,lost,c)
     return e._when((move==KNOCK)&(s.hp[actor,mon]>0)&(item>0),remove,c)

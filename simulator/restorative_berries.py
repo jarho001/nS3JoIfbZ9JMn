@@ -15,6 +15,6 @@ def update(c,side,e):
             s=s._replace(hp=s.hp.at[side,mon].set(hp))
             return e._event((s,t),e.HEAL,side,mon,value=hp,aux=maximum,status=s.status[side,mon],move=11)
         c=e.jax.lax.cond(item==I['chestoberry'],lambda c:e.effects.cure(c,side,e),heal,c)
-        s,t=c;s=e.tracking.item_used(s,side,item)
-        return s._replace(item=s.item.at[side,mon].set(0),item_order=s.item_order.at[side,mon].set(0)),t
+        s,t=c;s=e.item_ops.used(s,side,item,e)
+        return s,t
     return e._when(active,eat,c)

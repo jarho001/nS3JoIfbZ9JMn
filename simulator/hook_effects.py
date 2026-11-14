@@ -21,6 +21,7 @@ def speeds(s,staged,e):
     quick=(ability==h.A['quickfeet'])&(s.status!=e.NONE)&(s.status!=e.FNT)
     modifier=jnp.where(doubled,8192,jnp.where(quick,6144,4096)).astype(jnp.int32)
     modifier=chain(modifier,jnp.where(item==h.I['choicescarf'],6144,4096))
+    modifier=chain(modifier,jnp.where(e.gem_ops.speed(s,ability),8192,4096))
     speed=modify(staged,modifier)
     speed=jnp.where((s.status==e.PAR)&(~quick),speed//4,speed)
     return jnp.maximum(1,jnp.minimum(speed,10000))&8191
@@ -49,7 +50,7 @@ def accuracy(base,s,actor,target,category):
     return modify(base,modifier)
 
 
-def power(value,ability,item,physical,move_type,e,phase_modifier=4096,defender_ability=0,move=0,move_modifier=4096):
+def power(value,ability,item,physical,move_type,e,phase_modifier=4096,defender_ability=0,move=0,move_modifier=4096,gem_modifier=4096):
     modifier=jnp.where((ability==h.A['technician'])&(value<=60),6144,4096).astype(jnp.int32)
     boosted=((ability==h.A['ironfist'])&h.PUNCH[move])|((ability==h.A['reckless'])&h.RECKLESS[move])
     # Iron Fist/Reckless priority23: before Dry Skin17 and item modifiers.
@@ -61,6 +62,7 @@ def power(value,ability,item,physical,move_type,e,phase_modifier=4096,defender_a
     typed=((item==h.I['silkscarf'])&(move_type==e.generic.TYPES['normal']))|((item==h.I['mysticwater'])&(move_type==e.generic.TYPES['water']))
     modifier=chain(modifier,jnp.where(band,4505,jnp.where(typed,4915,4096)))
     modifier=chain(modifier,move_modifier)
+    modifier=chain(modifier,gem_modifier)
     return modify(value,chain(modifier,phase_modifier))
 
 

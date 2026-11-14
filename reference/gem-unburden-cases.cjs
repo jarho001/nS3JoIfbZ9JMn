@@ -31,6 +31,8 @@ module.exports=function(){
  add('unburden-chesto',{p1:[m({item:'Chesto Berry',moves:['Rest','Acrobatics','Recover'],evs:{spe:252}})],setup:[{side:'p1',hp:100}],steps:[b(),b(2)]});
  add('unburden-whiteherb',{p1:[m({item:'White Herb',evs:{spe:252}})],setup:[{side:'p1',boosts:{def:-2}}],steps:[b(2),b()]});
  add('unburden-powerherb',{p1:[m({item:'Power Herb',moves:['Fly','Recover'],evs:{spe:252}})],steps:[b(),b(2)]});
+ add('unburden-sash',{p1:[m({item:'Focus Sash',level:1})],p2:[foe({level:100})],steps:[b(1,1),b()]});
+ add('unburden-recycle',{itemLifecycleFamily:true,p1:[m({item:'Lum Berry',moves:['Acrobatics','Recycle','Recover']})],p2:[foe({moves:['Thunder Wave','Recover'],evs:{spe:252}})],steps:[b(1,1),b(2,2),b(1,1)]});
  add('unburden-knockoff',{p1:[m({item:'Leftovers'})],p2:[foe({moves:['Knock Off','Recover'],evs:{spe:252}})],steps:[b(2,1),b()]});
  add('unburden-trick-lose',{itemLifecycleFamily:true,p1:[m({item:'Leftovers',moves:['Trick','Acrobatics','Recover'],evs:{spe:252}})],steps:[b(),b(2)]});
  add('unburden-trick-other',{itemLifecycleFamily:true,p1:[m({item:'Leftovers'})],p2:[foe({moves:['Trick','Recover'],evs:{spe:252}})],steps:[b(2,1),b()]});
@@ -42,6 +44,7 @@ module.exports=function(){
  add('unburden-suppress-before',{abilityChangeFamily:true,p2:[foe({moves:['Gastro Acid','Recover']})],steps:[b(2,1),b()]});
  add('unburden-roleplay',{abilityChangeFamily:true,p1:[m({moves:['Acrobatics','Role Play','Recover'],evs:{spe:252}})],steps:[b(),b(2),b()]});
  add('unburden-skillswap',{abilityChangeFamily:true,p1:[m({moves:['Acrobatics','Skill Swap','Recover'],evs:{spe:252}})],steps:[b(),b(2),b()]});
+ for(const ability of ['Pressure','Unburden'])add('unburden-transform-'+ability.toLowerCase(),{identityFamily:true,p1:[m({moves:['Acrobatics','Transform','Recover'],evs:{spe:252}})],p2:[foe({ability})],steps:[b(),b(2)]});
  add('unburden-switch-reset',{p1:[m({evs:{spe:252}}),foe()],steps:[b(),{p1:'switch 2',p2:'move 2'},{p1:'switch 2',p2:'move 2'},b()]});
  add('unburden-tie',{p1:[m()]});
  add('gem-residual-tie',{p1:[m({ability:'Pressure'})],p2:[foe({moves:['Magic Coat','Recover']})],steps:[b(1,1)]});
