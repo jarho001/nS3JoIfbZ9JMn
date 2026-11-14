@@ -22,6 +22,13 @@ Keep historical commands/results as provenance.
 
 ## Current source and evidence
 
+**Next group, native only:** White Herb / Clear Body has29 preliminary native
+scenarios/65 boundaries, with pinned generator witnesses and a passing
+`node --test test/stat-drop-native.test.cjs` contract. Complete callback/lifecycle
+capture before implementation. It is not included in the current CPU/CUDA
+runner; no engine or device validation is claimed. Resume details are in
+`active_task.next_work_package` in [compact state](ORCHESTRATION_STATE.json).
+
 **Schema47 Light Ball / Thick Club / Soul Dew group:** focused CPU41 scenarios/94 boundaries
 passed in327.707s;2 native/inventory contracts and4 handoff helpers pass.
 See [schema47-checkpoint.json](../test-logs/g4-cpu-conformance/schema47-checkpoint.json).

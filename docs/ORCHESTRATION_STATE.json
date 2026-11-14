@@ -524,7 +524,7 @@
     "brief": "PROJECT_PLAN.md#proposed-g4-cpu-implementation-and-conformance-goal",
     "source_base": "f37067e",
     "scope": "Complete pinned gen5randombattle reachable mechanics and every prepared CPU gate. Integrated checkpoints, resumable progress and commit/push authorized. GPU execution, profiling, benchmarks, training, delegation and scored research excluded.",
-    "checkpoint": "Schema47 Light Ball / Thick Club / Soul Dew group: 41 scenarios/94 native boundaries passed through one compiled advance in327.707s;2 native/inventory contracts and4 handoff helpers passed. Full G4/broad/device gates pending.",
+    "checkpoint": "Schema47 complete and published:41 scenarios/94 boundaries passed, all schema47 source fingerprints unchanged. This session completed8 item families in3 groups:135 scenarios/348 boundaries. Next White Herb/Clear Body is native-only29/65; implementation pending.",
     "completed_checkpoints": [
       "Pinned resolved data and source-owned conservative candidate inventory exported; 605 role roots, 1768 data/effect entries, 1146 callback slots. Data-only mappings remain partial; transitive closure and complete callback implementation are not claimed.",
       "Generic species/set/type/stat/physical-special/Hidden Power/happiness/priority/hazard integration passes 37 affected CPU checks on 4eab254, retaining all 133 baseline scenarios and validating 24 added scenarios: 157 scenarios / 1059 boundaries, including 20 complete battles (eight six-member games). Eager/JIT/1-8-32 mixed batches, serialized continuation/reset, explicit schema 1/2 migration and full/lean rollouts pass.",
@@ -1251,8 +1251,8 @@
     "publication": {
       "status": "checkpoint_publication_authorized",
       "target": "origin/main",
-      "previous_published_head": "3d558167e82b01e5b804aae775dbb641707fb029",
-      "scope": "Schema47 Light Ball / Thick Club / Soul Dew group focused CPU checkpoint; full G4 open."
+      "previous_published_head": "230674d",
+      "scope": "Schema47 CPU checkpoint plus native-only stat-drop precheck; full G4 open."
     },
     "reasoning_effort": "medium (user preference,2026-11-10; no automatic escalation)",
     "design_pass": {
@@ -1390,7 +1390,7 @@
     },
     "next_work_package": {
       "id": "g4-stat-drop-group",
-      "status": "raw_native_precheck_complete_implementation_pending",
+      "status": "native_precheck_passed_implementation_pending",
       "members": [
         "Clear Body external negative boost filtering",
         "White Herb negative boost restoration/consumption"
@@ -1403,13 +1403,30 @@
         "Clear Body Klinklang seed[5,2,3,4]",
         "White Herb Crustle seed[14,2,3,4]"
       ],
-      "native_precheck": "work/stat-drop-precheck-final.json:29 raw native scenarios/65 boundaries; all scripted choices accepted; final lifecycle callback capture/check pending",
+      "native_precheck": "test-logs/g4-cpu-conformance/stat-drop-precheck.json.gz:29 raw native scenarios/65 boundaries; all choices accepted, fixture/witness/branch contract passes. Complete final lifecycle callback capture/check before implementation.",
       "planned_command": "JAX_PLATFORMS=cpu JAX_ENABLE_COMPILATION_CACHE=true JAX_COMPILATION_CACHE_DIR=\"$PWD/work/jax-cache\" OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 XLA_PYTHON_CLIENT_PREALLOCATE=false timeout 900s .venv-jax/bin/python -m unittest test.test_stat_drop_engine -v -f",
       "command_status": "planned; module not yet implemented",
       "excluded": [
         "White Smoke membership unresolved: no witness in seed scan1..500, not an exclusion proof",
         "Broad CPU matrices, GPU, campaigns, profiling and compile ablations"
-      ]
+      ],
+      "native_command": "node --test test/stat-drop-native.test.cjs",
+      "native_result": "1 passed; no CPU engine implementation or comparison for this group",
+      "native_log": "test-logs/g4-cpu-conformance/stat-drop-native-precheck.log.gz",
+      "source_base": "230674d577a3bc68dac28b432027fd71fa7bc088",
+      "source_sha256": {
+        "reference/stat-drop-cases.cjs": "da6f26557b30d84fe02cab94e38900b0bea0efce6f416f72b2c1591282060b1a",
+        "test/stat-drop-native.test.cjs": "48c57a9db7be6d954db2e862ec6457b8164ccfde83113a80018ad96ef4080947",
+        "test-logs/g4-cpu-conformance/stat-drop-precheck.json.gz": "cf431cbb82bfd22a412a22e495414dd29775b1ad7cf29d986df42f5365e7f18c"
+      }
+    },
+    "stopping_reason": {
+      "kind": "session_context_checkpoint",
+      "reason": "Checkpoint before another implementation/validation/diagnosis group to preserve sufficient session context. Sustained CPU goal remains in_progress; no semantic blocker or unvalidated simulator WIP. Resume next_work_package without a new approval gate.",
+      "last_validated_source": "230674d",
+      "source_identity": "test-logs/g4-cpu-conformance/schema47-checkpoint.json",
+      "native_only_next": "reference/stat-drop-cases.cjs",
+      "unrelated_work": "Preserved pre-existing AGENTS.md modification."
     }
   },
   "optional_gpu_validation_history": [
@@ -2386,6 +2403,15 @@
       "source_identity": "test-logs/g4-cpu-conformance/schema47-checkpoint.json",
       "checks": 109
     },
-    "pending_candidate": null
+    "pending_candidate": {
+      "family": "White Herb / Clear Body",
+      "status": "native_only_precheck_passed_implementation_pending",
+      "cases": 29,
+      "boundaries": 65,
+      "fixture": "test-logs/g4-cpu-conformance/stat-drop-precheck.json.gz",
+      "native_command": "node --test test/stat-drop-native.test.cjs",
+      "included_in_checkpoint_runner": false,
+      "next": "Complete callback/lifecycle native capture before implementation, then add implemented grouped CPU module and matching device command to this same handoff."
+    }
   }
 }
