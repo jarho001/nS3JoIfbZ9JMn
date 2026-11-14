@@ -785,3 +785,10 @@ including live Choice/transformed/reflected state persistence. Validation logged
 assertions; these are test phase timings, not throughput/profiling evidence. See
 [schema36-checkpoint.json](../test-logs/g4-cpu-conformance/schema36-checkpoint.json).
 Remaining mechanics, inventory closure and broad/final/device gates stay open.
+
+Schema37 adds Storm Drain/Lightning Rod SpA and Motor Drive Speed interception
+through the same TryHit path as healing absorption. Successful boosts reveal
+the ability then raise a stage; +6 emits immunity only. Native54/87 directed
+CPU parity and live NPZ/journal16 persistence pass. Positive generated-set
+memberships do not close redirect callback, helper or full-format scope.
+Remaining mechanics, capacity and deferred execution/acceptance gates stay open.

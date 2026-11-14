@@ -2623,10 +2623,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/type-boost.json.gz",
+          "native": "reference/type-boost-cases.cjs",
+          "scope": "Independent54 synthetic scenarios/87 directed boundaries; TryHit only, redirect callback closure and complete-game/full-format validation pending",
+          "test": "test/test_type_boost_engine.py"
+        }
+      ],
       "field": "onTryHit",
       "id": "abilities:lightningrod:onTryHit",
-      "implementation": null,
+      "implementation": {
+        "family": "type_boost",
+        "file": "simulator/status_immunity.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:lightningrod",
@@ -2638,7 +2650,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "e7bc368d24a7638bb05bc324f01c277977e96ff743d4506c11bb7107eedf3057",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -3139,10 +3151,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/type-boost.json.gz",
+          "native": "reference/type-boost-cases.cjs",
+          "scope": "Independent54 synthetic scenarios/87 directed boundaries; TryHit only, redirect callback closure and complete-game/full-format validation pending",
+          "test": "test/test_type_boost_engine.py"
+        }
+      ],
       "field": "onTryHit",
       "id": "abilities:motordrive:onTryHit",
-      "implementation": null,
+      "implementation": {
+        "family": "type_boost",
+        "file": "simulator/status_immunity.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:motordrive",
@@ -3154,7 +3178,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "ae57095d0d5c5d0f0c7805484c951c8bf4fdb6525406cd104da2023567911cf9",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -5239,10 +5263,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/type-boost.json.gz",
+          "native": "reference/type-boost-cases.cjs",
+          "scope": "Independent54 synthetic scenarios/87 directed boundaries; TryHit only, redirect callback closure and complete-game/full-format validation pending",
+          "test": "test/test_type_boost_engine.py"
+        }
+      ],
       "field": "onTryHit",
       "id": "abilities:stormdrain:onTryHit",
-      "implementation": null,
+      "implementation": {
+        "family": "type_boost",
+        "file": "simulator/status_immunity.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:stormdrain",
@@ -5254,7 +5290,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "36ffb36c2b4cd1b3302857364d455b9b89e61a4db32221495685095e6ef97161",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -72720,8 +72756,8 @@
         }
       ],
       "kind": "abilities",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "type-boost-positive-witness",
       "status": "partial"
     },
     {
@@ -73121,8 +73157,8 @@
         }
       ],
       "kind": "abilities",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "type-boost-positive-witness",
       "status": "partial"
     },
     {
@@ -75159,8 +75195,8 @@
         }
       ],
       "kind": "abilities",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "type-boost-positive-witness",
       "status": "partial"
     },
     {
@@ -97249,6 +97285,153 @@
             }
           }
         ]
+      },
+      "type-boost-positive-witness": {
+        "bound": [
+          "abilities:lightningrod",
+          "abilities:motordrive",
+          "abilities:stormdrain"
+        ],
+        "conclusion": "required",
+        "kind": "abilities",
+        "reasoning": "Unmodified pinned generator outputs witness Storm Drain, Lightning Rod and Motor Drive memberships only; redirect/activation branches and other identities remain unresolved.",
+        "references": [
+          "data/random-battles/gen5/teams.ts:103-494 (cullMovePool/randomMoveset)",
+          "data/random-battles/gen5/teams.ts:496-566 (ability filters/fallback)",
+          "data/random-battles/gen5/teams.ts:568-816 (item returns and randomSet)",
+          "data/random-battles/gen5/teams.ts:850-1014 (team eligibility)",
+          "data/random-battles/gen9/teams.ts:675-693 (addMove)",
+          "data/random-battles/gen9/teams.ts:1442-1497 (getLevel/getForme)",
+          "data/random-battles/gen9/teams.ts:1641-1683 (getPokemonPool)"
+        ],
+        "witnesses": [
+          {
+            "ability": "lightningrod",
+            "seed": [
+              2,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Lightning Rod",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Expert Belt",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 93,
+              "moves": [
+                "icebeam",
+                "drillrun",
+                "megahorn",
+                "waterfall"
+              ],
+              "name": "Seaking",
+              "role": "Fast Attacker",
+              "shiny": false,
+              "species": "Seaking",
+              "speciesId": "seaking"
+            }
+          },
+          {
+            "ability": "motordrive",
+            "seed": [
+              32,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Motor Drive",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Flying Gem",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 84,
+              "moves": [
+                "toxic",
+                "acrobatics",
+                "thunderbolt",
+                "roost"
+              ],
+              "name": "Emolga",
+              "role": "Bulky Attacker",
+              "shiny": false,
+              "species": "Emolga",
+              "speciesId": "emolga"
+            }
+          },
+          {
+            "ability": "stormdrain",
+            "seed": [
+              33,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Storm Drain",
+              "evs": {
+                "atk": 0,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Leftovers",
+              "ivs": {
+                "atk": 2,
+                "def": 30,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 98,
+              "moves": [
+                "gigadrain",
+                "leechseed",
+                "protect",
+                "hiddenpowerice"
+              ],
+              "name": "Maractus",
+              "role": "Staller",
+              "shiny": false,
+              "species": "Maractus",
+              "speciesId": "maractus"
+            }
+          }
+        ]
       }
     },
     "references": {
@@ -97278,8 +97461,8 @@
       },
       "entries": {
         "proven_unreachable": 542,
-        "required": 38,
-        "unresolved": 1188
+        "required": 41,
+        "unresolved": 1185
       },
       "roots": {
         "proven_unreachable": 0,

@@ -247,6 +247,10 @@ function classify(ledger) {
  const absorptionAbilities=new Set(absorptionWitnesses.map(w=>'abilities:'+w.ability));
  for(const id of absorptionAbilities)required.add(id);
  proofs['type-absorption-positive-witness']={conclusion:'required',kind:'abilities',bound:[...absorptionAbilities].sort(),references:refs.generator,witnesses:absorptionWitnesses,reasoning:'Unmodified pinned generator outputs positively witness Water Absorb and Volt Absorb memberships only; callback activation and other set identities remain independently unresolved.'};
+ const typeBoostWitnesses=require('./type-boost-cases.cjs').membershipWitnesses();
+ const typeBoostAbilities=new Set(typeBoostWitnesses.map(w=>'abilities:'+w.ability));
+ for(const id of typeBoostAbilities)required.add(id);
+ proofs['type-boost-positive-witness']={conclusion:'required',kind:'abilities',bound:[...typeBoostAbilities].sort(),references:refs.generator,witnesses:typeBoostWitnesses,reasoning:'Unmodified pinned generator outputs witness Storm Drain, Lightning Rod and Motor Drive memberships only; redirect/activation branches and other identities remain unresolved.'};
  for(const entry of ledger.entries){
   entry.reachability='unresolved';
   entry.reachabilityAudit='unresolved-membership';
@@ -256,7 +260,7 @@ function classify(ledger) {
   }
   if(required.has(entry.id)){
    assert.notEqual(entry.reachability,'proven_unreachable',entry.id);
-   entry.reachability='required';entry.reachabilityAudit=lowHpAbilities.has(entry.id)?'low-hp-ability-positive-witness':absorptionAbilities.has(entry.id)?'type-absorption-positive-witness':'native-team-positive-witness';
+   entry.reachability='required';entry.reachabilityAudit=typeBoostAbilities.has(entry.id)?'type-boost-positive-witness':lowHpAbilities.has(entry.id)?'low-hp-ability-positive-witness':absorptionAbilities.has(entry.id)?'type-absorption-positive-witness':'native-team-positive-witness';
   }
  }
  for(const root of ledger.roots){

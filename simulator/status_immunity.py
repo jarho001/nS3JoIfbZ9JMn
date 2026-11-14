@@ -2,7 +2,7 @@
 import jax.numpy as jnp
 from . import gen5_engine_tables as t
 A=t.ABILITY_IDS
-KEYS=('immunity','limber','waterveil','magmaarmor','insomnia','vitalspirit','wonderguard','waterabsorb','voltabsorb')
+KEYS=('immunity','limber','waterveil','magmaarmor','insomnia','vitalspirit','wonderguard','waterabsorb','voltabsorb','stormdrain','lightningrod','motordrive')
 ABILITY_IMPLEMENTED=jnp.asarray([k in KEYS for k in t.ABILITIES],jnp.bool_)
 SLEEP=jnp.asarray([k in ('insomnia','vitalspirit')for k in t.ABILITIES],jnp.bool_)
 
@@ -33,7 +33,7 @@ def absorbs(s,actor,target,move,e):
     mon=s.active[target];source=s.active[actor]
     ability=e.suppression_ops.abilities(s)[target,mon]
     move_type=jnp.where(move==e.HIDDEN_POWER,s.hp_type[actor,source],t.MOVE_TYPE[move])
-    return (actor!=target)&(((ability==A['waterabsorb'])&(move_type==e.generic.TYPES['water']))|((ability==A['voltabsorb'])&(move_type==e.generic.TYPES['electric'])))
+    return (actor!=target)&((((ability==A['waterabsorb'])|(ability==A['stormdrain']))&(move_type==e.generic.TYPES['water']))|(((ability==A['voltabsorb'])|(ability==A['lightningrod'])|(ability==A['motordrive']))&(move_type==e.generic.TYPES['electric'])))
 
 
 def absorb(c,actor,target,move,e):
@@ -46,4 +46,18 @@ def absorb(c,actor,target,move,e):
         s,tr=c;hp=jnp.minimum(maximum,s.hp[target,mon]+maximum//4)
         s=s._replace(hp=s.hp.at[target,mon].set(hp))
         return e._event((s,tr),e.HEAL,target,mon,move=jnp.where(ability==A['waterabsorb'],4,5),target=actor,targetmon=s.active[actor],value=hp,aux=maximum,status=s.status[target,mon])
-    return e.jax.lax.cond(s.hp[target,mon]<maximum,heal,lambda c:e._event(c,e.IMMUNE,target,mon,value=ability,aux=4),c)
+    boosting=(ability==A['stormdrain'])|(ability==A['lightningrod'])|(ability==A['motordrive'])
+    return e.jax.lax.cond(boosting,lambda c:absorb_boost(c,target,ability,e),lambda c:e.jax.lax.cond(c[0].hp[target,mon]<maximum,heal,lambda c:e._event(c,e.IMMUNE,target,mon,value=ability,aux=4),c),c)
+
+
+def absorb_boost(c,target,ability,e):
+    s,_=c;mon=s.active[target];stat=jnp.where(ability==A['motordrive'],4,2)
+    old=s.boosts[target,mon,stat]
+    def raise_stat(c):
+        s,tr=c;s=s._replace(boosts=s.boosts.at[target,mon,stat].set(old+1))
+        s=e.tracking.boosted(s,target,jnp.array(True),jnp.array(False))
+        c=e._event((s,tr),e.REVEAL,target,mon,value=ability,aux=1)
+        return e._event(c,e.BOOST,target,mon,value=1,aux=stat)
+    # Native successful absorption reveals the ability then raises one stage;
+    # at +6 it emits only immunity. Neither branch runs the hit loop.
+    return e.jax.lax.cond(old<6,raise_stat,lambda c:e._event(c,e.IMMUNE,target,mon,value=ability,aux=4),c)

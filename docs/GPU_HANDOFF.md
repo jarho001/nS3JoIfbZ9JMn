@@ -12,6 +12,21 @@ all acceptance requirements and commands below remain pending.
 
 ## Current source and evidence
 
+**Schema37 Type-interception boosts:** focused CPU54 scenarios/87 boundaries
+passed in512.253s;2 native/inventory checks passed. No GPU run.
+See [schema37-checkpoint.json](../test-logs/g4-cpu-conformance/schema37-checkpoint.json).
+Covers SpA/Speed absorption, caps, effective Hidden Power, protection/air,
+Substitute, suppression/replacement, Trace and called/reflected moves,
+Choice and live NPZ/journal16 persistence. Redirect callback closure stays pending.
+
+```sh
+JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_type_boost_engine -v -f
+```
+
+Runner now includes99 checks/43 modules, 1229 scenarios/
+5382 boundaries. Preparation, broad CPU/migration/full-lean, fixed campaigns
+and device checks remain pending until mechanics/inventory closure.
+
 **Schema36 absorption checkpoint passed one focused CPU run.** Water Absorb and
 Volt Absorb agree with native across 54 scenarios/71 boundaries in 264.277s,
 including Choice, transformed and reflected NPZ/journal16 core round trips.
