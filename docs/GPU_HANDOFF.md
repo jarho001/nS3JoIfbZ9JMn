@@ -22,6 +22,20 @@ Keep historical commands/results as provenance.
 
 ## Current source and evidence
 
+**Schema45 Black Sludge / Toxic Orb / Flame Orb group:** focused CPU59 scenarios/177
+boundaries passed in323.299s;2 native/inventory contracts and4 handoff helpers pass.
+See [schema45-checkpoint.json](../test-logs/g4-cpu-conformance/schema45-checkpoint.json).
+One shared compiled step covers item/status ordering, Poison Heal/Shed Skin,
+immunity, suppression, ties, exchange, switching, caps/fainting and NPZ/journal17
+continuation. State layout is unchanged. No GPU run.
+
+```sh
+JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_residual_item_engine -v -f
+```
+
+Runner includes107 checks/51 modules,1487 scenarios/5916 boundaries in45 corpora.
+Current-source broad/device preparation and execution remain deferred.
+
 **Schema44 Shed Skin / Poison Heal group:** focused CPU35 scenarios/78 boundaries
 passed in338.37s;2 native/inventory contracts pass. No GPU run.
 See [schema44-checkpoint.json](../test-logs/g4-cpu-conformance/schema44-checkpoint.json).

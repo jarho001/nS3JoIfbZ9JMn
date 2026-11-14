@@ -11047,10 +11047,22 @@
           "file": "data/items.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/residual-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_residual_item_engine.py"
+        }
+      ],
       "field": "onResidual",
       "id": "items:blacksludge:onResidual",
-      "implementation": null,
+      "implementation": {
+        "family": "residual_item",
+        "file": "simulator/residual_items.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "items:blacksludge",
@@ -11062,7 +11074,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "9bc534339ed4561dbf74c0043088532dd006769fd3c03b4b3f288375a2c0c493",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -12679,10 +12691,22 @@
           "file": "data/items.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/residual-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_residual_item_engine.py"
+        }
+      ],
       "field": "onResidual",
       "id": "items:flameorb:onResidual",
-      "implementation": null,
+      "implementation": {
+        "family": "residual_item",
+        "file": "simulator/residual_items.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "items:flameorb",
@@ -12694,7 +12718,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "0a6b2a9d6fa9ffaa70b3a45d19170b51679c6a7edb6bd9d99607fc0d36bb4920",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -16999,10 +17023,22 @@
           "file": "data/items.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/residual-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_residual_item_engine.py"
+        }
+      ],
       "field": "onResidual",
       "id": "items:toxicorb:onResidual",
-      "implementation": null,
+      "implementation": {
+        "family": "residual_item",
+        "file": "simulator/residual_items.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "items:toxicorb",
@@ -17014,7 +17050,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "6ea33cfb37af1f3fe7038b29a22861bb3cc298d6a49be706dde432f8a4b7c896",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -77230,8 +77266,8 @@
         }
       ],
       "kind": "items",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "residual-item-positive-witness",
       "status": "partial"
     },
     {
@@ -78933,8 +78969,8 @@
         }
       ],
       "kind": "items",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "residual-item-positive-witness",
       "status": "partial"
     },
     {
@@ -84094,8 +84130,8 @@
         }
       ],
       "kind": "items",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "residual-item-positive-witness",
       "status": "partial"
     },
     {
@@ -97756,6 +97792,153 @@
           }
         ]
       },
+      "residual-item-positive-witness": {
+        "bound": [
+          "items:blacksludge",
+          "items:flameorb",
+          "items:toxicorb"
+        ],
+        "conclusion": "required",
+        "kind": "items",
+        "reasoning": "Pinned generator Black Sludge Arbok seed[3,2,3,4], Toxic Orb Raticate seed[2,2,3,4], Flame Orb Sigilyph seed[278,2,3,4] prove membership. Residual callbacks only; full callback/indirect/format closure remains pending.",
+        "references": [
+          "data/random-battles/gen5/teams.ts:103-494 (cullMovePool/randomMoveset)",
+          "data/random-battles/gen5/teams.ts:496-566 (ability filters/fallback)",
+          "data/random-battles/gen5/teams.ts:568-816 (item returns and randomSet)",
+          "data/random-battles/gen5/teams.ts:850-1014 (team eligibility)",
+          "data/random-battles/gen9/teams.ts:675-693 (addMove)",
+          "data/random-battles/gen9/teams.ts:1442-1497 (getLevel/getForme)",
+          "data/random-battles/gen9/teams.ts:1641-1683 (getPokemonPool)"
+        ],
+        "witnesses": [
+          {
+            "item": "blacksludge",
+            "seed": [
+              3,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Intimidate",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Black Sludge",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 90,
+              "moves": [
+                "earthquake",
+                "gunkshot",
+                "suckerpunch",
+                "coil"
+              ],
+              "name": "Arbok",
+              "role": "Bulky Attacker",
+              "shiny": false,
+              "species": "Arbok",
+              "speciesId": "arbok"
+            }
+          },
+          {
+            "item": "toxicorb",
+            "seed": [
+              2,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Guts",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Toxic Orb",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 88,
+              "moves": [
+                "uturn",
+                "facade",
+                "flamewheel",
+                "crunch"
+              ],
+              "name": "Raticate",
+              "role": "Wallbreaker",
+              "shiny": false,
+              "species": "Raticate",
+              "speciesId": "raticate"
+            }
+          },
+          {
+            "item": "flameorb",
+            "seed": [
+              278,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Magic Guard",
+              "evs": {
+                "atk": 0,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Flame Orb",
+              "ivs": {
+                "atk": 0,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 82,
+              "moves": [
+                "cosmicpower",
+                "psychoshift",
+                "storedpower",
+                "roost"
+              ],
+              "name": "Sigilyph",
+              "role": "Staller",
+              "shiny": false,
+              "species": "Sigilyph",
+              "speciesId": "sigilyph"
+            }
+          }
+        ]
+      },
       "residual-recovery-positive-witness": {
         "bound": [
           "abilities:poisonheal",
@@ -98408,8 +98591,8 @@
       },
       "entries": {
         "proven_unreachable": 542,
-        "required": 51,
-        "unresolved": 1175
+        "required": 54,
+        "unresolved": 1172
       },
       "roots": {
         "proven_unreachable": 0,

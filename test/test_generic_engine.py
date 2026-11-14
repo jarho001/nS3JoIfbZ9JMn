@@ -72,7 +72,7 @@ class GenericEngineTest(unittest.TestCase):
 
     def test_unsupported_callbacks_preflight_without_rng(self):
         base={'species':'Mew','moves':['Surf'],'ability':'Synchronize'}
-        for replacement in ({'ability':'Magic Guard'},{'moves':['Sleep Talk']},{'item':'Black Sludge'},
+        for replacement in ({'ability':'Magic Guard'},{'moves':['Sleep Talk']},{'item':'Sticky Barb'},
                             {'moves':['Psychic']},{'moves':['False Swipe']},{'species':'Darmanitan-Zen'}):
             result=e.make_gen5_state([[base|replacement],[base]],seed=[1,2,3,4])
             self.assertEqual(int(result.code),e.UNSUPPORTED,replacement)
