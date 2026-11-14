@@ -1363,8 +1363,16 @@
       "status": "findings_adopted_in_grouped_validation_instructions",
       "evidence": "test-logs/g4-cpu-conformance/compilation-investigation.json",
       "findings": "64.25MB StableHLO/542170 lines;311647 unique-graph JAXPR equations. Trace24.71s; separate lower28.73s. Two-core quota/8GiB; persistent cache explicitly disabled and per-module process isolation. Reduced-optimization trial timed out180s before compile completion.",
-      "recommendation": "Persistent cache with process isolation; group a few related mechanics per full JIT differential, native contracts per family; preserve all final gates. No workflow or simulator changes made.",
-      "next": "Apply grouped validation and correctness cache in next rain-recovery package; no additional compilation investigation needed."
+      "recommendation": "Continue small related groups with persistent correctness caching and process isolation; preserve final gates. Dependency-ordered coupled members may share edits; combined timing is sufficient. Continue after passed groups within sustained authorization.",
+      "next": "Continue the planned residual-item group under grouped validation; use existing cache controls, lightweight checkpoints and combined timers. No further compilation experiment or accounting-only test run needed.",
+      "grouped_workflow_review": {
+        "evidence": [
+          "test-logs/g4-cpu-conformance/schema43-checkpoint.json",
+          "test-logs/g4-cpu-conformance/schema44-checkpoint.json"
+        ],
+        "assessment": "User-supplied review reports four families sharing two successful full-step compiles. Grouping demonstrated; changed-source misses expected, cache-hit benefit not established. Prior group cases have not all been rerun on final source; historical/broad gates remain pending.",
+        "instruction_adjustments": "Allow coupled edit batches and checkpoint-only member status; permit documented independent native stimulus repairs without weakened assertions; accept labeled combined timers; require continuation or an explicit stopping reason. No new test run."
+      }
     },
     "next_work_package": {
       "id": "g4-residual-item-group",

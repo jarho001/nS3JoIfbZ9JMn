@@ -780,15 +780,15 @@ exhaustive battle histories and all combinations of effects are not required.
 
 **Implementation order, updated 2026-11-14:** Plan small work packages of two to
 four related reachable mechanic families. Establish native expectations per
-member, implement sequentially, and run all members' exact focused CPU cases
+member, implement in dependency order, and run all members' exact focused CPU cases
 through one shared compiled step at the group checkpoint. Keep CPU evidence
 pending until that group passes. Use persistent caching for unchanged-source
 correctness reruns, preserve memory-safe process isolation, and stop on a
 divergence before adding further families. Follow the
 [compilation-aware workflow](docs/ORCHESTRATION.md#compilation-aware-g4-checkpoints).
-The next package is Rain Dish/Hydration rain recovery plus the harness/cache
-plumbing needed to validate both in one compile; compact state owns its exact
-scope and resume command. Do not launch speculative optimization sweeps.
+Compact state owns the current next package, scope and resume command; completed
+packages are historical evidence. Continue between passed group checkpoints
+within sustained authorization. Do not launch speculative optimization sweeps.
 GPU correctness, broad CPU matrices, complete-battle campaigns and profiling
 remain deferred until reachable mechanics and inventory closure are complete.
 The gates below remain required; deferred commands live in

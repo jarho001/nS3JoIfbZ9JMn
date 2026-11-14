@@ -67,13 +67,19 @@ shared-path risk or dependency. Do not add unrelated mechanics to fill a quota.
 
 1. Precheck each member's reachability and establish compact pinned native cases
    before its implementation. Keep exact state/RNG/requests/events/history checks;
-   synthetic installations do not prove generator membership. Run cheap native
-   fixture/inventory contracts per meaningful revision, without a full engine
+   synthetic installations do not prove generator membership. A discovered
+   stimulus defect may be corrected after implementation: regenerate independent
+   native expectations, record the reason, retain intended branch coverage and
+   exact assertions, and validate the corrected fixture before claiming parity.
+   Run cheap native fixture/inventory contracts per meaningful revision, without a full engine
    compile per member. Prepare the next member's native cases during a compile
    when useful; avoid concurrent JAX compiles and overlapping simulator edits.
-2. Implement members sequentially, recording completed implementation versus
-   pending CPU validation in compact state. At most one small group may accumulate
-   without integration evidence. Add only targeted cross-member/shared-path cases.
+2. Implement members in dependency order. Closely coupled members may share an
+   edit batch; separate edits/status writes per member are not acceptance gates.
+   Record member implementation versus pending CPU validation at meaningful
+   checkpoints or interruption, without per-member documentation busywork.
+   At most one small group may accumulate without integration evidence. Add only
+   targeted cross-member/shared-path cases.
    Use cheap helper-level checks where they diagnose a local risk; these do not
    replace whole-step parity. Do not disable JIT as a presumed shortcut.
 3. Run one focused CPU integration invocation for all group cases, using one
@@ -87,7 +93,12 @@ shared-path risk or dependency. Do not add unrelated mechanics to fill a quota.
    unrun members passed. If interrupted, save source/fixture identity, the pending
    group command and first failure/cursor. After a pass, save one compact group
    checkpoint, update ledger/GPU handoff, commit/push and continue the next group
-   within authorized execution. Do not pause for approval after every family.
+   within authorized execution. A published group is an internal checkpoint,
+   not a reason to end an authorized sustained run. Select/precheck the next
+   group and continue unless acceptance is reached, the user stops/limits scope,
+   execution resources require checkpointing, or a concrete blocker arises.
+   Record the actual stopping reason; do not manufacture extra checks or status
+   updates to keep busy. Do not pause for approval after every family.
 
 Correctness runs should use a trusted persistent compilation cache:
 
@@ -98,9 +109,9 @@ export JAX_COMPILATION_CACHE_DIR="$PWD/work/jax-cache"
 
 Use these settings before importing JAX; create the ignored directory if needed.
 Remove hard-coded `JAX_ENABLE_COMPILATION_CACHE=false` from new correctness
-commands. The existing deferred runner currently forces false: add an explicit
-cache/cold option and record effective settings before claiming that runner uses
-this policy. Preserve per-module process isolation for historical suites because
+commands. The deferred runner now supports `--cache-dir` and explicit `--cold`,
+records effective cache settings, and defaults to persistent correctness caching.
+Preserve per-module process isolation for historical suites because
 combined execution previously exceeded 8 GiB; persistent cache survives process
 exit and `jax.clear_caches()`. Capture cache hit/miss diagnostics on normal runs
 rather than launching repeated suites solely to demonstrate reuse. A changed
@@ -111,8 +122,13 @@ Keep optimized settings unchanged. The reduced-optimization 180s trial did not
 finish; neither its speed nor parity is established. Explicit cold-compilation
 experiments must disable caching and say so, separately from correctness and
 simulation runtime measurements. No new profiling campaign is authorized here.
-Record initialization, tracing/lowering or cache-load/compile, and replay timing
-separately where practical; label combined timers accurately. Use actual cloud
+Record compile-attempt count, group members/cases, combined lower/compile time,
+and initialization/replay/assertion time from the normal run. Combined timers
+are sufficient for development decisions when labeled accurately; unavailable
+subphase/cache-load/wall-time metrics stay unknown. Do not rerun checks or add
+profiling just to split timers. Expected changed-source cache misses are not a
+workflow failure. Report compile cost per validated family as a descriptive
+metric, not a controlled speedup claim. Use actual cloud
 CPU quota/memory limits when choosing concurrency; more threads do not grant
 more cores. Larger hosts and graph deduplication remain possible future work,
 not prerequisites for continuing G4 or proven improvements.

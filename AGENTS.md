@@ -79,6 +79,9 @@ process isolation where needed for memory. Do not clear caches between focused
 members or compile separate equivalent wrappers within a group. Exact workflow,
 cache commands and limits: [ORCHESTRATION.md](docs/ORCHESTRATION.md#compilation-aware-g4-checkpoints).
 Do not adopt unproven reduced-optimization settings or start compile ablations.
+Use lightweight group checkpoints and accurately labeled combined timers; do not
+add runs for accounting alone. A passed/published group does not end an authorized
+sustained run: continue the next group or record the concrete stopping reason.
 
 GPU correctness, broad CPU matrices, complete-battle campaigns and profiling
 remain deferred until reachable mechanics and inventory closure are complete.
