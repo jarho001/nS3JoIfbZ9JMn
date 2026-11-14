@@ -41,7 +41,7 @@ def critical_blocked(ability):
 
 def accuracy(base,s,actor,physical):
     m=s.active[actor];ability=suppression_ops.abilities(s)[actor,m]
-    modifier=jnp.where(ability==h.A['compoundeyes'],5325,jnp.where((ability==h.A['hustle'])&physical,3277,4096)).astype(jnp.int32)
+    modifier=jnp.where(ability==h.A['compoundeyes'],5325,jnp.where((ability==h.A['hustle'])&physical,3277,jnp.where(ability==h.A['victorystar'],4506,4096))).astype(jnp.int32)
     return modify(base,modifier)
 
 

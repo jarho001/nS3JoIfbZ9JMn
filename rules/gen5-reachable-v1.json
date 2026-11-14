@@ -3475,10 +3475,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/accuracy-ability.json.gz",
+          "native": "reference/accuracy-ability-cases.cjs",
+          "scope": "Independent48 constructed/synthetic scenarios70 boundaries; No Guard accuracy/semi-invulnerability and Victory Star modifier, raw suppressed-handler sorting, stages, self moves, ability lifecycle and continuation. OHKO/weather-dependent attacks and remaining format closure pending",
+          "test": "test/test_accuracy_ability_engine.py"
+        }
+      ],
       "field": "onAnyAccuracy",
       "id": "abilities:noguard:onAnyAccuracy",
-      "implementation": null,
+      "implementation": {
+        "family": "accuracy_ability",
+        "file": "simulator/accuracy_abilities.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:noguard",
@@ -3490,7 +3502,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "b2e8b8f9e03b39ed8c957092c5ab0b142f9a945b32bf510017c6302b3fc5c308",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -3499,10 +3511,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/accuracy-ability.json.gz",
+          "native": "reference/accuracy-ability-cases.cjs",
+          "scope": "Independent48 constructed/synthetic scenarios70 boundaries; No Guard accuracy/semi-invulnerability and Victory Star modifier, raw suppressed-handler sorting, stages, self moves, ability lifecycle and continuation. OHKO/weather-dependent attacks and remaining format closure pending",
+          "test": "test/test_accuracy_ability_engine.py"
+        }
+      ],
       "field": "onAnyInvulnerability",
       "id": "abilities:noguard:onAnyInvulnerability",
-      "implementation": null,
+      "implementation": {
+        "family": "accuracy_ability",
+        "file": "simulator/accuracy_abilities.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:noguard",
@@ -3514,7 +3538,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "01bb31d70ce163c5f53096b867437223e88200d023c406eb76def54cd130223f",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -6511,10 +6535,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/accuracy-ability.json.gz",
+          "native": "reference/accuracy-ability-cases.cjs",
+          "scope": "Independent48 constructed/synthetic scenarios70 boundaries; No Guard accuracy/semi-invulnerability and Victory Star modifier, raw suppressed-handler sorting, stages, self moves, ability lifecycle and continuation. OHKO/weather-dependent attacks and remaining format closure pending",
+          "test": "test/test_accuracy_ability_engine.py"
+        }
+      ],
       "field": "onAnyModifyAccuracy",
       "id": "abilities:victorystar:onAnyModifyAccuracy",
-      "implementation": null,
+      "implementation": {
+        "family": "accuracy_ability",
+        "file": "simulator/accuracy_abilities.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:victorystar",
@@ -6526,7 +6562,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "ed28a1e85b2080eb8368bdefc0a93a43936ed5b16dd961b6e8ceaf754fec8a59",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -73914,8 +73950,8 @@
         }
       ],
       "kind": "abilities",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "accuracy-ability-positive-witness",
       "status": "partial"
     },
     {
@@ -76566,8 +76602,8 @@
         }
       ],
       "kind": "abilities",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "accuracy-ability-positive-witness",
       "status": "partial"
     },
     {
@@ -97281,6 +97317,112 @@
       ]
     },
     "proofs": {
+      "accuracy-ability-positive-witness": {
+        "bound": [
+          "abilities:noguard",
+          "abilities:victorystar"
+        ],
+        "conclusion": "required",
+        "kind": "abilities",
+        "reasoning": "Pinned No Guard Golurk seed[44,2,3,4] and Victory Star Victini seed[38,2,3,4] prove membership. Singles accuracy/invulnerability callbacks only; remaining indirect/full-format obligations are not closed.",
+        "references": [
+          "data/random-battles/gen5/teams.ts:103-494 (cullMovePool/randomMoveset)",
+          "data/random-battles/gen5/teams.ts:496-566 (ability filters/fallback)",
+          "data/random-battles/gen5/teams.ts:568-816 (item returns and randomSet)",
+          "data/random-battles/gen5/teams.ts:850-1014 (team eligibility)",
+          "data/random-battles/gen9/teams.ts:675-693 (addMove)",
+          "data/random-battles/gen9/teams.ts:1442-1497 (getLevel/getForme)",
+          "data/random-battles/gen9/teams.ts:1641-1683 (getPokemonPool)"
+        ],
+        "witnesses": [
+          {
+            "id": "noguard",
+            "kind": "ability",
+            "seed": [
+              44,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "No Guard",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "N",
+              "item": "Life Orb",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 80,
+              "moves": [
+                "rockpolish",
+                "stoneedge",
+                "earthquake",
+                "dynamicpunch"
+              ],
+              "name": "Golurk",
+              "role": "Wallbreaker",
+              "shiny": false,
+              "species": "Golurk",
+              "speciesId": "golurk"
+            }
+          },
+          {
+            "id": "victorystar",
+            "kind": "ability",
+            "seed": [
+              38,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Victory Star",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "N",
+              "item": "Expert Belt",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 76,
+              "moves": [
+                "energyball",
+                "vcreate",
+                "boltstrike",
+                "uturn"
+              ],
+              "name": "Victini",
+              "role": "Fast Attacker",
+              "shiny": false,
+              "species": "Victini",
+              "speciesId": "victini"
+            }
+          }
+        ]
+      },
       "dry-skin-positive-witness": {
         "bound": [
           "abilities:dryskin"
@@ -99270,8 +99412,8 @@
       },
       "entries": {
         "proven_unreachable": 542,
-        "required": 63,
-        "unresolved": 1163
+        "required": 65,
+        "unresolved": 1161
       },
       "roots": {
         "proven_unreachable": 0,

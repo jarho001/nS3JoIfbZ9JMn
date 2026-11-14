@@ -45,6 +45,7 @@ from . import residual_items as residual_item_ops
 from . import restorative_berries as berry_ops
 from . import stat_drop as stat_drop_ops
 from . import survival as survival_ops
+from . import accuracy_abilities as accuracy_ability_ops
 from . import species_items as species_item_ops
 from . import ability_creation as creation_ops
 from . import suppression as suppression_ops
@@ -59,7 +60,7 @@ import sys
 def _engine():
     return sys.modules[__name__]
 
-SCHEMA = 49
+SCHEMA = 50
 ROSTER, SLOTS, QUEUE, EVENTS, DRAWS, HISTORY = 6, 4, 8, 128, 128, 2048
 OK, PENDING, INVALID, UNSUPPORTED, CAPACITY, TERMINAL, STALE = range(7)
 RETRY=7
@@ -119,8 +120,9 @@ CALLED_SELECTION=26
 TRACE_TARGET=27
 DAMAGE_CALC_SORT=28
 AFTER_MOVE=29
+MODIFY_ACCURACY_SORT,ACCURACY_SORT=30,31
 MOVE_ACTOR_TARGET=field_tables.ACTOR_TARGET
-DRAW_CONTEXTS=('initialization','queue-sort','before-turn','update','hit-update','switch-order','residual-handlers','accuracy','critical','damage','paralysis','stall','sleep-duration','freeze','confusion-duration','confusion','confusion-damage','secondary','weather-change','weather-order','damage-modifiers','multihit-count','rampage-duration','frisk-target','volatile-duration','phazing-selection','sleep-talk-selection','trace-target','damage-calculation-sort','after-move')
+DRAW_CONTEXTS=('initialization','queue-sort','before-turn','update','hit-update','switch-order','residual-handlers','accuracy','critical','damage','paralysis','stall','sleep-duration','freeze','confusion-duration','confusion','confusion-damage','secondary','weather-change','weather-order','damage-modifiers','multihit-count','rampage-duration','frisk-target','volatile-duration','phazing-selection','sleep-talk-selection','trace-target','damage-calculation-sort','after-move','modify-accuracy-sort','accuracy-sort')
 # Queue kinds, order values mirror the pinned scheduler.
 BEFORE, ATTACK, SWAP, INSTANT, RUN_SWITCH, RESIDUAL, BEFORE_MOVE, FINISH_SWITCH = range(1,9)
 FORCED_MOVE_ACTION=12
@@ -638,10 +640,13 @@ def _use_move(c,frame):
         def immunity(c):return _event(c,IMMUNE,target,tm,aux=jnp.where(levitate,2,0))
         def try_hit(c):
             def accuracy(c):
-                c,roll=jax.lax.cond((ACCURACY[move]>0)&(~pursuit_ops.boosted(c[0],target,move,_engine())),lambda c:_draw(c,0,100,ACC),lambda c:(c,jnp.uint32(0)),c)
+                c=accuracy_ability_ops.modify_sort(c,actor,_engine())
+                c=accuracy_ability_ops.accuracy_sort(c,_engine())
+                sure=accuracy_ability_ops.sure_hit(c[0],actor,target,_engine())
+                c,roll=jax.lax.cond((ACCURACY[move]>0)&(~sure)&(~pursuit_ops.boosted(c[0],target,move,_engine())),lambda c:_draw(c,0,100,ACC),lambda c:(c,jnp.uint32(0)),c)
                 base_accuracy=hook_ops.accuracy(ACCURACY[move],c[0],actor,tables.CATEGORY[move]==1)
                 threshold=field_ops.accuracy(base_accuracy,c[0],actor,target,_engine())
-                hit=pursuit_ops.boosted(c[0],target,move,_engine())|(ACCURACY[move]==0)|(roll<threshold.astype(jnp.uint32))
+                hit=sure|pursuit_ops.boosted(c[0],target,move,_engine())|(ACCURACY[move]==0)|(roll<threshold.astype(jnp.uint32))
                 def miss(c):
                     s,t=c;t=t._replace(events=t.events.at[move_row,7].set(1))
                     return _event((s,t),MISS,actor,mon,move,target,tm)
@@ -658,7 +663,7 @@ def _use_move(c,frame):
             s,t=c;t=t._replace(events=t.events.at[move_row,7].set(1))
             return _event((s,t),MISS,actor,mon,move,target,tm)
         sound=phaze_ops.SOUND[move]&(suppression_ops.abilities(s)[target,tm]==tables.ABILITY_IDS['soundproof'])
-        return jax.lax.cond(phase_ops.invulnerable(s,target,move)&(~pursuit_ops.boosted(s,target,move,_engine())),semi_miss,lambda c:jax.lax.cond(immune,immunity,lambda c:jax.lax.cond(sound,lambda c:_event(c,IMMUNE,target,tm,aux=3),try_hit,c),c),c)
+        return jax.lax.cond(phase_ops.invulnerable(s,target,move)&(~accuracy_ability_ops.sure_hit(s,actor,target,_engine()))&(~pursuit_ops.boosted(s,target,move,_engine())),semi_miss,lambda c:jax.lax.cond(immune,immunity,lambda c:jax.lax.cond(sound,lambda c:_event(c,IMMUNE,target,tm,aux=3),try_hit,c),c),c)
     def no_target(c):
         s,t=c;t=t._replace(events=t.events.at[move_row,7].set(3))
         return _event((s,t),FAIL,actor,mon)
@@ -692,6 +697,8 @@ def _use_move(c,frame):
     move_row=jnp.max(jnp.where((jnp.arange(EVENTS)<c[1].ecount)&((c[1].events[:,0]==EV_MOVE)|(c[1].events[:,0]==ANIM)),jnp.arange(EVENTS),0))
     blocked_rest=(move==REST)&(c[0].status[actor,mon]==SLP)
     c=_when(blocked_rest,lambda c:ability_ops.fail(c,actor,move,move_row,_engine()),c)
+    self_accuracy=(target==actor)&(~charging)&(~blocked_rest)&(field_tables.WEATHER[move]==0)&(field_tables.SCREEN[move]==0)
+    c=_when(self_accuracy,lambda c:accuracy_ability_ops.modify_sort(c,actor,_engine()),c)
     c,reflected=called_ops.reflect(c,frame,_engine())
     c=_when((~charging)&(~blocked_rest)&(~reflected),lambda c:jax.lax.cond((called_ops.MOVE_IMPLEMENTED[move]&(move!=called_ops.MIRROR_MOVE)&(move!=called_ops.MAGIC_COAT)),lambda c:called_ops.call(c,frame,move_row,_engine()),resolve_move,c),c)
     c=_when(hit_tables.SELF_DESTRUCT[move]&(~c[0].fainted[actor,mon]),lambda c:_faint(c,actor),c)
@@ -1018,7 +1025,7 @@ def _supported(s,initializing=False):
             &jnp.all((s.moves==0)|move_mask[jnp.clip(s.moves,0,len(MOVE_KEYS)-1)])
             &jnp.all((s.item>=0)&(s.item<len(ITEMS)))
             &jnp.all((hook_tables.ITEM_IMPLEMENTED|hit_tables.ITEM_IMPLEMENTED|phase_ops.ITEM_IMPLEMENTED|partial_ops.ITEM_IMPLEMENTED|residual_item_ops.ITEM_IMPLEMENTED|berry_ops.ITEM_IMPLEMENTED|species_item_ops.ITEM_IMPLEMENTED|stat_drop_ops.ITEM_IMPLEMENTED|survival_ops.ITEM_IMPLEMENTED)[jnp.clip(s.item,0,len(ITEMS)-1)])
-            &jnp.all((s.ability>=0)&(s.ability<len(ABILITIES)))&jnp.all((hook_tables.ABILITY_IMPLEMENTED|hit_tables.ABILITY_IMPLEMENTED|trap_ops.ABILITY_IMPLEMENTED|phaze_ops.ABILITY_IMPLEMENTED|item_ops.ABILITY_IMPLEMENTED|identity_ops.ABILITY_IMPLEMENTED|illusion_ops.ABILITY_IMPLEMENTED|form_ops.ABILITY_IMPLEMENTED|trigger_form_ops.ABILITY_IMPLEMENTED|immunity_ops.ABILITY_IMPLEMENTED|creation_ops.ABILITY_IMPLEMENTED|sleep_ops.ABILITY_IMPLEMENTED|called_ops.ABILITY_IMPLEMENTED|trace_ops.ABILITY_IMPLEMENTED|flash_ops.ABILITY_IMPLEMENTED|recovery_ops.ABILITY_IMPLEMENTED|rain_ops.ABILITY_IMPLEMENTED|residual_ops.ABILITY_IMPLEMENTED|stat_drop_ops.ABILITY_IMPLEMENTED|survival_ops.ABILITY_IMPLEMENTED)[jnp.clip(s.ability,0,len(ABILITIES)-1)])
+            &jnp.all((s.ability>=0)&(s.ability<len(ABILITIES)))&jnp.all((hook_tables.ABILITY_IMPLEMENTED|hit_tables.ABILITY_IMPLEMENTED|trap_ops.ABILITY_IMPLEMENTED|phaze_ops.ABILITY_IMPLEMENTED|item_ops.ABILITY_IMPLEMENTED|identity_ops.ABILITY_IMPLEMENTED|illusion_ops.ABILITY_IMPLEMENTED|form_ops.ABILITY_IMPLEMENTED|trigger_form_ops.ABILITY_IMPLEMENTED|immunity_ops.ABILITY_IMPLEMENTED|creation_ops.ABILITY_IMPLEMENTED|sleep_ops.ABILITY_IMPLEMENTED|called_ops.ABILITY_IMPLEMENTED|trace_ops.ABILITY_IMPLEMENTED|flash_ops.ABILITY_IMPLEMENTED|recovery_ops.ABILITY_IMPLEMENTED|rain_ops.ABILITY_IMPLEMENTED|residual_ops.ABILITY_IMPLEMENTED|stat_drop_ops.ABILITY_IMPLEMENTED|survival_ops.ABILITY_IMPLEMENTED|accuracy_ability_ops.ABILITY_IMPLEMENTED)[jnp.clip(s.ability,0,len(ABILITIES)-1)])
             &jnp.all((s.ivs>=0)&(s.ivs<=31))&jnp.all((s.evs>=0)&(s.evs<=255))
             &jnp.all((s.nature>=1)&(s.nature<=len(generic.NATURES)))
             &jnp.all(s.types==tables.SPECIES_TYPES[safe_species])&jnp.all((s.boosts>=-6)&(s.boosts<=6))

@@ -22,11 +22,23 @@ Keep historical commands/results as provenance.
 
 ## Current source and evidence
 
-**Next group, native only:** No Guard / Victory Star has21 preliminary scenarios/25
-boundaries, pinned generator witnesses, and a passing
-`node --test test/accuracy-ability-native.test.cjs` contract. Complete callback
-sort/lifecycle coverage before implementation; it is not in the CPU/CUDA runner.
+**Next group, native only:** Tangled Feet / Wonder Skin has32 scenarios/59 boundaries,
+pinned generator witnesses, and a passing `node --test test/evasion-ability-native.test.cjs`
+contract. It is not in the CPU/CUDA runner; implementation remains pending.
 Resume `active_task.next_work_package` in [compact state](ORCHESTRATION_STATE.json).
+
+**Schema50 No Guard / Victory Star group:** focused CPU48 scenarios/70 boundaries
+passed in326.004s;2 native/inventory contracts and4 handoff helpers pass.
+See [schema50-checkpoint.json](../test-logs/g4-cpu-conformance/schema50-checkpoint.json).
+One compiled step covers exact state/RNG/requests/recipient events/histories,
+NPZ continuation and journal17. No GPU execution.
+
+```sh
+JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_accuracy_ability_engine -v -f
+```
+
+Runner includes112 checks/56 modules,1680 scenarios/6273
+boundaries in50 corpora. Current-source broad/device execution remains deferred.
 
 **Schema49 Sturdy / Focus Sash group:** focused CPU32 scenarios/39 boundaries passed
 in333.437s;2 native/inventory contracts and4 handoff helpers pass.

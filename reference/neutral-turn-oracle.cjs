@@ -230,8 +230,8 @@ function withObservedBattleDraws(ps, battle, action, options = {}) {
 			eventIds.pop();
 		}
 	};
-	if (options.observeAfterMove) battle.runEvent = function (eventid, ...args) {
-		if (eventid !== 'AfterMove') return originalRunEvent.call(this, eventid, ...args);
+	if (options.observeAfterMove || options.observeAccuracy) battle.runEvent = function (eventid, ...args) {
+		if (!(options.observeAfterMove && eventid === 'AfterMove') && !(options.observeAccuracy && ['Invulnerability','ModifyAccuracy','Accuracy'].includes(eventid))) return originalRunEvent.call(this, eventid, ...args);
 		eventIds.push(eventid);
 		try { return originalRunEvent.call(this, eventid, ...args); } finally { eventIds.pop(); }
 	};
