@@ -50,6 +50,7 @@ from . import unaware as unaware_ops
 from . import boost_abilities as boost_ability_ops
 from . import faint_abilities as faint_ability_ops
 from . import reactive_abilities as reactive_ability_ops
+from . import contact_status as contact_status_ops
 from . import species_items as species_item_ops
 from . import ability_creation as creation_ops
 from . import suppression as suppression_ops
@@ -64,7 +65,7 @@ import sys
 def _engine():
     return sys.modules[__name__]
 
-SCHEMA = 56
+SCHEMA = 57
 ROSTER, SLOTS, QUEUE, EVENTS, DRAWS, HISTORY = 6, 4, 8, 128, 128, 2048
 OK, PENDING, INVALID, UNSUPPORTED, CAPACITY, TERMINAL, STALE = range(7)
 RETRY=7
@@ -127,8 +128,9 @@ AFTER_MOVE=29
 MODIFY_ACCURACY_SORT,ACCURACY_SORT=30,31
 MODIFY_BOOST_SORT=32
 CURSED_BODY=33
+CONTACT_STATUS=34
 MOVE_ACTOR_TARGET=field_tables.ACTOR_TARGET
-DRAW_CONTEXTS=('initialization','queue-sort','before-turn','update','hit-update','switch-order','residual-handlers','accuracy','critical','damage','paralysis','stall','sleep-duration','freeze','confusion-duration','confusion','confusion-damage','secondary','weather-change','weather-order','damage-modifiers','multihit-count','rampage-duration','frisk-target','volatile-duration','phazing-selection','sleep-talk-selection','trace-target','damage-calculation-sort','after-move','modify-accuracy-sort','accuracy-sort','modify-boost-sort','cursed-body')
+DRAW_CONTEXTS=('initialization','queue-sort','before-turn','update','hit-update','switch-order','residual-handlers','accuracy','critical','damage','paralysis','stall','sleep-duration','freeze','confusion-duration','confusion','confusion-damage','secondary','weather-change','weather-order','damage-modifiers','multihit-count','rampage-duration','frisk-target','volatile-duration','phazing-selection','sleep-talk-selection','trace-target','damage-calculation-sort','after-move','modify-accuracy-sort','accuracy-sort','modify-boost-sort','cursed-body','contact-status')
 # Queue kinds, order values mirror the pinned scheduler.
 BEFORE, ATTACK, SWAP, INSTANT, RUN_SWITCH, RESIDUAL, BEFORE_MOVE, FINISH_SWITCH = range(1,9)
 FORCED_MOVE_ACTION=12
@@ -451,6 +453,7 @@ def _hit(c,actor,move):
             # left-to-right DamagingHit order, after ordered contact damage.
             c=mummy_ops.contact(c,actor,target,move,_engine())
             c=reactive_ability_ops.after_hit(c,actor,target,move,_engine())
+            c=contact_status_ops.after_hit(c,actor,target,move,_engine())
             c=item_ops.knock(c,actor,target,move,_engine())
             # Gen5 Spin is AfterHit, and is skipped if contact damage killed it.
             c=_when((move==RAPID_SPIN)&(c[0].hp[actor,mon]>0),lambda c:hit_ops.spin(c,actor,_engine()),c)

@@ -22,10 +22,23 @@ Keep historical commands/results as provenance.
 
 ## Current source and evidence
 
-**Next group, native only:** Static / Flame Body has40 scenarios/52 boundaries,
-pinned positive witnesses and a passing `node --test test/contact-status-native.test.cjs`
+**Next group, native only:** Iron Fist / Reckless has40 scenarios/44 boundaries,
+pinned positive witnesses and a passing `node --test test/power-ability-native.test.cjs`
 contract. It is not in the CPU/CUDA runner; implementation remains pending.
-Poison Point has no positive witness in seeds1..500 and remains unresolved/unsupported.
+Crash-move/MoveFail dependencies remain unsupported and pending.
+
+**Schema57 Static / Flame Body group:** focused CPU40 scenarios/52 boundaries
+passed in405.74s;2 native/inventory contracts and4 handoff helpers pass.
+See [schema57-checkpoint.json](../test-logs/g4-cpu-conformance/schema57-checkpoint.json).
+One compiled step covers exact state/RNG/requests/recipient events/histories,
+NPZ continuation and journal17. No GPU execution.
+
+```sh
+JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_contact_status_engine -v -f
+```
+
+Runner includes119 checks/63 modules,1899 scenarios/6583
+boundaries in57 corpora. Current-source broad/device execution remains deferred.
 
 **Schema56 Weak Armor / Cursed Body group:** focused CPU31 scenarios/47 boundaries
 passed in392.058s;2 native/inventory contracts and4 handoff helpers pass.

@@ -1147,10 +1147,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/contact-status.json.gz",
+          "native": "reference/contact-status-cases.cjs",
+          "scope": "Independent40 constructed/synthetic scenarios52 boundaries; contact-only chance draw, status attribution, multihit, immunity/Lum/Synchronize/Magic Guard, Gen5 Electric paralysis, Struggle/Substitute/suppression and KO/Helmet post-terminal draws. Poison Point unresolved without positive seed1..500 witness; full-format closure pending",
+          "test": "test/test_contact_status_engine.py"
+        }
+      ],
       "field": "onDamagingHit",
       "id": "abilities:flamebody:onDamagingHit",
-      "implementation": null,
+      "implementation": {
+        "family": "contact_status",
+        "file": "simulator/contact_status.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:flamebody",
@@ -1162,7 +1174,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "bb427faa033657dd0c16f4442c7d7aa2770eb96119320455a003acbf8bffb23d",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -5491,10 +5503,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/contact-status.json.gz",
+          "native": "reference/contact-status-cases.cjs",
+          "scope": "Independent40 constructed/synthetic scenarios52 boundaries; contact-only chance draw, status attribution, multihit, immunity/Lum/Synchronize/Magic Guard, Gen5 Electric paralysis, Struggle/Substitute/suppression and KO/Helmet post-terminal draws. Poison Point unresolved without positive seed1..500 witness; full-format closure pending",
+          "test": "test/test_contact_status_engine.py"
+        }
+      ],
       "field": "onDamagingHit",
       "id": "abilities:static:onDamagingHit",
-      "implementation": null,
+      "implementation": {
+        "family": "contact_status",
+        "file": "simulator/contact_status.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:static",
@@ -5506,7 +5530,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "25b61aad71bb78792081d2730344e5a9fe9d248306b5abdeec689280e5380536",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -72180,8 +72204,8 @@
         }
       ],
       "kind": "abilities",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "contact-status-positive-witness",
       "status": "partial"
     },
     {
@@ -75839,8 +75863,8 @@
         }
       ],
       "kind": "abilities",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "contact-status-positive-witness",
       "status": "partial"
     },
     {
@@ -97673,6 +97697,112 @@
           }
         ]
       },
+      "contact-status-positive-witness": {
+        "bound": [
+          "abilities:flamebody",
+          "abilities:static"
+        ],
+        "conclusion": "required",
+        "kind": "abilities",
+        "reasoning": "Pinned Static Ampharos seed[9,2,3,4] and Flame Body Magmortar seed[78,2,3,4] prove membership. Poison Point unresolved without positive seed1..500 witness; full-format closure pending.",
+        "references": [
+          "data/random-battles/gen5/teams.ts:103-494 (cullMovePool/randomMoveset)",
+          "data/random-battles/gen5/teams.ts:496-566 (ability filters/fallback)",
+          "data/random-battles/gen5/teams.ts:568-816 (item returns and randomSet)",
+          "data/random-battles/gen5/teams.ts:850-1014 (team eligibility)",
+          "data/random-battles/gen9/teams.ts:675-693 (addMove)",
+          "data/random-battles/gen9/teams.ts:1442-1497 (getLevel/getForme)",
+          "data/random-battles/gen9/teams.ts:1641-1683 (getPokemonPool)"
+        ],
+        "witnesses": [
+          {
+            "id": "static",
+            "kind": "ability",
+            "seed": [
+              9,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Static",
+              "evs": {
+                "atk": 0,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Leftovers",
+              "ivs": {
+                "atk": 2,
+                "def": 30,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 87,
+              "moves": [
+                "voltswitch",
+                "hiddenpowerice",
+                "healbell",
+                "thunderbolt"
+              ],
+              "name": "Ampharos",
+              "role": "Bulky Attacker",
+              "shiny": false,
+              "species": "Ampharos",
+              "speciesId": "ampharos"
+            }
+          },
+          {
+            "id": "flamebody",
+            "kind": "ability",
+            "seed": [
+              78,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Flame Body",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Expert Belt",
+              "ivs": {
+                "atk": 30,
+                "def": 30,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 84,
+              "moves": [
+                "hiddenpowerice",
+                "earthquake",
+                "thunderbolt",
+                "fireblast"
+              ],
+              "name": "Magmortar",
+              "role": "Fast Attacker",
+              "shiny": false,
+              "species": "Magmortar",
+              "speciesId": "magmortar"
+            }
+          }
+        ]
+      },
       "dry-skin-positive-witness": {
         "bound": [
           "abilities:dryskin"
@@ -100148,8 +100278,8 @@
       },
       "entries": {
         "proven_unreachable": 542,
-        "required": 76,
-        "unresolved": 1150
+        "required": 78,
+        "unresolved": 1148
       },
       "roots": {
         "proven_unreachable": 0,

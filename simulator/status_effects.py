@@ -64,7 +64,7 @@ def sleep_switch(c,side,e):
     return s._replace(status_state=s.status_state.at[side,m].set(meta)),t
 
 
-def inflict(c,source,target,status,e,reflect=True,move=0,secondary=False,overwrite=False,source_mon=None,item=0):
+def inflict(c,source,target,status,e,reflect=True,move=0,secondary=False,overwrite=False,source_mon=None,item=0,source_ability=0):
     s,t=c;m=s.active[target];sm=s.active[source]if source_mon is None else source_mon;ability=e.suppression_ops.abilities(s)[target,m]
     poison=jnp.any((s.types[target,m]==e.generic.TYPES['poison'])|(s.types[target,m]==e.generic.TYPES['steel']))
     fire=jnp.any(s.types[target,m]==e.generic.TYPES['fire'])
@@ -94,7 +94,7 @@ def inflict(c,source,target,status,e,reflect=True,move=0,secondary=False,overwri
         meta=jnp.stack((status,s.effect_order,source,sm,e.i32(1),e.i32(-1),e.i32(-1)))
         s=s._replace(status=s.status.at[target,m].set(status),toxic=s.toxic.at[target,m].set(0),
                      status_state=s.status_state.at[target,m].set(meta),effect_order=s.effect_order+1)
-        c=e._event((s,t),e.STATUS,target,m,move=move,status=status,aux=item)
+        c=e._event((s,t),e.STATUS,target,m,move=move,status=status,aux=item,value=source_ability,target=jnp.where(source_ability>0,source,0),targetmon=jnp.where(source_ability>0,sm,0))
         def sleep(c):
             c,value=e._draw(c,2,5,e.SLEEP_DURATION,2);s,t=c
             return s._replace(status_state=s.status_state.at[target,m,5:7].set(value.astype(jnp.int32))),t
