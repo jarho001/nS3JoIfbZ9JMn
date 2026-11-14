@@ -10,6 +10,13 @@ complete-battle campaigns and profiling remain deferred until reachable mechanic
 and inventory closure are complete. This supersedes earlier checkpoint timing;
 all acceptance requirements and commands below remain pending.
 
+**Compilation-aware execution, 2026-11-14:** new CPU mechanic packages use small
+groups and persistent correctness caching under the
+[workflow](ORCHESTRATION.md#compilation-aware-g4-checkpoints). Deferred acceptance
+requirements remain unchanged. The existing runner still forces cache off;
+cache-option plumbing is part of the next package, not implemented or validated
+by this instruction update. Keep historical commands/results as provenance.
+
 ## Current source and evidence
 
 **Schema42 Natural Cure / Regenerator switch-out recovery:** focused CPU22 scenarios/30 boundaries

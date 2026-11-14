@@ -68,19 +68,22 @@ approved goal's validation scope or a separately requested test session. Do
 not blindly retry slow or failing checks. Missing required evidence remains
 pending, with the exact command, relevant source identity, and blocker.
 
-The user approved a smaller implementation validation policy on 2026-11-12.
-For each mechanic family, default to one focused CPU differential check of the
-changed behavior against pinned native cases. Add a narrow regression only for
-a concrete shared-path concern. Consolidate broad eager/JIT/mixed1/8/32,
-full/lean, lifecycle and historical regression coverage at agreed milestone
-checkpoints; do not repeat that matrix after each family or restart the paused
-Substitute gate automatically. Preserve all final acceptance requirements and
-mark deferred checks as pending. This replaces the earlier broad per-family
-validation practice, including under the standing G4 CPU authorization.
-The 2026-11-13 continuation defers GPU correctness, broad CPU matrices,
-complete-battle campaigns and profiling until reachable mechanics and inventory
-closure are complete. Preserve final acceptance and exact pending commands in
-`docs/GPU_HANDOFF.md`; continue families sequentially with focused CPU checks.
+The 2026-11-14 compilation-aware workflow supersedes one full JIT differential
+per family: plan small groups of two to four related reachable families, retain
+native prechecks per family, then validate every member against one shared
+compiled step at the group checkpoint. A concrete dependency/risk can justify a
+smaller group; do not pad groups with unrelated work. Keep implemented members
+CPU-unvalidated until the group passes; stop for a divergence and diagnose it.
+Use persistent caching for unchanged-source correctness reruns, preserving
+process isolation where needed for memory. Do not clear caches between focused
+members or compile separate equivalent wrappers within a group. Exact workflow,
+cache commands and limits: [ORCHESTRATION.md](docs/ORCHESTRATION.md#compilation-aware-g4-checkpoints).
+Do not adopt unproven reduced-optimization settings or start compile ablations.
+
+GPU correctness, broad CPU matrices, complete-battle campaigns and profiling
+remain deferred until reachable mechanics and inventory closure are complete.
+Preserve final acceptance and pending commands in `docs/GPU_HANDOFF.md`. Do not
+restart the paused Substitute gate or rerun historical matrices after each group.
 
 Start on CPU. Require GPU only for a stated acceptance criterion or a concrete
 device-specific property. Missing optional GPU evidence is not a blocker. If

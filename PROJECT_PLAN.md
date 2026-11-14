@@ -778,12 +778,21 @@ exhaustive battle histories and all combinations of effects are not required.
 
 ### Acceptance and bounded CPU validation
 
-**Implementation order, 2026-11-13:** Continue reachable mechanic families
-sequentially, with one focused CPU differential per family and narrow regression
-only for a concrete shared-path concern. Defer GPU correctness, broad CPU
-matrices, complete-battle campaigns and profiling until reachable mechanics and
-inventory closure are complete. The gates below remain required; exact deferred
-commands live in [GPU_HANDOFF.md](docs/GPU_HANDOFF.md).
+**Implementation order, updated 2026-11-14:** Plan small work packages of two to
+four related reachable mechanic families. Establish native expectations per
+member, implement sequentially, and run all members' exact focused CPU cases
+through one shared compiled step at the group checkpoint. Keep CPU evidence
+pending until that group passes. Use persistent caching for unchanged-source
+correctness reruns, preserve memory-safe process isolation, and stop on a
+divergence before adding further families. Follow the
+[compilation-aware workflow](docs/ORCHESTRATION.md#compilation-aware-g4-checkpoints).
+The next package is Rain Dish/Hydration rain recovery plus the harness/cache
+plumbing needed to validate both in one compile; compact state owns its exact
+scope and resume command. Do not launch speculative optimization sweeps.
+GPU correctness, broad CPU matrices, complete-battle campaigns and profiling
+remain deferred until reachable mechanics and inventory closure are complete.
+The gates below remain required; deferred commands live in
+[GPU_HANDOFF.md](docs/GPU_HANDOFF.md).
 
 All conditions below are required; never replace a failed start, drop a reachable
 family, weaken equality or turn a harness cap into a native draw.
@@ -860,8 +869,7 @@ clarifies exact native parity and does not accept inventory, capacities or G4.
 
 These are internal checkpoints, not separate approvals or a prescribed number
 of cloud runs. Continue through them within the approved goal. Save compact
-progress in `active_task` only after execution is approved: completed/next family,
-ledger gaps, exact source identity, evidence, first failure and resumable cursor.
+progress in `active_task` only after execution is approved: completed/next group, member validation status, ledger gaps, exact source identity, evidence, first failure and resumable cursor.
 Commit/push at coherent checkpoints; preserve unrelated work and normal remote
 history. Choose proportional affected checks once per meaningful revision;
 known-long CPU integration is included in the proposed execution scope. Do not

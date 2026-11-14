@@ -434,6 +434,13 @@ superset is permitted; silently deleting uncertainty is not.
 
 ### Reachability audit and family precheck (2026-11-13)
 
+**Execution cadence, updated 2026-11-14:** keep these prechecks per family, but
+plan two to four related families per implementation package and compile their
+focused integration cases together. Follow the
+[compilation-aware workflow](ORCHESTRATION.md#compilation-aware-g4-checkpoints).
+A member's native fixture may be ready while its CPU parity remains pending;
+grouping does not discharge reachability or final acceptance obligations.
+
 The ledger now separates **required**, **proven unreachable** (machine label
 `proven_unreachable`), and **unresolved** from implementation status. Rows and
 existing evidence are retained, including implemented synthetic behavior outside

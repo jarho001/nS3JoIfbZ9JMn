@@ -850,7 +850,7 @@ experiment; adding `jit` decorators alone does not guarantee backend reuse.
 
 Current commands explicitly disable persistent caching. Tests clear in-memory
 caches, and the deferred runner uses separate processes because a combined run
-previously exceeded8GiB. A configured persistent cache can preserve executable
+previously exceeded 8 GiB. A configured persistent cache can preserve executable
 reuse across these processes without keeping all executables resident. It
 requires an unchanged lowered program, compatible compiler/options/device;
 engine changes generally miss. `jax.clear_caches()` does not delete disk cache.
@@ -886,3 +886,8 @@ Compact measurements, exact source fingerprints and the bounded trial command:
 [compilation-investigation.json](../test-logs/g4-cpu-conformance/compilation-investigation.json).
 The large IR remains ignored under `work/`. No simulator behavior, milestone
 acceptance or validation policy changed during this investigation.
+
+The subsequent 2026-11-14 instruction update adopts grouped implementation checks
+and persistent correctness caching; see the
+[execution policy](ORCHESTRATION.md#compilation-aware-g4-checkpoints). The
+investigation's unchanged-policy statement above describes that earlier commit.

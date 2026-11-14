@@ -538,7 +538,7 @@
       "Schema10 core/journal/hard-turn-limit checkpoint validated on a9d0fbd:3 integrated CPU checks pass in1174.685s, plus5 native/6 helper checks. Complete combat and1000-boundary neutral histories match native; mixed1/8/32,full/lean,core reset,persistence/corruption pass. Full64 suite and full-format G4 pending.",
       "Schema11 trapping/retry checkpoint:8 affected CPU checks plus6 native/6 helper checks pass. New31 scenarios/215 boundaries include two complete six-member games and mirrored private-state episodes. Aggregate558/4110; full68 suite and full-format G4 pending."
     ],
-    "next": "Discuss compilation findings and proposed small-group validation before resuming G4 mechanics.",
+    "next": "Implement the rain-recovery group (Rain Dish + Hydration) with a shared focused test executable and persistent correctness-cache plumbing; precheck/freeze native cases for each member first, then one group CPU comparison. Follow docs/ORCHESTRATION.md#compilation-aware-g4-checkpoints; broader/device gates deferred.",
     "ledger": {
       "path": "rules/gen5-reachable-v1.json",
       "entries": 1768,
@@ -1332,11 +1332,49 @@
       }
     },
     "compilation_investigation": {
-      "status": "bounded_investigation_complete_recommendations_not_adopted",
+      "status": "findings_adopted_in_grouped_validation_instructions",
       "evidence": "test-logs/g4-cpu-conformance/compilation-investigation.json",
       "findings": "64.25MB StableHLO/542170 lines;311647 unique-graph JAXPR equations. Trace24.71s; separate lower28.73s. Two-core quota/8GiB; persistent cache explicitly disabled and per-module process isolation. Reduced-optimization trial timed out180s before compile completion.",
       "recommendation": "Persistent cache with process isolation; group a few related mechanics per full JIT differential, native contracts per family; preserve all final gates. No workflow or simulator changes made.",
-      "next": "Discuss validation schedule before further mechanic implementation, as user requested."
+      "next": "Apply grouped validation and correctness cache in next rain-recovery package; no additional compilation investigation needed."
+    },
+    "next_work_package": {
+      "id": "g4-rain-recovery-group",
+      "status": "planned_not_implemented_or_CPU_validated",
+      "members": [
+        "Rain Dish: rain healing/cap/rounding, effective suppression and weather expiry",
+        "Hydration: residual order5/suborder3 status cure, exact activation/cure metadata, rain expiry and suppression"
+      ],
+      "precheck": [
+        "Reproduce positive generator witnesses: Rain Dish Pelipper seed[59,2,3,4]; Hydration Swanna seed[1,2,3,4]; persist ledger proofs, not just prior ignored work files.",
+        "Freeze pinned native ordinary/boundary/interactions per member before implementation; reuse work/g4-rain-recovery scratch inputs only if present and reverified."
+      ],
+      "shared_paths": [
+        "Weather duration/expiry and native ordered weather callbacks",
+        "Residual handler collection, ordering and skipping a status callback after Hydration cure",
+        "Exact RNG, HP/status metadata, legal requests and both recipient histories"
+      ],
+      "harness": [
+        "One compact rain-recovery fixture/test method shares a single compiled advance for both members; planned module test.test_rain_recovery_engine does not yet exist.",
+        "Enable trusted persistent correctness caching; remove forced cache disable from new commands. Add explicit cache/cold controls and effective-setting provenance to deferred runner without running broad/device suites.",
+        "Preserve process isolation for historical modules; no per-member clear_caches or equivalent duplicate integration compiles."
+      ],
+      "validation": [
+        "Cheap native fixture/inventory contracts per meaningful revision.",
+        "One focused optimized CPU differential for the entire group after both members are implemented, plus narrow regression only for a concrete shared-path risk.",
+        "Representative NPZ/journal continuation and targeted cure-before-status/Leftovers, expiry, suppression and tied ordering within that same focused method."
+      ],
+      "planned_command": "JAX_PLATFORMS=cpu JAX_ENABLE_COMPILATION_CACHE=true JAX_COMPILATION_CACHE_DIR=\"$PWD/work/jax-cache\" OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 XLA_PYTHON_CLIENT_PREALLOCATE=false timeout 900s .venv-jax/bin/python -m unittest test.test_rain_recovery_engine -v -f",
+      "command_status": "planned; add module first, respect actual host quota, record timing/source identity; not run by this instruction update",
+      "stop_and_save": [
+        "Stop adding members on a divergence; preserve exact assertions and diagnose before rerun.",
+        "If interrupted before group pass, record implemented members as CPU-unvalidated with fixture/source identities and resume command.",
+        "After group pass commit/push coherent evidence, update GPU_HANDOFF and select next small related group; full G4 remains open."
+      ],
+      "excluded": [
+        "Solar Power and other unrelated abilities in this package",
+        "Reduced-optimization experiments, new compile sweeps, broad CPU matrices, GPU execution, complete campaigns and profiling"
+      ]
     }
   },
   "optional_gpu_validation_history": [
