@@ -22,9 +22,23 @@ Keep historical commands/results as provenance.
 
 ## Current source and evidence
 
-**Next group, native only:** Weak Armor / Cursed Body has29 scenarios/43 boundaries,
-pinned positive witnesses and a passing `node --test test/reactive-ability-native.test.cjs`
+**Next group, native only:** Static / Flame Body has40 scenarios/52 boundaries,
+pinned positive witnesses and a passing `node --test test/contact-status-native.test.cjs`
 contract. It is not in the CPU/CUDA runner; implementation remains pending.
+Poison Point has no positive witness in seeds1..500 and remains unresolved/unsupported.
+
+**Schema56 Weak Armor / Cursed Body group:** focused CPU31 scenarios/47 boundaries
+passed in392.058s;2 native/inventory contracts and4 handoff helpers pass.
+See [schema56-checkpoint.json](../test-logs/g4-cpu-conformance/schema56-checkpoint.json).
+One compiled step covers exact state/RNG/requests/recipient events/histories,
+NPZ continuation and journal17. No GPU execution.
+
+```sh
+JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_reactive_ability_engine -v -f
+```
+
+Runner includes118 checks/62 modules,1859 scenarios/6531
+boundaries in56 corpora. Current-source broad/device execution remains deferred.
 
 **Schema55 Moxie / Aftermath group:** focused CPU25 scenarios/29 boundaries
 passed in392.779s;2 native/inventory contracts and4 handoff helpers pass.

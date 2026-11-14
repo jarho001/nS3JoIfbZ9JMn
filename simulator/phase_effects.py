@@ -159,6 +159,7 @@ def valid_phases(s):
             fields=CHARGE[move]&(row[:,:,4]==row[:,:,7])&(row[:,:,6]==SOURCE_MOVE)&(row[:,:,5]>=1)&(row[:,:,5]<=2)
         elif kind in (15,16,17,18):
             fields=(row[:,:,6]==SOURCE_MOVE)&(row[:,:,4]==t.MOVE_IDS[VOLATILES[kind]])
+            if kind==17:fields=fields|((row[:,:,6]==SOURCE_ABILITY)&(row[:,:,4]==t.ABILITY_IDS['cursedbody']))
             fields=fields&((row[:,:,5]>=1)&(row[:,:,5]<=5) if kind!=18 else row[:,:,5]==0)
             if kind in (16,17):fields=fields&(row[:,:,7]>0)&(row[:,:,7]<len(t.MOVE_KEYS))
         elif kind==VOLATILE_IDS['flashfire']:

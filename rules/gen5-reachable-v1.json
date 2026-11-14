@@ -655,10 +655,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/reactive-ability.json.gz",
+          "native": "reference/reactive-ability-cases.cjs",
+          "scope": "Independent31 constructed/synthetic scenarios47 boundaries; physical hit Defense-/Speed+, capped/self changes, exact Cursed Body chance and ability-sourced Disable lifetime/PP/root-move metadata, suppression/Substitute/Struggle, KO/Helmet post-terminal callbacks. Full-format closure remains pending",
+          "test": "test/test_reactive_ability_engine.py"
+        }
+      ],
       "field": "onDamagingHit",
       "id": "abilities:cursedbody:onDamagingHit",
-      "implementation": null,
+      "implementation": {
+        "family": "reactive_ability",
+        "file": "simulator/reactive_abilities.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:cursedbody",
@@ -670,7 +682,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "ef64586582e2093bdc4847a059e8d123201d97ee9715c326cc66458d992d765d",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -6931,10 +6943,22 @@
           "file": "data/mods/gen6/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/reactive-ability.json.gz",
+          "native": "reference/reactive-ability-cases.cjs",
+          "scope": "Independent31 constructed/synthetic scenarios47 boundaries; physical hit Defense-/Speed+, capped/self changes, exact Cursed Body chance and ability-sourced Disable lifetime/PP/root-move metadata, suppression/Substitute/Struggle, KO/Helmet post-terminal callbacks. Full-format closure remains pending",
+          "test": "test/test_reactive_ability_engine.py"
+        }
+      ],
       "field": "onDamagingHit",
       "id": "abilities:weakarmor:onDamagingHit",
-      "implementation": null,
+      "implementation": {
+        "family": "reactive_ability",
+        "file": "simulator/reactive_abilities.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:weakarmor",
@@ -6946,7 +6970,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "e38c2da5c24c34211bfb9314dc05c5cf4468334d0d2831190582956a8a0b7a39",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -71736,8 +71760,8 @@
         }
       ],
       "kind": "abilities",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "reactive-ability-positive-witness",
       "status": "partial"
     },
     {
@@ -76901,8 +76925,8 @@
         }
       ],
       "kind": "abilities",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "reactive-ability-positive-witness",
       "status": "partial"
     },
     {
@@ -98694,6 +98718,112 @@
           }
         ]
       },
+      "reactive-ability-positive-witness": {
+        "bound": [
+          "abilities:cursedbody",
+          "abilities:weakarmor"
+        ],
+        "conclusion": "required",
+        "kind": "abilities",
+        "reasoning": "Pinned Weak Armor Vanilluxe seed[11,2,3,4] and Cursed Body Froslass seed[38,2,3,4] prove membership. Directed callbacks leave full-format closure pending.",
+        "references": [
+          "data/random-battles/gen5/teams.ts:103-494 (cullMovePool/randomMoveset)",
+          "data/random-battles/gen5/teams.ts:496-566 (ability filters/fallback)",
+          "data/random-battles/gen5/teams.ts:568-816 (item returns and randomSet)",
+          "data/random-battles/gen5/teams.ts:850-1014 (team eligibility)",
+          "data/random-battles/gen9/teams.ts:675-693 (addMove)",
+          "data/random-battles/gen9/teams.ts:1442-1497 (getLevel/getForme)",
+          "data/random-battles/gen9/teams.ts:1641-1683 (getPokemonPool)"
+        ],
+        "witnesses": [
+          {
+            "id": "weakarmor",
+            "kind": "ability",
+            "seed": [
+              11,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Weak Armor",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Life Orb",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 30,
+                "spd": 30,
+                "spe": 31
+              },
+              "level": 88,
+              "moves": [
+                "flashcannon",
+                "icebeam",
+                "explosion",
+                "hiddenpowerground"
+              ],
+              "name": "Vanilluxe",
+              "role": "Fast Attacker",
+              "shiny": false,
+              "species": "Vanilluxe",
+              "speciesId": "vanilluxe"
+            }
+          },
+          {
+            "id": "cursedbody",
+            "kind": "ability",
+            "seed": [
+              38,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Cursed Body",
+              "evs": {
+                "atk": 0,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "F",
+              "item": "Leftovers",
+              "ivs": {
+                "atk": 0,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 78,
+              "moves": [
+                "shadowball",
+                "icebeam",
+                "taunt",
+                "spikes"
+              ],
+              "name": "Froslass",
+              "role": "Fast Support",
+              "shiny": false,
+              "species": "Froslass",
+              "speciesId": "froslass"
+            }
+          }
+        ]
+      },
       "residual-item-positive-witness": {
         "bound": [
           "items:blacksludge",
@@ -100018,8 +100148,8 @@
       },
       "entries": {
         "proven_unreachable": 542,
-        "required": 74,
-        "unresolved": 1152
+        "required": 76,
+        "unresolved": 1150
       },
       "roots": {
         "proven_unreachable": 0,

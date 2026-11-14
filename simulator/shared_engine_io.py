@@ -147,7 +147,7 @@ def project_events(state,trace,audience):
         elif kind==e.CLEAR_NEGATIVE:line=f'|-clearnegativeboost|{actor}|[silent]'
         elif kind==e.BOOST:line=f'|-'+('unboost' if status else 'boost')+f'|{actor}|{e.field_tables.STATS[aux]}|{abs(value)}'
         elif kind==e.WEATHER:line='|-weather|'+e.field_tables.WEATHER_NAMES[value]+(f'|[from] ability: {e.hook_tables.ABILITY_NAMES[move]}|[of] {actor}' if aux==2 else '|[upkeep]' if aux==1 else '')
-        elif kind==e.VOL_START:line=f'|-start|{actor}|'+('move: Taunt' if value==15 else e.MOVE_NAMES[tables.MOVE_IDS[e.phase_ops.VOLATILES[value]]])+('|'+name if value==17 else '')
+        elif kind==e.VOL_START:line=f'|-start|{actor}|'+('move: Taunt' if value==15 else e.MOVE_NAMES[tables.MOVE_IDS[e.phase_ops.VOLATILES[value]]])+('|'+name if value==17 else '')+('|[from] ability: Cursed Body|[of] '+foe if aux==1 else '')
         elif kind==e.VOL_END:line=f'|-end|{actor}|'+('move: Taunt' if value==15 else e.MOVE_NAMES[tables.MOVE_IDS[e.phase_ops.VOLATILES[value]]])
         elif kind==e.VOL_CANT:line=f'|cant|{actor}|'+('move: Taunt' if value==15 else 'Disable')+'|'+name
         elif kind==e.PREPARE:line=f'|-prepare|{actor}|{name}'
@@ -214,9 +214,9 @@ def load_state(path,*,schema=None,replayed_state=None):
         stored=int(saved['schema']) if 'schema' in saved else None
         if schema is not None and stored is not None and stored!=schema:raise ValueError('schema mismatch')
         version=stored if schema is None else schema
-        if version not in (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55):raise ValueError('explicit supported state schema required')
+        if version not in (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56):raise ValueError('explicit supported state schema required')
         fields={k:jnp.asarray(saved[k]) for k in saved.files if k not in ('schema','data_sha256')}
-        if version in (3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55):
+        if version in (3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56):
             if 'data_sha256' not in saved or str(saved['data_sha256'])!=generic.DATA_SHA256:
                 raise ValueError('state data table identity mismatch')
         if version<39 and replayed_state is not None:

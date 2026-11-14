@@ -19,6 +19,8 @@ module.exports=function(){
  add('cursedbody-last-pp',{p2:[m({ability:'Cursed Body'})],setup:[{side:'p1',ppByMove:{tackle:1}}]});
  add('weakarmor-defense-cap',{p2:[m({ability:'Weak Armor'})],setup:[{side:'p2',boosts:{def:-6}}]});
  add('weakarmor-speed-cap',{p2:[m({ability:'Weak Armor'})],setup:[{side:'p2',boosts:{spe:6}}]});
+ add('cursedbody-sleep-talk',{seed:4,p1:[m({moves:['Rest','Sleep Talk','Tackle'],evs:{spe:252}})],p2:[m({ability:'Cursed Body'})],setup:[{side:'p1',hp:100}],steps:[b(1),b(2)]});
+ add('cursedbody-substitute',{p1:[m({moves:['Substitute','Tackle','Recover'],evs:{spe:252}})],p2:[m({ability:'Cursed Body',moves:['Substitute','Recover']})],steps:[b(3,1),b(2,2)]});
  return cases;
 };
 module.exports.membershipWitnesses=function(){
