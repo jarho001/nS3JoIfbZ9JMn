@@ -830,3 +830,59 @@ status metadata; singles CheckShow is a format-guard no-op. Regenerator silently
 heals floor(original maximum HP/3), capped, on living effective holders.
 Native22/30 focused CPU parity and NPZ/journal17 persistence pass. Layout unchanged;
 remaining mechanics/closure and broad/device/final acceptance stay pending.
+
+
+### Compilation investigation (2026-11-14)
+
+At `b9ce88d`, the focused switch-recovery method spent467.546s in combined
+lower/compile and30.593s in fixture initialization/replay/assertions. The cloud
+has a two-core CPU quota (three affinity CPUs) and8GiB memory. A bounded
+trace/lower diagnostic produced311647 JAXPR equations across3279 distinct nested
+graph objects, and64.25MB/542170 lines of pre-optimization StableHLO. Tracing
+was24.71s and a separate lower call28.73s; these are not disjoint phases of the
+historical compile timer. Backend pass times were not measured.
+
+Dynamic move/ability branches compile together: fewer fixture cases do not
+remove those branches. Shared helpers such as Update occur at multiple call
+sites; most IR resides in main. Existing loop-based holder visits already
+reduce some duplication. Further graph reduction needs a separate parity-checked
+experiment; adding `jit` decorators alone does not guarantee backend reuse.
+
+Current commands explicitly disable persistent caching. Tests clear in-memory
+caches, and the deferred runner uses separate processes because a combined run
+previously exceeded8GiB. A configured persistent cache can preserve executable
+reuse across these processes without keeping all executables resident. It
+requires an unchanged lowered program, compatible compiler/options/device;
+engine changes generally miss. `jax.clear_caches()` does not delete disk cache.
+Use a trusted ignored path such as `work/jax-cache`, with
+`JAX_ENABLE_COMPILATION_CACHE=true JAX_COMPILATION_CACHE_DIR="$PWD/work/jax-cache"`
+for correctness work. Cold-compilation measurements must explicitly remain cold.
+An actual full-engine cache-hit timing was not run in this investigation.
+
+Proposed workflow (not adopted): establish native expectations per family, then
+implement two to four related families and run all their exact differential
+cases against one shared compiled step. Keep CPU parity pending until that group
+passes; failures stop the group for diagnosis. Retain process isolation/cache
+reuse for historical modules and all final eager/JIT/batched/lifecycle/campaign
+and device gates. Do not simply postpone every integration check until G4 ends.
+Small helper-level JIT checks can shorten feedback for isolated arithmetic or
+hooks, but cannot substitute for scheduler/RNG/projection integration parity.
+
+One reduced-optimization trial (`JAX_DISABLE_MOST_OPTIMIZATIONS=true`) timed out
+at180s before a compile timing or parity result. It demonstrates no speedup;
+do not adopt it or extrapolate runtime performance. Disabling JIT still stages
+control-flow primitives and may make replay much slower. Larger hosts may help,
+but compile scaling and GPU compile times have not been measured.
+
+Reproduce lowering only (no backend compile):
+
+```sh
+JAX_PLATFORMS=cpu OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 \
+JAX_ENABLE_COMPILATION_CACHE=false timeout 120s \
+.venv-jax/bin/python scripts/inspect_g4_compilation.py --output work/g4-compilation
+```
+
+Compact measurements, exact source fingerprints and the bounded trial command:
+[compilation-investigation.json](../test-logs/g4-cpu-conformance/compilation-investigation.json).
+The large IR remains ignored under `work/`. No simulator behavior, milestone
+acceptance or validation policy changed during this investigation.

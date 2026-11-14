@@ -538,7 +538,7 @@
       "Schema10 core/journal/hard-turn-limit checkpoint validated on a9d0fbd:3 integrated CPU checks pass in1174.685s, plus5 native/6 helper checks. Complete combat and1000-boundary neutral histories match native; mixed1/8/32,full/lean,core reset,persistence/corruption pass. Full64 suite and full-format G4 pending.",
       "Schema11 trapping/retry checkpoint:8 affected CPU checks plus6 native/6 helper checks pass. New31 scenarios/215 boundaries include two complete six-member games and mirrored private-state episodes. Aggregate558/4110; full68 suite and full-format G4 pending."
     ],
-    "next": "Next family candidates: Rain Dish/Hydration, repeat native reachability precheck before implementation. Stopped after completed switch-out recovery family at user request; broad/GPU/campaign/profiling gates remain deferred.",
+    "next": "Discuss compilation findings and proposed small-group validation before resuming G4 mechanics.",
     "ledger": {
       "path": "rules/gen5-reachable-v1.json",
       "entries": 1768,
@@ -1330,6 +1330,13 @@
         ],
         "not_run": "No tests removed or changed; no mechanic tests, Trace compilation, runner preparation, GPU, profiling, broad suites or battle campaigns."
       }
+    },
+    "compilation_investigation": {
+      "status": "bounded_investigation_complete_recommendations_not_adopted",
+      "evidence": "test-logs/g4-cpu-conformance/compilation-investigation.json",
+      "findings": "64.25MB StableHLO/542170 lines;311647 unique-graph JAXPR equations. Trace24.71s; separate lower28.73s. Two-core quota/8GiB; persistent cache explicitly disabled and per-module process isolation. Reduced-optimization trial timed out180s before compile completion.",
+      "recommendation": "Persistent cache with process isolation; group a few related mechanics per full JIT differential, native contracts per family; preserve all final gates. No workflow or simulator changes made.",
+      "next": "Discuss validation schedule before further mechanic implementation, as user requested."
     }
   },
   "optional_gpu_validation_history": [

@@ -1,0 +1,175 @@
+{
+  "jax": "0.12.0.1",
+  "initialization_seconds": 16.290281006999976,
+  "tracing_seconds": 24.710774770999933,
+  "lowering_seconds": 28.73133239999993,
+  "ir_export_seconds": 1.753916145000062,
+  "jaxpr_equations": 311647,
+  "jaxpr_graphs": 3279,
+  "largest_graph": 3208,
+  "primitives": [
+    [
+      "add",
+      61977
+    ],
+    [
+      "lt",
+      49042
+    ],
+    [
+      "select_n",
+      48747
+    ],
+    [
+      "squeeze",
+      35186
+    ],
+    [
+      "dynamic_slice",
+      19239
+    ],
+    [
+      "slice",
+      16992
+    ],
+    [
+      "broadcast_in_dim",
+      15079
+    ],
+    [
+      "mul",
+      9605
+    ],
+    [
+      "scatter",
+      7285
+    ],
+    [
+      "jit",
+      6633
+    ],
+    [
+      "and",
+      6457
+    ],
+    [
+      "convert_element_type",
+      5133
+    ],
+    [
+      "concatenate",
+      4940
+    ],
+    [
+      "eq",
+      3789
+    ],
+    [
+      "ge",
+      3710
+    ],
+    [
+      "or",
+      3351
+    ],
+    [
+      "shift_right_logical",
+      3210
+    ],
+    [
+      "gt",
+      2175
+    ],
+    [
+      "stack",
+      1839
+    ],
+    [
+      "cond",
+      1580
+    ]
+  ],
+  "stablehlo_bytes": 64250852,
+  "stablehlo_lines": 542170,
+  "compile_executed": false,
+  "source_commit": "b9ce88d",
+  "observed_at": "2026-11-14T09:13:53.435752+00:00",
+  "kind": "bounded_compile_investigation_not_simulation_performance_or_acceptance",
+  "cpu_quota_cores": 2,
+  "memory_limit_bytes": 8589934592,
+  "affinity_cpus": 3,
+  "measurement_notes": "make_jaxpr and lower were separate calls; their durations are not disjoint phases of the prior combined lower/compile timer. JAXPR counts visit each nested graph object once. StableHLO is pre-backend-optimization IR, not machine code.",
+  "baseline": {
+    "evidence": "schema42-checkpoint.json",
+    "lower_compile_seconds": 467.546,
+    "replay_initialization_assertion_seconds": 30.593,
+    "method_total_seconds": 502.851
+  },
+  "reduced_optimization": {
+    "setting": "JAX_DISABLE_MOST_OPTIMIZATIONS=true",
+    "timeout_seconds": 180,
+    "exit_code": 124,
+    "result": "timed_out_before_compile_timing_or_parity_result; no demonstrated speedup",
+    "command": "JAX_PLATFORMS=cpu OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 XLA_PYTHON_CLIENT_PREALLOCATE=false JAX_ENABLE_COMPILATION_CACHE=false JAX_DISABLE_MOST_OPTIMIZATIONS=true timeout 180s .venv-jax/bin/python -c 'import os,unittest;os.sched_setaffinity(0,sorted(os.sched_getaffinity(0))[:3]);unittest.main(module=\"test.test_switch_recovery_engine\",verbosity=2,failfast=True)'"
+  },
+  "diagnostic_command": "JAX_PLATFORMS=cpu OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 JAX_ENABLE_COMPILATION_CACHE=false timeout 120s .venv-jax/bin/python scripts/inspect_g4_compilation.py --output work/g4-compilation",
+  "limitations": [
+    "No XLA per-pass timing; backend bottleneck attribution remains inferred, not measured directly.",
+    "No complete cached engine compile/cache-hit run; cache benefits are expected from JAX implementation, not measured here.",
+    "No simulation performance benchmark, GPU work, broad correctness suite or acceptance change."
+  ],
+  "recommendation": "Use persistent cache for same-IR correctness runs while retaining process isolation; validate small related mechanic groups with one full integration compile, preserving pending CPU evidence and final gates; workflow change proposed only.",
+  "source_sha256": {
+    "simulator/__init__.py": "771044eeaae218d973d7f0a76e09781e441444f6256824f0605ace5aa78eccd3",
+    "simulator/accuracy_choice.py": "a2599f3ff3451482f5a2b2c7cfc12ecc600597931171f4e2b5c90a1ec2ffed69",
+    "simulator/burn_choice.py": "672e258463a83eed9e5c0714fde69ca64f1ccaf25071c5a5f9ea2f9fa0e4e0e6",
+    "simulator/gen5_rng.py": "716c10f38fdae8036df4ebe07af6889c467c1bcb392ba4886fa3dd519b2c35d7",
+    "simulator/neutral_duel.py": "28cf1e59eea90f5bcd8fa1427695ba7e20448c4792033fdb323a051af5543357",
+    "simulator/neutral_mega_punch.py": "9a99c65be335491fd656b3f27023aac93045808f51972845a4598630ee04c5f8",
+    "simulator/neutral_pound.py": "081e1841e2cd59a97055bd78a951c0b983bea69c7b9211ce83c4f0446664b990",
+    "simulator/neutral_tackle.py": "535d0a6d9c5645e089b12fa05387a7c8db7e4e6efe30cb25020199cb5900924a",
+    "simulator/neutral_tackle_ties.py": "cfae3a6f0459a74c91307050ab55ffc6e00a2e6bbb615d76b33d7d858a10e88a",
+    "simulator/neutral_two_move.py": "7eecd7f2e1cf8963714dbe671fc6fa68bcf98ca22fbbc7686e726fa3745511da",
+    "simulator/request_session.py": "12828f66618e7d1ad08b3f26cf4b1245f4f4644a9ab68ca79da179f21c0fb313",
+    "simulator/two_move_session.py": "8f9cd35bf71a0e99fd42747570c020d1ea1aae09b4f3c6784eb9adcced12968f",
+    "simulator/item_lifecycle.py": "a7f3b3bf56705b1db8632aec0f24e33e0266860318b1acf5a1b98325f98d0b67",
+    "simulator/hook_tables.py": "595cba9756a6bc81665c76849126b640bcbe47e6ca760bb678310e8a73f73182",
+    "simulator/switch_recovery.py": "025329382646d2d05515803f46812459606b247ad4a9a5e847cc510b5d771c1a",
+    "simulator/partial_trap.py": "9d2006d23ff5f94bf44500758c78e35ed725923a5185b90aec2dc16f4bb73bd8",
+    "simulator/identity.py": "a714c65c2257b780a8febc5022cf8ddbdf2143a2614ec268158d6d4c6b470724",
+    "simulator/trapping.py": "dfdcaa8faf2f6a4cc615c42736ae6f0d2be6db31246f11ac33e6a6a7a0b88ae2",
+    "simulator/substitute.py": "1a5e5fb3594f99c15faa11efe3a566d11b65a2b29427c354b2219e9c54036b13",
+    "simulator/journal.py": "ffd1eeef4fb1245dc62ff196cb24446dfbd4807a1010e75c059e4913bf5325c8",
+    "simulator/flash_fire.py": "a724ce356924e80bf13ddd94aed9cefa1792726dcb9393774c16b94a3d302306",
+    "simulator/field_effects.py": "76bff2fbf647f25c97e6e63f139ac543df99bf8b887cc144cc1bf0d8a0382d23",
+    "simulator/ability_changes.py": "c5df95f53985a01a12a78c999608bded6cee63bc8b160075be6b5a5c1d2dd436",
+    "simulator/hook_effects.py": "e6d74e52f1cee498ed4eefbdca284471fe9c1d5b4fd7a2755ecebd9bf6f69e24",
+    "simulator/shared_engine_io.py": "58b6d76464543b50fb10de7c50d681b2df4c4350b0103cd08781dfd0aaf1d504",
+    "simulator/called_moves.py": "b93a2d5719b2e8ba486ec173e01ba18b460ffd7ab588780aec06408e9ee0fcad",
+    "simulator/hit_tables.py": "c084b7036ff23da8fc5cda6fdcda4915a2524282383b9f1205803f6dc5f60cbc",
+    "simulator/forms.py": "c77d5ce3ca84f6ba94c0570d16f5ec5a4dc2fb62ccab19de10998d090716540c",
+    "simulator/suppression.py": "4c3640b86966054b5f730ba3f4ad966fd305d29c545faf7727a1c69323bf1bf2",
+    "simulator/battle_tracking.py": "fab4454abb7e230fa93a9943f41314063097b7deca248f42777c1b7e571c5f2e",
+    "simulator/illusion.py": "068715c493fe6c24cc1bcce6dd8877bd3c3812686d3aefb2c0657448e83377be",
+    "simulator/trace_ability.py": "992b116cbd770759c90799b2edb4f9349b335bd2955bea865ab2c506232c9af5",
+    "simulator/phazing.py": "09676ecacea5ae55fb7de277899f792d2d18985f9949f79f99a4c4ae11bf9ce3",
+    "simulator/trigger_forms.py": "facb1536dd74857729448adada0c27ae3d8a6a48bbe7a3673bce80721825712f",
+    "simulator/rollout.py": "218f6312f02bcc860b6868a934ed5f23fc81d758cc932661a051e86aa8b3a715",
+    "simulator/gen5_engine_tables.py": "2c424486c43318febe26e815e5333b8f0a9137b0ee0eee162d82900aaa581cd8",
+    "simulator/shared_engine.py": "c03c99c0e631bc8ca131144a261ea1dc161ffdc0f20c20d1391963b8faaa6afc",
+    "simulator/pursuit.py": "d4ba171c4c289c713981a07f43df9ec403017278958600fbdff0a8a96379778d",
+    "simulator/hit_effects.py": "bec65f56e1f95c46e03bfd2360fb09fa0e49558f9cdb7ffa4f46135ae2b39f62",
+    "simulator/phase_effects.py": "a8efc1b1bfdd76cdcb155428b8d1dd05177231b5fb2e4cc14a5546dcc896fee2",
+    "simulator/field_tables.py": "69ba84cdbed0e40d879945fc04e425b049b3ff5f3fd5367c73e089bebda98d34",
+    "simulator/status_immunity.py": "3547338504be2b079bf775fd201c279bfdb627111b4c59a5316cae6f04dd0943",
+    "simulator/status_effects.py": "eaa451bb2ea47baf080c677d6e23ace22e8fbaae6d4b2f85f36f03f90afea6eb",
+    "simulator/ability_creation.py": "da068a16fe7c2999c77e586d5a893c1e9643c80acadf173535c7aea5595d4145",
+    "simulator/sleep_control.py": "f9ce97b39f925dfae85b98b934dba1ef9b8b1b457512549d2d6c00b77c401ee4",
+    "simulator/mummy.py": "57e7e4b2b62b82eefe99981a5a3518e8a2e871ed3243f4ae6bdccdf1d1bfec05",
+    "simulator/gen5_tables.py": "47333f7651b00a5b74fea5081e417b5336498f5513cf764bd1ded8829a4ba53a",
+    "test/test_switch_recovery_engine.py": "2af0dffaeabdc0c867ee31b9ffe2bbf854e86c327844aa5512df35ed693f75e8",
+    "test/shared_engine_support.py": "23cafe7f426e80ed06aad8aab3da574f34fb41180628d6bfb92cb9b8ed19fb59",
+    "test-logs/g4-cpu-conformance/switch-recovery.json.gz": "6ee66872b4f3fc645b71fa2cce08c9b224f0e72a21cc67505b0b84c03c8c3141",
+    "scripts/inspect_g4_compilation.py": "b48727a238602ff3e583e1061edd9a78dd6158f13ffaf4e799de24aac02e1c74"
+  }
+}
