@@ -22,10 +22,23 @@ Keep historical commands/results as provenance.
 
 ## Current source and evidence
 
-**Next group, native only:** Iron Fist / Reckless has40 scenarios/44 boundaries,
-pinned positive witnesses and a passing `node --test test/power-ability-native.test.cjs`
+**Next group, native only:** Jump Kick / High Jump Kick has44 scenarios/50 boundaries,
+pinned positive witnesses and a passing `node --test test/crash-move-native.test.cjs`
 contract. It is not in the CPU/CUDA runner; implementation remains pending.
-Crash-move/MoveFail dependencies remain unsupported and pending.
+Gravity and remaining full-format dependencies stay unsupported and pending.
+
+**Schema58 Iron Fist / Reckless group:** focused CPU40 scenarios/44 boundaries
+passed in404.784s;2 native/inventory contracts and4 handoff helpers pass.
+See [schema58-checkpoint.json](../test-logs/g4-cpu-conformance/schema58-checkpoint.json).
+One compiled step covers exact state/RNG/requests/recipient events/histories,
+NPZ continuation and journal17. No GPU execution.
+
+```sh
+JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_power_ability_engine -v -f
+```
+
+Runner includes120 checks/64 modules,1939 scenarios/6627
+boundaries in58 corpora. Current-source broad/device execution remains deferred.
 
 **Schema57 Static / Flame Body group:** focused CPU40 scenarios/52 boundaries
 passed in405.74s;2 native/inventory contracts and4 handoff helpers pass.

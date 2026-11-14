@@ -34,8 +34,8 @@
     "brief": "PROJECT_PLAN.md#proposed-g4-cpu-implementation-and-conformance-goal",
     "source_base": "f37067e",
     "scope": "Complete pinned gen5randombattle reachable mechanics and every prepared CPU gate. Integrated checkpoints, resumable progress and commit/push authorized. GPU execution, profiling, benchmarks, training, delegation and scored research excluded.",
-    "checkpoint": "Schema57 Static / Flame Body group: 40 scenarios/52 boundaries pass one compiled step in405.74s; native/inventory and4 handoff helpers pass. Full G4 remains open.",
-    "next": "Continue Iron Fist/Reckless base-power modifier group from40 scenarios/44 native boundaries; punch/recoil flags, fixed-point chain ordering, suppression/Mummy and recoil/drain, then one shared CPU checkpoint.",
+    "checkpoint": "Schema58 Iron Fist / Reckless group: 40 scenarios/44 boundaries pass one compiled step in404.784s; native/inventory and4 handoff helpers pass. Full G4 remains open.",
+    "next": "Continue Jump Kick/High Jump Kick crash-move dependency group from44 scenarios/50 native boundaries; accuracy/protect/immunity/semi-invulnerability failures, half-base-max-HP damage, Magic Guard and terminal/request ordering, then one shared CPU checkpoint.",
     "ledger": {
       "path": "rules/gen5-reachable-v1.json",
       "entries": 1768,
@@ -45,7 +45,7 @@
         "indirect-closure",
         "engine-contract"
       ],
-      "status": "Incomplete:342 partial callback mappings/804 unsupported; full reachability/closure pending.",
+      "status": "Incomplete:344 partial callback mappings/802 unsupported; full reachability/closure pending.",
       "reachability_summary": {
         "callbacks": {
           "proven_unreachable": 546,
@@ -54,8 +54,8 @@
         },
         "entries": {
           "proven_unreachable": 542,
-          "required": 78,
-          "unresolved": 1148
+          "required": 80,
+          "unresolved": 1146
         },
         "roots": {
           "proven_unreachable": 0,
@@ -77,13 +77,13 @@
     "first_divergence": null,
     "gpu_requirement": "Deferred during travel. Record all G4 device obligations and ready/pending commands in docs/GPU_HANDOFF.md; current checkpoint runner is scripts/g4_gpu_handoff.py. CPU implementation remains active. Later full G4 release still requires matching-source GPU conformance.",
     "acceptance": "G4-CPU-conformance pending. Generic data checkpoint passes; all remaining prepared CPU gates retained, all milestone acceptance/task count unchanged.",
-    "source_identity": "test-logs/g4-cpu-conformance/schema57-checkpoint.json",
+    "source_identity": "test-logs/g4-cpu-conformance/schema58-checkpoint.json",
     "evidence_directory": "test-logs/g4-cpu-conformance",
     "publication": {
       "status": "checkpoint_publication_authorized",
       "target": "origin/main",
-      "previous_published_head": "a5e08489a21847dab314bb1244fd056ce3339bd7",
-      "scope": "Schema57 focused CPU checkpoint; sustained CPU execution continues, full G4 open."
+      "previous_published_head": "338718e4486e804bf33d28486540af9db5a7ed1e",
+      "scope": "Schema58 focused CPU checkpoint; sustained CPU execution continues, full G4 open."
     },
     "reasoning_effort": "medium (user preference,2026-11-10; no automatic escalation)",
     "design_pass": {
@@ -150,26 +150,26 @@
     },
     "record_usage": "Start at docs/CURRENT.md and scripts/read_context.py. State is authoritative for live progress; history is archived. Update live checkpoint/next/package/blockers at meaningful checkpoints; do not append completed-family narratives. Detailed results belong in immutable test evidence.",
     "next_work_package": {
-      "id": "g4-power-ability-group",
+      "id": "g4-crash-move-group",
       "status": "native_precheck_passed_implementation_pending",
       "members": [
-        "Iron Fist punch base-power modifier",
-        "Reckless recoil base-power modifier"
+        "Jump Kick MoveFail half-base-max-HP crash",
+        "High Jump Kick MoveFail half-base-max-HP crash"
       ],
       "shared_paths": [
-        "Source BasePower priority23 fixed-point chain before Dry Skin/items"
+        "Attack failure routing, self-damage/faint ordering and Reckless base-power dependency"
       ],
       "membership": [
-        "Reckless Mienshao seed[20,2,3,4]",
-        "Iron Fist Hitmonchan seed[64,2,3,4]"
+        "Jump Kick Lopunny seed[4,2,3,4]",
+        "High Jump Kick Mienshao seed[20,2,3,4]"
       ],
-      "native_precheck": "40 scenarios/44 boundaries in test-logs/g4-cpu-conformance/power-ability-precheck.json.gz; punch/recoil vs controls, nonmember moves, items, burn, suppression/Mummy, low levels, Dry Skin and Struggle.",
-      "native_command": "node --test test/power-ability-native.test.cjs",
+      "native_precheck": "44 scenarios/50 boundaries in test-logs/g4-cpu-conformance/crash-move-precheck.json.gz; successful hits, accuracy misses, Protect, Ghost/Wonder Guard, Fly, Magic Guard/Rock Head/Reckless/No Guard, odd/even maxHP, KO/reserve, Life Orb/Helmet, paralysis, Sleep Talk and Explosion no-target.",
+      "native_command": "node --test test/crash-move-native.test.cjs",
       "native_result": "1 passed; implementation pending",
-      "planned_command": "JAX_PLATFORMS=cpu JAX_ENABLE_COMPILATION_CACHE=true JAX_COMPILATION_CACHE_DIR=\"$PWD/work/jax-cache\" JAX_EXPLAIN_CACHE_MISSES=true OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 XLA_PYTHON_CLIENT_PREALLOCATE=false timeout 900s .venv-jax/bin/python -m unittest test.test_power_ability_engine -v -f",
+      "planned_command": "JAX_PLATFORMS=cpu JAX_ENABLE_COMPILATION_CACHE=true JAX_COMPILATION_CACHE_DIR=\"$PWD/work/jax-cache\" JAX_EXPLAIN_CACHE_MISSES=true OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 XLA_PYTHON_CLIENT_PREALLOCATE=false timeout 900s .venv-jax/bin/python -m unittest test.test_crash_move_engine -v -f",
       "command_status": "planned; module not yet implemented",
       "excluded": [
-        "Crash moves/MoveFail behavior remain unsupported and pending; callback mapping remains partial",
+        "Gravity and unsupported full-format interactions remain pending",
         "Broad CPU/device/campaign/profiling gates deferred"
       ]
     },
@@ -559,27 +559,27 @@
     "combined_return_home_block": "docs/GPU_HANDOFF.md#one-return-home-block-correctness-plus-g3-v6-measurements",
     "pending_status_checkpoint": "Current status/field/hook GPU checks are wired into the49-check runner; no GPU execution during travel. Preserve matching-source CPU results and do not transfer earlier GPU/CPU evidence across changed source.",
     "expanded_checkpoint": {
-      "status": "schema57_grouped_focused_CPU_complete_GPU_deferred",
-      "engine_schema": 57,
-      "modules": 63,
-      "native_scenarios": 1899,
-      "native_boundaries": 6583,
+      "status": "schema58_grouped_focused_CPU_complete_GPU_deferred",
+      "engine_schema": 58,
+      "modules": 64,
+      "native_scenarios": 1939,
+      "native_boundaries": 6627,
       "initial_field_evidence": "test-logs/g4-cpu-conformance/schema5-checkpoint.json",
       "source": "Use latest committed checkout and runner source/fixture fingerprints; earlier source_commit fields describe historical preparation.",
       "handoff_prepared": false,
-      "source_commit": "Publishing commit; exact fingerprints in schema57-checkpoint.json",
-      "source_identity": "test-logs/g4-cpu-conformance/schema57-checkpoint.json",
-      "checks": 119
+      "source_commit": "Publishing commit; exact fingerprints in schema58-checkpoint.json",
+      "source_identity": "test-logs/g4-cpu-conformance/schema58-checkpoint.json",
+      "checks": 120
     },
     "pending_candidate": {
-      "family": "Iron Fist / Reckless",
+      "family": "Jump Kick / High Jump Kick",
       "status": "native_only_precheck_passed_implementation_pending",
-      "cases": 40,
-      "boundaries": 44,
-      "fixture": "test-logs/g4-cpu-conformance/power-ability-precheck.json.gz",
-      "native_command": "node --test test/power-ability-native.test.cjs",
+      "cases": 44,
+      "boundaries": 50,
+      "fixture": "test-logs/g4-cpu-conformance/crash-move-precheck.json.gz",
+      "native_command": "node --test test/crash-move-native.test.cjs",
       "included_in_checkpoint_runner": false,
-      "next": "Implement punch/recoil power chains, then grouped CPU checkpoint; crash move dependencies remain explicit."
+      "next": "Implement MoveFail crash and exact guard/faint behavior, then grouped CPU checkpoint."
     }
   },
   "historical_records": {

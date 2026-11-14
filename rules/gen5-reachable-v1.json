@@ -2647,10 +2647,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/power-ability.json.gz",
+          "native": "reference/power-ability-cases.cjs",
+          "scope": "Independent40 constructed/synthetic scenarios44 boundaries; punch/recoil power versus controls, fixed-point chain priority23, Dry Skin/items, burn/low level, suppression/Mummy and Struggle. Crash move/MoveFail dependencies remain unsupported and pending; full-format closure pending",
+          "test": "test/test_power_ability_engine.py"
+        }
+      ],
       "field": "onBasePower",
       "id": "abilities:ironfist:onBasePower",
-      "implementation": null,
+      "implementation": {
+        "family": "power_ability",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:ironfist",
@@ -2662,7 +2674,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "26f3d84360e2fe79173db2eea06eaa25d1b8112079d50550443c9097bc2e1da8",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -4375,10 +4387,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/power-ability.json.gz",
+          "native": "reference/power-ability-cases.cjs",
+          "scope": "Independent40 constructed/synthetic scenarios44 boundaries; punch/recoil power versus controls, fixed-point chain priority23, Dry Skin/items, burn/low level, suppression/Mummy and Struggle. Crash move/MoveFail dependencies remain unsupported and pending; full-format closure pending",
+          "test": "test/test_power_ability_engine.py"
+        }
+      ],
       "field": "onBasePower",
       "id": "abilities:reckless:onBasePower",
-      "implementation": null,
+      "implementation": {
+        "family": "power_ability",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:reckless",
@@ -4390,7 +4414,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "0a0caddb3c25c52aa6a3755af4b2e77266fae420da1331f64a926ca2e6f9fe28",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -73259,8 +73283,8 @@
         }
       ],
       "kind": "abilities",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "power-ability-positive-witness",
       "status": "partial"
     },
     {
@@ -74772,8 +74796,8 @@
         }
       ],
       "kind": "abilities",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "power-ability-positive-witness",
       "status": "partial"
     },
     {
@@ -98744,6 +98768,112 @@
           "sim/battle-actions.ts:267-408 (OverrideAction, Z/Max and Dancer guards)"
         ]
       },
+      "power-ability-positive-witness": {
+        "bound": [
+          "abilities:ironfist",
+          "abilities:reckless"
+        ],
+        "conclusion": "required",
+        "kind": "abilities",
+        "reasoning": "Pinned Reckless Mienshao seed[20,2,3,4] and Iron Fist Hitmonchan seed[64,2,3,4] prove membership; crash moves remain unsupported pending MoveFail implementation; full-format closure pending.",
+        "references": [
+          "data/random-battles/gen5/teams.ts:103-494 (cullMovePool/randomMoveset)",
+          "data/random-battles/gen5/teams.ts:496-566 (ability filters/fallback)",
+          "data/random-battles/gen5/teams.ts:568-816 (item returns and randomSet)",
+          "data/random-battles/gen5/teams.ts:850-1014 (team eligibility)",
+          "data/random-battles/gen9/teams.ts:675-693 (addMove)",
+          "data/random-battles/gen9/teams.ts:1442-1497 (getLevel/getForme)",
+          "data/random-battles/gen9/teams.ts:1641-1683 (getPokemonPool)"
+        ],
+        "witnesses": [
+          {
+            "id": "reckless",
+            "kind": "ability",
+            "seed": [
+              20,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Reckless",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 81,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Choice Band",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 79,
+              "moves": [
+                "uturn",
+                "highjumpkick",
+                "drainpunch",
+                "stoneedge"
+              ],
+              "name": "Mienshao",
+              "role": "Wallbreaker",
+              "shiny": false,
+              "species": "Mienshao",
+              "speciesId": "mienshao"
+            }
+          },
+          {
+            "id": "ironfist",
+            "kind": "ability",
+            "seed": [
+              64,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Iron Fist",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "M",
+              "item": "Choice Band",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 86,
+              "moves": [
+                "machpunch",
+                "icepunch",
+                "drainpunch",
+                "stoneedge"
+              ],
+              "name": "Hitmonchan",
+              "role": "Bulky Attacker",
+              "shiny": false,
+              "species": "Hitmonchan",
+              "speciesId": "hitmonchan"
+            }
+          }
+        ]
+      },
       "rain-recovery-positive-witness": {
         "bound": [
           "abilities:hydration",
@@ -100278,8 +100408,8 @@
       },
       "entries": {
         "proven_unreachable": 542,
-        "required": 78,
-        "unresolved": 1148
+        "required": 80,
+        "unresolved": 1146
       },
       "roots": {
         "proven_unreachable": 0,

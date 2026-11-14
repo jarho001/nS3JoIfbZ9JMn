@@ -8,7 +8,7 @@ I=t.ITEM_IDS
 ABILITIES=('pressure','intimidate','prankster','hugepower','purepower','adaptability',
     'technician','hustle','compoundeyes','superluck','sniper','guts','quickfeet',
     'marvelscale','battlearmor','shellarmor','thickfat','filter','solidrock','tintedlens',
-    'drizzle','drought','sandstream','snowwarning','swiftswim','chlorophyll','sandrush','icebody','overgrow','blaze','torrent','swarm','multiscale','defeatist','unaware','download','defiant','moxie','aftermath','weakarmor','cursedbody','static','flamebody')
+    'drizzle','drought','sandstream','snowwarning','swiftswim','chlorophyll','sandrush','icebody','overgrow','blaze','torrent','swarm','multiscale','defeatist','unaware','download','defiant','moxie','aftermath','weakarmor','cursedbody','static','flamebody','ironfist','reckless')
 ITEMS=('choiceband','choicespecs','choicescarf','lifeorb','expertbelt','muscleband',
        'wiseglasses','silkscarf','mysticwater','scopelens','eviolite')
 ABILITY_IMPLEMENTED=jnp.asarray([n<=3 or key in ABILITIES for n,key in enumerate(t.ABILITIES)],jnp.bool_)
@@ -25,3 +25,6 @@ PRESSURE_TARGET=t.mv(lambda r:bool(r.get('flags',{}).get('mustpressure')) or r['
 
 # These native hooks modify the offensive stat, not base power.
 LOW_HP_TYPE=jnp.asarray([{'overgrow':t.g.TYPES['grass'],'blaze':t.g.TYPES['fire'],'torrent':t.g.TYPES['water'],'swarm':t.g.TYPES['bug']}.get(key,-1)for key in t.ABILITIES],jnp.int32)
+
+PUNCH=t.mv(lambda r:bool(r.get('flags',{}).get('punch'))).astype(jnp.bool_)
+RECKLESS=t.mv(lambda r:bool(r.get('recoil')) or bool(r.get('hasCrashDamage'))).astype(jnp.bool_)
