@@ -8,7 +8,7 @@ I=t.ITEM_IDS
 ABILITIES=('pressure','intimidate','prankster','hugepower','purepower','adaptability',
     'technician','hustle','compoundeyes','superluck','sniper','guts','quickfeet',
     'marvelscale','battlearmor','shellarmor','thickfat','filter','solidrock','tintedlens',
-    'drizzle','drought','sandstream','snowwarning','swiftswim','chlorophyll','sandrush','icebody','overgrow','blaze','torrent','swarm','multiscale','defeatist')
+    'drizzle','drought','sandstream','snowwarning','swiftswim','chlorophyll','sandrush','icebody','overgrow','blaze','torrent','swarm','multiscale','defeatist','unaware')
 ITEMS=('choiceband','choicespecs','choicescarf','lifeorb','expertbelt','muscleband',
        'wiseglasses','silkscarf','mysticwater','scopelens','eviolite')
 ABILITY_IMPLEMENTED=jnp.asarray([n<=3 or key in ABILITIES for n,key in enumerate(t.ABILITIES)],jnp.bool_)

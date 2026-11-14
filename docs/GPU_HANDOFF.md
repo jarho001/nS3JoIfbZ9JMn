@@ -22,10 +22,23 @@ Keep historical commands/results as provenance.
 
 ## Current source and evidence
 
-**Next group, native only:** Unaware has28 scenarios/37 boundaries and a pinned
-generator witness. `node --test test/unaware-native.test.cjs` passes. Its global
-stat-query/scheduler dependency justifies a standalone checkpoint before further
-families; it is not in the CPU/CUDA runner. Resume compact state.
+**Next group, native only:** Download / Defiant has29 scenarios/36 boundaries,
+pinned generator witnesses and a passing `node --test test/boost-ability-native.test.cjs`
+contract. It is not in the CPU/CUDA runner; implementation remains pending.
+Resume compact state.
+
+**Schema53 Unaware global query dependency:** focused CPU32 scenarios/46 boundaries
+passed in358.711s;2 native/inventory contracts and4 handoff helpers pass.
+See [schema53-checkpoint.json](../test-logs/g4-cpu-conformance/schema53-checkpoint.json).
+One compiled step covers exact state/RNG/requests/recipient events/histories,
+NPZ continuation and journal17. No GPU execution.
+
+```sh
+JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_unaware_engine -v -f
+```
+
+Runner includes115 checks/59 modules,1773 scenarios/6418
+boundaries in53 corpora. Current-source broad/device execution remains deferred.
 
 **Schema52 Multiscale / Defeatist group:** focused CPU29 scenarios/40 boundaries
 passed in328.627s;2 native/inventory contracts and4 handoff helpers pass.

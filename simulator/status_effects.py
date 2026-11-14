@@ -180,9 +180,10 @@ def before_move(c,actor,move,e):
             c=e._event(c,e.CONF_ACTIVATE,actor,m)
             c,value=e._draw(c,0,2,e.CONFUSION)
             def self_hit(c):
-                s,t=c
-                attack=e.field_ops.scale_stat_stage(s.stats[actor,m,1],s.boosts[actor,m,0])
-                defense=e.field_ops.scale_stat_stage(s.stats[actor,m,2],s.boosts[actor,m,1])
+                c=e.unaware_ops.pair(c,e);s,t=c
+                ignore=(~e.MOVE_ACTOR_TARGET[move])&e.unaware_ops.effective(s,1-actor,e)
+                attack=e.field_ops.scale_stat_stage(s.stats[actor,m,1],jnp.where(ignore,0,s.boosts[actor,m,0]))
+                defense=e.field_ops.scale_stat_stage(s.stats[actor,m,2],jnp.where(ignore,0,s.boosts[actor,m,1]))
                 core=e.base_damage_core(s.level[actor,m],e.i32(40),attack,defense)+2
                 c,roll=e._draw(c,0,16,e.CONF_DAMAGE)
                 damage=jnp.maximum(1,(core&65535)*(100-roll.astype(jnp.int32))//100)

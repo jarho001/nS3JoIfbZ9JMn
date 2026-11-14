@@ -58,9 +58,11 @@ def move(c,actor,move,move_row,e):
 
 
 def damage_parameters(c,actor,target,move,crit,physical,attack,defense,e):
+    c=e.unaware_ops.pair(c,e)
     s,t=c;m=s.active[actor];tm=s.active[target]
     offensive=jnp.where(physical,0,2);defensive=jnp.where(physical,1,3)
-    atkstage=s.boosts[actor,m,offensive];defstage=s.boosts[target,tm,defensive]
+    atkstage=jnp.where(e.unaware_ops.effective(s,target,e),0,s.boosts[actor,m,offensive])
+    defstage=jnp.where(e.unaware_ops.effective(s,actor,e),0,s.boosts[target,tm,defensive])
     atkstage=jnp.where((crit==0)&(atkstage<0),0,atkstage)
     defstage=jnp.where((crit==0)&(defstage>0),0,defstage)
     attack=scale_stat_stage(attack,atkstage);defense=scale_stat_stage(defense,defstage)
@@ -82,7 +84,9 @@ def weather_damage(core,move_type,s,e):
 
 def accuracy(base,s,actor,target,e):
     m=s.active[actor];tm=s.active[target]
-    stage=jnp.clip(s.boosts[actor,m,5]-s.boosts[target,tm,6],-6,6)
+    source=jnp.where(e.unaware_ops.effective(s,target,e),0,s.boosts[actor,m,5])
+    target_stage=jnp.where(e.unaware_ops.effective(s,actor,e),0,s.boosts[target,tm,6])
+    stage=jnp.clip(source-target_stage,-6,6)
     return jnp.where(stage>=0,base*(3+stage)//3,base*3//(3-stage))
 
 

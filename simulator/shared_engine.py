@@ -46,6 +46,7 @@ from . import restorative_berries as berry_ops
 from . import stat_drop as stat_drop_ops
 from . import survival as survival_ops
 from . import accuracy_abilities as accuracy_ability_ops
+from . import unaware as unaware_ops
 from . import species_items as species_item_ops
 from . import ability_creation as creation_ops
 from . import suppression as suppression_ops
@@ -60,7 +61,7 @@ import sys
 def _engine():
     return sys.modules[__name__]
 
-SCHEMA = 52
+SCHEMA = 53
 ROSTER, SLOTS, QUEUE, EVENTS, DRAWS, HISTORY = 6, 4, 8, 128, 128, 2048
 OK, PENDING, INVALID, UNSUPPORTED, CAPACITY, TERMINAL, STALE = range(7)
 RETRY=7
@@ -121,8 +122,9 @@ TRACE_TARGET=27
 DAMAGE_CALC_SORT=28
 AFTER_MOVE=29
 MODIFY_ACCURACY_SORT,ACCURACY_SORT=30,31
+MODIFY_BOOST_SORT=32
 MOVE_ACTOR_TARGET=field_tables.ACTOR_TARGET
-DRAW_CONTEXTS=('initialization','queue-sort','before-turn','update','hit-update','switch-order','residual-handlers','accuracy','critical','damage','paralysis','stall','sleep-duration','freeze','confusion-duration','confusion','confusion-damage','secondary','weather-change','weather-order','damage-modifiers','multihit-count','rampage-duration','frisk-target','volatile-duration','phazing-selection','sleep-talk-selection','trace-target','damage-calculation-sort','after-move','modify-accuracy-sort','accuracy-sort')
+DRAW_CONTEXTS=('initialization','queue-sort','before-turn','update','hit-update','switch-order','residual-handlers','accuracy','critical','damage','paralysis','stall','sleep-duration','freeze','confusion-duration','confusion','confusion-damage','secondary','weather-change','weather-order','damage-modifiers','multihit-count','rampage-duration','frisk-target','volatile-duration','phazing-selection','sleep-talk-selection','trace-target','damage-calculation-sort','after-move','modify-accuracy-sort','accuracy-sort','modify-boost-sort')
 # Queue kinds, order values mirror the pinned scheduler.
 BEFORE, ATTACK, SWAP, INSTANT, RUN_SWITCH, RESIDUAL, BEFORE_MOVE, FINISH_SWITCH = range(1,9)
 FORCED_MOVE_ACTION=12
@@ -641,6 +643,8 @@ def _use_move(c,frame):
         def try_hit(c):
             def accuracy(c):
                 c=accuracy_ability_ops.modify_sort(c,actor,_engine(),target=target)
+                queries=(ACCURACY[move]>0)&(~pursuit_ops.boosted(c[0],target,move,_engine()))
+                c=_when(queries,lambda c:unaware_ops.pair(c,_engine()),c)
                 c=accuracy_ability_ops.accuracy_sort(c,_engine())
                 sure=accuracy_ability_ops.sure_hit(c[0],actor,target,_engine())
                 c,roll=jax.lax.cond((ACCURACY[move]>0)&(~sure)&(~pursuit_ops.boosted(c[0],target,move,_engine())),lambda c:_draw(c,0,100,ACC),lambda c:(c,jnp.uint32(0)),c)
@@ -746,7 +750,9 @@ def _switch_entry(c,row,drag=False):
     # runSwitch precedes ordinary moves and remaining simultaneous swaps.
     # Native queue.insertChoice updates the incoming Pokemon's Speed before
     # resolving/sorting its runSwitch callback, including forced replacements.
+    c=(s,t) if drag else unaware_ops.query((s,t),_engine());s,t=c
     s=s._replace(speed=s.speed.at[side,incoming].set(_speeds(s)[side,incoming]))
+    c=(s,t) if drag else unaware_ops.query((s,t),_engine());s,t=c
     if drag:return _run_switch((s,t),jnp.arange(2)==side)
     s=_qappend(s,jnp.array([RUN_SWITCH,0,0,0,0,0,0],jnp.int32).at[1].set(side).at[2].set(incoming).at[5].set(s.speed[side,incoming]))
     return _qsort((s,t))
@@ -787,7 +793,7 @@ def _run_switch(c,entrants):
 
 
 def _residual(c):
-    c=_event(c,BLANK);s,t=c;s=_refresh_speed(s);c=(s,t)
+    c=_event(c,BLANK);c=unaware_ops.refresh_speed(c,_engine());s,t=c
     # Native field handlers: status, protect, stall, item in insertion order.
     # Duration-only handlers sort last (false order), and still consume shuffle
     # draws even when their callback does nothing.
@@ -1107,7 +1113,7 @@ def advance(s,choices,token=None):
         s=s._replace(pending=pending,request_state=s.request_state.at[:,1].set(cant))
         ready=jnp.all((s.request>=WAIT)|(pending>=0))
         def resolve(c):
-            s,t=c;c=_event(c,BLANK);s,t=c;s=_refresh_speed(s)
+            s,t=c;c=_event(c,BLANK);c=unaware_ops.refresh_speed(c,_engine());s,t=c
             normal=jnp.all(s.request==MOVE)
             def normal_queue(c):
                 s,t=c;s=s._replace(midturn=jnp.array(True))
@@ -1128,10 +1134,11 @@ def advance(s,choices,token=None):
                     priority=jnp.where((kind==ATTACK)&(action!=10)&(~recharge),hook_ops.priority(move,suppression_ops.abilities(s)[side,mon],_engine()),0)
                     source=jnp.where(s.pivot[side],U_TURN,0)
                     row=jnp.stack([kind,i32(side),mon,action,priority,s.speed[side,mon],source])
-                    s=_qappend(s,row)
-                    def prepare(s):return _qappend(s,i32([BEFORE_MOVE,0,0,0,0,0,0]).at[1].set(side).at[2].set(mon).at[3].set(action).at[5].set(s.speed[side,mon]))
-                    s=jax.lax.cond(normal&(kind==ATTACK)&(move==pursuit_ops.MOVE)&(~recharge),prepare,lambda s:s,s)
-                    return s,t
+                    c=unaware_ops.query((s,t),_engine());s,t=c;s=_qappend(s,row)
+                    def prepare(c):
+                        c=unaware_ops.query(c,_engine());s,t=c
+                        return _qappend(s,i32([BEFORE_MOVE,0,0,0,0,0,0]).at[1].set(side).at[2].set(mon).at[3].set(action).at[5].set(s.speed[side,mon])),t
+                    return _when(normal&(kind==ATTACK)&(move==pursuit_ops.MOVE)&(~recharge),prepare,(s,t))
                 c=_when(s.request[side]<WAIT,add,c);s,t=c
             c=_when(normal,lambda c:(_qappend(c[0],i32([RESIDUAL,0,0,0,0,1,0])),c[1]),c)
             s,t=c;s=s._replace(pivot=jnp.zeros(2,jnp.bool_))
@@ -1276,7 +1283,7 @@ def _initialize_events(s):
     # Initial queue insertion and runSwitch each perform their own all-active
     # sort. The second draw determines SwitchIn callback order. Keep cached
     # speed until the first commitChoices, even after weather changes.
-    s,t=c;s=_refresh_speed(s);c=(s,t)
+    c=unaware_ops.refresh_speed(c,_engine(),INIT);s,t=c
     for side in range(2):
         s=illusion_ops.enter(c[0],i32(side),_engine());c=(s,c[1])
         c=_event(c,SWITCH,side,0,value=s.hp[side,0],aux=s.stats[side,0,0])

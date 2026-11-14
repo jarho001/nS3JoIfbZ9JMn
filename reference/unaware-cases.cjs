@@ -24,6 +24,9 @@ module.exports=function(){
  add('dual-fast-target',{p1:[m({ability:'Unaware'})],p2:[m({ability:'Unaware',evs:{spe:252}})]});
  add('dual-phaze',{p1:[m({ability:'Unaware',moves:['Roar']})],p2:[m({ability:'Unaware'}),m({ability:'Unaware'})],steps:[b(1,1)]});
  add('dual-pivot',{p1:[m({ability:'Unaware',moves:['U-turn']}),m({ability:'Unaware'})],p2:[m({ability:'Unaware'})],steps:[b(1,4),{p1:'switch 2'}]});
+ add('dual-pursuit',{p1:[m({ability:'Unaware',moves:['Pursuit']})],p2:[m({ability:'Unaware'}),m({ability:'Unaware'})],steps:[{p1:'move 1',p2:'switch 2'}]});
+ add('transform-pair',{p1:[m({moves:['Transform'],evs:{spe:252}})],p2:[m({ability:'Unaware'})],steps:[b(),b()]});
+ for(const targetMove of ['Tackle','Recover'])add('dual-confusion-'+targetMove.toLowerCase(),{p1:[m({ability:'Unaware',moves:['Confuse Ray','Recover']})],p2:[m({ability:'Unaware',moves:[targetMove]})],setup:[{side:'p2',boosts:{atk:3}}],steps:[b(1,1),b(2,1),b(2,1)]});
  return cases;
 };
 module.exports.membershipWitnesses=function(){

@@ -6391,10 +6391,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/unaware.json.gz",
+          "native": "reference/unaware-cases.cjs",
+          "scope": "Independent32 constructed/synthetic scenarios46 boundaries; directional offensive/defensive/accuracy/evasion stage views, raw query sorting through initialization, sequential speed refresh, queue/Pursuit, forced/pivot/phazing, Transform, suppression and confusion. Remaining full-format closure pending",
+          "test": "test/test_unaware_engine.py"
+        }
+      ],
       "field": "onAnyModifyBoost",
       "id": "abilities:unaware:onAnyModifyBoost",
-      "implementation": null,
+      "implementation": {
+        "family": "unaware",
+        "file": "simulator/unaware.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:unaware",
@@ -6406,7 +6418,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "e70f3a15e6137eb848db1132127acaca2a834f66aed6e4d71144cea1772f8e58",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -76569,8 +76581,8 @@
         }
       ],
       "kind": "abilities",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "unaware-positive-witness",
       "status": "partial"
     },
     {
@@ -99655,6 +99667,68 @@
             }
           }
         ]
+      },
+      "unaware-positive-witness": {
+        "bound": [
+          "abilities:unaware"
+        ],
+        "conclusion": "required",
+        "kind": "abilities",
+        "reasoning": "Pinned Unaware Quagsire seed[18,2,3,4] proves membership. Directed global query/boost behavior does not close remaining indirect/full-format obligations.",
+        "references": [
+          "data/random-battles/gen5/teams.ts:103-494 (cullMovePool/randomMoveset)",
+          "data/random-battles/gen5/teams.ts:496-566 (ability filters/fallback)",
+          "data/random-battles/gen5/teams.ts:568-816 (item returns and randomSet)",
+          "data/random-battles/gen5/teams.ts:850-1014 (team eligibility)",
+          "data/random-battles/gen9/teams.ts:675-693 (addMove)",
+          "data/random-battles/gen9/teams.ts:1442-1497 (getLevel/getForme)",
+          "data/random-battles/gen9/teams.ts:1641-1683 (getPokemonPool)"
+        ],
+        "witnesses": [
+          {
+            "id": "unaware",
+            "kind": "ability",
+            "seed": [
+              18,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Unaware",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Leftovers",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 86,
+              "moves": [
+                "earthquake",
+                "recover",
+                "toxic",
+                "scald"
+              ],
+              "name": "Quagsire",
+              "role": "Bulky Attacker",
+              "shiny": false,
+              "species": "Quagsire",
+              "speciesId": "quagsire"
+            }
+          }
+        ]
       }
     },
     "references": {
@@ -99684,8 +99758,8 @@
       },
       "entries": {
         "proven_unreachable": 542,
-        "required": 69,
-        "unresolved": 1157
+        "required": 70,
+        "unresolved": 1156
       },
       "roots": {
         "proven_unreachable": 0,
