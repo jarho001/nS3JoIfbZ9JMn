@@ -287,6 +287,10 @@ function classify(ledger) {
  const restorativeBerries=new Set(restorativeBerryWitnesses.map(w=>'items:'+w.item));
  for(const id of restorativeBerries)required.add(id);
  proofs['restorative-berry-positive-witness']={conclusion:'required',kind:'items',bound:[...restorativeBerries].sort(),references:refs.generator,witnesses:restorativeBerryWitnesses,reasoning:'Pinned generator Chesto Berry Regirock seed[58,2,3,4] and Sitrus Berry Tropius seed[13,2,3,4] prove membership. Directed synthetic Update/consumption cases do not accept unsupported ability/move interactions or full callback/indirect/format closure.'};
+ const speciesItemWitnesses=require('./species-item-cases.cjs').membershipWitnesses();
+ const speciesItems=new Set(speciesItemWitnesses.map(w=>'items:'+w.item));
+ for(const id of speciesItems)required.add(id);
+ proofs['species-stat-item-positive-witness']={conclusion:'required',kind:'items',bound:[...speciesItems].sort(),references:refs.generator,witnesses:speciesItemWitnesses,reasoning:'Pinned generator Light Ball Pikachu seed[21,2,3,4], Thick Club Marowak seed[57,2,3,4] and Soul Dew Latios seed[3,2,3,4] prove membership. Native original-species/Transform/stat modifier cases do not accept complete callback/indirect/format closure.'};
  for(const entry of ledger.entries){
   entry.reachability='unresolved';
   entry.reachabilityAudit='unresolved-membership';
@@ -296,7 +300,7 @@ function classify(ledger) {
   }
   if(required.has(entry.id)){
    assert.notEqual(entry.reachability,'proven_unreachable',entry.id);
-   entry.reachability='required';entry.reachabilityAudit=restorativeBerries.has(entry.id)?'restorative-berry-positive-witness':residualItems.has(entry.id)?'residual-item-positive-witness':residualRecoveryAbilities.has(entry.id)?'residual-recovery-positive-witness':rainRecoveryAbilities.has(entry.id)?'rain-recovery-positive-witness':recoveryAbilities.has(entry.id)?'switch-recovery-positive-witness':drySkinAbilities.has(entry.id)?'dry-skin-positive-witness':secondaryAbilities.has(entry.id)?'secondary-ability-positive-witness':flashFireAbilities.has(entry.id)?'flash-fire-positive-witness':sapSipperAbilities.has(entry.id)?'sap-sipper-positive-witness':typeBoostAbilities.has(entry.id)?'type-boost-positive-witness':lowHpAbilities.has(entry.id)?'low-hp-ability-positive-witness':absorptionAbilities.has(entry.id)?'type-absorption-positive-witness':'native-team-positive-witness';
+   entry.reachability='required';entry.reachabilityAudit=speciesItems.has(entry.id)?'species-stat-item-positive-witness':restorativeBerries.has(entry.id)?'restorative-berry-positive-witness':residualItems.has(entry.id)?'residual-item-positive-witness':residualRecoveryAbilities.has(entry.id)?'residual-recovery-positive-witness':rainRecoveryAbilities.has(entry.id)?'rain-recovery-positive-witness':recoveryAbilities.has(entry.id)?'switch-recovery-positive-witness':drySkinAbilities.has(entry.id)?'dry-skin-positive-witness':secondaryAbilities.has(entry.id)?'secondary-ability-positive-witness':flashFireAbilities.has(entry.id)?'flash-fire-positive-witness':sapSipperAbilities.has(entry.id)?'sap-sipper-positive-witness':typeBoostAbilities.has(entry.id)?'type-boost-positive-witness':lowHpAbilities.has(entry.id)?'low-hp-ability-positive-witness':absorptionAbilities.has(entry.id)?'type-absorption-positive-witness':'native-team-positive-witness';
   }
  }
  for(const root of ledger.roots){

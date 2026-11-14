@@ -73,11 +73,13 @@ def stats(c,attack,defense,actor,target,physical,move_type,e):
     choice=((item==h.I['choiceband'])&physical)|((item==h.I['choicespecs'])&(~physical))
     atk_modifier=chain(atk_modifier,jnp.where(physical&e.form_ops.flower(s,actor),6144,4096))
     atk_modifier=chain(atk_modifier,jnp.where(choice,6144,4096))
+    atk_modifier=chain(atk_modifier,e.species_item_ops.offense(s,actor,physical))
     marvel=(defender==h.A['marvelscale'])&physical&(s.status[target,tm]!=e.NONE)
     def_modifier=jnp.where(marvel,6144,4096).astype(jnp.int32)
     eviolite=(s.item[target,tm]==h.I['eviolite'])&h.NFE[s.species[target,tm]]
     def_modifier=chain(def_modifier,jnp.where((~physical)&e.form_ops.flower(s,target),6144,4096))
     def_modifier=chain(def_modifier,jnp.where(eviolite,6144,4096))
+    def_modifier=chain(def_modifier,e.species_item_ops.defense(s,target,physical))
     sand=(s.weather_state[0]==3)&(~physical)&jnp.any(s.types[target,tm]==e.generic.TYPES['rock'])
     def_modifier=chain(def_modifier,jnp.where(sand,6144,4096))
     # Native collects both priority5 ModifySpA handlers before checking their

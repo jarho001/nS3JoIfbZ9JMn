@@ -13987,10 +13987,22 @@
           "file": "data/items.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/species-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_species_item_engine.py"
+        }
+      ],
       "field": "onModifyAtk",
       "id": "items:lightball:onModifyAtk",
-      "implementation": null,
+      "implementation": {
+        "family": "species_item",
+        "file": "simulator/species_items.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "items:lightball",
@@ -14002,7 +14014,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "1817002b81225089a8366ca3590b24a56f4c83f88b5a39e7e2726806952b97b1",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -14011,10 +14023,22 @@
           "file": "data/items.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/species-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_species_item_engine.py"
+        }
+      ],
       "field": "onModifySpA",
       "id": "items:lightball:onModifySpA",
-      "implementation": null,
+      "implementation": {
+        "family": "species_item",
+        "file": "simulator/species_items.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "items:lightball",
@@ -14026,7 +14050,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "489c2b491b0885eec32e1bd5b47e3cc972fa0f22c75215e7fbadf77e67f8bcd0",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -16651,10 +16675,22 @@
           "file": "data/mods/gen6/items.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/species-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_species_item_engine.py"
+        }
+      ],
       "field": "onModifySpA",
       "id": "items:souldew:onModifySpA",
-      "implementation": null,
+      "implementation": {
+        "family": "species_item",
+        "file": "simulator/species_items.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "items:souldew",
@@ -16666,7 +16702,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "589b05b2ea2b543e3bfb31fc3b3c78609b64a2628a68da2ee7b3b004f48fa68e",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -16675,10 +16711,22 @@
           "file": "data/mods/gen6/items.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/species-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_species_item_engine.py"
+        }
+      ],
       "field": "onModifySpD",
       "id": "items:souldew:onModifySpD",
-      "implementation": null,
+      "implementation": {
+        "family": "species_item",
+        "file": "simulator/species_items.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "items:souldew",
@@ -16690,7 +16738,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "35355e0b13efeca7faf72ebb2ac84ee33160655ed896ee8fd4ae7805a2c21a30",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -17059,10 +17107,22 @@
           "file": "data/items.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/species-item-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_species_item_engine.py"
+        }
+      ],
       "field": "onModifyAtk",
       "id": "items:thickclub:onModifyAtk",
-      "implementation": null,
+      "implementation": {
+        "family": "species_item",
+        "file": "simulator/species_items.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "items:thickclub",
@@ -17074,7 +17134,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "3619e2b625be6e8a1d8dc826589c5166d2f221e58be06c04bd16e341dbac67bf",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -80417,8 +80477,8 @@
         }
       ],
       "kind": "items",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "species-stat-item-positive-witness",
       "status": "partial"
     },
     {
@@ -83694,8 +83754,8 @@
         }
       ],
       "kind": "items",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "species-stat-item-positive-witness",
       "status": "partial"
     },
     {
@@ -84097,8 +84157,8 @@
         }
       ],
       "kind": "items",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "species-stat-item-positive-witness",
       "status": "partial"
     },
     {
@@ -98372,6 +98432,153 @@
           }
         ]
       },
+      "species-stat-item-positive-witness": {
+        "bound": [
+          "items:lightball",
+          "items:souldew",
+          "items:thickclub"
+        ],
+        "conclusion": "required",
+        "kind": "items",
+        "reasoning": "Pinned generator Light Ball Pikachu seed[21,2,3,4], Thick Club Marowak seed[57,2,3,4] and Soul Dew Latios seed[3,2,3,4] prove membership. Native original-species/Transform/stat modifier cases do not accept complete callback/indirect/format closure.",
+        "references": [
+          "data/random-battles/gen5/teams.ts:103-494 (cullMovePool/randomMoveset)",
+          "data/random-battles/gen5/teams.ts:496-566 (ability filters/fallback)",
+          "data/random-battles/gen5/teams.ts:568-816 (item returns and randomSet)",
+          "data/random-battles/gen5/teams.ts:850-1014 (team eligibility)",
+          "data/random-battles/gen9/teams.ts:675-693 (addMove)",
+          "data/random-battles/gen9/teams.ts:1442-1497 (getLevel/getForme)",
+          "data/random-battles/gen9/teams.ts:1641-1683 (getPokemonPool)"
+        ],
+        "witnesses": [
+          {
+            "item": "lightball",
+            "seed": [
+              21,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Lightning Rod",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Light Ball",
+              "ivs": {
+                "atk": 30,
+                "def": 30,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 90,
+              "moves": [
+                "hiddenpowerice",
+                "volttackle",
+                "extremespeed",
+                "grassknot"
+              ],
+              "name": "Pikachu",
+              "role": "Fast Attacker",
+              "shiny": false,
+              "species": "Pikachu",
+              "speciesId": "pikachu"
+            }
+          },
+          {
+            "item": "thickclub",
+            "seed": [
+              57,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Battle Armor",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Thick Club",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 88,
+              "moves": [
+                "firepunch",
+                "earthquake",
+                "swordsdance",
+                "stoneedge"
+              ],
+              "name": "Marowak",
+              "role": "Wallbreaker",
+              "shiny": false,
+              "species": "Marowak",
+              "speciesId": "marowak"
+            }
+          },
+          {
+            "item": "souldew",
+            "seed": [
+              3,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Levitate",
+              "evs": {
+                "atk": 0,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "M",
+              "item": "Soul Dew",
+              "ivs": {
+                "atk": 0,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 71,
+              "moves": [
+                "psyshock",
+                "calmmind",
+                "dracometeor",
+                "roost"
+              ],
+              "name": "Latios",
+              "role": "Bulky Attacker",
+              "shiny": false,
+              "species": "Latios",
+              "speciesId": "latios"
+            }
+          }
+        ]
+      },
       "switch-recovery-positive-witness": {
         "bound": [
           "abilities:naturalcure",
@@ -98755,8 +98962,8 @@
       },
       "entries": {
         "proven_unreachable": 542,
-        "required": 56,
-        "unresolved": 1170
+        "required": 59,
+        "unresolved": 1167
       },
       "roots": {
         "proven_unreachable": 0,

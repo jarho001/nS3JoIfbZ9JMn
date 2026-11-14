@@ -22,6 +22,20 @@ Keep historical commands/results as provenance.
 
 ## Current source and evidence
 
+**Schema47 Light Ball / Thick Club / Soul Dew group:** focused CPU41 scenarios/94 boundaries
+passed in327.707s;2 native/inventory contracts and4 handoff helpers pass.
+See [schema47-checkpoint.json](../test-logs/g4-cpu-conformance/schema47-checkpoint.json).
+One shared compiled step covers all members, exact state/RNG/requests/recipient
+events and histories, NPZ continuation and journal17. No GPU run.
+
+```sh
+JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_species_item_engine -v -f
+```
+
+Runner includes109 checks/53 modules,1563 scenarios/6087
+boundaries in47 corpora. Current-source broad/device preparation and
+execution remain deferred.
+
 **Schema46 Chesto Berry / Sitrus Berry group:** focused CPU35 scenarios/77 boundaries
 passed in330.426s;2 native/inventory contracts and4 handoff helpers pass.
 See [schema46-checkpoint.json](../test-logs/g4-cpu-conformance/schema46-checkpoint.json).
