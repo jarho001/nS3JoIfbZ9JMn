@@ -22,12 +22,25 @@ Keep historical commands/results as provenance.
 
 ## Current source and evidence
 
-**Next group, native only:** Super Fang / Seismic Toss has43 scenarios/60
+**Next group, native only:** Counter / Mirror Coat has39 scenarios/55
 boundaries, pinned positive witnesses and a passing
-`node --test test/fixed-damage-native.test.cjs` contract. It is not in the
-CPU/CUDA runner; implementation remains pending. Native fixed damage skips
-ordinary critical/stat/final modifier and damage-roll stages, retaining hit lifecycle.
-Night Shade remains unresolved/unsupported without a positive witness.
+`node --test test/retaliation-native.test.cjs` contract. It is not in the
+CPU/CUDA runner; implementation remains pending. The group plans pre-turn
+conditions and engine67/journal19 using genuine pre-edit66/18 baseline files.
+Custap Berry/Destiny Bond dependencies and full-format closure remain pending.
+
+**Schema66 Super Fang / Seismic Toss group:** focused CPU48 scenarios/66 boundaries
+passed in477.461s;2 native/inventory contracts and4 handoff helpers pass.
+See [schema66-checkpoint.json](../test-logs/g4-cpu-conformance/schema66-checkpoint.json).
+One compiled step covers exact state/RNG/requests/recipient events/histories,
+NPZ continuation and journal18. No GPU execution.
+
+```sh
+JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_fixed_damage_engine -v -f
+```
+
+Runner includes128 checks/72 modules,2292 scenarios/7089
+boundaries in66 corpora. Current-source broad/device execution remains deferred.
 
 **Schema65 Eviolite / Expert Belt group:** focused CPU39 scenarios/46 boundaries
 passed in447.919s;2 native/inventory contracts and4 handoff helpers pass.

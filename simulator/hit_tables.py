@@ -19,6 +19,12 @@ ITEM_IMPLEMENTED=jnp.asarray([key=='rockyhelmet' for key in t.ITEMS],jnp.bool_)
 
 
 def supported(row):
+    if row.get('id') in ('superfang','seismictoss'):
+        field='damageCallback' if row['id']=='superfang' else 'damage'
+        expected={'$callback':'moves:superfang:damageCallback'} if field=='damageCallback' else 'level'
+        if row.get('basePower')!=0 or row.get(field)!=expected:return False
+        clean=dict(row);clean.pop(field);clean['basePower']=1
+        return t.plain(clean)
     conditional={'facade':'onBasePower','acrobatics':'basePowerCallback'}.get(row.get('id'))
     if conditional:
         if row.get(conditional)!={'$callback':f"moves:{row['id']}:{conditional}"}:return False

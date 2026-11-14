@@ -56,6 +56,7 @@ from . import stat_selection as stat_ops
 from . import weight_based as weight_ops
 from . import conditional_power as conditional_power_ops
 from . import gem_unburden as gem_ops
+from . import fixed_damage as fixed_ops
 from . import species_items as species_item_ops
 from . import ability_creation as creation_ops
 from . import suppression as suppression_ops
@@ -70,7 +71,7 @@ import sys
 def _engine():
     return sys.modules[__name__]
 
-SCHEMA = 65
+SCHEMA = 66
 ROSTER, SLOTS, QUEUE, EVENTS, DRAWS, HISTORY = 6, 4, 8, 128, 128, 2048
 OK, PENDING, INVALID, UNSUPPORTED, CAPACITY, TERMINAL, STALE = range(7)
 RETRY=7
@@ -412,38 +413,43 @@ def _hit(c,actor,move):
     c=gem_ops.try_hit(c,actor,target,move,_engine());s,t=c
     damaging=tables.CATEGORY[move]>0
     def strike(c):
-        s,t=c
-        bound=hook_ops.critical_denominator(move,suppression_ops.abilities(s)[actor,mon],s.item[actor,mon])
-        c,crit=jax.lax.cond(bound>0,lambda c:_draw(c,0,bound,CRITICAL),lambda c:(c,jnp.uint32(1)),c)
-        crit=jnp.where(hook_ops.critical_blocked(suppression_ops.abilities(s)[target,tm]),jnp.uint32(1),crit)
-        s,t=c
         physical=tables.CATEGORY[move]==1
-        offensive_side=jnp.where(stat_ops.TARGET_ATTACK[move],target,actor)
-        defensive_physical=physical|stat_ops.TARGET_DEF[move]
-        attack=s.stats[offensive_side,s.active[offensive_side],jnp.where(physical,1,3)]
-        defense=s.stats[target,tm,jnp.where(defensive_physical,2,4)]
-        c,attack,defense=field_ops.damage_parameters(c,actor,target,move,crit,physical,attack,defense,_engine(),offensive_side=offensive_side,defensive_physical=defensive_physical);s,t=c
-        power=jnp.where(move==HIDDEN_POWER,s.hp_power[actor,mon],
-                        jnp.where(move==RETURN,s.happiness[actor,mon]*10//25,
-                                  jnp.where(move==FRUSTRATION,(255-s.happiness[actor,mon])*10//25,POWER[move])))
-        power=conditional_power_ops.base_power(s,actor,move,power)
-        power=weight_ops.power(s,actor,target,move,power)
-        power=conditional_ops.power(s,target,move,power,_engine())
-        power=jnp.maximum(1,power)*jnp.where(pursuit_ops.boosted(s,target,move,_engine()),2,1)
-        move_type=jnp.where(move==HIDDEN_POWER,s.hp_type[actor,mon],tables.MOVE_TYPE[move])
-        power=hook_ops.power(power,suppression_ops.abilities(s)[actor,mon],s.item[actor,mon],physical,move_type,_engine(),phase_ops.power_modifier(s,target,move),defender_ability=suppression_ops.abilities(s)[target,tm],move=move,move_modifier=conditional_power_ops.modifier(s,actor,move,_engine()),gem_modifier=gem_ops.modifier(s,actor))
-        c,attack,defense=hook_ops.stats(c,attack,defense,actor,target,physical,move_type,_engine(),defensive_physical=defensive_physical)
-        c,roll=_draw(c,0,16,ROLL);s,t=c
-        core=base_damage_core(s.level[actor,mon],power,attack,defense)+2
-        preroll=field_ops.weather_damage(core,move_type,s,_engine())*jnp.where(crit==0,2,1)
-        exponent,_=generic.type_matchup(move_type,s.types[target,tm])
-        stab=jnp.any(s.types[actor,mon]==move_type)
-        # Native effectiveness precedes the critical disclosure.
-        c=_when((exponent!=0)&(move!=STRUGGLE),lambda c:_event(c,ACTIVATE,target,tm,aux=exponent,move=-1),c)
-        c=_when(crit==0,lambda c:_event(c,CRIT,target,tm),c)
-        c,final_modifier=hook_ops.damage_modifier(c,actor,target,physical,crit==0,jnp.where(move==STRUGGLE,0,exponent),_engine(),move)
-        damage=damage_from_preroll(preroll,roll.astype(jnp.int32),stab,suppression_ops.abilities(s)[actor,mon]==hook_tables.A['adaptability'],move==STRUGGLE,
-                                  jnp.where(move==STRUGGLE,0,exponent),s.status[actor,mon]==BRN,physical,suppression_ops.abilities(s)[actor,mon]==hook_tables.A['guts'],final_modifier)
+        move_type=jnp.where(move==HIDDEN_POWER,c[0].hp_type[actor,mon],tables.MOVE_TYPE[move])
+        def ordinary(c):
+            s,t=c
+            bound=hook_ops.critical_denominator(move,suppression_ops.abilities(s)[actor,mon],s.item[actor,mon])
+            c,crit=jax.lax.cond(bound>0,lambda c:_draw(c,0,bound,CRITICAL),lambda c:(c,jnp.uint32(1)),c)
+            crit=jnp.where(hook_ops.critical_blocked(suppression_ops.abilities(s)[target,tm]),jnp.uint32(1),crit)
+            s,t=c
+            offensive_side=jnp.where(stat_ops.TARGET_ATTACK[move],target,actor)
+            defensive_physical=physical|stat_ops.TARGET_DEF[move]
+            attack=s.stats[offensive_side,s.active[offensive_side],jnp.where(physical,1,3)]
+            defense=s.stats[target,tm,jnp.where(defensive_physical,2,4)]
+            c,attack,defense=field_ops.damage_parameters(c,actor,target,move,crit,physical,attack,defense,_engine(),offensive_side=offensive_side,defensive_physical=defensive_physical);s,t=c
+            power=jnp.where(move==HIDDEN_POWER,s.hp_power[actor,mon],
+                            jnp.where(move==RETURN,s.happiness[actor,mon]*10//25,
+                                      jnp.where(move==FRUSTRATION,(255-s.happiness[actor,mon])*10//25,POWER[move])))
+            power=conditional_power_ops.base_power(s,actor,move,power)
+            power=weight_ops.power(s,actor,target,move,power)
+            power=conditional_ops.power(s,target,move,power,_engine())
+            power=jnp.maximum(1,power)*jnp.where(pursuit_ops.boosted(s,target,move,_engine()),2,1)
+            power=hook_ops.power(power,suppression_ops.abilities(s)[actor,mon],s.item[actor,mon],physical,move_type,_engine(),phase_ops.power_modifier(s,target,move),defender_ability=suppression_ops.abilities(s)[target,tm],move=move,move_modifier=conditional_power_ops.modifier(s,actor,move,_engine()),gem_modifier=gem_ops.modifier(s,actor))
+            c,attack,defense=hook_ops.stats(c,attack,defense,actor,target,physical,move_type,_engine(),defensive_physical=defensive_physical)
+            c,roll=_draw(c,0,16,ROLL);s,t=c
+            core=base_damage_core(s.level[actor,mon],power,attack,defense)+2
+            preroll=field_ops.weather_damage(core,move_type,s,_engine())*jnp.where(crit==0,2,1)
+            exponent,_=generic.type_matchup(move_type,s.types[target,tm])
+            stab=jnp.any(s.types[actor,mon]==move_type)
+            # Native effectiveness precedes the critical disclosure.
+            c=_when((exponent!=0)&(move!=STRUGGLE),lambda c:_event(c,ACTIVATE,target,tm,aux=exponent,move=-1),c)
+            c=_when(crit==0,lambda c:_event(c,CRIT,target,tm),c)
+            c,final_modifier=hook_ops.damage_modifier(c,actor,target,physical,crit==0,jnp.where(move==STRUGGLE,0,exponent),_engine(),move)
+            damage=damage_from_preroll(preroll,roll.astype(jnp.int32),stab,suppression_ops.abilities(s)[actor,mon]==hook_tables.A['adaptability'],move==STRUGGLE,
+                                      jnp.where(move==STRUGGLE,0,exponent),s.status[actor,mon]==BRN,physical,suppression_ops.abilities(s)[actor,mon]==hook_tables.A['guts'],final_modifier)
+            return c,damage
+        c,damage=jax.lax.cond(fixed_ops.MOVE_IMPLEMENTED[move],
+            lambda c:(c,fixed_ops.amount(c[0],actor,target,move)),ordinary,c)
+        s,t=c
         intercepted=sub_ops.intercepts(s,target,move)
         def normal(c):
             c,limited=survival_ops.limit(c,target,damage,_engine())

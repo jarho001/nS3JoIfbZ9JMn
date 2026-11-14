@@ -59,8 +59,8 @@ test('pinned resolved export and conservative inventory reproduce exactly',()=>{
     const cb=slots.get(id);assert.equal(cb.status,'unsupported');assert.equal(cb.implementation,null);
   }
   assert.ok(ledger.callbacks.every(c=>['partial','unsupported'].includes(c.status)));
-  assert.equal(ledger.callbacks.filter(c=>c.status==='partial').length,360);
-  assert.equal(ledger.callbacks.filter(c=>c.status==='unsupported').length,786);
+  assert.equal(ledger.callbacks.filter(c=>c.status==='partial').length,361);
+  assert.equal(ledger.callbacks.filter(c=>c.status==='unsupported').length,785);
   const audit=ledger.reachabilityAudit;
   const entries=new Map(ledger.entries.map(e=>[e.id,e]));
   assert.equal(audit.proofs['move-identity-bound'].bound.length,224);
@@ -152,6 +152,8 @@ test('pinned resolved export and conservative inventory reproduce exactly',()=>{
   for(const [owner,field]of [['moves:facade','onBasePower'],['moves:acrobatics','basePowerCallback']]){
     assert.equal(entries.get(owner).reachability,'required');assert.equal(entries.get(owner).reachabilityAudit,'conditional-power-positive-witness');assert.ok(slots.get(owner+':'+field).implementation);
   }
+  for(const id of ['superfang','seismictoss']){assert.equal(entries.get('moves:'+id).reachability,'required');assert.equal(entries.get('moves:'+id).reachabilityAudit,'fixed-damage-positive-witness');}
+  assert.ok(slots.get('moves:superfang:damageCallback').implementation);
   assert.equal(entries.get('abilities:zenmode').reachability,'unresolved');
   assert.equal(slots.get('abilities:magicguard:onDamage').reachability,'unresolved');
   for(const row of [...ledger.entries,...ledger.callbacks,...ledger.roots])

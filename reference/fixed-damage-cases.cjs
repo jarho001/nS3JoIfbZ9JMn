@@ -31,6 +31,11 @@ module.exports=function(){
  add('seismictoss-gem-ghost',{p1:[m({moves:['Seismic Toss','Recover'],item:'Fighting Gem',ability:'Unburden',evs:{spe:252}})],p2:[m({species:'Gengar'})]});
  add('seismictoss-gem-terminal',{p1:[m({moves:['Seismic Toss','Recover'],item:'Fighting Gem',ability:'Unburden',level:100,evs:{spe:252}})],p2:[m({level:1})]});
  add('seismictoss-moxie-terminal',{p1:[m({moves:['Seismic Toss','Recover'],ability:'Moxie',level:100,evs:{spe:252}})],p2:[m({level:1})]});
+ add('superfang-wonderguard',{p1:[m({moves:['Super Fang','Recover'],evs:{spe:252}})],p2:[m({ability:'Wonder Guard'})]});
+ add('seismictoss-wonderguard-super',{p1:[m({moves:['Seismic Toss','Recover'],evs:{spe:252}})],p2:[m({species:'Vigoroth',ability:'Wonder Guard'})]});
+ add('superfang-static',{p1:[m({moves:['Super Fang','Recover'],evs:{spe:252}})],p2:[m({ability:'Static'})]});
+ add('seismictoss-aftermath-terminal',{p1:[m({moves:['Seismic Toss','Recover'],evs:{spe:252}})],p2:[m({ability:'Aftermath'})],setup:[{side:'p1',hp:1},{side:'p2',hp:1}]});
+ add('superfang-sleep-talk',{seed:4,p1:[m({moves:['Rest','Sleep Talk','Super Fang'],evs:{spe:252}})],p2:[m({moves:['Recover','Tackle']})],setup:[{side:'p1',hp:100}],steps:[b(1,1),b(2,1)]});
  return cases;
 };
 module.exports.membershipWitnesses=function(){

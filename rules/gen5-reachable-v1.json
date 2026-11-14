@@ -29047,10 +29047,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/fixed-damage.json.gz",
+          "native": "reference/fixed-damage-cases.cjs",
+          "scope": "Independent48 synthetic scenarios66 boundaries; Super Fang half current HP/minimum1 and Seismic Toss level, skip ordinary critical/stats/power/roll/final modifiers while retaining accuracy/immunity, Substitute/contact/secondary/item/faint pipeline, Sash/Sturdy, Gem/Unburden, Wonder Guard, Static RNG, Aftermath double-KO and Sleep Talk. Night Shade and full-format closure remain pending",
+          "test": "test/test_fixed_damage_engine.py"
+        }
+      ],
       "field": "damageCallback",
       "id": "moves:superfang:damageCallback",
-      "implementation": null,
+      "implementation": {
+        "family": "fixed_damage",
+        "file": "simulator/fixed_damage.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:superfang",
@@ -29062,7 +29074,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "6836cf13162fee4b4b56b9db3e71157df38e575cf31a2d8a4f9b2f284816ddc3",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -66673,10 +66685,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/fixed-damage.json.gz",
+          "native": "reference/fixed-damage-cases.cjs",
+          "scope": "Independent48 synthetic scenarios66 boundaries; Super Fang half current HP/minimum1 and Seismic Toss level, skip ordinary critical/stats/power/roll/final modifiers while retaining accuracy/immunity, Substitute/contact/secondary/item/faint pipeline, Sash/Sturdy, Gem/Unburden, Wonder Guard, Static RNG, Aftermath double-KO and Sleep Talk. Night Shade and full-format closure remain pending",
+          "test": "test/test_fixed_damage_engine.py"
         }
       ],
       "id": "moves:seismictoss",
       "implementation": {
+        "behavior": {
+          "family": "fixed_damage",
+          "file": "simulator/fixed_damage.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "MOVE_TYPE/MOVE_POWER/MOVE_CATEGORY/MOVE_PRIORITY/MOVE_PP",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -66688,8 +66712,8 @@
         }
       ],
       "kind": "moves",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "fixed-damage-positive-witness",
       "status": "partial"
     },
     {
@@ -68858,10 +68882,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/fixed-damage.json.gz",
+          "native": "reference/fixed-damage-cases.cjs",
+          "scope": "Independent48 synthetic scenarios66 boundaries; Super Fang half current HP/minimum1 and Seismic Toss level, skip ordinary critical/stats/power/roll/final modifiers while retaining accuracy/immunity, Substitute/contact/secondary/item/faint pipeline, Sash/Sturdy, Gem/Unburden, Wonder Guard, Static RNG, Aftermath double-KO and Sleep Talk. Night Shade and full-format closure remain pending",
+          "test": "test/test_fixed_damage_engine.py"
         }
       ],
       "id": "moves:superfang",
       "implementation": {
+        "behavior": {
+          "family": "fixed_damage",
+          "file": "simulator/fixed_damage.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "MOVE_TYPE/MOVE_POWER/MOVE_CATEGORY/MOVE_PRIORITY/MOVE_PP",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -68873,8 +68909,8 @@
         }
       ],
       "kind": "moves",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "fixed-damage-positive-witness",
       "status": "partial"
     },
     {
@@ -98764,6 +98800,112 @@
           }
         ]
       },
+      "fixed-damage-positive-witness": {
+        "bound": [
+          "moves:seismictoss",
+          "moves:superfang"
+        ],
+        "conclusion": "required",
+        "kind": "moves",
+        "reasoning": "Pinned Super Fang Crobat seed[14,2,3,4] and Seismic Toss Blissey seed[36,2,3,4] prove membership. Directed fixed-damage hit/lifecycle/RNG cases do not establish full-format closure; Night Shade unresolved without positive seed1..500 witness.",
+        "references": [
+          "data/random-battles/gen5/teams.ts:103-494 (cullMovePool/randomMoveset)",
+          "data/random-battles/gen5/teams.ts:496-566 (ability filters/fallback)",
+          "data/random-battles/gen5/teams.ts:568-816 (item returns and randomSet)",
+          "data/random-battles/gen5/teams.ts:850-1014 (team eligibility)",
+          "data/random-battles/gen9/teams.ts:675-693 (addMove)",
+          "data/random-battles/gen9/teams.ts:1442-1497 (getLevel/getForme)",
+          "data/random-battles/gen9/teams.ts:1641-1683 (getPokemonPool)"
+        ],
+        "witnesses": [
+          {
+            "id": "superfang",
+            "kind": "move",
+            "seed": [
+              14,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Inner Focus",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Black Sludge",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 79,
+              "moves": [
+                "toxic",
+                "roost",
+                "superfang",
+                "bravebird"
+              ],
+              "name": "Crobat",
+              "role": "Bulky Support",
+              "shiny": false,
+              "species": "Crobat",
+              "speciesId": "crobat"
+            }
+          },
+          {
+            "id": "seismictoss",
+            "kind": "move",
+            "seed": [
+              36,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Natural Cure",
+              "evs": {
+                "atk": 0,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "F",
+              "item": "Leftovers",
+              "ivs": {
+                "atk": 0,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 84,
+              "moves": [
+                "seismictoss",
+                "softboiled",
+                "aromatherapy",
+                "toxic"
+              ],
+              "name": "Blissey",
+              "role": "Staller",
+              "shiny": false,
+              "species": "Blissey",
+              "speciesId": "blissey"
+            }
+          }
+        ]
+      },
       "flash-fire-positive-witness": {
         "bound": [
           "abilities:flashfire"
@@ -101566,8 +101708,8 @@
       },
       "entries": {
         "proven_unreachable": 542,
-        "required": 98,
-        "unresolved": 1128
+        "required": 100,
+        "unresolved": 1126
       },
       "roots": {
         "proven_unreachable": 0,
