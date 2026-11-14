@@ -1,0 +1,36 @@
+'use strict';
+module.exports=function(){
+ const m=(moves,x={})=>({species:'Mew',moves,ability:'Pressure',item:'',level:50,nature:'Hardy',gender:'M',ivs:{hp:31,atk:31,def:31,spa:31,spd:31,spe:31},evs:{hp:0,atk:0,def:0,spa:0,spd:0,spe:0},...x});
+ const b=(a=1,c=1)=>({p1:`move ${a}`,p2:`move ${c}`}),cases=[];
+ const add=(id,move='Flamethrower',x={})=>cases.push({id:'G4-flash-fire-'+id,seed:1,generic:true,flashFireFamily:true,p1:[m([move,'Tackle'],{evs:{spe:252}})],p2:[m(['Growl'],{ability:'Flash Fire'})],steps:[b()],...x});
+ add('ordinary');add('physical','Fire Punch');add('inaccurate','Fire Blast');add('status','Will-O-Wisp');
+ add('repeat','Flamethrower',{steps:[b(),b()]});
+ add('power','Flamethrower',{p2:[m(['Flamethrower'],{ability:'Flash Fire'})]});
+ add('physical-power','Fire Punch',{p2:[m(['Fire Punch'],{ability:'Flash Fire'})]});
+ add('protect','Will-O-Wisp',{p2:[m(['Protect'],{ability:'Flash Fire'})]});
+ add('substitute','Will-O-Wisp',{p1:[m(['Recover','Will-O-Wisp'])],p2:[m(['Substitute','Growl'],{ability:'Flash Fire',evs:{spe:252}})],steps:[b(),b(2,2)]});
+ add('frozen','Flamethrower',{setup:[{side:'p2',status:'frz'}]});
+ add('gas-end','Flamethrower',{p1:[m(['Flamethrower','Gastro Acid'],{evs:{spe:252}})],steps:[b(),b(2)]});
+ add('replace-end','Flamethrower',{p1:[m(['Flamethrower','Simple Beam'],{evs:{spe:252}})],steps:[b(),b(2)]});
+ add('switch-end','Flamethrower',{p2:[m(['Growl'],{ability:'Flash Fire'}),m(['Growl'])],steps:[b(),{p1:'move 2',p2:'switch 2'},{p1:'move 1',p2:'switch 2'}]});
+ add('transform-end','Flamethrower',{identityFamily:true,abilityChangeFamily:true,p1:[m(['Flamethrower','Growl'],{evs:{spe:252}})],p2:[m(['Growl','Transform'],{ability:'Flash Fire'})],steps:[b(),b(2,2)]});
+ add('hidden','Hidden Power Fire');add('non-fire','Surf');
+ add('fly','Will-O-Wisp',{p1:[m(['Will-O-Wisp'])],p2:[m(['Fly'],{ability:'Flash Fire',evs:{spe:252}})]});
+ add('entry-trace','Flamethrower',{p1:[m(['Flamethrower'],{ability:'Trace',evs:{spe:252}})],p2:[m(['Growl'],{ability:'Forecast'}),m(['Growl'],{ability:'Flash Fire'})],steps:[{p1:'move 1',p2:'switch 2'}]});
+ add('thickfat-tie','Flamethrower',{p1:[m(['Flamethrower','Surf'],{ability:'Flash Fire'})],p2:[m(['Flamethrower'],{ability:'Thick Fat'})],steps:[b(),b()]});
+ add('inactive-thickfat-tie','Flamethrower',{p1:[m(['Flamethrower','Surf'],{ability:'Flash Fire'})],p2:[m(['Flamethrower'],{ability:'Thick Fat'})],steps:[b(),b(2)]});
+ add('choice-specs','Flamethrower',{p1:[m(['Flamethrower'],{ability:'Flash Fire',item:'Choice Specs',evs:{spa:4}})],p2:[m(['Flamethrower'],{evs:{spe:252}})]});
+ add('choice-band','Fire Punch',{p1:[m(['Fire Punch'],{ability:'Flash Fire',item:'Choice Band',evs:{atk:4}})],p2:[m(['Flamethrower'],{evs:{spe:252}})]});
+ add('reflected','Will-O-Wisp',{p1:[m(['Will-O-Wisp'],{ability:'Flash Fire',evs:{spe:252}})],p2:[m(['Growl'],{ability:'Magic Bounce'})]});
+ add('sleep-talk','Flamethrower',{p1:[m(['Sleep Talk','Flamethrower'])],p2:[m(['Spore','Growl'],{ability:'Flash Fire',evs:{spe:252}})],steps:[b(),b(1,2)]});
+ add('pivot','U-turn',{p1:[m(['U-turn'],{ability:'Flash Fire'}),m(['Tackle'])],p2:[m(['Flamethrower'],{evs:{spe:252}})],steps:[b(),{p1:'switch 2'}]});
+ add('swap-end','Flamethrower',{p1:[m(['Flamethrower','Skill Swap'],{evs:{spe:252}})],steps:[b(),b(2)]});
+ add('mummy-end','Growl',{p1:[m(['Growl','Tackle'],{ability:'Flash Fire'})],p2:[m(['Flamethrower','Recover'],{ability:'Mummy',evs:{spe:252}})],steps:[b(),b(2,2)]});
+ add('faint-end','Flamethrower',{setup:[{side:'p2',hp:1}],steps:[b(),b(2)]});
+ add('mirrored','Flamethrower',{p1:[m(['Growl'],{ability:'Flash Fire'})],p2:[m(['Flamethrower'],{evs:{spe:252}})]});
+ return cases;
+};
+module.exports.membershipWitnesses=function(){
+ require('./neutral-turn-oracle.cjs').assertReady();const ps=require('./vendor/pokemon-showdown/dist/sim'),assert=require('node:assert/strict'),seed=[6,2,3,4];
+ const set=ps.Teams.getGenerator('gen5randombattle',seed).getTeam().find(s=>s.ability==='Flash Fire');assert.ok(set);return [{ability:'flashfire',seed,set}];
+};

@@ -799,3 +799,11 @@ NPZ/journal16 persistence pass. Gen5 explicitly removes the inherited
 onAllyTryHitSide callback. The inaccurate fixture uses Power Whip; Grass
 Whistle stays excluded by the source-backed move identity bound. Remaining
 mechanics/closure and broad/final/device checks remain pending.
+
+Schema39 appends Flash Fire volatile slot27 and journal17. Fire TryHit installs
+an ability-sourced activation; repeat hits disclose immunity. The condition
+modifies offensive Attack/SpA at priority5, retaining the native condition/ability suborder, so equal-Speed
+Flash Fire and Thick Fat do not shuffle. Silent End runs on ability loss, switching and
+Transform; fainting clears the condition without End disclosure. Native29/43
+focused CPU parity and live pivot NPZ/journal17 persistence pass. Remaining
+mechanics, capacity, old-schema migration and broad/final/device gates stay open.

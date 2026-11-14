@@ -22,6 +22,7 @@ def try_hit(c,actor,target,move,move_row,e):
 def end(c,side,e):
     s,_=c;mon=s.active[side]
     c=e._when(s.ability[side,mon]==A['illusion'],lambda c:e.illusion_ops.reveal(c,side,e),c)
+    c=e.flash_ops.end(c,side,e)
     return e.trigger_form_ops.end(c,side,e)
 
 def assign(s,side,ability,e):

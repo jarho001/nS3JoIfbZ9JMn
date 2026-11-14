@@ -64,6 +64,9 @@ def stats(c,attack,defense,actor,target,physical,move_type,e):
     atk_modifier=chain(atk_modifier,jnp.where(thick,2048,4096))
     low_hp=(h.LOW_HP_TYPE[ability]==move_type)&(s.hp[actor,m]*3<=s.stats[actor,m,0])
     atk_modifier=chain(atk_modifier,jnp.where(low_hp,6144,4096))
+    flash=s.volatile_state[actor,m,e.flash_ops.SLOT,0]>0
+    flash_power=flash&(ability==e.flash_ops.ABILITY)&(move_type==e.generic.TYPES['fire'])
+    atk_modifier=chain(atk_modifier,jnp.where(flash_power,6144,4096))
     choice=((item==h.I['choiceband'])&physical)|((item==h.I['choicespecs'])&(~physical))
     atk_modifier=chain(atk_modifier,jnp.where(physical&e.form_ops.flower(s,actor),6144,4096))
     atk_modifier=chain(atk_modifier,jnp.where(choice,6144,4096))
@@ -76,6 +79,8 @@ def stats(c,attack,defense,actor,target,physical,move_type,e):
     def_modifier=chain(def_modifier,jnp.where(sand,6144,4096))
     # Native collects both priority5 ModifySpA handlers before checking their
     # HP/type conditions. Equal cached Speed shuffles even inactive modifiers.
+    # Flash Fire is a Condition (subOrder2), not an Ability (subOrder7), so
+    # it cannot fully tie with Thick Fat and must not consume that shuffle.
     tie=(~physical)&(h.LOW_HP_TYPE[ability]>=0)&(defender==h.A['thickfat'])&(s.speed[actor,m]==s.speed[target,tm])
     c=e._when(tie,lambda c:e._draw(c,0,2,e.DAMAGE_CALC_SORT,2)[0],c)
     return c,modify(attack,atk_modifier),modify(defense,def_modifier)

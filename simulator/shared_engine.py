@@ -37,6 +37,7 @@ from . import forms as form_ops
 from . import trigger_forms as trigger_form_ops
 from . import ability_changes as ability_ops
 from . import status_immunity as immunity_ops
+from . import flash_fire as flash_ops
 from . import ability_creation as creation_ops
 from . import suppression as suppression_ops
 from . import sleep_control as sleep_ops
@@ -50,7 +51,7 @@ import sys
 def _engine():
     return sys.modules[__name__]
 
-SCHEMA = 38
+SCHEMA = 39
 ROSTER, SLOTS, QUEUE, EVENTS, DRAWS, HISTORY = 6, 4, 8, 128, 128, 2048
 OK, PENDING, INVALID, UNSUPPORTED, CAPACITY, TERMINAL, STALE = range(7)
 RETRY=7
@@ -93,6 +94,7 @@ ABILITY_CHANGE,ABILITY_SWAP=55,56
 STATUS_ABILITY,REST_ABILITY=57,58
 SUPPRESS_ABILITY=59
 YAWN_START,YAWN_END=60,61
+FLASH_START,FLASH_END=62,63
 EVENT_COLUMNS=16
 # Draw contexts; range form stores actual native arguments including offsets.
 INIT, QUEUE_SORT, BEFORE_TURN, UPDATE, HIT_UPDATE, SWITCH_SORT, FIELD_SORT, ACC, CRITICAL, ROLL, PARALYSIS, STALL = range(12)
@@ -630,7 +632,7 @@ def _use_move(c,frame):
                     t=t._replace(events=t.events.at[move_row,7].set(jnp.where(existing,2,t.events[move_row,7])))
                     return _hit((s,t),actor,move)
                 return jax.lax.cond(hit,hit_fn,miss,c)
-            return jax.lax.cond(blocked,block,lambda c:jax.lax.cond(immunity_ops.absorbs(c[0],actor,target,move,_engine()),lambda c:immunity_ops.absorb(c,actor,target,move,_engine()),lambda c:jax.lax.cond(immunity_ops.wonder_guard(c[0],actor,target,move,_engine()),lambda c:_event(c,IMMUNE,target,tm,value=tables.ABILITY_IDS['wonderguard'],aux=4),lambda c:jax.lax.cond(creation_ops.immunity(c[0],target,move),lambda c:_event(c,IMMUNE,target,tm),accuracy,c),c),c),c)
+            return jax.lax.cond(blocked,block,lambda c:jax.lax.cond(flash_ops.intercepts(c[0],actor,target,move,_engine()),lambda c:flash_ops.hit(c,actor,target,move,_engine()),lambda c:jax.lax.cond(immunity_ops.absorbs(c[0],actor,target,move,_engine()),lambda c:immunity_ops.absorb(c,actor,target,move,_engine()),lambda c:jax.lax.cond(immunity_ops.wonder_guard(c[0],actor,target,move,_engine()),lambda c:_event(c,IMMUNE,target,tm,value=tables.ABILITY_IDS['wonderguard'],aux=4),lambda c:jax.lax.cond(creation_ops.immunity(c[0],target,move),lambda c:_event(c,IMMUNE,target,tm),accuracy,c),c),c),c),c)
         # Pinned Gen 5 resolves type/Levitate immunity before Protect;
         # status failure checks still occur after Protect and accuracy.
         def semi_miss(c):
@@ -696,7 +698,7 @@ def _switch_entry(c,row,drag=False):
         keep=(jnp.arange(QUEUE)<s.qcount)&(~((s.queue[:,0]==ATTACK)&(s.queue[:,1]==side)&(s.queue[:,2]==old)))
         ix=jnp.nonzero(keep,size=QUEUE,fill_value=0)[0];count=jnp.sum(keep).astype(jnp.int32)
         s=s._replace(queue=jnp.where((jnp.arange(QUEUE)<count)[:,None],s.queue[ix],0),qcount=count)
-    c=trigger_form_ops.end((s,t),side,_engine());s,t=c
+    c=flash_ops.end((s,t),side,_engine());c=trigger_form_ops.end(c,side,_engine());s,t=c
     s=s._replace(ability_staleness=s.ability_staleness.at[side,s.active[side]].set(0))
     s=identity_ops.restore(s,side,_engine())
     s=jax.lax.cond(s.hp[side,old]>0,lambda s:tracking.clear_volatile(s,side),lambda s:s,s)
@@ -987,7 +989,7 @@ def _supported(s,initializing=False):
             &jnp.all((s.moves==0)|move_mask[jnp.clip(s.moves,0,len(MOVE_KEYS)-1)])
             &jnp.all((s.item>=0)&(s.item<len(ITEMS)))
             &jnp.all((hook_tables.ITEM_IMPLEMENTED|hit_tables.ITEM_IMPLEMENTED|phase_ops.ITEM_IMPLEMENTED|partial_ops.ITEM_IMPLEMENTED)[jnp.clip(s.item,0,len(ITEMS)-1)])
-            &jnp.all((s.ability>=0)&(s.ability<len(ABILITIES)))&jnp.all((hook_tables.ABILITY_IMPLEMENTED|hit_tables.ABILITY_IMPLEMENTED|trap_ops.ABILITY_IMPLEMENTED|phaze_ops.ABILITY_IMPLEMENTED|item_ops.ABILITY_IMPLEMENTED|identity_ops.ABILITY_IMPLEMENTED|illusion_ops.ABILITY_IMPLEMENTED|form_ops.ABILITY_IMPLEMENTED|trigger_form_ops.ABILITY_IMPLEMENTED|immunity_ops.ABILITY_IMPLEMENTED|creation_ops.ABILITY_IMPLEMENTED|sleep_ops.ABILITY_IMPLEMENTED|called_ops.ABILITY_IMPLEMENTED|trace_ops.ABILITY_IMPLEMENTED)[jnp.clip(s.ability,0,len(ABILITIES)-1)])
+            &jnp.all((s.ability>=0)&(s.ability<len(ABILITIES)))&jnp.all((hook_tables.ABILITY_IMPLEMENTED|hit_tables.ABILITY_IMPLEMENTED|trap_ops.ABILITY_IMPLEMENTED|phaze_ops.ABILITY_IMPLEMENTED|item_ops.ABILITY_IMPLEMENTED|identity_ops.ABILITY_IMPLEMENTED|illusion_ops.ABILITY_IMPLEMENTED|form_ops.ABILITY_IMPLEMENTED|trigger_form_ops.ABILITY_IMPLEMENTED|immunity_ops.ABILITY_IMPLEMENTED|creation_ops.ABILITY_IMPLEMENTED|sleep_ops.ABILITY_IMPLEMENTED|called_ops.ABILITY_IMPLEMENTED|trace_ops.ABILITY_IMPLEMENTED|flash_ops.ABILITY_IMPLEMENTED)[jnp.clip(s.ability,0,len(ABILITIES)-1)])
             &jnp.all((s.ivs>=0)&(s.ivs<=31))&jnp.all((s.evs>=0)&(s.evs<=255))
             &jnp.all((s.nature>=1)&(s.nature<=len(generic.NATURES)))
             &jnp.all(s.types==tables.SPECIES_TYPES[safe_species])&jnp.all((s.boosts>=-6)&(s.boosts<=6))

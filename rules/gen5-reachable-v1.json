@@ -1075,10 +1075,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/flash-fire.json.gz",
+          "native": "reference/flash-fire-cases.cjs",
+          "scope": "Independent29 synthetic scenarios/43 directed boundaries with saved continuation; full-format/capacity and remaining modifier dependencies pending",
+          "test": "test/test_flash_fire_engine.py"
+        }
+      ],
       "field": "condition.onEnd",
       "id": "abilities:flashfire:condition.onEnd",
-      "implementation": null,
+      "implementation": {
+        "family": "flash_fire",
+        "file": "simulator/flash_fire.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:flashfire",
@@ -1090,7 +1102,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "cccbe572dddf6b1f001b9026f50756bfb020ff105864b5d34e8c7492726b85d7",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -1099,10 +1111,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/flash-fire.json.gz",
+          "native": "reference/flash-fire-cases.cjs",
+          "scope": "Independent29 synthetic scenarios/43 directed boundaries with saved continuation; full-format/capacity and remaining modifier dependencies pending",
+          "test": "test/test_flash_fire_engine.py"
+        }
+      ],
       "field": "condition.onModifyAtk",
       "id": "abilities:flashfire:condition.onModifyAtk",
-      "implementation": null,
+      "implementation": {
+        "family": "flash_fire",
+        "file": "simulator/flash_fire.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:flashfire",
@@ -1114,7 +1138,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "f00bfc7027a3433080718d0ac70e7f0573f33d7f8018fe0051226c53d22b82f3",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -1123,10 +1147,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/flash-fire.json.gz",
+          "native": "reference/flash-fire-cases.cjs",
+          "scope": "Independent29 synthetic scenarios/43 directed boundaries with saved continuation; full-format/capacity and remaining modifier dependencies pending",
+          "test": "test/test_flash_fire_engine.py"
+        }
+      ],
       "field": "condition.onModifySpA",
       "id": "abilities:flashfire:condition.onModifySpA",
-      "implementation": null,
+      "implementation": {
+        "family": "flash_fire",
+        "file": "simulator/flash_fire.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:flashfire",
@@ -1138,7 +1174,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "4612bd1bbba07961ffd0e6cf3c8cf919af7b8f1edee5ed63fe1946a7a956153f",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -1147,10 +1183,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/flash-fire.json.gz",
+          "native": "reference/flash-fire-cases.cjs",
+          "scope": "Independent29 synthetic scenarios/43 directed boundaries with saved continuation; full-format/capacity and remaining modifier dependencies pending",
+          "test": "test/test_flash_fire_engine.py"
+        }
+      ],
       "field": "condition.onStart",
       "id": "abilities:flashfire:condition.onStart",
-      "implementation": null,
+      "implementation": {
+        "family": "flash_fire",
+        "file": "simulator/flash_fire.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:flashfire",
@@ -1162,7 +1210,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "f5384ab37cd17b5cc196e3db628042ad42c89d57e288553445632f830180d822",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -1171,10 +1219,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/flash-fire.json.gz",
+          "native": "reference/flash-fire-cases.cjs",
+          "scope": "Independent29 synthetic scenarios/43 directed boundaries with saved continuation; full-format/capacity and remaining modifier dependencies pending",
+          "test": "test/test_flash_fire_engine.py"
+        }
+      ],
       "field": "onEnd",
       "id": "abilities:flashfire:onEnd",
-      "implementation": null,
+      "implementation": {
+        "family": "flash_fire",
+        "file": "simulator/flash_fire.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:flashfire",
@@ -1186,7 +1246,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "80dbc10d9ca6cc22a150f220c5df7bd5580c6196d113dd225567caebf4587200",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -1195,10 +1255,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/flash-fire.json.gz",
+          "native": "reference/flash-fire-cases.cjs",
+          "scope": "Independent29 synthetic scenarios/43 directed boundaries with saved continuation; full-format/capacity and remaining modifier dependencies pending",
+          "test": "test/test_flash_fire_engine.py"
+        }
+      ],
       "field": "onTryHit",
       "id": "abilities:flashfire:onTryHit",
-      "implementation": null,
+      "implementation": {
+        "family": "flash_fire",
+        "file": "simulator/flash_fire.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:flashfire",
@@ -1210,7 +1282,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "e1eb3432e5f6e4defb6b6d30888dd1ac4949ebe182f102d78531ca599b3a0b9f",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -71567,10 +71639,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/flash-fire.json.gz",
+          "native": "reference/flash-fire-cases.cjs",
+          "scope": "Independent29 synthetic scenarios/43 directed boundaries with saved continuation; full-format/capacity and remaining modifier dependencies pending",
+          "test": "test/test_flash_fire_engine.py"
         }
       ],
       "id": "abilities:flashfire",
       "implementation": {
+        "behavior": {
+          "family": "flash_fire",
+          "file": "simulator/flash_fire.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -71582,8 +71666,8 @@
         }
       ],
       "kind": "abilities",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "flash-fire-positive-witness",
       "status": "partial"
     },
     {
@@ -96693,6 +96777,67 @@
       ]
     },
     "proofs": {
+      "flash-fire-positive-witness": {
+        "bound": [
+          "abilities:flashfire"
+        ],
+        "conclusion": "required",
+        "kind": "abilities",
+        "reasoning": "Pinned generator seed[6,2,3,4] positively witnesses Flash Fire Chandelure; no complete callback activation or unrelated membership claim.",
+        "references": [
+          "data/random-battles/gen5/teams.ts:103-494 (cullMovePool/randomMoveset)",
+          "data/random-battles/gen5/teams.ts:496-566 (ability filters/fallback)",
+          "data/random-battles/gen5/teams.ts:568-816 (item returns and randomSet)",
+          "data/random-battles/gen5/teams.ts:850-1014 (team eligibility)",
+          "data/random-battles/gen9/teams.ts:675-693 (addMove)",
+          "data/random-battles/gen9/teams.ts:1442-1497 (getLevel/getForme)",
+          "data/random-battles/gen9/teams.ts:1641-1683 (getPokemonPool)"
+        ],
+        "witnesses": [
+          {
+            "ability": "flashfire",
+            "seed": [
+              6,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Flash Fire",
+              "evs": {
+                "atk": 0,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Choice Scarf",
+              "ivs": {
+                "atk": 3,
+                "def": 30,
+                "hp": 31,
+                "spa": 30,
+                "spd": 30,
+                "spe": 30
+              },
+              "level": 77,
+              "moves": [
+                "shadowball",
+                "energyball",
+                "fireblast",
+                "hiddenpowerfighting"
+              ],
+              "name": "Chandelure",
+              "role": "Fast Attacker",
+              "shiny": false,
+              "species": "Chandelure",
+              "speciesId": "chandelure"
+            }
+          }
+        ]
+      },
       "item-identity-bound": {
         "bound": [
           "blackglasses",
@@ -97534,8 +97679,8 @@
       },
       "entries": {
         "proven_unreachable": 542,
-        "required": 42,
-        "unresolved": 1184
+        "required": 43,
+        "unresolved": 1183
       },
       "roots": {
         "proven_unreachable": 0,

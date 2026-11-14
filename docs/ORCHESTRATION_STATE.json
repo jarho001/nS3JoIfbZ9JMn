@@ -524,7 +524,7 @@
     "brief": "PROJECT_PLAN.md#proposed-g4-cpu-implementation-and-conformance-goal",
     "source_base": "f37067e",
     "scope": "Complete pinned gen5randombattle reachable mechanics and every prepared CPU gate. Integrated checkpoints, resumable progress and commit/push authorized. GPU execution, profiling, benchmarks, training, delegation and scored research excluded.",
-    "checkpoint": "Sap Sipper schema38: focused CPU 17 scenarios/29 boundaries passed in467.884s;2 native/inventory checks passed. Full G4 and broad gates pending.",
+    "checkpoint": "Flash Fire activation and stat condition schema39: focused CPU 29 scenarios/43 boundaries passed in496.428s;2 native/inventory checks passed. Full G4 and broad gates pending.",
     "completed_checkpoints": [
       "Pinned resolved data and source-owned conservative candidate inventory exported; 605 role roots, 1768 data/effect entries, 1146 callback slots. Data-only mappings remain partial; transitive closure and complete callback implementation are not claimed.",
       "Generic species/set/type/stat/physical-special/Hidden Power/happiness/priority/hazard integration passes 37 affected CPU checks on 4eab254, retaining all 133 baseline scenarios and validating 24 added scenarios: 157 scenarios / 1059 boundaries, including 20 complete battles (eight six-member games). Eager/JIT/1-8-32 mixed batches, serialized continuation/reset, explicit schema 1/2 migration and full/lean rollouts pass.",
@@ -538,7 +538,7 @@
       "Schema10 core/journal/hard-turn-limit checkpoint validated on a9d0fbd:3 integrated CPU checks pass in1174.685s, plus5 native/6 helper checks. Complete combat and1000-boundary neutral histories match native; mixed1/8/32,full/lean,core reset,persistence/corruption pass. Full64 suite and full-format G4 pending.",
       "Schema11 trapping/retry checkpoint:8 affected CPU checks plus6 native/6 helper checks pass. New31 scenarios/215 boundaries include two complete six-member games and mirrored private-state episodes. Aggregate558/4110; full68 suite and full-format G4 pending."
     ],
-    "next": "Implement reachable Flash Fire from positive Chandelure seed[6,2,3,4] and native activation/cleanup/stat modifier cases; continue families sequentially with focused CPU checks and inventory prechecks.",
+    "next": "Continue reachable secondary-effect ability family (Shield Dust and Serene Grace candidates), establishing native branches and generator witnesses before implementation; then remaining mechanics and closure. Focused CPU only.",
     "ledger": {
       "path": "rules/gen5-reachable-v1.json",
       "entries": 1768,
@@ -548,7 +548,7 @@
         "indirect-closure",
         "engine-contract"
       ],
-      "status": "Incomplete: 286 partial callback mappings/860 unsupported; reachability classifications are separate and full closure remains pending.",
+      "status": "Incomplete: 292 partial callback mappings/854 unsupported; reachability classifications are separate and full closure remains pending.",
       "reachability_summary": {
         "callbacks": {
           "proven_unreachable": 546,
@@ -557,8 +557,8 @@
         },
         "entries": {
           "proven_unreachable": 542,
-          "required": 42,
-          "unresolved": 1184
+          "required": 43,
+          "unresolved": 1183
         },
         "roots": {
           "proven_unreachable": 0,
@@ -633,7 +633,7 @@
     ],
     "gpu_requirement": "Deferred during travel. Record all G4 device obligations and ready/pending commands in docs/GPU_HANDOFF.md; current checkpoint runner is scripts/g4_gpu_handoff.py. CPU implementation remains active. Later full G4 release still requires matching-source GPU conformance.",
     "acceptance": "G4-CPU-conformance pending. Generic data checkpoint passes; all remaining prepared CPU gates retained, all milestone acceptance/task count unchanged.",
-    "source_identity": "test-logs/g4-cpu-conformance/schema38-checkpoint.json",
+    "source_identity": "test-logs/g4-cpu-conformance/schema39-checkpoint.json",
     "evidence_directory": "test-logs/g4-cpu-conformance",
     "continuation": {
       "status": "schema7_CPU_checkpoint_validated",
@@ -1161,14 +1161,24 @@
         "native_boundaries": 29,
         "evidence": "test-logs/g4-cpu-conformance/schema38-checkpoint.json",
         "next": "Implement reachable Flash Fire from positive Chandelure seed[6,2,3,4] and native activation/cleanup/stat modifier cases; continue families sequentially with focused CPU checks and inventory prechecks."
+      },
+      "flash_fire": {
+        "status": "completed_focused_CPU_checkpoint_not_full_G4",
+        "source_base": "7aacabf",
+        "candidate_schema": 39,
+        "core_journal_schema": 17,
+        "native_cases": 29,
+        "native_boundaries": 43,
+        "evidence": "test-logs/g4-cpu-conformance/schema39-checkpoint.json",
+        "next": "Continue reachable secondary-effect ability family (Shield Dust and Serene Grace candidates), establishing native branches and generator witnesses before implementation; then remaining mechanics and closure. Focused CPU only."
       }
     },
     "resolved_failure": "16b5263 preflight rejected ordinary moves because type was missing from its field set; fixed by 4eab254, failed run stopped, all 37 repaired checks pass. Detailed minimized input and source identities are in source.json.",
     "publication": {
       "status": "checkpoint_publication_authorized",
       "target": "origin/main",
-      "previous_published_head": "f1fd2bc",
-      "scope": "Schema38 focused CPU checkpoint; remaining G4 open."
+      "previous_published_head": "7aacabf",
+      "scope": "Schema39 focused CPU checkpoint; remaining G4 open."
     },
     "reasoning_effort": "medium (user preference,2026-11-10; no automatic escalation)",
     "design_pass": {
@@ -1196,20 +1206,22 @@
     "implementation_wip": null,
     "cpu_block": null,
     "reachability_precheck": {
-      "family": "Sap Sipper",
+      "family": "Flash Fire",
       "status": "completed_focused_CPU_checkpoint_not_full_G4",
       "required": [
-        "abilities:sapsipper: pinned seed[10,2,3,4] Girafarig"
+        "abilities:flashfire: pinned seed[6,2,3,4] generated Chandelure"
       ],
       "shared_behavior": [
-        "Existing type absorption/boost path, effective ability/Hidden Power type, native ability reveal and stat event, causal Attack flags"
+        "Existing effective ability/type queries and interception ordering before accuracy/Substitute",
+        "Existing volatile metadata, ability End dispatch, Transform/switch lifecycle, chain stat modifiers and exact priority5 stat shuffle"
       ],
       "new_dependencies": [
-        "Gen5 explicitly removes onAllyTryHitSide; do not inherit later generation behavior",
-        "Grass damage and Spore intercepted before accuracy/Substitute; +6 immunity; suppression/replacement/Trace/called/reflected/saved states",
-        "Grass Whistle is proven unreachable in the move identity audit; inaccurate interception fixture uses supported Power Whip instead. No capability-mask widening."
+        "Persistent activated condition with ability source; repeated absorption immunity",
+        "1.5 Attack/SpA with Choice/Thick Fat; equal Speed does not shuffle Condition2 vs Ability7. Existing low-HP Ability/Ability tie rule retained.",
+        "End on ability loss, GAS, switching, Transform and Mummy; silent clearing on faint differs",
+        "Source/recipient history, called/reflected frames and saved live pivot. Remaining breakable-ability/capacity closure stays pending."
       ],
-      "native_spec": "test-logs/g4-cpu-conformance/sap-sipper.json.gz:17 scenarios/29 boundaries frozen before final focused run"
+      "native_spec": "test-logs/g4-cpu-conformance/flash-fire.json.gz:29 scenarios/43 boundaries frozen before implementation"
     },
     "scope_audit": {
       "date": "2026-11-13",
@@ -2253,17 +2265,17 @@
     "combined_return_home_block": "docs/GPU_HANDOFF.md#one-return-home-block-correctness-plus-g3-v6-measurements",
     "pending_status_checkpoint": "Current status/field/hook GPU checks are wired into the49-check runner; no GPU execution during travel. Preserve matching-source CPU results and do not transfer earlier GPU/CPU evidence across changed source.",
     "expanded_checkpoint": {
-      "status": "schema38_focused_CPU_complete_GPU_deferred",
-      "engine_schema": 38,
-      "modules": 44,
-      "native_scenarios": 1246,
-      "native_boundaries": 5411,
+      "status": "schema39_focused_CPU_complete_GPU_deferred",
+      "engine_schema": 39,
+      "modules": 45,
+      "native_scenarios": 1275,
+      "native_boundaries": 5454,
       "initial_field_evidence": "test-logs/g4-cpu-conformance/schema5-checkpoint.json",
       "source": "Use latest committed checkout and runner source/fixture fingerprints; earlier source_commit fields describe historical preparation.",
       "handoff_prepared": false,
-      "source_commit": "Publishing commit; exact relevant source fingerprints in schema38-checkpoint.json",
-      "source_identity": "test-logs/g4-cpu-conformance/schema38-checkpoint.json",
-      "checks": 100
+      "source_commit": "Publishing commit; exact relevant source fingerprints in schema39-checkpoint.json",
+      "source_identity": "test-logs/g4-cpu-conformance/schema39-checkpoint.json",
+      "checks": 101
     },
     "pending_candidate": null
   }

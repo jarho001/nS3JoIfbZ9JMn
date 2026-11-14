@@ -103,6 +103,8 @@ def project_events(state,trace,audience):
         elif kind==e.UPKEEP:line='|upkeep'
         elif kind==e.YAWN_START:line=f'|-start|{actor}|move: Yawn|[of] {foe}'
         elif kind==e.YAWN_END:line=f'|-end|{actor}|move: Yawn|[silent]'
+        elif kind==e.FLASH_START:line=f'|-start|{actor}|ability: Flash Fire'
+        elif kind==e.FLASH_END:line=f'|-end|{actor}|ability: Flash Fire|[silent]'
         elif kind==e.SUPPRESS_ABILITY:line=f'|-endability|{actor}'
         elif kind==e.STATUS_ABILITY:line=f'|-activate|{actor}|ability: '+e.hook_tables.ABILITY_NAMES[value]
         elif kind==e.REST_ABILITY:line=f'|-fail|{actor}|[from] ability: '+e.hook_tables.ABILITY_NAMES[value]+f'|[of] {actor}'
@@ -210,15 +212,15 @@ def load_state(path,*,schema=None,replayed_state=None):
         stored=int(saved['schema']) if 'schema' in saved else None
         if schema is not None and stored is not None and stored!=schema:raise ValueError('schema mismatch')
         version=stored if schema is None else schema
-        if version not in (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38):raise ValueError('explicit supported state schema required')
+        if version not in (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39):raise ValueError('explicit supported state schema required')
         fields={k:jnp.asarray(saved[k]) for k in saved.files if k not in ('schema','data_sha256')}
-        if version in (3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38):
+        if version in (3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39):
             if 'data_sha256' not in saved or str(saved['data_sha256'])!=generic.DATA_SHA256:
                 raise ValueError('state data table identity mismatch')
-        if version<32 and replayed_state is not None:
+        if version<39 and replayed_state is not None:
             e._validate_structure(replayed_state)
             end='ivs' if version<=2 else 'effect_order' if version==3 else 'weather_state' if version==4 else 'move_history' if version<9 else 'request_state'
-            expected=set(e.State._fields[:e.State._fields.index('ability_seek')] if version>=26 else e.State._fields[:e.State._fields.index('call_frames')] if version>=21 else e.State._fields[:e.State._fields.index('ability_staleness')] if version>=18 else e.State._fields[:e.State._fields.index('illusion')] if version==17 else e.State._fields[:e.State._fields.index('base_species')] if version==16 else e.State._fields[:e.State._fields.index('item_provenance')] if version>=11 else e.State._fields[:e.State._fields.index(end)])
+            expected=set(e.State._fields if version>=32 else e.State._fields[:e.State._fields.index('ability_seek')] if version>=26 else e.State._fields[:e.State._fields.index('call_frames')] if version>=21 else e.State._fields[:e.State._fields.index('ability_staleness')] if version>=18 else e.State._fields[:e.State._fields.index('illusion')] if version==17 else e.State._fields[:e.State._fields.index('base_species')] if version==16 else e.State._fields[:e.State._fields.index('item_provenance')] if version>=11 else e.State._fields[:e.State._fields.index(end)])
             if version==1:expected.remove('hazards')
             if set(fields)!=expected:raise ValueError('invalid legacy field set for replay')
             for key,value in fields.items():
@@ -319,9 +321,9 @@ def load_state(path,*,schema=None,replayed_state=None):
             if np.any(np.asarray(e.trap_ops.QUERY)[species]) or np.any(np.asarray(e.trap_ops.ABILITY_IMPLEMENTED)[ability]):
                 raise ValueError('legacy trapping/disclosure requires replay/provenance')
             fields['request_state']=jnp.zeros((2,2),jnp.int32)
-        if 9<=version<30:
+        if 9<=version<39:
             v=fields['volatile_state']
-            slots=26 if version>=25 else 25 if version>=24 else 24 if version>=20 else 23 if version>=15 else 22 if version>=13 else 21 if version==12 else 20
+            slots=27 if version>=30 else 26 if version>=25 else 25 if version>=24 else 24 if version>=20 else 23 if version>=15 else 22 if version>=13 else 21 if version==12 else 20
             if v.shape!=(2,6,slots,e.phase_ops.VOLATILE_WIDTH):raise ValueError('invalid legacy volatile shape')
             fields['volatile_state']=jnp.pad(v,((0,0),(0,0),(0,len(e.phase_ops.VOLATILES)-slots),(0,0)))
         if 9<=version<15:
@@ -378,6 +380,7 @@ def effect_states(state,side,mon):
         if source_kind==e.phase_ops.SOURCE_ABILITY:row['sourceEffect']={'$effect':e.ABILITIES[move],'type':'Ability'}
         if kind==e.phase_ops.VOLATILE_IDS['zenmode']:row['name']='Zen Mode'
         if kind==e.phase_ops.VOLATILE_IDS['gastroacid']:row['name']='Gastro Acid'
+        if kind==e.flash_ops.SLOT:row['name']='Flash Fire'
         if kind==e.called_ops.COAT_SLOT:
             row.update(name='Magic Coat',duration=time)
             if int(s.volatile_state[side,mon,kind,10]):row['pranksterBoosted']=True

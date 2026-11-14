@@ -12,6 +12,22 @@ all acceptance requirements and commands below remain pending.
 
 ## Current source and evidence
 
+**Schema39 Flash Fire activation and stat condition:** focused CPU29 scenarios/43 boundaries
+passed in496.428s;2 native/inventory checks passed. No GPU run.
+See [schema39-checkpoint.json](../test-logs/g4-cpu-conformance/schema39-checkpoint.json).
+Flash Fire activation metadata, repeated immunity, physical/special stat
+modifiers with tied/untied Thick Fat and Choice, suppression and lifecycle
+cleanup, frozen/status/called/reflected frames and live pivot NPZ/journal17.
+Final old-schema migration/full-lean/batch gates remain deferred.
+
+```sh
+JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_flash_fire_engine -v -f
+```
+
+Runner now includes101 checks/45 modules, 1275 scenarios/
+5454 boundaries. Preparation, broad CPU/migration/full-lean, fixed campaigns
+and device checks remain pending until mechanics/inventory closure.
+
 **Schema38 Sap Sipper:** focused CPU17 scenarios/29 boundaries
 passed in467.884s;2 native/inventory checks passed. No GPU run.
 See [schema38-checkpoint.json](../test-logs/g4-cpu-conformance/schema38-checkpoint.json).
