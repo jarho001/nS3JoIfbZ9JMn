@@ -1,0 +1,53 @@
+'use strict';
+module.exports=function(){
+ const m=(x={})=>({species:'Mew',moves:['Acrobatics','Recover'],ability:'Unburden',item:'Flying Gem',level:50,nature:'Hardy',gender:'M',ivs:{hp:31,atk:31,def:31,spa:31,spd:31,spe:31},evs:{hp:0,atk:0,def:0,spa:0,spd:0,spe:0},...x});
+ const foe=(x={})=>m({moves:['Tackle','Recover'],ability:'Pressure',item:'',...x});
+ const b=(a=1,c=2)=>({p1:`move ${a}`,p2:`move ${c}`}),cases=[];
+ const add=(id,x={})=>cases.push({id:'G4-gem-unburden-'+id,seed:1,generic:true,gemUnburdenFamily:true,p1:[m({evs:{spe:252}})],p2:[foe()],steps:[b(),b()],...x});
+ add('flying');add('fighting',{p1:[m({moves:['Low Kick','Recover'],item:'Fighting Gem',evs:{spe:252}})]});
+ for(const [key,item,move]of [['flying','Flying Gem','Acrobatics'],['fighting','Fighting Gem','Drain Punch']]){
+  add(key+'-pressure',{p1:[m({ability:'Pressure',item,moves:[move,'Recover'],evs:{spe:252}})]});
+  add(key+'-mismatch',{p1:[m({item,moves:['Tackle','Recover'],evs:{spe:252}})],steps:[b()]});
+  add(key+'-protect',{p1:[m({item,moves:[move,'Recover'],evs:{spe:252}})],p2:[foe({moves:['Protect']})],steps:[b(1,1)]});
+  add(key+'-terminal',{p1:[m({item,moves:[move,'Recover'],evs:{spe:252}})],p2:[foe({level:1})],steps:[b()]});
+ }
+ add('fighting-ghost',{p1:[m({item:'Fighting Gem',moves:['Low Kick','Recover'],evs:{spe:252}})],p2:[foe({species:'Gengar'})],steps:[b()]});
+ add('fighting-miss',{seed:15,p1:[m({item:'Fighting Gem',moves:['High Jump Kick','Recover'],evs:{spe:252}})],steps:[b()]});
+ add('fighting-doublekick',{p1:[m({item:'Fighting Gem',moves:['Double Kick','Recover'],evs:{spe:252}})],steps:[b()]});
+ add('fighting-mummy',{abilityChangeFamily:true,p1:[m({item:'Fighting Gem',moves:['Double Kick','Recover'],evs:{spe:252}})],p2:[foe({ability:'Mummy'})],steps:[b()]});
+ add('flying-substitute',{p2:[foe({moves:['Substitute','Recover']})],steps:[b(2,1),b()]});
+ add('flying-helmet-source-ko',{p2:[foe({item:'Rocky Helmet'})],setup:[{side:'p1',hp:1}],steps:[b()]});
+ add('flying-reserve',{p2:[foe({level:1}),foe()],steps:[b(),{p2:'switch 2'},b()]});
+ add('flying-sleep-talk',{seed:4,p1:[m({moves:['Rest','Sleep Talk','Acrobatics'],evs:{spe:252}})],setup:[{side:'p1',hp:100}],steps:[b(),b(2)]});
+ add('fighting-hiddenpower',{p1:[m({item:'Fighting Gem',moves:['Hidden Power','Recover'],evs:{spe:252},ivs:{hp:30,atk:30,def:30,spa:30,spd:30,spe:30}})],steps:[b()]});
+ add('flying-fly',{p1:[m({moves:['Fly','Recover'],evs:{spe:252}})]});
+ add('flying-status',{p1:[m({moves:['Feather Dance','Recover'],evs:{spe:252}})],steps:[b()]});
+ add('flying-moxie-terminal',{p1:[m({ability:'Moxie',evs:{spe:252}})],p2:[foe({level:1})],steps:[b()]});
+ add('fighting-hiddenpower-par',{p1:[m({item:'Fighting Gem',moves:['Hidden Power','Recover'],evs:{spe:252},ivs:{hp:30,atk:30,def:30,spa:30,spd:30,spe:30}})],setup:[{side:'p1',status:'par'}]});
+ add('legacy-pressure',{p1:[m({ability:'Pressure',item:'',evs:{spe:252}})]});
+ add('unburden-naked',{p1:[m({item:'',evs:{spe:252}})]});
+ add('unburden-lum',{p1:[m({item:'Lum Berry'})],p2:[foe({moves:['Thunder Wave','Recover'],evs:{spe:252}})],steps:[b(1,1),b()]});
+ add('unburden-sitrus',{p1:[m({item:'Sitrus Berry'})],p2:[foe({evs:{spe:252}})],setup:[{side:'p1',hp:90}],steps:[b(1,1),b()]});
+ add('unburden-chesto',{p1:[m({item:'Chesto Berry',moves:['Rest','Acrobatics','Recover'],evs:{spe:252}})],setup:[{side:'p1',hp:100}],steps:[b(),b(2)]});
+ add('unburden-whiteherb',{p1:[m({item:'White Herb',evs:{spe:252}})],setup:[{side:'p1',boosts:{def:-2}}],steps:[b(2),b()]});
+ add('unburden-powerherb',{p1:[m({item:'Power Herb',moves:['Fly','Recover'],evs:{spe:252}})],steps:[b(),b(2)]});
+ add('unburden-knockoff',{p1:[m({item:'Leftovers'})],p2:[foe({moves:['Knock Off','Recover'],evs:{spe:252}})],steps:[b(2,1),b()]});
+ add('unburden-trick-lose',{itemLifecycleFamily:true,p1:[m({item:'Leftovers',moves:['Trick','Acrobatics','Recover'],evs:{spe:252}})],steps:[b(),b(2)]});
+ add('unburden-trick-other',{itemLifecycleFamily:true,p1:[m({item:'Leftovers'})],p2:[foe({moves:['Trick','Recover'],evs:{spe:252}})],steps:[b(2,1),b()]});
+ add('unburden-trick-held',{itemLifecycleFamily:true,p1:[m({item:'Leftovers',moves:['Trick','Acrobatics','Recover'],evs:{spe:252}})],p2:[foe({item:'Choice Band'})],steps:[b(),b(2)]});
+ add('unburden-trick-both',{itemLifecycleFamily:true,p1:[m({item:'Leftovers',moves:['Trick','Acrobatics','Recover'],evs:{spe:252}})],p2:[m({item:'Sitrus Berry',moves:['Tackle','Recover']})],steps:[b(),b(2)]});
+ add('unburden-trick-whiteherb',{itemLifecycleFamily:true,p1:[m({item:'',moves:['Trick','Acrobatics','Recover'],evs:{spe:252}})],p2:[foe({item:'White Herb'})],setup:[{side:'p1',boosts:{def:-2}}],steps:[b(),b(2)]});
+ add('unburden-repeat-take',{itemLifecycleFamily:true,p1:[m({item:'Leftovers'})],p2:[foe({item:'Choice Band',moves:['Trick','Knock Off','Recover'],evs:{spe:252}})],steps:[b(2,1),b(2,2),b(1,3)]});
+ add('unburden-suppress-after',{abilityChangeFamily:true,p2:[foe({moves:['Gastro Acid','Recover']})],steps:[b(),b(2,1),b()]});
+ add('unburden-suppress-before',{abilityChangeFamily:true,p2:[foe({moves:['Gastro Acid','Recover']})],steps:[b(2,1),b()]});
+ add('unburden-roleplay',{abilityChangeFamily:true,p1:[m({moves:['Acrobatics','Role Play','Recover'],evs:{spe:252}})],steps:[b(),b(2),b()]});
+ add('unburden-skillswap',{abilityChangeFamily:true,p1:[m({moves:['Acrobatics','Skill Swap','Recover'],evs:{spe:252}})],steps:[b(),b(2),b()]});
+ add('unburden-switch-reset',{p1:[m({evs:{spe:252}}),foe()],steps:[b(),{p1:'switch 2',p2:'move 2'},{p1:'switch 2',p2:'move 2'},b()]});
+ add('unburden-tie',{p1:[m()]});
+ add('gem-residual-tie',{p1:[m({ability:'Pressure'})],p2:[foe({moves:['Magic Coat','Recover']})],steps:[b(1,1)]});
+ return cases;
+};
+module.exports.membershipWitnesses=function(){
+ require('./neutral-turn-oracle.cjs').assertReady();const ps=require('./vendor/pokemon-showdown/dist/sim'),assert=require('node:assert/strict');
+ return [['item','flyinggem',28,'Drifblim'],['item','fightinggem',173,'Hitmonlee'],['ability','unburden',28,'Drifblim']].map(([kind,id,n,species])=>{const seed=[n,2,3,4],set=ps.Teams.getGenerator('gen5randombattle',seed).getTeam().find(s=>s.species===species&&ps.Dex.toID(kind==='item'?s.item:s.ability)===id);assert.ok(set,id);return {kind,id,seed,set};});
+};

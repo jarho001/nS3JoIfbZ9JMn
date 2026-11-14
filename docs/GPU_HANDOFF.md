@@ -22,11 +22,25 @@ Keep historical commands/results as provenance.
 
 ## Current source and evidence
 
-**Next group, native only:** Facade / Acrobatics has28 scenarios/36 boundaries,
-pinned positive witnesses and a passing
-`node --test test/conditional-power-native.test.cjs` contract. It is not in the
-CPU/CUDA runner; implementation remains pending. Gem and Unburden dependencies
-stay unsupported pending their own closure.
+**Next group, native only:** Flying Gem / Fighting Gem / Unburden has44 scenarios/80
+boundaries, pinned positive witnesses and a passing
+`node --test test/gem-unburden-native.test.cjs` contract. It is not in the
+CPU/CUDA runner; implementation remains pending. The group plans appended volatile
+rows and engine64/journal18, using frozen genuine schema63/journal17 baseline files
+for compatibility checks. Other gems remain unresolved/unsupported without positive witnesses.
+
+**Schema63 Facade / Acrobatics group:** focused CPU30 scenarios/39 boundaries
+passed in454.794s;2 native/inventory contracts and4 handoff helpers pass.
+See [schema63-checkpoint.json](../test-logs/g4-cpu-conformance/schema63-checkpoint.json).
+One compiled step covers exact state/RNG/requests/recipient events/histories,
+NPZ continuation and journal17. No GPU execution.
+
+```sh
+JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_conditional_power_engine -v -f
+```
+
+Runner includes125 checks/69 modules,2157 scenarios/6888
+boundaries in63 corpora. Current-source broad/device execution remains deferred.
 
 **Schema62 Low Kick / Grass Knot / Heavy Slam group:** focused CPU40 scenarios/48 boundaries
 passed in453.032s;2 native/inventory contracts and4 handoff helpers pass.

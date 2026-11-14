@@ -54,6 +54,7 @@ from . import contact_status as contact_status_ops
 from . import conditional_attacks as conditional_ops
 from . import stat_selection as stat_ops
 from . import weight_based as weight_ops
+from . import conditional_power as conditional_power_ops
 from . import species_items as species_item_ops
 from . import ability_creation as creation_ops
 from . import suppression as suppression_ops
@@ -68,7 +69,7 @@ import sys
 def _engine():
     return sys.modules[__name__]
 
-SCHEMA = 62
+SCHEMA = 63
 ROSTER, SLOTS, QUEUE, EVENTS, DRAWS, HISTORY = 6, 4, 8, 128, 128, 2048
 OK, PENDING, INVALID, UNSUPPORTED, CAPACITY, TERMINAL, STALE = range(7)
 RETRY=7
@@ -423,11 +424,12 @@ def _hit(c,actor,move):
         power=jnp.where(move==HIDDEN_POWER,s.hp_power[actor,mon],
                         jnp.where(move==RETURN,s.happiness[actor,mon]*10//25,
                                   jnp.where(move==FRUSTRATION,(255-s.happiness[actor,mon])*10//25,POWER[move])))
+        power=conditional_power_ops.base_power(s,actor,move,power)
         power=weight_ops.power(s,actor,target,move,power)
         power=conditional_ops.power(s,target,move,power,_engine())
         power=jnp.maximum(1,power)*jnp.where(pursuit_ops.boosted(s,target,move,_engine()),2,1)
         move_type=jnp.where(move==HIDDEN_POWER,s.hp_type[actor,mon],tables.MOVE_TYPE[move])
-        power=hook_ops.power(power,suppression_ops.abilities(s)[actor,mon],s.item[actor,mon],physical,move_type,_engine(),phase_ops.power_modifier(s,target,move),defender_ability=suppression_ops.abilities(s)[target,tm],move=move)
+        power=hook_ops.power(power,suppression_ops.abilities(s)[actor,mon],s.item[actor,mon],physical,move_type,_engine(),phase_ops.power_modifier(s,target,move),defender_ability=suppression_ops.abilities(s)[target,tm],move=move,move_modifier=conditional_power_ops.modifier(s,actor,move,_engine()))
         c,attack,defense=hook_ops.stats(c,attack,defense,actor,target,physical,move_type,_engine(),defensive_physical=defensive_physical)
         c,roll=_draw(c,0,16,ROLL);s,t=c
         core=base_damage_core(s.level[actor,mon],power,attack,defense)+2

@@ -11,12 +11,14 @@ module.exports=function(){
  add('facade-magicguard',{p1:[facade({ability:'Magic Guard'})],setup:[{side:'p1',status:'brn'}]});
  for(const item of ['Flame Orb','Toxic Orb'])add('facade-'+item.toLowerCase().replaceAll(' ',''),{p1:[facade({item})],steps:[b(2),b()]});
  add('facade-sleep-talk',{seed:4,p1:[m({moves:['Rest','Sleep Talk','Facade'],evs:{spe:252}})],setup:[{side:'p1',hp:100}],steps:[b(),b(2)]});
+ add('facade-guts-sleep-talk',{seed:4,p1:[m({moves:['Rest','Sleep Talk','Facade'],ability:'Guts',evs:{spe:252}})],setup:[{side:'p1',hp:100}],steps:[b(),b(2)]});
  add('facade-silkscarf',{p1:[facade({item:'Silk Scarf'})],setup:[{side:'p1',status:'brn'}]});
  add('facade-lum',{p1:[facade({item:'Lum Berry',evs:{spe:0}})],p2:[m({moves:['Thunder Wave','Recover'],evs:{spe:252}})],steps:[b(1,1)]});
  add('facade-frozen',{p1:[facade()],setup:[{side:'p1',status:'frz'}]});
  add('acrobatics-empty',{p1:[acro()]});
  for(const item of ['Leftovers','Choice Band','Muscle Band'])add('acrobatics-'+item.toLowerCase().replaceAll(' ',''),{p1:[acro({item})]});
  add('acrobatics-technician-empty',{p1:[acro({ability:'Technician'})]});
+ add('acrobatics-technician-muscleband',{p1:[acro({ability:'Technician',item:'Muscle Band'})]});
  add('acrobatics-technician-held',{p1:[acro({ability:'Technician',item:'Leftovers'})]});
  add('acrobatics-lum',{p1:[acro({item:'Lum Berry',evs:{spe:0}})],p2:[m({moves:['Thunder Wave','Recover'],evs:{spe:252}})],steps:[b(1,1)]});
  for(const gain of [false,true])add('acrobatics-trick-'+(gain?'gain':'lose'),{p1:[m({moves:['Trick','Acrobatics','Recover'],item:gain?'':'Leftovers',evs:{spe:252}})],p2:[m({item:gain?'Leftovers':''})],steps:[b(),b(2)]});

@@ -49,7 +49,7 @@ def accuracy(base,s,actor,target,category):
     return modify(base,modifier)
 
 
-def power(value,ability,item,physical,move_type,e,phase_modifier=4096,defender_ability=0,move=0):
+def power(value,ability,item,physical,move_type,e,phase_modifier=4096,defender_ability=0,move=0,move_modifier=4096):
     modifier=jnp.where((ability==h.A['technician'])&(value<=60),6144,4096).astype(jnp.int32)
     boosted=((ability==h.A['ironfist'])&h.PUNCH[move])|((ability==h.A['reckless'])&h.RECKLESS[move])
     # Iron Fist/Reckless priority23: before Dry Skin17 and item modifiers.
@@ -60,6 +60,7 @@ def power(value,ability,item,physical,move_type,e,phase_modifier=4096,defender_a
     band=((item==h.I['muscleband'])&physical)|((item==h.I['wiseglasses'])&(~physical))
     typed=((item==h.I['silkscarf'])&(move_type==e.generic.TYPES['normal']))|((item==h.I['mysticwater'])&(move_type==e.generic.TYPES['water']))
     modifier=chain(modifier,jnp.where(band,4505,jnp.where(typed,4915,4096)))
+    modifier=chain(modifier,move_modifier)
     return modify(value,chain(modifier,phase_modifier))
 
 

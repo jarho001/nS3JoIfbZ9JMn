@@ -18091,10 +18091,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/conditional-power.json.gz",
+          "native": "reference/conditional-power-cases.cjs",
+          "scope": "Independent30 constructed/synthetic scenarios39 boundaries; Gen5 Facade source status chain with retained burn reduction, live Acrobatics item callback before Technician, Guts/sleep/orbs/Magic Guard, same-turn Lum, Trick/Knock Off, Substitute/Helmet/Mummy and fixed-point item chain. Gem/Unburden and full-format dependencies remain gated",
+          "test": "test/test_conditional_power_engine.py"
+        }
+      ],
       "field": "basePowerCallback",
       "id": "moves:acrobatics:basePowerCallback",
-      "implementation": null,
+      "implementation": {
+        "family": "conditional_power",
+        "file": "simulator/conditional_power.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:acrobatics",
@@ -18106,7 +18118,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "da9eaf1e764a69519ce68653ef01bbee82e8094ae61d2cb906cc26498a586ac6",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -21067,10 +21079,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/conditional-power.json.gz",
+          "native": "reference/conditional-power-cases.cjs",
+          "scope": "Independent30 constructed/synthetic scenarios39 boundaries; Gen5 Facade source status chain with retained burn reduction, live Acrobatics item callback before Technician, Guts/sleep/orbs/Magic Guard, same-turn Lum, Trick/Knock Off, Substitute/Helmet/Mummy and fixed-point item chain. Gem/Unburden and full-format dependencies remain gated",
+          "test": "test/test_conditional_power_engine.py"
+        }
+      ],
       "field": "onBasePower",
       "id": "moves:facade:onBasePower",
-      "implementation": null,
+      "implementation": {
+        "family": "conditional_power",
+        "file": "simulator/conditional_power.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:facade",
@@ -21082,7 +21106,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "a2ede24182da28c462e16f52c34a21e7fbfdb17f56fb0c2621f49f870422eefe",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -53632,8 +53656,8 @@
         }
       ],
       "kind": "moves",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "conditional-power-positive-witness",
       "status": "partial"
     },
     {
@@ -57994,8 +58018,8 @@
         }
       ],
       "kind": "moves",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "conditional-power-positive-witness",
       "status": "partial"
     },
     {
@@ -97959,6 +97983,112 @@
           }
         ]
       },
+      "conditional-power-positive-witness": {
+        "bound": [
+          "moves:acrobatics",
+          "moves:facade"
+        ],
+        "conclusion": "required",
+        "kind": "moves",
+        "reasoning": "Pinned Facade Raticate seed[2,2,3,4] and Acrobatics Drifblim seed[28,2,3,4] prove membership. Gem/Unburden and remaining full-format dependencies remain gated and pending.",
+        "references": [
+          "data/random-battles/gen5/teams.ts:103-494 (cullMovePool/randomMoveset)",
+          "data/random-battles/gen5/teams.ts:496-566 (ability filters/fallback)",
+          "data/random-battles/gen5/teams.ts:568-816 (item returns and randomSet)",
+          "data/random-battles/gen5/teams.ts:850-1014 (team eligibility)",
+          "data/random-battles/gen9/teams.ts:675-693 (addMove)",
+          "data/random-battles/gen9/teams.ts:1442-1497 (getLevel/getForme)",
+          "data/random-battles/gen9/teams.ts:1641-1683 (getPokemonPool)"
+        ],
+        "witnesses": [
+          {
+            "id": "facade",
+            "kind": "move",
+            "seed": [
+              2,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Guts",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Toxic Orb",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 88,
+              "moves": [
+                "uturn",
+                "facade",
+                "flamewheel",
+                "crunch"
+              ],
+              "name": "Raticate",
+              "role": "Wallbreaker",
+              "shiny": false,
+              "species": "Raticate",
+              "speciesId": "raticate"
+            }
+          },
+          {
+            "id": "acrobatics",
+            "kind": "move",
+            "seed": [
+              28,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Unburden",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 81,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Flying Gem",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 81,
+              "moves": [
+                "disable",
+                "shadowball",
+                "acrobatics",
+                "substitute"
+              ],
+              "name": "Drifblim",
+              "role": "Fast Attacker",
+              "shiny": false,
+              "species": "Drifblim",
+              "speciesId": "drifblim"
+            }
+          }
+        ]
+      },
       "contact-status-positive-witness": {
         "bound": [
           "abilities:flamebody",
@@ -101096,8 +101226,8 @@
       },
       "entries": {
         "proven_unreachable": 542,
-        "required": 91,
-        "unresolved": 1135
+        "required": 93,
+        "unresolved": 1133
       },
       "roots": {
         "proven_unreachable": 0,
