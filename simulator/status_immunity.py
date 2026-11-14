@@ -2,7 +2,7 @@
 import jax.numpy as jnp
 from . import gen5_engine_tables as t
 A=t.ABILITY_IDS
-KEYS=('immunity','limber','waterveil','magmaarmor','insomnia','vitalspirit','wonderguard','waterabsorb','voltabsorb','stormdrain','lightningrod','motordrive','sapsipper')
+KEYS=('immunity','limber','waterveil','magmaarmor','insomnia','vitalspirit','wonderguard','waterabsorb','voltabsorb','stormdrain','lightningrod','motordrive','sapsipper','dryskin')
 ABILITY_IMPLEMENTED=jnp.asarray([k in KEYS for k in t.ABILITIES],jnp.bool_)
 SLEEP=jnp.asarray([k in ('insomnia','vitalspirit')for k in t.ABILITIES],jnp.bool_)
 
@@ -33,7 +33,7 @@ def absorbs(s,actor,target,move,e):
     mon=s.active[target];source=s.active[actor]
     ability=e.suppression_ops.abilities(s)[target,mon]
     move_type=jnp.where(move==e.HIDDEN_POWER,s.hp_type[actor,source],t.MOVE_TYPE[move])
-    return (actor!=target)&((((ability==A['waterabsorb'])|(ability==A['stormdrain']))&(move_type==e.generic.TYPES['water']))|(((ability==A['voltabsorb'])|(ability==A['lightningrod'])|(ability==A['motordrive']))&(move_type==e.generic.TYPES['electric']))|((ability==A['sapsipper'])&(move_type==e.generic.TYPES['grass'])))
+    return (actor!=target)&((((ability==A['waterabsorb'])|(ability==A['stormdrain'])|(ability==A['dryskin']))&(move_type==e.generic.TYPES['water']))|(((ability==A['voltabsorb'])|(ability==A['lightningrod'])|(ability==A['motordrive']))&(move_type==e.generic.TYPES['electric']))|((ability==A['sapsipper'])&(move_type==e.generic.TYPES['grass'])))
 
 
 def absorb(c,actor,target,move,e):
@@ -45,7 +45,7 @@ def absorb(c,actor,target,move,e):
     def heal(c):
         s,tr=c;hp=jnp.minimum(maximum,s.hp[target,mon]+maximum//4)
         s=s._replace(hp=s.hp.at[target,mon].set(hp))
-        return e._event((s,tr),e.HEAL,target,mon,move=jnp.where(ability==A['waterabsorb'],4,5),target=actor,targetmon=s.active[actor],value=hp,aux=maximum,status=s.status[target,mon])
+        return e._event((s,tr),e.HEAL,target,mon,move=jnp.where(ability==A['waterabsorb'],4,jnp.where(ability==A['dryskin'],6,5)),target=actor,targetmon=s.active[actor],value=hp,aux=maximum,status=s.status[target,mon])
     boosting=(ability==A['stormdrain'])|(ability==A['lightningrod'])|(ability==A['motordrive'])|(ability==A['sapsipper'])
     return e.jax.lax.cond(boosting,lambda c:absorb_boost(c,target,ability,e),lambda c:e.jax.lax.cond(c[0].hp[target,mon]<maximum,heal,lambda c:e._event(c,e.IMMUNE,target,mon,value=ability,aux=4),c),c)
 

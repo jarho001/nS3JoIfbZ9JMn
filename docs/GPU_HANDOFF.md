@@ -12,6 +12,21 @@ all acceptance requirements and commands below remain pending.
 
 ## Current source and evidence
 
+**Schema41 Dry Skin water/fire/weather hooks:** focused CPU34 scenarios/68 boundaries
+passed in482.343s;2 native/inventory checks passed. No GPU run.
+See [schema41-checkpoint.json](../test-logs/g4-cpu-conformance/schema41-checkpoint.json).
+Water interception/healing, Fire base-power chain order, rain/sun healing
+and self damage, cap/minimum/weather expiry, tied order/status/KO,
+suppression/Trace and NPZ/journal17 saves; final composed/broad gates pending.
+
+```sh
+JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_dry_skin_engine -v -f
+```
+
+Runner now includes103 checks/47 modules, 1338 scenarios/
+5555 boundaries. Preparation, broad CPU/migration/full-lean, fixed campaigns
+and device checks remain pending until mechanics/inventory closure.
+
 **Schema40 Shield Dust and Serene Grace:** focused CPU29 scenarios/33 boundaries
 passed in488.902s;2 native/inventory checks passed. No GPU run.
 See [schema40-checkpoint.json](../test-logs/g4-cpu-conformance/schema40-checkpoint.json).

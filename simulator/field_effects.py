@@ -87,7 +87,7 @@ def accuracy(base,s,actor,target,e):
 def weather_tick(c,e):
     s,t=c;weather=s.weather_state[0];remaining=jnp.maximum(0,s.weather_state[4]-1);timed=s.weather_state[4]>0
     def end(c):
-        s,t=c;state=empty_weather().at[5].set(1)
+        s,t=c;state=empty_weather().at[5].set(s.weather_state[5])
         c=e._event((s._replace(weather_state=state),t),e.WEATHER,value=0)
         speeds=s.speed[jnp.arange(2),s.active]
         return e.form_ops.weather_change(c,e,e.WEATHER_CHANGE)
@@ -110,6 +110,13 @@ def weather_tick(c,e):
                 s=s._replace(hp=s.hp.at[side,m].set(newhp))
                 return e._event((s,t),e.HEAL,side,m,value=newhp,aux=maximum,status=s.status[side,m],move=2)
             c=e._when((weather==4)&(ability==e.hook_tables.A['icebody'])&(s.hp[side,m]>0)&(s.hp[side,m]<s.stats[side,m,0]),ice_body,c)
+            def dry_heal(c):
+                s,t=c;maximum=s.stats[side,m,0];hp=jnp.minimum(maximum,s.hp[side,m]+maximum//8)
+                s=s._replace(hp=s.hp.at[side,m].set(hp))
+                return e._event((s,t),e.HEAL,side,m,value=hp,aux=maximum,status=s.status[side,m],move=7)
+            dry=(ability==e.hook_tables.A['dryskin'])&(s.hp[side,m]>0)
+            c=e._when(dry&(weather==1)&(s.hp[side,m]<s.stats[side,m,0]),dry_heal,c)
+            c=e._when(dry&(weather==2),lambda c:e._damage(c,side,jnp.maximum(1,s.stats[side,m,0]//8),cause=15,source_side=side,source_mon=m),c)
             c=e._when(((weather==3)|(weather==4))&(~immune)&(s.hp[side,m]>0),
                       lambda c:e._damage(c,side,s.stats[side,m,0]//16,cause=jnp.where(weather==3,7,8)),c)
         s,t=c

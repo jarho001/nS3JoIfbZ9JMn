@@ -815,3 +815,11 @@ of bounce/Prankster bits, and applied once per active move. Native29/33 focused
 CPU parity and NPZ/journal17 persistence pass, including Gen5 status-before-Mummy
 ordering. Layout unchanged; unsupported move effects and all remaining
 closure/broad/device/final gates remain pending.
+
+Schema41 adds Dry Skin water interception, Fire SourceBasePower priority17
+and weather callbacks through the shared paths. Rain heals one eighth original
+maximum HP; sun damages one eighth with native self attribution. Modifier order
+retains Technician30/Dry Skin17/items16. Native34/68 focused CPU parity and
+NPZ/journal17 persistence pass, including cap/minimum/expiry and burn/KO
+ordering. Layout unchanged; remaining mechanics/closure and broad/device/final
+acceptance stay pending.

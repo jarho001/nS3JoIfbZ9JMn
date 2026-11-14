@@ -45,8 +45,11 @@ def accuracy(base,s,actor,physical):
     return modify(base,modifier)
 
 
-def power(value,ability,item,physical,move_type,e,phase_modifier=4096):
+def power(value,ability,item,physical,move_type,e,phase_modifier=4096,defender_ability=0):
     modifier=jnp.where((ability==h.A['technician'])&(value<=60),6144,4096).astype(jnp.int32)
+    # Native SourceBasePower Dry Skin priority17: after Technician30, before items16.
+    dry=(defender_ability==h.A['dryskin'])&(move_type==e.generic.TYPES['fire'])
+    modifier=chain(modifier,jnp.where(dry,5120,4096))
     band=((item==h.I['muscleband'])&physical)|((item==h.I['wiseglasses'])&(~physical))
     typed=((item==h.I['silkscarf'])&(move_type==e.generic.TYPES['normal']))|((item==h.I['mysticwater'])&(move_type==e.generic.TYPES['water']))
     modifier=chain(modifier,jnp.where(band,4505,jnp.where(typed,4915,4096)))

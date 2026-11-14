@@ -895,10 +895,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/dry-skin.json.gz",
+          "native": "reference/dry-skin-cases.cjs",
+          "scope": "Independent32 synthetic plus2 retained historical weather scenarios/68 boundaries covering water/fire/weather; remaining interactions and full-format acceptance pending",
+          "test": "test/test_dry_skin_engine.py"
+        }
+      ],
       "field": "onSourceBasePower",
       "id": "abilities:dryskin:onSourceBasePower",
-      "implementation": null,
+      "implementation": {
+        "family": "dry_skin",
+        "file": "simulator/status_immunity.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:dryskin",
@@ -910,7 +922,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "9b6609cad489d4aa62e4dc6cf049767f51eb5a6266f7d4feaa9714290760bcff",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -919,10 +931,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/dry-skin.json.gz",
+          "native": "reference/dry-skin-cases.cjs",
+          "scope": "Independent32 synthetic plus2 retained historical weather scenarios/68 boundaries covering water/fire/weather; remaining interactions and full-format acceptance pending",
+          "test": "test/test_dry_skin_engine.py"
+        }
+      ],
       "field": "onTryHit",
       "id": "abilities:dryskin:onTryHit",
-      "implementation": null,
+      "implementation": {
+        "family": "dry_skin",
+        "file": "simulator/status_immunity.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:dryskin",
@@ -934,7 +958,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "a21a166899a418e9b701da3b857f9d7b28d8180b1ef924fcb125ee30275a4213",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -943,10 +967,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/dry-skin.json.gz",
+          "native": "reference/dry-skin-cases.cjs",
+          "scope": "Independent32 synthetic plus2 retained historical weather scenarios/68 boundaries covering water/fire/weather; remaining interactions and full-format acceptance pending",
+          "test": "test/test_dry_skin_engine.py"
+        }
+      ],
       "field": "onWeather",
       "id": "abilities:dryskin:onWeather",
-      "implementation": null,
+      "implementation": {
+        "family": "dry_skin",
+        "file": "simulator/status_immunity.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:dryskin",
@@ -958,7 +994,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "b7ea50bec2b94d30f91df4e7a3f65b7ccc49c55f2347ee0f3a6094d0bac6def6",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -71465,10 +71501,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/dry-skin.json.gz",
+          "native": "reference/dry-skin-cases.cjs",
+          "scope": "Independent32 synthetic plus2 retained historical weather scenarios/68 boundaries covering water/fire/weather; remaining interactions and full-format acceptance pending",
+          "test": "test/test_dry_skin_engine.py"
         }
       ],
       "id": "abilities:dryskin",
       "implementation": {
+        "behavior": {
+          "family": "dry_skin",
+          "file": "simulator/status_immunity.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -71480,8 +71528,8 @@
         }
       ],
       "kind": "abilities",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "dry-skin-positive-witness",
       "status": "partial"
     },
     {
@@ -96825,6 +96873,67 @@
       ]
     },
     "proofs": {
+      "dry-skin-positive-witness": {
+        "bound": [
+          "abilities:dryskin"
+        ],
+        "conclusion": "required",
+        "kind": "abilities",
+        "reasoning": "Pinned generator seed[23,2,3,4] positively witnesses Dry Skin Jynx only; water/fire/weather callbacks have directed synthetic evidence, not full-format closure.",
+        "references": [
+          "data/random-battles/gen5/teams.ts:103-494 (cullMovePool/randomMoveset)",
+          "data/random-battles/gen5/teams.ts:496-566 (ability filters/fallback)",
+          "data/random-battles/gen5/teams.ts:568-816 (item returns and randomSet)",
+          "data/random-battles/gen5/teams.ts:850-1014 (team eligibility)",
+          "data/random-battles/gen9/teams.ts:675-693 (addMove)",
+          "data/random-battles/gen9/teams.ts:1442-1497 (getLevel/getForme)",
+          "data/random-battles/gen9/teams.ts:1641-1683 (getPokemonPool)"
+        ],
+        "witnesses": [
+          {
+            "ability": "dryskin",
+            "seed": [
+              23,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Dry Skin",
+              "evs": {
+                "atk": 0,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "F",
+              "item": "Life Orb",
+              "ivs": {
+                "atk": 0,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 83,
+              "moves": [
+                "focusblast",
+                "icebeam",
+                "lovelykiss",
+                "psyshock"
+              ],
+              "name": "Jynx",
+              "role": "Fast Attacker",
+              "shiny": false,
+              "species": "Jynx",
+              "speciesId": "jynx"
+            }
+          }
+        ]
+      },
       "flash-fire-positive-witness": {
         "bound": [
           "abilities:flashfire"
@@ -97831,8 +97940,8 @@
       },
       "entries": {
         "proven_unreachable": 542,
-        "required": 45,
-        "unresolved": 1181
+        "required": 46,
+        "unresolved": 1180
       },
       "roots": {
         "proven_unreachable": 0,
