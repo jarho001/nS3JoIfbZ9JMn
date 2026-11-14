@@ -34,8 +34,8 @@
     "brief": "PROJECT_PLAN.md#proposed-g4-cpu-implementation-and-conformance-goal",
     "source_base": "f37067e",
     "scope": "Complete pinned gen5randombattle reachable mechanics and every prepared CPU gate. Integrated checkpoints, resumable progress and commit/push authorized. GPU execution, profiling, benchmarks, training, delegation and scored research excluded.",
-    "checkpoint": "Schema53 Unaware global query dependency: 32 scenarios/46 boundaries pass one compiled step in358.711s; native/inventory and4 handoff helpers pass. Full G4 remains open.",
-    "next": "Continue Download/Defiant boost-reaction group from29 scenarios/36 native boundaries; implement ordinary ability startup and per-stat after-boost reactions, then one shared focused CPU checkpoint.",
+    "checkpoint": "Schema54 Download / Defiant group: 30 scenarios/37 boundaries pass one compiled step in391.335s; native/inventory and4 handoff helpers pass. Full G4 remains open.",
+    "next": "Continue Moxie/Aftermath contact-KO reaction group from25 scenarios/29 native boundaries; preserve pre-recoil Moxie and contact KO/Helmet/terminal ordering, then one grouped CPU checkpoint.",
     "ledger": {
       "path": "rules/gen5-reachable-v1.json",
       "entries": 1768,
@@ -45,7 +45,7 @@
         "indirect-closure",
         "engine-contract"
       ],
-      "status": "Incomplete:334 partial callback mappings/812 unsupported; full reachability/closure pending.",
+      "status": "Incomplete:336 partial callback mappings/810 unsupported; full reachability/closure pending.",
       "reachability_summary": {
         "callbacks": {
           "proven_unreachable": 546,
@@ -54,8 +54,8 @@
         },
         "entries": {
           "proven_unreachable": 542,
-          "required": 70,
-          "unresolved": 1156
+          "required": 72,
+          "unresolved": 1154
         },
         "roots": {
           "proven_unreachable": 0,
@@ -77,13 +77,13 @@
     "first_divergence": null,
     "gpu_requirement": "Deferred during travel. Record all G4 device obligations and ready/pending commands in docs/GPU_HANDOFF.md; current checkpoint runner is scripts/g4_gpu_handoff.py. CPU implementation remains active. Later full G4 release still requires matching-source GPU conformance.",
     "acceptance": "G4-CPU-conformance pending. Generic data checkpoint passes; all remaining prepared CPU gates retained, all milestone acceptance/task count unchanged.",
-    "source_identity": "test-logs/g4-cpu-conformance/schema53-checkpoint.json",
+    "source_identity": "test-logs/g4-cpu-conformance/schema54-checkpoint.json",
     "evidence_directory": "test-logs/g4-cpu-conformance",
     "publication": {
       "status": "checkpoint_publication_authorized",
       "target": "origin/main",
-      "previous_published_head": "28eef79295e4361d998e52d32e578067297e644d",
-      "scope": "Schema53 focused CPU checkpoint; sustained CPU execution continues, full G4 open."
+      "previous_published_head": "9c961cb1291d8c08c433e5a3358079260f498b96",
+      "scope": "Schema54 focused CPU checkpoint; sustained CPU execution continues, full G4 open."
     },
     "reasoning_effort": "medium (user preference,2026-11-10; no automatic escalation)",
     "design_pass": {
@@ -150,26 +150,26 @@
     },
     "record_usage": "Start at docs/CURRENT.md and scripts/read_context.py. State is authoritative for live progress; history is archived. Update live checkpoint/next/package/blockers at meaningful checkpoints; do not append completed-family narratives. Detailed results belong in immutable test evidence.",
     "next_work_package": {
-      "id": "g4-boost-ability-group",
+      "id": "g4-faint-ability-group",
       "status": "native_precheck_passed_implementation_pending",
       "members": [
-        "Download startup/acquired-ability stat selection and boost",
-        "Defiant after-each-opposing-stat-drop Attack boost"
+        "Moxie source-Move AfterFaint Attack boost",
+        "Aftermath fatal-contact quarter-HP damage"
       ],
       "shared_paths": [
-        "Ability-sourced boosts, stat flags/events and capped stages; startup/Intimidate/acquisition plus ordinary boost dispatch"
+        "DamagingHit contact ordering, faint callbacks, recoil/Helmet/Life Orb and terminal outcomes"
       ],
       "membership": [
-        "Defiant Farfetch\u2019d seed[5,2,3,4]",
-        "Download Genesect seed[9,2,3,4]"
+        "Aftermath Skuntank seed[6,2,3,4]",
+        "Moxie Salamence seed[7,2,3,4]"
       ],
-      "native_precheck": "29 scenarios/36 boundaries in test-logs/g4-cpu-conformance/boost-ability-precheck.json.gz; multi-stat/per-stat drops, caps/self/suppression/White Herb, Download stat comparison/stages/ignored modifiers, startup/entry/Trace/Role Play/Skill Swap.",
-      "native_command": "node --test test/boost-ability-native.test.cjs",
+      "native_precheck": "25 scenarios/29 boundaries in test-logs/g4-cpu-conformance/faint-ability-precheck.json.gz. Contact/noncontact, caps, Magic Guard/Mummy/suppression, poison, reserves/terminal, recoil/Explosion/multihit and double-KO ordering.",
+      "native_command": "node --test test/faint-ability-native.test.cjs",
       "native_result": "1 passed; engine implementation pending",
-      "planned_command": "JAX_PLATFORMS=cpu JAX_ENABLE_COMPILATION_CACHE=true JAX_COMPILATION_CACHE_DIR=\"$PWD/work/jax-cache\" JAX_EXPLAIN_CACHE_MISSES=true OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 XLA_PYTHON_CLIENT_PREALLOCATE=false timeout 900s .venv-jax/bin/python -m unittest test.test_boost_ability_engine -v -f",
+      "planned_command": "JAX_PLATFORMS=cpu JAX_ENABLE_COMPILATION_CACHE=true JAX_COMPILATION_CACHE_DIR=\"$PWD/work/jax-cache\" JAX_EXPLAIN_CACHE_MISSES=true OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 XLA_PYTHON_CLIENT_PREALLOCATE=false timeout 900s .venv-jax/bin/python -m unittest test.test_faint_ability_engine -v -f",
       "command_status": "planned; module not yet implemented",
       "excluded": [
-        "Unsupported stat-changing secondaries and remaining callback dependencies stay explicit",
+        "Damp has no witness in seed1..500; remains unresolved and unsupported, not excluded",
         "Broad CPU/device/campaign/profiling gates deferred"
       ]
     },
@@ -559,27 +559,27 @@
     "combined_return_home_block": "docs/GPU_HANDOFF.md#one-return-home-block-correctness-plus-g3-v6-measurements",
     "pending_status_checkpoint": "Current status/field/hook GPU checks are wired into the49-check runner; no GPU execution during travel. Preserve matching-source CPU results and do not transfer earlier GPU/CPU evidence across changed source.",
     "expanded_checkpoint": {
-      "status": "schema53_grouped_focused_CPU_complete_GPU_deferred",
-      "engine_schema": 53,
-      "modules": 59,
-      "native_scenarios": 1773,
-      "native_boundaries": 6418,
+      "status": "schema54_grouped_focused_CPU_complete_GPU_deferred",
+      "engine_schema": 54,
+      "modules": 60,
+      "native_scenarios": 1803,
+      "native_boundaries": 6455,
       "initial_field_evidence": "test-logs/g4-cpu-conformance/schema5-checkpoint.json",
       "source": "Use latest committed checkout and runner source/fixture fingerprints; earlier source_commit fields describe historical preparation.",
       "handoff_prepared": false,
-      "source_commit": "Publishing commit; exact fingerprints in schema53-checkpoint.json",
-      "source_identity": "test-logs/g4-cpu-conformance/schema53-checkpoint.json",
-      "checks": 115
+      "source_commit": "Publishing commit; exact fingerprints in schema54-checkpoint.json",
+      "source_identity": "test-logs/g4-cpu-conformance/schema54-checkpoint.json",
+      "checks": 116
     },
     "pending_candidate": {
-      "family": "Download / Defiant",
+      "family": "Moxie / Aftermath",
       "status": "native_only_precheck_passed_implementation_pending",
-      "cases": 29,
-      "boundaries": 36,
-      "fixture": "test-logs/g4-cpu-conformance/boost-ability-precheck.json.gz",
-      "native_command": "node --test test/boost-ability-native.test.cjs",
+      "cases": 25,
+      "boundaries": 29,
+      "fixture": "test-logs/g4-cpu-conformance/faint-ability-precheck.json.gz",
+      "native_command": "node --test test/faint-ability-native.test.cjs",
       "included_in_checkpoint_runner": false,
-      "next": "Implement startup/after-each-stat-drop boosts and one grouped CPU checkpoint."
+      "next": "Implement contact and source-Move faint callbacks with exact ordering, then grouped CPU checkpoint."
     }
   },
   "historical_records": {

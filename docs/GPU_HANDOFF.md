@@ -22,10 +22,23 @@ Keep historical commands/results as provenance.
 
 ## Current source and evidence
 
-**Next group, native only:** Download / Defiant has29 scenarios/36 boundaries,
-pinned generator witnesses and a passing `node --test test/boost-ability-native.test.cjs`
+**Next group, native only:** Moxie / Aftermath has25 scenarios/29 boundaries,
+pinned generator witnesses and a passing `node --test test/faint-ability-native.test.cjs`
 contract. It is not in the CPU/CUDA runner; implementation remains pending.
-Resume compact state.
+Damp membership and its global guard callbacks remain unresolved/unsupported.
+
+**Schema54 Download / Defiant group:** focused CPU30 scenarios/37 boundaries
+passed in391.335s;2 native/inventory contracts and4 handoff helpers pass.
+See [schema54-checkpoint.json](../test-logs/g4-cpu-conformance/schema54-checkpoint.json).
+One compiled step covers exact state/RNG/requests/recipient events/histories,
+NPZ continuation and journal17. No GPU execution.
+
+```sh
+JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_boost_ability_engine -v -f
+```
+
+Runner includes116 checks/60 modules,1803 scenarios/6455
+boundaries in54 corpora. Current-source broad/device execution remains deferred.
 
 **Schema53 Unaware global query dependency:** focused CPU32 scenarios/46 boundaries
 passed in358.711s;2 native/inventory contracts and4 handoff helpers pass.

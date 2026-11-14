@@ -47,6 +47,7 @@ from . import stat_drop as stat_drop_ops
 from . import survival as survival_ops
 from . import accuracy_abilities as accuracy_ability_ops
 from . import unaware as unaware_ops
+from . import boost_abilities as boost_ability_ops
 from . import species_items as species_item_ops
 from . import ability_creation as creation_ops
 from . import suppression as suppression_ops
@@ -61,7 +62,7 @@ import sys
 def _engine():
     return sys.modules[__name__]
 
-SCHEMA = 53
+SCHEMA = 54
 ROSTER, SLOTS, QUEUE, EVENTS, DRAWS, HISTORY = 6, 4, 8, 128, 128, 2048
 OK, PENDING, INVALID, UNSUPPORTED, CAPACITY, TERMINAL, STALE = range(7)
 RETRY=7

@@ -24,7 +24,8 @@ def boost(c,actor,target,move,e):
             value=jnp.where(new!=old,e.tracking.TRUE,s.action_state[actor,s.active[actor],e.tracking.RESULT])
             s, t=e.tracking.outcome((s,t),actor,value,move)
             # Even a capped raise emits its zero-sized native boost event.
-            return e._event((s,t),e.BOOST,target,m,value=new-old,aux=k,status=(e.creation_ops.delta(s,target,change[k])<0).astype(jnp.int32))
+            c=e._event((s,t),e.BOOST,target,m,value=new-old,aux=k,status=(e.creation_ops.delta(s,target,change[k])<0).astype(jnp.int32))
+            return e.boost_ability_ops.after_drop(c,actor,target,new-old,e)
         c=e._when((change[k]!=0)&(~denied[k]),apply,c)
     return e._when(c[0].action_state[actor,c[0].active[actor],e.tracking.RESULT]==e.tracking.TRUE,lambda c:e._update(e._update(c,e.HIT_UPDATE),e.HIT_UPDATE),c)
 

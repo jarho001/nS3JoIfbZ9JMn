@@ -21,6 +21,7 @@ module.exports=function(){
  add('download-dual-tie',{p1:[m({ability:'Download'})],p2:[m({ability:'Download'})]});
  add('download-ignore-marvelscale',{p1:[m(),m({ability:'Download'})],p2:[m({ability:'Marvel Scale',nature:'Calm'})],setup:[{side:'p2',status:'brn'}],steps:[{p1:'switch 2',p2:'move 4'}]});
  add('download-trace',{p1:[m({ability:'Trace',evs:{spe:252}})],p2:[m({ability:'Download'})]});
+ add('download-imposter',{p1:[m({ability:'Imposter',evs:{spe:252}})],p2:[m({ability:'Download'})]});
  return cases;
 };
 module.exports.membershipWitnesses=function(){

@@ -1,0 +1,20 @@
+'use strict';
+const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),zlib=require('node:zlib');
+const {normalizeStacks}=require('./native-stack-support.cjs');
+test('native-only Moxie and Aftermath precheck preserves KO/contact ordering and terminal results',()=>{
+ require('../reference/neutral-turn-oracle.cjs').assertReady();
+ const ps=require('../reference/vendor/pokemon-showdown/dist/sim'),{runCase}=require('../reference/shared-engine-cases.cjs'),spec=require('../reference/faint-ability-cases.cjs');
+ const actual={pin:require('../reference-lock.json').commit,witnesses:spec.membershipWitnesses(),cases:spec().map(c=>runCase(ps,c))};
+ assert.deepEqual(normalizeStacks(JSON.parse(JSON.stringify(actual))),normalizeStacks(JSON.parse(zlib.gunzipSync(fs.readFileSync('test-logs/g4-cpu-conformance/faint-ability-precheck.json.gz')))));
+ assert.equal(actual.cases.length,25);assert.equal(actual.cases.reduce((n,c)=>n+c.steps.length,0),29);
+ assert.ok(actual.cases.every(c=>c.steps.every(s=>s.accepted.every(a=>a.accepted))));
+ const c=id=>actual.cases.find(c=>c.id==='G4-faint-ability-'+id),state=id=>c(id).steps[0].after;
+ assert.equal(state('moxie-1').sides[0].pokemon[0].boosts.atk,1);
+ assert.equal(state('moxie-last').sides[0].pokemon[0].boosts.atk,1);
+ assert.equal(state('moxie-mummy').sides[0].pokemon[0].boosts.atk,0);
+ assert.equal(state('magicguard-1').sides[0].pokemon[0].hp,175);
+ assert.ok(c('aftermath-terminal-double').steps[0].events.p1.some(e=>e.message==='|win|p2'));
+ const recoil=c('moxie-recoil-ko').steps[0].events.p1.map(e=>e.message);
+ assert.ok(recoil.findIndex(e=>e.includes('|Moxie|boost'))<recoil.findIndex(e=>e.includes('[from] Recoil')));
+ assert.deepEqual(actual.witnesses.map(w=>w.set.species),['Skuntank','Salamence']);
+});

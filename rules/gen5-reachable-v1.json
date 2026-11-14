@@ -811,10 +811,22 @@
           "file": "data/mods/gen8/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/boost-ability.json.gz",
+          "native": "reference/boost-ability-cases.cjs",
+          "scope": "Independent30 constructed/synthetic scenarios37 boundaries; Download boosted/unmodified stat comparison and startup/acquisition, per-stat Defiant direct drops/Intimidate, caps/self/suppression/White Herb. Stat-changing secondaries and remaining full-format closure pending",
+          "test": "test/test_boost_ability_engine.py"
+        }
+      ],
       "field": "onAfterEachBoost",
       "id": "abilities:defiant:onAfterEachBoost",
-      "implementation": null,
+      "implementation": {
+        "family": "boost_ability",
+        "file": "simulator/boost_abilities.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:defiant",
@@ -826,7 +838,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "1d1ab87ce90b50e63f6de1f9685a5b97e2382c65966a35e54580f14c1d09e036",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -835,10 +847,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/boost-ability.json.gz",
+          "native": "reference/boost-ability-cases.cjs",
+          "scope": "Independent30 constructed/synthetic scenarios37 boundaries; Download boosted/unmodified stat comparison and startup/acquisition, per-stat Defiant direct drops/Intimidate, caps/self/suppression/White Herb. Stat-changing secondaries and remaining full-format closure pending",
+          "test": "test/test_boost_ability_engine.py"
+        }
+      ],
       "field": "onStart",
       "id": "abilities:download:onStart",
-      "implementation": null,
+      "implementation": {
+        "family": "boost_ability",
+        "file": "simulator/boost_abilities.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:download",
@@ -850,7 +874,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "5012d0b00d0d7228ac3d3c8834f8853ae1cb537d5744ddbaf212a53a691eb9ee",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -71812,8 +71836,8 @@
         }
       ],
       "kind": "abilities",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "boost-ability-positive-witness",
       "status": "partial"
     },
     {
@@ -71843,8 +71867,8 @@
         }
       ],
       "kind": "abilities",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "boost-ability-positive-witness",
       "status": "partial"
     },
     {
@@ -97495,6 +97519,112 @@
           }
         ]
       },
+      "boost-ability-positive-witness": {
+        "bound": [
+          "abilities:defiant",
+          "abilities:download"
+        ],
+        "conclusion": "required",
+        "kind": "abilities",
+        "reasoning": "Pinned Defiant Farfetch’d seed[5,2,3,4] and Download Genesect seed[9,2,3,4] prove membership. Directed boost callbacks do not close remaining indirect/full-format obligations.",
+        "references": [
+          "data/random-battles/gen5/teams.ts:103-494 (cullMovePool/randomMoveset)",
+          "data/random-battles/gen5/teams.ts:496-566 (ability filters/fallback)",
+          "data/random-battles/gen5/teams.ts:568-816 (item returns and randomSet)",
+          "data/random-battles/gen5/teams.ts:850-1014 (team eligibility)",
+          "data/random-battles/gen9/teams.ts:675-693 (addMove)",
+          "data/random-battles/gen9/teams.ts:1442-1497 (getLevel/getForme)",
+          "data/random-battles/gen9/teams.ts:1641-1683 (getPokemonPool)"
+        ],
+        "witnesses": [
+          {
+            "id": "defiant",
+            "kind": "ability",
+            "seed": [
+              5,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Defiant",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Stick",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 100,
+              "moves": [
+                "return",
+                "swordsdance",
+                "leafblade",
+                "bravebird"
+              ],
+              "name": "Farfetch’d",
+              "role": "Setup Sweeper",
+              "shiny": false,
+              "species": "Farfetch’d",
+              "speciesId": "farfetchd"
+            }
+          },
+          {
+            "id": "download",
+            "kind": "ability",
+            "seed": [
+              9,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Download",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "N",
+              "item": "Choice Band",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 72,
+              "moves": [
+                "uturn",
+                "blazekick",
+                "ironhead",
+                "extremespeed"
+              ],
+              "name": "Genesect",
+              "role": "Wallbreaker",
+              "shiny": false,
+              "species": "Genesect",
+              "speciesId": "genesect"
+            }
+          }
+        ]
+      },
       "dry-skin-positive-witness": {
         "bound": [
           "abilities:dryskin"
@@ -99758,8 +99888,8 @@
       },
       "entries": {
         "proven_unreachable": 542,
-        "required": 70,
-        "unresolved": 1156
+        "required": 72,
+        "unresolved": 1154
       },
       "roots": {
         "proven_unreachable": 0,

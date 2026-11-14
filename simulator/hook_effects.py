@@ -146,7 +146,8 @@ def ordinary_ability_start(c,side,e,initial=False):
         s,t=c;foe=1-side;fm=s.active[foe];old=s.boosts[foe,fm,0];change=e.creation_ops.delta(s,foe,e.i32(-1));new=jnp.clip(old+change,-6,6)
         s=s._replace(boosts=s.boosts.at[foe,fm,0].set(new))
         s=e.tracking.boosted(s,foe,new>old,new<old)
-        return e._event((s,t),e.BOOST,foe,fm,value=new-old,aux=0,status=(change<0).astype(jnp.int32))
+        c=e._event((s,t),e.BOOST,foe,fm,value=new-old,aux=0,status=(change<0).astype(jnp.int32))
+        return e.boost_ability_ops.after_drop(c,side,foe,new-old,e)
     def try_intimidate(c):
         denied=e.stat_drop_ops.blocked(c[0],side,1-side,e.i32(-1),e)
         return e.jax.lax.cond(denied,lambda c:e.stat_drop_ops.fail(c,1-side,e),intimidate,c)
@@ -158,6 +159,7 @@ def ordinary_ability_start(c,side,e,initial=False):
         context=e.INIT if initial else e.WEATHER_CHANGE
         return e.form_ops.weather_change(c,e,context)
     c=e._when((weather>0)&((c[0].weather_state[0]!=weather)|(c[0].weather_state[4]>0)),set_weather,c)
+    c=e._when(ability==h.A['download'],lambda c:e.boost_ability_ops.download(c,side,e),c)
     return e.form_ops.change(c,side,e)
 
 
