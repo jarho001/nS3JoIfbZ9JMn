@@ -524,7 +524,7 @@
     "brief": "PROJECT_PLAN.md#proposed-g4-cpu-implementation-and-conformance-goal",
     "source_base": "f37067e",
     "scope": "Complete pinned gen5randombattle reachable mechanics and every prepared CPU gate. Integrated checkpoints, resumable progress and commit/push authorized. GPU execution, profiling, benchmarks, training, delegation and scored research excluded.",
-    "checkpoint": "Flash Fire activation and stat condition schema39: focused CPU 29 scenarios/43 boundaries passed in496.428s;2 native/inventory checks passed. Full G4 and broad gates pending.",
+    "checkpoint": "Shield Dust and Serene Grace schema40: focused CPU 29 scenarios/33 boundaries passed in488.902s;2 native/inventory checks passed. Full G4 and broad gates pending.",
     "completed_checkpoints": [
       "Pinned resolved data and source-owned conservative candidate inventory exported; 605 role roots, 1768 data/effect entries, 1146 callback slots. Data-only mappings remain partial; transitive closure and complete callback implementation are not claimed.",
       "Generic species/set/type/stat/physical-special/Hidden Power/happiness/priority/hazard integration passes 37 affected CPU checks on 4eab254, retaining all 133 baseline scenarios and validating 24 added scenarios: 157 scenarios / 1059 boundaries, including 20 complete battles (eight six-member games). Eager/JIT/1-8-32 mixed batches, serialized continuation/reset, explicit schema 1/2 migration and full/lean rollouts pass.",
@@ -538,7 +538,7 @@
       "Schema10 core/journal/hard-turn-limit checkpoint validated on a9d0fbd:3 integrated CPU checks pass in1174.685s, plus5 native/6 helper checks. Complete combat and1000-boundary neutral histories match native; mixed1/8/32,full/lean,core reset,persistence/corruption pass. Full64 suite and full-format G4 pending.",
       "Schema11 trapping/retry checkpoint:8 affected CPU checks plus6 native/6 helper checks pass. New31 scenarios/215 boundaries include two complete six-member games and mirrored private-state episodes. Aggregate558/4110; full68 suite and full-format G4 pending."
     ],
-    "next": "Continue reachable secondary-effect ability family (Shield Dust and Serene Grace candidates), establishing native branches and generator witnesses before implementation; then remaining mechanics and closure. Focused CPU only.",
+    "next": "Continue reachable ability/mechanic families with prechecks; next candidate Dry Skin (water interception, source base power and weather behavior) requires positive generator witness/native cases first. Broad/GPU/campaign/profiling remain deferred.",
     "ledger": {
       "path": "rules/gen5-reachable-v1.json",
       "entries": 1768,
@@ -548,7 +548,7 @@
         "indirect-closure",
         "engine-contract"
       ],
-      "status": "Incomplete: 292 partial callback mappings/854 unsupported; reachability classifications are separate and full closure remains pending.",
+      "status": "Incomplete: 294 partial callback mappings/852 unsupported; reachability classifications are separate and full closure remains pending.",
       "reachability_summary": {
         "callbacks": {
           "proven_unreachable": 546,
@@ -557,8 +557,8 @@
         },
         "entries": {
           "proven_unreachable": 542,
-          "required": 43,
-          "unresolved": 1183
+          "required": 45,
+          "unresolved": 1181
         },
         "roots": {
           "proven_unreachable": 0,
@@ -633,7 +633,7 @@
     ],
     "gpu_requirement": "Deferred during travel. Record all G4 device obligations and ready/pending commands in docs/GPU_HANDOFF.md; current checkpoint runner is scripts/g4_gpu_handoff.py. CPU implementation remains active. Later full G4 release still requires matching-source GPU conformance.",
     "acceptance": "G4-CPU-conformance pending. Generic data checkpoint passes; all remaining prepared CPU gates retained, all milestone acceptance/task count unchanged.",
-    "source_identity": "test-logs/g4-cpu-conformance/schema39-checkpoint.json",
+    "source_identity": "test-logs/g4-cpu-conformance/schema40-checkpoint.json",
     "evidence_directory": "test-logs/g4-cpu-conformance",
     "continuation": {
       "status": "schema7_CPU_checkpoint_validated",
@@ -1171,14 +1171,24 @@
         "native_boundaries": 43,
         "evidence": "test-logs/g4-cpu-conformance/schema39-checkpoint.json",
         "next": "Continue reachable secondary-effect ability family (Shield Dust and Serene Grace candidates), establishing native branches and generator witnesses before implementation; then remaining mechanics and closure. Focused CPU only."
+      },
+      "secondary_ability": {
+        "status": "completed_focused_CPU_checkpoint_not_full_G4",
+        "source_base": "d5e46f4",
+        "candidate_schema": 40,
+        "core_journal_schema": 17,
+        "native_cases": 29,
+        "native_boundaries": 33,
+        "evidence": "test-logs/g4-cpu-conformance/schema40-checkpoint.json",
+        "next": "Continue reachable ability/mechanic families with prechecks; next candidate Dry Skin (water interception, source base power and weather behavior) requires positive generator witness/native cases first. Broad/GPU/campaign/profiling remain deferred."
       }
     },
     "resolved_failure": "16b5263 preflight rejected ordinary moves because type was missing from its field set; fixed by 4eab254, failed run stopped, all 37 repaired checks pass. Detailed minimized input and source identities are in source.json.",
     "publication": {
       "status": "checkpoint_publication_authorized",
       "target": "origin/main",
-      "previous_published_head": "7aacabf",
-      "scope": "Schema39 focused CPU checkpoint; remaining G4 open."
+      "previous_published_head": "d5e46f4",
+      "scope": "Schema40 focused CPU checkpoint; remaining G4 open."
     },
     "reasoning_effort": "medium (user preference,2026-11-10; no automatic escalation)",
     "design_pass": {
@@ -1206,22 +1216,22 @@
     "implementation_wip": null,
     "cpu_block": null,
     "reachability_precheck": {
-      "family": "Flash Fire",
+      "family": "Shield Dust / Serene Grace",
       "status": "completed_focused_CPU_checkpoint_not_full_G4",
       "required": [
-        "abilities:flashfire: pinned seed[6,2,3,4] generated Chandelure"
+        "abilities:shielddust: seed[65,2,3,4] Dustox",
+        "abilities:serenegrace: seed[12,2,3,4] Dunsparce"
       ],
       "shared_behavior": [
-        "Existing effective ability/type queries and interception ordering before accuracy/Substitute",
-        "Existing volatile metadata, ability End dispatch, Transform/switch lifecycle, chain stat modifiers and exact priority5 stat shuffle"
+        "Existing supported target status/flinch secondary primitive, suppression queries and exact secondary draws",
+        "Explicit active-move frame flags capture ModifyMove chance before later callbacks; bits1/2 reserved bounce/Prankster remain independent"
       ],
       "new_dependencies": [
-        "Persistent activated condition with ability source; repeated absorption immunity",
-        "1.5 Attack/SpA with Choice/Thick Fat; equal Speed does not shuffle Condition2 vs Ability7. Existing low-HP Ability/Ability tie rule retained.",
-        "End on ability loss, GAS, switching, Transform and Mummy; silent clearing on faint differs",
-        "Source/recipient history, called/reflected frames and saved live pivot. Remaining breakable-ability/capacity closure stays pending."
+        "Shield Dust strips supported target secondary effects without RNG; primary status and Fire thaw remain independent",
+        "Serene Grace doubles base chance once per active move; frame flag survives later source ability changes, Gen5 secondary status still precedes Mummy activation",
+        "Self-secondary effect lists and Secret Power stay outside current move capabilities; no mask widening for those moves. Remaining full-format/callback closure pending."
       ],
-      "native_spec": "test-logs/g4-cpu-conformance/flash-fire.json.gz:29 scenarios/43 boundaries frozen before implementation"
+      "native_spec": "test-logs/g4-cpu-conformance/secondary-ability.json.gz:29 scenarios/33 boundaries frozen before implementation"
     },
     "scope_audit": {
       "date": "2026-11-13",
@@ -2265,17 +2275,17 @@
     "combined_return_home_block": "docs/GPU_HANDOFF.md#one-return-home-block-correctness-plus-g3-v6-measurements",
     "pending_status_checkpoint": "Current status/field/hook GPU checks are wired into the49-check runner; no GPU execution during travel. Preserve matching-source CPU results and do not transfer earlier GPU/CPU evidence across changed source.",
     "expanded_checkpoint": {
-      "status": "schema39_focused_CPU_complete_GPU_deferred",
-      "engine_schema": 39,
-      "modules": 45,
-      "native_scenarios": 1275,
-      "native_boundaries": 5454,
+      "status": "schema40_focused_CPU_complete_GPU_deferred",
+      "engine_schema": 40,
+      "modules": 46,
+      "native_scenarios": 1304,
+      "native_boundaries": 5487,
       "initial_field_evidence": "test-logs/g4-cpu-conformance/schema5-checkpoint.json",
       "source": "Use latest committed checkout and runner source/fixture fingerprints; earlier source_commit fields describe historical preparation.",
       "handoff_prepared": false,
-      "source_commit": "Publishing commit; exact relevant source fingerprints in schema39-checkpoint.json",
-      "source_identity": "test-logs/g4-cpu-conformance/schema39-checkpoint.json",
-      "checks": 101
+      "source_commit": "Publishing commit; exact relevant source fingerprints in schema40-checkpoint.json",
+      "source_identity": "test-logs/g4-cpu-conformance/schema40-checkpoint.json",
+      "checks": 102
     },
     "pending_candidate": null
   }

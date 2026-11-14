@@ -12,7 +12,7 @@ SELF_DESTRUCT=t.mv(lambda r:r.get('selfdestruct')=='always').astype(jnp.bool_)
 DEFROST=t.mv(lambda r:bool(r.get('flags',{}).get('defrost'))).astype(jnp.bool_)
 CONTACT=t.mv(lambda r:bool(r.get('flags',{}).get('contact'))).astype(jnp.bool_)
 HIT_COUNTS=jnp.asarray([2]*7+[3]*7+[4]*3+[5]*3,jnp.int32)
-ABILITIES=('skilllink','rockhead','roughskin','ironbarbs','liquidooze','mummy','magicguard')
+ABILITIES=('skilllink','rockhead','roughskin','ironbarbs','liquidooze','mummy','magicguard','shielddust','serenegrace')
 ABILITY_IMPLEMENTED=jnp.asarray([key in ABILITIES for key in t.ABILITIES],jnp.bool_)
 ITEM_IMPLEMENTED=jnp.asarray([key=='rockyhelmet' for key in t.ITEMS],jnp.bool_)
 

@@ -51,7 +51,7 @@ import sys
 def _engine():
     return sys.modules[__name__]
 
-SCHEMA = 39
+SCHEMA = 40
 ROSTER, SLOTS, QUEUE, EVENTS, DRAWS, HISTORY = 6, 4, 8, 128, 128, 2048
 OK, PENDING, INVALID, UNSUPPORTED, CAPACITY, TERMINAL, STALE = range(7)
 RETRY=7
@@ -555,7 +555,12 @@ def _use_move(c,frame):
     c=_when((s.status[actor,mon]==FRZ)&hit_tables.DEFROST[move],
             lambda c:effects.cure(c,actor,_engine(),source=target,move=move),(s,t))
     s,t=c
-    c=hook_ops.modify_move(c,actor,target,move,_engine())
+    # Active-move modifications survive ability changes during contact (Mummy).
+    grace=(suppression_ops.abilities(s)[actor,mon]==tables.ABILITY_IDS['serenegrace'])
+    flags=(frame[called_ops.FLAGS]&(~called_ops.SERENE_GRACE_FLAG))|jnp.where(grace,called_ops.SERENE_GRACE_FLAG,0)
+    frame=frame.at[called_ops.FLAGS].set(flags)
+    s=s._replace(call_frames=s.call_frames.at[s.call_depth-1,called_ops.FLAGS].set(flags))
+    c=hook_ops.modify_move((s,t),actor,target,move,_engine())
     c=_when(move==STRUGGLE,lambda c:_event(c,ACTIVATE,actor,mon,move=STRUGGLE),c)
     # Reserve move row so the native miss/fail annotation can be filled
     # after the outcome without reordering the event stream.

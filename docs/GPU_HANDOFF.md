@@ -12,6 +12,22 @@ all acceptance requirements and commands below remain pending.
 
 ## Current source and evidence
 
+**Schema40 Shield Dust and Serene Grace:** focused CPU29 scenarios/33 boundaries
+passed in488.902s;2 native/inventory checks passed. No GPU run.
+See [schema40-checkpoint.json](../test-logs/g4-cpu-conformance/schema40-checkpoint.json).
+Target status/flinch filtering, primary Toxic and Fire thaw independence,
+Serene Grace modified chance, suppression/Substitute/Mummy ordering and
+NPZ/journal17 saves. Unsupported self-secondary moves and Secret Power
+remain outside current capabilities; full closure stays pending.
+
+```sh
+JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_secondary_ability_engine -v -f
+```
+
+Runner now includes102 checks/46 modules, 1304 scenarios/
+5487 boundaries. Preparation, broad CPU/migration/full-lean, fixed campaigns
+and device checks remain pending until mechanics/inventory closure.
+
 **Schema39 Flash Fire activation and stat condition:** focused CPU29 scenarios/43 boundaries
 passed in496.428s;2 native/inventory checks passed. No GPU run.
 See [schema39-checkpoint.json](../test-logs/g4-cpu-conformance/schema39-checkpoint.json).

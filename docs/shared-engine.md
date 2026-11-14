@@ -807,3 +807,11 @@ Flash Fire and Thick Fat do not shuffle. Silent End runs on ability loss, switch
 Transform; fainting clears the condition without End disclosure. Native29/43
 focused CPU parity and live pivot NPZ/journal17 persistence pass. Remaining
 mechanics, capacity, old-schema migration and broad/final/device gates stay open.
+
+Schema40 adds Shield Dust and Serene Grace to supported target secondaries.
+Shield Dust skips their random draw; primary status and Fire thaw are preserved.
+Serene Grace is captured during ModifyMove in frame FLAGS bit4, independently
+of bounce/Prankster bits, and applied once per active move. Native29/33 focused
+CPU parity and NPZ/journal17 persistence pass, including Gen5 status-before-Mummy
+ordering. Layout unchanged; unsupported move effects and all remaining
+closure/broad/device/final gates remain pending.

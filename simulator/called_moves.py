@@ -6,6 +6,7 @@ SLEEP_TALK=t.MOVE_IDS['sleeptalk'];NATURE_POWER=t.MOVE_IDS['naturepower'];COPYCA
 # slot, accounting mode, return phase, root move/slot, lock, event tag, flags.
 MOVE,ACTOR,MON,TARGET,TM,SOURCE_KIND,SOURCE_ID,LOCATION,SLOT,MODE,PHASE,ROOT_MOVE,ROOT_SLOT,LOCKED,TAG,FLAGS=range(16)
 PREVIOUS_MOVE=16
+SERENE_GRACE_FLAG=4
 FIELDS=('call_frames','call_depth')
 MOVE_IMPLEMENTED=jnp.asarray([k in ('sleeptalk','naturepower','copycat','mirrormove','magiccoat')for k in t.MOVE_KEYS],jnp.bool_)
 ELIGIBLE=t.mv(lambda r:not(r.get('flags',{}).get('nosleeptalk')or r.get('flags',{}).get('charge'))).astype(jnp.bool_).at[0].set(False)

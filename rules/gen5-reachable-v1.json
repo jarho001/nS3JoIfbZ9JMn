@@ -4543,10 +4543,22 @@
           "file": "data/mods/gen5/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/secondary-ability.json.gz",
+          "native": "reference/secondary-ability-cases.cjs",
+          "scope": "Independent29 synthetic scenarios/33 boundaries, supported target status/flinch secondaries only; self-secondary and remaining full-format validation pending",
+          "test": "test/test_secondary_ability_engine.py"
+        }
+      ],
       "field": "onModifyMove",
       "id": "abilities:serenegrace:onModifyMove",
-      "implementation": null,
+      "implementation": {
+        "family": "secondary_ability",
+        "file": "simulator/status_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:serenegrace",
@@ -4558,7 +4570,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "3b151b5601373f7b9fa51bb137222485042a888438adc28a9a6aed5bb4e669e4",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -4711,10 +4723,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/secondary-ability.json.gz",
+          "native": "reference/secondary-ability-cases.cjs",
+          "scope": "Independent29 synthetic scenarios/33 boundaries, supported target status/flinch secondaries only; self-secondary and remaining full-format validation pending",
+          "test": "test/test_secondary_ability_engine.py"
+        }
+      ],
       "field": "onModifySecondaries",
       "id": "abilities:shielddust:onModifySecondaries",
-      "implementation": null,
+      "implementation": {
+        "family": "secondary_ability",
+        "file": "simulator/status_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:shielddust",
@@ -4726,7 +4750,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "bff7a6530964ba0809e26abc2a11f64c034759c482b5549f1871e29bca178133",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -74517,10 +74541,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/secondary-ability.json.gz",
+          "native": "reference/secondary-ability-cases.cjs",
+          "scope": "Independent29 synthetic scenarios/33 boundaries, supported target status/flinch secondaries only; self-secondary and remaining full-format validation pending",
+          "test": "test/test_secondary_ability_engine.py"
         }
       ],
       "id": "abilities:serenegrace",
       "implementation": {
+        "behavior": {
+          "family": "secondary_ability",
+          "file": "simulator/status_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -74532,8 +74568,8 @@
         }
       ],
       "kind": "abilities",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "secondary-ability-positive-witness",
       "status": "partial"
     },
     {
@@ -74696,10 +74732,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/secondary-ability.json.gz",
+          "native": "reference/secondary-ability-cases.cjs",
+          "scope": "Independent29 synthetic scenarios/33 boundaries, supported target status/flinch secondaries only; self-secondary and remaining full-format validation pending",
+          "test": "test/test_secondary_ability_engine.py"
         }
       ],
       "id": "abilities:shielddust",
       "implementation": {
+        "behavior": {
+          "family": "secondary_ability",
+          "file": "simulator/status_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -74711,8 +74759,8 @@
         }
       ],
       "kind": "abilities",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "secondary-ability-positive-witness",
       "status": "partial"
     },
     {
@@ -97400,6 +97448,110 @@
           }
         ]
       },
+      "secondary-ability-positive-witness": {
+        "bound": [
+          "abilities:serenegrace",
+          "abilities:shielddust"
+        ],
+        "conclusion": "required",
+        "kind": "abilities",
+        "reasoning": "Pinned generator outputs witness Shield Dust Dustox and Serene Grace Dunsparce only; supported target secondaries are directed cases, not complete effect/dependency closure.",
+        "references": [
+          "data/random-battles/gen5/teams.ts:103-494 (cullMovePool/randomMoveset)",
+          "data/random-battles/gen5/teams.ts:496-566 (ability filters/fallback)",
+          "data/random-battles/gen5/teams.ts:568-816 (item returns and randomSet)",
+          "data/random-battles/gen5/teams.ts:850-1014 (team eligibility)",
+          "data/random-battles/gen9/teams.ts:675-693 (addMove)",
+          "data/random-battles/gen9/teams.ts:1442-1497 (getLevel/getForme)",
+          "data/random-battles/gen9/teams.ts:1641-1683 (getPokemonPool)"
+        ],
+        "witnesses": [
+          {
+            "ability": "serenegrace",
+            "seed": [
+              12,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Serene Grace",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Leftovers",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 95,
+              "moves": [
+                "bodyslam",
+                "roost",
+                "coil",
+                "earthquake"
+              ],
+              "name": "Dunsparce",
+              "role": "Bulky Setup",
+              "shiny": false,
+              "species": "Dunsparce",
+              "speciesId": "dunsparce"
+            }
+          },
+          {
+            "ability": "shielddust",
+            "seed": [
+              65,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Shield Dust",
+              "evs": {
+                "atk": 0,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Black Sludge",
+              "ivs": {
+                "atk": 3,
+                "def": 31,
+                "hp": 31,
+                "spa": 30,
+                "spd": 30,
+                "spe": 31
+              },
+              "level": 91,
+              "moves": [
+                "hiddenpowerground",
+                "roost",
+                "quiverdance",
+                "sludgebomb"
+              ],
+              "name": "Dustox",
+              "role": "Bulky Setup",
+              "shiny": false,
+              "species": "Dustox",
+              "speciesId": "dustox"
+            }
+          }
+        ]
+      },
       "type-absorption-positive-witness": {
         "bound": [
           "abilities:voltabsorb",
@@ -97679,8 +97831,8 @@
       },
       "entries": {
         "proven_unreachable": 542,
-        "required": 43,
-        "unresolved": 1183
+        "required": 45,
+        "unresolved": 1181
       },
       "roots": {
         "proven_unreachable": 0,

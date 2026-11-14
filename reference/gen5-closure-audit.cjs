@@ -259,6 +259,10 @@ function classify(ledger) {
  const flashFireAbilities=new Set(flashFireWitnesses.map(w=>'abilities:'+w.ability));
  for(const id of flashFireAbilities)required.add(id);
  proofs['flash-fire-positive-witness']={conclusion:'required',kind:'abilities',bound:[...flashFireAbilities].sort(),references:refs.generator,witnesses:flashFireWitnesses,reasoning:'Pinned generator seed[6,2,3,4] positively witnesses Flash Fire Chandelure; no complete callback activation or unrelated membership claim.'};
+ const secondaryAbilityWitnesses=require('./secondary-ability-cases.cjs').membershipWitnesses();
+ const secondaryAbilities=new Set(secondaryAbilityWitnesses.map(w=>'abilities:'+w.ability));
+ for(const id of secondaryAbilities)required.add(id);
+ proofs['secondary-ability-positive-witness']={conclusion:'required',kind:'abilities',bound:[...secondaryAbilities].sort(),references:refs.generator,witnesses:secondaryAbilityWitnesses,reasoning:'Pinned generator outputs witness Shield Dust Dustox and Serene Grace Dunsparce only; supported target secondaries are directed cases, not complete effect/dependency closure.'};
  for(const entry of ledger.entries){
   entry.reachability='unresolved';
   entry.reachabilityAudit='unresolved-membership';
@@ -268,7 +272,7 @@ function classify(ledger) {
   }
   if(required.has(entry.id)){
    assert.notEqual(entry.reachability,'proven_unreachable',entry.id);
-   entry.reachability='required';entry.reachabilityAudit=flashFireAbilities.has(entry.id)?'flash-fire-positive-witness':sapSipperAbilities.has(entry.id)?'sap-sipper-positive-witness':typeBoostAbilities.has(entry.id)?'type-boost-positive-witness':lowHpAbilities.has(entry.id)?'low-hp-ability-positive-witness':absorptionAbilities.has(entry.id)?'type-absorption-positive-witness':'native-team-positive-witness';
+   entry.reachability='required';entry.reachabilityAudit=secondaryAbilities.has(entry.id)?'secondary-ability-positive-witness':flashFireAbilities.has(entry.id)?'flash-fire-positive-witness':sapSipperAbilities.has(entry.id)?'sap-sipper-positive-witness':typeBoostAbilities.has(entry.id)?'type-boost-positive-witness':lowHpAbilities.has(entry.id)?'low-hp-ability-positive-witness':absorptionAbilities.has(entry.id)?'type-absorption-positive-witness':'native-team-positive-witness';
   }
  }
  for(const root of ledger.roots){

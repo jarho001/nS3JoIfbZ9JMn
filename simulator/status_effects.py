@@ -144,6 +144,10 @@ def confuse(c,actor,target,move,e,*,fatigue=False):
 
 def secondary(c,actor,move,e):
     chance=jnp.maximum(e.tables.SECONDARY_CHANCE[move],e.phase_ops.FLINCH_CHANCE[move]);status=e.tables.SECONDARY_STATUS[move]
+    s,_=c;frame=s.call_frames[s.call_depth-1]
+    grace=(frame[e.called_ops.FLAGS]&e.called_ops.SERENE_GRACE_FLAG)!=0
+    dust=e.suppression_ops.abilities(s)[1-actor,s.active[1-actor]]==e.tables.ABILITY_IDS['shielddust']
+    chance=jnp.where(dust,0,chance*jnp.where(grace,2,1))
     def attempt(c):
         c,value=e._draw(c,0,100,e.SECONDARY)
         return e._when(value<chance.astype(jnp.uint32),
