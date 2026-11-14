@@ -6,6 +6,7 @@ module.exports=function(){
  for(const [key,move,attack,wrong,immune]of [['counter','Counter','Tackle','Surf','Gengar'],['mirrorcoat','Mirror Coat','Surf','Tackle','Umbreon']]){
   const user=(x={})=>m({moves:[move,'Recover'],evs:{spe:252},...x}),foe=(x={})=>m({moves:[attack,'Recover'],...x});
   add(key,{p1:[user()],p2:[foe()],steps:[b(),b()]});
+  add(key+'-struggle-slot4',{p1:[user({moves:['Tackle','Recover','Protect',move]})],p2:[foe()],setup:[{side:'p1',pp:0}]});
   add(key+'-no-damage',{p1:[user()],p2:[foe()],steps:[b(1,2)]});
   add(key+'-wrong-category',{p1:[user()],p2:[foe({moves:[wrong,'Recover']})]});
   add(key+'-immune-target',{p1:[user()],p2:[foe({species:immune})]});
@@ -19,14 +20,19 @@ module.exports=function(){
   add(key+'-lifeorb',{p1:[user({item:'Life Orb'})],p2:[foe()]});
   add(key+'-mummy',{abilityChangeFamily:true,p1:[user({ability:'Technician'})],p2:[foe({ability:'Mummy'})]});
   add(key+'-reserve',{p1:[user()],p2:[foe(),foe()],setup:[{side:'p2',hp:1}],steps:[b(),{p2:'switch 2'},b()]});
+  add(key+'-helmet-terminal',{p1:[user({item:'Rocky Helmet'})],p2:[foe({moves:[key==='counter'?attack:'Grass Knot','Recover']})],setup:[{side:'p2',hp:1}]});
+  add(key+'-blank-terminal',{p1:[user()],p2:[foe({item:'Life Orb',moves:[wrong,'Recover']})],setup:[{side:'p2',hp:1}]});
   add(key+'-terminal',{p1:[user()],p2:[foe()],setup:[{side:'p2',hp:1}]});
   add(key+'-queued-fail',{p1:[user()],p2:[foe()],steps:[b(),b(1,2)]});
+   for(const [tag,incoming]of [['frozen',attack],['fire-thaw',key==='counter'?'Fire Punch':'Flamethrower']])add(key+'-'+tag,{p1:[user()],p2:[foe({moves:[incoming,'Recover']})],setup:[{side:'p1',status:'frz'}]});
   add(key+'-sleep-talk',{seed:2,p1:[user({moves:['Rest','Sleep Talk',move],evs:{spe:0}})],p2:[foe({evs:{spe:252}})],setup:[{side:'p1',hp:100}],steps:[b(),b(2)]});
  }
  add('counter-doublekick',{p1:[m({moves:['Counter','Recover'],evs:{spe:252}})],p2:[m({moves:['Double Kick','Recover']})]});
  add('counter-both',{p1:[m({moves:['Counter','Recover']})],p2:[m({moves:['Counter','Recover']})]});
  add('mirrorcoat-both',{p1:[m({moves:['Mirror Coat','Recover']})],p2:[m({moves:['Mirror Coat','Recover']})]});
  add('counter-mirrorcoat-tie',{p1:[m({moves:['Counter','Recover']})],p2:[m({moves:['Mirror Coat','Recover']})]});
+ for(const species of ['Mew','Gengar'])add('counter-pivot-'+species.toLowerCase(),{p1:[m({moves:['Counter','Recover'],evs:{spe:252}})],p2:[m({moves:['U-turn','Recover']}),m({species})],steps:[b(),{p2:'switch 2'}]});
+ add('counter-pursuit-tie',{p1:[m({moves:['Counter','Recover']})],p2:[m({moves:['Pursuit','Recover']})]});
  add('legacy-pressure',{p1:[m({evs:{spe:252}})],p2:[m()]});
  return cases;
 };

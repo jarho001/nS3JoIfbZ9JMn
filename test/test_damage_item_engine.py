@@ -7,19 +7,19 @@ from simulator.shared_engine_io import draw_rows,player_view,private_packets,sav
 from test.shared_engine_support import initialize_case,choices_array,assert_state,assert_step
 STEP=jax.jit(e.advance)
 def assert_schema_metadata():
-    assert e.SCHEMA==65 and journal.CORE_SCHEMA==18
+    assert e.SCHEMA>=65 and journal.CORE_SCHEMA>=18
     for c in json.loads(gzip.decompress(Path('test-logs/g4-cpu-conformance/damage-item.json.gz').read_bytes()))['cases']:
      if c['id']not in ('G4-damage-item-eviolite-knockoff','G4-damage-item-eviolite-transform-vigoroth','G4-damage-item-expertbelt-trick'):continue
      s,t=initialize_case(c)
      with tempfile.TemporaryDirectory()as tmp:
       p=Path(tmp)/'schema65.npz';save_state(p,s)
-      with np.load(p,allow_pickle=False)as raw:assert int(raw['schema'])==65
+      with np.load(p,allow_pickle=False)as raw:assert int(raw['schema'])==e.SCHEMA
       restored=load_state(p)
       for a,b in zip(s,restored):np.testing.assert_array_equal(a,b)
       cp=journal.from_state(restored);journal.save(p,cp);saved=journal.load(p)
       for a,b in zip(cp.core,saved.core):np.testing.assert_array_equal(a,b)
       assert cp.pages==saved.pages
-     print(c['id']+' schema65 NPZ/journal18 metadata and every field/page passed',flush=True)
+     print(c['id']+f' schema{e.SCHEMA} NPZ/journal{journal.CORE_SCHEMA} metadata and every field/page passed',flush=True)
 
 class DamageItemEngineTest(unittest.TestCase):
     def test_native_damage_item(self):

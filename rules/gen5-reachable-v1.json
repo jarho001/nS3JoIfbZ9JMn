@@ -19531,10 +19531,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/retaliation.json.gz",
+          "native": "reference/retaliation-cases.cjs",
+          "scope": "Independent52 synthetic scenarios70 boundaries; singles pre-turn Counter/Mirror Coat conditions with per-hit category/dealt damage, scripted recorded-opponent slot including U-turn replacements, null/recorded terminal, typed immunity, fixed modifiers/RNG bypass, Pressure PP, Substitute/multihit/contact/faint, frozen/thaw, true Sleep Talk failures, Pursuit callback ties and legacy66/18 migration to67/19. Doubles/other dependencies and full-format closure pending",
+          "test": "test/test_retaliation_engine.py"
+        }
+      ],
       "field": "beforeTurnCallback",
       "id": "moves:counter:beforeTurnCallback",
-      "implementation": null,
+      "implementation": {
+        "family": "retaliation",
+        "file": "simulator/retaliation.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:counter",
@@ -19546,7 +19558,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "1e7ca8d98633912c41d4a2c4ca4829a739a42a3d7328cb134ecfb262373c5362",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -19555,10 +19567,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/retaliation.json.gz",
+          "native": "reference/retaliation-cases.cjs",
+          "scope": "Independent52 synthetic scenarios70 boundaries; singles pre-turn Counter/Mirror Coat conditions with per-hit category/dealt damage, scripted recorded-opponent slot including U-turn replacements, null/recorded terminal, typed immunity, fixed modifiers/RNG bypass, Pressure PP, Substitute/multihit/contact/faint, frozen/thaw, true Sleep Talk failures, Pursuit callback ties and legacy66/18 migration to67/19. Doubles/other dependencies and full-format closure pending",
+          "test": "test/test_retaliation_engine.py"
+        }
+      ],
       "field": "condition.onDamagingHit",
       "id": "moves:counter:condition.onDamagingHit",
-      "implementation": null,
+      "implementation": {
+        "family": "retaliation",
+        "file": "simulator/retaliation.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:counter",
@@ -19570,7 +19594,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "c0edd1476cac0ee0c6c7e5807dd6bf34e77575705dbaeaf65e3c01e2288a164a",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -19579,10 +19603,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/retaliation.json.gz",
+          "native": "reference/retaliation-cases.cjs",
+          "scope": "Independent52 synthetic scenarios70 boundaries; singles pre-turn Counter/Mirror Coat conditions with per-hit category/dealt damage, scripted recorded-opponent slot including U-turn replacements, null/recorded terminal, typed immunity, fixed modifiers/RNG bypass, Pressure PP, Substitute/multihit/contact/faint, frozen/thaw, true Sleep Talk failures, Pursuit callback ties and legacy66/18 migration to67/19. Doubles/other dependencies and full-format closure pending",
+          "test": "test/test_retaliation_engine.py"
+        }
+      ],
       "field": "condition.onRedirectTarget",
       "id": "moves:counter:condition.onRedirectTarget",
-      "implementation": null,
+      "implementation": {
+        "family": "retaliation",
+        "file": "simulator/retaliation.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:counter",
@@ -19594,7 +19630,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "e88d7d17ce84f4a5daf03ee7b702a9d238f95c187ada97cd872a42630f563f3f",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -19603,10 +19639,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/retaliation.json.gz",
+          "native": "reference/retaliation-cases.cjs",
+          "scope": "Independent52 synthetic scenarios70 boundaries; singles pre-turn Counter/Mirror Coat conditions with per-hit category/dealt damage, scripted recorded-opponent slot including U-turn replacements, null/recorded terminal, typed immunity, fixed modifiers/RNG bypass, Pressure PP, Substitute/multihit/contact/faint, frozen/thaw, true Sleep Talk failures, Pursuit callback ties and legacy66/18 migration to67/19. Doubles/other dependencies and full-format closure pending",
+          "test": "test/test_retaliation_engine.py"
+        }
+      ],
       "field": "condition.onStart",
       "id": "moves:counter:condition.onStart",
-      "implementation": null,
+      "implementation": {
+        "family": "retaliation",
+        "file": "simulator/retaliation.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:counter",
@@ -19618,7 +19666,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "688b3afc4d2d11152ce5f504ef7c7646b29b06ae4318a72ce0ea7b7123143eb4",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -19627,10 +19675,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/retaliation.json.gz",
+          "native": "reference/retaliation-cases.cjs",
+          "scope": "Independent52 synthetic scenarios70 boundaries; singles pre-turn Counter/Mirror Coat conditions with per-hit category/dealt damage, scripted recorded-opponent slot including U-turn replacements, null/recorded terminal, typed immunity, fixed modifiers/RNG bypass, Pressure PP, Substitute/multihit/contact/faint, frozen/thaw, true Sleep Talk failures, Pursuit callback ties and legacy66/18 migration to67/19. Doubles/other dependencies and full-format closure pending",
+          "test": "test/test_retaliation_engine.py"
+        }
+      ],
       "field": "damageCallback",
       "id": "moves:counter:damageCallback",
-      "implementation": null,
+      "implementation": {
+        "family": "retaliation",
+        "file": "simulator/retaliation.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:counter",
@@ -19642,7 +19702,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "39be073063c59caa1333e80df25b1dbd6abdae29045318a9858b69aaf958ea51",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -19651,10 +19711,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/retaliation.json.gz",
+          "native": "reference/retaliation-cases.cjs",
+          "scope": "Independent52 synthetic scenarios70 boundaries; singles pre-turn Counter/Mirror Coat conditions with per-hit category/dealt damage, scripted recorded-opponent slot including U-turn replacements, null/recorded terminal, typed immunity, fixed modifiers/RNG bypass, Pressure PP, Substitute/multihit/contact/faint, frozen/thaw, true Sleep Talk failures, Pursuit callback ties and legacy66/18 migration to67/19. Doubles/other dependencies and full-format closure pending",
+          "test": "test/test_retaliation_engine.py"
+        }
+      ],
       "field": "onTry",
       "id": "moves:counter:onTry",
-      "implementation": null,
+      "implementation": {
+        "family": "retaliation",
+        "file": "simulator/retaliation.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:counter",
@@ -19666,7 +19738,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "ce817ae0f9fce96b80e6753cbc57d5efcf9b5ce4b676a36823b36bc5bfb92189",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -25039,10 +25111,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/retaliation.json.gz",
+          "native": "reference/retaliation-cases.cjs",
+          "scope": "Independent52 synthetic scenarios70 boundaries; singles pre-turn Counter/Mirror Coat conditions with per-hit category/dealt damage, scripted recorded-opponent slot including U-turn replacements, null/recorded terminal, typed immunity, fixed modifiers/RNG bypass, Pressure PP, Substitute/multihit/contact/faint, frozen/thaw, true Sleep Talk failures, Pursuit callback ties and legacy66/18 migration to67/19. Doubles/other dependencies and full-format closure pending",
+          "test": "test/test_retaliation_engine.py"
+        }
+      ],
       "field": "beforeTurnCallback",
       "id": "moves:mirrorcoat:beforeTurnCallback",
-      "implementation": null,
+      "implementation": {
+        "family": "retaliation",
+        "file": "simulator/retaliation.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:mirrorcoat",
@@ -25054,7 +25138,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "337026e0631c763503a28a7e9d13b2d4f31ac312bad6df6766012cb7a1cb5b4d",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -25063,10 +25147,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/retaliation.json.gz",
+          "native": "reference/retaliation-cases.cjs",
+          "scope": "Independent52 synthetic scenarios70 boundaries; singles pre-turn Counter/Mirror Coat conditions with per-hit category/dealt damage, scripted recorded-opponent slot including U-turn replacements, null/recorded terminal, typed immunity, fixed modifiers/RNG bypass, Pressure PP, Substitute/multihit/contact/faint, frozen/thaw, true Sleep Talk failures, Pursuit callback ties and legacy66/18 migration to67/19. Doubles/other dependencies and full-format closure pending",
+          "test": "test/test_retaliation_engine.py"
+        }
+      ],
       "field": "condition.onDamagingHit",
       "id": "moves:mirrorcoat:condition.onDamagingHit",
-      "implementation": null,
+      "implementation": {
+        "family": "retaliation",
+        "file": "simulator/retaliation.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:mirrorcoat",
@@ -25078,7 +25174,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "b95214ee30488710d94369911b0bf023b1e7ebc45daae0152e2c2425d8813c5a",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -25087,10 +25183,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/retaliation.json.gz",
+          "native": "reference/retaliation-cases.cjs",
+          "scope": "Independent52 synthetic scenarios70 boundaries; singles pre-turn Counter/Mirror Coat conditions with per-hit category/dealt damage, scripted recorded-opponent slot including U-turn replacements, null/recorded terminal, typed immunity, fixed modifiers/RNG bypass, Pressure PP, Substitute/multihit/contact/faint, frozen/thaw, true Sleep Talk failures, Pursuit callback ties and legacy66/18 migration to67/19. Doubles/other dependencies and full-format closure pending",
+          "test": "test/test_retaliation_engine.py"
+        }
+      ],
       "field": "condition.onRedirectTarget",
       "id": "moves:mirrorcoat:condition.onRedirectTarget",
-      "implementation": null,
+      "implementation": {
+        "family": "retaliation",
+        "file": "simulator/retaliation.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:mirrorcoat",
@@ -25102,7 +25210,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "d9365fefe75babc469693e0d512a70f04ed819a2a02ce5e78c78d632c7d61db2",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -25111,10 +25219,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/retaliation.json.gz",
+          "native": "reference/retaliation-cases.cjs",
+          "scope": "Independent52 synthetic scenarios70 boundaries; singles pre-turn Counter/Mirror Coat conditions with per-hit category/dealt damage, scripted recorded-opponent slot including U-turn replacements, null/recorded terminal, typed immunity, fixed modifiers/RNG bypass, Pressure PP, Substitute/multihit/contact/faint, frozen/thaw, true Sleep Talk failures, Pursuit callback ties and legacy66/18 migration to67/19. Doubles/other dependencies and full-format closure pending",
+          "test": "test/test_retaliation_engine.py"
+        }
+      ],
       "field": "condition.onStart",
       "id": "moves:mirrorcoat:condition.onStart",
-      "implementation": null,
+      "implementation": {
+        "family": "retaliation",
+        "file": "simulator/retaliation.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:mirrorcoat",
@@ -25126,7 +25246,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "688b3afc4d2d11152ce5f504ef7c7646b29b06ae4318a72ce0ea7b7123143eb4",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -25135,10 +25255,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/retaliation.json.gz",
+          "native": "reference/retaliation-cases.cjs",
+          "scope": "Independent52 synthetic scenarios70 boundaries; singles pre-turn Counter/Mirror Coat conditions with per-hit category/dealt damage, scripted recorded-opponent slot including U-turn replacements, null/recorded terminal, typed immunity, fixed modifiers/RNG bypass, Pressure PP, Substitute/multihit/contact/faint, frozen/thaw, true Sleep Talk failures, Pursuit callback ties and legacy66/18 migration to67/19. Doubles/other dependencies and full-format closure pending",
+          "test": "test/test_retaliation_engine.py"
+        }
+      ],
       "field": "damageCallback",
       "id": "moves:mirrorcoat:damageCallback",
-      "implementation": null,
+      "implementation": {
+        "family": "retaliation",
+        "file": "simulator/retaliation.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:mirrorcoat",
@@ -25150,7 +25282,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "a5ec1c1b1f91a8127a09eb936a0765286764527364d84b512564c92ec291579d",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -25159,10 +25291,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/retaliation.json.gz",
+          "native": "reference/retaliation-cases.cjs",
+          "scope": "Independent52 synthetic scenarios70 boundaries; singles pre-turn Counter/Mirror Coat conditions with per-hit category/dealt damage, scripted recorded-opponent slot including U-turn replacements, null/recorded terminal, typed immunity, fixed modifiers/RNG bypass, Pressure PP, Substitute/multihit/contact/faint, frozen/thaw, true Sleep Talk failures, Pursuit callback ties and legacy66/18 migration to67/19. Doubles/other dependencies and full-format closure pending",
+          "test": "test/test_retaliation_engine.py"
+        }
+      ],
       "field": "onTry",
       "id": "moves:mirrorcoat:onTry",
-      "implementation": null,
+      "implementation": {
+        "family": "retaliation",
+        "file": "simulator/retaliation.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:mirrorcoat",
@@ -25174,7 +25318,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "ce35bafd0c3ffc91e829912057bdd3d0f56a13644dc11ff8d114d4ec1753084c",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -56210,10 +56354,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/retaliation.json.gz",
+          "native": "reference/retaliation-cases.cjs",
+          "scope": "Independent52 synthetic scenarios70 boundaries; singles pre-turn Counter/Mirror Coat conditions with per-hit category/dealt damage, scripted recorded-opponent slot including U-turn replacements, null/recorded terminal, typed immunity, fixed modifiers/RNG bypass, Pressure PP, Substitute/multihit/contact/faint, frozen/thaw, true Sleep Talk failures, Pursuit callback ties and legacy66/18 migration to67/19. Doubles/other dependencies and full-format closure pending",
+          "test": "test/test_retaliation_engine.py"
         }
       ],
       "id": "moves:counter",
       "implementation": {
+        "behavior": {
+          "family": "retaliation",
+          "file": "simulator/retaliation.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "MOVE_TYPE/MOVE_POWER/MOVE_CATEGORY/MOVE_PRIORITY/MOVE_PP",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -56225,8 +56381,8 @@
         }
       ],
       "kind": "moves",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "retaliation-positive-witness",
       "status": "partial"
     },
     {
@@ -63088,10 +63244,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/retaliation.json.gz",
+          "native": "reference/retaliation-cases.cjs",
+          "scope": "Independent52 synthetic scenarios70 boundaries; singles pre-turn Counter/Mirror Coat conditions with per-hit category/dealt damage, scripted recorded-opponent slot including U-turn replacements, null/recorded terminal, typed immunity, fixed modifiers/RNG bypass, Pressure PP, Substitute/multihit/contact/faint, frozen/thaw, true Sleep Talk failures, Pursuit callback ties and legacy66/18 migration to67/19. Doubles/other dependencies and full-format closure pending",
+          "test": "test/test_retaliation_engine.py"
         }
       ],
       "id": "moves:mirrorcoat",
       "implementation": {
+        "behavior": {
+          "family": "retaliation",
+          "file": "simulator/retaliation.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "MOVE_TYPE/MOVE_POWER/MOVE_CATEGORY/MOVE_PRIORITY/MOVE_PP",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -63103,8 +63271,8 @@
         }
       ],
       "kind": "moves",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "retaliation-positive-witness",
       "status": "partial"
     },
     {
@@ -100395,6 +100563,112 @@
           }
         ]
       },
+      "retaliation-positive-witness": {
+        "bound": [
+          "moves:counter",
+          "moves:mirrorcoat"
+        ],
+        "conclusion": "required",
+        "kind": "moves",
+        "reasoning": "Pinned Counter/Mirror Coat Wobbuffet seed[42,2,3,4] proves membership. Constructed singles conditions/targeting/hit lifecycle cases do not close doubles or full-format behavior; Custap Berry/Destiny Bond dependencies remain pending.",
+        "references": [
+          "data/random-battles/gen5/teams.ts:103-494 (cullMovePool/randomMoveset)",
+          "data/random-battles/gen5/teams.ts:496-566 (ability filters/fallback)",
+          "data/random-battles/gen5/teams.ts:568-816 (item returns and randomSet)",
+          "data/random-battles/gen5/teams.ts:850-1014 (team eligibility)",
+          "data/random-battles/gen9/teams.ts:675-693 (addMove)",
+          "data/random-battles/gen9/teams.ts:1442-1497 (getLevel/getForme)",
+          "data/random-battles/gen9/teams.ts:1641-1683 (getPokemonPool)"
+        ],
+        "witnesses": [
+          {
+            "id": "counter",
+            "kind": "move",
+            "seed": [
+              42,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Shadow Tag",
+              "evs": {
+                "atk": 0,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Custap Berry",
+              "ivs": {
+                "atk": 0,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 92,
+              "moves": [
+                "destinybond",
+                "counter",
+                "encore",
+                "mirrorcoat"
+              ],
+              "name": "Wobbuffet",
+              "role": "Bulky Support",
+              "shiny": false,
+              "species": "Wobbuffet",
+              "speciesId": "wobbuffet"
+            }
+          },
+          {
+            "id": "mirrorcoat",
+            "kind": "move",
+            "seed": [
+              42,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Shadow Tag",
+              "evs": {
+                "atk": 0,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Custap Berry",
+              "ivs": {
+                "atk": 0,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 92,
+              "moves": [
+                "destinybond",
+                "counter",
+                "encore",
+                "mirrorcoat"
+              ],
+              "name": "Wobbuffet",
+              "role": "Bulky Support",
+              "shiny": false,
+              "species": "Wobbuffet",
+              "speciesId": "wobbuffet"
+            }
+          }
+        ]
+      },
       "sap-sipper-positive-witness": {
         "bound": [
           "abilities:sapsipper"
@@ -101708,8 +101982,8 @@
       },
       "entries": {
         "proven_unreachable": 542,
-        "required": 100,
-        "unresolved": 1126
+        "required": 102,
+        "unresolved": 1124
       },
       "roots": {
         "proven_unreachable": 0,

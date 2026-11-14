@@ -22,12 +22,25 @@ Keep historical commands/results as provenance.
 
 ## Current source and evidence
 
-**Next group, native only:** Counter / Mirror Coat has39 scenarios/55
-boundaries, pinned positive witnesses and a passing
-`node --test test/retaliation-native.test.cjs` contract. It is not in the
-CPU/CUDA runner; implementation remains pending. The group plans pre-turn
-conditions and engine67/journal19 using genuine pre-edit66/18 baseline files.
-Custap Berry/Destiny Bond dependencies and full-format closure remain pending.
+**Next group, native only:** Custap Berry / early queue-time Unburden has30
+scenarios/39 boundaries, pinned positive witnesses and a passing
+`node --test test/custap-priority-native.test.cjs` contract. It is not in the
+CPU/CUDA runner; implementation remains pending. Preserve priority-band/speed
+ordering and queue-time use; genuine67/19 pending Counter queue files are frozen
+for any68/20 priority representation migration. Gluttony remains gated/unresolved.
+
+**Schema67 Counter / Mirror Coat group:** focused CPU52 scenarios/70 boundaries
+passed in544.242s;2 native/inventory contracts and4 handoff helpers pass.
+See [schema67-checkpoint.json](../test-logs/g4-cpu-conformance/schema67-checkpoint.json).
+One compiled step covers exact state/RNG/requests/recipient events/histories,
+NPZ continuation and journal19. No GPU execution.
+
+```sh
+JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_retaliation_engine -v -f
+```
+
+Runner includes129 checks/73 modules,2344 scenarios/7159
+boundaries in67 corpora. Current-source broad/device execution remains deferred.
 
 **Schema66 Super Fang / Seismic Toss group:** focused CPU48 scenarios/66 boundaries
 passed in477.461s;2 native/inventory contracts and4 handoff helpers pass.

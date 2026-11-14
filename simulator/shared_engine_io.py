@@ -214,12 +214,12 @@ def load_state(path,*,schema=None,replayed_state=None):
         stored=int(saved['schema']) if 'schema' in saved else None
         if schema is not None and stored is not None and stored!=schema:raise ValueError('schema mismatch')
         version=stored if schema is None else schema
-        if version not in (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66):raise ValueError('explicit supported state schema required')
+        if version not in (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67):raise ValueError('explicit supported state schema required')
         fields={k:jnp.asarray(saved[k]) for k in saved.files if k not in ('schema','data_sha256')}
-        if version in (3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66):
+        if version in (3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67):
             if 'data_sha256' not in saved or str(saved['data_sha256'])!=generic.DATA_SHA256:
                 raise ValueError('state data table identity mismatch')
-        if version<64 and replayed_state is not None:
+        if version<67 and replayed_state is not None:
             e._validate_structure(replayed_state)
             end='ivs' if version<=2 else 'effect_order' if version==3 else 'weather_state' if version==4 else 'move_history' if version<9 else 'request_state'
             expected=set(e.State._fields if version>=32 else e.State._fields[:e.State._fields.index('ability_seek')] if version>=26 else e.State._fields[:e.State._fields.index('call_frames')] if version>=21 else e.State._fields[:e.State._fields.index('ability_staleness')] if version>=18 else e.State._fields[:e.State._fields.index('illusion')] if version==17 else e.State._fields[:e.State._fields.index('base_species')] if version==16 else e.State._fields[:e.State._fields.index('item_provenance')] if version>=11 else e.State._fields[:e.State._fields.index(end)])
@@ -232,7 +232,7 @@ def load_state(path,*,schema=None,replayed_state=None):
                     if old.shape!=(2,6,slots,6):raise ValueError('invalid legacy volatile shape for replay')
                     replay=replay[:,:,:slots,:6]
                 elif key=='volatile_state':
-                    replay=replay[:,:,:28 if version>=39 else 27 if version>=30 else 26 if version>=25 else 25 if version>=24 else 24 if version>=20 else 23 if version>=15 else 22 if version>=13 else 21 if version==12 else 20,:]
+                    replay=replay[:,:,:30 if version>=64 else 28 if version>=39 else 27 if version>=30 else 26 if version>=25 else 25 if version>=24 else 24 if version>=20 else 23 if version>=15 else 22 if version>=13 else 21 if version==12 else 20,:]
                 if key=='call_frames' and version<28:replay=replay[:,:16]
                 if key=='history' and version<18:replay=replay[:,:10]
                 if key=='action_state' and version<15:replay=replay[:,:,:21]
@@ -364,9 +364,22 @@ def load_state(path,*,schema=None,replayed_state=None):
             if provenance.ndim==3:risky=risky or np.any(np.isin(provenance[:,:,0],new_items))
             if actions.ndim==3 and actions.shape[2]>e.tracking.LAST_ITEM:risky=risky or np.any(np.isin(actions[:,:,e.tracking.LAST_ITEM],new_items))
             if risky:raise ValueError('legacy gem/Unburden state requires replay/provenance')
+        if version<67:
+            new_moves=[tables.MOVE_IDS['counter'],tables.MOVE_IDS['mirrorcoat']]
+            risky=any(np.any(np.isin(np.asarray(fields[k]),new_moves))for k in ('moves','base_moves')if k in fields)
+            if 'move_history' in fields:risky=risky or np.any(np.isin(np.asarray(fields['move_history'])[:,:,:,0],new_moves))
+            if 'battle_move' in fields:risky=risky or np.any(np.isin(np.asarray(fields['battle_move'])[:1],new_moves))
+            if 'attacked_by' in fields:risky=risky or np.any(np.isin(np.asarray(fields['attacked_by'])[:,:,:,2],new_moves))
+            q=np.asarray(fields['queue']);literal=(q[:,0]==e.ATTACK)&(q[:,3]>=e.FORCED_MOVE_ACTION)
+            risky=risky or np.any(literal&np.isin(q[:,3]-e.FORCED_MOVE_ACTION,new_moves))
+            if risky:raise ValueError('legacy retaliation state requires replay/provenance')
         if 39<=version<64:
             v=fields['volatile_state']
             if v.shape!=(2,6,28,e.phase_ops.VOLATILE_WIDTH):raise ValueError('invalid legacy volatile shape')
+            fields['volatile_state']=jnp.pad(v,((0,0),(0,0),(0,len(e.phase_ops.VOLATILES)-28),(0,0)))
+        if 64<=version<67:
+            v=fields['volatile_state']
+            if v.shape!=(2,6,30,e.phase_ops.VOLATILE_WIDTH):raise ValueError('invalid legacy volatile shape')
             fields['volatile_state']=jnp.pad(v,((0,0),(0,0),(0,2),(0,0)))
         if set(fields)!=set(e.State._fields):raise ValueError('invalid state field set')
         state=e.State(*(fields[k] for k in e.State._fields))
@@ -399,6 +412,8 @@ def effect_states(state,side,mon):
         if kind==e.flash_ops.SLOT:row['name']='Flash Fire'
         if kind==e.gem_ops.GEM:row['duration']=time
         if kind==e.gem_ops.UNBURDEN:row['name']='Unburden'
+        if kind in (e.retaliation_ops.COUNTER_SLOT,e.retaliation_ops.COAT_SLOT):
+            data=s.volatile_state[side,mon,kind];row.update(name='Counter' if kind==e.retaliation_ops.COUNTER_SLOT else 'Mirror Coat',duration=time,damage=int(data[7]),slot=f'p{2-side}a' if int(data[8]) else None)
         if kind==e.called_ops.COAT_SLOT:
             row.update(name='Magic Coat',duration=time)
             if int(s.volatile_state[side,mon,kind,10]):row['pranksterBoosted']=True

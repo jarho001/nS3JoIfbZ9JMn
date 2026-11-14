@@ -57,6 +57,7 @@ from . import weight_based as weight_ops
 from . import conditional_power as conditional_power_ops
 from . import gem_unburden as gem_ops
 from . import fixed_damage as fixed_ops
+from . import retaliation as retaliation_ops
 from . import species_items as species_item_ops
 from . import ability_creation as creation_ops
 from . import suppression as suppression_ops
@@ -71,7 +72,7 @@ import sys
 def _engine():
     return sys.modules[__name__]
 
-SCHEMA = 66
+SCHEMA = 67
 ROSTER, SLOTS, QUEUE, EVENTS, DRAWS, HISTORY = 6, 4, 8, 128, 128, 2048
 OK, PENDING, INVALID, UNSUPPORTED, CAPACITY, TERMINAL, STALE = range(7)
 RETRY=7
@@ -447,8 +448,8 @@ def _hit(c,actor,move):
             damage=damage_from_preroll(preroll,roll.astype(jnp.int32),stab,suppression_ops.abilities(s)[actor,mon]==hook_tables.A['adaptability'],move==STRUGGLE,
                                       jnp.where(move==STRUGGLE,0,exponent),s.status[actor,mon]==BRN,physical,suppression_ops.abilities(s)[actor,mon]==hook_tables.A['guts'],final_modifier)
             return c,damage
-        c,damage=jax.lax.cond(fixed_ops.MOVE_IMPLEMENTED[move],
-            lambda c:(c,fixed_ops.amount(c[0],actor,target,move)),ordinary,c)
+        c,damage=jax.lax.cond(fixed_ops.MOVE_IMPLEMENTED[move]|retaliation_ops.MOVE_IMPLEMENTED[move],
+            lambda c:(c,jnp.where(retaliation_ops.MOVE_IMPLEMENTED[move],retaliation_ops.amount(c[0],actor,move),fixed_ops.amount(c[0],actor,target,move))),ordinary,c)
         s,t=c
         intercepted=sub_ops.intercepts(s,target,move)
         def normal(c):
@@ -461,6 +462,7 @@ def _hit(c,actor,move):
             c=effects.secondary(c,actor,move,_engine())
             c=phaze_ops.mark(c,actor,target,move,_engine())
             c=hit_ops.contact(c,actor,target,move,_engine())
+            c=retaliation_ops.after_hit(c,actor,target,move,dealt,_engine())
             c=illusion_ops.reveal(c,target,_engine())
             # Native DamagingHit resolves ordered contact callbacks before the
             # default-order freeze hook, even when a callback has ended the game.
@@ -723,7 +725,7 @@ def _use_move(c,frame):
         lambda c:field_ops.move(c,actor,move,move_row,_engine()),
         lambda c:jax.lax.cond(field_tables.IS_BOOST[move]&(target==actor),
             lambda c:field_ops.boost(c,actor,target,move,_engine()),lambda c:jax.lax.cond(move==called_ops.MAGIC_COAT,lambda c:called_ops.coat(c,frame,_engine()),ordinary,c),c),c)
-    conditional_denied=conditional_ops.denied(c[0],target,move,_engine())
+    conditional_denied=conditional_ops.denied(c[0],target,move,_engine())|retaliation_ops.denied(c[0],actor,move)
     c=_when(conditional_denied,lambda c:ability_ops.fail(c,actor,move,move_row,_engine()),c)
     c,charging=jax.lax.cond(phase_ops.CHARGE[move],lambda c:phase_ops.charge(c,actor,move,move_row,_engine(),target_loc=jnp.where(target==actor,-1,1)),lambda c:(c,jnp.array(False)),c)
     move_row=jnp.max(jnp.where((jnp.arange(EVENTS)<c[1].ecount)&((c[1].events[:,0]==EV_MOVE)|(c[1].events[:,0]==ANIM)),jnp.arange(EVENTS),0))
@@ -975,7 +977,7 @@ def _run_queue(c):
             q=jnp.where((jnp.arange(QUEUE)+count)[:,None]<s.qcount,q[jnp.minimum(jnp.arange(QUEUE)+count,QUEUE-1)],0)
             s=s._replace(queue=q,qcount=s.qcount-count)
             return _run_switch((s,t),entrants)
-        c=jax.lax.switch(jnp.clip(kind-1,0,7),(before,move,swap,swap,run_switch,_residual,lambda c:pursuit_ops.prepare(c,row,_engine()),lambda c:_finish_switch(c,row)),c)
+        c=jax.lax.switch(jnp.clip(kind-1,0,7),(before,move,swap,swap,run_switch,_residual,lambda c:retaliation_ops.before_move(c,row,_engine()),lambda c:_finish_switch(c,row)),c)
         c=phaze_ops.resolve(c,_engine())
         s,t=c
         # A skipped fainted action returns before the native per-action Update.
@@ -1151,6 +1153,7 @@ def advance(s,choices,token=None):
                 def add(c):
                     s,t=c;action=pending[side];mon=s.active[side];move=s.moves[side,mon,jnp.clip(action,0,3)]
                     kind=jnp.where(action>=4,jnp.where(action==10,ATTACK,jnp.where(normal,SWAP,INSTANT)),ATTACK)
+                    move=jnp.where(action==10,STRUGGLE,move)
                     forced=phase_ops.forced_move(s)[side]
                     actual_slot=jnp.argmax(s.moves[side,mon]==forced)
                     owns_forced=jnp.any(s.moves[side,mon]==forced)
@@ -1166,7 +1169,7 @@ def advance(s,choices,token=None):
                     def prepare(c):
                         c=unaware_ops.query(c,_engine());s,t=c
                         return _qappend(s,i32([BEFORE_MOVE,0,0,0,0,0,0]).at[1].set(side).at[2].set(mon).at[3].set(action).at[5].set(s.speed[side,mon])),t
-                    return _when(normal&(kind==ATTACK)&(move==pursuit_ops.MOVE)&(~recharge),prepare,(s,t))
+                    return _when(normal&(kind==ATTACK)&((move==pursuit_ops.MOVE)|retaliation_ops.MOVE_IMPLEMENTED[move])&(~recharge),prepare,(s,t))
                 c=_when(s.request[side]<WAIT,add,c);s,t=c
             c=_when(normal,lambda c:(_qappend(c[0],i32([RESIDUAL,0,0,0,0,1,0])),c[1]),c)
             s,t=c;s=s._replace(pivot=jnp.zeros(2,jnp.bool_))

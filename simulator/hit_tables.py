@@ -19,6 +19,20 @@ ITEM_IMPLEMENTED=jnp.asarray([key=='rockyhelmet' for key in t.ITEMS],jnp.bool_)
 
 
 def supported(row):
+    if row.get('id') in ('counter','mirrorcoat'):
+        key=row['id'];callbacks=('beforeTurnCallback','damageCallback','onTry')
+        if row.get('basePower')!=0 or any(row.get(k)!={'$callback':f'moves:{key}:{k}'}for k in callbacks):return False
+        condition={'duration':1,'noCopy':True,'onRedirectTargetPriority':-1,**{k:{'$callback':f'moves:{key}:condition.{k}'}for k in ('onStart','onRedirectTarget','onDamagingHit')}}
+        if row.get('condition')!=condition:return False
+        clean=dict(row)
+        for k in (*callbacks,'condition'):clean.pop(k)
+        if row.get('target')!='scripted':return False
+        clean['basePower']=1;clean['target']='normal'
+        # The recorded opponent slot supplies scripted singles targeting.
+        # These call-eligibility flags stay in canonical data; consumers use
+        # the original rows. Me First/Assist remain unsupported.
+        clean['flags']={k:v for k,v in row.get('flags',{}).items()if k not in ('failcopycat','failmefirst','noassist')}
+        return t.plain(clean)
     if row.get('id') in ('superfang','seismictoss'):
         field='damageCallback' if row['id']=='superfang' else 'damage'
         expected={'$callback':'moves:superfang:damageCallback'} if field=='damageCallback' else 'level'

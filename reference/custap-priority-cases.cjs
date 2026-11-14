@@ -1,0 +1,34 @@
+'use strict';
+module.exports=function(){
+ const m=(x={})=>({species:'Mew',moves:['Tackle','Recover'],ability:'Pressure',item:'',level:50,nature:'Hardy',gender:'M',ivs:{hp:31,atk:31,def:31,spa:31,spd:31,spe:31},evs:{hp:0,atk:0,def:0,spa:0,spd:0,spe:0},...x});
+ const b=(a=1,c=1)=>({p1:`move ${a}`,p2:`move ${c}`}),cases=[];
+ const add=(id,x={})=>cases.push({id:'G4-custap-priority-'+id,seed:1,generic:true,custapPriorityFamily:true,p1:[m({item:'Custap Berry'})],p2:[m({evs:{spe:252}})],setup:[{side:'p1',hp:43}],steps:[b()],...x});
+ add('slow-active');add('above-threshold',{setup:[{side:'p1',hp:44}],steps:[b(),b()]});
+ add('onehp',{setup:[{side:'p1',hp:1}]});add('fullhp',{setup:[]});
+ add('exact-quarter',{p1:[m({item:'Custap Berry',evs:{hp:4}})],setup:[{side:'p1',hp:44}]});
+ add('above-exact-quarter',{p1:[m({item:'Custap Berry',evs:{hp:4}})],setup:[{side:'p1',hp:45}]});
+ for(const hp of [3,4])add('level1-hp'+hp,{p1:[m({item:'Custap Berry',level:1})],setup:[{side:'p1',hp}]});
+ add('quickattack',{p1:[m({item:'Custap Berry',moves:['Quick Attack','Recover']})],p2:[m({moves:['Quick Attack','Recover'],evs:{spe:252}})]});
+ add('protect',{p1:[m({item:'Custap Berry',moves:['Protect','Tackle']})]});
+ add('counter',{p1:[m({item:'Custap Berry',moves:['Counter','Recover']})]});
+ add('recover',{steps:[b(2)]});add('rest',{p1:[m({item:'Custap Berry',moves:['Rest','Tackle']})]});
+ for(const tie of [false,true])add('both-'+(tie?'tie':'fast'),{p2:[m({item:'Custap Berry',evs:{spe:tie?0:252}})],setup:[{side:'p1',hp:43},{side:'p2',hp:43}]});
+ add('unburden',{p1:[m({item:'Custap Berry',ability:'Unburden'})]});
+ add('unburden-both',{p1:[m({item:'Custap Berry',ability:'Unburden'})],p2:[m({item:'Custap Berry',evs:{spe:252}})],setup:[{side:'p1',hp:43},{side:'p2',hp:43}]});
+ add('unburden-par',{p1:[m({item:'Custap Berry',ability:'Unburden'})],setup:[{side:'p1',hp:43,status:'par'}]});
+ add('unburden-mummy',{abilityChangeFamily:true,p1:[m({item:'Custap Berry',ability:'Unburden'})],p2:[m({ability:'Mummy',evs:{spe:252}})]});
+ for(const ability of ['Pressure','Unburden'])add('recycle-'+ability.toLowerCase(),{itemLifecycleFamily:true,p1:[m({item:'Custap Berry',ability,moves:['Tackle','Recycle','Recover']})],p2:[m({moves:['Recover','Tackle'],evs:{spe:252}})],steps:[b(),b(2),b()]});
+ add('trick-gain',{itemLifecycleFamily:true,p1:[m({ability:'Unburden',moves:['Trick','Tackle','Recover']})],p2:[m({item:'Custap Berry',evs:{spe:252}})],steps:[b(),b(2)]});
+ add('trick-empty',{itemLifecycleFamily:true,p1:[m({item:'Custap Berry',moves:['Trick','Tackle','Recover']})],p2:[m({moves:['Recover','Tackle'],evs:{spe:252}})]});
+ add('switch-no-eat',{p1:[m({item:'Custap Berry'}),m()],steps:[{p1:'switch 2',p2:'move 1'}]});
+ add('suppressed-before-eat',{abilityChangeFamily:true,p1:[m({item:'Custap Berry',ability:'Unburden'})],p2:[m({moves:['Gastro Acid','Tackle','Recover'],evs:{spe:252}})],setup:[{side:'p1',hp:50}],steps:[b(1,1),b(1,2),b(1,2)]});
+ add('suppressed-after-eat',{abilityChangeFamily:true,p1:[m({item:'Custap Berry',ability:'Unburden'})],p2:[m({moves:['Gastro Acid','Tackle','Recover'],evs:{spe:252}})]});
+ add('struggle-slot4',{p1:[m({item:'Custap Berry',moves:['Tackle','Recover','Protect','Counter']})],setup:[{side:'p1',hp:43,pp:0}]});
+ add('pursuit-switch',{pursuitFamily:true,p1:[m({item:'Custap Berry',ability:'Unburden',moves:['Pursuit','Recover']})],p2:[m(),m()],steps:[{p1:'move 1',p2:'switch 2'}]});
+ add('positive-target-priority',{p2:[m({moves:['Quick Attack','Recover'],evs:{spe:252}})]});
+ add('legacy-counter-pivot',{p1:[m({moves:['Counter','Recover'],evs:{spe:252}})],p2:[m({moves:['U-turn','Recover']}),m()],setup:[],steps:[b(),{p2:'switch 2'}]});
+ return cases;
+};
+module.exports.membershipWitnesses=function(){
+ require('./neutral-turn-oracle.cjs').assertReady();const ps=require('./vendor/pokemon-showdown/dist/sim'),assert=require('node:assert/strict');return [['item','custapberry',29,'Golem'],['ability','unburden',28,'Drifblim']].map(([kind,id,n,species])=>{const seed=[n,2,3,4],set=ps.Teams.getGenerator('gen5randombattle',seed).getTeam().find(s=>s.species===species&&ps.Dex.toID(kind==='item'?s.item:s.ability)===id);assert.ok(set,id);return {kind,id,seed,set};});
+};

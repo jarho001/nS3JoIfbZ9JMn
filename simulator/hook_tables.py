@@ -21,7 +21,7 @@ CRIT_DENOMINATOR=jnp.asarray([0,16,8,4,3,2],jnp.int32)
 ABILITY_NAMES=('',)+tuple(next(r['name'] for r in t.g.DATA['abilities'] if r['id']==key) for key in t.ABILITIES[1:])
 ITEM_NAMES=('',)+tuple(next(r['name'] for r in t.g.DATA['items'] if r['id']==key) for key in t.ITEMS[1:])
 
-PRESSURE_TARGET=t.mv(lambda r:bool(r.get('flags',{}).get('mustpressure')) or r['target'] in ('normal','any','all','allAdjacent','allAdjacentFoes','randomNormal','adjacentFoe'))
+PRESSURE_TARGET=t.mv(lambda r:r['id'] in ('counter','mirrorcoat') or bool(r.get('flags',{}).get('mustpressure')) or r['target'] in ('normal','any','all','allAdjacent','allAdjacentFoes','randomNormal','adjacentFoe'))
 
 # These native hooks modify the offensive stat, not base power.
 LOW_HP_TYPE=jnp.asarray([{'overgrow':t.g.TYPES['grass'],'blaze':t.g.TYPES['fire'],'torrent':t.g.TYPES['water'],'swarm':t.g.TYPES['bug']}.get(key,-1)for key in t.ABILITIES],jnp.int32)
