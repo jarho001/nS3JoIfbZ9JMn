@@ -1,11 +1,11 @@
 'use strict';
 const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),zlib=require('node:zlib');
 const {normalizeStacks}=require('./native-stack-support.cjs');
-test('native-only weight moves preserve hectogram thresholds, ratio boundaries and transformed species',()=>{
+test('native weight moves preserve hectogram thresholds, ratio boundaries and transformed species',()=>{
  require('../reference/neutral-turn-oracle.cjs').assertReady();
- const ps=require('../reference/vendor/pokemon-showdown/dist/sim'),{runCase}=require('../reference/shared-engine-cases.cjs'),spec=require('../reference/weight-based-cases.cjs');
- const actual={pin:require('../reference-lock.json').commit,witnesses:spec.membershipWitnesses(),cases:spec().map(c=>runCase(ps,c))};
- assert.deepEqual(normalizeStacks(JSON.parse(JSON.stringify(actual))),normalizeStacks(JSON.parse(zlib.gunzipSync(fs.readFileSync('test-logs/g4-cpu-conformance/weight-based-precheck.json.gz')))));
+ const ps=require('../reference/vendor/pokemon-showdown/dist/sim'),spec=require('../reference/weight-based-cases.cjs');
+ const actual=JSON.parse(require('node:child_process').execFileSync('node',['reference/shared-engine-cases.cjs','--batch','weightbased'],{maxBuffer:48*1024*1024}));
+ assert.deepEqual(normalizeStacks(actual),normalizeStacks(JSON.parse(zlib.gunzipSync(fs.readFileSync('test-logs/g4-cpu-conformance/weight-based.json.gz')))));
  assert.equal(actual.cases.length,40);assert.equal(actual.cases.reduce((n,c)=>n+c.steps.length,0),48);assert.ok(actual.cases.every(c=>c.steps.every(s=>s.accepted.every(a=>a.accepted))));
  for(const c of actual.cases)for(const side of ['p1','p2'])for(const mon of c.setup[side])assert.equal(new Set(mon.moves.map(m=>ps.Dex.toID(m))).size,mon.moves.length,c.id+' unique moves');
  const dex=ps.Dex.mod('gen5'),invoke=(id,source,target)=>dex.moves.get(id).basePowerCallback.call({debug(){}},{getWeight:()=>source},{getWeight:()=>target});
@@ -17,5 +17,5 @@ test('native-only weight moves preserve hectogram thresholds, ratio boundaries a
   assert.ok(hp(key+'-technician-vulpix')<hp(key+'-vulpix'));assert.ok(hp(key+'-technician-flareon')<hp(key+'-flareon'));assert.equal(hp(key+'-technician-zweilous'),hp(key+'-zweilous'));
   assert.ok(c(key+'-roughskin').steps[0].events.p1.some(e=>e.message.includes('[from] ability: Rough Skin')));
  }
- assert.deepEqual(actual.witnesses.map(w=>w.set.species),['Aggron','Emboar','Bisharp']);
+ assert.deepEqual(spec.membershipWitnesses().map(w=>w.set.species),['Aggron','Emboar','Bisharp']);
 });

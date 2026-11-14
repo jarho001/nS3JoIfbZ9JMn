@@ -19,6 +19,10 @@ ITEM_IMPLEMENTED=jnp.asarray([key=='rockyhelmet' for key in t.ITEMS],jnp.bool_)
 
 
 def supported(row):
+    if row.get('id') in ('lowkick','grassknot','heavyslam'):
+        if row.get('basePower')!=0 or row.get('basePowerCallback')!={'$callback':f"moves:{row['id']}:basePowerCallback"}:return False
+        clean=dict(row);clean.pop('basePowerCallback');clean['basePower']=1
+        return t.plain(clean)
     selector={'foulplay':('overrideOffensivePokemon','target'),'psyshock':('overrideDefensiveStat','def'),'psystrike':('overrideDefensiveStat','def'),'secretsword':('overrideDefensiveStat','def')}.get(row.get('id'))
     if selector:
         field,value=selector

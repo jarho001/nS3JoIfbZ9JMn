@@ -53,6 +53,7 @@ from . import reactive_abilities as reactive_ability_ops
 from . import contact_status as contact_status_ops
 from . import conditional_attacks as conditional_ops
 from . import stat_selection as stat_ops
+from . import weight_based as weight_ops
 from . import species_items as species_item_ops
 from . import ability_creation as creation_ops
 from . import suppression as suppression_ops
@@ -67,7 +68,7 @@ import sys
 def _engine():
     return sys.modules[__name__]
 
-SCHEMA = 61
+SCHEMA = 62
 ROSTER, SLOTS, QUEUE, EVENTS, DRAWS, HISTORY = 6, 4, 8, 128, 128, 2048
 OK, PENDING, INVALID, UNSUPPORTED, CAPACITY, TERMINAL, STALE = range(7)
 RETRY=7
@@ -422,6 +423,7 @@ def _hit(c,actor,move):
         power=jnp.where(move==HIDDEN_POWER,s.hp_power[actor,mon],
                         jnp.where(move==RETURN,s.happiness[actor,mon]*10//25,
                                   jnp.where(move==FRUSTRATION,(255-s.happiness[actor,mon])*10//25,POWER[move])))
+        power=weight_ops.power(s,actor,target,move,power)
         power=conditional_ops.power(s,target,move,power,_engine())
         power=jnp.maximum(1,power)*jnp.where(pursuit_ops.boosted(s,target,move,_engine()),2,1)
         move_type=jnp.where(move==HIDDEN_POWER,s.hp_type[actor,mon],tables.MOVE_TYPE[move])

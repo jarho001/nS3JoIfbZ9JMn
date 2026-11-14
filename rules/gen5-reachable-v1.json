@@ -22159,10 +22159,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/weight-based.json.gz",
+          "native": "reference/weight-based-cases.cjs",
+          "scope": "Independent40 constructed/synthetic scenarios48 boundaries; integer hectogram absolute/ratio power, exact threshold boundaries, current transformed species/Imposter, Technician/items, contact/Substitute and continuation. Weight-modifying abilities/items/volatiles stay gated, Heat Crash unresolved without positive seed1..500 witness, full-format closure pending",
+          "test": "test/test_weight_based_engine.py"
+        }
+      ],
       "field": "basePowerCallback",
       "id": "moves:grassknot:basePowerCallback",
-      "implementation": null,
+      "implementation": {
+        "family": "weight_based",
+        "file": "simulator/weight_based.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:grassknot",
@@ -22174,7 +22186,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "e16d64e273cca185f8f122d36fbac5dd0cab8e20f6ccfaa3dfdb0b1af40bf268",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -23023,10 +23035,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/weight-based.json.gz",
+          "native": "reference/weight-based-cases.cjs",
+          "scope": "Independent40 constructed/synthetic scenarios48 boundaries; integer hectogram absolute/ratio power, exact threshold boundaries, current transformed species/Imposter, Technician/items, contact/Substitute and continuation. Weight-modifying abilities/items/volatiles stay gated, Heat Crash unresolved without positive seed1..500 witness, full-format closure pending",
+          "test": "test/test_weight_based_engine.py"
+        }
+      ],
       "field": "basePowerCallback",
       "id": "moves:heavyslam:basePowerCallback",
-      "implementation": null,
+      "implementation": {
+        "family": "weight_based",
+        "file": "simulator/weight_based.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:heavyslam",
@@ -23038,7 +23062,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "3b16241e26318d0bc0c43dc1f6aa2b976e53df837ee14f79a7c95087bda5cb0d",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -24043,10 +24067,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/weight-based.json.gz",
+          "native": "reference/weight-based-cases.cjs",
+          "scope": "Independent40 constructed/synthetic scenarios48 boundaries; integer hectogram absolute/ratio power, exact threshold boundaries, current transformed species/Imposter, Technician/items, contact/Substitute and continuation. Weight-modifying abilities/items/volatiles stay gated, Heat Crash unresolved without positive seed1..500 witness, full-format closure pending",
+          "test": "test/test_weight_based_engine.py"
+        }
+      ],
       "field": "basePowerCallback",
       "id": "moves:lowkick:basePowerCallback",
-      "implementation": null,
+      "implementation": {
+        "family": "weight_based",
+        "file": "simulator/weight_based.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:lowkick",
@@ -24058,7 +24094,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "e16d64e273cca185f8f122d36fbac5dd0cab8e20f6ccfaa3dfdb0b1af40bf268",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -59501,8 +59537,8 @@
         }
       ],
       "kind": "moves",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "weight-based-positive-witness",
       "status": "partial"
     },
     {
@@ -60400,8 +60436,8 @@
         }
       ],
       "kind": "moves",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "weight-based-positive-witness",
       "status": "partial"
     },
     {
@@ -61974,8 +62010,8 @@
         }
       ],
       "kind": "moves",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "weight-based-positive-witness",
       "status": "partial"
     },
     {
@@ -100881,6 +100917,156 @@
             }
           }
         ]
+      },
+      "weight-based-positive-witness": {
+        "bound": [
+          "moves:grassknot",
+          "moves:heavyslam",
+          "moves:lowkick"
+        ],
+        "conclusion": "required",
+        "kind": "moves",
+        "reasoning": "Pinned Heavy Slam Aggron seed[4,2,3,4], Grass Knot Emboar seed[7,2,3,4], Low Kick Bisharp seed[21,2,3,4] prove membership. Weight-modifier dependencies stay gated; Heat Crash unresolved without positive seed1..500 witness; full-format closure pending.",
+        "references": [
+          "data/random-battles/gen5/teams.ts:103-494 (cullMovePool/randomMoveset)",
+          "data/random-battles/gen5/teams.ts:496-566 (ability filters/fallback)",
+          "data/random-battles/gen5/teams.ts:568-816 (item returns and randomSet)",
+          "data/random-battles/gen5/teams.ts:850-1014 (team eligibility)",
+          "data/random-battles/gen9/teams.ts:675-693 (addMove)",
+          "data/random-battles/gen9/teams.ts:1442-1497 (getLevel/getForme)",
+          "data/random-battles/gen9/teams.ts:1641-1683 (getPokemonPool)"
+        ],
+        "witnesses": [
+          {
+            "id": "heavyslam",
+            "kind": "move",
+            "seed": [
+              4,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Rock Head",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Choice Band",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 86,
+              "moves": [
+                "aquatail",
+                "earthquake",
+                "headsmash",
+                "heavyslam"
+              ],
+              "name": "Aggron",
+              "role": "Wallbreaker",
+              "shiny": false,
+              "species": "Aggron",
+              "speciesId": "aggron"
+            }
+          },
+          {
+            "id": "grassknot",
+            "kind": "move",
+            "seed": [
+              7,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Blaze",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Life Orb",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 85,
+              "moves": [
+                "wildcharge",
+                "superpower",
+                "fireblast",
+                "grassknot"
+              ],
+              "name": "Emboar",
+              "role": "Wallbreaker",
+              "shiny": false,
+              "species": "Emboar",
+              "speciesId": "emboar"
+            }
+          },
+          {
+            "id": "lowkick",
+            "kind": "move",
+            "seed": [
+              21,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Defiant",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Life Orb",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 83,
+              "moves": [
+                "lowkick",
+                "swordsdance",
+                "suckerpunch",
+                "ironhead"
+              ],
+              "name": "Bisharp",
+              "role": "Setup Sweeper",
+              "shiny": false,
+              "species": "Bisharp",
+              "speciesId": "bisharp"
+            }
+          }
+        ]
       }
     },
     "references": {
@@ -100910,8 +101096,8 @@
       },
       "entries": {
         "proven_unreachable": 542,
-        "required": 88,
-        "unresolved": 1138
+        "required": 91,
+        "unresolved": 1135
       },
       "roots": {
         "proven_unreachable": 0,

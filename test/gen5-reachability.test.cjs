@@ -59,8 +59,8 @@ test('pinned resolved export and conservative inventory reproduce exactly',()=>{
     const cb=slots.get(id);assert.equal(cb.status,'unsupported');assert.equal(cb.implementation,null);
   }
   assert.ok(ledger.callbacks.every(c=>['partial','unsupported'].includes(c.status)));
-  assert.equal(ledger.callbacks.filter(c=>c.status==='partial').length,348);
-  assert.equal(ledger.callbacks.filter(c=>c.status==='unsupported').length,798);
+  assert.equal(ledger.callbacks.filter(c=>c.status==='partial').length,351);
+  assert.equal(ledger.callbacks.filter(c=>c.status==='unsupported').length,795);
   const audit=ledger.reachabilityAudit;
   const entries=new Map(ledger.entries.map(e=>[e.id,e]));
   assert.equal(audit.proofs['move-identity-bound'].bound.length,224);
@@ -145,6 +145,9 @@ test('pinned resolved export and conservative inventory reproduce exactly',()=>{
   }
   for(const owner of ['moves:foulplay','moves:psyshock','moves:psystrike','moves:secretsword']){
     const entry=entries.get(owner);assert.equal(entry.reachability,'required');assert.equal(entry.reachabilityAudit,'stat-selection-positive-witness');assert.equal(entry.implementation.behavior.family,'stat_selection');assert.ok(entry.evidence.some(e=>e.test==='test/test_stat_selection_engine.py'));
+  }
+  for(const owner of ['moves:lowkick','moves:grassknot','moves:heavyslam']){
+    assert.equal(entries.get(owner).reachability,'required');assert.equal(entries.get(owner).reachabilityAudit,'weight-based-positive-witness');assert.ok(slots.get(owner+':basePowerCallback').implementation);
   }
   assert.equal(entries.get('abilities:zenmode').reachability,'unresolved');
   assert.equal(slots.get('abilities:magicguard:onDamage').reachability,'unresolved');

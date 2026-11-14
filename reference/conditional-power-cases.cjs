@@ -1,0 +1,32 @@
+'use strict';
+module.exports=function(){
+ const m=(x={})=>({species:'Mew',moves:['Tackle','Recover'],ability:'Pressure',item:'',level:50,nature:'Hardy',gender:'M',ivs:{hp:31,atk:31,def:31,spa:31,spd:31,spe:31},evs:{hp:0,atk:0,def:0,spa:0,spd:0,spe:0},...x});
+ const b=(a=1,c=2)=>({p1:`move ${a}`,p2:`move ${c}`}),cases=[];
+ const add=(id,x={})=>cases.push({id:'G4-conditional-power-'+id,seed:1,generic:true,conditionalPowerFamily:true,p1:[m({evs:{spe:252}})],p2:[m()],steps:[b()],...x});
+ const facade=(x={})=>m({moves:['Facade','Recover'],evs:{spe:252},...x}),acro=(x={})=>m({moves:['Acrobatics','Recover'],evs:{spe:252},...x});
+ add('facade-base',{p1:[facade()]});
+ for(const status of ['brn','par','psn','tox'])add('facade-'+status,{p1:[facade()],setup:[{side:'p1',status}]});
+ add('facade-target-status',{p1:[facade()],setup:[{side:'p2',status:'brn'}]});
+ for(const status of ['brn','par'])add('facade-guts-'+status,{p1:[facade({ability:'Guts'})],setup:[{side:'p1',status}]});
+ add('facade-magicguard',{p1:[facade({ability:'Magic Guard'})],setup:[{side:'p1',status:'brn'}]});
+ for(const item of ['Flame Orb','Toxic Orb'])add('facade-'+item.toLowerCase().replaceAll(' ',''),{p1:[facade({item})],steps:[b(2),b()]});
+ add('facade-sleep-talk',{seed:4,p1:[m({moves:['Rest','Sleep Talk','Facade'],evs:{spe:252}})],setup:[{side:'p1',hp:100}],steps:[b(),b(2)]});
+ add('facade-silkscarf',{p1:[facade({item:'Silk Scarf'})],setup:[{side:'p1',status:'brn'}]});
+ add('facade-lum',{p1:[facade({item:'Lum Berry',evs:{spe:0}})],p2:[m({moves:['Thunder Wave','Recover'],evs:{spe:252}})],steps:[b(1,1)]});
+ add('facade-frozen',{p1:[facade()],setup:[{side:'p1',status:'frz'}]});
+ add('acrobatics-empty',{p1:[acro()]});
+ for(const item of ['Leftovers','Choice Band','Muscle Band'])add('acrobatics-'+item.toLowerCase().replaceAll(' ',''),{p1:[acro({item})]});
+ add('acrobatics-technician-empty',{p1:[acro({ability:'Technician'})]});
+ add('acrobatics-technician-held',{p1:[acro({ability:'Technician',item:'Leftovers'})]});
+ add('acrobatics-lum',{p1:[acro({item:'Lum Berry',evs:{spe:0}})],p2:[m({moves:['Thunder Wave','Recover'],evs:{spe:252}})],steps:[b(1,1)]});
+ for(const gain of [false,true])add('acrobatics-trick-'+(gain?'gain':'lose'),{p1:[m({moves:['Trick','Acrobatics','Recover'],item:gain?'':'Leftovers',evs:{spe:252}})],p2:[m({item:gain?'Leftovers':''})],steps:[b(),b(2)]});
+ add('acrobatics-knockoff',{p1:[acro({item:'Leftovers',evs:{spe:0}})],p2:[m({moves:['Knock Off','Recover'],evs:{spe:252}})],steps:[b(2,1),b()]});
+ add('acrobatics-substitute',{p1:[acro()],p2:[m({moves:['Substitute','Recover']})],steps:[b(2,1),b()]});
+ add('acrobatics-helmet',{p1:[acro()],p2:[m({item:'Rocky Helmet'})]});
+ add('acrobatics-mummy',{abilityChangeFamily:true,p1:[acro({ability:'Technician',item:'Leftovers'})],p2:[m({ability:'Mummy'})],steps:[b(),b()]});
+ return cases;
+};
+module.exports.membershipWitnesses=function(){
+ require('./neutral-turn-oracle.cjs').assertReady();const ps=require('./vendor/pokemon-showdown/dist/sim'),assert=require('node:assert/strict');
+ return [['facade',2,'Raticate'],['acrobatics',28,'Drifblim']].map(([id,n,species])=>{const seed=[n,2,3,4],set=ps.Teams.getGenerator('gen5randombattle',seed).getTeam().find(s=>s.species===species&&s.moves.some(m=>ps.Dex.toID(m)===id));assert.ok(set,id);return {kind:'move',id,seed,set};});
+};

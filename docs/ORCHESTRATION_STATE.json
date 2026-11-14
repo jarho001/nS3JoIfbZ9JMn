@@ -34,8 +34,8 @@
     "brief": "PROJECT_PLAN.md#proposed-g4-cpu-implementation-and-conformance-goal",
     "source_base": "f37067e",
     "scope": "Complete pinned gen5randombattle reachable mechanics and every prepared CPU gate. Integrated checkpoints, resumable progress and commit/push authorized. GPU execution, profiling, benchmarks, training, delegation and scored research excluded.",
-    "checkpoint": "Schema61 Foul Play / Psyshock / Psystrike / Secret Sword group: 66 scenarios/76 boundaries pass one compiled step in455.367s; native/inventory and4 handoff helpers pass. Full G4 remains open.",
-    "next": "Continue Low Kick/Grass Knot/Heavy Slam weight-based base-power group from40 scenarios/48 native boundaries; hectogram thresholds/ratios, current transformed species, Technician/item/contact interactions and persistence, then one shared CPU checkpoint.",
+    "checkpoint": "Schema62 Low Kick / Grass Knot / Heavy Slam group: 40 scenarios/48 boundaries pass one compiled step in453.032s; native/inventory and4 handoff helpers pass. Full G4 remains open.",
+    "next": "Continue Facade/Acrobatics conditional-power group from28 scenarios/36 native boundaries; Gen5 status power chain with retained burn reduction, live item-dependent power before Technician, Lum/Trick/Knock Off/Mummy and persistence, then one shared CPU checkpoint.",
     "ledger": {
       "path": "rules/gen5-reachable-v1.json",
       "entries": 1768,
@@ -45,7 +45,7 @@
         "indirect-closure",
         "engine-contract"
       ],
-      "status": "Incomplete:348 partial callback mappings/798 unsupported; four declarative move behavior mappings added, full reachability/closure pending.",
+      "status": "Incomplete:351 partial callback mappings/795 unsupported; full reachability/closure pending.",
       "reachability_summary": {
         "callbacks": {
           "proven_unreachable": 546,
@@ -54,8 +54,8 @@
         },
         "entries": {
           "proven_unreachable": 542,
-          "required": 88,
-          "unresolved": 1138
+          "required": 91,
+          "unresolved": 1135
         },
         "roots": {
           "proven_unreachable": 0,
@@ -77,13 +77,13 @@
     "first_divergence": null,
     "gpu_requirement": "Deferred during travel. Record all G4 device obligations and ready/pending commands in docs/GPU_HANDOFF.md; current checkpoint runner is scripts/g4_gpu_handoff.py. CPU implementation remains active. Later full G4 release still requires matching-source GPU conformance.",
     "acceptance": "G4-CPU-conformance pending. Generic data checkpoint passes; all remaining prepared CPU gates retained, all milestone acceptance/task count unchanged.",
-    "source_identity": "test-logs/g4-cpu-conformance/schema61-checkpoint.json",
+    "source_identity": "test-logs/g4-cpu-conformance/schema62-checkpoint.json",
     "evidence_directory": "test-logs/g4-cpu-conformance",
     "publication": {
       "status": "checkpoint_publication_authorized",
       "target": "origin/main",
-      "previous_published_head": "0f2838e8f2071fab46351e215d50c2308240e7e8",
-      "scope": "Schema61 focused CPU checkpoint; sustained CPU execution continues, full G4 open."
+      "previous_published_head": "cba6c31b7bc650f324ed881b6f754fa9dd884fa7",
+      "scope": "Schema62 focused CPU checkpoint; sustained CPU execution continues, full G4 open."
     },
     "reasoning_effort": "medium (user preference,2026-11-10; no automatic escalation)",
     "design_pass": {
@@ -150,29 +150,26 @@
     },
     "record_usage": "Start at docs/CURRENT.md and scripts/read_context.py. State is authoritative for live progress; history is archived. Update live checkpoint/next/package/blockers at meaningful checkpoints; do not append completed-family narratives. Detailed results belong in immutable test evidence.",
     "next_work_package": {
-      "id": "g4-weight-based-group",
+      "id": "g4-conditional-power-group",
       "status": "native_precheck_passed_implementation_pending",
       "members": [
-        "Low Kick target-weight base power",
-        "Grass Knot target-weight base power",
-        "Heavy Slam source/target weight-ratio base power"
+        "Facade non-sleep status BasePower chain modifier",
+        "Acrobatics live empty-item base-power callback"
       ],
       "shared_paths": [
-        "Current species hectogram weight and pre-Technician dynamic base power; Transform/Imposter identity"
+        "Dynamic source status/item, pre-Technician power versus later chain modifier, item/ability lifecycle"
       ],
       "membership": [
-        "Heavy Slam Aggron seed[4,2,3,4]",
-        "Grass Knot Emboar seed[7,2,3,4]",
-        "Low Kick Bisharp seed[21,2,3,4]"
+        "Facade Raticate seed[2,2,3,4]",
+        "Acrobatics Drifblim seed[28,2,3,4]"
       ],
-      "native_precheck": "40 scenarios/48 boundaries in test-logs/g4-cpu-conformance/weight-based-precheck.json.gz; exact absolute thresholds and ratio boundaries, Technician/items, contact/Substitute, transformed source/target and Imposter. Native scalar callback boundaries independently asserted.",
-      "native_command": "node --test test/weight-based-native.test.cjs",
+      "native_precheck": "28 scenarios/36 boundaries in test-logs/g4-cpu-conformance/conditional-power-precheck.json.gz; source/target status, Guts/Magic Guard/orbs, Gen5 burn, Sleep Talk/freeze, held/empty items, Technician, same-turn Lum, Trick gain/loss, Knock Off, Substitute/Helmet/Mummy.",
+      "native_command": "node --test test/conditional-power-native.test.cjs",
       "native_result": "1 passed; implementation pending",
-      "planned_command": "JAX_PLATFORMS=cpu JAX_ENABLE_COMPILATION_CACHE=true JAX_COMPILATION_CACHE_DIR=\"$PWD/work/jax-cache\" JAX_EXPLAIN_CACHE_MISSES=true OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 XLA_PYTHON_CLIENT_PREALLOCATE=false timeout 900s .venv-jax/bin/python -m unittest test.test_weight_based_engine -v -f",
+      "planned_command": "JAX_PLATFORMS=cpu JAX_ENABLE_COMPILATION_CACHE=true JAX_COMPILATION_CACHE_DIR=\"$PWD/work/jax-cache\" JAX_EXPLAIN_CACHE_MISSES=true OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 XLA_PYTHON_CLIENT_PREALLOCATE=false timeout 900s .venv-jax/bin/python -m unittest test.test_conditional_power_engine -v -f",
       "command_status": "planned; module not yet implemented",
       "excluded": [
-        "Heat Crash has no positive seed1..500 witness; remains unresolved/unsupported, not excluded",
-        "Heavy Metal/Light Metal/Float Stone/Autotomize and other unsupported weight-modifier dependencies remain gated",
+        "Flying Gem/Normal Gem and Unburden dependencies stay unsupported pending their own native/implementation closure",
         "Broad CPU/device/campaign/profiling gates deferred"
       ]
     },
@@ -562,27 +559,27 @@
     "combined_return_home_block": "docs/GPU_HANDOFF.md#one-return-home-block-correctness-plus-g3-v6-measurements",
     "pending_status_checkpoint": "Current status/field/hook GPU checks are wired into the49-check runner; no GPU execution during travel. Preserve matching-source CPU results and do not transfer earlier GPU/CPU evidence across changed source.",
     "expanded_checkpoint": {
-      "status": "schema61_grouped_focused_CPU_complete_GPU_deferred",
-      "engine_schema": 61,
-      "modules": 67,
-      "native_scenarios": 2087,
-      "native_boundaries": 6801,
+      "status": "schema62_grouped_focused_CPU_complete_GPU_deferred",
+      "engine_schema": 62,
+      "modules": 68,
+      "native_scenarios": 2127,
+      "native_boundaries": 6849,
       "initial_field_evidence": "test-logs/g4-cpu-conformance/schema5-checkpoint.json",
       "source": "Use latest committed checkout and runner source/fixture fingerprints; earlier source_commit fields describe historical preparation.",
       "handoff_prepared": false,
-      "source_commit": "Publishing commit; exact fingerprints in schema61-checkpoint.json",
-      "source_identity": "test-logs/g4-cpu-conformance/schema61-checkpoint.json",
-      "checks": 123
+      "source_commit": "Publishing commit; exact fingerprints in schema62-checkpoint.json",
+      "source_identity": "test-logs/g4-cpu-conformance/schema62-checkpoint.json",
+      "checks": 124
     },
     "pending_candidate": {
-      "family": "Low Kick / Grass Knot / Heavy Slam",
+      "family": "Facade / Acrobatics",
       "status": "native_only_precheck_passed_implementation_pending",
-      "cases": 40,
-      "boundaries": 48,
-      "fixture": "test-logs/g4-cpu-conformance/weight-based-precheck.json.gz",
-      "native_command": "node --test test/weight-based-native.test.cjs",
+      "cases": 28,
+      "boundaries": 36,
+      "fixture": "test-logs/g4-cpu-conformance/conditional-power-precheck.json.gz",
+      "native_command": "node --test test/conditional-power-native.test.cjs",
       "included_in_checkpoint_runner": false,
-      "next": "Implement current-species hectogram weights and threshold/ratio power, then grouped CPU checkpoint."
+      "next": "Implement status BasePower chain and live item callback with exact Gen5 category behavior, then grouped CPU checkpoint."
     }
   },
   "historical_records": {
