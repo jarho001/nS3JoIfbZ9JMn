@@ -89,7 +89,7 @@ def stats(c,attack,defense,actor,target,physical,move_type,e,defensive_physical=
     atk_modifier=chain(atk_modifier,e.species_item_ops.offense(s,actor,physical))
     marvel=(defender==h.A['marvelscale'])&defensive_physical&(s.status[target,tm]!=e.NONE)
     def_modifier=jnp.where(marvel,6144,4096).astype(jnp.int32)
-    eviolite=(s.item[target,tm]==h.I['eviolite'])&h.NFE[s.species[target,tm]]
+    eviolite=(s.item[target,tm]==h.I['eviolite'])&h.NFE[s.base_species[target,tm]]
     def_modifier=chain(def_modifier,jnp.where((~defensive_physical)&e.form_ops.flower(s,target),6144,4096))
     def_modifier=chain(def_modifier,jnp.where(eviolite,6144,4096))
     def_modifier=chain(def_modifier,e.species_item_ops.defense(s,target,defensive_physical))

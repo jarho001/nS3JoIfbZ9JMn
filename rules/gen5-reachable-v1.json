@@ -12753,16 +12753,16 @@
       ],
       "evidence": [
         {
-          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
-          "native": "reference/ability-item-cases.cjs",
-          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
-          "test": "test/test_hook_engine.py"
+          "fixture": "test-logs/g4-cpu-conformance/damage-item.json.gz",
+          "native": "reference/damage-item-cases.cjs",
+          "scope": "Independent39 synthetic scenarios46 boundaries; Eviolite original-base-species defensive gate across both Transform directions, physical/special/stages/critical/Foul Play/Psyshock, Expert Belt effective-hit final modifier, multihit/Hidden Power/Filter/Tinted Lens, Substitute/Trick/Knock Off and combined items. Existing chains retained, full-format closure pending",
+          "test": "test/test_damage_item_engine.py"
         }
       ],
       "field": "onModifyDef",
       "id": "items:eviolite:onModifyDef",
       "implementation": {
-        "family": "hook",
+        "family": "damage_item",
         "file": "simulator/hook_effects.py",
         "scheduler": "simulator/shared_engine.py",
         "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
@@ -12789,16 +12789,16 @@
       ],
       "evidence": [
         {
-          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
-          "native": "reference/ability-item-cases.cjs",
-          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
-          "test": "test/test_hook_engine.py"
+          "fixture": "test-logs/g4-cpu-conformance/damage-item.json.gz",
+          "native": "reference/damage-item-cases.cjs",
+          "scope": "Independent39 synthetic scenarios46 boundaries; Eviolite original-base-species defensive gate across both Transform directions, physical/special/stages/critical/Foul Play/Psyshock, Expert Belt effective-hit final modifier, multihit/Hidden Power/Filter/Tinted Lens, Substitute/Trick/Knock Off and combined items. Existing chains retained, full-format closure pending",
+          "test": "test/test_damage_item_engine.py"
         }
       ],
       "field": "onModifySpD",
       "id": "items:eviolite:onModifySpD",
       "implementation": {
-        "family": "hook",
+        "family": "damage_item",
         "file": "simulator/hook_effects.py",
         "scheduler": "simulator/shared_engine.py",
         "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
@@ -12825,16 +12825,16 @@
       ],
       "evidence": [
         {
-          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
-          "native": "reference/ability-item-cases.cjs",
-          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
-          "test": "test/test_hook_engine.py"
+          "fixture": "test-logs/g4-cpu-conformance/damage-item.json.gz",
+          "native": "reference/damage-item-cases.cjs",
+          "scope": "Independent39 synthetic scenarios46 boundaries; Eviolite original-base-species defensive gate across both Transform directions, physical/special/stages/critical/Foul Play/Psyshock, Expert Belt effective-hit final modifier, multihit/Hidden Power/Filter/Tinted Lens, Substitute/Trick/Knock Off and combined items. Existing chains retained, full-format closure pending",
+          "test": "test/test_damage_item_engine.py"
         }
       ],
       "field": "onModifyDamage",
       "id": "items:expertbelt:onModifyDamage",
       "implementation": {
-        "family": "hook",
+        "family": "damage_item",
         "file": "simulator/hook_effects.py",
         "scheduler": "simulator/shared_engine.py",
         "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
@@ -79424,8 +79424,8 @@
         }
       ],
       "kind": "items",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "damage-item-positive-witness",
       "status": "partial"
     },
     {
@@ -79467,8 +79467,8 @@
         }
       ],
       "kind": "items",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "damage-item-positive-witness",
       "status": "partial"
     },
     {
@@ -98385,6 +98385,112 @@
           }
         ]
       },
+      "damage-item-positive-witness": {
+        "bound": [
+          "items:eviolite",
+          "items:expertbelt"
+        ],
+        "conclusion": "required",
+        "kind": "items",
+        "reasoning": "Pinned Expert Belt Seaking seed[2,2,3,4] and Eviolite Vigoroth seed[13,2,3,4] prove membership. Existing modifier paths receive directed conformance; Transform Eviolite uses original baseSpecies. Remaining interactions/full-format closure pending.",
+        "references": [
+          "data/random-battles/gen5/teams.ts:103-494 (cullMovePool/randomMoveset)",
+          "data/random-battles/gen5/teams.ts:496-566 (ability filters/fallback)",
+          "data/random-battles/gen5/teams.ts:568-816 (item returns and randomSet)",
+          "data/random-battles/gen5/teams.ts:850-1014 (team eligibility)",
+          "data/random-battles/gen9/teams.ts:675-693 (addMove)",
+          "data/random-battles/gen9/teams.ts:1442-1497 (getLevel/getForme)",
+          "data/random-battles/gen9/teams.ts:1641-1683 (getPokemonPool)"
+        ],
+        "witnesses": [
+          {
+            "id": "expertbelt",
+            "kind": "item",
+            "seed": [
+              2,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Lightning Rod",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Expert Belt",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 93,
+              "moves": [
+                "icebeam",
+                "drillrun",
+                "megahorn",
+                "waterfall"
+              ],
+              "name": "Seaking",
+              "role": "Fast Attacker",
+              "shiny": false,
+              "species": "Seaking",
+              "speciesId": "seaking"
+            }
+          },
+          {
+            "id": "eviolite",
+            "kind": "item",
+            "seed": [
+              13,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Vital Spirit",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Eviolite",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 86,
+              "moves": [
+                "slackoff",
+                "nightslash",
+                "bodyslam",
+                "bulkup"
+              ],
+              "name": "Vigoroth",
+              "role": "Bulky Setup",
+              "shiny": false,
+              "species": "Vigoroth",
+              "speciesId": "vigoroth"
+            }
+          }
+        ]
+      },
       "dry-skin-positive-witness": {
         "bound": [
           "abilities:dryskin"
@@ -101460,8 +101566,8 @@
       },
       "entries": {
         "proven_unreachable": 542,
-        "required": 96,
-        "unresolved": 1130
+        "required": 98,
+        "unresolved": 1128
       },
       "roots": {
         "proven_unreachable": 0,

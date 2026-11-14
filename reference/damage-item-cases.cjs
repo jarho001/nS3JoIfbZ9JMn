@@ -7,7 +7,7 @@ module.exports=function(){
   for(const [species,tag]of [['Vigoroth','nfe'],['Mew','fully-evolved']])for(const item of ['Eviolite',''])add(`eviolite-${key}-${tag}-${item?'held':'empty'}`,{p1:[m({moves:[move,'Recover'],evs:{spe:252}})],p2:[m({species,item})]});
   add(`eviolite-${key}-boosted`,{p1:[m({moves:[move,'Recover'],evs:{spe:252}})],p2:[m({species:'Vigoroth',item:'Eviolite'})],setup:[{side:'p2',boosts:{def:2,spd:2}}]});
  }
- add('eviolite-critical',{p1:[m({moves:['Storm Throw','Recover'],evs:{spe:252}})],p2:[m({species:'Vigoroth',item:'Eviolite'})],setup:[{side:'p2',boosts:{def:2}}]});
+ add('eviolite-critical',{seed:21,p1:[m({moves:['Tackle','Recover'],evs:{spe:252}})],p2:[m({species:'Vigoroth',item:'Eviolite'})],setup:[{side:'p2',boosts:{def:2}}]});
  add('eviolite-foulplay',{p1:[m({moves:['Foul Play','Recover'],evs:{spe:252}})],p2:[m({species:'Vigoroth',item:'Eviolite'})]});
  add('eviolite-psyshock',{p1:[m({moves:['Psyshock','Recover'],evs:{spe:252}})],p2:[m({species:'Vigoroth',item:'Eviolite'})]});
  add('eviolite-knockoff',{itemLifecycleFamily:true,p1:[m({moves:['Knock Off','Tackle','Recover'],evs:{spe:252}})],p2:[m({species:'Vigoroth',item:'Eviolite'})],steps:[b(),b(2)]});
@@ -16,7 +16,7 @@ module.exports=function(){
  for(const [key,move,species]of [['super','Surf','Arcanine'],['neutral','Surf','Mew'],['resist','Surf','Blastoise'],['immune','Thunderbolt','Rhydon'],['quad','Surf','Rhydon'],['net-neutral','Ice Beam','Walrein'],['physical','Low Kick','Regice']])for(const item of ['Expert Belt',''])add(`expertbelt-${key}-${item?'held':'empty'}`,{p1:[m({item,moves:[move,'Recover'],evs:{spe:252}})],p2:[m({species,level:key==='quad'?100:50})]});
  add('expertbelt-hiddenpower',{p1:[m({item:'Expert Belt',moves:['Hidden Power','Recover'],evs:{spe:252},ivs:{hp:30,atk:30,def:30,spa:30,spd:30,spe:30}})],p2:[m({species:'Regice'})]});
  add('expertbelt-multihit',{p1:[m({item:'Expert Belt',moves:['Double Kick','Recover'],evs:{spe:252}})],p2:[m({species:'Regice'})]});
- add('expertbelt-critical',{p1:[m({item:'Expert Belt',moves:['Storm Throw','Recover'],evs:{spe:252}})],p2:[m({species:'Regice'})]});
+ add('expertbelt-critical',{seed:21,p1:[m({item:'Expert Belt',moves:['Low Kick','Recover'],evs:{spe:252}})],p2:[m({species:'Regice'})]});
  add('expertbelt-filter',{p1:[m({item:'Expert Belt',moves:['Surf','Recover'],evs:{spe:252}})],p2:[m({species:'Arcanine',ability:'Filter'})]});
  add('expertbelt-tintedlens',{p1:[m({item:'Expert Belt',ability:'Tinted Lens',moves:['Surf','Recover'],evs:{spe:252}})],p2:[m({species:'Blastoise'})]});
  add('expertbelt-substitute',{p1:[m({item:'Expert Belt',moves:['Surf','Recover'],evs:{spe:252}})],p2:[m({species:'Arcanine',moves:['Substitute','Recover']})],steps:[b(2,1),b()]});

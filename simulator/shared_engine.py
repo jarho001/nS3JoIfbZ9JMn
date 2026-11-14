@@ -70,7 +70,7 @@ import sys
 def _engine():
     return sys.modules[__name__]
 
-SCHEMA = 64
+SCHEMA = 65
 ROSTER, SLOTS, QUEUE, EVENTS, DRAWS, HISTORY = 6, 4, 8, 128, 128, 2048
 OK, PENDING, INVALID, UNSUPPORTED, CAPACITY, TERMINAL, STALE = range(7)
 RETRY=7

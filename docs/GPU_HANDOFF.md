@@ -22,12 +22,25 @@ Keep historical commands/results as provenance.
 
 ## Current source and evidence
 
-**Next group, native only:** Eviolite / Expert Belt has39 scenarios/46
+**Next group, native only:** Super Fang / Seismic Toss has43 scenarios/60
 boundaries, pinned positive witnesses and a passing
-`node --test test/damage-item-native.test.cjs` contract. It is not in the
-CPU/CUDA runner; implementation remains pending. Original-base-species defense
-and effective-hit final damage share existing modifier/lifecycle paths.
-Other item families remain unresolved/unsupported without positive witnesses.
+`node --test test/fixed-damage-native.test.cjs` contract. It is not in the
+CPU/CUDA runner; implementation remains pending. Native fixed damage skips
+ordinary critical/stat/final modifier and damage-roll stages, retaining hit lifecycle.
+Night Shade remains unresolved/unsupported without a positive witness.
+
+**Schema65 Eviolite / Expert Belt group:** focused CPU39 scenarios/46 boundaries
+passed in447.919s;2 native/inventory contracts and4 handoff helpers pass.
+See [schema65-checkpoint.json](../test-logs/g4-cpu-conformance/schema65-checkpoint.json).
+One compiled step covers exact state/RNG/requests/recipient events/histories,
+NPZ continuation and journal18. No GPU execution.
+
+```sh
+JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_damage_item_engine -v -f
+```
+
+Runner includes127 checks/71 modules,2244 scenarios/7023
+boundaries in65 corpora. Current-source broad/device execution remains deferred.
 
 **Schema64 Flying Gem / Fighting Gem / Unburden group:** focused CPU48 scenarios/89 boundaries
 passed in455.382s;2 native/inventory contracts and4 handoff helpers pass.
