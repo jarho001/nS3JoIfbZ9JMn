@@ -71,6 +71,8 @@ def stats(c,attack,defense,actor,target,physical,move_type,e):
     atk_modifier=chain(atk_modifier,jnp.where(thick,2048,4096))
     low_hp=(h.LOW_HP_TYPE[ability]==move_type)&(s.hp[actor,m]*3<=s.stats[actor,m,0])
     atk_modifier=chain(atk_modifier,jnp.where(low_hp,6144,4096))
+    defeatist=(ability==h.A['defeatist'])&(s.hp[actor,m]*2<=s.stats[actor,m,0])
+    atk_modifier=chain(atk_modifier,jnp.where(defeatist,2048,4096))
     flash=s.volatile_state[actor,m,e.flash_ops.SLOT,0]>0
     flash_power=flash&(ability==e.flash_ops.ABILITY)&(move_type==e.generic.TYPES['fire'])
     atk_modifier=chain(atk_modifier,jnp.where(flash_power,6144,4096))
@@ -90,7 +92,8 @@ def stats(c,attack,defense,actor,target,physical,move_type,e):
     # HP/type conditions. Equal cached Speed shuffles even inactive modifiers.
     # Flash Fire is a Condition (subOrder2), not an Ability (subOrder7), so
     # it cannot fully tie with Thick Fat and must not consume that shuffle.
-    tie=(~physical)&(h.LOW_HP_TYPE[ability]>=0)&(defender==h.A['thickfat'])&(s.speed[actor,m]==s.speed[target,tm])
+    raw_source=s.ability[actor,m];raw_target=s.ability[target,tm]
+    tie=(~physical)&((h.LOW_HP_TYPE[raw_source]>=0)|(raw_source==h.A['defeatist']))&(raw_target==h.A['thickfat'])&(s.speed[actor,m]==s.speed[target,tm])
     c=e._when(tie,lambda c:e._draw(c,0,2,e.DAMAGE_CALC_SORT,2)[0],c)
     return c,modify(attack,atk_modifier),modify(defense,def_modifier)
 
@@ -104,11 +107,15 @@ def damage_modifier(c,actor,target,physical,critical,exponent,e,move):
             applies=(side==target)&(index==jnp.where(physical,0,1))&(~critical)
             rows.append(jnp.stack((jnp.where(applies,2048,4096),e.i32(0),e.i32(4))))
             valid.append(s.screens[side,index,0]>0)
-    offense=(ability==h.A['sniper'])|(ability==h.A['tintedlens'])
-    defense=(defender==h.A['filter'])|(defender==h.A['solidrock'])
+    raw_source=s.ability[actor,m];raw_target=s.ability[target,tm]
+    offense=(raw_source==h.A['sniper'])|(raw_source==h.A['tintedlens'])
+    defense=(raw_target==h.A['filter'])|(raw_target==h.A['solidrock'])|(raw_target==h.A['multiscale'])
     offense_modifier=jnp.where((ability==h.A['sniper'])&critical,6144,jnp.where((ability==h.A['tintedlens'])&(exponent<0),8192,4096))
     rows.append(jnp.stack((offense_modifier,s.speed[actor,m],e.i32(7))));valid.append(offense)
-    rows.append(jnp.stack((jnp.where(exponent>0,3072,4096),s.speed[target,tm],e.i32(7))));valid.append(defense)
+    multiscale=(defender==h.A['multiscale'])&(s.hp[target,tm]>=s.stats[target,tm,0])
+    mitigation=((defender==h.A['filter'])|(defender==h.A['solidrock']))&(exponent>0)
+    defense_modifier=jnp.where(multiscale,2048,jnp.where(mitigation,3072,4096))
+    rows.append(jnp.stack((defense_modifier,s.speed[target,tm],e.i32(7))));valid.append(defense)
     rows.append(jnp.stack((jnp.where(item==h.I['lifeorb'],5324,jnp.where(exponent>0,4915,4096)),s.speed[actor,m],e.i32(8))))
     valid.append((item==h.I['lifeorb'])|(item==h.I['expertbelt']))
     rows=jnp.stack(rows);valid=jnp.stack(valid);count=jnp.sum(valid).astype(jnp.int32);n=len(rows)

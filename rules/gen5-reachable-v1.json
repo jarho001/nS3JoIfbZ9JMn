@@ -739,10 +739,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hp-modifier.json.gz",
+          "native": "reference/hp-modifier-cases.cjs",
+          "scope": "Independent29 constructed/synthetic scenarios40 boundaries; full/half HP stat/final-damage chains, multihit/Rough Skin/Mummy, boosts/Choice/Life Orb, critical and suppressed raw handler sorts. Remaining full-format closure pending",
+          "test": "test/test_hp_modifier_engine.py"
+        }
+      ],
       "field": "onModifyAtk",
       "id": "abilities:defeatist:onModifyAtk",
-      "implementation": null,
+      "implementation": {
+        "family": "hp_modifier",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:defeatist",
@@ -754,7 +766,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "4fe1320091e7098d136cda84b319ae4bfd587edb8509cd9e85f294ddd5444b7b",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -763,10 +775,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hp-modifier.json.gz",
+          "native": "reference/hp-modifier-cases.cjs",
+          "scope": "Independent29 constructed/synthetic scenarios40 boundaries; full/half HP stat/final-damage chains, multihit/Rough Skin/Mummy, boosts/Choice/Life Orb, critical and suppressed raw handler sorts. Remaining full-format closure pending",
+          "test": "test/test_hp_modifier_engine.py"
+        }
+      ],
       "field": "onModifySpA",
       "id": "abilities:defeatist:onModifySpA",
-      "implementation": null,
+      "implementation": {
+        "family": "hp_modifier",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:defeatist",
@@ -778,7 +802,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "e21d3fa22be82c4966e0bd57f5187ddec9835caacd526307abc006dd91182b99",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -3343,10 +3367,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hp-modifier.json.gz",
+          "native": "reference/hp-modifier-cases.cjs",
+          "scope": "Independent29 constructed/synthetic scenarios40 boundaries; full/half HP stat/final-damage chains, multihit/Rough Skin/Mummy, boosts/Choice/Life Orb, critical and suppressed raw handler sorts. Remaining full-format closure pending",
+          "test": "test/test_hp_modifier_engine.py"
+        }
+      ],
       "field": "onSourceModifyDamage",
       "id": "abilities:multiscale:onSourceModifyDamage",
-      "implementation": null,
+      "implementation": {
+        "family": "hp_modifier",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:multiscale",
@@ -3358,7 +3394,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "75ab78430528c2c18d87064bdf1ff38fa49a9016008869695bbd99f2880807df",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -71733,8 +71769,8 @@
         }
       ],
       "kind": "abilities",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "hp-modifier-positive-witness",
       "status": "partial"
     },
     {
@@ -73795,8 +73831,8 @@
         }
       ],
       "kind": "abilities",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "hp-modifier-positive-witness",
       "status": "partial"
     },
     {
@@ -97675,6 +97711,112 @@
           }
         ]
       },
+      "hp-modifier-positive-witness": {
+        "bound": [
+          "abilities:defeatist",
+          "abilities:multiscale"
+        ],
+        "conclusion": "required",
+        "kind": "abilities",
+        "reasoning": "Pinned Multiscale Dragonite seed[10,2,3,4] and Defeatist Archeops seed[91,2,3,4] prove membership. Directed HP-dependent callbacks do not close remaining indirect/full-format obligations.",
+        "references": [
+          "data/random-battles/gen5/teams.ts:103-494 (cullMovePool/randomMoveset)",
+          "data/random-battles/gen5/teams.ts:496-566 (ability filters/fallback)",
+          "data/random-battles/gen5/teams.ts:568-816 (item returns and randomSet)",
+          "data/random-battles/gen5/teams.ts:850-1014 (team eligibility)",
+          "data/random-battles/gen9/teams.ts:675-693 (addMove)",
+          "data/random-battles/gen9/teams.ts:1442-1497 (getLevel/getForme)",
+          "data/random-battles/gen9/teams.ts:1641-1683 (getPokemonPool)"
+        ],
+        "witnesses": [
+          {
+            "id": "multiscale",
+            "kind": "ability",
+            "seed": [
+              10,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Multiscale",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Choice Band",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 71,
+              "moves": [
+                "extremespeed",
+                "outrage",
+                "superpower",
+                "earthquake"
+              ],
+              "name": "Dragonite",
+              "role": "Wallbreaker",
+              "shiny": false,
+              "species": "Dragonite",
+              "speciesId": "dragonite"
+            }
+          },
+          {
+            "id": "defeatist",
+            "kind": "ability",
+            "seed": [
+              91,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Defeatist",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Flying Gem",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 75,
+              "moves": [
+                "earthquake",
+                "acrobatics",
+                "roost",
+                "stoneedge"
+              ],
+              "name": "Archeops",
+              "role": "Fast Attacker",
+              "shiny": false,
+              "species": "Archeops",
+              "speciesId": "archeops"
+            }
+          }
+        ]
+      },
       "item-identity-bound": {
         "bound": [
           "blackglasses",
@@ -99542,8 +99684,8 @@
       },
       "entries": {
         "proven_unreachable": 542,
-        "required": 67,
-        "unresolved": 1159
+        "required": 69,
+        "unresolved": 1157
       },
       "roots": {
         "proven_unreachable": 0,

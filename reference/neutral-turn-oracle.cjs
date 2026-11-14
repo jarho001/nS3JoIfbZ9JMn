@@ -230,8 +230,8 @@ function withObservedBattleDraws(ps, battle, action, options = {}) {
 			eventIds.pop();
 		}
 	};
-	if (options.observeAfterMove || options.observeAccuracy) battle.runEvent = function (eventid, ...args) {
-		if (!(options.observeAfterMove && eventid === 'AfterMove') && !(options.observeAccuracy && ['Invulnerability','ModifyAccuracy','Accuracy'].includes(eventid))) return originalRunEvent.call(this, eventid, ...args);
+	if (options.observeAfterMove || options.observeAccuracy || options.observeBoost) battle.runEvent = function (eventid, ...args) {
+		if (!(options.observeAfterMove && eventid === 'AfterMove') && !(options.observeAccuracy && ['Invulnerability','ModifyAccuracy','Accuracy'].includes(eventid)) && !(options.observeBoost && eventid === 'ModifyBoost')) return originalRunEvent.call(this, eventid, ...args);
 		eventIds.push(eventid);
 		try { return originalRunEvent.call(this, eventid, ...args); } finally { eventIds.pop(); }
 	};
@@ -245,7 +245,7 @@ function withObservedBattleDraws(ps, battle, action, options = {}) {
 		} : {};
 		const value = original.call(this, bound, to);
 		if (isBattleRng) {
-			const stack = new Error().stack.split('\n').slice(2, 8).map(frame => frame.trim());
+			const stack = new Error().stack.split('\n').slice(2, options.stackDepth ?? 8).map(frame => frame.trim());
 			const context = to !== undefined
 				? 'speed-sort'
 				: stack.some(frame => frame.includes('hitStepAccuracy'))
