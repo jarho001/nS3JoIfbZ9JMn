@@ -3907,10 +3907,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/residual-recovery.json.gz",
+          "native": "reference/residual-recovery-cases.cjs",
+          "scope": "Independent35 synthetic scenarios/78 boundaries; one shared compiled advance, status cure RNG and damage replacement, suppression/cap/counters and persistence; complete interaction/full-format validation pending",
+          "test": "test/test_residual_recovery_engine.py"
+        }
+      ],
       "field": "onDamage",
       "id": "abilities:poisonheal:onDamage",
-      "implementation": null,
+      "implementation": {
+        "family": "residual_recovery",
+        "file": "simulator/residual_recovery.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:poisonheal",
@@ -3922,7 +3934,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "23374794726cdb423002490861a9346d2d6ac88f4a9d18d14c5175fb975e4fb1",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -4747,10 +4759,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/residual-recovery.json.gz",
+          "native": "reference/residual-recovery-cases.cjs",
+          "scope": "Independent35 synthetic scenarios/78 boundaries; one shared compiled advance, status cure RNG and damage replacement, suppression/cap/counters and persistence; complete interaction/full-format validation pending",
+          "test": "test/test_residual_recovery_engine.py"
+        }
+      ],
       "field": "onResidual",
       "id": "abilities:shedskin:onResidual",
-      "implementation": null,
+      "implementation": {
+        "family": "residual_recovery",
+        "file": "simulator/residual_recovery.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:shedskin",
@@ -4762,7 +4786,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "fd8cdc9b9a72b1b6519e9cb81b3e5a7628c7cb99638e63686424cb6f0e299764",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -73926,10 +73950,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/residual-recovery.json.gz",
+          "native": "reference/residual-recovery-cases.cjs",
+          "scope": "Independent35 synthetic scenarios/78 boundaries; one shared compiled advance, status cure RNG and damage replacement, suppression/cap/counters and persistence; complete interaction/full-format validation pending",
+          "test": "test/test_residual_recovery_engine.py"
         }
       ],
       "id": "abilities:poisonheal",
       "implementation": {
+        "behavior": {
+          "family": "residual_recovery",
+          "file": "simulator/residual_recovery.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -73941,8 +73977,8 @@
         }
       ],
       "kind": "abilities",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "residual-recovery-positive-witness",
       "status": "partial"
     },
     {
@@ -74783,10 +74819,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/residual-recovery.json.gz",
+          "native": "reference/residual-recovery-cases.cjs",
+          "scope": "Independent35 synthetic scenarios/78 boundaries; one shared compiled advance, status cure RNG and damage replacement, suppression/cap/counters and persistence; complete interaction/full-format validation pending",
+          "test": "test/test_residual_recovery_engine.py"
         }
       ],
       "id": "abilities:shedskin",
       "implementation": {
+        "behavior": {
+          "family": "residual_recovery",
+          "file": "simulator/residual_recovery.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -74798,8 +74846,8 @@
         }
       ],
       "kind": "abilities",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "residual-recovery-positive-witness",
       "status": "partial"
     },
     {
@@ -97708,6 +97756,110 @@
           }
         ]
       },
+      "residual-recovery-positive-witness": {
+        "bound": [
+          "abilities:poisonheal",
+          "abilities:shedskin"
+        ],
+        "conclusion": "required",
+        "kind": "abilities",
+        "reasoning": "Pinned generator seeds[4,2,3,4] Arbok Shed Skin and[38,2,3,4] Breloom Poison Heal prove membership; directed status/residual evidence is not complete callback/format closure.",
+        "references": [
+          "data/random-battles/gen5/teams.ts:103-494 (cullMovePool/randomMoveset)",
+          "data/random-battles/gen5/teams.ts:496-566 (ability filters/fallback)",
+          "data/random-battles/gen5/teams.ts:568-816 (item returns and randomSet)",
+          "data/random-battles/gen5/teams.ts:850-1014 (team eligibility)",
+          "data/random-battles/gen9/teams.ts:675-693 (addMove)",
+          "data/random-battles/gen9/teams.ts:1442-1497 (getLevel/getForme)",
+          "data/random-battles/gen9/teams.ts:1641-1683 (getPokemonPool)"
+        ],
+        "witnesses": [
+          {
+            "ability": "shedskin",
+            "seed": [
+              4,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Shed Skin",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Black Sludge",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 90,
+              "moves": [
+                "gunkshot",
+                "coil",
+                "earthquake",
+                "rest"
+              ],
+              "name": "Arbok",
+              "role": "Bulky Setup",
+              "shiny": false,
+              "species": "Arbok",
+              "speciesId": "arbok"
+            }
+          },
+          {
+            "ability": "poisonheal",
+            "seed": [
+              38,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Poison Heal",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Toxic Orb",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 78,
+              "moves": [
+                "substitute",
+                "focuspunch",
+                "spore",
+                "stoneedge"
+              ],
+              "name": "Breloom",
+              "role": "Bulky Attacker",
+              "shiny": false,
+              "species": "Breloom",
+              "speciesId": "breloom"
+            }
+          }
+        ]
+      },
       "sap-sipper-positive-witness": {
         "bound": [
           "abilities:sapsipper"
@@ -98256,8 +98408,8 @@
       },
       "entries": {
         "proven_unreachable": 542,
-        "required": 49,
-        "unresolved": 1177
+        "required": 51,
+        "unresolved": 1175
       },
       "roots": {
         "proven_unreachable": 0,

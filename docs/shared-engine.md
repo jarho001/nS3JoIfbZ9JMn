@@ -843,6 +843,18 @@ Rain Dish; storage and core journal17 remain unchanged. The native fixture has
 method uses one compiled advance and trusted persistent caching; final broad,
 device, capacity and full-format acceptance remain pending.
 
+Schema44 adds Shed Skin and Poison Heal as a residual-recovery group.
+Shed Skin shares Hydration's residual5/suborder3 scheduler row and exact cure
+metadata; it draws random(100) only for living status holders and cures below33.
+Poison Heal replaces poison/toxic Damage at priority1 with capped eighth original
+maximum HP healing, retaining Toxic increments even at full HP. Other damage
+uses existing callbacks. HEAL source tag9 renders Poison Heal; layout/journal17
+are unchanged. Native35 scenarios/78 boundaries include cross-member/tied order,
+suppression and success/failure/no-op branches, with separate positive Arbok
+seed[4,2,3,4] and Breloom seed[38,2,3,4] membership witnesses. Focused CPU
+comparison passed in338.37s, including NPZ continuation and journal17 core
+round trips; broad/device/full-format acceptance remains open.
+
 ### Compilation investigation (2026-11-14)
 
 At `b9ce88d`, the focused switch-recovery method spent467.546s in combined

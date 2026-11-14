@@ -22,6 +22,20 @@ Keep historical commands/results as provenance.
 
 ## Current source and evidence
 
+**Schema44 Shed Skin / Poison Heal group:** focused CPU35 scenarios/78 boundaries
+passed in338.37s;2 native/inventory contracts pass. No GPU run.
+See [schema44-checkpoint.json](../test-logs/g4-cpu-conformance/schema44-checkpoint.json).
+Shed Skin success/failure/no-op draws, Poison Heal poison/toxic damage replacement,
+Toxic stages/cap, suppression, ties, cross-member order and NPZ/journal17
+persistence are in the shared focused method.
+
+```sh
+JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_residual_recovery_engine -v -f
+```
+
+Runner includes106 checks/50 modules,1428 scenarios/5739 boundaries.
+No current-source broad/device preparation or execution is claimed.
+
 **Schema43 Rain Dish / Hydration group:** focused CPU33 scenarios/76 boundaries
 passed in313.196s; native fixture/inventory contracts and4 cache/handoff helpers pass.
 See [schema43-checkpoint.json](../test-logs/g4-cpu-conformance/schema43-checkpoint.json).

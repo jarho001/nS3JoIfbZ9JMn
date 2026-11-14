@@ -524,7 +524,7 @@
     "brief": "PROJECT_PLAN.md#proposed-g4-cpu-implementation-and-conformance-goal",
     "source_base": "f37067e",
     "scope": "Complete pinned gen5randombattle reachable mechanics and every prepared CPU gate. Integrated checkpoints, resumable progress and commit/push authorized. GPU execution, profiling, benchmarks, training, delegation and scored research excluded.",
-    "checkpoint": "Schema43 Rain Dish/Hydration group:33 scenarios/76 native boundaries passed through one compiled advance in313.196s;2 native/inventory contracts and4 cache/handoff helpers passed. Full G4/broad/device gates pending.",
+    "checkpoint": "Schema44 Shed Skin/Poison Heal group:35 scenarios/78 native boundaries passed through one compiled advance in338.37s;2 native/inventory contracts passed. Prior rain recovery schema43 complete. Full G4/broad/device gates pending.",
     "completed_checkpoints": [
       "Pinned resolved data and source-owned conservative candidate inventory exported; 605 role roots, 1768 data/effect entries, 1146 callback slots. Data-only mappings remain partial; transitive closure and complete callback implementation are not claimed.",
       "Generic species/set/type/stat/physical-special/Hidden Power/happiness/priority/hazard integration passes 37 affected CPU checks on 4eab254, retaining all 133 baseline scenarios and validating 24 added scenarios: 157 scenarios / 1059 boundaries, including 20 complete battles (eight six-member games). Eager/JIT/1-8-32 mixed batches, serialized continuation/reset, explicit schema 1/2 migration and full/lean rollouts pass.",
@@ -538,7 +538,7 @@
       "Schema10 core/journal/hard-turn-limit checkpoint validated on a9d0fbd:3 integrated CPU checks pass in1174.685s, plus5 native/6 helper checks. Complete combat and1000-boundary neutral histories match native; mixed1/8/32,full/lean,core reset,persistence/corruption pass. Full64 suite and full-format G4 pending.",
       "Schema11 trapping/retry checkpoint:8 affected CPU checks plus6 native/6 helper checks pass. New31 scenarios/215 boundaries include two complete six-member games and mirrored private-state episodes. Aggregate558/4110; full68 suite and full-format G4 pending."
     ],
-    "next": "Precheck and implement the residual-recovery group (Shed Skin + Poison Heal), then one shared focused CPU comparison with persistent cache. Candidate witnesses: Arbok seed[4,2,3,4], Breloom seed[38,2,3,4]. Broader/device gates deferred.",
+    "next": "Precheck and implement the related residual-item group (Black Sludge + Toxic Orb + Flame Orb), then one shared focused CPU comparison with persistent cache; preserve Poison Heal/Shed Skin interactions. Broader/device gates deferred.",
     "ledger": {
       "path": "rules/gen5-reachable-v1.json",
       "entries": 1768,
@@ -1217,14 +1217,30 @@
           "unittest_total": 313.196
         },
         "next": "Residual recovery group: Shed Skin/Poison Heal; reproduce witnesses and freeze pinned native cases before implementation."
+      },
+      "residual_recovery": {
+        "status": "completed_focused_CPU_checkpoint_not_full_G4",
+        "source_base": "d0379c5eb0b5860e9e65bd00a69efe465b119e25",
+        "candidate_schema": 44,
+        "core_journal_schema": 17,
+        "native_cases": 35,
+        "native_boundaries": 78,
+        "evidence": "test-logs/g4-cpu-conformance/schema44-checkpoint.json",
+        "focused_CPU_runs": 1,
+        "validation_phase_seconds": {
+          "lower_compile": 299.724,
+          "initialization_replay_assertions": 35.734,
+          "unittest_total": 338.37
+        },
+        "next": "Residual item group candidates: Black Sludge, Toxic Orb, Flame Orb; pinned membership/native precheck before implementation."
       }
     },
     "resolved_failure": "16b5263 preflight rejected ordinary moves because type was missing from its field set; fixed by 4eab254, failed run stopped, all 37 repaired checks pass. Detailed minimized input and source identities are in source.json.",
     "publication": {
       "status": "checkpoint_publication_authorized",
       "target": "origin/main",
-      "previous_published_head": "0e543e3",
-      "scope": "Schema43 grouped rain-recovery focused CPU checkpoint; full G4 open."
+      "previous_published_head": "d0379c5",
+      "scope": "Schema44 grouped residual-recovery focused CPU checkpoint; full G4 open."
     },
     "reasoning_effort": "medium (user preference,2026-11-10; no automatic escalation)",
     "design_pass": {
@@ -1252,17 +1268,17 @@
     "implementation_wip": null,
     "cpu_block": null,
     "reachability_precheck": {
-      "family": "Rain Dish / Hydration",
+      "family": "Shed Skin / Poison Heal",
       "status": "completed_focused_CPU_checkpoint_not_full_G4",
       "required": [
-        "abilities:raindish: seed[59,2,3,4] Pelipper",
-        "abilities:hydration: seed[1,2,3,4] Swanna"
+        "abilities:shedskin: seed[4,2,3,4] Arbok",
+        "abilities:poisonheal: seed[38,2,3,4] Breloom"
       ],
       "shared_behavior": [
-        "Ordered weather callbacks, weather expiry",
-        "Residual5/suborder3 cure before Leftovers/poison/burn; keep collected sort draws and skip removed status effects"
+        "Residual5/suborder3 cure before poison/burn; keep collected sort draws and skip removed status effects",
+        "Damage priority1 poison/toxic replacement preserves Toxic counters and other damage callbacks"
       ],
-      "native_spec": "test-logs/g4-cpu-conformance/rain-recovery.json.gz:33 synthetic scenarios/76 boundaries; native cases frozen before implementation, expiry stimulus changed to deterministic Thunder Wave before CPU run"
+      "native_spec": "test-logs/g4-cpu-conformance/residual-recovery.json.gz:35 synthetic scenarios/78 boundaries frozen before implementation"
     },
     "scope_audit": {
       "date": "2026-11-13",
@@ -1351,21 +1367,22 @@
       "next": "Apply grouped validation and correctness cache in next rain-recovery package; no additional compilation investigation needed."
     },
     "next_work_package": {
-      "id": "g4-residual-recovery-group",
+      "id": "g4-residual-item-group",
       "status": "planned_native_precheck_pending",
       "members": [
-        "Shed Skin residual5/suborder3 chance33/100 status cure",
-        "Poison Heal onDamage priority1 poison/toxic replacement with eighth original-HP healing"
+        "Black Sludge residual healing or poison-type-dependent damage",
+        "Toxic Orb residual Toxic status creation",
+        "Flame Orb residual burn status creation"
       ],
       "shared_paths": [
-        "Residual handler collection/order and removed status callback guard",
-        "Status cure metadata, capped HP recovery and effective suppression"
+        "Residual item collection and ordering with ability/status callbacks",
+        "Status infliction/immunity/cure metadata; Poison Heal and Shed Skin interactions"
       ],
       "precheck": [
-        "Reproduce positive Arbok Shed Skin seed[4,2,3,4] and Breloom Poison Heal seed[38,2,3,4]; persist ledger proof",
-        "Freeze ordinary/no-op/success/failure/tie/suppression/status/Leftovers/cross-member native cases before each implementation"
+        "Establish each item membership witness and callback/helper dependencies from pinned generator/source",
+        "Freeze native ordinary/no-op/immunity/suppression/tie/cap/KO and cross-member/status-recovery interactions before implementation"
       ],
-      "planned_command": "JAX_PLATFORMS=cpu JAX_ENABLE_COMPILATION_CACHE=true JAX_COMPILATION_CACHE_DIR=\"$PWD/work/jax-cache\" JAX_EXPLAIN_CACHE_MISSES=true OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 XLA_PYTHON_CLIENT_PREALLOCATE=false timeout 900s .venv-jax/bin/python -m unittest test.test_residual_recovery_engine -v -f",
+      "planned_command": "JAX_PLATFORMS=cpu JAX_ENABLE_COMPILATION_CACHE=true JAX_COMPILATION_CACHE_DIR=\"$PWD/work/jax-cache\" JAX_EXPLAIN_CACHE_MISSES=true OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 XLA_PYTHON_CLIENT_PREALLOCATE=false timeout 900s .venv-jax/bin/python -m unittest test.test_residual_item_engine -v -f",
       "command_status": "planned; module not yet implemented",
       "excluded": [
         "Broad CPU matrices, GPU, campaigns, profiling and compile ablations"
@@ -2334,17 +2351,17 @@
     "combined_return_home_block": "docs/GPU_HANDOFF.md#one-return-home-block-correctness-plus-g3-v6-measurements",
     "pending_status_checkpoint": "Current status/field/hook GPU checks are wired into the49-check runner; no GPU execution during travel. Preserve matching-source CPU results and do not transfer earlier GPU/CPU evidence across changed source.",
     "expanded_checkpoint": {
-      "status": "schema43_grouped_focused_CPU_complete_GPU_deferred",
-      "engine_schema": 43,
-      "modules": 49,
-      "native_scenarios": 1393,
-      "native_boundaries": 5661,
+      "status": "schema44_grouped_focused_CPU_complete_GPU_deferred",
+      "engine_schema": 44,
+      "modules": 50,
+      "native_scenarios": 1428,
+      "native_boundaries": 5739,
       "initial_field_evidence": "test-logs/g4-cpu-conformance/schema5-checkpoint.json",
       "source": "Use latest committed checkout and runner source/fixture fingerprints; earlier source_commit fields describe historical preparation.",
       "handoff_prepared": false,
-      "source_commit": "Publishing commit; exact relevant source fingerprints in schema43-checkpoint.json",
-      "source_identity": "test-logs/g4-cpu-conformance/schema43-checkpoint.json",
-      "checks": 105
+      "source_commit": "Publishing commit; exact relevant source fingerprints in schema44-checkpoint.json",
+      "source_identity": "test-logs/g4-cpu-conformance/schema44-checkpoint.json",
+      "checks": 106
     },
     "pending_candidate": null
   }

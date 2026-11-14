@@ -275,6 +275,10 @@ function classify(ledger) {
  const rainRecoveryAbilities=new Set(rainRecoveryWitnesses.map(w=>'abilities:'+w.ability));
  for(const id of rainRecoveryAbilities)required.add(id);
  proofs['rain-recovery-positive-witness']={conclusion:'required',kind:'abilities',bound:[...rainRecoveryAbilities].sort(),references:refs.generator,witnesses:rainRecoveryWitnesses,reasoning:'Pinned generator seeds[59,2,3,4] Pelipper Rain Dish and[1,2,3,4] Swanna Hydration prove membership. Directed synthetic weather/residual cases cover implemented branches, not complete dependency/format closure.'};
+ const residualRecoveryWitnesses=require('./residual-recovery-cases.cjs').membershipWitnesses();
+ const residualRecoveryAbilities=new Set(residualRecoveryWitnesses.map(w=>'abilities:'+w.ability));
+ for(const id of residualRecoveryAbilities)required.add(id);
+ proofs['residual-recovery-positive-witness']={conclusion:'required',kind:'abilities',bound:[...residualRecoveryAbilities].sort(),references:refs.generator,witnesses:residualRecoveryWitnesses,reasoning:'Pinned generator seeds[4,2,3,4] Arbok Shed Skin and[38,2,3,4] Breloom Poison Heal prove membership; directed status/residual evidence is not complete callback/format closure.'};
  for(const entry of ledger.entries){
   entry.reachability='unresolved';
   entry.reachabilityAudit='unresolved-membership';
@@ -284,7 +288,7 @@ function classify(ledger) {
   }
   if(required.has(entry.id)){
    assert.notEqual(entry.reachability,'proven_unreachable',entry.id);
-   entry.reachability='required';entry.reachabilityAudit=rainRecoveryAbilities.has(entry.id)?'rain-recovery-positive-witness':recoveryAbilities.has(entry.id)?'switch-recovery-positive-witness':drySkinAbilities.has(entry.id)?'dry-skin-positive-witness':secondaryAbilities.has(entry.id)?'secondary-ability-positive-witness':flashFireAbilities.has(entry.id)?'flash-fire-positive-witness':sapSipperAbilities.has(entry.id)?'sap-sipper-positive-witness':typeBoostAbilities.has(entry.id)?'type-boost-positive-witness':lowHpAbilities.has(entry.id)?'low-hp-ability-positive-witness':absorptionAbilities.has(entry.id)?'type-absorption-positive-witness':'native-team-positive-witness';
+   entry.reachability='required';entry.reachabilityAudit=residualRecoveryAbilities.has(entry.id)?'residual-recovery-positive-witness':rainRecoveryAbilities.has(entry.id)?'rain-recovery-positive-witness':recoveryAbilities.has(entry.id)?'switch-recovery-positive-witness':drySkinAbilities.has(entry.id)?'dry-skin-positive-witness':secondaryAbilities.has(entry.id)?'secondary-ability-positive-witness':flashFireAbilities.has(entry.id)?'flash-fire-positive-witness':sapSipperAbilities.has(entry.id)?'sap-sipper-positive-witness':typeBoostAbilities.has(entry.id)?'type-boost-positive-witness':lowHpAbilities.has(entry.id)?'low-hp-ability-positive-witness':absorptionAbilities.has(entry.id)?'type-absorption-positive-witness':'native-team-positive-witness';
   }
  }
  for(const root of ledger.roots){
