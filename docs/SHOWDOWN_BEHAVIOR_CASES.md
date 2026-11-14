@@ -446,9 +446,20 @@ mechanics**. All 600 other callback activation obligations remain unresolved.
 `native-team-positive-witness` records one unmodified generator output at seed
 `[1,2,3,4]`: Swanna, Golduck, Maractus, Primeape, Magic Guard Clefable and Sceptile.
 It proves 34 entity memberships and six role roots, not callback completeness.
-The remaining 1,192 entity entries and 599 role roots stay unresolved. Absence
-from that witness supplies no exclusion. This is a membership check, not a
+That initial witness leaves 1,192 entity entries and 599 role roots unresolved;
+the family witnesses below narrow entity membership further. Absence from any
+witness supplies no exclusion. This is a membership check, not a
 battle campaign or acceptance test.
+
+The low-HP ability precheck adds positive ability witnesses from unmodified
+pinned teams: Overgrow Sceptile at `[1,2,3,4]`, Blaze Emboar at `[7,2,3,4]`,
+Torrent Feraligatr at `[8,2,3,4]`, and Swarm Scolipede at `[31,2,3,4]`.
+`low-hp-ability-positive-witness` stores the seeds and returned sets; only the
+four named ability memberships are claimed. Overgrow was already required, so
+this adds three required entities and leaves 1,189 entity memberships unresolved.
+It does not promote callback activation, the other returned set identities, or
+role roots to required. Directed synthetic behavior cases are separate from
+these generator witnesses.
 
 Generator eligibility follows Gen5 `randomTeam` and inherited Gen9
 `getPokemonPool`: set-file base-species grouping, team type/weakness/compatibility

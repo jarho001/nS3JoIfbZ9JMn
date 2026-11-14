@@ -331,10 +331,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/low-hp.json.gz",
+          "native": "reference/low-hp-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_low_hp_engine.py"
+        }
+      ],
       "field": "onModifyAtk",
       "id": "abilities:blaze:onModifyAtk",
-      "implementation": null,
+      "implementation": {
+        "family": "low_hp",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:blaze",
@@ -346,7 +358,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "a3d374003e68eb504aa7039d13948960ad9c89e67ecb51cdf3d78a12224e4352",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -355,10 +367,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/low-hp.json.gz",
+          "native": "reference/low-hp-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_low_hp_engine.py"
+        }
+      ],
       "field": "onModifySpA",
       "id": "abilities:blaze:onModifySpA",
-      "implementation": null,
+      "implementation": {
+        "family": "low_hp",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:blaze",
@@ -370,7 +394,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "abb545ef54f5043854020247d51e950b5d2429484ad1a4cc0fd2a52be6ff4720",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -3463,10 +3487,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/low-hp.json.gz",
+          "native": "reference/low-hp-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_low_hp_engine.py"
+        }
+      ],
       "field": "onModifyAtk",
       "id": "abilities:overgrow:onModifyAtk",
-      "implementation": null,
+      "implementation": {
+        "family": "low_hp",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:overgrow",
@@ -3478,7 +3514,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "16e53787fbcf0e7bf9c6e0e7d616b0842ac3113cac4af18cc04f8a777baf5526",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -3487,10 +3523,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/low-hp.json.gz",
+          "native": "reference/low-hp-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_low_hp_engine.py"
+        }
+      ],
       "field": "onModifySpA",
       "id": "abilities:overgrow:onModifySpA",
-      "implementation": null,
+      "implementation": {
+        "family": "low_hp",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:overgrow",
@@ -3502,7 +3550,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "97f2d78a8142dce71584126919d203274224a7886767475cbe2afc42e30c9e75",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -5335,10 +5383,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/low-hp.json.gz",
+          "native": "reference/low-hp-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_low_hp_engine.py"
+        }
+      ],
       "field": "onModifyAtk",
       "id": "abilities:swarm:onModifyAtk",
-      "implementation": null,
+      "implementation": {
+        "family": "low_hp",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:swarm",
@@ -5350,7 +5410,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "11c7fa688ae92c18fa72487d8e799a4ee9e7c2917512c958d9eb4df62721221b",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -5359,10 +5419,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/low-hp.json.gz",
+          "native": "reference/low-hp-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_low_hp_engine.py"
+        }
+      ],
       "field": "onModifySpA",
       "id": "abilities:swarm:onModifySpA",
-      "implementation": null,
+      "implementation": {
+        "family": "low_hp",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:swarm",
@@ -5374,7 +5446,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "7ae7de8fe60ea61e23ba183943d0ed9ef78e5565973d86e68254ea6992219552",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -5695,10 +5767,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/low-hp.json.gz",
+          "native": "reference/low-hp-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_low_hp_engine.py"
+        }
+      ],
       "field": "onModifyAtk",
       "id": "abilities:torrent:onModifyAtk",
-      "implementation": null,
+      "implementation": {
+        "family": "low_hp",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:torrent",
@@ -5710,7 +5794,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "86f9d032bc04acc64e66642d90e501259990044b8d0c5dbed7d7a1627f8100ed",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -5719,10 +5803,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/low-hp.json.gz",
+          "native": "reference/low-hp-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_low_hp_engine.py"
+        }
+      ],
       "field": "onModifySpA",
       "id": "abilities:torrent:onModifySpA",
-      "implementation": null,
+      "implementation": {
+        "family": "low_hp",
+        "file": "simulator/hook_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:torrent",
@@ -5734,7 +5830,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "94af157b9827e8e7d16c9de66a4a6a3e13f9c3aab34d5dc2242b4c81889335bb",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -70664,10 +70760,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/low-hp.json.gz",
+          "native": "reference/low-hp-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_low_hp_engine.py"
         }
       ],
       "id": "abilities:blaze",
       "implementation": {
+        "behavior": {
+          "family": "low_hp",
+          "file": "simulator/hook_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -70679,8 +70787,8 @@
         }
       ],
       "kind": "abilities",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "low-hp-ability-positive-witness",
       "status": "partial"
     },
     {
@@ -73327,10 +73435,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/low-hp.json.gz",
+          "native": "reference/low-hp-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_low_hp_engine.py"
         }
       ],
       "id": "abilities:overgrow",
       "implementation": {
+        "behavior": {
+          "family": "low_hp",
+          "file": "simulator/hook_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -73343,7 +73463,7 @@
       ],
       "kind": "abilities",
       "reachability": "required",
-      "reachabilityAudit": "native-team-positive-witness",
+      "reachabilityAudit": "low-hp-ability-positive-witness",
       "status": "partial"
     },
     {
@@ -75148,10 +75268,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/low-hp.json.gz",
+          "native": "reference/low-hp-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_low_hp_engine.py"
         }
       ],
       "id": "abilities:swarm",
       "implementation": {
+        "behavior": {
+          "family": "low_hp",
+          "file": "simulator/hook_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -75163,8 +75295,8 @@
         }
       ],
       "kind": "abilities",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "low-hp-ability-positive-witness",
       "status": "partial"
     },
     {
@@ -75487,10 +75619,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/low-hp.json.gz",
+          "native": "reference/low-hp-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_low_hp_engine.py"
         }
       ],
       "id": "abilities:torrent",
       "implementation": {
+        "behavior": {
+          "family": "low_hp",
+          "file": "simulator/hook_effects.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -75502,8 +75646,8 @@
         }
       ],
       "kind": "abilities",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "low-hp-ability-positive-witness",
       "status": "partial"
     },
     {
@@ -96519,6 +96663,196 @@
           "sim/battle-actions.ts:267-408 (OverrideAction, Z/Max and Dancer guards)"
         ]
       },
+      "low-hp-ability-positive-witness": {
+        "bound": [
+          "abilities:blaze",
+          "abilities:overgrow",
+          "abilities:swarm",
+          "abilities:torrent"
+        ],
+        "conclusion": "required",
+        "kind": "abilities",
+        "reasoning": "Unmodified pinned generator outputs positively witness these four abilities only. Other set identities and callback activation remain independently unresolved; absence supplies no exclusions.",
+        "references": [
+          "data/random-battles/gen5/teams.ts:103-494 (cullMovePool/randomMoveset)",
+          "data/random-battles/gen5/teams.ts:496-566 (ability filters/fallback)",
+          "data/random-battles/gen5/teams.ts:568-816 (item returns and randomSet)",
+          "data/random-battles/gen5/teams.ts:850-1014 (team eligibility)",
+          "data/random-battles/gen9/teams.ts:675-693 (addMove)",
+          "data/random-battles/gen9/teams.ts:1442-1497 (getLevel/getForme)",
+          "data/random-battles/gen9/teams.ts:1641-1683 (getPokemonPool)"
+        ],
+        "witnesses": [
+          {
+            "ability": "overgrow",
+            "seed": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Overgrow",
+              "evs": {
+                "atk": 0,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Leftovers",
+              "ivs": {
+                "atk": 2,
+                "def": 31,
+                "hp": 31,
+                "spa": 30,
+                "spd": 31,
+                "spe": 30
+              },
+              "level": 82,
+              "moves": [
+                "leechseed",
+                "substitute",
+                "hiddenpowerfire",
+                "gigadrain"
+              ],
+              "name": "Sceptile",
+              "role": "Staller",
+              "shiny": false,
+              "species": "Sceptile",
+              "speciesId": "sceptile"
+            }
+          },
+          {
+            "ability": "blaze",
+            "seed": [
+              7,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Blaze",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Life Orb",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 85,
+              "moves": [
+                "wildcharge",
+                "superpower",
+                "fireblast",
+                "grassknot"
+              ],
+              "name": "Emboar",
+              "role": "Wallbreaker",
+              "shiny": false,
+              "species": "Emboar",
+              "speciesId": "emboar"
+            }
+          },
+          {
+            "ability": "torrent",
+            "seed": [
+              8,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Torrent",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Life Orb",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 83,
+              "moves": [
+                "swordsdance",
+                "waterfall",
+                "aquajet",
+                "return"
+              ],
+              "name": "Feraligatr",
+              "role": "Fast Attacker",
+              "shiny": false,
+              "species": "Feraligatr",
+              "speciesId": "feraligatr"
+            }
+          },
+          {
+            "ability": "swarm",
+            "seed": [
+              31,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Swarm",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Life Orb",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 80,
+              "moves": [
+                "spikes",
+                "megahorn",
+                "earthquake",
+                "rockslide"
+              ],
+              "name": "Scolipede",
+              "role": "Fast Attacker",
+              "shiny": false,
+              "species": "Scolipede",
+              "speciesId": "scolipede"
+            }
+          }
+        ]
+      },
       "move-identity-bound": {
         "bound": [
           "acrobatics",
@@ -96792,8 +97126,8 @@
       },
       "entries": {
         "proven_unreachable": 542,
-        "required": 34,
-        "unresolved": 1192
+        "required": 37,
+        "unresolved": 1189
       },
       "roots": {
         "proven_unreachable": 0,

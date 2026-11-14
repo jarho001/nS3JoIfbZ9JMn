@@ -50,7 +50,7 @@ import sys
 def _engine():
     return sys.modules[__name__]
 
-SCHEMA = 34
+SCHEMA = 35
 ROSTER, SLOTS, QUEUE, EVENTS, DRAWS, HISTORY = 6, 4, 8, 128, 128, 2048
 OK, PENDING, INVALID, UNSUPPORTED, CAPACITY, TERMINAL, STALE = range(7)
 RETRY=7
@@ -106,8 +106,9 @@ VOLATILE_DURATION=24
 PHAZE_SELECTION=25
 CALLED_SELECTION=26
 TRACE_TARGET=27
+DAMAGE_CALC_SORT=28
 MOVE_ACTOR_TARGET=field_tables.ACTOR_TARGET
-DRAW_CONTEXTS=('initialization','queue-sort','before-turn','update','hit-update','switch-order','residual-handlers','accuracy','critical','damage','paralysis','stall','sleep-duration','freeze','confusion-duration','confusion','confusion-damage','secondary','weather-change','weather-order','damage-modifiers','multihit-count','rampage-duration','frisk-target','volatile-duration','phazing-selection','sleep-talk-selection','trace-target')
+DRAW_CONTEXTS=('initialization','queue-sort','before-turn','update','hit-update','switch-order','residual-handlers','accuracy','critical','damage','paralysis','stall','sleep-duration','freeze','confusion-duration','confusion','confusion-damage','secondary','weather-change','weather-order','damage-modifiers','multihit-count','rampage-duration','frisk-target','volatile-duration','phazing-selection','sleep-talk-selection','trace-target','damage-calculation-sort')
 # Queue kinds, order values mirror the pinned scheduler.
 BEFORE, ATTACK, SWAP, INSTANT, RUN_SWITCH, RESIDUAL, BEFORE_MOVE, FINISH_SWITCH = range(1,9)
 FORCED_MOVE_ACTION=12
@@ -385,7 +386,6 @@ def _hit(c,actor,move):
         bound=hook_ops.critical_denominator(move,suppression_ops.abilities(s)[actor,mon],s.item[actor,mon])
         c,crit=jax.lax.cond(bound>0,lambda c:_draw(c,0,bound,CRITICAL),lambda c:(c,jnp.uint32(1)),c)
         crit=jnp.where(hook_ops.critical_blocked(suppression_ops.abilities(s)[target,tm]),jnp.uint32(1),crit)
-        c,roll=_draw(c,0,16,ROLL)
         s,t=c
         physical=tables.CATEGORY[move]==1
         attack=s.stats[actor,mon,jnp.where(physical,1,3)]
@@ -397,7 +397,8 @@ def _hit(c,actor,move):
         power=jnp.maximum(1,power)*jnp.where(pursuit_ops.boosted(s,target,move,_engine()),2,1)
         move_type=jnp.where(move==HIDDEN_POWER,s.hp_type[actor,mon],tables.MOVE_TYPE[move])
         power=hook_ops.power(power,suppression_ops.abilities(s)[actor,mon],s.item[actor,mon],physical,move_type,_engine(),phase_ops.power_modifier(s,target,move))
-        attack,defense=hook_ops.stats(attack,defense,s,actor,target,physical,move_type,_engine())
+        c,attack,defense=hook_ops.stats(c,attack,defense,actor,target,physical,move_type,_engine())
+        c,roll=_draw(c,0,16,ROLL);s,t=c
         core=base_damage_core(s.level[actor,mon],power,attack,defense)+2
         preroll=field_ops.weather_damage(core,move_type,s,_engine())*jnp.where(crit==0,2,1)
         exponent,_=generic.type_matchup(move_type,s.types[target,tm])

@@ -12,11 +12,36 @@ all acceptance requirements and commands below remain pending.
 
 ## Current source and evidence
 
+**Schema35 low-HP ability checkpoint passed focused CPU validation.** Overgrow,
+Blaze, Torrent and Swarm agree with native across 40 scenarios/48 boundaries in
+292.632s, including live acquired ability and threshold-crossing NPZ/journal16
+persistence. Four native/inventory checks (including Magic Guard reader and generic corpus
+isolation regressions) and three handoff checks pass. See
+[schema35-checkpoint.json](../test-logs/g4-cpu-conformance/schema35-checkpoint.json).
+Current runner includes 97 checks/41 modules,1121 scenarios/5224 boundaries,
+`test.test_low_hp_engine` and the `lowhp` batch. Preparation, broad CPU, device
+and campaign gates remain deferred until mechanics and inventory closure.
+Pending focused device command on matching committed source:
+
+```sh
+JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_low_hp_engine -v -f
+```
+
+Check exact one-third HP, effective move type, offensive-stat fixed-point
+rounding with Choice/Thick Fat/Flower Gift, critical/boost stages, damage/healing
+threshold crossings, multi-hit/Substitute and acquisition/suppression/loss.
+Equal-Speed special-offense/Thick Fat sorting occurs even when callback guards
+fail, before damage variance. Draw context28 preserves that native sort.
+State fields and journal16 are unchanged. Consolidated eager/JIT/mixed lanes,
+full/lean, lifecycle and final campaigns remain pending. Razor Leaf's high
+critical rate and Bug Buzz's stat secondary remain unsupported dependencies;
+the directed ability cases use Seed Bomb and typed Hidden Power.
+
 **Schema34 Magic Guard checkpoint passed focused CPU validation.** Native26
 scenarios/42 boundaries agree exactly in330.331s, including live binding and
 suppression NPZ/journal16 persistence;2 native/inventory checks and3 handoff
 retention checks pass. See [schema34-checkpoint.json](../test-logs/g4-cpu-conformance/schema34-checkpoint.json).
-Current runner includes96 checks/40 modules,1081 scenarios/5176 boundaries,
+The schema34 checkpoint runner included96 checks/40 modules,1081 scenarios/5176 boundaries,
 `test.test_magic_guard_engine` and the `magicguard` batch. Preparation, broad
 CPU, device and campaign gates remain deferred until reachable mechanics and
 inventory closure. Pending device command on matching committed source:

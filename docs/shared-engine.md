@@ -738,3 +738,26 @@ including live binding/suppression NPZ/journal16 persistence; see
 The native fixture includes suppression,
 Role Play, Mummy, Trace and mirrored seats. Full inventory and final/device
 conformance remain pending.
+
+Schema35 adds Overgrow, Blaze, Torrent and Swarm through the shared offensive
+stat chain. The pinned callbacks modify Attack/Special Attack at priority5;
+matching effective move type and `hp*3 <= maxhp` select the 1.5 modifier. The
+native chain retains stat stages, critical stage bypass, Thick Fat, Choice and
+Flower Gift before the final fixed-point stat rounding. Thresholds use current
+HP on each hit, including copied abilities and typed Hidden Power.
+
+Both priority5 Special Attack handlers are collected before their callback
+guards. At equal cached Speed, a low-HP ability paired with Thick Fat therefore
+consumes a sorting draw even above one-third HP or for a nonmatching type. The
+shared stat helper now returns its RNG/trace carry, and draw context28 records
+`damage-calculation-sort`. The native reader classifies these direct getDamage
+sorting draws independently. Damage variance follows the stat-handler sort and
+precedes final damage-modifier sorting. Schema34 state fields and journal16 are
+unchanged.
+High-critical moves and stat-changing secondaries remain unsupported; directed
+cases use Seed Bomb/typed Hidden Power to isolate the ability family.
+
+Focused scalar-JIT CPU parity passed all 40 scenarios/48 boundaries in
+292.632s, including live ability/threshold-crossing NPZ/journal16 persistence.
+See [schema35-checkpoint.json](../test-logs/g4-cpu-conformance/schema35-checkpoint.json).
+Remaining mechanics, inventory closure and broad/final/device gates stay open.

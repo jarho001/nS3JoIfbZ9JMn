@@ -53,8 +53,8 @@ def power(value,ability,item,physical,move_type,e,phase_modifier=4096):
     return modify(value,chain(modifier,phase_modifier))
 
 
-def stats(attack,defense,s,actor,target,physical,move_type,e):
-    m=s.active[actor];tm=s.active[target];ability=suppression_ops.abilities(s)[actor,m];defender=suppression_ops.abilities(s)[target,tm];item=s.item[actor,m]
+def stats(c,attack,defense,actor,target,physical,move_type,e):
+    s,_=c;m=s.active[actor];tm=s.active[target];ability=suppression_ops.abilities(s)[actor,m];defender=suppression_ops.abilities(s)[target,tm];item=s.item[actor,m]
     # Hustle returns a direct stat value before the queued chain modifiers.
     attack=jnp.where((ability==h.A['hustle'])&physical,modify(attack,e.i32(6144)),attack)
     huge=(ability==h.A['hugepower'])|(ability==h.A['purepower'])
@@ -62,6 +62,8 @@ def stats(attack,defense,s,actor,target,physical,move_type,e):
     atk_modifier=jnp.where(physical&huge,8192,jnp.where(physical&guts,6144,4096)).astype(jnp.int32)
     thick=(defender==h.A['thickfat'])&((move_type==e.generic.TYPES['fire'])|(move_type==e.generic.TYPES['ice']))
     atk_modifier=chain(atk_modifier,jnp.where(thick,2048,4096))
+    low_hp=(h.LOW_HP_TYPE[ability]==move_type)&(s.hp[actor,m]*3<=s.stats[actor,m,0])
+    atk_modifier=chain(atk_modifier,jnp.where(low_hp,6144,4096))
     choice=((item==h.I['choiceband'])&physical)|((item==h.I['choicespecs'])&(~physical))
     atk_modifier=chain(atk_modifier,jnp.where(physical&e.form_ops.flower(s,actor),6144,4096))
     atk_modifier=chain(atk_modifier,jnp.where(choice,6144,4096))
@@ -72,7 +74,11 @@ def stats(attack,defense,s,actor,target,physical,move_type,e):
     def_modifier=chain(def_modifier,jnp.where(eviolite,6144,4096))
     sand=(s.weather_state[0]==3)&(~physical)&jnp.any(s.types[target,tm]==e.generic.TYPES['rock'])
     def_modifier=chain(def_modifier,jnp.where(sand,6144,4096))
-    return modify(attack,atk_modifier),modify(defense,def_modifier)
+    # Native collects both priority5 ModifySpA handlers before checking their
+    # HP/type conditions. Equal cached Speed shuffles even inactive modifiers.
+    tie=(~physical)&(h.LOW_HP_TYPE[ability]>=0)&(defender==h.A['thickfat'])&(s.speed[actor,m]==s.speed[target,tm])
+    c=e._when(tie,lambda c:e._draw(c,0,2,e.DAMAGE_CALC_SORT,2)[0],c)
+    return c,modify(attack,atk_modifier),modify(defense,def_modifier)
 
 
 def damage_modifier(c,actor,target,physical,critical,exponent,e,move):

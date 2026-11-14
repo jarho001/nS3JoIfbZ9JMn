@@ -239,6 +239,10 @@ function classify(ledger) {
    conclusion:'proven_unreachable',kind:'items',bound:[...itemBound].sort(),references:[...refs.generator,...refs.engine],
    reasoning:'All getPriorityItem/getItem return expressions (including requiredItems) and all randomSet item assignments are structurally bounded. Black Sludge conversion is included. Trick/Switcheroo transfer existing items, with failure restoration; consumption/Knock Off remove them; Harvest restores lastItem only if a berry. Transform copies no item. No initial/called move adds Recycle/Bestow/Thief/Covet/Fling or an item-creation path; no reachable ability creates a new item ID. Thus item identity remains inside this upper bound. This does not prove each of the 45 branches feasible.'},
  };
+ const lowHpWitnesses=require('./low-hp-cases.cjs').membershipWitnesses();
+ const lowHpAbilities=new Set(lowHpWitnesses.map(w=>'abilities:'+w.ability));
+ for(const id of lowHpAbilities)required.add(id);
+ proofs['low-hp-ability-positive-witness']={conclusion:'required',kind:'abilities',bound:[...lowHpAbilities].sort(),references:refs.generator,witnesses:lowHpWitnesses,reasoning:'Unmodified pinned generator outputs positively witness these four abilities only. Other set identities and callback activation remain independently unresolved; absence supplies no exclusions.'};
  for(const entry of ledger.entries){
   entry.reachability='unresolved';
   entry.reachabilityAudit='unresolved-membership';
@@ -248,7 +252,7 @@ function classify(ledger) {
   }
   if(required.has(entry.id)){
    assert.notEqual(entry.reachability,'proven_unreachable',entry.id);
-   entry.reachability='required';entry.reachabilityAudit='native-team-positive-witness';
+   entry.reachability='required';entry.reachabilityAudit=lowHpAbilities.has(entry.id)?'low-hp-ability-positive-witness':'native-team-positive-witness';
   }
  }
  for(const root of ledger.roots){
