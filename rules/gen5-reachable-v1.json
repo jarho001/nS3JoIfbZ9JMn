@@ -5539,10 +5539,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/survival.json.gz",
+          "native": "reference/survival-cases.cjs",
+          "scope": "Independent32 constructed/synthetic scenarios39 boundaries; full/chipped/nonlethal/direct damage, suppression, combined priority, multihit, recoil/drain and one-HP targets. Sturdy OHKO and unsupported interactions/full-format acceptance remain pending",
+          "test": "test/test_survival_engine.py"
+        }
+      ],
       "field": "onDamage",
       "id": "abilities:sturdy:onDamage",
-      "implementation": null,
+      "implementation": {
+        "family": "survival",
+        "file": "simulator/survival.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:sturdy",
@@ -5554,7 +5566,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "ff5b3b7204abd6f64f2ecc53963d6f9bb1c896ad8f4444be8dfb81e06f997459",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -12883,10 +12895,22 @@
           "file": "data/items.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/survival.json.gz",
+          "native": "reference/survival-cases.cjs",
+          "scope": "Independent32 constructed/synthetic scenarios39 boundaries; full/chipped/nonlethal/direct damage, suppression, combined priority, multihit, recoil/drain and one-HP targets. Sturdy OHKO and unsupported interactions/full-format acceptance remain pending",
+          "test": "test/test_survival_engine.py"
+        }
+      ],
       "field": "onDamage",
       "id": "items:focussash:onDamage",
-      "implementation": null,
+      "implementation": {
+        "family": "survival",
+        "file": "simulator/survival.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "items:focussash",
@@ -12898,7 +12922,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "842751237c7d23d347c5c413f9e276e425e777b0ebf90551ab44438961d80a79",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -75802,8 +75826,8 @@
         }
       ],
       "kind": "abilities",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "survival-positive-witness",
       "status": "partial"
     },
     {
@@ -79316,8 +79340,8 @@
         }
       ],
       "kind": "items",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "survival-positive-witness",
       "status": "partial"
     },
     {
@@ -98757,6 +98781,112 @@
           }
         ]
       },
+      "survival-positive-witness": {
+        "bound": [
+          "abilities:sturdy",
+          "items:focussash"
+        ],
+        "conclusion": "required",
+        "kind": "mixed",
+        "reasoning": "Pinned Sturdy Crustle seed[14,2,3,4] and Focus Sash Qwilfish seed[57,2,3,4] prove membership. Direct-Move damage callbacks only; Sturdy OHKO, Fling and remaining indirect/full-format obligations are not closed.",
+        "references": [
+          "data/random-battles/gen5/teams.ts:103-494 (cullMovePool/randomMoveset)",
+          "data/random-battles/gen5/teams.ts:496-566 (ability filters/fallback)",
+          "data/random-battles/gen5/teams.ts:568-816 (item returns and randomSet)",
+          "data/random-battles/gen5/teams.ts:850-1014 (team eligibility)",
+          "data/random-battles/gen9/teams.ts:675-693 (addMove)",
+          "data/random-battles/gen9/teams.ts:1442-1497 (getLevel/getForme)",
+          "data/random-battles/gen9/teams.ts:1641-1683 (getPokemonPool)"
+        ],
+        "witnesses": [
+          {
+            "id": "sturdy",
+            "kind": "ability",
+            "seed": [
+              14,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Sturdy",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "White Herb",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 80,
+              "moves": [
+                "xscissor",
+                "earthquake",
+                "shellsmash",
+                "stoneedge"
+              ],
+              "name": "Crustle",
+              "role": "Setup Sweeper",
+              "shiny": false,
+              "species": "Crustle",
+              "speciesId": "crustle"
+            }
+          },
+          {
+            "id": "focussash",
+            "kind": "item",
+            "seed": [
+              57,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Intimidate",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Focus Sash",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 82,
+              "moves": [
+                "waterfall",
+                "spikes",
+                "taunt",
+                "thunderwave"
+              ],
+              "name": "Qwilfish",
+              "role": "Fast Support",
+              "shiny": false,
+              "species": "Qwilfish",
+              "speciesId": "qwilfish"
+            }
+          }
+        ]
+      },
       "switch-recovery-positive-witness": {
         "bound": [
           "abilities:naturalcure",
@@ -99140,8 +99270,8 @@
       },
       "entries": {
         "proven_unreachable": 542,
-        "required": 61,
-        "unresolved": 1165
+        "required": 63,
+        "unresolved": 1163
       },
       "roots": {
         "proven_unreachable": 0,

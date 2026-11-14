@@ -13,6 +13,8 @@ module.exports=function(){
   add(key+'-suppressed',{p2:[target],steps:[b(3),b()]});
   add(key+'-burn',{p1:[m({moves:['Recover']})],p2:[target],setup:[{side:'p2',status:'brn',hp:1}],steps:[b(1,1)]});
  }
+ for(const [key,ability,item]of [['sturdy','Sturdy',''],['sash','Pressure','Focus Sash'],['both','Sturdy','Focus Sash']])for(const move of ['Drain Punch','Double-Edge'])add(key+'-'+move.toLowerCase().replaceAll(/[^a-z]/g,''),{p1:[m({species:'Snorlax',moves:[move],evs:{spe:252}})],p2:[m({level:1,ability,item})],setup:[{side:'p1',hp:100}],steps:[b()]});
+ for(const [key,ability,item]of [['sturdy','Sturdy',''],['sash','Pressure','Focus Sash']])add(key+'-one-hp',{p1:[m({species:'Snorlax',moves:['Aerial Ace'],evs:{spe:252}})],p2:[m({species:'Shedinja',moves:['Recover'],ability,item})],steps:[b(1,1)]});
  return cases;
 };
 module.exports.membershipWitnesses=function(){

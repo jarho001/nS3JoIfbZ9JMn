@@ -22,10 +22,24 @@ Keep historical commands/results as provenance.
 
 ## Current source and evidence
 
-**Next group, native only:** Sturdy / Focus Sash has24 scenarios/31 boundaries,
-pinned generator witnesses, and a passing `node --test test/survival-native.test.cjs`
-contract. It is not in the CPU/CUDA runner; implementation remains pending.
+**Next group, native only:** No Guard / Victory Star has21 preliminary scenarios/25
+boundaries, pinned generator witnesses, and a passing
+`node --test test/accuracy-ability-native.test.cjs` contract. Complete callback
+sort/lifecycle coverage before implementation; it is not in the CPU/CUDA runner.
 Resume `active_task.next_work_package` in [compact state](ORCHESTRATION_STATE.json).
+
+**Schema49 Sturdy / Focus Sash group:** focused CPU32 scenarios/39 boundaries passed
+in333.437s;2 native/inventory contracts and4 handoff helpers pass.
+See [schema49-checkpoint.json](../test-logs/g4-cpu-conformance/schema49-checkpoint.json).
+One compiled step covers exact state/RNG/requests/recipient events/histories,
+NPZ continuation and journal17. Sturdy OHKO callback remains unsupported.
+
+```sh
+JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_survival_engine -v -f
+```
+
+Runner includes111 checks/55 modules,1632 scenarios/6203 boundaries in49 corpora.
+Current-source broad/device preparation and execution remain deferred.
 
 **Schema48 White Herb / Clear Body group:** focused CPU37 scenarios/77 boundaries
 passed in329.157s;2 native/inventory contracts and4 handoff helpers pass.

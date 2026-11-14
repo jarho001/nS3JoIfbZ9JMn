@@ -34,8 +34,8 @@
     "brief": "PROJECT_PLAN.md#proposed-g4-cpu-implementation-and-conformance-goal",
     "source_base": "f37067e",
     "scope": "Complete pinned gen5randombattle reachable mechanics and every prepared CPU gate. Integrated checkpoints, resumable progress and commit/push authorized. GPU execution, profiling, benchmarks, training, delegation and scored research excluded.",
-    "checkpoint": "Schema48 White Herb/Clear Body group passed37 scenarios/77 boundaries through one shared compiled step;2 native/inventory contracts and4 handoff helpers pass. Full G4 remains open.",
-    "next": "Continue Sturdy/Focus Sash direct-move damage-survival group from24 native scenarios/31 boundaries; finish native branch audit before implementation, then one focused CPU checkpoint.",
+    "checkpoint": "Schema49 Sturdy/Focus Sash group passed32 scenarios/39 boundaries in333.437s. This session completed4 families in2 groups:69 scenarios/116 boundaries, each on its recorded source. No Guard/Victory Star native-only21/25; full G4 open.",
+    "next": "Continue No Guard/Victory Star accuracy group: preliminary native21/25 and generator witnesses prepared. Complete tied-handler sorting, lifecycle/suppression and semi-invulnerability audit before implementation; one grouped CPU comparison, broad/device gates deferred.",
     "ledger": {
       "path": "rules/gen5-reachable-v1.json",
       "entries": 1768,
@@ -45,7 +45,7 @@
         "indirect-closure",
         "engine-contract"
       ],
-      "status": "Incomplete:323 partial callback mappings/823 unsupported; reachability classifications separate, full closure pending.",
+      "status": "Incomplete:325 partial callback mappings/821 unsupported; full reachability/closure pending.",
       "reachability_summary": {
         "callbacks": {
           "proven_unreachable": 546,
@@ -54,8 +54,8 @@
         },
         "entries": {
           "proven_unreachable": 542,
-          "required": 61,
-          "unresolved": 1165
+          "required": 63,
+          "unresolved": 1163
         },
         "roots": {
           "proven_unreachable": 0,
@@ -77,13 +77,13 @@
     "first_divergence": null,
     "gpu_requirement": "Deferred during travel. Record all G4 device obligations and ready/pending commands in docs/GPU_HANDOFF.md; current checkpoint runner is scripts/g4_gpu_handoff.py. CPU implementation remains active. Later full G4 release still requires matching-source GPU conformance.",
     "acceptance": "G4-CPU-conformance pending. Generic data checkpoint passes; all remaining prepared CPU gates retained, all milestone acceptance/task count unchanged.",
-    "source_identity": "test-logs/g4-cpu-conformance/schema48-checkpoint.json",
+    "source_identity": "test-logs/g4-cpu-conformance/schema49-checkpoint.json",
     "evidence_directory": "test-logs/g4-cpu-conformance",
     "publication": {
       "status": "checkpoint_publication_authorized",
       "target": "origin/main",
-      "previous_published_head": "16123ca",
-      "scope": "Schema48 focused CPU checkpoint and native-only survival precheck; full G4 open."
+      "previous_published_head": "4daaa16",
+      "scope": "Schema49 focused CPU checkpoint and native-only accuracy ability precheck; full G4 open."
     },
     "reasoning_effort": "medium (user preference,2026-11-10; no automatic escalation)",
     "design_pass": {
@@ -150,27 +150,40 @@
     },
     "record_usage": "Start at docs/CURRENT.md and scripts/read_context.py. State is authoritative for live progress; history is archived. Update live checkpoint/next/package/blockers at meaningful checkpoints; do not append completed-family narratives. Detailed results belong in immutable test evidence.",
     "next_work_package": {
-      "id": "g4-survival-group",
+      "id": "g4-accuracy-ability-group",
       "status": "native_precheck_passed_implementation_pending",
       "members": [
-        "Sturdy direct-Move lethal damage survival",
-        "Focus Sash direct-Move survival and consumption"
+        "No Guard accuracy and semi-invulnerability bypass",
+        "Victory Star source-side accuracy modifier"
+      ],
+      "shared_paths": [
+        "Hit accuracy/ModifyAccuracy callbacks, suppression and native handler-sort draws"
       ],
       "membership": [
-        "Sturdy Crustle seed[14,2,3,4]",
-        "Focus Sash Qwilfish seed[57,2,3,4]"
+        "No Guard Golurk seed[44,2,3,4]",
+        "Victory Star Victini seed[38,2,3,4]"
       ],
-      "native_precheck": "24 cases/31 boundaries; all choices accepted; full/chipped/nonlethal/multihit/suppression/combined priority/burn branches. test-logs/g4-cpu-conformance/survival-precheck.json.gz",
-      "native_command": "node --test test/survival-native.test.cjs",
-      "native_result": "1 passed; CPU implementation pending",
-      "planned_command": "JAX_PLATFORMS=cpu JAX_ENABLE_COMPILATION_CACHE=true JAX_COMPILATION_CACHE_DIR=\"$PWD/work/jax-cache\" JAX_EXPLAIN_CACHE_MISSES=true OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 XLA_PYTHON_CLIENT_PREALLOCATE=false timeout 900s .venv-jax/bin/python -m unittest test.test_survival_engine -v -f",
+      "native_precheck": "21 preliminary cases/25 boundaries; all choices accepted. test-logs/g4-cpu-conformance/accuracy-ability-precheck.json.gz. Final audit must add tied callbacks/both holders and lifecycle cases before implementation. Fly follow-up uses forced request slot1; illegal slot4 stimulus corrected before freezing precheck.",
+      "native_command": "node --test test/accuracy-ability-native.test.cjs",
+      "native_result": "1 passed; no engine implementation or CPU comparison",
+      "planned_command": "JAX_PLATFORMS=cpu JAX_ENABLE_COMPILATION_CACHE=true JAX_COMPILATION_CACHE_DIR=\"$PWD/work/jax-cache\" JAX_EXPLAIN_CACHE_MISSES=true OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 XLA_PYTHON_CLIENT_PREALLOCATE=false timeout 900s .venv-jax/bin/python -m unittest test.test_accuracy_ability_engine -v -f",
       "command_status": "planned; module not yet implemented",
       "excluded": [
-        "OHKO attacks/Mold Breaker dependencies and unimplemented move callbacks stay explicit; native audit pending",
+        "OHKO/weather-dependent accuracy/other unsupported move interactions remain explicit",
         "Broad CPU/GPU/campaign/profiling gates deferred"
-      ]
+      ],
+      "source_sha256": {
+        "reference/accuracy-ability-cases.cjs": "f6d82a252b4b7511089605a205cde9bca7180a9703002b2c2810ee366eafa23e",
+        "test/accuracy-ability-native.test.cjs": "15274aa2897f636ddf092e776abbc5e7c78cbf11876e1e187964de89cfd20663",
+        "test-logs/g4-cpu-conformance/accuracy-ability-precheck.json.gz": "048d57a676ca78177992caea6c00722b1912603d2db3610b8186faad60451ea6"
+      }
     },
-    "stopping_reason": null,
+    "stopping_reason": {
+      "kind": "session_context_checkpoint",
+      "reason": "Two implementation/validation groups complete; preserve sufficient session context before starting the next accuracy scheduler group. Sustained CPU goal remains in_progress; no semantic blocker or unvalidated simulator WIP. Resume next_work_package without a new approval gate.",
+      "last_validated_source": "Publishing commit; relevant fingerprints in schema49-checkpoint.json",
+      "unrelated_work": "Pre-existing AGENTS.md Trail section preserved outside commits; incoming context-cleanup changes safely synchronized."
+    },
     "pending_acceptance": "Reachability/required callbacks, rule/indirect closure and capacity proof remain open; directed eager/JIT/mixed batches, lifecycle/migration/full-lean, fixed64/128 campaigns and matching-source GPU acceptance remain pending. Use PROJECT_PLAN.md acceptance section and docs/GPU_HANDOFF.md for exact gates/commands.",
     "capacity_evidence": {
       "status": "full_capacity_proof_pending",
@@ -556,27 +569,27 @@
     "combined_return_home_block": "docs/GPU_HANDOFF.md#one-return-home-block-correctness-plus-g3-v6-measurements",
     "pending_status_checkpoint": "Current status/field/hook GPU checks are wired into the49-check runner; no GPU execution during travel. Preserve matching-source CPU results and do not transfer earlier GPU/CPU evidence across changed source.",
     "expanded_checkpoint": {
-      "status": "schema48_grouped_focused_CPU_complete_GPU_deferred",
-      "engine_schema": 48,
-      "modules": 54,
-      "native_scenarios": 1600,
-      "native_boundaries": 6164,
+      "status": "schema49_grouped_focused_CPU_complete_GPU_deferred",
+      "engine_schema": 49,
+      "modules": 55,
+      "native_scenarios": 1632,
+      "native_boundaries": 6203,
       "initial_field_evidence": "test-logs/g4-cpu-conformance/schema5-checkpoint.json",
       "source": "Use latest committed checkout and runner source/fixture fingerprints; earlier source_commit fields describe historical preparation.",
       "handoff_prepared": false,
-      "source_commit": "Publishing commit; exact relevant fingerprints in schema48-checkpoint.json",
-      "source_identity": "test-logs/g4-cpu-conformance/schema48-checkpoint.json",
-      "checks": 110
+      "source_commit": "Publishing commit; exact relevant fingerprints in schema49-checkpoint.json",
+      "source_identity": "test-logs/g4-cpu-conformance/schema49-checkpoint.json",
+      "checks": 111
     },
     "pending_candidate": {
-      "family": "Sturdy / Focus Sash",
+      "family": "No Guard / Victory Star",
       "status": "native_only_precheck_passed_implementation_pending",
-      "cases": 24,
-      "boundaries": 31,
-      "fixture": "test-logs/g4-cpu-conformance/survival-precheck.json.gz",
-      "native_command": "node --test test/survival-native.test.cjs",
+      "cases": 21,
+      "boundaries": 25,
+      "fixture": "test-logs/g4-cpu-conformance/accuracy-ability-precheck.json.gz",
+      "native_command": "node --test test/accuracy-ability-native.test.cjs",
       "included_in_checkpoint_runner": false,
-      "next": "Audit remaining callbacks before implementation; add grouped CPU module/device command after parity."
+      "next": "Complete callback/lifecycle precheck, then implement and add grouped CPU/device module."
     }
   },
   "historical_records": {

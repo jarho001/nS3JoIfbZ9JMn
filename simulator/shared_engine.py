@@ -44,6 +44,7 @@ from . import residual_recovery as residual_ops
 from . import residual_items as residual_item_ops
 from . import restorative_berries as berry_ops
 from . import stat_drop as stat_drop_ops
+from . import survival as survival_ops
 from . import species_items as species_item_ops
 from . import ability_creation as creation_ops
 from . import suppression as suppression_ops
@@ -58,7 +59,7 @@ import sys
 def _engine():
     return sys.modules[__name__]
 
-SCHEMA = 48
+SCHEMA = 49
 ROSTER, SLOTS, QUEUE, EVENTS, DRAWS, HISTORY = 6, 4, 8, 128, 128, 2048
 OK, PENDING, INVALID, UNSUPPORTED, CAPACITY, TERMINAL, STALE = range(7)
 RETRY=7
@@ -424,8 +425,9 @@ def _hit(c,actor,move):
                                   jnp.where(move==STRUGGLE,0,exponent),s.status[actor,mon]==BRN,physical,suppression_ops.abilities(s)[actor,mon]==hook_tables.A['guts'],final_modifier)
         intercepted=sub_ops.intercepts(s,target,move)
         def normal(c):
-            dealt=jnp.minimum(s.hp[target,tm],damage)
-            c=_damage(c,target,damage,minimum=0,source_side=actor,source_mon=mon)
+            c,limited=survival_ops.limit(c,target,damage,_engine())
+            dealt=jnp.minimum(s.hp[target,tm],limited)
+            c=_damage(c,target,limited,minimum=0,source_side=actor,source_mon=mon)
             c=hit_ops.drain(c,actor,target,move,dealt,_engine())
             c=partial_ops.install(c,actor,target,move,_engine())
             c=phase_ops.install(c,actor,move,_engine())
@@ -1015,8 +1017,8 @@ def _supported(s,initializing=False):
             &jnp.all((s.moves>=0)&(s.moves<len(MOVE_KEYS))&(s.moves!=STRUGGLE))
             &jnp.all((s.moves==0)|move_mask[jnp.clip(s.moves,0,len(MOVE_KEYS)-1)])
             &jnp.all((s.item>=0)&(s.item<len(ITEMS)))
-            &jnp.all((hook_tables.ITEM_IMPLEMENTED|hit_tables.ITEM_IMPLEMENTED|phase_ops.ITEM_IMPLEMENTED|partial_ops.ITEM_IMPLEMENTED|residual_item_ops.ITEM_IMPLEMENTED|berry_ops.ITEM_IMPLEMENTED|species_item_ops.ITEM_IMPLEMENTED|stat_drop_ops.ITEM_IMPLEMENTED)[jnp.clip(s.item,0,len(ITEMS)-1)])
-            &jnp.all((s.ability>=0)&(s.ability<len(ABILITIES)))&jnp.all((hook_tables.ABILITY_IMPLEMENTED|hit_tables.ABILITY_IMPLEMENTED|trap_ops.ABILITY_IMPLEMENTED|phaze_ops.ABILITY_IMPLEMENTED|item_ops.ABILITY_IMPLEMENTED|identity_ops.ABILITY_IMPLEMENTED|illusion_ops.ABILITY_IMPLEMENTED|form_ops.ABILITY_IMPLEMENTED|trigger_form_ops.ABILITY_IMPLEMENTED|immunity_ops.ABILITY_IMPLEMENTED|creation_ops.ABILITY_IMPLEMENTED|sleep_ops.ABILITY_IMPLEMENTED|called_ops.ABILITY_IMPLEMENTED|trace_ops.ABILITY_IMPLEMENTED|flash_ops.ABILITY_IMPLEMENTED|recovery_ops.ABILITY_IMPLEMENTED|rain_ops.ABILITY_IMPLEMENTED|residual_ops.ABILITY_IMPLEMENTED|stat_drop_ops.ABILITY_IMPLEMENTED)[jnp.clip(s.ability,0,len(ABILITIES)-1)])
+            &jnp.all((hook_tables.ITEM_IMPLEMENTED|hit_tables.ITEM_IMPLEMENTED|phase_ops.ITEM_IMPLEMENTED|partial_ops.ITEM_IMPLEMENTED|residual_item_ops.ITEM_IMPLEMENTED|berry_ops.ITEM_IMPLEMENTED|species_item_ops.ITEM_IMPLEMENTED|stat_drop_ops.ITEM_IMPLEMENTED|survival_ops.ITEM_IMPLEMENTED)[jnp.clip(s.item,0,len(ITEMS)-1)])
+            &jnp.all((s.ability>=0)&(s.ability<len(ABILITIES)))&jnp.all((hook_tables.ABILITY_IMPLEMENTED|hit_tables.ABILITY_IMPLEMENTED|trap_ops.ABILITY_IMPLEMENTED|phaze_ops.ABILITY_IMPLEMENTED|item_ops.ABILITY_IMPLEMENTED|identity_ops.ABILITY_IMPLEMENTED|illusion_ops.ABILITY_IMPLEMENTED|form_ops.ABILITY_IMPLEMENTED|trigger_form_ops.ABILITY_IMPLEMENTED|immunity_ops.ABILITY_IMPLEMENTED|creation_ops.ABILITY_IMPLEMENTED|sleep_ops.ABILITY_IMPLEMENTED|called_ops.ABILITY_IMPLEMENTED|trace_ops.ABILITY_IMPLEMENTED|flash_ops.ABILITY_IMPLEMENTED|recovery_ops.ABILITY_IMPLEMENTED|rain_ops.ABILITY_IMPLEMENTED|residual_ops.ABILITY_IMPLEMENTED|stat_drop_ops.ABILITY_IMPLEMENTED|survival_ops.ABILITY_IMPLEMENTED)[jnp.clip(s.ability,0,len(ABILITIES)-1)])
             &jnp.all((s.ivs>=0)&(s.ivs<=31))&jnp.all((s.evs>=0)&(s.evs<=255))
             &jnp.all((s.nature>=1)&(s.nature<=len(generic.NATURES)))
             &jnp.all(s.types==tables.SPECIES_TYPES[safe_species])&jnp.all((s.boosts>=-6)&(s.boosts<=6))
