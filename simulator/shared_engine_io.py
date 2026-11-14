@@ -124,7 +124,7 @@ def project_events(state,trace,audience):
         elif kind==e.STATUS:line=f'|-status|{actor}|'+e.STATUS_NAMES[status]+(f'|[from] move: {name}' if status==e.SLP and move else '')
         elif kind==e.ABILITY:line=f'|-activate|{actor}|ability: Synchronize'
         elif kind==e.END_ITEM:line=f'|-enditem|{actor}|Lum Berry|[eat]'
-        elif kind==e.CURE:line=f'|-curestatus|{actor}|'+e.STATUS_NAMES[status]+(f'|[from] move: {name}' if move else '|[msg]')
+        elif kind==e.CURE:line=f'|-curestatus|{actor}|'+e.STATUS_NAMES[status]+('|[from] ability: '+e.hook_tables.ABILITY_NAMES[aux]+('|[silent]'if value else '') if aux else f'|[from] move: {name}' if move else '|[msg]')
         elif kind==e.FAIL:line=f'|-fail|{actor}'+('|move: Substitute'+('|[weak]' if aux==3 else '') if aux in (2,3) else '|heal' if aux==1 else '|'+e.STATUS_NAMES[status] if status else '')
         elif kind==e.CANT:line=f'|cant|{actor}|'+e.STATUS_NAMES[status]
         elif kind==e.ACTIVATE:
@@ -212,9 +212,9 @@ def load_state(path,*,schema=None,replayed_state=None):
         stored=int(saved['schema']) if 'schema' in saved else None
         if schema is not None and stored is not None and stored!=schema:raise ValueError('schema mismatch')
         version=stored if schema is None else schema
-        if version not in (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41):raise ValueError('explicit supported state schema required')
+        if version not in (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42):raise ValueError('explicit supported state schema required')
         fields={k:jnp.asarray(saved[k]) for k in saved.files if k not in ('schema','data_sha256')}
-        if version in (3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41):
+        if version in (3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42):
             if 'data_sha256' not in saved or str(saved['data_sha256'])!=generic.DATA_SHA256:
                 raise ValueError('state data table identity mismatch')
         if version<39 and replayed_state is not None:

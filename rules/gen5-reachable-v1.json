@@ -3379,10 +3379,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/switch-recovery.json.gz",
+          "native": "reference/switch-recovery-cases.cjs",
+          "scope": "Independent22 synthetic scenarios/30 boundaries, singles CheckShow format-guard no-op; exact switches, suppression, Mummy, pivot, phazing and Pursuit; remaining interactions/full-format acceptance pending",
+          "test": "test/test_switch_recovery_engine.py"
+        }
+      ],
       "field": "onCheckShow",
       "id": "abilities:naturalcure:onCheckShow",
-      "implementation": null,
+      "implementation": {
+        "family": "switch_recovery",
+        "file": "simulator/switch_recovery.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:naturalcure",
@@ -3394,7 +3406,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "464561bce584bc223d088105b70f5daab325b63dd1cb7316bae17aa7859c7dd3",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -3403,10 +3415,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/switch-recovery.json.gz",
+          "native": "reference/switch-recovery-cases.cjs",
+          "scope": "Independent22 synthetic scenarios/30 boundaries, singles CheckShow format-guard no-op; exact switches, suppression, Mummy, pivot, phazing and Pursuit; remaining interactions/full-format acceptance pending",
+          "test": "test/test_switch_recovery_engine.py"
+        }
+      ],
       "field": "onSwitchOut",
       "id": "abilities:naturalcure:onSwitchOut",
-      "implementation": null,
+      "implementation": {
+        "family": "switch_recovery",
+        "file": "simulator/switch_recovery.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:naturalcure",
@@ -3418,7 +3442,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "cdfd3ce6c7557732f2b489b8e0b77a2cbc293bb68c5eb6c25c568395691a7d4e",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -4195,10 +4219,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/switch-recovery.json.gz",
+          "native": "reference/switch-recovery-cases.cjs",
+          "scope": "Independent22 synthetic scenarios/30 boundaries, singles CheckShow format-guard no-op; exact switches, suppression, Mummy, pivot, phazing and Pursuit; remaining interactions/full-format acceptance pending",
+          "test": "test/test_switch_recovery_engine.py"
+        }
+      ],
       "field": "onSwitchOut",
       "id": "abilities:regenerator:onSwitchOut",
-      "implementation": null,
+      "implementation": {
+        "family": "switch_recovery",
+        "file": "simulator/switch_recovery.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:regenerator",
@@ -4210,7 +4246,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "98d68e1f5937aeba1a49872cb3c020642b4175efcc5d2d81d5dc24b9be1acb3a",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -73477,10 +73513,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/switch-recovery.json.gz",
+          "native": "reference/switch-recovery-cases.cjs",
+          "scope": "Independent22 synthetic scenarios/30 boundaries, singles CheckShow format-guard no-op; exact switches, suppression, Mummy, pivot, phazing and Pursuit; remaining interactions/full-format acceptance pending",
+          "test": "test/test_switch_recovery_engine.py"
         }
       ],
       "id": "abilities:naturalcure",
       "implementation": {
+        "behavior": {
+          "family": "switch_recovery",
+          "file": "simulator/switch_recovery.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -73492,8 +73540,8 @@
         }
       ],
       "kind": "abilities",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "switch-recovery-positive-witness",
       "status": "partial"
     },
     {
@@ -74200,10 +74248,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/switch-recovery.json.gz",
+          "native": "reference/switch-recovery-cases.cjs",
+          "scope": "Independent22 synthetic scenarios/30 boundaries, singles CheckShow format-guard no-op; exact switches, suppression, Mummy, pivot, phazing and Pursuit; remaining interactions/full-format acceptance pending",
+          "test": "test/test_switch_recovery_engine.py"
         }
       ],
       "id": "abilities:regenerator",
       "implementation": {
+        "behavior": {
+          "family": "switch_recovery",
+          "file": "simulator/switch_recovery.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -74215,8 +74275,8 @@
         }
       ],
       "kind": "abilities",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "switch-recovery-positive-witness",
       "status": "partial"
     },
     {
@@ -97661,6 +97721,110 @@
           }
         ]
       },
+      "switch-recovery-positive-witness": {
+        "bound": [
+          "abilities:naturalcure",
+          "abilities:regenerator"
+        ],
+        "conclusion": "required",
+        "kind": "abilities",
+        "reasoning": "Pinned generator seeds[3,2,3,4] Slowking Regenerator and[24,2,3,4] Celebi Natural Cure positively witness required abilities. Natural Cure onCheckShow returns for active.length1: only singles no-op branch applies; remaining full-format closure pending.",
+        "references": [
+          "data/random-battles/gen5/teams.ts:103-494 (cullMovePool/randomMoveset)",
+          "data/random-battles/gen5/teams.ts:496-566 (ability filters/fallback)",
+          "data/random-battles/gen5/teams.ts:568-816 (item returns and randomSet)",
+          "data/random-battles/gen5/teams.ts:850-1014 (team eligibility)",
+          "data/random-battles/gen9/teams.ts:675-693 (addMove)",
+          "data/random-battles/gen9/teams.ts:1442-1497 (getLevel/getForme)",
+          "data/random-battles/gen9/teams.ts:1641-1683 (getPokemonPool)"
+        ],
+        "witnesses": [
+          {
+            "ability": "regenerator",
+            "seed": [
+              3,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Regenerator",
+              "evs": {
+                "atk": 0,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Leftovers",
+              "ivs": {
+                "atk": 0,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 83,
+              "moves": [
+                "scald",
+                "psyshock",
+                "icebeam",
+                "slackoff"
+              ],
+              "name": "Slowking",
+              "role": "Bulky Attacker",
+              "shiny": false,
+              "species": "Slowking",
+              "speciesId": "slowking"
+            }
+          },
+          {
+            "ability": "naturalcure",
+            "seed": [
+              24,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Natural Cure",
+              "evs": {
+                "atk": 0,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "N",
+              "item": "Leftovers",
+              "ivs": {
+                "atk": 0,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 80,
+              "moves": [
+                "leafstorm",
+                "recover",
+                "nastyplot",
+                "psychic"
+              ],
+              "name": "Celebi",
+              "role": "Bulky Setup",
+              "shiny": false,
+              "species": "Celebi",
+              "speciesId": "celebi"
+            }
+          }
+        ]
+      },
       "type-absorption-positive-witness": {
         "bound": [
           "abilities:voltabsorb",
@@ -97940,8 +98104,8 @@
       },
       "entries": {
         "proven_unreachable": 542,
-        "required": 46,
-        "unresolved": 1180
+        "required": 48,
+        "unresolved": 1178
       },
       "roots": {
         "proven_unreachable": 0,

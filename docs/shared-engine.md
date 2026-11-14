@@ -823,3 +823,10 @@ retains Technician30/Dry Skin17/items16. Native34/68 focused CPU parity and
 NPZ/journal17 persistence pass, including cap/minimum/expiry and burn/KO
 ordering. Layout unchanged; remaining mechanics/closure and broad/device/final
 acceptance stay pending.
+
+Schema42 adds Natural Cure and Regenerator at shared switch-out after Pursuit
+and before clearing volatile/base state. Natural Cure silent cure reuses exact
+status metadata; singles CheckShow is a format-guard no-op. Regenerator silently
+heals floor(original maximum HP/3), capped, on living effective holders.
+Native22/30 focused CPU parity and NPZ/journal17 persistence pass. Layout unchanged;
+remaining mechanics/closure and broad/device/final acceptance stay pending.

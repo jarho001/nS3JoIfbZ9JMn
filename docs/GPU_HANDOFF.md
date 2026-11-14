@@ -12,6 +12,20 @@ all acceptance requirements and commands below remain pending.
 
 ## Current source and evidence
 
+**Schema42 Natural Cure / Regenerator switch-out recovery:** focused CPU22 scenarios/30 boundaries
+passed in502.851s;2 native/inventory checks passed. No GPU run.
+See [schema42-checkpoint.json](../test-logs/g4-cpu-conformance/schema42-checkpoint.json).
+Silent cure/heal, cap/rounding, suppression/Mummy, normal/pivot/phazing
+and surviving/KO Pursuit; NPZ/journal17 persistence. Composed/broad gates pending.
+
+```sh
+JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_switch_recovery_engine -v -f
+```
+
+Runner now includes104 checks/48 modules, 1360 scenarios/
+5585 boundaries. Preparation, broad CPU/migration/full-lean, fixed campaigns
+and device checks remain pending until mechanics/inventory closure.
+
 **Schema41 Dry Skin water/fire/weather hooks:** focused CPU34 scenarios/68 boundaries
 passed in482.343s;2 native/inventory checks passed. No GPU run.
 See [schema41-checkpoint.json](../test-logs/g4-cpu-conformance/schema41-checkpoint.json).

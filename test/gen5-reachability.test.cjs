@@ -59,8 +59,8 @@ test('pinned resolved export and conservative inventory reproduce exactly',()=>{
     const cb=slots.get(id);assert.equal(cb.status,'unsupported');assert.equal(cb.implementation,null);
   }
   assert.ok(ledger.callbacks.every(c=>['partial','unsupported'].includes(c.status)));
-  assert.equal(ledger.callbacks.filter(c=>c.status==='partial').length,297);
-  assert.equal(ledger.callbacks.filter(c=>c.status==='unsupported').length,849);
+  assert.equal(ledger.callbacks.filter(c=>c.status==='partial').length,300);
+  assert.equal(ledger.callbacks.filter(c=>c.status==='unsupported').length,846);
   const audit=ledger.reachabilityAudit;
   const entries=new Map(ledger.entries.map(e=>[e.id,e]));
   assert.equal(audit.proofs['move-identity-bound'].bound.length,224);

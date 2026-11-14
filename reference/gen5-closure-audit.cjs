@@ -267,6 +267,10 @@ function classify(ledger) {
  const drySkinAbilities=new Set(drySkinWitnesses.map(w=>'abilities:'+w.ability));
  for(const id of drySkinAbilities)required.add(id);
  proofs['dry-skin-positive-witness']={conclusion:'required',kind:'abilities',bound:[...drySkinAbilities].sort(),references:refs.generator,witnesses:drySkinWitnesses,reasoning:'Pinned generator seed[23,2,3,4] positively witnesses Dry Skin Jynx only; water/fire/weather callbacks have directed synthetic evidence, not full-format closure.'};
+ const recoveryWitnesses=require('./switch-recovery-cases.cjs').membershipWitnesses();
+ const recoveryAbilities=new Set(recoveryWitnesses.map(w=>'abilities:'+w.ability));
+ for(const id of recoveryAbilities)required.add(id);
+ proofs['switch-recovery-positive-witness']={conclusion:'required',kind:'abilities',bound:[...recoveryAbilities].sort(),references:refs.generator,witnesses:recoveryWitnesses,reasoning:'Pinned generator seeds[3,2,3,4] Slowking Regenerator and[24,2,3,4] Celebi Natural Cure positively witness required abilities. Natural Cure onCheckShow returns for active.length1: only singles no-op branch applies; remaining full-format closure pending.'};
  for(const entry of ledger.entries){
   entry.reachability='unresolved';
   entry.reachabilityAudit='unresolved-membership';
@@ -276,7 +280,7 @@ function classify(ledger) {
   }
   if(required.has(entry.id)){
    assert.notEqual(entry.reachability,'proven_unreachable',entry.id);
-   entry.reachability='required';entry.reachabilityAudit=drySkinAbilities.has(entry.id)?'dry-skin-positive-witness':secondaryAbilities.has(entry.id)?'secondary-ability-positive-witness':flashFireAbilities.has(entry.id)?'flash-fire-positive-witness':sapSipperAbilities.has(entry.id)?'sap-sipper-positive-witness':typeBoostAbilities.has(entry.id)?'type-boost-positive-witness':lowHpAbilities.has(entry.id)?'low-hp-ability-positive-witness':absorptionAbilities.has(entry.id)?'type-absorption-positive-witness':'native-team-positive-witness';
+   entry.reachability='required';entry.reachabilityAudit=recoveryAbilities.has(entry.id)?'switch-recovery-positive-witness':drySkinAbilities.has(entry.id)?'dry-skin-positive-witness':secondaryAbilities.has(entry.id)?'secondary-ability-positive-witness':flashFireAbilities.has(entry.id)?'flash-fire-positive-witness':sapSipperAbilities.has(entry.id)?'sap-sipper-positive-witness':typeBoostAbilities.has(entry.id)?'type-boost-positive-witness':lowHpAbilities.has(entry.id)?'low-hp-ability-positive-witness':absorptionAbilities.has(entry.id)?'type-absorption-positive-witness':'native-team-positive-witness';
   }
  }
  for(const root of ledger.roots){

@@ -23,9 +23,9 @@ def activate(c,side,e):
                       item_order=s.item_order.at[side,m].set(item)),t
 
 
-def cure(c,side,e,source=None,move=0):
+def cure(c,side,e,source=None,move=0,ability=0,silent=False):
     s,t=c;m=s.active[side];old=s.status[side,m]
-    c=e._event(c,e.CURE,side,m,status=old,move=move);s,t=c
+    c=e._event(c,e.CURE,side,m,status=old,move=move,aux=ability,value=e.i32(silent));s,t=c
     source=side if source is None else source
     meta=e.i32([0,0,0,0,1,-1,-1]).at[2].set(source).at[3].set(s.active[source])
     return s._replace(status=s.status.at[side,m].set(0),toxic=s.toxic.at[side,m].set(0),
