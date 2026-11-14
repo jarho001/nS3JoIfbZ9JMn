@@ -12,6 +12,21 @@ all acceptance requirements and commands below remain pending.
 
 ## Current source and evidence
 
+**Schema38 Sap Sipper:** focused CPU17 scenarios/29 boundaries
+passed in467.884s;2 native/inventory checks passed. No GPU run.
+See [schema38-checkpoint.json](../test-logs/g4-cpu-conformance/schema38-checkpoint.json).
+Grass damage/status interception, Attack caps, protection/Substitute,
+suppression/replacement, Trace and called/reflected frames, drain prevention,
+switch restoration and live NPZ/journal16 persistence. Gen5 ally callback absent.
+
+```sh
+JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_sap_sipper_engine -v -f
+```
+
+Runner now includes100 checks/44 modules, 1246 scenarios/
+5411 boundaries. Preparation, broad CPU/migration/full-lean, fixed campaigns
+and device checks remain pending until mechanics/inventory closure.
+
 **Schema37 Type-interception boosts:** focused CPU54 scenarios/87 boundaries
 passed in512.253s;2 native/inventory checks passed. No GPU run.
 See [schema37-checkpoint.json](../test-logs/g4-cpu-conformance/schema37-checkpoint.json).

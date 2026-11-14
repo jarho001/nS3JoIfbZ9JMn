@@ -4411,10 +4411,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/sap-sipper.json.gz",
+          "native": "reference/sap-sipper-cases.cjs",
+          "scope": "Independent17 synthetic scenarios/29 directed boundaries; Gen5 removes ally-side callback; full-format/remaining dependency validation pending",
+          "test": "test/test_sap_sipper_engine.py"
+        }
+      ],
       "field": "onTryHit",
       "id": "abilities:sapsipper:onTryHit",
-      "implementation": null,
+      "implementation": {
+        "family": "sap_sipper",
+        "file": "simulator/status_immunity.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:sapsipper",
@@ -4426,7 +4438,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "83266890d7f8488000bcd770cc59ce3f2e4bce6bfb9cb3910818e6490882a546",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -74374,8 +74386,8 @@
         }
       ],
       "kind": "abilities",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "sap-sipper-positive-witness",
       "status": "partial"
     },
     {
@@ -97182,6 +97194,67 @@
           "sim/battle-actions.ts:267-408 (OverrideAction, Z/Max and Dancer guards)"
         ]
       },
+      "sap-sipper-positive-witness": {
+        "bound": [
+          "abilities:sapsipper"
+        ],
+        "conclusion": "required",
+        "kind": "abilities",
+        "reasoning": "Pinned generator seed[10,2,3,4] positively witnesses Sap Sipper Girafarig; no other exclusion/activation claim. Gen5 abilities override removes onAllyTryHitSide.",
+        "references": [
+          "data/random-battles/gen5/teams.ts:103-494 (cullMovePool/randomMoveset)",
+          "data/random-battles/gen5/teams.ts:496-566 (ability filters/fallback)",
+          "data/random-battles/gen5/teams.ts:568-816 (item returns and randomSet)",
+          "data/random-battles/gen5/teams.ts:850-1014 (team eligibility)",
+          "data/random-battles/gen9/teams.ts:675-693 (addMove)",
+          "data/random-battles/gen9/teams.ts:1442-1497 (getLevel/getForme)",
+          "data/random-battles/gen9/teams.ts:1641-1683 (getPokemonPool)"
+        ],
+        "witnesses": [
+          {
+            "ability": "sapsipper",
+            "seed": [
+              10,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Sap Sipper",
+              "evs": {
+                "atk": 0,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Leftovers",
+              "ivs": {
+                "atk": 3,
+                "def": 30,
+                "hp": 31,
+                "spa": 30,
+                "spd": 30,
+                "spe": 30
+              },
+              "level": 93,
+              "moves": [
+                "hiddenpowerfighting",
+                "substitute",
+                "psyshock",
+                "calmmind"
+              ],
+              "name": "Girafarig",
+              "role": "Setup Sweeper",
+              "shiny": false,
+              "species": "Girafarig",
+              "speciesId": "girafarig"
+            }
+          }
+        ]
+      },
       "type-absorption-positive-witness": {
         "bound": [
           "abilities:voltabsorb",
@@ -97461,8 +97534,8 @@
       },
       "entries": {
         "proven_unreachable": 542,
-        "required": 41,
-        "unresolved": 1185
+        "required": 42,
+        "unresolved": 1184
       },
       "roots": {
         "proven_unreachable": 0,

@@ -792,3 +792,10 @@ the ability then raise a stage; +6 emits immunity only. Native54/87 directed
 CPU parity and live NPZ/journal16 persistence pass. Positive generated-set
 memberships do not close redirect callback, helper or full-format scope.
 Remaining mechanics, capacity and deferred execution/acceptance gates stay open.
+
+Schema38 adds Sap Sipper through the shared type-interception boost path,
+raising Attack rather than SpA/Speed. Native17/29 directed CPU parity and
+NPZ/journal16 persistence pass. Gen5 explicitly removes the inherited
+onAllyTryHitSide callback. The inaccurate fixture uses Power Whip; Grass
+Whistle stays excluded by the source-backed move identity bound. Remaining
+mechanics/closure and broad/final/device checks remain pending.
