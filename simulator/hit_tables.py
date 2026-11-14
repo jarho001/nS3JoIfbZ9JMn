@@ -11,6 +11,7 @@ DRAIN_DEN=t.mv(lambda r:r.get('drain',[0,1])[1])
 SELF_DESTRUCT=t.mv(lambda r:r.get('selfdestruct')=='always').astype(jnp.bool_)
 DEFROST=t.mv(lambda r:bool(r.get('flags',{}).get('defrost'))).astype(jnp.bool_)
 CONTACT=t.mv(lambda r:bool(r.get('flags',{}).get('contact'))).astype(jnp.bool_)
+CRASH=t.mv(lambda r:r.get('id') in ('jumpkick','highjumpkick')).astype(jnp.bool_)
 HIT_COUNTS=jnp.asarray([2]*7+[3]*7+[4]*3+[5]*3,jnp.int32)
 ABILITIES=('skilllink','rockhead','roughskin','ironbarbs','liquidooze','mummy','magicguard','shielddust','serenegrace')
 ABILITY_IMPLEMENTED=jnp.asarray([key in ABILITIES for key in t.ABILITIES],jnp.bool_)
@@ -18,6 +19,12 @@ ITEM_IMPLEMENTED=jnp.asarray([key=='rockyhelmet' for key in t.ITEMS],jnp.bool_)
 
 
 def supported(row):
+    if row.get('id') in ('jumpkick','highjumpkick'):
+        if row.get('hasCrashDamage') is not True or row.get('onMoveFail')!={'$callback':f"moves:{row['id']}:onMoveFail"}:return False
+        clean=dict(row);clean.pop('hasCrashDamage');clean.pop('onMoveFail')
+        clean['flags']={key:value for key,value in row.get('flags',{}).items()if key!='gravity'}
+        # Gravity itself stays unsupported; preserve every other capability guard.
+        return t.plain(clean)
     if row.get('selfdestruct') not in (None,'always'):return False
     clean=dict(row)
     # Pinned Gen5 Scald explicitly disables the later target-thaw behavior.

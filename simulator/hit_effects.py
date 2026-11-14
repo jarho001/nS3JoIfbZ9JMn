@@ -82,3 +82,12 @@ def spin(c,actor,e):
     s,trace=c
     c=(s._replace(hazards=s.hazards.at[actor].set(0),hazard_meta=s.hazard_meta.at[actor].set(0)),trace)
     return e.partial_ops.end(c,actor,e)
+
+
+def crash(c,actor,move,e):
+    def apply(c):
+        s,_=c;mon=s.active[actor];cause=jnp.where(move==tables.MOVE_IDS['jumpkick'],18,19)
+        c=e._damage(c,actor,s.stats[actor,mon,0]//2,cause=cause,source_side=actor,source_mon=mon)
+        def faint(c):return e._win(e._faint(c,actor),1-actor)
+        return e._when(c[0].hp[actor,mon]==0,faint,c)
+    return e._when(h.CRASH[move],apply,c)

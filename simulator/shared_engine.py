@@ -65,7 +65,7 @@ import sys
 def _engine():
     return sys.modules[__name__]
 
-SCHEMA = 58
+SCHEMA = 59
 ROSTER, SLOTS, QUEUE, EVENTS, DRAWS, HISTORY = 6, 4, 8, 128, 128, 2048
 OK, PENDING, INVALID, UNSUPPORTED, CAPACITY, TERMINAL, STALE = range(7)
 RETRY=7
@@ -647,8 +647,8 @@ def _use_move(c,frame):
         damaging=tables.CATEGORY[move]>0
         immune=(item_ops.EXCHANGE[move]&(suppression_ops.abilities(s)[target,tm]==tables.ABILITY_IDS['stickyhold']))|((move!=STRUGGLE)&(((damaging|(move==THUNDER_WAVE))&type_immune)|(damaging&levitate)))
         blocked=s.protected[target,tm]&ability_ops.PROTECT[move]
-        def block(c):return _event(tracking.outcome(c,actor,i32(tracking.NULL),move),ACTIVATE,target,tm,move=PROTECT)
-        def immunity(c):return _event(c,IMMUNE,target,tm,aux=jnp.where(levitate,2,0))
+        def block(c):return hit_ops.crash(_event(tracking.outcome(c,actor,i32(tracking.NULL),move),ACTIVATE,target,tm,move=PROTECT),actor,move,_engine())
+        def immunity(c):return hit_ops.crash(_event(c,IMMUNE,target,tm,aux=jnp.where(levitate,2,0)),actor,move,_engine())
         def try_hit(c):
             def accuracy(c):
                 c=accuracy_ability_ops.modify_sort(c,actor,_engine(),target=target)
@@ -662,19 +662,19 @@ def _use_move(c,frame):
                 hit=sure|pursuit_ops.boosted(c[0],target,move,_engine())|(ACCURACY[move]==0)|(roll<threshold.astype(jnp.uint32))
                 def miss(c):
                     s,t=c;t=t._replace(events=t.events.at[move_row,7].set(1))
-                    return _event((s,t),MISS,actor,mon,move,target,tm)
+                    return hit_ops.crash(_event((s,t),MISS,actor,mon,move,target,tm),actor,move,_engine())
                 def hit_fn(c):
                     s,t=c
                     existing=(~called_ops.MOVE_IMPLEMENTED[move])&(phase_ops.RESTRICTION[move]==0)&(move!=sleep_ops.YAWN)&(move!=suppression_ops.MOVE)&(~ability_ops.MOVE_IMPLEMENTED[move])&(move!=identity_ops.MOVE)&(~item_ops.EXCHANGE[move])&(~phaze_ops.STATUS[move])&(tables.CATEGORY[move]==0)&(~field_tables.IS_BOOST[move])&(move!=CONFUSE_RAY)&(s.status[target,tm]!=NONE)&(s.status[target,tm]!=jnp.where(move==WISP,BRN,jnp.where(move==TOXIC,TOX,jnp.where(move==POISON_POWDER,PSN,jnp.where(move==SPORE,SLP,PAR)))))
                     t=t._replace(events=t.events.at[move_row,7].set(jnp.where(existing,2,t.events[move_row,7])))
                     return _hit((s,t),actor,move)
                 return jax.lax.cond(hit,hit_fn,miss,c)
-            return jax.lax.cond(blocked,block,lambda c:jax.lax.cond(flash_ops.intercepts(c[0],actor,target,move,_engine()),lambda c:flash_ops.hit(c,actor,target,move,_engine()),lambda c:jax.lax.cond(immunity_ops.absorbs(c[0],actor,target,move,_engine()),lambda c:immunity_ops.absorb(c,actor,target,move,_engine()),lambda c:jax.lax.cond(immunity_ops.wonder_guard(c[0],actor,target,move,_engine()),lambda c:_event(c,IMMUNE,target,tm,value=tables.ABILITY_IDS['wonderguard'],aux=4),lambda c:jax.lax.cond(creation_ops.immunity(c[0],target,move),lambda c:_event(c,IMMUNE,target,tm),accuracy,c),c),c),c),c)
+            return jax.lax.cond(blocked,block,lambda c:jax.lax.cond(flash_ops.intercepts(c[0],actor,target,move,_engine()),lambda c:flash_ops.hit(c,actor,target,move,_engine()),lambda c:jax.lax.cond(immunity_ops.absorbs(c[0],actor,target,move,_engine()),lambda c:immunity_ops.absorb(c,actor,target,move,_engine()),lambda c:jax.lax.cond(immunity_ops.wonder_guard(c[0],actor,target,move,_engine()),lambda c:hit_ops.crash(_event(c,IMMUNE,target,tm,value=tables.ABILITY_IDS['wonderguard'],aux=4),actor,move,_engine()),lambda c:jax.lax.cond(creation_ops.immunity(c[0],target,move),lambda c:_event(c,IMMUNE,target,tm),accuracy,c),c),c),c),c)
         # Pinned Gen 5 resolves type/Levitate immunity before Protect;
         # status failure checks still occur after Protect and accuracy.
         def semi_miss(c):
             s,t=c;t=t._replace(events=t.events.at[move_row,7].set(1))
-            return _event((s,t),MISS,actor,mon,move,target,tm)
+            return hit_ops.crash(_event((s,t),MISS,actor,mon,move,target,tm),actor,move,_engine())
         sound=phaze_ops.SOUND[move]&(suppression_ops.abilities(s)[target,tm]==tables.ABILITY_IDS['soundproof'])
         return jax.lax.cond(phase_ops.invulnerable(s,target,move)&(~accuracy_ability_ops.sure_hit(s,actor,target,_engine()))&(~pursuit_ops.boosted(s,target,move,_engine())),semi_miss,lambda c:jax.lax.cond(immune,immunity,lambda c:jax.lax.cond(sound,lambda c:_event(c,IMMUNE,target,tm,aux=3),try_hit,c),c),c)
     def no_target(c):

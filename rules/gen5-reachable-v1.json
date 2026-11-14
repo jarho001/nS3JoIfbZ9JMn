@@ -23215,10 +23215,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/crash-move.json.gz",
+          "native": "reference/crash-move-cases.cjs",
+          "scope": "Independent44 constructed/synthetic scenarios50 boundaries; half-base-max-HP MoveFail damage on Protect/type/Wonder Guard/accuracy/Fly failures, Magic Guard/Rock Head/Reckless/No Guard, odd/even/one HP, KO/reserve, Life Orb/Helmet, paralysis, Sleep Talk and no-target exclusion. Gravity and full-format closure pending",
+          "test": "test/test_crash_move_engine.py"
+        }
+      ],
       "field": "onMoveFail",
       "id": "moves:highjumpkick:onMoveFail",
-      "implementation": null,
+      "implementation": {
+        "family": "crash_move",
+        "file": "simulator/hit_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:highjumpkick",
@@ -23230,7 +23242,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "14dd5ee4c1fe1a580e7619fd144e8ee56bf6041fa6d0ab07f67f7df05b0a4e9d",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -23623,10 +23635,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/crash-move.json.gz",
+          "native": "reference/crash-move-cases.cjs",
+          "scope": "Independent44 constructed/synthetic scenarios50 boundaries; half-base-max-HP MoveFail damage on Protect/type/Wonder Guard/accuracy/Fly failures, Magic Guard/Rock Head/Reckless/No Guard, odd/even/one HP, KO/reserve, Life Orb/Helmet, paralysis, Sleep Talk and no-target exclusion. Gravity and full-format closure pending",
+          "test": "test/test_crash_move_engine.py"
+        }
+      ],
       "field": "onMoveFail",
       "id": "moves:jumpkick:onMoveFail",
-      "implementation": null,
+      "implementation": {
+        "family": "crash_move",
+        "file": "simulator/hit_effects.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:jumpkick",
@@ -23638,7 +23662,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "78dad12dc3c2fc823b3f606ffe32bda804b8f70c71ebe4118d208e156470c868",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -60464,8 +60488,8 @@
         }
       ],
       "kind": "moves",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "crash-move-positive-witness",
       "status": "partial"
     },
     {
@@ -61394,8 +61418,8 @@
         }
       ],
       "kind": "moves",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "crash-move-positive-witness",
       "status": "partial"
     },
     {
@@ -97827,6 +97851,112 @@
           }
         ]
       },
+      "crash-move-positive-witness": {
+        "bound": [
+          "moves:highjumpkick",
+          "moves:jumpkick"
+        ],
+        "conclusion": "required",
+        "kind": "moves",
+        "reasoning": "Pinned Jump Kick Lopunny seed[4,2,3,4] and High Jump Kick Mienshao seed[20,2,3,4] prove membership. Gravity and full-format closure pending.",
+        "references": [
+          "data/random-battles/gen5/teams.ts:103-494 (cullMovePool/randomMoveset)",
+          "data/random-battles/gen5/teams.ts:496-566 (ability filters/fallback)",
+          "data/random-battles/gen5/teams.ts:568-816 (item returns and randomSet)",
+          "data/random-battles/gen5/teams.ts:850-1014 (team eligibility)",
+          "data/random-battles/gen9/teams.ts:675-693 (addMove)",
+          "data/random-battles/gen9/teams.ts:1442-1497 (getLevel/getForme)",
+          "data/random-battles/gen9/teams.ts:1641-1683 (getPokemonPool)"
+        ],
+        "witnesses": [
+          {
+            "id": "jumpkick",
+            "kind": "move",
+            "seed": [
+              4,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Limber",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 81,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Choice Band",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 88,
+              "moves": [
+                "return",
+                "healingwish",
+                "icepunch",
+                "jumpkick"
+              ],
+              "name": "Lopunny",
+              "role": "Wallbreaker",
+              "shiny": false,
+              "species": "Lopunny",
+              "speciesId": "lopunny"
+            }
+          },
+          {
+            "id": "highjumpkick",
+            "kind": "move",
+            "seed": [
+              20,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Reckless",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 81,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Choice Band",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 79,
+              "moves": [
+                "uturn",
+                "highjumpkick",
+                "drainpunch",
+                "stoneedge"
+              ],
+              "name": "Mienshao",
+              "role": "Wallbreaker",
+              "shiny": false,
+              "species": "Mienshao",
+              "speciesId": "mienshao"
+            }
+          }
+        ]
+      },
       "dry-skin-positive-witness": {
         "bound": [
           "abilities:dryskin"
@@ -100408,8 +100538,8 @@
       },
       "entries": {
         "proven_unreachable": 542,
-        "required": 80,
-        "unresolved": 1146
+        "required": 82,
+        "unresolved": 1144
       },
       "roots": {
         "proven_unreachable": 0,

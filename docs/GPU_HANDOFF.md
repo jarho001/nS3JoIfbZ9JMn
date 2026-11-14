@@ -22,10 +22,23 @@ Keep historical commands/results as provenance.
 
 ## Current source and evidence
 
-**Next group, native only:** Jump Kick / High Jump Kick has44 scenarios/50 boundaries,
-pinned positive witnesses and a passing `node --test test/crash-move-native.test.cjs`
+**Next group, native only:** Sucker Punch / Payback has38 scenarios/48 boundaries,
+pinned positive witnesses and a passing `node --test test/conditional-attack-native.test.cjs`
 contract. It is not in the CPU/CUDA runner; implementation remains pending.
-Gravity and remaining full-format dependencies stay unsupported and pending.
+Me First and remaining full-format dependencies stay unsupported and pending.
+
+**Schema59 Jump Kick / High Jump Kick group:** focused CPU44 scenarios/50 boundaries
+passed in420.736s;2 native/inventory contracts and4 handoff helpers pass.
+See [schema59-checkpoint.json](../test-logs/g4-cpu-conformance/schema59-checkpoint.json).
+One compiled step covers exact state/RNG/requests/recipient events/histories,
+NPZ continuation and journal17. No GPU execution.
+
+```sh
+JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_crash_move_engine -v -f
+```
+
+Runner includes121 checks/65 modules,1983 scenarios/6677
+boundaries in59 corpora. Current-source broad/device execution remains deferred.
 
 **Schema58 Iron Fist / Reckless group:** focused CPU40 scenarios/44 boundaries
 passed in404.784s;2 native/inventory contracts and4 handoff helpers pass.

@@ -1,11 +1,11 @@
 'use strict';
 const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),zlib=require('node:zlib');
 const {normalizeStacks}=require('./native-stack-support.cjs');
-test('native-only Jump Kick and High Jump Kick preserve crash triggers, rounding and faint requests',()=>{
+test('native Jump Kick and High Jump Kick preserve crash triggers, rounding and faint requests',()=>{
  require('../reference/neutral-turn-oracle.cjs').assertReady();
- const ps=require('../reference/vendor/pokemon-showdown/dist/sim'),{runCase}=require('../reference/shared-engine-cases.cjs'),spec=require('../reference/crash-move-cases.cjs');
- const actual={pin:require('../reference-lock.json').commit,witnesses:spec.membershipWitnesses(),cases:spec().map(c=>runCase(ps,c))};
- assert.deepEqual(normalizeStacks(JSON.parse(JSON.stringify(actual))),normalizeStacks(JSON.parse(zlib.gunzipSync(fs.readFileSync('test-logs/g4-cpu-conformance/crash-move-precheck.json.gz')))));
+ const spec=require('../reference/crash-move-cases.cjs');
+ const actual=JSON.parse(require('node:child_process').execFileSync('node',['reference/shared-engine-cases.cjs','--batch','crashmove'],{maxBuffer:32*1024*1024}));
+ assert.deepEqual(normalizeStacks(actual),normalizeStacks(JSON.parse(zlib.gunzipSync(fs.readFileSync('test-logs/g4-cpu-conformance/crash-move.json.gz')))));
  assert.equal(actual.cases.length,44);assert.equal(actual.cases.reduce((n,c)=>n+c.steps.length,0),50);assert.ok(actual.cases.every(c=>c.steps.every(s=>s.accepted.every(a=>a.accepted))));
  const c=id=>actual.cases.find(c=>c.id==='G4-crash-'+id),first=id=>c(id).steps[0],hp=id=>first(id).after.sides[0].pokemon[0].hp;
  for(const key of ['jumpkick','highjumpkick']){
@@ -18,5 +18,5 @@ test('native-only Jump Kick and High Jump Kick preserve crash triggers, rounding
   assert.deepEqual(first(key+'-reserve').after.sides[0].request.forceSwitch,[true]);
   assert.ok(first(key+'-seed-15').events.p1.some(e=>e.message.startsWith('|-miss|')));
  }
- assert.deepEqual(actual.witnesses.map(w=>w.set.species),['Lopunny','Mienshao']);
+ assert.deepEqual(spec.membershipWitnesses().map(w=>w.set.species),['Lopunny','Mienshao']);
 });
