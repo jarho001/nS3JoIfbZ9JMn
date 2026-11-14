@@ -59,8 +59,8 @@ test('pinned resolved export and conservative inventory reproduce exactly',()=>{
     const cb=slots.get(id);assert.equal(cb.status,'unsupported');assert.equal(cb.implementation,null);
   }
   assert.ok(ledger.callbacks.every(c=>['partial','unsupported'].includes(c.status)));
-  assert.equal(ledger.callbacks.filter(c=>c.status==='partial').length,307);
-  assert.equal(ledger.callbacks.filter(c=>c.status==='unsupported').length,839);
+  assert.equal(ledger.callbacks.filter(c=>c.status==='partial').length,312);
+  assert.equal(ledger.callbacks.filter(c=>c.status==='unsupported').length,834);
   const audit=ledger.reachabilityAudit;
   const entries=new Map(ledger.entries.map(e=>[e.id,e]));
   assert.equal(audit.proofs['move-identity-bound'].bound.length,224);
@@ -93,6 +93,11 @@ test('pinned resolved export and conservative inventory reproduce exactly',()=>{
     assert.equal(entries.get('items:'+id).reachability,'required');
     assert.equal(entries.get('items:'+id).reachabilityAudit,'residual-item-positive-witness');
     assert.ok(slots.get('items:'+id+':onResidual').implementation);
+  }
+  for(const id of ['chestoberry','sitrusberry']) {
+    assert.equal(entries.get('items:'+id).reachability,'required');
+    assert.equal(entries.get('items:'+id).reachabilityAudit,'restorative-berry-positive-witness');
+    assert.ok(slots.get('items:'+id+':onUpdate').implementation);
   }
   assert.equal(entries.get('abilities:zenmode').reachability,'unresolved');
   assert.equal(slots.get('abilities:magicguard:onDamage').reachability,'unresolved');

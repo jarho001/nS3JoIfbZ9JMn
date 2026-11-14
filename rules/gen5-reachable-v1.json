@@ -11347,10 +11347,22 @@
           "file": "data/items.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/restorative-berry-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_restorative_berry_engine.py"
+        }
+      ],
       "field": "onEat",
       "id": "items:chestoberry:onEat",
-      "implementation": null,
+      "implementation": {
+        "family": "restorative_berry",
+        "file": "simulator/restorative_berries.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "items:chestoberry",
@@ -11362,7 +11374,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "632073390c426de721011f16543b08a9f5d6b89a365c88c87a81e27ac4017a50",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -11371,10 +11383,22 @@
           "file": "data/items.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/restorative-berry-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_restorative_berry_engine.py"
+        }
+      ],
       "field": "onUpdate",
       "id": "items:chestoberry:onUpdate",
-      "implementation": null,
+      "implementation": {
+        "family": "restorative_berry",
+        "file": "simulator/restorative_berries.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "items:chestoberry",
@@ -11386,7 +11410,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "683198ce973a8acb7d0f978b2bc2c54b23004a800eb688f75c8f739ed088b9d9",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -16447,10 +16471,22 @@
           "file": "data/items.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/restorative-berry-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_restorative_berry_engine.py"
+        }
+      ],
       "field": "onEat",
       "id": "items:sitrusberry:onEat",
-      "implementation": null,
+      "implementation": {
+        "family": "restorative_berry",
+        "file": "simulator/restorative_berries.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "items:sitrusberry",
@@ -16462,7 +16498,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "b5dacf5d316b5737d67f0d84ce75f2a95ef21d5ae66d56d9e43bc0fbd3f0d84b",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -16471,10 +16507,22 @@
           "file": "data/items.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/restorative-berry-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_restorative_berry_engine.py"
+        }
+      ],
       "field": "onTryEatItem",
       "id": "items:sitrusberry:onTryEatItem",
-      "implementation": null,
+      "implementation": {
+        "family": "restorative_berry",
+        "file": "simulator/restorative_berries.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "items:sitrusberry",
@@ -16486,7 +16534,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "26f8a40a07060d7c4ee8346c850714efea7efca188113addaea94e8229ed2d03",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -16495,10 +16543,22 @@
           "file": "data/items.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hooks.json.gz",
+          "native": "reference/restorative-berry-cases.cjs",
+          "scope": "Independent directed family cases and complete constructed games; not generator membership or full-format acceptance",
+          "test": "test/test_restorative_berry_engine.py"
+        }
+      ],
       "field": "onUpdate",
       "id": "items:sitrusberry:onUpdate",
-      "implementation": null,
+      "implementation": {
+        "family": "restorative_berry",
+        "file": "simulator/restorative_berries.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "items:sitrusberry",
@@ -16510,7 +16570,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "b0d9d4fef1b7ee5eeb382d8de52006e3509b3f7e8d67b76c5250507ef5772af1",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -77576,8 +77636,8 @@
         }
       ],
       "kind": "items",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "restorative-berry-positive-witness",
       "status": "partial"
     },
     {
@@ -83479,8 +83539,8 @@
         }
       ],
       "kind": "items",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "restorative-berry-positive-witness",
       "status": "partial"
     },
     {
@@ -98043,6 +98103,110 @@
           }
         ]
       },
+      "restorative-berry-positive-witness": {
+        "bound": [
+          "items:chestoberry",
+          "items:sitrusberry"
+        ],
+        "conclusion": "required",
+        "kind": "items",
+        "reasoning": "Pinned generator Chesto Berry Regirock seed[58,2,3,4] and Sitrus Berry Tropius seed[13,2,3,4] prove membership. Directed synthetic Update/consumption cases do not accept unsupported ability/move interactions or full callback/indirect/format closure.",
+        "references": [
+          "data/random-battles/gen5/teams.ts:103-494 (cullMovePool/randomMoveset)",
+          "data/random-battles/gen5/teams.ts:496-566 (ability filters/fallback)",
+          "data/random-battles/gen5/teams.ts:568-816 (item returns and randomSet)",
+          "data/random-battles/gen5/teams.ts:850-1014 (team eligibility)",
+          "data/random-battles/gen9/teams.ts:675-693 (addMove)",
+          "data/random-battles/gen9/teams.ts:1442-1497 (getLevel/getForme)",
+          "data/random-battles/gen9/teams.ts:1641-1683 (getPokemonPool)"
+        ],
+        "witnesses": [
+          {
+            "item": "chestoberry",
+            "seed": [
+              58,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Clear Body",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "N",
+              "item": "Chesto Berry",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 85,
+              "moves": [
+                "curse",
+                "drainpunch",
+                "rest",
+                "stoneedge"
+              ],
+              "name": "Regirock",
+              "role": "Bulky Setup",
+              "shiny": false,
+              "species": "Regirock",
+              "speciesId": "regirock"
+            }
+          },
+          {
+            "item": "sitrusberry",
+            "seed": [
+              13,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Harvest",
+              "evs": {
+                "atk": 0,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Sitrus Berry",
+              "ivs": {
+                "atk": 0,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 91,
+              "moves": [
+                "airslash",
+                "protect",
+                "substitute",
+                "leechseed"
+              ],
+              "name": "Tropius",
+              "role": "Staller",
+              "shiny": false,
+              "species": "Tropius",
+              "speciesId": "tropius"
+            }
+          }
+        ]
+      },
       "sap-sipper-positive-witness": {
         "bound": [
           "abilities:sapsipper"
@@ -98591,8 +98755,8 @@
       },
       "entries": {
         "proven_unreachable": 542,
-        "required": 54,
-        "unresolved": 1172
+        "required": 56,
+        "unresolved": 1170
       },
       "roots": {
         "proven_unreachable": 0,

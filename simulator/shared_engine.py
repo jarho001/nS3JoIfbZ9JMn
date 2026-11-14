@@ -42,6 +42,7 @@ from . import switch_recovery as recovery_ops
 from . import rain_recovery as rain_ops
 from . import residual_recovery as residual_ops
 from . import residual_items as residual_item_ops
+from . import restorative_berries as berry_ops
 from . import ability_creation as creation_ops
 from . import suppression as suppression_ops
 from . import sleep_control as sleep_ops
@@ -55,7 +56,7 @@ import sys
 def _engine():
     return sys.modules[__name__]
 
-SCHEMA = 45
+SCHEMA = 46
 ROSTER, SLOTS, QUEUE, EVENTS, DRAWS, HISTORY = 6, 4, 8, 128, 128, 2048
 OK, PENDING, INVALID, UNSUPPORTED, CAPACITY, TERMINAL, STALE = range(7)
 RETRY=7
@@ -311,7 +312,8 @@ def _update(c,context=UPDATE,sort_all=False):
             s,t=c
             return effects.lum((s,t),side,_engine(),emit_item=False)
         s,t=c;m=s.active[side]
-        return _when((s.item[side,m]==2)&((s.status[side,m]!=NONE)&(s.status[side,m]!=FNT)|(s.volatile_state[side,m,2,0]>0))&(s.hp[side,m]>0),cure,c)
+        c=_when((s.item[side,m]==2)&((s.status[side,m]!=NONE)&(s.status[side,m]!=FNT)|(s.volatile_state[side,m,2,0]>0))&(s.hp[side,m]>0),cure,c)
+        return berry_ops.update(c,side,_engine())
     return jax.lax.fori_loop(0,2,visit,c)
 
 
@@ -1004,7 +1006,7 @@ def _supported(s,initializing=False):
             &jnp.all((s.moves>=0)&(s.moves<len(MOVE_KEYS))&(s.moves!=STRUGGLE))
             &jnp.all((s.moves==0)|move_mask[jnp.clip(s.moves,0,len(MOVE_KEYS)-1)])
             &jnp.all((s.item>=0)&(s.item<len(ITEMS)))
-            &jnp.all((hook_tables.ITEM_IMPLEMENTED|hit_tables.ITEM_IMPLEMENTED|phase_ops.ITEM_IMPLEMENTED|partial_ops.ITEM_IMPLEMENTED|residual_item_ops.ITEM_IMPLEMENTED)[jnp.clip(s.item,0,len(ITEMS)-1)])
+            &jnp.all((hook_tables.ITEM_IMPLEMENTED|hit_tables.ITEM_IMPLEMENTED|phase_ops.ITEM_IMPLEMENTED|partial_ops.ITEM_IMPLEMENTED|residual_item_ops.ITEM_IMPLEMENTED|berry_ops.ITEM_IMPLEMENTED)[jnp.clip(s.item,0,len(ITEMS)-1)])
             &jnp.all((s.ability>=0)&(s.ability<len(ABILITIES)))&jnp.all((hook_tables.ABILITY_IMPLEMENTED|hit_tables.ABILITY_IMPLEMENTED|trap_ops.ABILITY_IMPLEMENTED|phaze_ops.ABILITY_IMPLEMENTED|item_ops.ABILITY_IMPLEMENTED|identity_ops.ABILITY_IMPLEMENTED|illusion_ops.ABILITY_IMPLEMENTED|form_ops.ABILITY_IMPLEMENTED|trigger_form_ops.ABILITY_IMPLEMENTED|immunity_ops.ABILITY_IMPLEMENTED|creation_ops.ABILITY_IMPLEMENTED|sleep_ops.ABILITY_IMPLEMENTED|called_ops.ABILITY_IMPLEMENTED|trace_ops.ABILITY_IMPLEMENTED|flash_ops.ABILITY_IMPLEMENTED|recovery_ops.ABILITY_IMPLEMENTED|rain_ops.ABILITY_IMPLEMENTED|residual_ops.ABILITY_IMPLEMENTED)[jnp.clip(s.ability,0,len(ABILITIES)-1)])
             &jnp.all((s.ivs>=0)&(s.ivs<=31))&jnp.all((s.evs>=0)&(s.evs<=255))
             &jnp.all((s.nature>=1)&(s.nature<=len(generic.NATURES)))

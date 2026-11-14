@@ -22,6 +22,20 @@ Keep historical commands/results as provenance.
 
 ## Current source and evidence
 
+**Schema46 Chesto Berry / Sitrus Berry group:** focused CPU35 scenarios/77 boundaries
+passed in330.426s;2 native/inventory contracts and4 handoff helpers pass.
+See [schema46-checkpoint.json](../test-logs/g4-cpu-conformance/schema46-checkpoint.json).
+One shared compiled step covers all members, exact state/RNG/requests/recipient
+events and histories, NPZ continuation and journal17. No GPU run.
+
+```sh
+JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_restorative_berry_engine -v -f
+```
+
+Runner includes108 checks/52 modules,1522 scenarios/5993
+boundaries in46 corpora. Current-source broad/device preparation and
+execution remain deferred.
+
 **Schema45 Black Sludge / Toxic Orb / Flame Orb group:** focused CPU59 scenarios/177
 boundaries passed in323.299s;2 native/inventory contracts and4 handoff helpers pass.
 See [schema45-checkpoint.json](../test-logs/g4-cpu-conformance/schema45-checkpoint.json).
