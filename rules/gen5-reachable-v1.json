@@ -6355,10 +6355,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/absorption.json.gz",
+          "native": "reference/absorption-cases.cjs",
+          "scope": "Independent54 synthetic scenarios/71 directed request boundaries only; no complete-game or generator-membership validation; full-format acceptance pending",
+          "test": "test/test_absorption_engine.py"
+        }
+      ],
       "field": "onTryHit",
       "id": "abilities:voltabsorb:onTryHit",
-      "implementation": null,
+      "implementation": {
+        "family": "absorption",
+        "file": "simulator/status_immunity.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:voltabsorb",
@@ -6370,7 +6382,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "f92f079695eb9363691ab9aee272c33c30275c480de3f3425287615aedd34cc1",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -6379,10 +6391,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/absorption.json.gz",
+          "native": "reference/absorption-cases.cjs",
+          "scope": "Independent54 synthetic scenarios/71 directed request boundaries only; no complete-game or generator-membership validation; full-format acceptance pending",
+          "test": "test/test_absorption_engine.py"
+        }
+      ],
       "field": "onTryHit",
       "id": "abilities:waterabsorb:onTryHit",
-      "implementation": null,
+      "implementation": {
+        "family": "absorption",
+        "file": "simulator/status_immunity.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:waterabsorb",
@@ -6394,7 +6418,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "cdb3e97abb787964258c22da86ab53884bf112e7356ce1d54fb8261eb7c87dd6",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -75953,10 +75977,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/absorption.json.gz",
+          "native": "reference/absorption-cases.cjs",
+          "scope": "Independent54 synthetic scenarios/71 directed request boundaries only; no complete-game or generator-membership validation; full-format acceptance pending",
+          "test": "test/test_absorption_engine.py"
         }
       ],
       "id": "abilities:voltabsorb",
       "implementation": {
+        "behavior": {
+          "family": "absorption",
+          "file": "simulator/status_immunity.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -75968,8 +76004,8 @@
         }
       ],
       "kind": "abilities",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "type-absorption-positive-witness",
       "status": "partial"
     },
     {
@@ -75984,10 +76020,22 @@
           "scope": "438 pre-entry sets, HP bitplanes and type chart; not every callback or generator branch",
           "source": "6857d91",
           "test": "test/test_gen5_tables.py"
+        },
+        {
+          "fixture": "test-logs/g4-cpu-conformance/absorption.json.gz",
+          "native": "reference/absorption-cases.cjs",
+          "scope": "Independent54 synthetic scenarios/71 directed request boundaries only; no complete-game or generator-membership validation; full-format acceptance pending",
+          "test": "test/test_absorption_engine.py"
         }
       ],
       "id": "abilities:waterabsorb",
       "implementation": {
+        "behavior": {
+          "family": "absorption",
+          "file": "simulator/status_immunity.py",
+          "scheduler": "simulator/shared_engine.py",
+          "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+        },
         "file": "simulator/gen5_tables.py",
         "mapping": "ABILITIES canonical IDs; battle callback coverage pending",
         "scope": "immutable data/pre-entry values only; complete entity and interaction behavior pending"
@@ -76000,7 +76048,7 @@
       ],
       "kind": "abilities",
       "reachability": "required",
-      "reachabilityAudit": "native-team-positive-witness",
+      "reachabilityAudit": "type-absorption-positive-witness",
       "status": "partial"
     },
     {
@@ -97097,6 +97145,110 @@
           "sim/pokemon.ts:1125 (Struggle request)",
           "sim/battle-actions.ts:267-408 (OverrideAction, Z/Max and Dancer guards)"
         ]
+      },
+      "type-absorption-positive-witness": {
+        "bound": [
+          "abilities:voltabsorb",
+          "abilities:waterabsorb"
+        ],
+        "conclusion": "required",
+        "kind": "abilities",
+        "reasoning": "Unmodified pinned generator outputs positively witness Water Absorb and Volt Absorb memberships only; callback activation and other set identities remain independently unresolved.",
+        "references": [
+          "data/random-battles/gen5/teams.ts:103-494 (cullMovePool/randomMoveset)",
+          "data/random-battles/gen5/teams.ts:496-566 (ability filters/fallback)",
+          "data/random-battles/gen5/teams.ts:568-816 (item returns and randomSet)",
+          "data/random-battles/gen5/teams.ts:850-1014 (team eligibility)",
+          "data/random-battles/gen9/teams.ts:675-693 (addMove)",
+          "data/random-battles/gen9/teams.ts:1442-1497 (getLevel/getForme)",
+          "data/random-battles/gen9/teams.ts:1641-1683 (getPokemonPool)"
+        ],
+        "witnesses": [
+          {
+            "ability": "waterabsorb",
+            "seed": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Water Absorb",
+              "evs": {
+                "atk": 0,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Leftovers",
+              "ivs": {
+                "atk": 2,
+                "def": 31,
+                "hp": 31,
+                "spa": 30,
+                "spd": 31,
+                "spe": 30
+              },
+              "level": 98,
+              "moves": [
+                "hiddenpowerfire",
+                "protect",
+                "gigadrain",
+                "leechseed"
+              ],
+              "name": "Maractus",
+              "role": "Staller",
+              "shiny": false,
+              "species": "Maractus",
+              "speciesId": "maractus"
+            }
+          },
+          {
+            "ability": "voltabsorb",
+            "seed": [
+              2,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Volt Absorb",
+              "evs": {
+                "atk": 0,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "M",
+              "item": "Life Orb",
+              "ivs": {
+                "atk": 2,
+                "def": 30,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 74,
+              "moves": [
+                "nastyplot",
+                "hiddenpowerice",
+                "focusblast",
+                "thunderbolt"
+              ],
+              "name": "Thundurus",
+              "role": "Fast Attacker",
+              "shiny": false,
+              "species": "Thundurus-Therian",
+              "speciesId": "thundurustherian"
+            }
+          }
+        ]
       }
     },
     "references": {
@@ -97126,8 +97278,8 @@
       },
       "entries": {
         "proven_unreachable": 542,
-        "required": 37,
-        "unresolved": 1189
+        "required": 38,
+        "unresolved": 1188
       },
       "roots": {
         "proven_unreachable": 0,

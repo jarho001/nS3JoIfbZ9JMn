@@ -524,7 +524,7 @@
     "brief": "PROJECT_PLAN.md#proposed-g4-cpu-implementation-and-conformance-goal",
     "source_base": "f37067e",
     "scope": "Complete pinned gen5randombattle reachable mechanics and every prepared CPU gate. Integrated checkpoints, resumable progress and commit/push authorized. GPU execution, profiling, benchmarks, training, delegation and scored research excluded.",
-    "checkpoint": "Low-HP ability schema35 focused CPU checkpoint passed: Overgrow/Blaze/Torrent/Swarm,40 scenarios/48 boundaries, including stat-hook RNG ordering; remaining mechanics/inventory closure continue.",
+    "checkpoint": "Type-absorption healing schema36 focused CPU checkpoint passed: Water Absorb/Volt Absorb,54 scenarios/71 boundaries; one CPU run, no retries. Remaining mechanics/inventory closure continue.",
     "completed_checkpoints": [
       "Pinned resolved data and source-owned conservative candidate inventory exported; 605 role roots, 1768 data/effect entries, 1146 callback slots. Data-only mappings remain partial; transitive closure and complete callback implementation are not claimed.",
       "Generic species/set/type/stat/physical-special/Hidden Power/happiness/priority/hazard integration passes 37 affected CPU checks on 4eab254, retaining all 133 baseline scenarios and validating 24 added scenarios: 157 scenarios / 1059 boundaries, including 20 complete battles (eight six-member games). Eager/JIT/1-8-32 mixed batches, serialized continuation/reset, explicit schema 1/2 migration and full/lean rollouts pass.",
@@ -538,7 +538,7 @@
       "Schema10 core/journal/hard-turn-limit checkpoint validated on a9d0fbd:3 integrated CPU checks pass in1174.685s, plus5 native/6 helper checks. Complete combat and1000-boundary neutral histories match native; mixed1/8/32,full/lean,core reset,persistence/corruption pass. Full64 suite and full-format G4 pending.",
       "Schema11 trapping/retry checkpoint:8 affected CPU checks plus6 native/6 helper checks pass. New31 scenarios/215 boundaries include two complete six-member games and mirrored private-state episodes. Aggregate558/4110; full68 suite and full-format G4 pending."
     ],
-    "next": "Continue reachable ability families, starting Water Absorb (existing positive generator membership); establish native branches and shared-path dependencies first. Then close callback/indirect/rule inventory and remaining mechanics. Focused CPU checks only; broad/device/campaign/profiling gates remain deferred.",
+    "next": "Continue reachable type-interception ability families (Storm Drain/Lightning Rod/Motor Drive candidates), establishing positive reachability and native branches first; then remaining mechanics and callback/indirect/rule closure. Keep focused CPU checks; broad/device/campaign/profiling gates remain deferred.",
     "ledger": {
       "path": "rules/gen5-reachable-v1.json",
       "entries": 1768,
@@ -1125,14 +1125,30 @@
         "evidence": "test-logs/g4-cpu-conformance/schema35-checkpoint.json",
         "archive": "test-logs/g4-cpu-conformance/schema35-validation.tar.gz",
         "next": "Continue reachable ability families, starting Water Absorb (existing positive generator membership); establish native branches and shared-path dependencies first. Then close callback/indirect/rule inventory and remaining mechanics. Focused CPU checks only; broad/device/campaign/profiling gates remain deferred."
+      },
+      "absorption": {
+        "status": "completed_focused_CPU_checkpoint_not_full_G4",
+        "source_base": "c236445",
+        "candidate_schema": 36,
+        "core_journal_schema": 16,
+        "native_cases": 54,
+        "native_boundaries": 71,
+        "evidence": "test-logs/g4-cpu-conformance/schema36-checkpoint.json",
+        "focused_CPU_runs": 1,
+        "validation_phase_seconds": {
+          "lower_compile": 247.238,
+          "initialization_replay_assertions": 14.816,
+          "unittest_total": 264.277
+        },
+        "next": "Continue reachable type-interception ability families (Storm Drain/Lightning Rod/Motor Drive candidates), establishing positive reachability and native branches first; then remaining mechanics and callback/indirect/rule closure. Keep focused CPU checks; broad/device/campaign/profiling gates remain deferred."
       }
     },
     "resolved_failure": "16b5263 preflight rejected ordinary moves because type was missing from its field set; fixed by 4eab254, failed run stopped, all 37 repaired checks pass. Detailed minimized input and source identities are in source.json.",
     "publication": {
       "status": "checkpoint_publication_authorized",
       "target": "origin/main",
-      "previous_published_head": "8c37eb2",
-      "scope": "Low-HP offensive-stat abilities schema35 focused CPU checkpoint; remaining reachable mechanics and inventory closure continue."
+      "previous_published_head": "c236445",
+      "scope": "Water Absorb/Volt Absorb schema36 focused CPU checkpoint; remaining reachable mechanics/inventory closure continue."
     },
     "reasoning_effort": "medium (user preference,2026-11-10; no automatic escalation)",
     "design_pass": {
@@ -1160,26 +1176,24 @@
     "implementation_wip": null,
     "cpu_block": null,
     "reachability_precheck": {
-      "family": "Low-HP type Attack/Special Attack modifiers: Overgrow/Blaze/Torrent/Swarm",
+      "family": "Type absorption healing: Water Absorb / Volt Absorb",
       "status": "completed_focused_CPU_checkpoint_not_full_G4",
       "required": [
-        "Overgrow: pinned generated Sceptile seed[1,2,3,4]",
-        "Blaze: pinned generated Emboar seed[7,2,3,4]",
-        "Torrent: pinned generated Feraligatr seed[8,2,3,4]",
-        "Swarm: pinned generated Scolipede seed[31,2,3,4]"
+        "abilities:waterabsorb: pinned seed[1,2,3,4] generated Maractus, existing positive membership",
+        "abilities:voltabsorb: pinned seed[2,2,3,4] generated Thundurus-Therian, new positive membership"
       ],
       "shared_behavior": [
-        "Reuse hook_effects.stats fixed-point Attack/Special Attack chain, effective ability queries and dynamic Hidden Power type",
-        "Native callbacks modify offensive stat at priority5, after stage handling; threshold hp*3<=maxhp; no new state fields"
+        "Reuse shared effective-ability queries, TryHit dispatch, numeric HEAL/IMMUNE events and original maximum HP retained through Transform",
+        "Reuse current Protect/type/semi-invulnerability ordering, Choice/PP/call/reflection/lifecycle paths; preserve cancelled-hit action results and Update RNG"
       ],
       "new_dependencies": [
-        "Choice/Thick Fat/Flower Gift modifier ordering and rounding, healing/damage crossing threshold, multi-hit and Substitute",
-        "Acquisition via Role Play/Trace, suppression via Gastro Acid and loss via Mummy; all existing lifecycle paths",
-        "Positive generated sets prove membership only; callback and full indirect closure remain unresolved",
-        "Razor Leaf high-critical move and Bug Buzz stat secondary remain unsupported dependencies; isolated ability cases use Seed Bomb/typed Hidden Power without relaxing assertions.",
-        "Observed native ModifySpA sorting before inactive callback guards; explicit draw context28 and state/trace carry added. Full callback activation closure remains unresolved."
+        "Quarter-HP floor/cap and full-HP branch; ability interception before accuracy/primary hit and Substitute",
+        "Gen5 electric status absorption and Ground immunity precedence; called/reflected frames and self-target exclusion",
+        "Ability creation/suppression/copying, residual status and saved continuation; no complete callback/indirect closure claim",
+        "Native absorbed move result is false (TryHit converts null); HEAL includes ability and opposing source identity. Thunder weather callbacks remain unsupported candidates; Soak is proven unreachable by move-identity-bound. No callback-mask widening.",
+        "Mold Breaker/Teravolt/Turboblaze ability suppression remains unsupported; breakable callback combinations are not newly claimed."
       ],
-      "native_spec": "test-logs/g4-cpu-conformance/low-hp.json.gz:40 cases/48 boundaries, including newly observed equal-Speed sorting"
+      "native_spec": "test-logs/g4-cpu-conformance/absorption.json.gz:54 cases/71 boundaries, frozen before implementation"
     },
     "scope_audit": {
       "date": "2026-11-13",
@@ -2208,17 +2222,17 @@
     "combined_return_home_block": "docs/GPU_HANDOFF.md#one-return-home-block-correctness-plus-g3-v6-measurements",
     "pending_status_checkpoint": "Current status/field/hook GPU checks are wired into the49-check runner; no GPU execution during travel. Preserve matching-source CPU results and do not transfer earlier GPU/CPU evidence across changed source.",
     "expanded_checkpoint": {
-      "status": "schema35_focused_CPU_complete_GPU_deferred",
-      "engine_schema": 35,
-      "modules": 41,
-      "native_scenarios": 1121,
-      "native_boundaries": 5224,
+      "status": "schema36_focused_CPU_complete_GPU_deferred",
+      "engine_schema": 36,
+      "modules": 42,
+      "native_scenarios": 1175,
+      "native_boundaries": 5295,
       "initial_field_evidence": "test-logs/g4-cpu-conformance/schema5-checkpoint.json",
       "source": "Use latest committed checkout and runner source/fixture fingerprints; earlier source_commit fields describe historical preparation.",
       "handoff_prepared": false,
-      "source_commit": "Publishing commit; exact relevant source fingerprints in schema35-checkpoint.json",
-      "source_identity": "test-logs/g4-cpu-conformance/schema35-checkpoint.json",
-      "checks": 97
+      "source_commit": "Publishing commit; exact relevant source fingerprints in schema36-checkpoint.json",
+      "source_identity": "test-logs/g4-cpu-conformance/schema36-checkpoint.json",
+      "checks": 98
     },
     "pending_candidate": null
   }

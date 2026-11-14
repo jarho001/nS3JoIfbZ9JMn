@@ -44,7 +44,7 @@ test('pinned resolved export and conservative inventory reproduce exactly',()=>{
   for(const id of ['conditions:slp:onBeforeMove','moves:rest:onHit',
     'moves:reflect:condition.onAnyModifyDamage','conditions:sandstorm:onWeather',
     'abilities:pressure:onDeductPP','abilities:prankster:onModifyPriority',
-    'abilities:overgrow:onModifyAtk','abilities:overgrow:onModifySpA','abilities:blaze:onModifyAtk','abilities:blaze:onModifySpA','abilities:torrent:onModifyAtk','abilities:torrent:onModifySpA','abilities:swarm:onModifyAtk','abilities:swarm:onModifySpA','abilities:magicguard:onDamage','abilities:immunity:onUpdate','abilities:trace:onStart','abilities:trace:onUpdate','abilities:mummy:onDamagingHit',
+    'abilities:overgrow:onModifyAtk','abilities:overgrow:onModifySpA','abilities:blaze:onModifyAtk','abilities:blaze:onModifySpA','abilities:torrent:onModifyAtk','abilities:torrent:onModifySpA','abilities:swarm:onModifyAtk','abilities:swarm:onModifySpA','abilities:waterabsorb:onTryHit','abilities:voltabsorb:onTryHit','abilities:magicguard:onDamage','abilities:immunity:onUpdate','abilities:trace:onStart','abilities:trace:onUpdate','abilities:mummy:onDamagingHit',
     'abilities:icebody:onWeather','items:lifeorb:onAfterMoveSecondarySelf',
     'conditions:mustrecharge:onStart','conditions:mustrecharge:onBeforeMove','conditions:choicelock:onStart','conditions:frz:onModifyMove',
     'abilities:skilllink:onModifyMove','abilities:rockhead:onDamage',
@@ -59,8 +59,8 @@ test('pinned resolved export and conservative inventory reproduce exactly',()=>{
     const cb=slots.get(id);assert.equal(cb.status,'unsupported');assert.equal(cb.implementation,null);
   }
   assert.ok(ledger.callbacks.every(c=>['partial','unsupported'].includes(c.status)));
-  assert.equal(ledger.callbacks.filter(c=>c.status==='partial').length,280);
-  assert.equal(ledger.callbacks.filter(c=>c.status==='unsupported').length,866);
+  assert.equal(ledger.callbacks.filter(c=>c.status==='partial').length,282);
+  assert.equal(ledger.callbacks.filter(c=>c.status==='unsupported').length,864);
   const audit=ledger.reachabilityAudit;
   const entries=new Map(ledger.entries.map(e=>[e.id,e]));
   assert.equal(audit.proofs['move-identity-bound'].bound.length,224);
@@ -75,6 +75,11 @@ test('pinned resolved export and conservative inventory reproduce exactly',()=>{
     assert.equal(entries.get('abilities:'+id).reachability,'required');
     assert.equal(entries.get('abilities:'+id).reachabilityAudit,'low-hp-ability-positive-witness');
     assert.equal(slots.get('abilities:'+id+':onModifyAtk').reachability,'unresolved');
+  }
+  for(const id of ['waterabsorb','voltabsorb']) {
+    assert.equal(entries.get('abilities:'+id).reachability,'required');
+    assert.equal(entries.get('abilities:'+id).reachabilityAudit,'type-absorption-positive-witness');
+    assert.equal(slots.get('abilities:'+id+':onTryHit').reachability,'unresolved');
   }
   assert.equal(entries.get('abilities:zenmode').reachability,'unresolved');
   assert.equal(slots.get('abilities:magicguard:onDamage').reachability,'unresolved');

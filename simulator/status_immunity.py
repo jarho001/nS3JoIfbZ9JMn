@@ -2,7 +2,7 @@
 import jax.numpy as jnp
 from . import gen5_engine_tables as t
 A=t.ABILITY_IDS
-KEYS=('immunity','limber','waterveil','magmaarmor','insomnia','vitalspirit','wonderguard')
+KEYS=('immunity','limber','waterveil','magmaarmor','insomnia','vitalspirit','wonderguard','waterabsorb','voltabsorb')
 ABILITY_IMPLEMENTED=jnp.asarray([k in KEYS for k in t.ABILITIES],jnp.bool_)
 SLEEP=jnp.asarray([k in ('insomnia','vitalspirit')for k in t.ABILITIES],jnp.bool_)
 
@@ -27,3 +27,23 @@ def wonder_guard(s,actor,target,move,e):
     move_type=jnp.where(move==e.HIDDEN_POWER,s.hp_type[actor,source],t.MOVE_TYPE[move])
     exponent,immune=e.generic.type_matchup(move_type,s.types[target,mon])
     return (actor!=target)&(t.CATEGORY[move]>0)&(move!=e.STRUGGLE)&(e.suppression_ops.abilities(s)[target,mon]==A['wonderguard'])&((exponent<=0)|immune)
+
+
+def absorbs(s,actor,target,move,e):
+    mon=s.active[target];source=s.active[actor]
+    ability=e.suppression_ops.abilities(s)[target,mon]
+    move_type=jnp.where(move==e.HIDDEN_POWER,s.hp_type[actor,source],t.MOVE_TYPE[move])
+    return (actor!=target)&(((ability==A['waterabsorb'])&(move_type==e.generic.TYPES['water']))|((ability==A['voltabsorb'])&(move_type==e.generic.TYPES['electric'])))
+
+
+def absorb(c,actor,target,move,e):
+    # Native TryHit turns the callback's null into false. No accuracy, primary
+    # hit, attackedBy, secondary/contact or hit-loop Update runs for this target.
+    c=e.tracking.outcome(c,actor,e.i32(e.tracking.FALSE),move)
+    s,_=c;mon=s.active[target];maximum=s.stats[target,mon,0]
+    ability=e.suppression_ops.abilities(s)[target,mon]
+    def heal(c):
+        s,tr=c;hp=jnp.minimum(maximum,s.hp[target,mon]+maximum//4)
+        s=s._replace(hp=s.hp.at[target,mon].set(hp))
+        return e._event((s,tr),e.HEAL,target,mon,move=jnp.where(ability==A['waterabsorb'],4,5),target=actor,targetmon=s.active[actor],value=hp,aux=maximum,status=s.status[target,mon])
+    return e.jax.lax.cond(s.hp[target,mon]<maximum,heal,lambda c:e._event(c,e.IMMUNE,target,mon,value=ability,aux=4),c)

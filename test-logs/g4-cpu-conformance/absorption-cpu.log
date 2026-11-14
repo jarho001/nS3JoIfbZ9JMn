@@ -1,0 +1,8 @@
+test_native_absorption_interception_and_healing (test.test_absorption_engine.AbsorptionEngineTest.test_native_absorption_interception_and_healing) ... advance lower/compile: 247.238s
+fixture initialization/replay/assertions: 14.816s
+ok
+
+----------------------------------------------------------------------
+Ran 1 test in 264.277s
+
+OK

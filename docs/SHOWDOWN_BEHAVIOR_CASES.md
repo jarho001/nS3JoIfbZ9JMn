@@ -461,6 +461,16 @@ It does not promote callback activation, the other returned set identities, or
 role roots to required. Directed synthetic behavior cases are separate from
 these generator witnesses.
 
+
+The absorption precheck adds pinned generated Volt Absorb Thundurus-Therian at
+`[2,2,3,4]`, alongside the existing Water Absorb Maractus at `[1,2,3,4]`.
+`type-absorption-positive-witness` retains both returned sets and seeds. Only
+these two ability memberships are claimed; this adds one required entity for
+38 required and 1,188 unresolved memberships. The species/form, other set
+identities, roots and callback activation obligations are not promoted by this
+family check. Soak remains excluded by the move-identity bound; unsupported
+Thunder weather callbacks remain a separate candidate dependency.
+
 Generator eligibility follows Gen5 `randomTeam` and inherited Gen9
 `getPokemonPool`: set-file base-species grouping, team type/weakness/compatibility
 limits, Zoroark slot restriction and no-lead species. No set-file species was

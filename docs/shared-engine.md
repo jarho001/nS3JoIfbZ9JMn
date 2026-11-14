@@ -761,3 +761,27 @@ Focused scalar-JIT CPU parity passed all 40 scenarios/48 boundaries in
 292.632s, including live ability/threshold-crossing NPZ/journal16 persistence.
 See [schema35-checkpoint.json](../test-logs/g4-cpu-conformance/schema35-checkpoint.json).
 Remaining mechanics, inventory closure and broad/final/device gates stay open.
+
+Schema36 adds Water Absorb and Volt Absorb through the shared opposing TryHit
+path. Gen5 checks semi-invulnerability and type immunity first, then Protect,
+then absorption before accuracy or primary-hit/Substitute processing. Matching
+moves heal `floor(baseMaxHP/4)` with a maximum-HP cap, or reveal ability immunity
+at full HP. The native heal attributes both the absorbing ability and the
+attacking source. The converted TryHit result is false, and there are no
+primary-hit effects or hit-loop Updates; ordinary action and caller Updates
+retain their existing ordering, including equal-Speed draws.
+
+Effective ability queries preserve acquisition, suppression, Trace and Mummy.
+Transformed holders keep their original maximum HP for healing. Sleep Talk
+and reflected Thunder Wave use the shared call frames. Existing HEAL tags0..3
+are unchanged; additive tags4/5 encode Water/Volt Absorb and source identity.
+State layout and journal16 are unchanged; journal pages retain recipient text.
+Thunder weather callbacks and source Mold Breaker/Teravolt/Turboblaze suppression
+remain unsupported. Soak is excluded by the pinned move-identity bound.
+
+One focused scalar-JIT CPU check passed 54 scenarios/71 boundaries in 264.277s,
+including live Choice/transformed/reflected state persistence. Validation logged
+247.238s lowering/compilation and 14.816s fixture initialization, replay and
+assertions; these are test phase timings, not throughput/profiling evidence. See
+[schema36-checkpoint.json](../test-logs/g4-cpu-conformance/schema36-checkpoint.json).
+Remaining mechanics, inventory closure and broad/final/device gates stay open.

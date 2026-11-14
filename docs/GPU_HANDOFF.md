@@ -12,13 +12,37 @@ all acceptance requirements and commands below remain pending.
 
 ## Current source and evidence
 
+**Schema36 absorption checkpoint passed one focused CPU run.** Water Absorb and
+Volt Absorb agree with native across 54 scenarios/71 boundaries in 264.277s,
+including Choice, transformed and reflected NPZ/journal16 core round trips.
+Four native/inventory checks pass, including prior low-HP and generic corpus
+isolation checks; the final ledger evidence wording also reproduces exactly.
+See [schema36-checkpoint.json](../test-logs/g4-cpu-conformance/schema36-checkpoint.json).
+Current runner includes 98 checks/42 modules,1175 scenarios/5295 boundaries,
+`test.test_absorption_engine` and the `absorption` batch. Preparation, broad CPU,
+device and campaign gates remain deferred until mechanics and inventory closure.
+Pending focused device command on matching committed source:
+
+```sh
+JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_absorption_engine -v -f
+```
+
+Check native interception before accuracy/primary-hit/Substitute, after Gen5
+innate type immunity and Protect; quarter original maximum-HP healing/caps,
+full-HP immunity, false move result, attacker source labels and cancelled-hit
+Update ordering. Preserve Ground/status/airborne/underwater, Sleep Talk,
+reflection, Choice/Life Orb, residuals and ability lifecycle/Transform behavior.
+HEAL tags4/5 are additive; state layout and journal16 are retained. Mixed lanes,
+full/lean, lifecycle and final campaigns remain pending. Soak is excluded by the
+move bound; Thunder weather and ability-breaker candidates remain unsupported.
+
 **Schema35 low-HP ability checkpoint passed focused CPU validation.** Overgrow,
 Blaze, Torrent and Swarm agree with native across 40 scenarios/48 boundaries in
 292.632s, including live acquired ability and threshold-crossing NPZ/journal16
 persistence. Four native/inventory checks (including Magic Guard reader and generic corpus
 isolation regressions) and three handoff checks pass. See
 [schema35-checkpoint.json](../test-logs/g4-cpu-conformance/schema35-checkpoint.json).
-Current runner includes 97 checks/41 modules,1121 scenarios/5224 boundaries,
+The schema35 checkpoint runner included 97 checks/41 modules,1121 scenarios/5224 boundaries,
 `test.test_low_hp_engine` and the `lowhp` batch. Preparation, broad CPU, device
 and campaign gates remain deferred until mechanics and inventory closure.
 Pending focused device command on matching committed source:

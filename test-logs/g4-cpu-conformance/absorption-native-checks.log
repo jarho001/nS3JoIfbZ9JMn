@@ -1,0 +1,12 @@
+✔ native type absorption retains healing, interception and lifecycle boundaries (3776.277298ms)
+✔ pinned resolved export and conservative inventory reproduce exactly (12185.654202ms)
+✔ native low-HP offensive stat hooks retain thresholds, rounding and lifecycle (4102.363515ms)
+✔ new ability families preserve the existing generic corpus selection (2407.401158ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 12286.197942
