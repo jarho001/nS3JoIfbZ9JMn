@@ -1,0 +1,8 @@
+{
+  "name": "project-trail-tooling",
+  "private": true,
+  "description": "Pinned Trail CLI and MCP server for local and cloud project work",
+  "dependencies": {
+    "trail-code": "0.29.0"
+  }
+}

@@ -12,3 +12,9 @@ config_file = "agents/implementer.toml"
 [agents.janitor]
 description = "Explicitly requested cleanup of redundant development artifacts, code, tests, and documentation."
 config_file = "agents/janitor.toml"
+
+[mcp_servers.trail]
+command = "node"
+args = ["scripts/trail.cjs", "mcp"]
+startup_timeout_sec = 120
+tool_timeout_sec = 120

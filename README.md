@@ -462,3 +462,7 @@ See [`docs/TASKS.md`](docs/TASKS.md) for acceptance state and handoff details.
 Task030 is accepted: `move-first-v1` passed its 71-test affected suite and the independent [T030 global checkpoint](docs/reviews/T030-global.md) accepted Tasks021–030. The review baseline is 30 and the next checkpoint is 40; G1 and later milestones remain open.
 
 Task031 is accepted: the named baseline paired-matchup API passed 7/7 focused and 115/115 affected tests. The accepted count is 31; review baseline 30/next 40 and open G1 status are unchanged.
+
+Project tooling: run `node scripts/setup-trail.cjs` in each new local/cloud checkout
+before project work. See [Trail setup](docs/TRAIL_SETUP.md) for CLI/MCP verification
+and host configuration.

@@ -26,10 +26,22 @@ reasoning effort; the user selected Medium to control usage.
 
 ## Context and documentation
 
-Read the current goal, relevant plan sections, and compact state. Consult the
-Trail graph when useful and current; otherwise use targeted `rg` and source
-reads. Do not install tooling, rebuild an index, or read all archives merely
-for routine orientation.
+Read the current goal, relevant plan sections, and compact state.
+
+Trail-code is required in every environment used for this project (local,
+cloud, worktree, and CI when agents perform project work). Before investigation
+or edits, verify `node scripts/trail.cjs --version` and run
+`node scripts/trail.cjs ask "<current task>"`. Queries refresh the graph against
+current source. Use the Trail MCP server when exposed; the pinned CLI is the
+mandatory fallback when the host cannot expose or reload MCP tools. A copied
+`.trail/cache` alone is not a working installation. On a fresh checkout or when
+the pin changes, run `node scripts/setup-trail.cjs` (authorized project tooling
+setup), then repeat the preflight. If setup or a real query fails, stop project
+work, repair Trail or report the concrete blocker; do not silently continue
+using only source searches. After orientation, use targeted source reads and
+`rg` for exact text or non-indexed files as needed. No deep/LLM or semantic
+model build is required. Setup and host configuration: `docs/TRAIL_SETUP.md`.
+Do not read all archives merely for routine orientation.
 
 Keep useful evidence, not a narrative. The plan owns scope and acceptance;
 `docs/ORCHESTRATION_STATE.json` owns current progress/blockers; tests and their

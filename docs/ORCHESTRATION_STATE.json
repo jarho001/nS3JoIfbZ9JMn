@@ -1273,6 +1273,35 @@
         ],
         "not_run": "No tests removed or changed; no mechanic tests, Trace compilation, runner preparation, GPU, profiling, broad suites or battle campaigns."
       }
+    },
+    "user_pause": {
+      "date": "2026-11-14",
+      "reason": "User stopped G4 to require working Trail in every project environment. Tooling setup completed; G4 remains paused.",
+      "preserved_native_work": "test-logs/g4-cpu-conformance/type-boost-native-paused.tar.gz",
+      "archive_sha256": "baa3b39acb019b3312fe971cd3252b1a9256b22540932cdab8715c4ffcb12e0d",
+      "native_cases": 36,
+      "native_boundaries": 63,
+      "status": "native-only unimplemented/unvalidated type-boost family; no checkpoint acceptance",
+      "membership_seeds": {
+        "lightningrod": [
+          2,
+          2,
+          3,
+          4
+        ],
+        "motordrive": [
+          32,
+          2,
+          3,
+          4
+        ],
+        "stormdrain": [
+          33,
+          2,
+          3,
+          4
+        ]
+      }
     }
   },
   "optional_gpu_validation_history": [
@@ -1617,7 +1646,22 @@
       },
       "record_usage": "Historical preparation snapshot from before approval; execution_started/active_goal_changed/authorization/next describe that phase only. Current execution and acceptance are in active_task and PROJECT_PLAN.md."
     },
-    "gpu_travel_handoff": "docs/GPU_HANDOFF.md; keep ready/pending commands current without blocking CPU-only work"
+    "gpu_travel_handoff": "docs/GPU_HANDOFF.md; keep ready/pending commands current without blocking CPU-only work",
+    "trail": {
+      "status": "required_for_all_project_work",
+      "version": "0.29.0",
+      "setup_command": "node scripts/setup-trail.cjs",
+      "verification_command": "node scripts/check-trail.cjs",
+      "policy": "Fresh local/cloud/worktree environments must provision the pinned package and pass a live Trail query before work; stop and repair/report failure instead of silently falling back to source search. CLI required when host MCP is unavailable.",
+      "configuration": [
+        ".codex/config.toml",
+        ".mcp.json",
+        "CLAUDE.md",
+        "AGENTS.md"
+      ],
+      "verification": "Locked npm ci/setup passed on Linux Node24.22.1; live CLI query, stdio MCP initialize/tools-list/code-query, outside-cwd launcher, missing-install failure, matching host config and lock pin checks passed. Windows-compatible entrypoints provided; Windows execution not tested.",
+      "scope": "No simulator changes, GPU, profiling, broad tests or mechanic CPU comparisons. Saved cloud setup settings cannot be changed through the tools exposed in this session; AGENTS provisions missing installations before work."
+    }
   },
   "completed_goals": [
     {
