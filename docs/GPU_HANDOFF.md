@@ -22,6 +22,10 @@ Keep historical commands/results as provenance.
 
 ## Current source and evidence
 
+**Execution paused at the user's request:** wrapped after schema77 Justified /
+Speed Boost, pushed as `b050b2a`. The later instruction supersedes the90-minute
+window. Await the user before starting the next implementation group.
+
 **Next group, native only:** Harvest / Unnerve has31 scenarios/61 boundaries and a passing
 `node --test test/berry-ability-native.test.cjs` contract. Implementation is pending.
 Freeze schema77/journal20 state before adding the tri-state Unnerve flag.

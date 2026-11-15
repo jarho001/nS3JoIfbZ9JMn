@@ -35,7 +35,7 @@
     "source_base": "f37067e",
     "scope": "Complete pinned gen5randombattle reachable mechanics and every prepared CPU gate. Integrated checkpoints, resumable progress and commit/push authorized. GPU execution, profiling, benchmarks, training, delegation and scored research excluded.",
     "checkpoint": "Schema77 Justified / Speed Boost group: 37 scenarios/60 boundaries pass one compiled step in451.998s; native/inventory and4 handoff helpers pass. Full G4 remains open.",
-    "next": "Continue native-prechecked Harvest / Unnerve group31 scenarios61 boundaries. Freeze genuine schema77/journal20 state before adding explicit tri-state ability_unnerved field and journal21. Harvest chance precedes held/lastItem eligibility outside Sun; Unnerve blocks berry eating, not restoration.",
+    "next": "Wait for user to continue. Then implement native-prechecked Harvest / Unnerve31 cases61 boundaries; freeze genuine schema77/journal20 state first. Preserve Harvest chance-before-eligibility and tri-state Unnerve ability flags.",
     "ledger": {
       "path": "rules/gen5-reachable-v1.json",
       "entries": 1768,
@@ -80,10 +80,11 @@
     "source_identity": "test-logs/g4-cpu-conformance/schema77-checkpoint.json",
     "evidence_directory": "test-logs/g4-cpu-conformance",
     "publication": {
-      "status": "checkpoint_publication_authorized",
+      "status": "checkpoint_pushed",
       "target": "origin/main",
       "previous_published_head": "2723b06f9cc6bc7a115d1ed6696437082738df50",
-      "scope": "Schema77 focused CPU checkpoint; sustained CPU execution continues, full G4 open."
+      "scope": "Schema77 completed focused CPU checkpoint pushed to origin/main; execution paused by user request. Full G4 remains open.",
+      "published_head": "b050b2a"
     },
     "reasoning_effort": "medium (user preference,2026-11-10; no automatic escalation)",
     "design_pass": {
@@ -160,7 +161,7 @@
       "native_command": "node --test test/berry-ability-native.test.cjs",
       "native_result": "1 passed; implementation pending"
     },
-    "stopping_reason": null,
+    "stopping_reason": "User requested immediate wrap after current family, superseding90-minute window. Schema77 Justified / Speed Boost complete and pushed as b050b2a; Harvest / Unnerve native-only preparation remains pending implementation. No schema78 runtime edits or migration artifacts created.",
     "pending_acceptance": "Reachability/required callbacks, rule/indirect closure and capacity proof remain open; directed eager/JIT/mixed batches, lifecycle/migration/full-lean, fixed64/128 campaigns and matching-source GPU acceptance remain pending. Use PROJECT_PLAN.md acceptance section and docs/GPU_HANDOFF.md for exact gates/commands.",
     "capacity_evidence": {
       "status": "full_capacity_proof_pending",
@@ -169,11 +170,11 @@
       "historical_details": "docs/archive/ORCHESTRATION_STATE_PRE_CONTEXT_CLEANUP.json#/active_task/continuation/capacity_investigation"
     },
     "user_stop_after_current_family": {
-      "family": "Custap Berry / queue-time Unburden",
-      "instruction": "Continue until90 minutes have elapsed, then finish the family in progress and wrap up; do not start another family after cutoff.",
-      "status": "scheduled_after_90minute_window",
-      "requested_at": "2026-11-15T20:07:19Z",
-      "wrap_not_before": "2026-11-15T21:37:19Z"
+      "family": "Justified / Speed Boost",
+      "instruction": "Wrap up after current family; wait for user to continue.",
+      "status": "honored_at_schema77_checkpoint",
+      "requested_at": "2026-11-15T20:41:39Z",
+      "superseded_wrap_not_before": "2026-11-15T21:37:19Z"
     }
   },
   "gpu_block": null,
