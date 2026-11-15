@@ -26,6 +26,8 @@ module.exports=function(){
  add('struggle-slot4',{p1:[m({item:'Custap Berry',moves:['Tackle','Recover','Protect','Counter']})],setup:[{side:'p1',hp:43,pp:0}]});
  add('pursuit-switch',{pursuitFamily:true,p1:[m({item:'Custap Berry',ability:'Unburden',moves:['Pursuit','Recover']})],p2:[m(),m()],steps:[{p1:'move 1',p2:'switch 2'}]});
  add('positive-target-priority',{p2:[m({moves:['Quick Attack','Recover'],evs:{spe:252}})]});
+ for(const ability of ['Pressure','Unburden'])add('recharge-'+ability.toLowerCase(),{p1:[m({item:'Custap Berry',ability,moves:['Hyper Beam','Recover']})],setup:[{side:'p1',hp:50}],steps:[b(),b(1,2)]});
+ add('fractional-counter-pivot',{p1:[m({item:'Custap Berry',ability:'Unburden',level:100,moves:['Counter','Recover']})],p2:[m({moves:['U-turn','Recover']}),m()],setup:[{side:'p1',hp:85}],steps:[b(),{p2:'switch 2'}]});
  add('legacy-counter-pivot',{p1:[m({moves:['Counter','Recover'],evs:{spe:252}})],p2:[m({moves:['U-turn','Recover']}),m()],setup:[],steps:[b(),{p2:'switch 2'}]});
  return cases;
 };

@@ -12271,10 +12271,22 @@
           "file": "data/items.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/custap-priority.json.gz",
+          "native": "reference/custap-priority-cases.cjs",
+          "scope": "Independent33 synthetic scenarios45 boundaries; quarter-HP queue-time consumption including recharge/Struggle/priority bands, item lifecycle/Unburden speed and suppression, exact fractional/integer suspended queues and genuine67/19 migration to68/20. Gluttony/Unnerve dependencies remain gated; full-format closure pending",
+          "test": "test/test_custap_priority_engine.py"
+        }
+      ],
       "field": "onEat",
       "id": "items:custapberry:onEat",
-      "implementation": null,
+      "implementation": {
+        "family": "custap_priority",
+        "file": "simulator/custap_priority.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "items:custapberry",
@@ -12286,7 +12298,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "7deaafc2c7cfc3e458fb83a29bb51b8b667ab3b70e9a3035bb5a678227bad72e",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -12295,10 +12307,22 @@
           "file": "data/items.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/custap-priority.json.gz",
+          "native": "reference/custap-priority-cases.cjs",
+          "scope": "Independent33 synthetic scenarios45 boundaries; quarter-HP queue-time consumption including recharge/Struggle/priority bands, item lifecycle/Unburden speed and suppression, exact fractional/integer suspended queues and genuine67/19 migration to68/20. Gluttony/Unnerve dependencies remain gated; full-format closure pending",
+          "test": "test/test_custap_priority_engine.py"
+        }
+      ],
       "field": "onFractionalPriority",
       "id": "items:custapberry:onFractionalPriority",
-      "implementation": null,
+      "implementation": {
+        "family": "custap_priority",
+        "file": "simulator/custap_priority.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "items:custapberry",
@@ -12310,7 +12334,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "49abc7408988211cc13fc2895ad77260e617322b7e543cbf1e660c67fd55856b",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -78872,8 +78896,8 @@
         }
       ],
       "kind": "items",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "custap-priority-positive-witness",
       "status": "partial"
     },
     {
@@ -98589,6 +98613,112 @@
           }
         ]
       },
+      "custap-priority-positive-witness": {
+        "bound": [
+          "abilities:unburden",
+          "items:custapberry"
+        ],
+        "conclusion": "required",
+        "kind": "mixed",
+        "reasoning": "Pinned Custap Berry Golem seed[29,2,3,4] and Unburden Drifblim seed[28,2,3,4] prove membership. Directed queue-time consumption/priority/lifecycle cases do not close Gluttony/Unnerve or full-format dependencies; Gluttony unresolved without positive seed1..500 witness.",
+        "references": [
+          "data/random-battles/gen5/teams.ts:103-494 (cullMovePool/randomMoveset)",
+          "data/random-battles/gen5/teams.ts:496-566 (ability filters/fallback)",
+          "data/random-battles/gen5/teams.ts:568-816 (item returns and randomSet)",
+          "data/random-battles/gen5/teams.ts:850-1014 (team eligibility)",
+          "data/random-battles/gen9/teams.ts:675-693 (addMove)",
+          "data/random-battles/gen9/teams.ts:1442-1497 (getLevel/getForme)",
+          "data/random-battles/gen9/teams.ts:1641-1683 (getPokemonPool)"
+        ],
+        "witnesses": [
+          {
+            "id": "custapberry",
+            "kind": "item",
+            "seed": [
+              29,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Sturdy",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Custap Berry",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 85,
+              "moves": [
+                "explosion",
+                "stoneedge",
+                "toxic",
+                "earthquake"
+              ],
+              "name": "Golem",
+              "role": "Bulky Attacker",
+              "shiny": false,
+              "species": "Golem",
+              "speciesId": "golem"
+            }
+          },
+          {
+            "id": "unburden",
+            "kind": "ability",
+            "seed": [
+              28,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Unburden",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 81,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Flying Gem",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 81,
+              "moves": [
+                "disable",
+                "shadowball",
+                "acrobatics",
+                "substitute"
+              ],
+              "name": "Drifblim",
+              "role": "Fast Attacker",
+              "shiny": false,
+              "species": "Drifblim",
+              "speciesId": "drifblim"
+            }
+          }
+        ]
+      },
       "damage-item-positive-witness": {
         "bound": [
           "items:eviolite",
@@ -101982,8 +102112,8 @@
       },
       "entries": {
         "proven_unreachable": 542,
-        "required": 102,
-        "unresolved": 1124
+        "required": 103,
+        "unresolved": 1123
       },
       "roots": {
         "proven_unreachable": 0,

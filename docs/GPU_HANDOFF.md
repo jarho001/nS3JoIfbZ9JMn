@@ -22,12 +22,23 @@ Keep historical commands/results as provenance.
 
 ## Current source and evidence
 
-**Next group, native only:** Custap Berry / early queue-time Unburden has30
-scenarios/39 boundaries, pinned positive witnesses and a passing
-`node --test test/custap-priority-native.test.cjs` contract. It is not in the
-CPU/CUDA runner; implementation remains pending. Preserve priority-band/speed
-ordering and queue-time use; genuine67/19 pending Counter queue files are frozen
-for any68/20 priority representation migration. Gluttony remains gated/unresolved.
+**Execution paused at the user's request:** The current Custap/queue-time
+Unburden family is complete on CPU. Do not start another family until the user
+explicitly says to continue. Full G4 acceptance and the G3/G4 deferred GPU
+commands below remain open; no GPU/profiling work was executed.
+
+**Schema68 Custap Berry / queue-time Unburden group:** focused CPU33 scenarios/45 boundaries
+passed in440.338s;2 native/inventory contracts and4 handoff helpers pass.
+See [schema68-checkpoint.json](../test-logs/g4-cpu-conformance/schema68-checkpoint.json).
+One compiled step covers exact state/RNG/requests/recipient events/histories,
+NPZ continuation and journal20. No GPU execution.
+
+```sh
+JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_custap_priority_engine -v -f
+```
+
+Runner includes130 checks/74 modules,2377 scenarios/7204
+boundaries in68 corpora. Current-source broad/device execution remains deferred.
 
 **Schema67 Counter / Mirror Coat group:** focused CPU52 scenarios/70 boundaries
 passed in544.242s;2 native/inventory contracts and4 handoff helpers pass.

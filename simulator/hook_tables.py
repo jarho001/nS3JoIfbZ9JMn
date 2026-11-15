@@ -10,7 +10,7 @@ ABILITIES=('pressure','intimidate','prankster','hugepower','purepower','adaptabi
     'marvelscale','battlearmor','shellarmor','thickfat','filter','solidrock','tintedlens',
     'drizzle','drought','sandstream','snowwarning','swiftswim','chlorophyll','sandrush','icebody','overgrow','blaze','torrent','swarm','multiscale','defeatist','unaware','download','defiant','moxie','aftermath','weakarmor','cursedbody','static','flamebody','ironfist','reckless','unburden')
 ITEMS=('choiceband','choicespecs','choicescarf','lifeorb','expertbelt','muscleband',
-       'wiseglasses','silkscarf','mysticwater','scopelens','eviolite','flyinggem','fightinggem')
+       'wiseglasses','silkscarf','mysticwater','scopelens','eviolite','flyinggem','fightinggem','custapberry')
 ABILITY_IMPLEMENTED=jnp.asarray([n<=3 or key in ABILITIES for n,key in enumerate(t.ABILITIES)],jnp.bool_)
 ITEM_IMPLEMENTED=f.ITEM_IMPLEMENTED|jnp.asarray([key in ITEMS for key in t.ITEMS],jnp.bool_)
 ABILITY_WEATHER=jnp.asarray([{'drizzle':1,'drought':2,'sandstream':3,'snowwarning':4}.get(key,0) for key in t.ABILITIES],jnp.int32)

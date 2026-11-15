@@ -167,7 +167,7 @@ def assert_state(test,s,native,label):
             move='recharge' if action==e.phase_ops.RECHARGE_ACTION else e.MOVE_KEYS[action-e.FORCED_MOVE_ACTION if action>=e.FORCED_MOVE_ACTION else e.STRUGGLE if action==10 else int(s.moves[side,mon,action])]
         else:move=None
         q.append({'choice':{e.BEFORE:'beforeTurn',e.ATTACK:'move',e.SWAP:'switch',e.INSTANT:'instaswitch',e.RUN_SWITCH:'runSwitch',e.RESIDUAL:'residual',e.BEFORE_MOVE:'beforeTurnMove'}[kind],
-                  'order':int(e.QORDER[kind]),'priority':priority,'speed':speed,
+                  'order':int(e.QORDER[kind]),'priority':priority/e.custap_ops.PRIORITY_SCALE,'speed':speed,
                   'actor':None if kind in (e.BEFORE,e.RESIDUAL) else {'side':side,'mon':mon},
                   'target':None if kind not in (e.SWAP,e.INSTANT) else {'side':side,'mon':int(s.order[side,action-4])},
                   'move':move,'source':'uturn' if source else None})

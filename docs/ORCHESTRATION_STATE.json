@@ -28,14 +28,14 @@
   },
   "active_task": {
     "id": "G4-CPU-conformance",
-    "status": "in_progress",
+    "status": "paused",
     "approved_at": "2026-11-08",
     "owner": "/root",
     "brief": "PROJECT_PLAN.md#proposed-g4-cpu-implementation-and-conformance-goal",
     "source_base": "f37067e",
     "scope": "Complete pinned gen5randombattle reachable mechanics and every prepared CPU gate. Integrated checkpoints, resumable progress and commit/push authorized. GPU execution, profiling, benchmarks, training, delegation and scored research excluded.",
-    "checkpoint": "Schema67 Counter / Mirror Coat group: 52 scenarios/70 boundaries pass one compiled step in544.242s; native/inventory and4 handoff helpers pass. Full G4 remains open.",
-    "next": "Continue Custap Berry fractional priority / queue-time Unburden dependency group from30 native scenarios/39 boundaries; preserve consume/order/speed timing and priority bands, with genuine schema67/journal19 pending-Counter queue compatibility, then one shared CPU checkpoint.",
+    "checkpoint": "Schema68 Custap Berry / queue-time Unburden group: 33 scenarios/45 boundaries pass one compiled step in440.338s; native/inventory and4 handoff helpers pass. Full G4 remains open.",
+    "next": "Wait for the user's explicit continue. Current Custap/queue-time Unburden family is finished; no next family selected or started. G4 acceptance and deferred GPU work remain open.",
     "ledger": {
       "path": "rules/gen5-reachable-v1.json",
       "entries": 1768,
@@ -45,7 +45,7 @@
         "indirect-closure",
         "engine-contract"
       ],
-      "status": "Incomplete:373 partial callback mappings/773 unsupported; full reachability/closure pending.",
+      "status": "Incomplete:375 partial callback mappings/771 unsupported; full reachability/closure pending.",
       "reachability_summary": {
         "callbacks": {
           "proven_unreachable": 546,
@@ -54,8 +54,8 @@
         },
         "entries": {
           "proven_unreachable": 542,
-          "required": 102,
-          "unresolved": 1124
+          "required": 103,
+          "unresolved": 1123
         },
         "roots": {
           "proven_unreachable": 0,
@@ -77,13 +77,13 @@
     "first_divergence": null,
     "gpu_requirement": "Deferred during travel. Record all G4 device obligations and ready/pending commands in docs/GPU_HANDOFF.md; current checkpoint runner is scripts/g4_gpu_handoff.py. CPU implementation remains active. Later full G4 release still requires matching-source GPU conformance.",
     "acceptance": "G4-CPU-conformance pending. Generic data checkpoint passes; all remaining prepared CPU gates retained, all milestone acceptance/task count unchanged.",
-    "source_identity": "test-logs/g4-cpu-conformance/schema67-checkpoint.json",
+    "source_identity": "test-logs/g4-cpu-conformance/schema68-checkpoint.json",
     "evidence_directory": "test-logs/g4-cpu-conformance",
     "publication": {
       "status": "checkpoint_publication_authorized",
       "target": "origin/main",
-      "previous_published_head": "10fd5db09b1cceabe4c602af472816350e2117f9",
-      "scope": "Schema67 focused CPU checkpoint; sustained CPU execution continues, full G4 open."
+      "previous_published_head": "b4ba70b5f0457a3b3b621756b3a5a3327a1e8dcf",
+      "scope": "Schema68 focused CPU checkpoint; current family complete, execution paused at user request. Full G4 remains open."
     },
     "reasoning_effort": "medium (user preference,2026-11-10; no automatic escalation)",
     "design_pass": {
@@ -150,42 +150,24 @@
     },
     "record_usage": "Start at docs/CURRENT.md and scripts/read_context.py. State is authoritative for live progress; history is archived. Update live checkpoint/next/package/blockers at meaningful checkpoints; do not append completed-family narratives. Detailed results belong in immutable test evidence.",
     "next_work_package": {
-      "id": "g4-custap-priority-group",
-      "status": "native_precheck_passed_implementation_pending",
-      "members": [
-        "Custap Berry quarter-HP fractional priority and queue-time consumption",
-        "Unburden extension to early Custap consumption and cached action Speed (existing reachable family)"
-      ],
-      "shared_paths": [
-        "Queue move resolution/priority/speed and item use before BeforeTurn, pre-turn Counter/Pursuit callbacks, replayable queue representation"
-      ],
-      "membership": [
-        "Custap Berry Golem seed[29,2,3,4]",
-        "Unburden Drifblim seed[28,2,3,4]"
-      ],
-      "native_precheck": "30 synthetic scenarios39 boundaries; quarter/exact/above/level1, positive/negative priority bands, both-holder/ties, status/Struggle/cannot-act consumption, Unburden speed/Mummy/suppression/recycle, Trick gain/loss, switch no-eat, Pursuit and legacy pending Counter pivot. Native-only; implementation pending.",
-      "native_command": "node --test test/custap-priority-native.test.cjs",
-      "native_result": "1 passed; implementation pending",
-      "planned_command": "JAX_PLATFORMS=cpu JAX_ENABLE_COMPILATION_CACHE=true JAX_COMPILATION_CACHE_DIR=\"$PWD/work/jax-cache\" JAX_EXPLAIN_CACHE_MISSES=true OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 XLA_PYTHON_CLIENT_PREALLOCATE=false timeout 900s .venv-jax/bin/python -m unittest test.test_custap_priority_engine -v -f",
-      "command_status": "planned; module not yet implemented",
-      "planned_serialization": "Native fractional priority requires a queue representation decision. If int priority is scaled/packed, engine68/journal20 must preserve old numeric priority semantics. Genuine67/19 midturn Counter/U-turn state with pending priority-5 frozen for exact conversion/replay checks; do not infer unsupported legacy Custap consumption.",
-      "legacy_artifacts": [
-        "test-logs/g4-cpu-conformance/custap-priority-schema67-pivot.npz",
-        "test-logs/g4-cpu-conformance/custap-priority-journal19-pivot.npz"
-      ],
-      "excluded": [
-        "Gluttony has no positive witness in seed1..500; ability and its early-threshold dependency remain unresolved/unsupported, no exclusion",
-        "Unnerve and other item suppression/eating dependencies stay gated and full-format closure pending",
-        "Broad CPU/device/campaign/profiling gates deferred"
-      ]
+      "id": "g4-await-user-continue",
+      "status": "paused_by_user_after_current_family",
+      "members": [],
+      "reason": "User: Wrap up after the current family, until I tell you to continue.",
+      "next": "Wait for explicit continue before selecting or starting another family."
     },
-    "stopping_reason": null,
+    "stopping_reason": "User requested wrap up after current Custap Berry / queue-time Unburden family; awaiting explicit continue.",
     "pending_acceptance": "Reachability/required callbacks, rule/indirect closure and capacity proof remain open; directed eager/JIT/mixed batches, lifecycle/migration/full-lean, fixed64/128 campaigns and matching-source GPU acceptance remain pending. Use PROJECT_PLAN.md acceptance section and docs/GPU_HANDOFF.md for exact gates/commands.",
     "capacity_evidence": {
       "status": "full_capacity_proof_pending",
       "native_witness": "test-logs/g4-cpu-conformance/turn-limit-native-investigation.json.gz",
       "history_capacity": 2048,
       "historical_details": "docs/archive/ORCHESTRATION_STATE_PRE_CONTEXT_CLEANUP.json#/active_task/continuation/capacity_investigation"
+    },
+    "user_stop_after_current_family": {
+      "family": "Custap Berry / queue-time Unburden",
+      "instruction": "Wrap up after the current family, until I tell you to continue",
+      "status": "paused_after_successful_current_family_checkpoint"
     }
   },
   "gpu_block": null,
@@ -565,27 +547,23 @@
     "combined_return_home_block": "docs/GPU_HANDOFF.md#one-return-home-block-correctness-plus-g3-v6-measurements",
     "pending_status_checkpoint": "Current status/field/hook GPU checks are wired into the49-check runner; no GPU execution during travel. Preserve matching-source CPU results and do not transfer earlier GPU/CPU evidence across changed source.",
     "expanded_checkpoint": {
-      "status": "schema67_grouped_focused_CPU_complete_GPU_deferred",
-      "engine_schema": 67,
-      "modules": 73,
-      "native_scenarios": 2344,
-      "native_boundaries": 7159,
+      "status": "schema68_grouped_focused_CPU_complete_GPU_deferred",
+      "engine_schema": 68,
+      "modules": 74,
+      "native_scenarios": 2377,
+      "native_boundaries": 7204,
       "initial_field_evidence": "test-logs/g4-cpu-conformance/schema5-checkpoint.json",
       "source": "Use latest committed checkout and runner source/fixture fingerprints; earlier source_commit fields describe historical preparation.",
       "handoff_prepared": false,
-      "source_commit": "Publishing commit; exact fingerprints in schema67-checkpoint.json",
-      "source_identity": "test-logs/g4-cpu-conformance/schema67-checkpoint.json",
-      "checks": 129
+      "source_commit": "Publishing commit; exact fingerprints in schema68-checkpoint.json",
+      "source_identity": "test-logs/g4-cpu-conformance/schema68-checkpoint.json",
+      "checks": 130
     },
     "pending_candidate": {
-      "family": "Custap Berry / early queue-time Unburden",
-      "status": "native_only_precheck_passed_implementation_pending",
-      "cases": 30,
-      "boundaries": 39,
-      "fixture": "test-logs/g4-cpu-conformance/custap-priority-precheck.json.gz",
-      "native_command": "node --test test/custap-priority-native.test.cjs",
+      "family": null,
+      "status": "waiting_for_user_continue",
       "included_in_checkpoint_runner": false,
-      "next": "Implement fractional priority and queue-time consumption with exact cached Speed and prior queue-state migration, then one grouped CPU checkpoint."
+      "next": "Current family completed; no next family selected. Resume CPU work only on explicit user instruction."
     }
   },
   "historical_records": {

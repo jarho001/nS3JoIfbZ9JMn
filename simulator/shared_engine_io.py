@@ -145,6 +145,7 @@ def project_events(state,trace,audience):
             continue
         elif kind==e.BOOST_BLOCK:line=f'|-fail|{actor}|unboost|[from] ability: Clear Body|[of] {actor}'
         elif kind==e.CLEAR_NEGATIVE:line=f'|-clearnegativeboost|{actor}|[silent]'
+        elif kind==e.CUSTAP_ACTIVATE:line=f'|-activate|{actor}|item: Custap Berry|[consumed]'
         elif kind==e.BOOST:line=f'|-'+('unboost' if status else 'boost')+f'|{actor}|{e.field_tables.STATS[aux]}|{abs(value)}'
         elif kind==e.WEATHER:line='|-weather|'+e.field_tables.WEATHER_NAMES[value]+(f'|[from] ability: {e.hook_tables.ABILITY_NAMES[move]}|[of] {actor}' if aux==2 else '|[upkeep]' if aux==1 else '')
         elif kind==e.VOL_START:line=f'|-start|{actor}|'+('move: Taunt' if value==15 else e.MOVE_NAMES[tables.MOVE_IDS[e.phase_ops.VOLATILES[value]]])+('|'+name if value==17 else '')+('|[from] ability: Cursed Body|[of] '+foe if aux==1 else '')
@@ -214,12 +215,12 @@ def load_state(path,*,schema=None,replayed_state=None):
         stored=int(saved['schema']) if 'schema' in saved else None
         if schema is not None and stored is not None and stored!=schema:raise ValueError('schema mismatch')
         version=stored if schema is None else schema
-        if version not in (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67):raise ValueError('explicit supported state schema required')
+        if version not in (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68):raise ValueError('explicit supported state schema required')
         fields={k:jnp.asarray(saved[k]) for k in saved.files if k not in ('schema','data_sha256')}
-        if version in (3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67):
+        if version in (3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68):
             if 'data_sha256' not in saved or str(saved['data_sha256'])!=generic.DATA_SHA256:
                 raise ValueError('state data table identity mismatch')
-        if version<67 and replayed_state is not None:
+        if version<68 and replayed_state is not None:
             e._validate_structure(replayed_state)
             end='ivs' if version<=2 else 'effect_order' if version==3 else 'weather_state' if version==4 else 'move_history' if version<9 else 'request_state'
             expected=set(e.State._fields if version>=32 else e.State._fields[:e.State._fields.index('ability_seek')] if version>=26 else e.State._fields[:e.State._fields.index('call_frames')] if version>=21 else e.State._fields[:e.State._fields.index('ability_staleness')] if version>=18 else e.State._fields[:e.State._fields.index('illusion')] if version==17 else e.State._fields[:e.State._fields.index('base_species')] if version==16 else e.State._fields[:e.State._fields.index('item_provenance')] if version>=11 else e.State._fields[:e.State._fields.index(end)])
@@ -232,7 +233,10 @@ def load_state(path,*,schema=None,replayed_state=None):
                     if old.shape!=(2,6,slots,6):raise ValueError('invalid legacy volatile shape for replay')
                     replay=replay[:,:,:slots,:6]
                 elif key=='volatile_state':
-                    replay=replay[:,:,:30 if version>=64 else 28 if version>=39 else 27 if version>=30 else 26 if version>=25 else 25 if version>=24 else 24 if version>=20 else 23 if version>=15 else 22 if version>=13 else 21 if version==12 else 20,:]
+                    replay=replay[:,:,:32 if version>=67 else 30 if version>=64 else 28 if version>=39 else 27 if version>=30 else 26 if version>=25 else 25 if version>=24 else 24 if version>=20 else 23 if version>=15 else 22 if version>=13 else 21 if version==12 else 20,:]
+                if key=='queue':
+                    if np.any(replay[:,4]%e.custap_ops.PRIORITY_SCALE):raise ValueError('legacy replay/provenance mismatch: fractional queue')
+                    replay=replay.copy();replay[:,4]//=e.custap_ops.PRIORITY_SCALE
                 if key=='call_frames' and version<28:replay=replay[:,:16]
                 if key=='history' and version<18:replay=replay[:,:10]
                 if key=='action_state' and version<15:replay=replay[:,:,:21]
@@ -381,6 +385,13 @@ def load_state(path,*,schema=None,replayed_state=None):
             v=fields['volatile_state']
             if v.shape!=(2,6,30,e.phase_ops.VOLATILE_WIDTH):raise ValueError('invalid legacy volatile shape')
             fields['volatile_state']=jnp.pad(v,((0,0),(0,0),(0,2),(0,0)))
+        if version<68:
+            new_item=tables.ITEM_IDS['custapberry']
+            risky=np.any(np.asarray(fields['item'])==new_item)
+            if 'item_provenance' in fields:risky=risky or np.any(np.asarray(fields['item_provenance'])[:,:,0]==new_item)
+            if 'action_state' in fields:risky=risky or np.any(np.asarray(fields['action_state'])[:,:,e.tracking.LAST_ITEM]==new_item)
+            if risky:raise ValueError('legacy Custap state requires replay/provenance')
+            fields['queue']=fields['queue'].at[:,4].multiply(e.custap_ops.PRIORITY_SCALE)
         if set(fields)!=set(e.State._fields):raise ValueError('invalid state field set')
         state=e.State(*(fields[k] for k in e.State._fields))
         e._validate_structure(state)

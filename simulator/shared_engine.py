@@ -58,6 +58,7 @@ from . import conditional_power as conditional_power_ops
 from . import gem_unburden as gem_ops
 from . import fixed_damage as fixed_ops
 from . import retaliation as retaliation_ops
+from . import custap_priority as custap_ops
 from . import species_items as species_item_ops
 from . import ability_creation as creation_ops
 from . import suppression as suppression_ops
@@ -72,7 +73,7 @@ import sys
 def _engine():
     return sys.modules[__name__]
 
-SCHEMA = 67
+SCHEMA = 68
 ROSTER, SLOTS, QUEUE, EVENTS, DRAWS, HISTORY = 6, 4, 8, 128, 128, 2048
 OK, PENDING, INVALID, UNSUPPORTED, CAPACITY, TERMINAL, STALE = range(7)
 RETRY=7
@@ -117,6 +118,7 @@ SUPPRESS_ABILITY=59
 YAWN_START,YAWN_END=60,61
 FLASH_START,FLASH_END=62,63
 BOOST_BLOCK,CLEAR_NEGATIVE=64,65
+CUSTAP_ACTIVATE=66
 EVENT_COLUMNS=16
 # Draw contexts; range form stores actual native arguments including offsets.
 INIT, QUEUE_SORT, BEFORE_TURN, UPDATE, HIT_UPDATE, SWITCH_SORT, FIELD_SORT, ACC, CRITICAL, ROLL, PARALYSIS, STALL = range(12)
@@ -1143,7 +1145,7 @@ def advance(s,choices,token=None):
         s=s._replace(pending=pending,request_state=s.request_state.at[:,1].set(cant))
         ready=jnp.all((s.request>=WAIT)|(pending>=0))
         def resolve(c):
-            s,t=c;c=_event(c,BLANK);c=unaware_ops.refresh_speed(c,_engine());s,t=c
+            c=unaware_ops.refresh_speed(c,_engine());s,t=c
             normal=jnp.all(s.request==MOVE)
             def normal_queue(c):
                 s,t=c;s=s._replace(midturn=jnp.array(True))
@@ -1162,14 +1164,19 @@ def advance(s,choices,token=None):
                     move=jnp.where((kind==ATTACK)&(forced>0),forced,move)
                     recharge=(kind==ATTACK)&(forced<0)
                     action=jnp.where(recharge,phase_ops.RECHARGE_ACTION,action)
-                    priority=jnp.where((kind==ATTACK)&(action!=10)&(~recharge),hook_ops.priority(move,suppression_ops.abilities(s)[side,mon],_engine()),0)
-                    source=jnp.where(s.pivot[side],U_TURN,0)
-                    row=jnp.stack([kind,i32(side),mon,action,priority,s.speed[side,mon],source])
-                    c=unaware_ops.query((s,t),_engine());s,t=c;s=_qappend(s,row)
                     def prepare(c):
                         c=unaware_ops.query(c,_engine());s,t=c
-                        return _qappend(s,i32([BEFORE_MOVE,0,0,0,0,0,0]).at[1].set(side).at[2].set(mon).at[3].set(action).at[5].set(s.speed[side,mon])),t
-                    return _when(normal&(kind==ATTACK)&((move==pursuit_ops.MOVE)|retaliation_ops.MOVE_IMPLEMENTED[move])&(~recharge),prepare,(s,t))
+                        speed=_speeds(s)[side,mon]
+                        return _qappend(s,i32([BEFORE_MOVE,0,0,0,0,0,0]).at[1].set(side).at[2].set(mon).at[3].set(action).at[5].set(speed)),t
+                    # Native recursively resolves beforeTurnMove before the
+                    # fractional item callback, then computes attack Speed.
+                    c=_when(normal&(kind==ATTACK)&((move==pursuit_ops.MOVE)|retaliation_ops.MOVE_IMPLEMENTED[move])&(~recharge),prepare,(s,t))
+                    c,fraction=jax.lax.cond(normal&(kind==ATTACK),lambda c:custap_ops.consume(c,i32(side),_engine()),lambda c:(c,i32(0)),c)
+                    c=unaware_ops.query(c,_engine());s,t=c
+                    priority=jnp.where((kind==ATTACK)&(action!=10)&(~recharge),hook_ops.priority(move,suppression_ops.abilities(s)[side,mon],_engine()),0)
+                    source=jnp.where(s.pivot[side],U_TURN,0)
+                    row=jnp.stack([kind,i32(side),mon,action,priority*custap_ops.PRIORITY_SCALE+fraction,_speeds(s)[side,mon],source])
+                    return _qappend(s,row),t
                 c=_when(s.request[side]<WAIT,add,c);s,t=c
             c=_when(normal,lambda c:(_qappend(c[0],i32([RESIDUAL,0,0,0,0,1,0])),c[1]),c)
             s,t=c;s=s._replace(pivot=jnp.zeros(2,jnp.bool_))
@@ -1179,7 +1186,7 @@ def advance(s,choices,token=None):
                 return s._replace(queue=jnp.concatenate((i32([[BEFORE,0,0,0,0,1,0]]),s.queue[:-1])),qcount=s.qcount+1),t
             s,t=_when(normal,prepend,(s,t))
             t=t._replace(overflow=t.overflow|(s.qcount>QUEUE))
-            return _run_queue((s,t))
+            return _run_queue(_event((s,t),BLANK))
         s,t=jax.lax.cond(ready,resolve,lambda c:c,(s,t))
         overflow=t.overflow|(s.episode<0)
         if isinstance(s,State):overflow=overflow|(s.hcount+t.ecount>HISTORY)
