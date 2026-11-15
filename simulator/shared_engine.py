@@ -64,6 +64,7 @@ from . import stat_power as stat_power_ops
 from . import boost_reset as boost_reset_ops
 from . import weather_accuracy as weather_accuracy_ops
 from . import confusion_secondary as confusion_secondary_ops
+from . import flinch_guard as flinch_guard_ops
 from . import species_items as species_item_ops
 from . import ability_creation as creation_ops
 from . import suppression as suppression_ops
@@ -78,7 +79,7 @@ import sys
 def _engine():
     return sys.modules[__name__]
 
-SCHEMA = 74
+SCHEMA = 75
 ROSTER, SLOTS, QUEUE, EVENTS, DRAWS, HISTORY = 6, 4, 8, 128, 128, 2048
 OK, PENDING, INVALID, UNSUPPORTED, CAPACITY, TERMINAL, STALE = range(7)
 RETRY=7
@@ -126,6 +127,7 @@ BOOST_BLOCK,CLEAR_NEGATIVE=64,65
 CUSTAP_ACTIVATE=66
 CLEAR_BOOST=67
 STAT_GUARD_BLOCK=68
+FAKE_OUT_HINT=69
 EVENT_COLUMNS=16
 # Draw contexts; range form stores actual native arguments including offsets.
 INIT, QUEUE_SORT, BEFORE_TURN, UPDATE, HIT_UPDATE, SWITCH_SORT, FIELD_SORT, ACC, CRITICAL, ROLL, PARALYSIS, STALL = range(12)
@@ -741,7 +743,9 @@ def _use_move(c,frame):
             lambda c:field_ops.boost(c,actor,target,move,_engine()),lambda c:jax.lax.cond(move==called_ops.MAGIC_COAT,lambda c:called_ops.coat(c,frame,_engine()),ordinary,c),c),c)
     def resolve_move(c):
         return jax.lax.cond(move==boost_reset_ops.HAZE,lambda c:boost_reset_ops.field(c,actor,move,_engine()),resolve_field,c)
-    conditional_denied=conditional_ops.denied(c[0],target,move,_engine())|retaliation_ops.denied(c[0],actor,move)
+    fake_denied=flinch_guard_ops.denied(c[0],actor,move,_engine())
+    c=_when(fake_denied,lambda c:flinch_guard_ops.hint(c,_engine()),c)
+    conditional_denied=fake_denied|conditional_ops.denied(c[0],target,move,_engine())|retaliation_ops.denied(c[0],actor,move)
     c=_when(conditional_denied,lambda c:ability_ops.fail(c,actor,move,move_row,_engine()),c)
     c,charging=jax.lax.cond(phase_ops.CHARGE[move],lambda c:phase_ops.charge(c,actor,move,move_row,_engine(),target_loc=jnp.where(target==actor,-1,1)),lambda c:(c,jnp.array(False)),c)
     move_row=jnp.max(jnp.where((jnp.arange(EVENTS)<c[1].ecount)&((c[1].events[:,0]==EV_MOVE)|(c[1].events[:,0]==ANIM)),jnp.arange(EVENTS),0))
@@ -1077,7 +1081,7 @@ def _supported(s,initializing=False):
             &jnp.all((s.moves==0)|move_mask[jnp.clip(s.moves,0,len(MOVE_KEYS)-1)])
             &jnp.all((s.item>=0)&(s.item<len(ITEMS)))
             &jnp.all((hook_tables.ITEM_IMPLEMENTED|hit_tables.ITEM_IMPLEMENTED|phase_ops.ITEM_IMPLEMENTED|partial_ops.ITEM_IMPLEMENTED|residual_item_ops.ITEM_IMPLEMENTED|berry_ops.ITEM_IMPLEMENTED|species_item_ops.ITEM_IMPLEMENTED|stat_drop_ops.ITEM_IMPLEMENTED|survival_ops.ITEM_IMPLEMENTED)[jnp.clip(s.item,0,len(ITEMS)-1)])
-            &jnp.all((s.ability>=0)&(s.ability<len(ABILITIES)))&jnp.all((hook_tables.ABILITY_IMPLEMENTED|hit_tables.ABILITY_IMPLEMENTED|trap_ops.ABILITY_IMPLEMENTED|phaze_ops.ABILITY_IMPLEMENTED|item_ops.ABILITY_IMPLEMENTED|identity_ops.ABILITY_IMPLEMENTED|illusion_ops.ABILITY_IMPLEMENTED|form_ops.ABILITY_IMPLEMENTED|trigger_form_ops.ABILITY_IMPLEMENTED|immunity_ops.ABILITY_IMPLEMENTED|creation_ops.ABILITY_IMPLEMENTED|sleep_ops.ABILITY_IMPLEMENTED|called_ops.ABILITY_IMPLEMENTED|trace_ops.ABILITY_IMPLEMENTED|flash_ops.ABILITY_IMPLEMENTED|recovery_ops.ABILITY_IMPLEMENTED|rain_ops.ABILITY_IMPLEMENTED|residual_ops.ABILITY_IMPLEMENTED|stat_drop_ops.ABILITY_IMPLEMENTED|survival_ops.ABILITY_IMPLEMENTED|accuracy_ability_ops.ABILITY_IMPLEMENTED)[jnp.clip(s.ability,0,len(ABILITIES)-1)])
+            &jnp.all((s.ability>=0)&(s.ability<len(ABILITIES)))&jnp.all((flinch_guard_ops.ABILITY_IMPLEMENTED|hook_tables.ABILITY_IMPLEMENTED|hit_tables.ABILITY_IMPLEMENTED|trap_ops.ABILITY_IMPLEMENTED|phaze_ops.ABILITY_IMPLEMENTED|item_ops.ABILITY_IMPLEMENTED|identity_ops.ABILITY_IMPLEMENTED|illusion_ops.ABILITY_IMPLEMENTED|form_ops.ABILITY_IMPLEMENTED|trigger_form_ops.ABILITY_IMPLEMENTED|immunity_ops.ABILITY_IMPLEMENTED|creation_ops.ABILITY_IMPLEMENTED|sleep_ops.ABILITY_IMPLEMENTED|called_ops.ABILITY_IMPLEMENTED|trace_ops.ABILITY_IMPLEMENTED|flash_ops.ABILITY_IMPLEMENTED|recovery_ops.ABILITY_IMPLEMENTED|rain_ops.ABILITY_IMPLEMENTED|residual_ops.ABILITY_IMPLEMENTED|stat_drop_ops.ABILITY_IMPLEMENTED|survival_ops.ABILITY_IMPLEMENTED|accuracy_ability_ops.ABILITY_IMPLEMENTED)[jnp.clip(s.ability,0,len(ABILITIES)-1)])
             &jnp.all((s.ivs>=0)&(s.ivs<=31))&jnp.all((s.evs>=0)&(s.evs<=255))
             &jnp.all((s.nature>=1)&(s.nature<=len(generic.NATURES)))
             &jnp.all(s.types==tables.SPECIES_TYPES[safe_species])&jnp.all((s.boosts>=-6)&(s.boosts<=6))

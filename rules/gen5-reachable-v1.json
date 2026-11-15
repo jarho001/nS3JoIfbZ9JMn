@@ -2467,10 +2467,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/flinch-guard.json.gz",
+          "native": "reference/flinch-guard-cases.cjs",
+          "scope": "Independent30 synthetic scenarios54 boundaries; quiet Inner Focus flinch rejection after chance, Fake Out active-action eligibility/repeated hint, first/repeat/switch/blocked action, priority/ties, immunity/protection/Substitute, Copycat/Sleep Talk, terminal/contact and Headbutt/suppression/Trace with continuation. Steadfast and full-format closure pending",
+          "test": "test/test_flinch_guard_engine.py"
+        }
+      ],
       "field": "onTryAddVolatile",
       "id": "abilities:innerfocus:onTryAddVolatile",
-      "implementation": null,
+      "implementation": {
+        "family": "flinch_guard",
+        "file": "simulator/flinch_guard.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:innerfocus",
@@ -2482,7 +2494,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "bc0218a744df710bea9ee7d3225a10c2bd018e7dfa75f5c7af5cee5248465143",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -21355,10 +21367,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/flinch-guard.json.gz",
+          "native": "reference/flinch-guard-cases.cjs",
+          "scope": "Independent30 synthetic scenarios54 boundaries; quiet Inner Focus flinch rejection after chance, Fake Out active-action eligibility/repeated hint, first/repeat/switch/blocked action, priority/ties, immunity/protection/Substitute, Copycat/Sleep Talk, terminal/contact and Headbutt/suppression/Trace with continuation. Steadfast and full-format closure pending",
+          "test": "test/test_flinch_guard_engine.py"
+        }
+      ],
       "field": "onTry",
       "id": "moves:fakeout:onTry",
-      "implementation": null,
+      "implementation": {
+        "family": "flinch_guard",
+        "file": "simulator/flinch_guard.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:fakeout",
@@ -21370,7 +21394,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "bb49c538bc9bc46fccc2f1263b2e28a414a53c105a93142ac292f1893b1768b9",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -58457,8 +58481,8 @@
         }
       ],
       "kind": "moves",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "flinch-guard-positive-witness",
       "status": "partial"
     },
     {
@@ -73735,8 +73759,8 @@
         }
       ],
       "kind": "abilities",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "flinch-guard-positive-witness",
       "status": "partial"
     },
     {
@@ -99653,6 +99677,112 @@
           }
         ]
       },
+      "flinch-guard-positive-witness": {
+        "bound": [
+          "abilities:innerfocus",
+          "moves:fakeout"
+        ],
+        "conclusion": "required",
+        "kind": "mixed",
+        "reasoning": "Pinned Inner Focus Glalie seed[2,2,3,4] and Fake Out Hariyama seed[6,2,3,4] prove membership. Directed flinch/first-action cases do not close full-format behavior. Steadfast bounded500 scan is not an exclusion proof.",
+        "references": [
+          "data/random-battles/gen5/teams.ts:103-494 (cullMovePool/randomMoveset)",
+          "data/random-battles/gen5/teams.ts:496-566 (ability filters/fallback)",
+          "data/random-battles/gen5/teams.ts:568-816 (item returns and randomSet)",
+          "data/random-battles/gen5/teams.ts:850-1014 (team eligibility)",
+          "data/random-battles/gen9/teams.ts:675-693 (addMove)",
+          "data/random-battles/gen9/teams.ts:1442-1497 (getLevel/getForme)",
+          "data/random-battles/gen9/teams.ts:1641-1683 (getPokemonPool)"
+        ],
+        "witnesses": [
+          {
+            "id": "innerfocus",
+            "kind": "ability",
+            "seed": [
+              2,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Inner Focus",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Leftovers",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 90,
+              "moves": [
+                "spikes",
+                "taunt",
+                "icebeam",
+                "earthquake"
+              ],
+              "name": "Glalie",
+              "role": "Bulky Support",
+              "shiny": false,
+              "species": "Glalie",
+              "speciesId": "glalie"
+            }
+          },
+          {
+            "id": "fakeout",
+            "kind": "move",
+            "seed": [
+              6,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Guts",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Toxic Orb",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 85,
+              "moves": [
+                "fakeout",
+                "facade",
+                "stoneedge",
+                "closecombat"
+              ],
+              "name": "Hariyama",
+              "role": "Wallbreaker",
+              "shiny": false,
+              "species": "Hariyama",
+              "speciesId": "hariyama"
+            }
+          }
+        ]
+      },
       "gem-unburden-positive-witness": {
         "bound": [
           "abilities:unburden",
@@ -102924,8 +103054,8 @@
       },
       "entries": {
         "proven_unreachable": 542,
-        "required": 116,
-        "unresolved": 1110
+        "required": 118,
+        "unresolved": 1108
       },
       "roots": {
         "proven_unreachable": 0,

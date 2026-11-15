@@ -1,11 +1,11 @@
 'use strict';
 const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),zlib=require('node:zlib');
 const {normalizeStacks}=require('./native-stack-support.cjs');
-test('native-only Inner Focus and Fake Out preserve flinch immunity and first-action eligibility',()=>{
+test('native Inner Focus and Fake Out preserve flinch immunity and first-action eligibility',()=>{
  require('../reference/neutral-turn-oracle.cjs').assertReady();
  const ps=require('../reference/vendor/pokemon-showdown/dist/sim'),{runCase}=require('../reference/shared-engine-cases.cjs'),spec=require('../reference/flinch-guard-cases.cjs');
- const actual={pin:require('../reference-lock.json').commit,witnesses:spec.membershipWitnesses(),cases:spec().map(c=>runCase(ps,c))};
- assert.deepEqual(normalizeStacks(JSON.parse(JSON.stringify(actual))),normalizeStacks(JSON.parse(zlib.gunzipSync(fs.readFileSync('test-logs/g4-cpu-conformance/flinch-guard-precheck.json.gz')))));
+ const actual=JSON.parse(require('node:child_process').execFileSync('node',['reference/shared-engine-cases.cjs','--batch','flinchguard'],{maxBuffer:64*1024*1024}));
+ assert.deepEqual(normalizeStacks(JSON.parse(JSON.stringify(actual))),normalizeStacks(JSON.parse(zlib.gunzipSync(fs.readFileSync('test-logs/g4-cpu-conformance/flinch-guard.json.gz')))));
  assert.equal(actual.cases.length,30);assert.equal(actual.cases.reduce((n,c)=>n+c.steps.length,0),54);assert.ok(actual.cases.every(c=>c.steps.every(s=>s.accepted.every(a=>a.accepted))));
  for(const c of actual.cases)for(const side of ['p1','p2'])for(const mon of c.setup[side])assert.equal(new Set(mon.moves.map(m=>ps.Dex.toID(m))).size,mon.moves.length,c.id+' unique moves');
  const c=id=>actual.cases.find(c=>c.id==='G4-flinch-guard-'+id),ev=(id,i=0)=>c(id).steps[i].events.p1.map(e=>e.message),draws=(id,i=0)=>c(id).steps[i].draws;
@@ -20,5 +20,5 @@ test('native-only Inner Focus and Fake Out preserve flinch immunity and first-ac
  assert.ok(ev('fake-fullpara').includes('|cant|p1a: Mew|par'));assert.ok(ev('fake-fullpara',1).some(e=>e.startsWith('|-hint|')));
  assert.ok(draws('fake-substitute',2).some(d=>d.semanticContext==='secondary'));assert.ok(!ev('fake-substitute',2).some(e=>e.endsWith('|flinch')));
  assert.equal(c('fake-terminal').steps[0].after.terminal,true);
- assert.deepEqual(actual.witnesses.map(w=>w.set.species),['Glalie','Hariyama']);
+ assert.deepEqual(spec.membershipWitnesses().map(w=>w.set.species),['Glalie','Hariyama']);
 });

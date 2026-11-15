@@ -22,12 +22,25 @@ Keep historical commands/results as provenance.
 
 ## Current source and evidence
 
-**Next group, native only:** Inner Focus / Fake Out has30 scenarios/54
+**Next group, native only:** Analytic / Toxic Boost has42 scenarios/51
 boundaries, pinned positive witnesses and a passing
-`node --test test/flinch-guard-native.test.cjs` contract. It is not in the
-CPU/CUDA runner; implementation remains pending. Preserve quiet flinch block,
-activeMoveActions eligibility, repeated hint, blocked first action, switching
-and called-move behavior. Full-format closure remains pending.
+`node --test test/conditional-ability-native.test.cjs` contract. It is not in the
+CPU/CUDA runner; implementation remains pending. Preserve queued-move predicate,
+poison/category gating, live per-hit ability and native modifier priorities.
+Full-format closure remains pending.
+
+**Schema75 Inner Focus / Fake Out group:** focused CPU30 scenarios/54 boundaries
+passed in443.741s;2 native/inventory contracts and4 handoff helpers pass.
+See [schema75-checkpoint.json](../test-logs/g4-cpu-conformance/schema75-checkpoint.json).
+One compiled step covers exact state/RNG/requests/recipient events/histories,
+NPZ continuation and journal20. No GPU execution.
+
+```sh
+JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_flinch_guard_engine -v -f
+```
+
+Runner includes137 checks/81 modules,2670 scenarios/7602
+boundaries in75 corpora. Current-source broad/device execution remains deferred.
 
 **Schema74 Big Pecks / Hyper Cutter group:** focused CPU35 scenarios/39 boundaries
 passed in441.094s;2 native/inventory contracts and4 handoff helpers pass.

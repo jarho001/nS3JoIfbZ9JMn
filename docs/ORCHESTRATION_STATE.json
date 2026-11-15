@@ -34,8 +34,8 @@
     "brief": "PROJECT_PLAN.md#proposed-g4-cpu-implementation-and-conformance-goal",
     "source_base": "f37067e",
     "scope": "Complete pinned gen5randombattle reachable mechanics and every prepared CPU gate. Integrated checkpoints, resumable progress and commit/push authorized. GPU execution, profiling, benchmarks, training, delegation and scored research excluded.",
-    "checkpoint": "Schema74 Big Pecks / Hyper Cutter group: 35 scenarios/39 boundaries pass one compiled step in441.094s; native/inventory and4 handoff helpers pass. Full G4 remains open.",
-    "next": "Continue Inner Focus / Fake Out flinch guard and first-action eligibility group from30 native scenarios54 boundaries. Inner Focus silently rejects flinch after chance without applying volatile. Fake Out uses already-tracked activeMoveActions>1, emits repeatable hint then fails, counts blocked first actions and resets eligibility on switching; child moves share outer action count. Existing flinch path and event support suffice; no new runtime state needed.",
+    "checkpoint": "Schema75 Inner Focus / Fake Out group: 30 scenarios/54 boundaries pass one compiled step in443.741s; native/inventory and4 handoff helpers pass. Full G4 remains open.",
+    "next": "Continue Analytic / Toxic Boost conditional BasePower abilities from42 native scenarios51 boundaries. Analytic checks remaining queued move for every opposing active Pokemon (reuse phase_ops._will_move including mon match), not speed/acted flag; Toxic Boost needs PSN/TOX and Physical category. Insert priority21/19 modifiers after Iron Fist23 and before Dry Skin17/items16; evaluate live ability per hit so Mummy removes boost on later hits.",
     "ledger": {
       "path": "rules/gen5-reachable-v1.json",
       "entries": 1768,
@@ -45,7 +45,7 @@
         "indirect-closure",
         "engine-contract"
       ],
-      "status": "Incomplete:386 partial callback mappings/760 unsupported; full reachability/closure pending.",
+      "status": "Incomplete:388 partial callback mappings/758 unsupported; full reachability/closure pending.",
       "reachability_summary": {
         "callbacks": {
           "proven_unreachable": 546,
@@ -54,8 +54,8 @@
         },
         "entries": {
           "proven_unreachable": 542,
-          "required": 116,
-          "unresolved": 1110
+          "required": 118,
+          "unresolved": 1108
         },
         "roots": {
           "proven_unreachable": 0,
@@ -77,13 +77,13 @@
     "first_divergence": null,
     "gpu_requirement": "Deferred during travel. Record all G4 device obligations and ready/pending commands in docs/GPU_HANDOFF.md; current checkpoint runner is scripts/g4_gpu_handoff.py. CPU implementation remains active. Later full G4 release still requires matching-source GPU conformance.",
     "acceptance": "G4-CPU-conformance pending. Generic data checkpoint passes; all remaining prepared CPU gates retained, all milestone acceptance/task count unchanged.",
-    "source_identity": "test-logs/g4-cpu-conformance/schema74-checkpoint.json",
+    "source_identity": "test-logs/g4-cpu-conformance/schema75-checkpoint.json",
     "evidence_directory": "test-logs/g4-cpu-conformance",
     "publication": {
       "status": "checkpoint_publication_authorized",
       "target": "origin/main",
-      "previous_published_head": "5ca84d1f12675e553181b6480aefb1aad145631b",
-      "scope": "Schema74 focused CPU checkpoint; sustained CPU execution continues, full G4 open."
+      "previous_published_head": "48df3f29a47e4a1ae52244d4a212230a1004d5f3",
+      "scope": "Schema75 focused CPU checkpoint; sustained CPU execution continues, full G4 open."
     },
     "reasoning_effort": "medium (user preference,2026-11-10; no automatic escalation)",
     "design_pass": {
@@ -150,23 +150,23 @@
     },
     "record_usage": "Start at docs/CURRENT.md and scripts/read_context.py. State is authoritative for live progress; history is archived. Update live checkpoint/next/package/blockers at meaningful checkpoints; do not append completed-family narratives. Detailed results belong in immutable test evidence.",
     "next_work_package": {
-      "id": "g4-flinch-guard-group",
+      "id": "g4-conditional-ability-group",
       "status": "native_precheck_passed_implementation_pending",
       "members": [
-        "Gen5 Inner Focus silently blocks flinch installation",
-        "Fake Out first-action eligibility and repeatable failure hint"
+        "Analytic when no opposing active has a queued move",
+        "Toxic Boost physical power while poisoned/toxic"
       ],
       "membership": [
-        "Inner Focus Glalie seed[2,2,3,4]",
-        "Fake Out Hariyama seed[6,2,3,4]"
+        "Analytic Beheeyem seed[2,2,3,4]",
+        "Toxic Boost Zangoose seed[14,2,3,4]"
       ],
-      "native_precheck": "30 synthetic scenarios54 boundaries; first/repeat/after Recover, switching, priority/speed/tie, Inner Focus/Shield Dust, protection/Substitute/Ghost, terminal/Helmet/Mummy, Copycat, Sleep Talk failed/first-action after reentry, paralysis/full paralysis, Headbutt Serene Grace controls, suppression/Trace. Fullpara seed4; Sleep Talk failed child seed2 and eligible reentry child seed1.",
-      "native_command": "node --test test/flinch-guard-native.test.cjs",
+      "native_precheck": "42 synthetic scenarios51 boundaries; source/foe speed/priority/ties, switch/recharge/flinch queue behavior, physical/special, Specs and modifier chains with Dry Skin/Muscle Band/Facade, burn/paralysis/poison, Toxic Orb, Foul Play/Psyshock, Substitute/suppression, Mummy multihit, actual Sleep Talk, fixed-damage bypass and terminal. Native BasePower priority21 Analytic,19 Toxic Boost; Flare Boost bounded500 scan unresolved.",
+      "native_command": "node --test test/conditional-ability-native.test.cjs",
       "native_result": "1 passed; implementation pending",
-      "planned_command": "JAX_PLATFORMS=cpu JAX_ENABLE_COMPILATION_CACHE=true JAX_COMPILATION_CACHE_DIR=\"$PWD/work/jax-cache\" JAX_EXPLAIN_CACHE_MISSES=true OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 XLA_PYTHON_CLIENT_PREALLOCATE=false timeout 900s .venv-jax/bin/python -m unittest test.test_flinch_guard_engine -v -f",
+      "planned_command": "JAX_PLATFORMS=cpu JAX_ENABLE_COMPILATION_CACHE=true JAX_COMPILATION_CACHE_DIR=\"$PWD/work/jax-cache\" JAX_EXPLAIN_CACHE_MISSES=true OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 XLA_PYTHON_CLIENT_PREALLOCATE=false timeout 900s .venv-jax/bin/python -m unittest test.test_conditional_ability_engine -v -f",
       "command_status": "planned; module not yet implemented",
       "excluded": [
-        "Steadfast unsupported/unresolved after bounded500 scan, no exclusion proof",
+        "Flare Boost unsupported/unresolved after bounded500 scan, no exclusion proof",
         "Broad CPU/device/campaign/profiling gates deferred; full-format closure pending"
       ]
     },
@@ -561,27 +561,27 @@
     "combined_return_home_block": "docs/GPU_HANDOFF.md#one-return-home-block-correctness-plus-g3-v6-measurements",
     "pending_status_checkpoint": "Current status/field/hook GPU checks are wired into the49-check runner; no GPU execution during travel. Preserve matching-source CPU results and do not transfer earlier GPU/CPU evidence across changed source.",
     "expanded_checkpoint": {
-      "status": "schema74_grouped_focused_CPU_complete_GPU_deferred",
-      "engine_schema": 74,
-      "modules": 80,
-      "native_scenarios": 2640,
-      "native_boundaries": 7548,
+      "status": "schema75_grouped_focused_CPU_complete_GPU_deferred",
+      "engine_schema": 75,
+      "modules": 81,
+      "native_scenarios": 2670,
+      "native_boundaries": 7602,
       "initial_field_evidence": "test-logs/g4-cpu-conformance/schema5-checkpoint.json",
       "source": "Use latest committed checkout and runner source/fixture fingerprints; earlier source_commit fields describe historical preparation.",
       "handoff_prepared": false,
-      "source_commit": "Publishing commit; exact fingerprints in schema74-checkpoint.json",
-      "source_identity": "test-logs/g4-cpu-conformance/schema74-checkpoint.json",
-      "checks": 136
+      "source_commit": "Publishing commit; exact fingerprints in schema75-checkpoint.json",
+      "source_identity": "test-logs/g4-cpu-conformance/schema75-checkpoint.json",
+      "checks": 137
     },
     "pending_candidate": {
-      "family": "Inner Focus / Fake Out",
+      "family": "Analytic / Toxic Boost",
       "status": "native_only_precheck_passed_implementation_pending",
-      "cases": 30,
-      "boundaries": 54,
-      "fixture": "test-logs/g4-cpu-conformance/flinch-guard-precheck.json.gz",
-      "native_command": "node --test test/flinch-guard-native.test.cjs",
+      "cases": 42,
+      "boundaries": 51,
+      "fixture": "test-logs/g4-cpu-conformance/conditional-ability-precheck.json.gz",
+      "native_command": "node --test test/conditional-ability-native.test.cjs",
       "included_in_checkpoint_runner": false,
-      "next": "Implement silent flinch guard and tracked first-action eligibility/hint with one shared CPU checkpoint."
+      "next": "Implement live queue/status/category BasePower modifiers at native priorities, then one shared CPU checkpoint."
     }
   },
   "historical_records": {

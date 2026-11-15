@@ -59,8 +59,8 @@ test('pinned resolved export and conservative inventory reproduce exactly',()=>{
     const cb=slots.get(id);assert.equal(cb.status,'unsupported');assert.equal(cb.implementation,null);
   }
   assert.ok(ledger.callbacks.every(c=>['partial','unsupported'].includes(c.status)));
-  assert.equal(ledger.callbacks.filter(c=>c.status==='partial').length,386);
-  assert.equal(ledger.callbacks.filter(c=>c.status==='unsupported').length,760);
+  assert.equal(ledger.callbacks.filter(c=>c.status==='partial').length,388);
+  assert.equal(ledger.callbacks.filter(c=>c.status==='unsupported').length,758);
   const audit=ledger.reachabilityAudit;
   const entries=new Map(ledger.entries.map(e=>[e.id,e]));
   assert.equal(audit.proofs['move-identity-bound'].bound.length,224);
@@ -162,6 +162,7 @@ test('pinned resolved export and conservative inventory reproduce exactly',()=>{
   for(const id of ['thunder','blizzard']){assert.equal(entries.get('moves:'+id).reachability,'required');assert.equal(entries.get('moves:'+id).reachabilityAudit,'weather-accuracy-positive-witness');assert.ok(slots.get('moves:'+id+':onModifyMove').implementation);}
   for(const id of ['signalbeam','hurricane','dynamicpunch']){assert.equal(entries.get('moves:'+id).reachability,'required');assert.equal(entries.get('moves:'+id).reachabilityAudit,'confusion-secondary-positive-witness');}assert.ok(slots.get('moves:hurricane:onModifyMove').implementation);
   for(const id of ['bigpecks','hypercutter']){assert.equal(entries.get('abilities:'+id).reachability,'required');assert.equal(entries.get('abilities:'+id).reachabilityAudit,'stat-guard-positive-witness');assert.ok(slots.get('abilities:'+id+':onTryBoost').implementation);}
+  for(const [id,field]of [['abilities:innerfocus','onTryAddVolatile'],['moves:fakeout','onTry']]){assert.equal(entries.get(id).reachability,'required');assert.equal(entries.get(id).reachabilityAudit,'flinch-guard-positive-witness');assert.ok(slots.get(id+':'+field).implementation);}
   assert.equal(entries.get('abilities:zenmode').reachability,'unresolved');
   assert.equal(slots.get('abilities:magicguard:onDamage').reachability,'unresolved');
   for(const row of [...ledger.entries,...ledger.callbacks,...ledger.roots])

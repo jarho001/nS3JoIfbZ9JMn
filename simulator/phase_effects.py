@@ -45,6 +45,9 @@ def flinch_supported(row):
     if set(secondary)!={'chance','volatileStatus'} or secondary['volatileStatus']!='flinch':return False
     if row.get('secondaries') not in (None,[secondary]):return False
     clean=dict(row);clean.pop('secondary',None);clean.pop('secondaries',None)
+    if row['id']=='fakeout':
+        if row.get('onTry')!={'$callback':'moves:fakeout:onTry'} or secondary['chance']!=100 or row.get('basePower')!=40 or row.get('priority')!=3 or row.get('accuracy')!=100:return False
+        clean.pop('onTry')
     return t.plain(clean)
 
 
@@ -272,7 +275,7 @@ def flinch(c,actor,target,move,e):
         c=e.effects.add_volatile(c,target,VOLATILE_IDS['flinch'],actor,move,e)
         s,trace=c
         return s._replace(volatile_state=s.volatile_state.at[target,mon,VOLATILE_IDS['flinch'],5].set(1)),trace
-    return e._when(s.hp[target,mon]>0,install,c)
+    return e._when((s.hp[target,mon]>0)&(~e.flinch_guard_ops.blocked(s,target,e)),install,c)
 
 
 def before_move(c,side,move,e):
