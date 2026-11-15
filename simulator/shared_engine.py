@@ -65,6 +65,7 @@ from . import boost_reset as boost_reset_ops
 from . import weather_accuracy as weather_accuracy_ops
 from . import confusion_secondary as confusion_secondary_ops
 from . import flinch_guard as flinch_guard_ops
+from . import conditional_ability as conditional_ability_ops
 from . import species_items as species_item_ops
 from . import ability_creation as creation_ops
 from . import suppression as suppression_ops
@@ -79,7 +80,7 @@ import sys
 def _engine():
     return sys.modules[__name__]
 
-SCHEMA = 75
+SCHEMA = 76
 ROSTER, SLOTS, QUEUE, EVENTS, DRAWS, HISTORY = 6, 4, 8, 128, 128, 2048
 OK, PENDING, INVALID, UNSUPPORTED, CAPACITY, TERMINAL, STALE = range(7)
 RETRY=7
@@ -448,7 +449,7 @@ def _hit(c,actor,move):
             power=weight_ops.power(s,actor,target,move,power)
             power=conditional_ops.power(s,target,move,power,_engine())
             power=jnp.maximum(1,power)*jnp.where(pursuit_ops.boosted(s,target,move,_engine()),2,1)
-            power=hook_ops.power(power,suppression_ops.abilities(s)[actor,mon],s.item[actor,mon],physical,move_type,_engine(),phase_ops.power_modifier(s,target,move),defender_ability=suppression_ops.abilities(s)[target,tm],move=move,move_modifier=conditional_power_ops.modifier(s,actor,move,_engine()),gem_modifier=gem_ops.modifier(s,actor))
+            power=hook_ops.power(power,suppression_ops.abilities(s)[actor,mon],s.item[actor,mon],physical,move_type,_engine(),phase_ops.power_modifier(s,target,move),defender_ability=suppression_ops.abilities(s)[target,tm],move=move,move_modifier=conditional_power_ops.modifier(s,actor,move,_engine()),gem_modifier=gem_ops.modifier(s,actor),conditional_modifier=conditional_ability_ops.modifier(s,actor,target,physical,_engine()))
             c,attack,defense=hook_ops.stats(c,attack,defense,actor,target,physical,move_type,_engine(),defensive_physical=defensive_physical)
             c,roll=_draw(c,0,16,ROLL);s,t=c
             core=base_damage_core(s.level[actor,mon],power,attack,defense)+2
@@ -1081,7 +1082,7 @@ def _supported(s,initializing=False):
             &jnp.all((s.moves==0)|move_mask[jnp.clip(s.moves,0,len(MOVE_KEYS)-1)])
             &jnp.all((s.item>=0)&(s.item<len(ITEMS)))
             &jnp.all((hook_tables.ITEM_IMPLEMENTED|hit_tables.ITEM_IMPLEMENTED|phase_ops.ITEM_IMPLEMENTED|partial_ops.ITEM_IMPLEMENTED|residual_item_ops.ITEM_IMPLEMENTED|berry_ops.ITEM_IMPLEMENTED|species_item_ops.ITEM_IMPLEMENTED|stat_drop_ops.ITEM_IMPLEMENTED|survival_ops.ITEM_IMPLEMENTED)[jnp.clip(s.item,0,len(ITEMS)-1)])
-            &jnp.all((s.ability>=0)&(s.ability<len(ABILITIES)))&jnp.all((flinch_guard_ops.ABILITY_IMPLEMENTED|hook_tables.ABILITY_IMPLEMENTED|hit_tables.ABILITY_IMPLEMENTED|trap_ops.ABILITY_IMPLEMENTED|phaze_ops.ABILITY_IMPLEMENTED|item_ops.ABILITY_IMPLEMENTED|identity_ops.ABILITY_IMPLEMENTED|illusion_ops.ABILITY_IMPLEMENTED|form_ops.ABILITY_IMPLEMENTED|trigger_form_ops.ABILITY_IMPLEMENTED|immunity_ops.ABILITY_IMPLEMENTED|creation_ops.ABILITY_IMPLEMENTED|sleep_ops.ABILITY_IMPLEMENTED|called_ops.ABILITY_IMPLEMENTED|trace_ops.ABILITY_IMPLEMENTED|flash_ops.ABILITY_IMPLEMENTED|recovery_ops.ABILITY_IMPLEMENTED|rain_ops.ABILITY_IMPLEMENTED|residual_ops.ABILITY_IMPLEMENTED|stat_drop_ops.ABILITY_IMPLEMENTED|survival_ops.ABILITY_IMPLEMENTED|accuracy_ability_ops.ABILITY_IMPLEMENTED)[jnp.clip(s.ability,0,len(ABILITIES)-1)])
+            &jnp.all((s.ability>=0)&(s.ability<len(ABILITIES)))&jnp.all((conditional_ability_ops.ABILITY_IMPLEMENTED|flinch_guard_ops.ABILITY_IMPLEMENTED|hook_tables.ABILITY_IMPLEMENTED|hit_tables.ABILITY_IMPLEMENTED|trap_ops.ABILITY_IMPLEMENTED|phaze_ops.ABILITY_IMPLEMENTED|item_ops.ABILITY_IMPLEMENTED|identity_ops.ABILITY_IMPLEMENTED|illusion_ops.ABILITY_IMPLEMENTED|form_ops.ABILITY_IMPLEMENTED|trigger_form_ops.ABILITY_IMPLEMENTED|immunity_ops.ABILITY_IMPLEMENTED|creation_ops.ABILITY_IMPLEMENTED|sleep_ops.ABILITY_IMPLEMENTED|called_ops.ABILITY_IMPLEMENTED|trace_ops.ABILITY_IMPLEMENTED|flash_ops.ABILITY_IMPLEMENTED|recovery_ops.ABILITY_IMPLEMENTED|rain_ops.ABILITY_IMPLEMENTED|residual_ops.ABILITY_IMPLEMENTED|stat_drop_ops.ABILITY_IMPLEMENTED|survival_ops.ABILITY_IMPLEMENTED|accuracy_ability_ops.ABILITY_IMPLEMENTED)[jnp.clip(s.ability,0,len(ABILITIES)-1)])
             &jnp.all((s.ivs>=0)&(s.ivs<=31))&jnp.all((s.evs>=0)&(s.evs<=255))
             &jnp.all((s.nature>=1)&(s.nature<=len(generic.NATURES)))
             &jnp.all(s.types==tables.SPECIES_TYPES[safe_species])&jnp.all((s.boosts>=-6)&(s.boosts<=6))

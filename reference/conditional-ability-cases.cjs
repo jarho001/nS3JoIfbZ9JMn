@@ -33,6 +33,8 @@ module.exports=function(){
  add('toxic-dryskin',{p1:[toxic({moves:['Fire Punch','Recover'],item:'Muscle Band'})],p2:[m({ability:'Dry Skin'})],setup:[{side:'p1',status:'psn'}]});
  add('toxic-fixed',{p1:[toxic({moves:['Seismic Toss','Recover']})],setup:[{side:'p1',status:'psn'}]});
  add('toxic-terminal',{p1:[toxic()],p2:[m({level:1})],setup:[{side:'p1',status:'psn'}]});
+ for(const fast of [false,true])add('analytic-selfdestruct-'+(fast?'fast':'slow'),{p1:[analytic({moves:['Self-Destruct','Recover'],evs:{spe:fast?252:0}})],p2:[m({evs:{spe:fast?0:252}})],steps:[b(1,1)]});
+ add('toxic-selfdestruct',{p1:[toxic({moves:['Self-Destruct','Recover']})],setup:[{side:'p1',status:'psn'}],steps:[b(1,1)]});
  return cases;
 };
 module.exports.membershipWitnesses=function(){

@@ -1,0 +1,25 @@
+'use strict';
+const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),zlib=require('node:zlib');
+const {normalizeStacks}=require('./native-stack-support.cjs');
+test('native-only Justified and Speed Boost preserve hit/residual timing, caps and cached Speed',()=>{
+ require('../reference/neutral-turn-oracle.cjs').assertReady();
+ const ps=require('../reference/vendor/pokemon-showdown/dist/sim'),{runCase}=require('../reference/shared-engine-cases.cjs'),spec=require('../reference/stat-trigger-cases.cjs');
+ const actual={pin:require('../reference-lock.json').commit,witnesses:spec.membershipWitnesses(),cases:spec().map(c=>runCase(ps,c))};
+ assert.deepEqual(normalizeStacks(JSON.parse(JSON.stringify(actual))),normalizeStacks(JSON.parse(zlib.gunzipSync(fs.readFileSync('test-logs/g4-cpu-conformance/stat-trigger-precheck.json.gz')))));
+ assert.equal(actual.cases.length,34);assert.equal(actual.cases.reduce((n,c)=>n+c.steps.length,0),57);assert.ok(actual.cases.every(c=>c.steps.every(s=>s.accepted.every(a=>a.accepted))));
+ for(const c of actual.cases)for(const side of ['p1','p2'])for(const mon of c.setup[side])assert.equal(new Set(mon.moves.map(m=>ps.Dex.toID(m))).size,mon.moves.length,c.id+' unique moves');
+ const c=id=>actual.cases.find(c=>c.id==='G4-stat-trigger-'+id),active=(id,side=0,i=0)=>c(id).steps[i].after.sides[side].pokemon.find(p=>p.active),ev=(id,i=0)=>c(id).steps[i].events.p1.map(e=>e.message);
+ for(const id of ['justified-foulplay','justified-darkpulse','justified-bite','justified-hiddenpower'])assert.equal(active(id,1).boosts.atk,1);
+ assert.equal(active('justified-tackle',1).boosts.atk,0);assert.equal(active('justified-followup',1,1).boosts.atk,2);
+ assert.ok(!ev('justified-stage-6').some(e=>e.includes('|Justified|boost')));
+ assert.equal(active('justified-substitute',1,1).boosts.atk,0);assert.equal(active('justified-suppressed',1,1).boosts.atk,0);
+ assert.equal(active('speed-base',0,2).boosts.spe,3);assert.ok(!ev('speed-stage-6').some(e=>e.includes('|Speed Boost|boost')));
+ assert.equal(active('speed-switch',0,0).boosts.spe,0);assert.equal(active('speed-switch',0,1).boosts.spe,1);
+ assert.equal(active('speed-reentry',0,2).boosts.spe,0);assert.equal(active('speed-reentry',0,3).boosts.spe,1);
+ assert.equal(active('speed-both-suppressed',0,1).boosts.spe,2);assert.equal(active('speed-both-suppressed',1,1).boosts.spe,0);
+ assert.equal(active('speed-mummy').ability,'mummy');assert.equal(active('speed-mummy').boosts.spe,0);
+ assert.equal(c('speed-poison-ko').steps[0].after.terminal,true);assert.ok(!ev('speed-poison-ko').some(e=>e.includes('|Speed Boost|boost')));
+ assert.equal(c('speed-terminal').steps[0].after.terminal,true);assert.equal(active('speed-terminal').boosts.spe,0);
+ assert.ok(ev('justified-sleep-talk',1).some(e=>e.includes('|Dark Pulse|')&&e.includes('[from] move: Sleep Talk')));
+ assert.deepEqual(actual.witnesses.map(w=>w.set.species),['Gallade','Blaziken']);
+});

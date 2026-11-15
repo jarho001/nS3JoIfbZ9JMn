@@ -151,10 +151,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/conditional-ability.json.gz",
+          "native": "reference/conditional-ability-cases.cjs",
+          "scope": "Independent45 synthetic scenarios54 boundaries; live queued-move Analytic and poison/physical Toxic Boost at priorities21/19 before Dry Skin17/items16, speed/priority/switch/recharge/flinch, item/Facade/Dry Skin chains, Foul Play/Psyshock, source status cure/Orb, Substitute/suppression/Mummy multihit, called/fixed/terminal/self-KO and continuation. Full-format closure pending",
+          "test": "test/test_conditional_ability_engine.py"
+        }
+      ],
       "field": "onBasePower",
       "id": "abilities:analytic:onBasePower",
-      "implementation": null,
+      "implementation": {
+        "family": "conditional_ability",
+        "file": "simulator/conditional_ability.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:analytic",
@@ -166,7 +178,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "89624fbe4aac535647d38793eb00572e1edcda788563d793fcbc14dfce7ba6e4",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -6343,10 +6355,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/conditional-ability.json.gz",
+          "native": "reference/conditional-ability-cases.cjs",
+          "scope": "Independent45 synthetic scenarios54 boundaries; live queued-move Analytic and poison/physical Toxic Boost at priorities21/19 before Dry Skin17/items16, speed/priority/switch/recharge/flinch, item/Facade/Dry Skin chains, Foul Play/Psyshock, source status cure/Orb, Substitute/suppression/Mummy multihit, called/fixed/terminal/self-KO and continuation. Full-format closure pending",
+          "test": "test/test_conditional_ability_engine.py"
+        }
+      ],
       "field": "onBasePower",
       "id": "abilities:toxicboost:onBasePower",
-      "implementation": null,
+      "implementation": {
+        "family": "conditional_ability",
+        "file": "simulator/conditional_ability.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:toxicboost",
@@ -6358,7 +6382,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "3f03365bab7a9490b88ed1565703b31fa7408a7572a42525a5c757d89116fb43",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -71926,8 +71950,8 @@
         }
       ],
       "kind": "abilities",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "conditional-ability-positive-witness",
       "status": "partial"
     },
     {
@@ -77189,8 +77213,8 @@
         }
       ],
       "kind": "abilities",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "conditional-ability-positive-witness",
       "status": "partial"
     },
     {
@@ -98451,6 +98475,112 @@
           }
         ]
       },
+      "conditional-ability-positive-witness": {
+        "bound": [
+          "abilities:analytic",
+          "abilities:toxicboost"
+        ],
+        "conclusion": "required",
+        "kind": "abilities",
+        "reasoning": "Pinned Analytic Beheeyem seed[2,2,3,4] and Toxic Boost Zangoose seed[14,2,3,4] prove membership. Directed queue/status/category power cases do not close full-format behavior. Flare Boost bounded500 scan is not an exclusion proof.",
+        "references": [
+          "data/random-battles/gen5/teams.ts:103-494 (cullMovePool/randomMoveset)",
+          "data/random-battles/gen5/teams.ts:496-566 (ability filters/fallback)",
+          "data/random-battles/gen5/teams.ts:568-816 (item returns and randomSet)",
+          "data/random-battles/gen5/teams.ts:850-1014 (team eligibility)",
+          "data/random-battles/gen9/teams.ts:675-693 (addMove)",
+          "data/random-battles/gen9/teams.ts:1442-1497 (getLevel/getForme)",
+          "data/random-battles/gen9/teams.ts:1641-1683 (getPokemonPool)"
+        ],
+        "witnesses": [
+          {
+            "id": "analytic",
+            "kind": "ability",
+            "seed": [
+              2,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Analytic",
+              "evs": {
+                "atk": 0,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Life Orb",
+              "ivs": {
+                "atk": 3,
+                "def": 30,
+                "hp": 31,
+                "spa": 30,
+                "spd": 30,
+                "spe": 30
+              },
+              "level": 89,
+              "moves": [
+                "recover",
+                "signalbeam",
+                "psychic",
+                "hiddenpowerfighting"
+              ],
+              "name": "Beheeyem",
+              "role": "Wallbreaker",
+              "shiny": false,
+              "species": "Beheeyem",
+              "speciesId": "beheeyem"
+            }
+          },
+          {
+            "id": "toxicboost",
+            "kind": "ability",
+            "seed": [
+              14,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Toxic Boost",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Toxic Orb",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 84,
+              "moves": [
+                "swordsdance",
+                "quickattack",
+                "facade",
+                "nightslash"
+              ],
+              "name": "Zangoose",
+              "role": "Wallbreaker",
+              "shiny": false,
+              "species": "Zangoose",
+              "speciesId": "zangoose"
+            }
+          }
+        ]
+      },
       "conditional-attack-positive-witness": {
         "bound": [
           "moves:payback",
@@ -103054,8 +103184,8 @@
       },
       "entries": {
         "proven_unreachable": 542,
-        "required": 118,
-        "unresolved": 1108
+        "required": 120,
+        "unresolved": 1106
       },
       "roots": {
         "proven_unreachable": 0,

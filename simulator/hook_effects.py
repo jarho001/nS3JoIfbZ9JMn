@@ -50,11 +50,13 @@ def accuracy(base,s,actor,target,category):
     return modify(base,modifier)
 
 
-def power(value,ability,item,physical,move_type,e,phase_modifier=4096,defender_ability=0,move=0,move_modifier=4096,gem_modifier=4096):
+def power(value,ability,item,physical,move_type,e,phase_modifier=4096,defender_ability=0,move=0,move_modifier=4096,gem_modifier=4096,conditional_modifier=4096):
     modifier=jnp.where((ability==h.A['technician'])&(value<=60),6144,4096).astype(jnp.int32)
     boosted=((ability==h.A['ironfist'])&h.PUNCH[move])|((ability==h.A['reckless'])&h.RECKLESS[move])
     # Iron Fist/Reckless priority23: before Dry Skin17 and item modifiers.
     modifier=chain(modifier,jnp.where(boosted,4915,4096))
+    # Analytic21 / Toxic Boost19 precede defender Dry Skin17 and items16.
+    modifier=chain(modifier,conditional_modifier)
     # Native SourceBasePower Dry Skin priority17: after Technician30, before items16.
     dry=(defender_ability==h.A['dryskin'])&(move_type==e.generic.TYPES['fire'])
     modifier=chain(modifier,jnp.where(dry,5120,4096))

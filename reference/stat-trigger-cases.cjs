@@ -1,0 +1,38 @@
+'use strict';
+module.exports=function(){
+ const m=(x={})=>({species:'Mew',moves:['Tackle','Recover'],ability:'Pressure',item:'',level:50,nature:'Hardy',gender:'M',ivs:{hp:31,atk:31,def:31,spa:31,spd:31,spe:31},evs:{hp:0,atk:0,def:0,spa:0,spd:0,spe:0},...x});
+ const b=(a=1,c=2)=>({p1:`move ${a}`,p2:`move ${c}`}),cases=[];
+ const add=(id,x={})=>cases.push({id:'G4-stat-trigger-'+id,seed:1,generic:true,statTriggerFamily:true,p1:[m({evs:{spe:252}})],p2:[m()],steps:[b()],...x});
+ for(const move of ['Foul Play','Dark Pulse','Bite','Tackle'])add('justified-'+move.toLowerCase().replace(' ',''),{p1:[m({moves:[move,'Recover'],evs:{spe:252}})],p2:[m({ability:'Justified'})]});
+ for(const n of [5,6,-6])add('justified-stage-'+n,{p1:[m({moves:['Dark Pulse','Recover'],evs:{spe:252}})],p2:[m({ability:'Justified'})],setup:[{side:'p2',boosts:{atk:n}}]});
+ add('justified-hiddenpower',{p1:[m({moves:['Hidden Power','Recover'],evs:{spe:252}})],p2:[m({ability:'Justified'})]});
+ add('justified-followup',{p1:[m({moves:['Foul Play','Recover'],evs:{spe:252}})],p2:[m({ability:'Justified'})],steps:[b(),b()]});
+ add('justified-substitute',{p1:[m({moves:['Dark Pulse','Recover']})],p2:[m({ability:'Justified',moves:['Substitute','Recover'],evs:{spe:252}})],steps:[b(2,1),b()]});
+ add('justified-protect',{p1:[m({moves:['Dark Pulse','Recover'],evs:{spe:252}})],p2:[m({ability:'Justified',moves:['Protect','Recover']})],steps:[b(1,1)]});
+ add('justified-suppressed',{abilityChangeFamily:true,p1:[m({moves:['Gastro Acid','Dark Pulse','Recover'],evs:{spe:252}})],p2:[m({ability:'Justified'})],steps:[b(),b(2)]});
+ add('justified-weakness',{p1:[m({moves:['Dark Pulse','Recover'],evs:{spe:252}})],p2:[m({species:'Girafarig',ability:'Justified'})]});
+ add('justified-terminal',{p1:[m({moves:['Dark Pulse','Recover'],evs:{spe:252}})],p2:[m({ability:'Justified',level:1})]});
+ add('justified-sleep-talk',{seed:2,p1:[m({moves:['Rest','Sleep Talk','Dark Pulse']})],p2:[m({ability:'Justified',evs:{spe:252}})],setup:[{side:'p1',hp:100}],steps:[b(1,1),b(2,1)]});
+ const speed=(x={})=>m({ability:'Speed Boost',...x});
+ add('speed-base',{p1:[speed({moves:['Recover']})],steps:[b(1,1),b(1,1),b(1,1)]});
+ add('speed-order-flip',{p1:[speed()],p2:[m({evs:{spe:252}})],steps:[b(1,1),b(1,1)]});
+ for(const n of [5,6,-6])add('speed-stage-'+n,{p1:[speed()],setup:[{side:'p1',boosts:{spe:n}}],steps:[b(),b()]});
+ add('speed-both-tie',{p1:[speed({moves:['Recover']})],p2:[speed({moves:['Recover']})],steps:[b(1,1),b(1,1)]});
+ add('speed-switch',{p1:[m({moves:['Recover']}),speed({moves:['Recover']})],steps:[{p1:'switch 2',p2:'move 2'},b()]});
+ add('speed-reentry',{p1:[speed({moves:['Recover']}),m({moves:['Recover']})],steps:[b(),{p1:'switch 2',p2:'move 2'},{p1:'switch 2',p2:'move 2'},b()]});
+ add('speed-suppressed',{abilityChangeFamily:true,p1:[m({moves:['Gastro Acid','Recover'],evs:{spe:252}})],p2:[speed({moves:['Recover']})],steps:[b(1,1),b(2,1)]});
+ add('speed-both-suppressed',{abilityChangeFamily:true,p1:[speed({moves:['Gastro Acid','Recover']})],p2:[speed({moves:['Recover']})],steps:[b(1,1),b(2,1)]});
+ add('speed-paralysis',{seed:4,p1:[speed({evs:{spe:252}})],setup:[{side:'p1',status:'par'}],steps:[b(),b()]});
+ add('speed-toxic-orb',{p1:[speed({item:'Toxic Orb'})],steps:[b(),b()]});
+ add('speed-poison-ko',{p1:[speed()],setup:[{side:'p1',hp:1,status:'psn'}]});
+ add('speed-mummy',{abilityChangeFamily:true,p1:[speed()],p2:[m({ability:'Mummy'})]});
+ add('speed-trace',{p1:[m({ability:'Trace',moves:['Recover']})],p2:[speed({moves:['Recover']})],steps:[b(1,1),b(1,1)]});
+ add('speed-storedpower',{p1:[speed({moves:['Recover','Stored Power']})],steps:[b(),b(2)]});
+ add('speed-gyroball',{p1:[speed({moves:['Recover','Gyro Ball']})],steps:[b(),b(2)]});
+ add('speed-analytic',{p1:[speed()],p2:[m({ability:'Analytic',evs:{spe:252}})],steps:[b(1,1),b(1,1)]});
+ add('speed-terminal',{p1:[speed()],p2:[m({level:1})]});
+ return cases;
+};
+module.exports.membershipWitnesses=function(){
+ require('./neutral-turn-oracle.cjs').assertReady();const ps=require('./vendor/pokemon-showdown/dist/sim'),assert=require('node:assert/strict');return [['Justified',11,'Gallade'],['Speed Boost',55,'Blaziken']].map(([name,n,species])=>{const seed=[n,2,3,4],set=ps.Teams.getGenerator('gen5randombattle',seed).getTeam().find(s=>s.species===species&&s.ability===name);assert.ok(set,name);return {kind:'ability',id:ps.Dex.toID(name),seed,set};});
+};

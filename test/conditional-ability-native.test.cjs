@@ -1,12 +1,12 @@
 'use strict';
 const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),zlib=require('node:zlib');
 const {normalizeStacks}=require('./native-stack-support.cjs');
-test('native-only Analytic and Toxic Boost preserve queued-action and poison/category power',()=>{
+test('native Analytic and Toxic Boost preserve queued-action and poison/category power',()=>{
  require('../reference/neutral-turn-oracle.cjs').assertReady();
  const ps=require('../reference/vendor/pokemon-showdown/dist/sim'),{runCase}=require('../reference/shared-engine-cases.cjs'),spec=require('../reference/conditional-ability-cases.cjs');
- const actual={pin:require('../reference-lock.json').commit,witnesses:spec.membershipWitnesses(),cases:spec().map(c=>runCase(ps,c))};
- assert.deepEqual(normalizeStacks(JSON.parse(JSON.stringify(actual))),normalizeStacks(JSON.parse(zlib.gunzipSync(fs.readFileSync('test-logs/g4-cpu-conformance/conditional-ability-precheck.json.gz')))));
- assert.equal(actual.cases.length,42);assert.equal(actual.cases.reduce((n,c)=>n+c.steps.length,0),51);assert.ok(actual.cases.every(c=>c.steps.every(s=>s.accepted.every(a=>a.accepted))));
+ const actual=JSON.parse(require('node:child_process').execFileSync('node',['reference/shared-engine-cases.cjs','--batch','conditionalability'],{maxBuffer:64*1024*1024}));
+ assert.deepEqual(normalizeStacks(JSON.parse(JSON.stringify(actual))),normalizeStacks(JSON.parse(zlib.gunzipSync(fs.readFileSync('test-logs/g4-cpu-conformance/conditional-ability.json.gz')))));
+ assert.equal(actual.cases.length,45);assert.equal(actual.cases.reduce((n,c)=>n+c.steps.length,0),54);assert.ok(actual.cases.every(c=>c.steps.every(s=>s.accepted.every(a=>a.accepted))));
  for(const c of actual.cases)for(const side of ['p1','p2'])for(const mon of c.setup[side])assert.equal(new Set(mon.moves.map(m=>ps.Dex.toID(m))).size,mon.moves.length,c.id+' unique moves');
  const c=id=>actual.cases.find(c=>c.id==='G4-conditional-ability-'+id),damage=(id,i=0)=>{const q=c(id),n=q.steps[i],before=(i?q.steps[i-1].after:q.initial).sides[1].pokemon[0].hp;return before-parseInt(n.events.p2.find(e=>e.message.startsWith('|-damage|p2a:')).message.split('|')[3],10);};
  assert.ok(damage('analytic-slow-tackle')>damage('analytic-fast-tackle'));assert.equal(damage('analytic-switch'),damage('analytic-slow-tackle'));
@@ -16,5 +16,5 @@ test('native-only Analytic and Toxic Boost preserve queued-action and poison/cat
  for(const id of ['analytic-mummy-multihit','toxic-mummy-multihit'])assert.equal(c(id).steps[0].after.sides[0].pokemon[0].ability,'mummy');
  for(const [id,move]of [['analytic-sleep-talk','Water Gun'],['toxic-rest-sleep-talk','Tackle']])assert.ok(c(id).steps[1].events.p1.some(e=>e.message.includes('|'+move+'|')&&e.message.includes('[from] move: Sleep Talk')));
  for(const id of ['analytic-fixed','toxic-fixed'])assert.ok(!c(id).steps[0].draws.some(d=>['critical','damage'].includes(d.semanticContext)));
- assert.equal(c('toxic-terminal').steps[0].after.terminal,true);assert.deepEqual(actual.witnesses.map(w=>w.set.species),['Beheeyem','Zangoose']);
+ assert.equal(c('toxic-terminal').steps[0].after.terminal,true);assert.deepEqual(spec.membershipWitnesses().map(w=>w.set.species),['Beheeyem','Zangoose']);
 });
