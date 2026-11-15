@@ -5,8 +5,8 @@ module.exports=function(){
  const add=(id,x={})=>cases.push({id:'G4-stat-power-'+id,seed:1,generic:true,statPowerFamily:true,p1:[m({evs:{spe:252}})],p2:[m()],steps:[b()],...x});
  const gyro=(x={})=>m({moves:['Gyro Ball','Recover'],...x}),stored=(x={})=>m({moves:['Stored Power','Recover'],evs:{spe:252},...x});
  add('gyro-equal',{p1:[gyro()]});
- for(const [key,a,z]of [['slow','Shuckle','Deoxys-Speed'],['fast','Deoxys-Speed','Shuckle']])add('gyro-'+key,{p1:[gyro({species:a})],p2:[m({species:z})]});
- add('gyro-minimum',{p1:[gyro({species:'Deoxys-Speed',level:100})],p2:[m({species:'Shuckle',level:1})]});
+ for(const [key,a,z]of [['slow','Shuckle','Ninjask'],['fast','Ninjask','Shuckle']])add('gyro-'+key,{p1:[gyro({species:a})],p2:[m({species:z})]});
+ add('gyro-minimum',{p1:[gyro({species:'Ninjask',level:100})],p2:[m({species:'Shuckle',level:1})]});
  for(const [key,side,boost]of [['source-up','p1',2],['source-down','p1',-2],['target-up','p2',2],['target-down','p2',-2]])add('gyro-'+key,{p1:[gyro()],setup:[{side,boosts:{spe:boost}}]});
  for(const side of ['p1','p2'])add('gyro-par-'+side,{seed:side==='p1'?3:1,p1:[gyro()],setup:[{side,status:'par'}]});
  for(const side of ['p1','p2'])add('gyro-scarf-'+side,{p1:[gyro({item:side==='p1'?'Choice Scarf':''})],p2:[m({item:side==='p2'?'Choice Scarf':''})]});

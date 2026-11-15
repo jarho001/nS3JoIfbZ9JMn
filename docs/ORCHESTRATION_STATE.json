@@ -34,8 +34,8 @@
     "brief": "PROJECT_PLAN.md#proposed-g4-cpu-implementation-and-conformance-goal",
     "source_base": "f37067e",
     "scope": "Complete pinned gen5randombattle reachable mechanics and every prepared CPU gate. Integrated checkpoints, resumable progress and commit/push authorized. GPU execution, profiling, benchmarks, training, delegation and scored research excluded.",
-    "checkpoint": "Schema69 Eruption / Water Spout group: 54 scenarios/64 boundaries pass one compiled step in437.427s; native/inventory and4 handoff helpers pass. Full G4 remains open.",
-    "next": "Continue Gyro Ball / Stored Power derived-stat power group from43 native scenarios/53 boundaries; preserve live speed getters and pre-critical ModifyBoost RNG for Gyro Ball, raw positive-boost counting for Stored Power, then one shared CPU checkpoint.",
+    "checkpoint": "Schema70 Gyro Ball / Stored Power group: 43 scenarios/53 boundaries pass one compiled step in430.96s; native/inventory and4 handoff helpers pass. Full G4 remains open.",
+    "next": "Continue Haze / Clear Smog boost-reset group from35 native scenarios41 boundaries. Haze resets both active raw boost vectors through protection/Substitute; Clear Smog clears target after a successful real hit, including terminal damage. Preserve distinct field/hit callbacks and exact event/tracking/update timing.",
     "ledger": {
       "path": "rules/gen5-reachable-v1.json",
       "entries": 1768,
@@ -45,7 +45,7 @@
         "indirect-closure",
         "engine-contract"
       ],
-      "status": "Incomplete:377 partial callback mappings/769 unsupported; full reachability/closure pending.",
+      "status": "Incomplete:379 partial callback mappings/767 unsupported; full reachability/closure pending.",
       "reachability_summary": {
         "callbacks": {
           "proven_unreachable": 546,
@@ -54,8 +54,8 @@
         },
         "entries": {
           "proven_unreachable": 542,
-          "required": 105,
-          "unresolved": 1121
+          "required": 107,
+          "unresolved": 1119
         },
         "roots": {
           "proven_unreachable": 0,
@@ -77,13 +77,13 @@
     "first_divergence": null,
     "gpu_requirement": "Deferred during travel. Record all G4 device obligations and ready/pending commands in docs/GPU_HANDOFF.md; current checkpoint runner is scripts/g4_gpu_handoff.py. CPU implementation remains active. Later full G4 release still requires matching-source GPU conformance.",
     "acceptance": "G4-CPU-conformance pending. Generic data checkpoint passes; all remaining prepared CPU gates retained, all milestone acceptance/task count unchanged.",
-    "source_identity": "test-logs/g4-cpu-conformance/schema69-checkpoint.json",
+    "source_identity": "test-logs/g4-cpu-conformance/schema70-checkpoint.json",
     "evidence_directory": "test-logs/g4-cpu-conformance",
     "publication": {
       "status": "checkpoint_publication_authorized",
       "target": "origin/main",
-      "previous_published_head": "f947bf04a1c87ce8e6161cfcc14f98f18afc14a8",
-      "scope": "Schema69 focused CPU checkpoint; sustained CPU execution continues, full G4 open."
+      "previous_published_head": "5cde1def4a082a066010b4ac1040389cc99d91a1",
+      "scope": "Schema70 focused CPU checkpoint; sustained CPU execution continues, full G4 open."
     },
     "reasoning_effort": "medium (user preference,2026-11-10; no automatic escalation)",
     "design_pass": {
@@ -150,26 +150,22 @@
     },
     "record_usage": "Start at docs/CURRENT.md and scripts/read_context.py. State is authoritative for live progress; history is archived. Update live checkpoint/next/package/blockers at meaningful checkpoints; do not append completed-family narratives. Detailed results belong in immutable test evidence.",
     "next_work_package": {
-      "id": "g4-stat-power-group",
+      "id": "g4-boost-reset-group",
       "status": "native_precheck_passed_implementation_pending",
       "members": [
-        "Gyro Ball live target/source Speed ratio with floor and150 cap",
-        "Stored Power own positive boost count across all seven stats"
-      ],
-      "shared_paths": [
-        "Derived-stat basePowerCallback before Technician/power modifiers; Gyro speed queries run before critical and require original Unaware event sorting draws"
+        "Haze clears both active raw boost vectors",
+        "Clear Smog target clear after successful hit"
       ],
       "membership": [
-        "Gyro Ball Ferrothorn seed[12,2,3,4]",
-        "Stored Power Swoobat seed[100,2,3,4]"
+        "Clear Smog Amoonguss seed[13,2,3,4]",
+        "Haze Tentacruel seed[17,2,3,4]"
       ],
-      "native_precheck": "43 synthetic scenarios53 boundaries. Gyro equal/slow/fast/minimum, source/target Speed stages/paralysis/Scarf, midturn Agility, Chlorophyll/weather, Unburden/Custap, Technician, Trick, Substitute, Sleep Talk, protection; Stored Power positive/negative/mixed/max boosts, accuracy/evasion, target boosts, Calm Mind/Simple/Contrary, Technician thresholds, Unaware, item/immune/substitute/called/terminal. Explicit observeBoost and stackDepth14 retain12 ordered ModifyBoost sort draws in tied Gyro/Unaware case. Source paralysis seed3 preserves an actual Gyro hit.",
-      "native_command": "node --test test/stat-power-native.test.cjs",
+      "native_precheck": "35 synthetic scenarios41 boundaries; own/target/both all-seven mixed stages, Simple/Contrary/Defiant/Clear Body/Unaware, protection, Substitute, midturn Calm Mind, Stored Power, Steel immunity, called moves and lethal hit.",
+      "native_command": "node --test test/boost-reset-native.test.cjs",
       "native_result": "1 passed; implementation pending",
-      "planned_command": "JAX_PLATFORMS=cpu JAX_ENABLE_COMPILATION_CACHE=true JAX_COMPILATION_CACHE_DIR=\"$PWD/work/jax-cache\" JAX_EXPLAIN_CACHE_MISSES=true OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 XLA_PYTHON_CLIENT_PREALLOCATE=false timeout 900s .venv-jax/bin/python -m unittest test.test_stat_power_engine -v -f",
+      "planned_command": "JAX_PLATFORMS=cpu JAX_ENABLE_COMPILATION_CACHE=true JAX_COMPILATION_CACHE_DIR=\"$PWD/work/jax-cache\" JAX_EXPLAIN_CACHE_MISSES=true OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 XLA_PYTHON_CLIENT_PREALLOCATE=false timeout 900s .venv-jax/bin/python -m unittest test.test_boost_reset_engine -v -f",
       "command_status": "planned; module not yet implemented",
       "excluded": [
-        "Trick Room/Tailwind and remaining dependency mechanics stay gated pending their own implementation",
         "Broad CPU/device/campaign/profiling gates deferred; full-format closure pending"
       ]
     },
@@ -564,27 +560,27 @@
     "combined_return_home_block": "docs/GPU_HANDOFF.md#one-return-home-block-correctness-plus-g3-v6-measurements",
     "pending_status_checkpoint": "Current status/field/hook GPU checks are wired into the49-check runner; no GPU execution during travel. Preserve matching-source CPU results and do not transfer earlier GPU/CPU evidence across changed source.",
     "expanded_checkpoint": {
-      "status": "schema69_grouped_focused_CPU_complete_GPU_deferred",
-      "engine_schema": 69,
-      "modules": 75,
-      "native_scenarios": 2431,
-      "native_boundaries": 7268,
+      "status": "schema70_grouped_focused_CPU_complete_GPU_deferred",
+      "engine_schema": 70,
+      "modules": 76,
+      "native_scenarios": 2474,
+      "native_boundaries": 7321,
       "initial_field_evidence": "test-logs/g4-cpu-conformance/schema5-checkpoint.json",
       "source": "Use latest committed checkout and runner source/fixture fingerprints; earlier source_commit fields describe historical preparation.",
       "handoff_prepared": false,
-      "source_commit": "Publishing commit; exact fingerprints in schema69-checkpoint.json",
-      "source_identity": "test-logs/g4-cpu-conformance/schema69-checkpoint.json",
-      "checks": 131
+      "source_commit": "Publishing commit; exact fingerprints in schema70-checkpoint.json",
+      "source_identity": "test-logs/g4-cpu-conformance/schema70-checkpoint.json",
+      "checks": 132
     },
     "pending_candidate": {
-      "family": "Gyro Ball / Stored Power",
+      "family": "Haze / Clear Smog",
       "status": "native_only_precheck_passed_implementation_pending",
-      "cases": 43,
-      "boundaries": 53,
-      "fixture": "test-logs/g4-cpu-conformance/stat-power-precheck.json.gz",
-      "native_command": "node --test test/stat-power-native.test.cjs",
+      "cases": 35,
+      "boundaries": 41,
+      "fixture": "test-logs/g4-cpu-conformance/boost-reset-precheck.json.gz",
+      "native_command": "node --test test/boost-reset-native.test.cjs",
       "included_in_checkpoint_runner": false,
-      "next": "Implement live stat/boost power with exact pre-critical query RNG and one shared CPU checkpoint."
+      "next": "Implement distinct field and real-hit boost reset with one shared CPU checkpoint."
     }
   },
   "historical_records": {

@@ -60,6 +60,7 @@ from . import fixed_damage as fixed_ops
 from . import retaliation as retaliation_ops
 from . import custap_priority as custap_ops
 from . import hp_power as hp_power_ops
+from . import stat_power as stat_power_ops
 from . import species_items as species_item_ops
 from . import ability_creation as creation_ops
 from . import suppression as suppression_ops
@@ -74,7 +75,7 @@ import sys
 def _engine():
     return sys.modules[__name__]
 
-SCHEMA = 69
+SCHEMA = 70
 ROSTER, SLOTS, QUEUE, EVENTS, DRAWS, HISTORY = 6, 4, 8, 128, 128, 2048
 OK, PENDING, INVALID, UNSUPPORTED, CAPACITY, TERMINAL, STALE = range(7)
 RETRY=7
@@ -420,6 +421,7 @@ def _hit(c,actor,move):
         physical=tables.CATEGORY[move]==1
         move_type=jnp.where(move==HIDDEN_POWER,c[0].hp_type[actor,mon],tables.MOVE_TYPE[move])
         def ordinary(c):
+            c,gyro_power=stat_power_ops.before_critical(c,actor,target,move,_engine())
             s,t=c
             bound=hook_ops.critical_denominator(move,suppression_ops.abilities(s)[actor,mon],s.item[actor,mon])
             c,crit=jax.lax.cond(bound>0,lambda c:_draw(c,0,bound,CRITICAL),lambda c:(c,jnp.uint32(1)),c)
@@ -433,6 +435,7 @@ def _hit(c,actor,move):
             power=jnp.where(move==HIDDEN_POWER,s.hp_power[actor,mon],
                             jnp.where(move==RETURN,s.happiness[actor,mon]*10//25,
                                       jnp.where(move==FRUSTRATION,(255-s.happiness[actor,mon])*10//25,POWER[move])))
+            power=stat_power_ops.power(s,actor,move,power,gyro_power)
             power=hp_power_ops.power(s,actor,move,power)
             power=conditional_power_ops.base_power(s,actor,move,power)
             power=weight_ops.power(s,actor,target,move,power)

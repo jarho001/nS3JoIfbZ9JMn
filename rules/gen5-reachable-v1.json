@@ -22867,10 +22867,22 @@
           "file": "data/mods/gen5/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/stat-power.json.gz",
+          "native": "reference/stat-power-cases.cjs",
+          "scope": "Independent43 synthetic scenarios53 boundaries; live Speed queries before critical, raw seven-stat positive boosts, interactions and continuation. Full-format closure pending",
+          "test": "test/test_stat_power_engine.py"
+        }
+      ],
       "field": "basePowerCallback",
       "id": "moves:gyroball:basePowerCallback",
-      "implementation": null,
+      "implementation": {
+        "family": "stat_power",
+        "file": "simulator/stat_power.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:gyroball",
@@ -22882,7 +22894,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "70733e5aaafe13ce25d17b254900b568486613fd65f12cf969569807b1e76c8d",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -28963,10 +28975,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/stat-power.json.gz",
+          "native": "reference/stat-power-cases.cjs",
+          "scope": "Independent43 synthetic scenarios53 boundaries; live Speed queries before critical, raw seven-stat positive boosts, interactions and continuation. Full-format closure pending",
+          "test": "test/test_stat_power_engine.py"
+        }
+      ],
       "field": "basePowerCallback",
       "id": "moves:storedpower:basePowerCallback",
-      "implementation": null,
+      "implementation": {
+        "family": "stat_power",
+        "file": "simulator/stat_power.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:storedpower",
@@ -28978,7 +29002,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "769eb4b19c8d1081fc23af4f10b2c8d2540f0aea6f876638eb769220e92275db",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -60233,8 +60257,8 @@
         }
       ],
       "kind": "moves",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "stat-power-positive-witness",
       "status": "partial"
     },
     {
@@ -68760,8 +68784,8 @@
         }
       ],
       "kind": "moves",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "stat-power-positive-witness",
       "status": "partial"
     },
     {
@@ -98114,7 +98138,7 @@
         ],
         "conclusion": "required",
         "kind": "abilities",
-        "reasoning": "Pinned Defiant Farfetch\u2019d seed[5,2,3,4] and Download Genesect seed[9,2,3,4] prove membership. Directed boost callbacks do not close remaining indirect/full-format obligations.",
+        "reasoning": "Pinned Defiant Farfetch’d seed[5,2,3,4] and Download Genesect seed[9,2,3,4] prove membership. Directed boost callbacks do not close remaining indirect/full-format obligations.",
         "references": [
           "data/random-battles/gen5/teams.ts:103-494 (cullMovePool/randomMoveset)",
           "data/random-battles/gen5/teams.ts:496-566 (ability filters/fallback)",
@@ -98161,10 +98185,10 @@
                 "leafblade",
                 "bravebird"
               ],
-              "name": "Farfetch\u2019d",
+              "name": "Farfetch’d",
               "role": "Setup Sweeper",
               "shiny": false,
-              "species": "Farfetch\u2019d",
+              "species": "Farfetch’d",
               "speciesId": "farfetchd"
             }
           },
@@ -101347,6 +101371,112 @@
           }
         ]
       },
+      "stat-power-positive-witness": {
+        "bound": [
+          "moves:gyroball",
+          "moves:storedpower"
+        ],
+        "conclusion": "required",
+        "kind": "moves",
+        "reasoning": "Pinned Gyro Ball Ferrothorn seed[12,2,3,4] and Stored Power Swoobat seed[100,2,3,4] prove membership. Directed live stat power/interaction cases do not close full-format behavior. Existing move-identity-bound exclusions remain unchanged.",
+        "references": [
+          "data/random-battles/gen5/teams.ts:103-494 (cullMovePool/randomMoveset)",
+          "data/random-battles/gen5/teams.ts:496-566 (ability filters/fallback)",
+          "data/random-battles/gen5/teams.ts:568-816 (item returns and randomSet)",
+          "data/random-battles/gen5/teams.ts:850-1014 (team eligibility)",
+          "data/random-battles/gen9/teams.ts:675-693 (addMove)",
+          "data/random-battles/gen9/teams.ts:1442-1497 (getLevel/getForme)",
+          "data/random-battles/gen9/teams.ts:1641-1683 (getPokemonPool)"
+        ],
+        "witnesses": [
+          {
+            "id": "gyroball",
+            "kind": "move",
+            "seed": [
+              12,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Iron Barbs",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 0
+              },
+              "gender": "",
+              "item": "Leftovers",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 0
+              },
+              "level": 70,
+              "moves": [
+                "powerwhip",
+                "spikes",
+                "toxic",
+                "gyroball"
+              ],
+              "name": "Ferrothorn",
+              "role": "Bulky Attacker",
+              "shiny": false,
+              "species": "Ferrothorn",
+              "speciesId": "ferrothorn"
+            }
+          },
+          {
+            "id": "storedpower",
+            "kind": "move",
+            "seed": [
+              100,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Simple",
+              "evs": {
+                "atk": 0,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Life Orb",
+              "ivs": {
+                "atk": 0,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 84,
+              "moves": [
+                "calmmind",
+                "storedpower",
+                "roost",
+                "airslash"
+              ],
+              "name": "Swoobat",
+              "role": "Setup Sweeper",
+              "shiny": false,
+              "species": "Swoobat",
+              "speciesId": "swoobat"
+            }
+          }
+        ]
+      },
       "stat-selection-positive-witness": {
         "bound": [
           "moves:foulplay",
@@ -102242,8 +102372,8 @@
       },
       "entries": {
         "proven_unreachable": 542,
-        "required": 105,
-        "unresolved": 1121
+        "required": 107,
+        "unresolved": 1119
       },
       "roots": {
         "proven_unreachable": 0,
