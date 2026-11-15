@@ -1,0 +1,23 @@
+'use strict';
+const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),zlib=require('node:zlib');
+const {normalizeStacks}=require('./native-stack-support.cjs');
+test('native-only Gyro Ball and Stored Power preserve live stat/boost power and stat-query RNG',()=>{
+ require('../reference/neutral-turn-oracle.cjs').assertReady();
+ const ps=require('../reference/vendor/pokemon-showdown/dist/sim'),{runCase}=require('../reference/shared-engine-cases.cjs'),spec=require('../reference/stat-power-cases.cjs');
+ const actual={pin:require('../reference-lock.json').commit,witnesses:spec.membershipWitnesses(),cases:spec().map(c=>runCase(ps,c))};
+ assert.deepEqual(normalizeStacks(JSON.parse(JSON.stringify(actual))),normalizeStacks(JSON.parse(zlib.gunzipSync(fs.readFileSync('test-logs/g4-cpu-conformance/stat-power-precheck.json.gz')))));
+ assert.equal(actual.cases.length,43);assert.equal(actual.cases.reduce((n,c)=>n+c.steps.length,0),53);assert.ok(actual.cases.every(c=>c.steps.every(s=>s.accepted.every(a=>a.accepted))));
+ for(const c of actual.cases)for(const side of ['p1','p2'])for(const mon of c.setup[side])assert.equal(new Set(mon.moves.map(m=>ps.Dex.toID(m))).size,mon.moves.length,c.id+' unique moves');
+ const c=id=>actual.cases.find(c=>c.id==='G4-stat-power-'+id),p=(id,i=0)=>c(id).steps[i].after.sides[0].pokemon[0],damage=id=>c(id).initial.sides[1].pokemon[0].hp-parseInt(c(id).steps[0].events.p2.find(e=>e.message.startsWith('|-damage|p2a:')).message.split('|')[3],10);
+ assert.ok(c('gyro-par-p1').steps[0].events.p1.some(e=>e.message.includes('|Gyro Ball|')));
+ assert.equal(c('gyro-unaware-tie').steps[0].draws.filter(d=>d.semanticContext==='modify-boost-sort').length,12);
+ assert.ok(c('gyro-unaware-suppressed').steps[1].draws.some(d=>d.semanticContext==='modify-boost-sort'));
+ assert.equal(damage('stored-accuracy'),damage('stored-evasion'));assert.ok(damage('stored-accuracy')>damage('stored-attack'));assert.ok(damage('stored-attack')>damage('stored-base'));
+ assert.ok(damage('stored-technician-2')>damage('stored-technician-3'));
+ assert.equal(p('stored-calmmind-simple').boosts.spa,2);assert.equal(p('stored-calmmind-simple').boosts.spd,2);
+ assert.equal(p('stored-calmmind-contrary').boosts.spa,-1);assert.equal(p('stored-calmmind-contrary').boosts.spd,-1);
+ for(const [id,move]of [['gyro-sleep-talk','Gyro Ball'],['stored-sleep-talk','Stored Power']])assert.ok(c(id).steps[1].events.p1.some(e=>e.message.includes('|'+move+'|')&&e.message.includes('[from] move: Sleep Talk')));
+ assert.ok(c('stored-immune').steps[0].events.p1.some(e=>e.message.startsWith('|-immune|p2a:')));
+ assert.equal(c('stored-terminal').steps[0].after.terminal,true);
+ assert.deepEqual(actual.witnesses.map(w=>w.set.species),['Ferrothorn','Swoobat']);
+});

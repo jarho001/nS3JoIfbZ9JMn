@@ -59,6 +59,7 @@ from . import gem_unburden as gem_ops
 from . import fixed_damage as fixed_ops
 from . import retaliation as retaliation_ops
 from . import custap_priority as custap_ops
+from . import hp_power as hp_power_ops
 from . import species_items as species_item_ops
 from . import ability_creation as creation_ops
 from . import suppression as suppression_ops
@@ -73,7 +74,7 @@ import sys
 def _engine():
     return sys.modules[__name__]
 
-SCHEMA = 68
+SCHEMA = 69
 ROSTER, SLOTS, QUEUE, EVENTS, DRAWS, HISTORY = 6, 4, 8, 128, 128, 2048
 OK, PENDING, INVALID, UNSUPPORTED, CAPACITY, TERMINAL, STALE = range(7)
 RETRY=7
@@ -432,6 +433,7 @@ def _hit(c,actor,move):
             power=jnp.where(move==HIDDEN_POWER,s.hp_power[actor,mon],
                             jnp.where(move==RETURN,s.happiness[actor,mon]*10//25,
                                       jnp.where(move==FRUSTRATION,(255-s.happiness[actor,mon])*10//25,POWER[move])))
+            power=hp_power_ops.power(s,actor,move,power)
             power=conditional_power_ops.base_power(s,actor,move,power)
             power=weight_ops.power(s,actor,target,move,power)
             power=conditional_ops.power(s,target,move,power,_engine())

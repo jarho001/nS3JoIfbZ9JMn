@@ -22,10 +22,25 @@ Keep historical commands/results as provenance.
 
 ## Current source and evidence
 
-**Execution paused at the user's request:** The current Custap/queue-time
-Unburden family is complete on CPU. Do not start another family until the user
-explicitly says to continue. Full G4 acceptance and the G3/G4 deferred GPU
-commands below remain open; no GPU/profiling work was executed.
+**Next group, native only:** Gyro Ball / Stored Power has43 scenarios/53
+boundaries, pinned positive witnesses and a passing
+`node --test test/stat-power-native.test.cjs` contract. It is not in the
+CPU/CUDA runner; implementation remains pending. Gyro speed getters consume
+ordered ModifyBoost query draws before critical; Stored Power counts raw own
+positive boosts, including accuracy/evasion. Full-format closure remains pending.
+
+**Schema69 Eruption / Water Spout group:** focused CPU54 scenarios/64 boundaries
+passed in437.427s;2 native/inventory contracts and4 handoff helpers pass.
+See [schema69-checkpoint.json](../test-logs/g4-cpu-conformance/schema69-checkpoint.json).
+One compiled step covers exact state/RNG/requests/recipient events/histories,
+NPZ continuation and journal20. No GPU execution.
+
+```sh
+JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_hp_power_engine -v -f
+```
+
+Runner includes131 checks/75 modules,2431 scenarios/7268
+boundaries in69 corpora. Current-source broad/device execution remains deferred.
 
 **Schema68 Custap Berry / queue-time Unburden group:** focused CPU33 scenarios/45 boundaries
 passed in440.338s;2 native/inventory contracts and4 handoff helpers pass.

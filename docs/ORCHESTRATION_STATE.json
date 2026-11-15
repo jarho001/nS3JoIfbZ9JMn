@@ -28,14 +28,14 @@
   },
   "active_task": {
     "id": "G4-CPU-conformance",
-    "status": "paused",
+    "status": "in_progress",
     "approved_at": "2026-11-08",
     "owner": "/root",
     "brief": "PROJECT_PLAN.md#proposed-g4-cpu-implementation-and-conformance-goal",
     "source_base": "f37067e",
     "scope": "Complete pinned gen5randombattle reachable mechanics and every prepared CPU gate. Integrated checkpoints, resumable progress and commit/push authorized. GPU execution, profiling, benchmarks, training, delegation and scored research excluded.",
-    "checkpoint": "Schema68 Custap Berry / queue-time Unburden group: 33 scenarios/45 boundaries pass one compiled step in440.338s; native/inventory and4 handoff helpers pass. Full G4 remains open.",
-    "next": "Wait for the user's explicit continue. Current Custap/queue-time Unburden family is finished; no next family selected or started. G4 acceptance and deferred GPU work remain open.",
+    "checkpoint": "Schema69 Eruption / Water Spout group: 54 scenarios/64 boundaries pass one compiled step in437.427s; native/inventory and4 handoff helpers pass. Full G4 remains open.",
+    "next": "Continue Gyro Ball / Stored Power derived-stat power group from43 native scenarios/53 boundaries; preserve live speed getters and pre-critical ModifyBoost RNG for Gyro Ball, raw positive-boost counting for Stored Power, then one shared CPU checkpoint.",
     "ledger": {
       "path": "rules/gen5-reachable-v1.json",
       "entries": 1768,
@@ -45,7 +45,7 @@
         "indirect-closure",
         "engine-contract"
       ],
-      "status": "Incomplete:375 partial callback mappings/771 unsupported; full reachability/closure pending.",
+      "status": "Incomplete:377 partial callback mappings/769 unsupported; full reachability/closure pending.",
       "reachability_summary": {
         "callbacks": {
           "proven_unreachable": 546,
@@ -54,8 +54,8 @@
         },
         "entries": {
           "proven_unreachable": 542,
-          "required": 103,
-          "unresolved": 1123
+          "required": 105,
+          "unresolved": 1121
         },
         "roots": {
           "proven_unreachable": 0,
@@ -77,13 +77,13 @@
     "first_divergence": null,
     "gpu_requirement": "Deferred during travel. Record all G4 device obligations and ready/pending commands in docs/GPU_HANDOFF.md; current checkpoint runner is scripts/g4_gpu_handoff.py. CPU implementation remains active. Later full G4 release still requires matching-source GPU conformance.",
     "acceptance": "G4-CPU-conformance pending. Generic data checkpoint passes; all remaining prepared CPU gates retained, all milestone acceptance/task count unchanged.",
-    "source_identity": "test-logs/g4-cpu-conformance/schema68-checkpoint.json",
+    "source_identity": "test-logs/g4-cpu-conformance/schema69-checkpoint.json",
     "evidence_directory": "test-logs/g4-cpu-conformance",
     "publication": {
       "status": "checkpoint_publication_authorized",
       "target": "origin/main",
-      "previous_published_head": "b4ba70b5f0457a3b3b621756b3a5a3327a1e8dcf",
-      "scope": "Schema68 focused CPU checkpoint; current family complete, execution paused at user request. Full G4 remains open."
+      "previous_published_head": "f947bf04a1c87ce8e6161cfcc14f98f18afc14a8",
+      "scope": "Schema69 focused CPU checkpoint; sustained CPU execution continues, full G4 open."
     },
     "reasoning_effort": "medium (user preference,2026-11-10; no automatic escalation)",
     "design_pass": {
@@ -150,13 +150,30 @@
     },
     "record_usage": "Start at docs/CURRENT.md and scripts/read_context.py. State is authoritative for live progress; history is archived. Update live checkpoint/next/package/blockers at meaningful checkpoints; do not append completed-family narratives. Detailed results belong in immutable test evidence.",
     "next_work_package": {
-      "id": "g4-await-user-continue",
-      "status": "paused_by_user_after_current_family",
-      "members": [],
-      "reason": "User: Wrap up after the current family, until I tell you to continue.",
-      "next": "Wait for explicit continue before selecting or starting another family."
+      "id": "g4-stat-power-group",
+      "status": "native_precheck_passed_implementation_pending",
+      "members": [
+        "Gyro Ball live target/source Speed ratio with floor and150 cap",
+        "Stored Power own positive boost count across all seven stats"
+      ],
+      "shared_paths": [
+        "Derived-stat basePowerCallback before Technician/power modifiers; Gyro speed queries run before critical and require original Unaware event sorting draws"
+      ],
+      "membership": [
+        "Gyro Ball Ferrothorn seed[12,2,3,4]",
+        "Stored Power Swoobat seed[100,2,3,4]"
+      ],
+      "native_precheck": "43 synthetic scenarios53 boundaries. Gyro equal/slow/fast/minimum, source/target Speed stages/paralysis/Scarf, midturn Agility, Chlorophyll/weather, Unburden/Custap, Technician, Trick, Substitute, Sleep Talk, protection; Stored Power positive/negative/mixed/max boosts, accuracy/evasion, target boosts, Calm Mind/Simple/Contrary, Technician thresholds, Unaware, item/immune/substitute/called/terminal. Explicit observeBoost and stackDepth14 retain12 ordered ModifyBoost sort draws in tied Gyro/Unaware case. Source paralysis seed3 preserves an actual Gyro hit.",
+      "native_command": "node --test test/stat-power-native.test.cjs",
+      "native_result": "1 passed; implementation pending",
+      "planned_command": "JAX_PLATFORMS=cpu JAX_ENABLE_COMPILATION_CACHE=true JAX_COMPILATION_CACHE_DIR=\"$PWD/work/jax-cache\" JAX_EXPLAIN_CACHE_MISSES=true OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 XLA_PYTHON_CLIENT_PREALLOCATE=false timeout 900s .venv-jax/bin/python -m unittest test.test_stat_power_engine -v -f",
+      "command_status": "planned; module not yet implemented",
+      "excluded": [
+        "Trick Room/Tailwind and remaining dependency mechanics stay gated pending their own implementation",
+        "Broad CPU/device/campaign/profiling gates deferred; full-format closure pending"
+      ]
     },
-    "stopping_reason": "User requested wrap up after current Custap Berry / queue-time Unburden family; awaiting explicit continue.",
+    "stopping_reason": null,
     "pending_acceptance": "Reachability/required callbacks, rule/indirect closure and capacity proof remain open; directed eager/JIT/mixed batches, lifecycle/migration/full-lean, fixed64/128 campaigns and matching-source GPU acceptance remain pending. Use PROJECT_PLAN.md acceptance section and docs/GPU_HANDOFF.md for exact gates/commands.",
     "capacity_evidence": {
       "status": "full_capacity_proof_pending",
@@ -167,7 +184,7 @@
     "user_stop_after_current_family": {
       "family": "Custap Berry / queue-time Unburden",
       "instruction": "Wrap up after the current family, until I tell you to continue",
-      "status": "paused_after_successful_current_family_checkpoint"
+      "status": "revoked_by_explicit_user_continue"
     }
   },
   "gpu_block": null,
@@ -547,23 +564,27 @@
     "combined_return_home_block": "docs/GPU_HANDOFF.md#one-return-home-block-correctness-plus-g3-v6-measurements",
     "pending_status_checkpoint": "Current status/field/hook GPU checks are wired into the49-check runner; no GPU execution during travel. Preserve matching-source CPU results and do not transfer earlier GPU/CPU evidence across changed source.",
     "expanded_checkpoint": {
-      "status": "schema68_grouped_focused_CPU_complete_GPU_deferred",
-      "engine_schema": 68,
-      "modules": 74,
-      "native_scenarios": 2377,
-      "native_boundaries": 7204,
+      "status": "schema69_grouped_focused_CPU_complete_GPU_deferred",
+      "engine_schema": 69,
+      "modules": 75,
+      "native_scenarios": 2431,
+      "native_boundaries": 7268,
       "initial_field_evidence": "test-logs/g4-cpu-conformance/schema5-checkpoint.json",
       "source": "Use latest committed checkout and runner source/fixture fingerprints; earlier source_commit fields describe historical preparation.",
       "handoff_prepared": false,
-      "source_commit": "Publishing commit; exact fingerprints in schema68-checkpoint.json",
-      "source_identity": "test-logs/g4-cpu-conformance/schema68-checkpoint.json",
-      "checks": 130
+      "source_commit": "Publishing commit; exact fingerprints in schema69-checkpoint.json",
+      "source_identity": "test-logs/g4-cpu-conformance/schema69-checkpoint.json",
+      "checks": 131
     },
     "pending_candidate": {
-      "family": null,
-      "status": "waiting_for_user_continue",
+      "family": "Gyro Ball / Stored Power",
+      "status": "native_only_precheck_passed_implementation_pending",
+      "cases": 43,
+      "boundaries": 53,
+      "fixture": "test-logs/g4-cpu-conformance/stat-power-precheck.json.gz",
+      "native_command": "node --test test/stat-power-native.test.cjs",
       "included_in_checkpoint_runner": false,
-      "next": "Current family completed; no next family selected. Resume CPU work only on explicit user instruction."
+      "next": "Implement live stat/boost power with exact pre-critical query RNG and one shared CPU checkpoint."
     }
   },
   "historical_records": {

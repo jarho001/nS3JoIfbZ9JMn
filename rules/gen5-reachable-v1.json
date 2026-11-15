@@ -21235,10 +21235,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hp-power.json.gz",
+          "native": "reference/hp-power-cases.cjs",
+          "scope": "Independent54 synthetic scenarios64 boundaries; live source-HP callback clamped to integer before Technician, HP1/floors/thresholds, Blaze/Torrent, damage/healing before action, burn/item/weather chains, Sleep Talk/Substitute, Custap/Unburden, absorption/protection and continuation. Full-format closure pending",
+          "test": "test/test_hp_power_engine.py"
+        }
+      ],
       "field": "basePowerCallback",
       "id": "moves:eruption:basePowerCallback",
-      "implementation": null,
+      "implementation": {
+        "family": "hp_power",
+        "file": "simulator/hp_power.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:eruption",
@@ -21250,7 +21262,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "793a8cbfb4c25775425ffa616835fc1ac9ae5c32486e799f088bd7b7862d2776",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -30787,10 +30799,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/hp-power.json.gz",
+          "native": "reference/hp-power-cases.cjs",
+          "scope": "Independent54 synthetic scenarios64 boundaries; live source-HP callback clamped to integer before Technician, HP1/floors/thresholds, Blaze/Torrent, damage/healing before action, burn/item/weather chains, Sleep Talk/Substitute, Custap/Unburden, absorption/protection and continuation. Full-format closure pending",
+          "test": "test/test_hp_power_engine.py"
+        }
+      ],
       "field": "basePowerCallback",
       "id": "moves:waterspout:basePowerCallback",
-      "implementation": null,
+      "implementation": {
+        "family": "hp_power",
+        "file": "simulator/hp_power.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:waterspout",
@@ -30802,7 +30826,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "793a8cbfb4c25775425ffa616835fc1ac9ae5c32486e799f088bd7b7862d2776",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -58170,8 +58194,8 @@
         }
       ],
       "kind": "moves",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "hp-power-positive-witness",
       "status": "partial"
     },
     {
@@ -71021,8 +71045,8 @@
         }
       ],
       "kind": "moves",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "hp-power-positive-witness",
       "status": "partial"
     },
     {
@@ -99521,6 +99545,112 @@
           }
         ]
       },
+      "hp-power-positive-witness": {
+        "bound": [
+          "moves:eruption",
+          "moves:waterspout"
+        ],
+        "conclusion": "required",
+        "kind": "moves",
+        "reasoning": "Pinned Eruption Typhlosion seed[20,2,3,4] and Water Spout Wailord seed[36,2,3,4] prove membership. Directed live-HP power/interaction cases do not close full-format behavior. Existing move-identity-bound exclusions remain unchanged.",
+        "references": [
+          "data/random-battles/gen5/teams.ts:103-494 (cullMovePool/randomMoveset)",
+          "data/random-battles/gen5/teams.ts:496-566 (ability filters/fallback)",
+          "data/random-battles/gen5/teams.ts:568-816 (item returns and randomSet)",
+          "data/random-battles/gen5/teams.ts:850-1014 (team eligibility)",
+          "data/random-battles/gen9/teams.ts:675-693 (addMove)",
+          "data/random-battles/gen9/teams.ts:1442-1497 (getLevel/getForme)",
+          "data/random-battles/gen9/teams.ts:1641-1683 (getPokemonPool)"
+        ],
+        "witnesses": [
+          {
+            "id": "eruption",
+            "kind": "move",
+            "seed": [
+              20,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Blaze",
+              "evs": {
+                "atk": 0,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Choice Scarf",
+              "ivs": {
+                "atk": 3,
+                "def": 30,
+                "hp": 31,
+                "spa": 31,
+                "spd": 30,
+                "spe": 30
+              },
+              "level": 80,
+              "moves": [
+                "focusblast",
+                "fireblast",
+                "eruption",
+                "hiddenpowerrock"
+              ],
+              "name": "Typhlosion",
+              "role": "Fast Attacker",
+              "shiny": false,
+              "species": "Typhlosion",
+              "speciesId": "typhlosion"
+            }
+          },
+          {
+            "id": "waterspout",
+            "kind": "move",
+            "seed": [
+              36,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Water Veil",
+              "evs": {
+                "atk": 0,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Choice Scarf",
+              "ivs": {
+                "atk": 2,
+                "def": 31,
+                "hp": 31,
+                "spa": 30,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 90,
+              "moves": [
+                "hydropump",
+                "waterspout",
+                "hiddenpowergrass",
+                "icebeam"
+              ],
+              "name": "Wailord",
+              "role": "Bulky Attacker",
+              "shiny": false,
+              "species": "Wailord",
+              "speciesId": "wailord"
+            }
+          }
+        ]
+      },
       "item-identity-bound": {
         "bound": [
           "blackglasses",
@@ -102112,8 +102242,8 @@
       },
       "entries": {
         "proven_unreachable": 542,
-        "required": 103,
-        "unresolved": 1123
+        "required": 105,
+        "unresolved": 1121
       },
       "roots": {
         "proven_unreachable": 0,
