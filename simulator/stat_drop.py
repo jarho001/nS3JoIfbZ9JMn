@@ -1,18 +1,23 @@
-"""Clear Body TryBoost filtering and White Herb lifecycle callbacks."""
+"""External boost filtering and White Herb lifecycle callbacks."""
 import jax.numpy as jnp
 from . import gen5_engine_tables as tables
 A=tables.ABILITY_IDS;I=tables.ITEM_IDS
-HERB=I['whiteherb'];CLEAR=A['clearbody']
+HERB=I['whiteherb'];CLEAR=A['clearbody'];PECKS=A['bigpecks'];CUTTER=A['hypercutter']
 ITEM_IMPLEMENTED=jnp.asarray([k=='whiteherb'for k in tables.ITEMS],jnp.bool_)
-ABILITY_IMPLEMENTED=jnp.asarray([k=='clearbody'for k in tables.ABILITIES],jnp.bool_)
+ABILITY_IMPLEMENTED=jnp.asarray([k in ('clearbody','bigpecks','hypercutter')for k in tables.ABILITIES],jnp.bool_)
 
 
 def blocked(s,actor,target,change,e):
-    return (actor!=target)&(e.suppression_ops.abilities(s)[target,s.active[target]]==CLEAR)&(change<0)
+    ability=e.suppression_ops.abilities(s)[target,s.active[target]]
+    protected=(ability==CLEAR)|((ability==PECKS)&(jnp.arange(7)==1))|((ability==CUTTER)&(jnp.arange(7)==0))
+    # Native clamps a drop at -6 to zero before TryBoost handlers inspect it.
+    return (actor!=target)&protected&(change<0)&(s.boosts[target,s.active[target]]>-6)
 
 
 def fail(c,target,e):
-    return e._event(c,e.BOOST_BLOCK,target,c[0].active[target])
+    s,_=c;mon=s.active[target];ability=e.suppression_ops.abilities(s)[target,mon]
+    specific=ability!=CLEAR
+    return e._event(c,jnp.where(specific,e.STAT_GUARD_BLOCK,e.BOOST_BLOCK),target,mon,value=jnp.where(specific,ability,0),aux=jnp.where(specific,jnp.where(ability==CUTTER,0,1),0))
 
 
 def restore(c,side,e):

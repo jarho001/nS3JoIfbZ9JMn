@@ -1,0 +1,31 @@
+'use strict';
+module.exports=function(){
+ const m=(x={})=>({species:'Mew',moves:['Tackle','Recover'],ability:'Pressure',item:'',level:50,nature:'Hardy',gender:'M',ivs:{hp:31,atk:31,def:31,spa:31,spd:31,spe:31},evs:{hp:0,atk:0,def:0,spa:0,spd:0,spe:0},...x});
+ const b=(a=1,c=2)=>({p1:`move ${a}`,p2:`move ${c}`}),cases=[];
+ const add=(id,x={})=>cases.push({id:'G4-flinch-guard-'+id,seed:1,generic:true,flinchGuardFamily:true,p1:[m({moves:['Fake Out','Recover'],evs:{spe:252}})],p2:[m()],steps:[b()],...x});
+ add('fake-first');add('fake-repeat',{steps:[b(),b(),b()]});
+ add('fake-after-recover',{steps:[b(2),b()]});
+ add('fake-switch-reset',{p1:[m({moves:['Fake Out','Recover'],evs:{spe:252}}),m()],steps:[b(),{p1:'switch 2',p2:'move 2'},{p1:'switch 2',p2:'move 2'},b()]});
+ add('fake-slower',{p1:[m({moves:['Fake Out','Recover']})],p2:[m({evs:{spe:252}})]});
+ add('fake-tie',{p1:[m({moves:['Fake Out','Recover']})],p2:[m({moves:['Fake Out','Recover']})],steps:[b(1,1)]});
+ for(const ability of ['Inner Focus','Shield Dust'])add('fake-'+ability.toLowerCase().replace(' ',''),{p2:[m({ability})]});
+ add('fake-if-tie',{p1:[m({ability:'Inner Focus',moves:['Fake Out','Recover']})],p2:[m({ability:'Inner Focus',moves:['Fake Out','Recover']})],steps:[b(1,1)]});
+ add('fake-own-protect',{p2:[m({moves:['Protect','Recover']})],steps:[b(1,1),b()]});
+ add('fake-substitute',{p1:[m({moves:['Recover']}),m({moves:['Fake Out','Recover']})],p2:[m({moves:['Substitute','Recover']})],steps:[b(1,1),{p1:'switch 2',p2:'move 2'},b()]});
+ add('fake-ghost',{p2:[m({species:'Dusknoir'})]});
+ add('fake-terminal',{p2:[m({level:1})]});
+ add('fake-helmet',{p2:[m({item:'Rocky Helmet'})]});
+ add('fake-mummy',{abilityChangeFamily:true,p2:[m({ability:'Mummy'})]});
+ add('fake-copycat',{p2:[m({ability:'Inner Focus',moves:['Copycat','Recover']})],steps:[b(1,1)]});
+ add('fake-sleep-talk',{seed:2,p1:[m({moves:['Rest','Sleep Talk','Fake Out']})],p2:[m({evs:{spe:252}})],setup:[{side:'p1',hp:100}],steps:[b(1,1),b(2,1)]});
+ add('fake-sleep-reentry',{seed:1,p1:[m({moves:['Rest','Sleep Talk','Fake Out']}),m()],p2:[m({evs:{spe:252}})],setup:[{side:'p1',hp:100}],steps:[b(1,1),{p1:'switch 2',p2:'move 2'},{p1:'switch 2',p2:'move 2'},b(2)]});
+ add('fake-fullpara',{seed:4,p1:[m({moves:['Fake Out','Recover'],evs:{spe:252}})],setup:[{side:'p1',status:'par'}],steps:[b(),b()]});
+ add('fake-paralysis',{p1:[m({moves:['Fake Out','Recover'],evs:{spe:252}})],setup:[{side:'p1',status:'par'}],steps:[b(),b()]});
+ for(const ability of ['Pressure','Inner Focus'])for(const seed of [1,2,5,9])add('headbutt-'+ability.toLowerCase().replace(' ','')+'-'+seed,{seed,p1:[m({moves:['Headbutt','Recover'],ability:'Serene Grace',evs:{spe:252}})],p2:[m({ability})],steps:[b(),b(2,1)]});
+ add('inner-suppressed',{abilityChangeFamily:true,p1:[m({moves:['Gastro Acid','Headbutt','Recover'],ability:'Serene Grace',evs:{spe:252}})],p2:[m({ability:'Inner Focus'})],steps:[b(),b(2)]});
+ add('inner-trace',{p1:[m({moves:['Headbutt','Recover'],ability:'Inner Focus',evs:{spe:252}})],p2:[m({ability:'Trace'})],steps:[b()]});
+ return cases;
+};
+module.exports.membershipWitnesses=function(){
+ require('./neutral-turn-oracle.cjs').assertReady();const ps=require('./vendor/pokemon-showdown/dist/sim'),assert=require('node:assert/strict');return [['ability','innerfocus',2,'Glalie'],['move','fakeout',6,'Hariyama']].map(([kind,id,n,species])=>{const seed=[n,2,3,4],set=ps.Teams.getGenerator('gen5randombattle',seed).getTeam().find(s=>s.species===species&&(kind==='ability'?ps.Dex.toID(s.ability)===id:s.moves.some(m=>ps.Dex.toID(m)===id)));assert.ok(set,id);return {kind,id,seed,set};});
+};

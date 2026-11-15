@@ -1,0 +1,24 @@
+'use strict';
+const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),zlib=require('node:zlib');
+const {normalizeStacks}=require('./native-stack-support.cjs');
+test('native-only Inner Focus and Fake Out preserve flinch immunity and first-action eligibility',()=>{
+ require('../reference/neutral-turn-oracle.cjs').assertReady();
+ const ps=require('../reference/vendor/pokemon-showdown/dist/sim'),{runCase}=require('../reference/shared-engine-cases.cjs'),spec=require('../reference/flinch-guard-cases.cjs');
+ const actual={pin:require('../reference-lock.json').commit,witnesses:spec.membershipWitnesses(),cases:spec().map(c=>runCase(ps,c))};
+ assert.deepEqual(normalizeStacks(JSON.parse(JSON.stringify(actual))),normalizeStacks(JSON.parse(zlib.gunzipSync(fs.readFileSync('test-logs/g4-cpu-conformance/flinch-guard-precheck.json.gz')))));
+ assert.equal(actual.cases.length,30);assert.equal(actual.cases.reduce((n,c)=>n+c.steps.length,0),54);assert.ok(actual.cases.every(c=>c.steps.every(s=>s.accepted.every(a=>a.accepted))));
+ for(const c of actual.cases)for(const side of ['p1','p2'])for(const mon of c.setup[side])assert.equal(new Set(mon.moves.map(m=>ps.Dex.toID(m))).size,mon.moves.length,c.id+' unique moves');
+ const c=id=>actual.cases.find(c=>c.id==='G4-flinch-guard-'+id),ev=(id,i=0)=>c(id).steps[i].events.p1.map(e=>e.message),draws=(id,i=0)=>c(id).steps[i].draws;
+ assert.ok(ev('fake-first').some(e=>e==='|cant|p2a: Mew|flinch'));
+ for(const i of [1,2])assert.ok(ev('fake-repeat',i).some(e=>e==='|-hint|Fake Out only works on your first turn out.'));
+ for(const id of ['fake-innerfocus','fake-if-tie'])assert.ok(!ev(id).some(e=>e.endsWith('|flinch')||e.startsWith('|-immune|')));
+ assert.ok(draws('fake-innerfocus').some(d=>d.semanticContext==='secondary'));assert.ok(!draws('fake-shielddust').some(d=>d.semanticContext==='secondary'));
+ assert.ok(!draws('fake-ghost').some(d=>d.semanticContext==='secondary'));
+ assert.ok(ev('fake-copycat').some(e=>e.includes('|Fake Out|')&&e.includes('[from] move: Copycat')));
+ assert.ok(ev('fake-sleep-talk',1).some(e=>e.includes('|Fake Out|')&&e.includes('[from] move: Sleep Talk')));assert.ok(ev('fake-sleep-talk',1).some(e=>e.startsWith('|-hint|')));
+ assert.ok(ev('fake-sleep-reentry',3).some(e=>e.includes('|Fake Out|')&&e.includes('[from] move: Sleep Talk')));assert.ok(!ev('fake-sleep-reentry',3).some(e=>e.startsWith('|-hint|')));
+ assert.ok(ev('fake-fullpara').includes('|cant|p1a: Mew|par'));assert.ok(ev('fake-fullpara',1).some(e=>e.startsWith('|-hint|')));
+ assert.ok(draws('fake-substitute',2).some(d=>d.semanticContext==='secondary'));assert.ok(!ev('fake-substitute',2).some(e=>e.endsWith('|flinch')));
+ assert.equal(c('fake-terminal').steps[0].after.terminal,true);
+ assert.deepEqual(actual.witnesses.map(w=>w.set.species),['Glalie','Hariyama']);
+});

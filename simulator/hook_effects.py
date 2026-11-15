@@ -156,7 +156,7 @@ def ordinary_ability_start(c,side,e,initial=False):
         c=e._event((s,t),e.BOOST,foe,fm,value=new-old,aux=0,status=(change<0).astype(jnp.int32))
         return e.boost_ability_ops.after_drop(c,side,foe,new-old,e)
     def try_intimidate(c):
-        denied=e.stat_drop_ops.blocked(c[0],side,1-side,e.i32(-1),e)
+        denied=jnp.any(e.stat_drop_ops.blocked(c[0],side,1-side,e.i32([-1,0,0,0,0,0,0]),e))
         return e.jax.lax.cond(denied,lambda c:e.stat_drop_ops.fail(c,1-side,e),intimidate,c)
     c=e._when((ability==h.A['intimidate'])&(c[0].hp[1-side,c[0].active[1-side]]>0),try_intimidate,c)
     def set_weather(c):

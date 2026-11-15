@@ -16,6 +16,10 @@ module.exports=function(){
   add(key+'-swap',{abilityChangeFamily:true,p1:[m({moves:['Skill Swap','Recover'],evs:{spe:252}})],p2:[m({ability,moves:['Tickle','Recover']})],steps:[b(1,1)]});
   add(key+'-trace',{p1:[m({ability:'Trace',moves:['Recover'],evs:{spe:252}})],p2:[m({ability,moves:['Tickle','Recover']})],steps:[b(1,1)]});
  }
+ add('clear-growl-control',{p2:[m({ability:'Clear Body'})],steps:[b(),b()]});
+ add('clear-intimidate-control',{p1:[m({ability:'Intimidate',evs:{spe:252}})],p2:[m({ability:'Clear Body'})],steps:[b(),b()]});
+ add('clear-capped-control',{p1:[m({moves:['Tickle','Recover'],evs:{spe:252}})],p2:[m({ability:'Clear Body'})],setup:[{side:'p2',boosts:{atk:-6,def:-6}}]});
+ for(const [key,ability]of [['cutter','Hyper Cutter'],['clear','Clear Body']])add(key+'-capped-intimidate',{p1:[m(),m({ability:'Intimidate'})],p2:[m({ability})],setup:[{side:'p2',boosts:{atk:-6}}],steps:[{p1:'switch 2',p2:'move 2'}]});
  return cases;
 };
 module.exports.membershipWitnesses=function(){

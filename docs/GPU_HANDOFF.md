@@ -22,12 +22,25 @@ Keep historical commands/results as provenance.
 
 ## Current source and evidence
 
-**Next group, native only:** Big Pecks / Hyper Cutter has30 scenarios/32
+**Next group, native only:** Inner Focus / Fake Out has30 scenarios/54
 boundaries, pinned positive witnesses and a passing
-`node --test test/stat-guard-native.test.cjs` contract. It is not in the
-CPU/CUDA runner; implementation remains pending. Preserve partial Tickle,
-stat-specific failure projection, self-drop bypass, Intimidate and transfers.
-Full-format closure remains pending.
+`node --test test/flinch-guard-native.test.cjs` contract. It is not in the
+CPU/CUDA runner; implementation remains pending. Preserve quiet flinch block,
+activeMoveActions eligibility, repeated hint, blocked first action, switching
+and called-move behavior. Full-format closure remains pending.
+
+**Schema74 Big Pecks / Hyper Cutter group:** focused CPU35 scenarios/39 boundaries
+passed in441.094s;2 native/inventory contracts and4 handoff helpers pass.
+See [schema74-checkpoint.json](../test-logs/g4-cpu-conformance/schema74-checkpoint.json).
+One compiled step covers exact state/RNG/requests/recipient events/histories,
+NPZ continuation and journal20. No GPU execution.
+
+```sh
+JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_stat_guard_engine -v -f
+```
+
+Runner includes136 checks/80 modules,2640 scenarios/7548
+boundaries in74 corpora. Current-source broad/device execution remains deferred.
 
 **Schema73 Signal Beam / Hurricane / Dynamic Punch group:** focused CPU44 scenarios/62 boundaries
 passed in434.725s;2 native/inventory contracts and4 handoff helpers pass.

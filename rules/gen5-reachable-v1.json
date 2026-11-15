@@ -319,10 +319,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/stat-guard.json.gz",
+          "native": "reference/stat-guard-cases.cjs",
+          "scope": "Independent35 synthetic scenarios39 boundaries; Big Pecks/Hyper Cutter external stat masks, partial Tickle and stat-specific failures, caps/self/suppression, Intimidate startup/switch, White Herb, reflection/transfers/Trace and Clear Body controls with continuation. Other guards, stat secondaries and full-format closure pending",
+          "test": "test/test_stat_guard_engine.py"
+        }
+      ],
       "field": "onTryBoost",
       "id": "abilities:bigpecks:onTryBoost",
-      "implementation": null,
+      "implementation": {
+        "family": "stat_guard",
+        "file": "simulator/stat_drop.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:bigpecks",
@@ -334,7 +346,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "a7b5635ff80b891e68bdacc20fe2b57b27e2d788ec1bcd7c9368a812e5138be7",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -2071,10 +2083,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/stat-guard.json.gz",
+          "native": "reference/stat-guard-cases.cjs",
+          "scope": "Independent35 synthetic scenarios39 boundaries; Big Pecks/Hyper Cutter external stat masks, partial Tickle and stat-specific failures, caps/self/suppression, Intimidate startup/switch, White Herb, reflection/transfers/Trace and Clear Body controls with continuation. Other guards, stat secondaries and full-format closure pending",
+          "test": "test/test_stat_guard_engine.py"
+        }
+      ],
       "field": "onTryBoost",
       "id": "abilities:hypercutter:onTryBoost",
-      "implementation": null,
+      "implementation": {
+        "family": "stat_guard",
+        "file": "simulator/stat_drop.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:hypercutter",
@@ -2086,7 +2110,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "7bf5dfc436936d85fe1740ea2670b84e8cc3182e6cc0e035b3a51e8e6b8f854c",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -72088,8 +72112,8 @@
         }
       ],
       "kind": "abilities",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "stat-guard-positive-witness",
       "status": "partial"
     },
     {
@@ -73458,8 +73482,8 @@
         }
       ],
       "kind": "abilities",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "stat-guard-positive-witness",
       "status": "partial"
     },
     {
@@ -101687,6 +101711,112 @@
           }
         ]
       },
+      "stat-guard-positive-witness": {
+        "bound": [
+          "abilities:bigpecks",
+          "abilities:hypercutter"
+        ],
+        "conclusion": "required",
+        "kind": "abilities",
+        "reasoning": "Pinned Big Pecks Pidgeot seed[16,2,3,4] and Hyper Cutter Kingler seed[207,2,3,4] prove membership. Directed stat guard cases do not close full-format behavior. White Smoke/Keen Eye bounded500 scan is not an exclusion proof.",
+        "references": [
+          "data/random-battles/gen5/teams.ts:103-494 (cullMovePool/randomMoveset)",
+          "data/random-battles/gen5/teams.ts:496-566 (ability filters/fallback)",
+          "data/random-battles/gen5/teams.ts:568-816 (item returns and randomSet)",
+          "data/random-battles/gen5/teams.ts:850-1014 (team eligibility)",
+          "data/random-battles/gen9/teams.ts:675-693 (addMove)",
+          "data/random-battles/gen9/teams.ts:1442-1497 (getLevel/getForme)",
+          "data/random-battles/gen9/teams.ts:1641-1683 (getPokemonPool)"
+        ],
+        "witnesses": [
+          {
+            "id": "bigpecks",
+            "kind": "ability",
+            "seed": [
+              16,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Big Pecks",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Leftovers",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 87,
+              "moves": [
+                "bravebird",
+                "heatwave",
+                "roost",
+                "return"
+              ],
+              "name": "Pidgeot",
+              "role": "Bulky Attacker",
+              "shiny": false,
+              "species": "Pidgeot",
+              "speciesId": "pidgeot"
+            }
+          },
+          {
+            "id": "hypercutter",
+            "kind": "ability",
+            "seed": [
+              207,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Hyper Cutter",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Leftovers",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 89,
+              "moves": [
+                "crabhammer",
+                "agility",
+                "swordsdance",
+                "return"
+              ],
+              "name": "Kingler",
+              "role": "Bulky Setup",
+              "shiny": false,
+              "species": "Kingler",
+              "speciesId": "kingler"
+            }
+          }
+        ]
+      },
       "stat-power-positive-witness": {
         "bound": [
           "moves:gyroball",
@@ -102794,8 +102924,8 @@
       },
       "entries": {
         "proven_unreachable": 542,
-        "required": 114,
-        "unresolved": 1112
+        "required": 116,
+        "unresolved": 1110
       },
       "roots": {
         "proven_unreachable": 0,

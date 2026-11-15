@@ -34,8 +34,8 @@
     "brief": "PROJECT_PLAN.md#proposed-g4-cpu-implementation-and-conformance-goal",
     "source_base": "f37067e",
     "scope": "Complete pinned gen5randombattle reachable mechanics and every prepared CPU gate. Integrated checkpoints, resumable progress and commit/push authorized. GPU execution, profiling, benchmarks, training, delegation and scored research excluded.",
-    "checkpoint": "Schema73 Signal Beam / Hurricane / Dynamic Punch group: 44 scenarios/62 boundaries pass one compiled step in434.725s; native/inventory and4 handoff helpers pass. Full G4 remains open.",
-    "next": "Continue Big Pecks / Hyper Cutter stat-specific external drop guards from30 native scenarios32 boundaries. Preserve partial Tickle application and exact stat/name fail messages, self-drop bypass, suppression, Intimidate startup/switch and Trace/Role Play/Skill Swap/reflection. Intimidate currently passes scalar -1 to all-stat Clear Body filter; represent its atk-only change explicitly when introducing stat masks.",
+    "checkpoint": "Schema74 Big Pecks / Hyper Cutter group: 35 scenarios/39 boundaries pass one compiled step in441.094s; native/inventory and4 handoff helpers pass. Full G4 remains open.",
+    "next": "Continue Inner Focus / Fake Out flinch guard and first-action eligibility group from30 native scenarios54 boundaries. Inner Focus silently rejects flinch after chance without applying volatile. Fake Out uses already-tracked activeMoveActions>1, emits repeatable hint then fails, counts blocked first actions and resets eligibility on switching; child moves share outer action count. Existing flinch path and event support suffice; no new runtime state needed.",
     "ledger": {
       "path": "rules/gen5-reachable-v1.json",
       "entries": 1768,
@@ -45,7 +45,7 @@
         "indirect-closure",
         "engine-contract"
       ],
-      "status": "Incomplete:384 partial callback mappings/762 unsupported; full reachability/closure pending.",
+      "status": "Incomplete:386 partial callback mappings/760 unsupported; full reachability/closure pending.",
       "reachability_summary": {
         "callbacks": {
           "proven_unreachable": 546,
@@ -54,8 +54,8 @@
         },
         "entries": {
           "proven_unreachable": 542,
-          "required": 114,
-          "unresolved": 1112
+          "required": 116,
+          "unresolved": 1110
         },
         "roots": {
           "proven_unreachable": 0,
@@ -77,13 +77,13 @@
     "first_divergence": null,
     "gpu_requirement": "Deferred during travel. Record all G4 device obligations and ready/pending commands in docs/GPU_HANDOFF.md; current checkpoint runner is scripts/g4_gpu_handoff.py. CPU implementation remains active. Later full G4 release still requires matching-source GPU conformance.",
     "acceptance": "G4-CPU-conformance pending. Generic data checkpoint passes; all remaining prepared CPU gates retained, all milestone acceptance/task count unchanged.",
-    "source_identity": "test-logs/g4-cpu-conformance/schema73-checkpoint.json",
+    "source_identity": "test-logs/g4-cpu-conformance/schema74-checkpoint.json",
     "evidence_directory": "test-logs/g4-cpu-conformance",
     "publication": {
       "status": "checkpoint_publication_authorized",
       "target": "origin/main",
-      "previous_published_head": "255467304982f1de5080836ff01e269e1a3ad2d2",
-      "scope": "Schema73 focused CPU checkpoint; sustained CPU execution continues, full G4 open."
+      "previous_published_head": "5ca84d1f12675e553181b6480aefb1aad145631b",
+      "scope": "Schema74 focused CPU checkpoint; sustained CPU execution continues, full G4 open."
     },
     "reasoning_effort": "medium (user preference,2026-11-10; no automatic escalation)",
     "design_pass": {
@@ -150,24 +150,24 @@
     },
     "record_usage": "Start at docs/CURRENT.md and scripts/read_context.py. State is authoritative for live progress; history is archived. Update live checkpoint/next/package/blockers at meaningful checkpoints; do not append completed-family narratives. Detailed results belong in immutable test evidence.",
     "next_work_package": {
-      "id": "g4-stat-guard-group",
+      "id": "g4-flinch-guard-group",
       "status": "native_precheck_passed_implementation_pending",
       "members": [
-        "Big Pecks blocks external Defense drops",
-        "Hyper Cutter blocks external Attack drops"
+        "Gen5 Inner Focus silently blocks flinch installation",
+        "Fake Out first-action eligibility and repeatable failure hint"
       ],
       "membership": [
-        "Big Pecks Pidgeot seed[16,2,3,4]",
-        "Hyper Cutter Kingler seed[207,2,3,4]"
+        "Inner Focus Glalie seed[2,2,3,4]",
+        "Fake Out Hariyama seed[6,2,3,4]"
       ],
-      "native_precheck": "30 synthetic scenarios32 boundaries; Growl/Charm/Screech/Tickle/Metal Sound, capped stages, self Shell Smash, Gastro Acid suppression, Intimidate startup/switch, White Herb, Magic Bounce source/reflection, Role Play/Skill Swap/Trace. Mixed Tickle emits stat/name-specific failure then unprotected stat drop.",
-      "native_command": "node --test test/stat-guard-native.test.cjs",
+      "native_precheck": "30 synthetic scenarios54 boundaries; first/repeat/after Recover, switching, priority/speed/tie, Inner Focus/Shield Dust, protection/Substitute/Ghost, terminal/Helmet/Mummy, Copycat, Sleep Talk failed/first-action after reentry, paralysis/full paralysis, Headbutt Serene Grace controls, suppression/Trace. Fullpara seed4; Sleep Talk failed child seed2 and eligible reentry child seed1.",
+      "native_command": "node --test test/flinch-guard-native.test.cjs",
       "native_result": "1 passed; implementation pending",
-      "planned_command": "JAX_PLATFORMS=cpu JAX_ENABLE_COMPILATION_CACHE=true JAX_COMPILATION_CACHE_DIR=\"$PWD/work/jax-cache\" JAX_EXPLAIN_CACHE_MISSES=true OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 XLA_PYTHON_CLIENT_PREALLOCATE=false timeout 900s .venv-jax/bin/python -m unittest test.test_stat_guard_engine -v -f",
+      "planned_command": "JAX_PLATFORMS=cpu JAX_ENABLE_COMPILATION_CACHE=true JAX_COMPILATION_CACHE_DIR=\"$PWD/work/jax-cache\" JAX_EXPLAIN_CACHE_MISSES=true OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 XLA_PYTHON_CLIENT_PREALLOCATE=false timeout 900s .venv-jax/bin/python -m unittest test.test_flinch_guard_engine -v -f",
       "command_status": "planned; module not yet implemented",
       "excluded": [
-        "White Smoke/Keen Eye remain unsupported/unresolved; bounded500 generator scan is not a proof",
-        "Stat-dropping secondaries/other dependencies and broad CPU/device/campaign/profiling gates deferred; full-format closure pending"
+        "Steadfast unsupported/unresolved after bounded500 scan, no exclusion proof",
+        "Broad CPU/device/campaign/profiling gates deferred; full-format closure pending"
       ]
     },
     "stopping_reason": null,
@@ -561,27 +561,27 @@
     "combined_return_home_block": "docs/GPU_HANDOFF.md#one-return-home-block-correctness-plus-g3-v6-measurements",
     "pending_status_checkpoint": "Current status/field/hook GPU checks are wired into the49-check runner; no GPU execution during travel. Preserve matching-source CPU results and do not transfer earlier GPU/CPU evidence across changed source.",
     "expanded_checkpoint": {
-      "status": "schema73_grouped_focused_CPU_complete_GPU_deferred",
-      "engine_schema": 73,
-      "modules": 79,
-      "native_scenarios": 2605,
-      "native_boundaries": 7509,
+      "status": "schema74_grouped_focused_CPU_complete_GPU_deferred",
+      "engine_schema": 74,
+      "modules": 80,
+      "native_scenarios": 2640,
+      "native_boundaries": 7548,
       "initial_field_evidence": "test-logs/g4-cpu-conformance/schema5-checkpoint.json",
       "source": "Use latest committed checkout and runner source/fixture fingerprints; earlier source_commit fields describe historical preparation.",
       "handoff_prepared": false,
-      "source_commit": "Publishing commit; exact fingerprints in schema73-checkpoint.json",
-      "source_identity": "test-logs/g4-cpu-conformance/schema73-checkpoint.json",
-      "checks": 135
+      "source_commit": "Publishing commit; exact fingerprints in schema74-checkpoint.json",
+      "source_identity": "test-logs/g4-cpu-conformance/schema74-checkpoint.json",
+      "checks": 136
     },
     "pending_candidate": {
-      "family": "Big Pecks / Hyper Cutter",
+      "family": "Inner Focus / Fake Out",
       "status": "native_only_precheck_passed_implementation_pending",
       "cases": 30,
-      "boundaries": 32,
-      "fixture": "test-logs/g4-cpu-conformance/stat-guard-precheck.json.gz",
-      "native_command": "node --test test/stat-guard-native.test.cjs",
+      "boundaries": 54,
+      "fixture": "test-logs/g4-cpu-conformance/flinch-guard-precheck.json.gz",
+      "native_command": "node --test test/flinch-guard-native.test.cjs",
       "included_in_checkpoint_runner": false,
-      "next": "Implement stat-specific external drop guards, preserve scalar Intimidate compatibility via explicit atk vector, then shared CPU checkpoint."
+      "next": "Implement silent flinch guard and tracked first-action eligibility/hint with one shared CPU checkpoint."
     }
   },
   "historical_records": {
