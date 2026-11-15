@@ -19,6 +19,7 @@ module.exports=function(){
   add(key+'-steel',{p1:[source()],p2:[m({species:'Registeel'})],setup:[{side:'p2',boosts:mixed}]});
   add(key+'-sleep-talk',{seed:2,p1:[source({moves:['Rest','Sleep Talk',move],evs:{spe:0}})],p2:[m({evs:{spe:252}})],setup:[{side:'p1',hp:100},{side:'p2',boosts:{atk:2,def:2}}],steps:[b(1,1),b(2,1)]});
  }
+ add('haze-victory-tie',{accuracyAbilityFamily:true,p1:[m({ability:'Victory Star',moves:['Haze','Recover']})],p2:[m({ability:'Victory Star'})]});
  add('smog-terminal',{p1:[m({moves:['Clear Smog','Recover'],evs:{spe:252}})],p2:[m({level:1})],setup:[{side:'p2',boosts:{atk:2}}]});
  return cases;
 };

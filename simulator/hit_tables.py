@@ -19,6 +19,10 @@ ITEM_IMPLEMENTED=jnp.asarray([key=='rockyhelmet' for key in t.ITEMS],jnp.bool_)
 
 
 def supported(row):
+    if row.get('id')=='clearsmog':
+        if row.get('basePower')!=50 or row.get('onHit')!={'$callback':'moves:clearsmog:onHit'}:return False
+        clean=dict(row);clean.pop('onHit')
+        return t.plain(clean)
     if row.get('id') in ('gyroball','storedpower'):
         if row.get('basePower')!={'gyroball':0,'storedpower':20}[row['id']] or row.get('basePowerCallback')!={'$callback':f"moves:{row['id']}:basePowerCallback"}:return False
         clean=dict(row);clean.pop('basePowerCallback');clean['basePower']=max(1,clean['basePower'])

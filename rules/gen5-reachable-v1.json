@@ -19447,10 +19447,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/boost-reset.json.gz",
+          "native": "reference/boost-reset-cases.cjs",
+          "scope": "Independent36 synthetic scenarios42 boundaries; raw seven-stat active resets, field versus real-hit targeting, own/target/both/reserves, abilities, Protect/Substitute/Steel, tied Unaware queries, midturn Calm Mind/Stored Power, called moves and lethal hit with continuation. Full-format closure pending",
+          "test": "test/test_boost_reset_engine.py"
+        }
+      ],
       "field": "onHit",
       "id": "moves:clearsmog:onHit",
-      "implementation": null,
+      "implementation": {
+        "family": "boost_reset",
+        "file": "simulator/boost_reset.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:clearsmog",
@@ -19462,7 +19474,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "3fe3a6367c8694efcb19bc340f9c9aaaac88c0fbbd44b32a6d5b00f5d27f1463",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -22903,10 +22915,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/boost-reset.json.gz",
+          "native": "reference/boost-reset-cases.cjs",
+          "scope": "Independent36 synthetic scenarios42 boundaries; raw seven-stat active resets, field versus real-hit targeting, own/target/both/reserves, abilities, Protect/Substitute/Steel, tied Unaware queries, midturn Calm Mind/Stored Power, called moves and lethal hit with continuation. Full-format closure pending",
+          "test": "test/test_boost_reset_engine.py"
+        }
+      ],
       "field": "onHitField",
       "id": "moves:haze:onHitField",
-      "implementation": null,
+      "implementation": {
+        "family": "boost_reset",
+        "file": "simulator/boost_reset.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:haze",
@@ -22918,7 +22942,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "bbdbeecec983e2abf94eff63f87d26132e33ebf89a1ec435f6e20114c00f42fa",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -56026,8 +56050,8 @@
         }
       ],
       "kind": "moves",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "boost-reset-positive-witness",
       "status": "partial"
     },
     {
@@ -60381,8 +60405,8 @@
         }
       ],
       "kind": "moves",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "boost-reset-positive-witness",
       "status": "partial"
     },
     {
@@ -98237,6 +98261,112 @@
           }
         ]
       },
+      "boost-reset-positive-witness": {
+        "bound": [
+          "moves:clearsmog",
+          "moves:haze"
+        ],
+        "conclusion": "required",
+        "kind": "moves",
+        "reasoning": "Pinned Clear Smog Amoonguss seed[13,2,3,4] and Haze Tentacruel seed[17,2,3,4] prove membership. Directed boost reset cases do not close full-format behavior.",
+        "references": [
+          "data/random-battles/gen5/teams.ts:103-494 (cullMovePool/randomMoveset)",
+          "data/random-battles/gen5/teams.ts:496-566 (ability filters/fallback)",
+          "data/random-battles/gen5/teams.ts:568-816 (item returns and randomSet)",
+          "data/random-battles/gen5/teams.ts:850-1014 (team eligibility)",
+          "data/random-battles/gen9/teams.ts:675-693 (addMove)",
+          "data/random-battles/gen9/teams.ts:1442-1497 (getLevel/getForme)",
+          "data/random-battles/gen9/teams.ts:1641-1683 (getPokemonPool)"
+        ],
+        "witnesses": [
+          {
+            "id": "clearsmog",
+            "kind": "move",
+            "seed": [
+              13,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Regenerator",
+              "evs": {
+                "atk": 0,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Black Sludge",
+              "ivs": {
+                "atk": 0,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 82,
+              "moves": [
+                "spore",
+                "clearsmog",
+                "foulplay",
+                "sludgebomb"
+              ],
+              "name": "Amoonguss",
+              "role": "Bulky Attacker",
+              "shiny": false,
+              "species": "Amoonguss",
+              "speciesId": "amoonguss"
+            }
+          },
+          {
+            "id": "haze",
+            "kind": "move",
+            "seed": [
+              17,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Liquid Ooze",
+              "evs": {
+                "atk": 0,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Black Sludge",
+              "ivs": {
+                "atk": 0,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 80,
+              "moves": [
+                "scald",
+                "toxicspikes",
+                "sludgebomb",
+                "haze"
+              ],
+              "name": "Tentacruel",
+              "role": "Bulky Attacker",
+              "shiny": false,
+              "species": "Tentacruel",
+              "speciesId": "tentacruel"
+            }
+          }
+        ]
+      },
       "conditional-attack-positive-witness": {
         "bound": [
           "moves:payback",
@@ -102372,8 +102502,8 @@
       },
       "entries": {
         "proven_unreachable": 542,
-        "required": 107,
-        "unresolved": 1119
+        "required": 109,
+        "unresolved": 1117
       },
       "roots": {
         "proven_unreachable": 0,

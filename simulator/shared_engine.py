@@ -61,6 +61,7 @@ from . import retaliation as retaliation_ops
 from . import custap_priority as custap_ops
 from . import hp_power as hp_power_ops
 from . import stat_power as stat_power_ops
+from . import boost_reset as boost_reset_ops
 from . import species_items as species_item_ops
 from . import ability_creation as creation_ops
 from . import suppression as suppression_ops
@@ -75,7 +76,7 @@ import sys
 def _engine():
     return sys.modules[__name__]
 
-SCHEMA = 70
+SCHEMA = 71
 ROSTER, SLOTS, QUEUE, EVENTS, DRAWS, HISTORY = 6, 4, 8, 128, 128, 2048
 OK, PENDING, INVALID, UNSUPPORTED, CAPACITY, TERMINAL, STALE = range(7)
 RETRY=7
@@ -121,6 +122,7 @@ YAWN_START,YAWN_END=60,61
 FLASH_START,FLASH_END=62,63
 BOOST_BLOCK,CLEAR_NEGATIVE=64,65
 CUSTAP_ACTIVATE=66
+CLEAR_BOOST=67
 EVENT_COLUMNS=16
 # Draw contexts; range form stores actual native arguments including offsets.
 INIT, QUEUE_SORT, BEFORE_TURN, UPDATE, HIT_UPDATE, SWITCH_SORT, FIELD_SORT, ACC, CRITICAL, ROLL, PARALYSIS, STALL = range(12)
@@ -463,6 +465,7 @@ def _hit(c,actor,move):
             c,limited=survival_ops.limit(c,target,damage,_engine())
             dealt=jnp.minimum(s.hp[target,tm],limited)
             c=_damage(c,target,limited,minimum=0,source_side=actor,source_mon=mon)
+            c=boost_reset_ops.hit(c,actor,target,move,_engine())
             c=hit_ops.drain(c,actor,target,move,dealt,_engine())
             c=partial_ops.install(c,actor,target,move,_engine())
             c=phase_ops.install(c,actor,move,_engine())
@@ -727,18 +730,20 @@ def _use_move(c,frame):
         return jax.lax.cond((move==STEALTH_ROCK)|(move==SPIKES),hazard,
         lambda c:jax.lax.cond((target!=actor)&(s.hp[target,tm]==0),no_target,
             lambda c:jax.lax.cond(target==actor,self_move,foe_move,c),c),c)
-    def resolve_move(c):
+    def resolve_field(c):
         return jax.lax.cond((field_tables.WEATHER[move]>0)|(field_tables.SCREEN[move]>0),
         lambda c:field_ops.move(c,actor,move,move_row,_engine()),
         lambda c:jax.lax.cond(field_tables.IS_BOOST[move]&(target==actor),
             lambda c:field_ops.boost(c,actor,target,move,_engine()),lambda c:jax.lax.cond(move==called_ops.MAGIC_COAT,lambda c:called_ops.coat(c,frame,_engine()),ordinary,c),c),c)
+    def resolve_move(c):
+        return jax.lax.cond(move==boost_reset_ops.HAZE,lambda c:boost_reset_ops.field(c,actor,move,_engine()),resolve_field,c)
     conditional_denied=conditional_ops.denied(c[0],target,move,_engine())|retaliation_ops.denied(c[0],actor,move)
     c=_when(conditional_denied,lambda c:ability_ops.fail(c,actor,move,move_row,_engine()),c)
     c,charging=jax.lax.cond(phase_ops.CHARGE[move],lambda c:phase_ops.charge(c,actor,move,move_row,_engine(),target_loc=jnp.where(target==actor,-1,1)),lambda c:(c,jnp.array(False)),c)
     move_row=jnp.max(jnp.where((jnp.arange(EVENTS)<c[1].ecount)&((c[1].events[:,0]==EV_MOVE)|(c[1].events[:,0]==ANIM)),jnp.arange(EVENTS),0))
     blocked_rest=(move==REST)&(c[0].status[actor,mon]==SLP)
     c=_when(blocked_rest,lambda c:ability_ops.fail(c,actor,move,move_row,_engine()),c)
-    self_accuracy=(target==actor)&(~charging)&(~blocked_rest)&(field_tables.WEATHER[move]==0)&(field_tables.SCREEN[move]==0)
+    self_accuracy=(move!=boost_reset_ops.HAZE)&(target==actor)&(~charging)&(~blocked_rest)&(field_tables.WEATHER[move]==0)&(field_tables.SCREEN[move]==0)
     c=_when(self_accuracy,lambda c:accuracy_ability_ops.modify_sort(c,actor,_engine()),c)
     c,reflected=called_ops.reflect(c,frame,_engine())
     c=_when((~charging)&(~blocked_rest)&(~reflected)&(~conditional_denied),lambda c:jax.lax.cond((called_ops.MOVE_IMPLEMENTED[move]&(move!=called_ops.MIRROR_MOVE)&(move!=called_ops.MAGIC_COAT)),lambda c:called_ops.call(c,frame,move_row,_engine()),resolve_move,c),c)
@@ -1053,7 +1058,7 @@ def _supported(s,initializing=False):
     lock_ok=lock_ok&(source_item==s.item)&(lock[:,:,5]>0)&(lock[:,:,5]<len(MOVE_KEYS))
     lock_ok=lock_ok&(lock[:,:,1]<s.effect_order)
     lock_ok=jnp.all((lock[:,:,0]==0)|lock_ok)
-    move_mask=(tables.MOVE_IMPLEMENTED|field_tables.MOVE_IMPLEMENTED|hit_tables.MOVE_IMPLEMENTED|phase_ops.MOVE_IMPLEMENTED|partial_ops.MOVE_IMPLEMENTED|phaze_ops.MOVE_IMPLEMENTED|pursuit_ops.MOVE_IMPLEMENTED|item_ops.MOVE_IMPLEMENTED|identity_ops.MOVE_IMPLEMENTED|trigger_form_ops.MOVE_IMPLEMENTED|ability_ops.MOVE_IMPLEMENTED|suppression_ops.MOVE_IMPLEMENTED|sleep_ops.MOVE_IMPLEMENTED|called_ops.MOVE_IMPLEMENTED)
+    move_mask=(boost_reset_ops.MOVE_IMPLEMENTED|tables.MOVE_IMPLEMENTED|field_tables.MOVE_IMPLEMENTED|hit_tables.MOVE_IMPLEMENTED|phase_ops.MOVE_IMPLEMENTED|partial_ops.MOVE_IMPLEMENTED|phaze_ops.MOVE_IMPLEMENTED|pursuit_ops.MOVE_IMPLEMENTED|item_ops.MOVE_IMPLEMENTED|identity_ops.MOVE_IMPLEMENTED|trigger_form_ops.MOVE_IMPLEMENTED|ability_ops.MOVE_IMPLEMENTED|suppression_ops.MOVE_IMPLEMENTED|sleep_ops.MOVE_IMPLEMENTED|called_ops.MOVE_IMPLEMENTED)
     cached=jnp.concatenate((s.move_history[:,:,:,0].reshape(-1),s.battle_move[:1]))
     cached_ok=jnp.all((cached==0)|(cached==STRUGGLE)|move_mask[jnp.clip(cached,0,len(MOVE_KEYS)-1)])
     literal=s.queue[:,3]-FORCED_MOVE_ACTION
