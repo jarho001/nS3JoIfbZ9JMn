@@ -2731,10 +2731,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/stat-trigger.json.gz",
+          "native": "reference/stat-trigger-cases.cjs",
+          "scope": "Independent37 synthetic scenarios60 boundaries; Justified runtime Dark hit raises and post-terminal Helmet, Speed Boost28/sub2 active-turn residual raises, quiet caps/dead, switch/reentry, raw suppressed/fainted sorting, status/Mummy/Trace, Pursuit, Stored Power/Gyro Ball/Analytic and continuation. Full-format closure pending",
+          "test": "test/test_stat_trigger_engine.py"
+        }
+      ],
       "field": "onDamagingHit",
       "id": "abilities:justified:onDamagingHit",
-      "implementation": null,
+      "implementation": {
+        "family": "stat_trigger",
+        "file": "simulator/stat_trigger.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:justified",
@@ -2746,7 +2758,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "3a5fd3f8201e108b20cde0264ff6303325f265e4167e84b5c1b7b7a7386e8dc4",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -5551,10 +5563,22 @@
           "file": "data/abilities.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/stat-trigger.json.gz",
+          "native": "reference/stat-trigger-cases.cjs",
+          "scope": "Independent37 synthetic scenarios60 boundaries; Justified runtime Dark hit raises and post-terminal Helmet, Speed Boost28/sub2 active-turn residual raises, quiet caps/dead, switch/reentry, raw suppressed/fainted sorting, status/Mummy/Trace, Pursuit, Stored Power/Gyro Ball/Analytic and continuation. Full-format closure pending",
+          "test": "test/test_stat_trigger_engine.py"
+        }
+      ],
       "field": "onResidual",
       "id": "abilities:speedboost:onResidual",
-      "implementation": null,
+      "implementation": {
+        "family": "stat_trigger",
+        "file": "simulator/stat_trigger.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "abilities:speedboost",
@@ -5566,7 +5590,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "3a59ae91d7afd60f4a3ced951a138990da33c5d94c2dc7e1743b2ff09364c616",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -73962,8 +73986,8 @@
         }
       ],
       "kind": "abilities",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "stat-trigger-positive-witness",
       "status": "partial"
     },
     {
@@ -76473,8 +76497,8 @@
         }
       ],
       "kind": "abilities",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "stat-trigger-positive-witness",
       "status": "partial"
     },
     {
@@ -102377,6 +102401,112 @@
           }
         ]
       },
+      "stat-trigger-positive-witness": {
+        "bound": [
+          "abilities:justified",
+          "abilities:speedboost"
+        ],
+        "conclusion": "required",
+        "kind": "abilities",
+        "reasoning": "Pinned Justified Gallade seed[11,2,3,4] and Speed Boost Blaziken seed[55,2,3,4] prove membership. Directed hit/residual stat raise cases do not close full-format behavior.",
+        "references": [
+          "data/random-battles/gen5/teams.ts:103-494 (cullMovePool/randomMoveset)",
+          "data/random-battles/gen5/teams.ts:496-566 (ability filters/fallback)",
+          "data/random-battles/gen5/teams.ts:568-816 (item returns and randomSet)",
+          "data/random-battles/gen5/teams.ts:850-1014 (team eligibility)",
+          "data/random-battles/gen9/teams.ts:675-693 (addMove)",
+          "data/random-battles/gen9/teams.ts:1442-1497 (getLevel/getForme)",
+          "data/random-battles/gen9/teams.ts:1641-1683 (getPokemonPool)"
+        ],
+        "witnesses": [
+          {
+            "id": "justified",
+            "kind": "ability",
+            "seed": [
+              11,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Justified",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "M",
+              "item": "Choice Scarf",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 85,
+              "moves": [
+                "zenheadbutt",
+                "nightslash",
+                "closecombat",
+                "trick"
+              ],
+              "name": "Gallade",
+              "role": "Fast Attacker",
+              "shiny": false,
+              "species": "Gallade",
+              "speciesId": "gallade"
+            }
+          },
+          {
+            "id": "speedboost",
+            "kind": "ability",
+            "seed": [
+              55,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Speed Boost",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 81,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Life Orb",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 75,
+              "moves": [
+                "stoneedge",
+                "protect",
+                "fireblast",
+                "highjumpkick"
+              ],
+              "name": "Blaziken",
+              "role": "Wallbreaker",
+              "shiny": false,
+              "species": "Blaziken",
+              "speciesId": "blaziken"
+            }
+          }
+        ]
+      },
       "survival-positive-witness": {
         "bound": [
           "abilities:sturdy",
@@ -103184,8 +103314,8 @@
       },
       "entries": {
         "proven_unreachable": 542,
-        "required": 120,
-        "unresolved": 1106
+        "required": 122,
+        "unresolved": 1104
       },
       "roots": {
         "proven_unreachable": 0,

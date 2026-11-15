@@ -1,12 +1,12 @@
 'use strict';
 const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),zlib=require('node:zlib');
 const {normalizeStacks}=require('./native-stack-support.cjs');
-test('native-only Justified and Speed Boost preserve hit/residual timing, caps and cached Speed',()=>{
+test('native Justified and Speed Boost preserve hit/residual timing, caps and cached Speed',()=>{
  require('../reference/neutral-turn-oracle.cjs').assertReady();
  const ps=require('../reference/vendor/pokemon-showdown/dist/sim'),{runCase}=require('../reference/shared-engine-cases.cjs'),spec=require('../reference/stat-trigger-cases.cjs');
- const actual={pin:require('../reference-lock.json').commit,witnesses:spec.membershipWitnesses(),cases:spec().map(c=>runCase(ps,c))};
- assert.deepEqual(normalizeStacks(JSON.parse(JSON.stringify(actual))),normalizeStacks(JSON.parse(zlib.gunzipSync(fs.readFileSync('test-logs/g4-cpu-conformance/stat-trigger-precheck.json.gz')))));
- assert.equal(actual.cases.length,34);assert.equal(actual.cases.reduce((n,c)=>n+c.steps.length,0),57);assert.ok(actual.cases.every(c=>c.steps.every(s=>s.accepted.every(a=>a.accepted))));
+ const actual=JSON.parse(require('node:child_process').execFileSync('node',['reference/shared-engine-cases.cjs','--batch','stattrigger'],{maxBuffer:64*1024*1024}));
+ assert.deepEqual(normalizeStacks(JSON.parse(JSON.stringify(actual))),normalizeStacks(JSON.parse(zlib.gunzipSync(fs.readFileSync('test-logs/g4-cpu-conformance/stat-trigger.json.gz')))));
+ assert.equal(actual.cases.length,37);assert.equal(actual.cases.reduce((n,c)=>n+c.steps.length,0),60);assert.ok(actual.cases.every(c=>c.steps.every(s=>s.accepted.every(a=>a.accepted))));
  for(const c of actual.cases)for(const side of ['p1','p2'])for(const mon of c.setup[side])assert.equal(new Set(mon.moves.map(m=>ps.Dex.toID(m))).size,mon.moves.length,c.id+' unique moves');
  const c=id=>actual.cases.find(c=>c.id==='G4-stat-trigger-'+id),active=(id,side=0,i=0)=>c(id).steps[i].after.sides[side].pokemon.find(p=>p.active),ev=(id,i=0)=>c(id).steps[i].events.p1.map(e=>e.message);
  for(const id of ['justified-foulplay','justified-darkpulse','justified-bite','justified-hiddenpower'])assert.equal(active(id,1).boosts.atk,1);
@@ -21,5 +21,5 @@ test('native-only Justified and Speed Boost preserve hit/residual timing, caps a
  assert.equal(c('speed-poison-ko').steps[0].after.terminal,true);assert.ok(!ev('speed-poison-ko').some(e=>e.includes('|Speed Boost|boost')));
  assert.equal(c('speed-terminal').steps[0].after.terminal,true);assert.equal(active('speed-terminal').boosts.spe,0);
  assert.ok(ev('justified-sleep-talk',1).some(e=>e.includes('|Dark Pulse|')&&e.includes('[from] move: Sleep Talk')));
- assert.deepEqual(actual.witnesses.map(w=>w.set.species),['Gallade','Blaziken']);
+ assert.deepEqual(spec.membershipWitnesses().map(w=>w.set.species),['Gallade','Blaziken']);
 });

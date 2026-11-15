@@ -11,7 +11,9 @@ module.exports=function(){
  add('justified-protect',{p1:[m({moves:['Dark Pulse','Recover'],evs:{spe:252}})],p2:[m({ability:'Justified',moves:['Protect','Recover']})],steps:[b(1,1)]});
  add('justified-suppressed',{abilityChangeFamily:true,p1:[m({moves:['Gastro Acid','Dark Pulse','Recover'],evs:{spe:252}})],p2:[m({ability:'Justified'})],steps:[b(),b(2)]});
  add('justified-weakness',{p1:[m({moves:['Dark Pulse','Recover'],evs:{spe:252}})],p2:[m({species:'Girafarig',ability:'Justified'})]});
+ add('justified-helmet-ko',{p1:[m({moves:['Foul Play','Recover'],evs:{spe:252}})],p2:[m({ability:'Justified',item:'Rocky Helmet'})],setup:[{side:'p1',hp:1}]});
  add('justified-terminal',{p1:[m({moves:['Dark Pulse','Recover'],evs:{spe:252}})],p2:[m({ability:'Justified',level:1})]});
+ add('justified-pursuit',{p1:[m({moves:['Pursuit','Recover'],evs:{spe:252}})],p2:[m({ability:'Justified'}),m()],steps:[{p1:'move 1',p2:'switch 2'}]});
  add('justified-sleep-talk',{seed:2,p1:[m({moves:['Rest','Sleep Talk','Dark Pulse']})],p2:[m({ability:'Justified',evs:{spe:252}})],setup:[{side:'p1',hp:100}],steps:[b(1,1),b(2,1)]});
  const speed=(x={})=>m({ability:'Speed Boost',...x});
  add('speed-base',{p1:[speed({moves:['Recover']})],steps:[b(1,1),b(1,1),b(1,1)]});
@@ -24,6 +26,7 @@ module.exports=function(){
  add('speed-both-suppressed',{abilityChangeFamily:true,p1:[speed({moves:['Gastro Acid','Recover']})],p2:[speed({moves:['Recover']})],steps:[b(1,1),b(2,1)]});
  add('speed-paralysis',{seed:4,p1:[speed({evs:{spe:252}})],setup:[{side:'p1',status:'par'}],steps:[b(),b()]});
  add('speed-toxic-orb',{p1:[speed({item:'Toxic Orb'})],steps:[b(),b()]});
+ add('speed-fainted-holder',{p1:[speed({moves:['Recover']}),m()],p2:[speed({moves:['Quick Attack','Recover']})],setup:[{side:'p1',hp:1}],steps:[b(1,1)]});
  add('speed-poison-ko',{p1:[speed()],setup:[{side:'p1',hp:1,status:'psn'}]});
  add('speed-mummy',{abilityChangeFamily:true,p1:[speed()],p2:[m({ability:'Mummy'})]});
  add('speed-trace',{p1:[m({ability:'Trace',moves:['Recover']})],p2:[speed({moves:['Recover']})],steps:[b(1,1),b(1,1)]});

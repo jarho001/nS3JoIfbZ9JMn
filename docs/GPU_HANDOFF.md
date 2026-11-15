@@ -22,12 +22,23 @@ Keep historical commands/results as provenance.
 
 ## Current source and evidence
 
-**Next group, native only:** Justified / Speed Boost has34 scenarios/57
-boundaries, pinned positive witnesses and a passing
-`node --test test/stat-trigger-native.test.cjs` contract. It is not in the
-CPU/CUDA runner; implementation remains pending. Preserve quiet ability caps,
-runtime move type, activeTurns gating, order28/suborder2, raw suppressed sorting
-and cached Speed timing. Full-format closure remains pending.
+**Next group, native only:** Harvest / Unnerve has31 scenarios/61 boundaries and a passing
+`node --test test/berry-ability-native.test.cjs` contract. Implementation is pending.
+Freeze schema77/journal20 state before adding the tri-state Unnerve flag.
+Harvest chance precedes eligibility; Unnerve gates berry eating. Full closure pending.
+
+**Schema77 Justified / Speed Boost group:** focused CPU37 scenarios/60 boundaries
+passed in451.998s;2 native/inventory contracts and4 handoff helpers pass.
+See [schema77-checkpoint.json](../test-logs/g4-cpu-conformance/schema77-checkpoint.json).
+One compiled step covers exact state/RNG/requests/recipient events/histories,
+NPZ continuation and journal20. No GPU execution.
+
+```sh
+JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_stat_trigger_engine -v -f
+```
+
+Runner includes139 checks/83 modules,2752 scenarios/7716
+boundaries in77 corpora. Current-source broad/device execution remains deferred.
 
 **Schema76 Analytic / Toxic Boost group:** focused CPU45 scenarios/54 boundaries
 passed in462.909s;2 native/inventory contracts and4 handoff helpers pass.

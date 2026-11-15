@@ -1,0 +1,22 @@
+'use strict';
+const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),zlib=require('node:zlib');
+const {normalizeStacks}=require('./native-stack-support.cjs');
+test('native-only Harvest and Unnerve preserve chance-before-eligibility, berry gates and ability flags',()=>{
+ require('../reference/neutral-turn-oracle.cjs').assertReady();
+ const ps=require('../reference/vendor/pokemon-showdown/dist/sim'),{runCase}=require('../reference/shared-engine-cases.cjs'),spec=require('../reference/berry-ability-cases.cjs');
+ const actual={pin:require('../reference-lock.json').commit,witnesses:spec.membershipWitnesses(),cases:spec().map(c=>runCase(ps,c))};
+ assert.deepEqual(normalizeStacks(JSON.parse(JSON.stringify(actual))),normalizeStacks(JSON.parse(zlib.gunzipSync(fs.readFileSync('test-logs/g4-cpu-conformance/berry-ability-precheck.json.gz')))));
+ assert.equal(actual.cases.length,31);assert.equal(actual.cases.reduce((n,c)=>n+c.steps.length,0),61);assert.ok(actual.cases.every(c=>c.steps.every(s=>s.accepted.every(a=>a.accepted))));
+ for(const c of actual.cases)for(const side of ['p1','p2'])for(const mon of c.setup[side])assert.equal(new Set(mon.moves.map(m=>ps.Dex.toID(m))).size,mon.moves.length,c.id+' unique moves');
+ const c=id=>actual.cases.find(c=>c.id==='G4-berry-ability-'+id),p=(id,side=0,i=0)=>c(id).steps[i].after.sides[side].pokemon.find(p=>p.active),h=(id,i=0)=>c(id).steps[i].draws.filter(d=>d.semanticContext==='harvest');
+ assert.equal(h('harvest-empty').length,1);assert.equal(h('harvest-held').length,1);assert.equal(h('harvest-herb').length,1);
+ assert.equal(h('harvest-sun').length,0);assert.ok(c('harvest-sun').steps[0].events.p1.some(e=>e.message.includes('[from] ability: Harvest')));
+ assert.ok([1,2,3,4].some(n=>p('harvest-consumed-'+n).item==='sitrusberry'));assert.ok([1,2,3,4].some(n=>p('harvest-consumed-'+n).item===''));
+ assert.equal(p('harvest-herb').item,'');assert.equal(p('harvest-knockoff').item,'');
+ for(const item of ['sitrusberry','lumberry','chestoberry','oranberry','pechaberry','custapberry'])assert.equal(p('unnerve-'+item).item,item);
+ assert.equal(p('unnerve-herb').item,'');assert.equal(p('unnerve-suppressed',1).abilityState.unnerved,false);assert.equal(p('unnerve-suppressed').item,'');
+ assert.equal(c('unnerve-switch-in').initial.sides[1].pokemon[1].abilityState.unnerved,undefined);assert.equal(p('unnerve-switch-in',1).abilityState.unnerved,true);
+ assert.equal(c('unnerve-switch-out').steps[0].after.sides[1].pokemon.find(p=>p.ability==='unnerve').abilityState.unnerved,false);
+ assert.equal(p('unnerve-reentry',1,2).abilityState.unnerved,true);
+ assert.deepEqual(actual.witnesses.map(w=>w.set.species),['Tropius','Aerodactyl']);
+});

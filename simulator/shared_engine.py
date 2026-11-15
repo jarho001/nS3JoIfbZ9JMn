@@ -66,6 +66,7 @@ from . import weather_accuracy as weather_accuracy_ops
 from . import confusion_secondary as confusion_secondary_ops
 from . import flinch_guard as flinch_guard_ops
 from . import conditional_ability as conditional_ability_ops
+from . import stat_trigger as stat_trigger_ops
 from . import species_items as species_item_ops
 from . import ability_creation as creation_ops
 from . import suppression as suppression_ops
@@ -80,7 +81,7 @@ import sys
 def _engine():
     return sys.modules[__name__]
 
-SCHEMA = 76
+SCHEMA = 77
 ROSTER, SLOTS, QUEUE, EVENTS, DRAWS, HISTORY = 6, 4, 8, 128, 128, 2048
 OK, PENDING, INVALID, UNSUPPORTED, CAPACITY, TERMINAL, STALE = range(7)
 RETRY=7
@@ -488,6 +489,7 @@ def _hit(c,actor,move):
             # left-to-right DamagingHit order, after ordered contact damage.
             c=mummy_ops.contact(c,actor,target,move,_engine())
             c=reactive_ability_ops.after_hit(c,actor,target,move,_engine())
+            c=stat_trigger_ops.after_hit(c,target,move_type,_engine())
             c=contact_status_ops.after_hit(c,actor,target,move,_engine())
             c=item_ops.knock(c,actor,target,move,_engine())
             # Gen5 Spin is AfterHit, and is skipped if contact damage killed it.
@@ -884,6 +886,11 @@ def _residual(c):
     for side in range(2):
         mon=s.active[side]
         rows.append(i32([13,side,0,29,0,1,0]).at[2].set(mon).at[4].set(s.speed[side,mon]));valid.append(s.item[side,mon]==stat_drop_ops.HERB)
+    for side in range(2):
+        mon=s.active[side]
+        rows.append(i32([14,side,0,28,0,2,0]).at[2].set(mon).at[4].set(s.speed[side,mon]))
+        # Raw holders participate in sorting even when suppressed or fainted.
+        valid.append(s.ability[side,mon]==stat_trigger_ops.SPEED)
     handlers=len(rows)
     rows=jnp.stack(rows);valid=jnp.stack(valid);count=jnp.sum(valid).astype(jnp.int32)
     order=jnp.where(valid,rows[:,3],20000)
@@ -905,7 +912,7 @@ def _residual(c):
     c,rows=jax.lax.fori_loop(0,handlers-1,shuffle_body,(c,rows))
     def effect(k,c):
         s,t=c;row=rows[k];kind,side,m=row[:3]
-        def apply(c):
+        def apply_existing(c):
             def status_tick(c):
                 s,t=c;tox=s.status[side,m]==TOX
                 stage=jnp.minimum(15,s.toxic[side,m]+1)
@@ -936,6 +943,8 @@ def _residual(c):
                 lambda c:jax.lax.cond(kind==5,lambda c:field_ops.weather_tick(c,_engine()),
                 lambda c:jax.lax.cond(kind==6,lambda c:field_ops.screen_tick(c,side,m,_engine()),
                     lambda c:jax.lax.cond(kind==1,status_tick,lambda c:jax.lax.cond(kind==4,leftovers,duration,c),c),c),c),c),c),c),c),c),c),c)
+        def apply(c):
+            return jax.lax.cond(kind==14,lambda c:stat_trigger_ops.residual(c,side,_engine()),apply_existing,c)
         return _when((k<count)&((kind==5)|(kind==6)|(~s.fainted[side,m]))&(s.winner<0)&((kind!=1)|((s.status[side,m]==TOX)|(s.status[side,m]==PSN)|(s.status[side,m]==BRN))),apply,c)
     c=jax.lax.fori_loop(0,handlers,effect,c)
     s,t=c
@@ -1082,7 +1091,7 @@ def _supported(s,initializing=False):
             &jnp.all((s.moves==0)|move_mask[jnp.clip(s.moves,0,len(MOVE_KEYS)-1)])
             &jnp.all((s.item>=0)&(s.item<len(ITEMS)))
             &jnp.all((hook_tables.ITEM_IMPLEMENTED|hit_tables.ITEM_IMPLEMENTED|phase_ops.ITEM_IMPLEMENTED|partial_ops.ITEM_IMPLEMENTED|residual_item_ops.ITEM_IMPLEMENTED|berry_ops.ITEM_IMPLEMENTED|species_item_ops.ITEM_IMPLEMENTED|stat_drop_ops.ITEM_IMPLEMENTED|survival_ops.ITEM_IMPLEMENTED)[jnp.clip(s.item,0,len(ITEMS)-1)])
-            &jnp.all((s.ability>=0)&(s.ability<len(ABILITIES)))&jnp.all((conditional_ability_ops.ABILITY_IMPLEMENTED|flinch_guard_ops.ABILITY_IMPLEMENTED|hook_tables.ABILITY_IMPLEMENTED|hit_tables.ABILITY_IMPLEMENTED|trap_ops.ABILITY_IMPLEMENTED|phaze_ops.ABILITY_IMPLEMENTED|item_ops.ABILITY_IMPLEMENTED|identity_ops.ABILITY_IMPLEMENTED|illusion_ops.ABILITY_IMPLEMENTED|form_ops.ABILITY_IMPLEMENTED|trigger_form_ops.ABILITY_IMPLEMENTED|immunity_ops.ABILITY_IMPLEMENTED|creation_ops.ABILITY_IMPLEMENTED|sleep_ops.ABILITY_IMPLEMENTED|called_ops.ABILITY_IMPLEMENTED|trace_ops.ABILITY_IMPLEMENTED|flash_ops.ABILITY_IMPLEMENTED|recovery_ops.ABILITY_IMPLEMENTED|rain_ops.ABILITY_IMPLEMENTED|residual_ops.ABILITY_IMPLEMENTED|stat_drop_ops.ABILITY_IMPLEMENTED|survival_ops.ABILITY_IMPLEMENTED|accuracy_ability_ops.ABILITY_IMPLEMENTED)[jnp.clip(s.ability,0,len(ABILITIES)-1)])
+            &jnp.all((s.ability>=0)&(s.ability<len(ABILITIES)))&jnp.all((stat_trigger_ops.ABILITY_IMPLEMENTED|conditional_ability_ops.ABILITY_IMPLEMENTED|flinch_guard_ops.ABILITY_IMPLEMENTED|hook_tables.ABILITY_IMPLEMENTED|hit_tables.ABILITY_IMPLEMENTED|trap_ops.ABILITY_IMPLEMENTED|phaze_ops.ABILITY_IMPLEMENTED|item_ops.ABILITY_IMPLEMENTED|identity_ops.ABILITY_IMPLEMENTED|illusion_ops.ABILITY_IMPLEMENTED|form_ops.ABILITY_IMPLEMENTED|trigger_form_ops.ABILITY_IMPLEMENTED|immunity_ops.ABILITY_IMPLEMENTED|creation_ops.ABILITY_IMPLEMENTED|sleep_ops.ABILITY_IMPLEMENTED|called_ops.ABILITY_IMPLEMENTED|trace_ops.ABILITY_IMPLEMENTED|flash_ops.ABILITY_IMPLEMENTED|recovery_ops.ABILITY_IMPLEMENTED|rain_ops.ABILITY_IMPLEMENTED|residual_ops.ABILITY_IMPLEMENTED|stat_drop_ops.ABILITY_IMPLEMENTED|survival_ops.ABILITY_IMPLEMENTED|accuracy_ability_ops.ABILITY_IMPLEMENTED)[jnp.clip(s.ability,0,len(ABILITIES)-1)])
             &jnp.all((s.ivs>=0)&(s.ivs<=31))&jnp.all((s.evs>=0)&(s.evs<=255))
             &jnp.all((s.nature>=1)&(s.nature<=len(generic.NATURES)))
             &jnp.all(s.types==tables.SPECIES_TYPES[safe_species])&jnp.all((s.boosts>=-6)&(s.boosts<=6))
