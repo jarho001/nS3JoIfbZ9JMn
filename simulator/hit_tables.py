@@ -1,6 +1,7 @@
 """Declarative hit-loop capabilities, separate from the exported data universe."""
 import jax.numpy as jnp
 from . import gen5_engine_tables as t
+from . import confusion_secondary
 
 MIN_HITS=t.mv(lambda r:r.get('multihit',[1,1])[0] if isinstance(r.get('multihit',[1,1]),list) else r['multihit'])
 MAX_HITS=t.mv(lambda r:r.get('multihit',[1,1])[-1] if isinstance(r.get('multihit',[1,1]),list) else r['multihit'])
@@ -19,6 +20,7 @@ ITEM_IMPLEMENTED=jnp.asarray([key=='rockyhelmet' for key in t.ITEMS],jnp.bool_)
 
 
 def supported(row):
+    if confusion_secondary.supported(row):return True
     if row.get('id') in ('thunder','blizzard'):
         if row.get('onModifyMove')!={'$callback':f"moves:{row['id']}:onModifyMove"} or row.get('accuracy')!=70 or row.get('basePower')!=120:return False
         clean=dict(row);clean.pop('onModifyMove')

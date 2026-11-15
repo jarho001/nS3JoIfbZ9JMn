@@ -23539,10 +23539,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/confusion-secondary.json.gz",
+          "native": "reference/confusion-secondary-cases.cjs",
+          "scope": "Independent44 synthetic scenarios62 boundaries; strict Signal Beam/Hurricane/Dynamic Punch secondary confusion chance/duration, quiet Own Tempo/existing/KO guards, Shield Dust/Serene Grace/Lum, Substitute/Protect, followup/source/lifetime, actual Sleep Talk, Hurricane weather and contact with continuation. Full-format closure pending",
+          "test": "test/test_confusion_secondary_engine.py"
+        }
+      ],
       "field": "onModifyMove",
       "id": "moves:hurricane:onModifyMove",
-      "implementation": null,
+      "implementation": {
+        "family": "confusion_secondary",
+        "file": "simulator/confusion_secondary.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:hurricane",
@@ -23554,7 +23566,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "6f4c5aaa1a7db7e84dd6f92ccdfa4006c3a7726660386473e4e6b56c7f048d09",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -57808,8 +57820,8 @@
         }
       ],
       "kind": "moves",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "confusion-secondary-positive-witness",
       "status": "partial"
     },
     {
@@ -61142,8 +61154,8 @@
         }
       ],
       "kind": "moves",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "confusion-secondary-positive-witness",
       "status": "partial"
     },
     {
@@ -67372,8 +67384,8 @@
         }
       ],
       "kind": "moves",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "confusion-secondary-positive-witness",
       "status": "partial"
     },
     {
@@ -98603,6 +98615,156 @@
           }
         ]
       },
+      "confusion-secondary-positive-witness": {
+        "bound": [
+          "moves:dynamicpunch",
+          "moves:hurricane",
+          "moves:signalbeam"
+        ],
+        "conclusion": "required",
+        "kind": "moves",
+        "reasoning": "Pinned Signal Beam Beheeyem seed[2,2,3,4], Hurricane Moltres seed[13,2,3,4] and Dynamic Punch Golurk seed[44,2,3,4] prove membership. Directed confusion secondary cases do not close full-format behavior. Existing Water Pulse/Confusion/Psybeam move-identity exclusions remain unchanged.",
+        "references": [
+          "data/random-battles/gen5/teams.ts:103-494 (cullMovePool/randomMoveset)",
+          "data/random-battles/gen5/teams.ts:496-566 (ability filters/fallback)",
+          "data/random-battles/gen5/teams.ts:568-816 (item returns and randomSet)",
+          "data/random-battles/gen5/teams.ts:850-1014 (team eligibility)",
+          "data/random-battles/gen9/teams.ts:675-693 (addMove)",
+          "data/random-battles/gen9/teams.ts:1442-1497 (getLevel/getForme)",
+          "data/random-battles/gen9/teams.ts:1641-1683 (getPokemonPool)"
+        ],
+        "witnesses": [
+          {
+            "id": "signalbeam",
+            "kind": "move",
+            "seed": [
+              2,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Analytic",
+              "evs": {
+                "atk": 0,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Life Orb",
+              "ivs": {
+                "atk": 3,
+                "def": 30,
+                "hp": 31,
+                "spa": 30,
+                "spd": 30,
+                "spe": 30
+              },
+              "level": 89,
+              "moves": [
+                "recover",
+                "signalbeam",
+                "psychic",
+                "hiddenpowerfighting"
+              ],
+              "name": "Beheeyem",
+              "role": "Wallbreaker",
+              "shiny": false,
+              "species": "Beheeyem",
+              "speciesId": "beheeyem"
+            }
+          },
+          {
+            "id": "hurricane",
+            "kind": "move",
+            "seed": [
+              13,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Pressure",
+              "evs": {
+                "atk": 0,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "N",
+              "item": "Leftovers",
+              "ivs": {
+                "atk": 0,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 78,
+              "moves": [
+                "roost",
+                "substitute",
+                "fireblast",
+                "hurricane"
+              ],
+              "name": "Moltres",
+              "role": "Bulky Attacker",
+              "shiny": false,
+              "species": "Moltres",
+              "speciesId": "moltres"
+            }
+          },
+          {
+            "id": "dynamicpunch",
+            "kind": "move",
+            "seed": [
+              44,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "No Guard",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "N",
+              "item": "Life Orb",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 80,
+              "moves": [
+                "rockpolish",
+                "stoneedge",
+                "earthquake",
+                "dynamicpunch"
+              ],
+              "name": "Golurk",
+              "role": "Wallbreaker",
+              "shiny": false,
+              "species": "Golurk",
+              "speciesId": "golurk"
+            }
+          }
+        ]
+      },
       "contact-status-positive-witness": {
         "bound": [
           "abilities:flamebody",
@@ -102632,8 +102794,8 @@
       },
       "entries": {
         "proven_unreachable": 542,
-        "required": 111,
-        "unresolved": 1115
+        "required": 114,
+        "unresolved": 1112
       },
       "roots": {
         "proven_unreachable": 0,

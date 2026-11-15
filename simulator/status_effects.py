@@ -149,7 +149,7 @@ def confuse(c,actor,target,move,e,*,fatigue=False):
 
 
 def secondary(c,actor,move,e):
-    chance=jnp.maximum(e.tables.SECONDARY_CHANCE[move],e.phase_ops.FLINCH_CHANCE[move]);status=e.tables.SECONDARY_STATUS[move]
+    chance=jnp.maximum(e.confusion_secondary_ops.CHANCE[move],jnp.maximum(e.tables.SECONDARY_CHANCE[move],e.phase_ops.FLINCH_CHANCE[move]));status=e.tables.SECONDARY_STATUS[move]
     s,_=c;frame=s.call_frames[s.call_depth-1]
     grace=(frame[e.called_ops.FLAGS]&e.called_ops.SERENE_GRACE_FLAG)!=0
     dust=e.suppression_ops.abilities(s)[1-actor,s.active[1-actor]]==e.tables.ABILITY_IDS['shielddust']
@@ -157,7 +157,7 @@ def secondary(c,actor,move,e):
     def attempt(c):
         c,value=e._draw(c,0,100,e.SECONDARY)
         return e._when(value<chance.astype(jnp.uint32),
-            lambda c:jax.lax.cond(e.phase_ops.FLINCH_CHANCE[move]>0,lambda c:e.phase_ops.flinch(c,actor,1-actor,move,e),lambda c:inflict(c,actor,1-actor,status,e,move=move,secondary=True),c),c)
+            lambda c:jax.lax.cond(e.confusion_secondary_ops.CHANCE[move]>0,lambda c:e.confusion_secondary_ops.apply(c,actor,1-actor,move,e),lambda c:jax.lax.cond(e.phase_ops.FLINCH_CHANCE[move]>0,lambda c:e.phase_ops.flinch(c,actor,1-actor,move,e),lambda c:inflict(c,actor,1-actor,status,e,move=move,secondary=True),c),c),c)
     return e._when(chance>0,attempt,c)
 
 

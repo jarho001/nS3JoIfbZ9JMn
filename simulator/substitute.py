@@ -48,7 +48,7 @@ def absorb(c,actor,target,move,damage,e):
     c=e.hit_ops.drain(c,actor,target,move,dealt,e,substitute=True)
     c=e.phase_ops.install(c,actor,move,e)
     c=e._when((move==e.RAPID_SPIN)&(c[0].hp[actor,mon]>0),lambda c:e.hit_ops.spin(c,actor,e),c)
-    chance=jnp.maximum(e.tables.SECONDARY_CHANCE[move],e.phase_ops.FLINCH_CHANCE[move])
+    chance=jnp.maximum(e.confusion_secondary_ops.CHANCE[move],jnp.maximum(e.tables.SECONDARY_CHANCE[move],e.phase_ops.FLINCH_CHANCE[move]))
     def secondary_draw(c):
         c,_=e._draw(c,0,100,e.SECONDARY)
         return c

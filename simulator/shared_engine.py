@@ -63,6 +63,7 @@ from . import hp_power as hp_power_ops
 from . import stat_power as stat_power_ops
 from . import boost_reset as boost_reset_ops
 from . import weather_accuracy as weather_accuracy_ops
+from . import confusion_secondary as confusion_secondary_ops
 from . import species_items as species_item_ops
 from . import ability_creation as creation_ops
 from . import suppression as suppression_ops
@@ -77,7 +78,7 @@ import sys
 def _engine():
     return sys.modules[__name__]
 
-SCHEMA = 72
+SCHEMA = 73
 ROSTER, SLOTS, QUEUE, EVENTS, DRAWS, HISTORY = 6, 4, 8, 128, 128, 2048
 OK, PENDING, INVALID, UNSUPPORTED, CAPACITY, TERMINAL, STALE = range(7)
 RETRY=7
