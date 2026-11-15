@@ -22,12 +22,25 @@ Keep historical commands/results as provenance.
 
 ## Current source and evidence
 
-**Next group, native only:** Thunder / Blizzard has51 scenarios/84
-boundaries, pinned positive witnesses and a passing
-`node --test test/weather-accuracy-native.test.cjs` contract. It is not in the
-CPU/CUDA runner; implementation remains pending. Preserve live weather accuracy
-and exact skipped query/draw behavior. Hurricane requires secondary confusion.
-Full-format closure remains pending.
+**Next group, native only:** Signal Beam / Hurricane / Dynamic Punch has44
+scenarios/62 boundaries, pinned positive witnesses and a passing
+`node --test test/confusion-secondary-native.test.cjs` contract. It is not in the
+CPU/CUDA runner; implementation remains pending. Preserve chance/duration RNG,
+silent Own Tempo/existing-confusion blocks, KO behavior, source lifetime and
+Hurricane weather callback. Full-format closure remains pending.
+
+**Schema72 Thunder / Blizzard group:** focused CPU51 scenarios/84 boundaries
+passed in439.778s;2 native/inventory contracts and4 handoff helpers pass.
+See [schema72-checkpoint.json](../test-logs/g4-cpu-conformance/schema72-checkpoint.json).
+One compiled step covers exact state/RNG/requests/recipient events/histories,
+NPZ continuation and journal20. No GPU execution.
+
+```sh
+JAX_PLATFORMS=cuda "$JAX_PYTHON" -m unittest test.test_weather_accuracy_engine -v -f
+```
+
+Runner includes134 checks/78 modules,2561 scenarios/7447
+boundaries in72 corpora. Current-source broad/device execution remains deferred.
 
 **Schema71 Haze / Clear Smog group:** focused CPU36 scenarios/42 boundaries
 passed in434.279s;2 native/inventory contracts and4 handoff helpers pass.

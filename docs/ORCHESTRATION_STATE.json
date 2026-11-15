@@ -34,8 +34,8 @@
     "brief": "PROJECT_PLAN.md#proposed-g4-cpu-implementation-and-conformance-goal",
     "source_base": "f37067e",
     "scope": "Complete pinned gen5randombattle reachable mechanics and every prepared CPU gate. Integrated checkpoints, resumable progress and commit/push authorized. GPU execution, profiling, benchmarks, training, delegation and scored research excluded.",
-    "checkpoint": "Schema71 Haze / Clear Smog group: 36 scenarios/42 boundaries pass one compiled step in434.279s; native/inventory and4 handoff helpers pass. Full G4 remains open.",
-    "next": "Continue Thunder / Blizzard weather accuracy group from51 native scenarios84 boundaries. Resolve live weather before accuracy stages/draws; rain/hail guaranteed hits skip both stage queries and accuracy draw, retain other modifier sorts, sun Thunder50. Hurricane secondary confusion remains gated.",
+    "checkpoint": "Schema72 Thunder / Blizzard group: 51 scenarios/84 boundaries pass one compiled step in439.778s; native/inventory and4 handoff helpers pass. Full G4 remains open.",
+    "next": "Continue Signal Beam / Hurricane / Dynamic Punch secondary confusion group from44 native scenarios62 boundaries. Preserve chance draw even on KO and Own Tempo/existing confusion, but silent no-op and no duration on blocked/KO; Shield Dust removes chance. Reuse existing confusion source/lifetime/cure path with secondary-specific quiet guards, enable Hurricane weather accuracy only together with its confusion secondary.",
     "ledger": {
       "path": "rules/gen5-reachable-v1.json",
       "entries": 1768,
@@ -45,7 +45,7 @@
         "indirect-closure",
         "engine-contract"
       ],
-      "status": "Incomplete:381 partial callback mappings/765 unsupported; full reachability/closure pending.",
+      "status": "Incomplete:383 partial callback mappings/763 unsupported; full reachability/closure pending.",
       "reachability_summary": {
         "callbacks": {
           "proven_unreachable": 546,
@@ -54,8 +54,8 @@
         },
         "entries": {
           "proven_unreachable": 542,
-          "required": 109,
-          "unresolved": 1117
+          "required": 111,
+          "unresolved": 1115
         },
         "roots": {
           "proven_unreachable": 0,
@@ -77,13 +77,13 @@
     "first_divergence": null,
     "gpu_requirement": "Deferred during travel. Record all G4 device obligations and ready/pending commands in docs/GPU_HANDOFF.md; current checkpoint runner is scripts/g4_gpu_handoff.py. CPU implementation remains active. Later full G4 release still requires matching-source GPU conformance.",
     "acceptance": "G4-CPU-conformance pending. Generic data checkpoint passes; all remaining prepared CPU gates retained, all milestone acceptance/task count unchanged.",
-    "source_identity": "test-logs/g4-cpu-conformance/schema71-checkpoint.json",
+    "source_identity": "test-logs/g4-cpu-conformance/schema72-checkpoint.json",
     "evidence_directory": "test-logs/g4-cpu-conformance",
     "publication": {
       "status": "checkpoint_publication_authorized",
       "target": "origin/main",
-      "previous_published_head": "57f1f20930850ad827afa10839eb8873eac8f32c",
-      "scope": "Schema71 focused CPU checkpoint; sustained CPU execution continues, full G4 open."
+      "previous_published_head": "eac97de3c98186cb86a0a333e45c51171434cdc1",
+      "scope": "Schema72 focused CPU checkpoint; sustained CPU execution continues, full G4 open."
     },
     "reasoning_effort": "medium (user preference,2026-11-10; no automatic escalation)",
     "design_pass": {
@@ -150,24 +150,26 @@
     },
     "record_usage": "Start at docs/CURRENT.md and scripts/read_context.py. State is authoritative for live progress; history is archived. Update live checkpoint/next/package/blockers at meaningful checkpoints; do not append completed-family narratives. Detailed results belong in immutable test evidence.",
     "next_work_package": {
-      "id": "g4-weather-accuracy-group",
+      "id": "g4-confusion-secondary-group",
       "status": "native_precheck_passed_implementation_pending",
       "members": [
-        "Thunder rain guaranteed hit / sun50 accuracy",
-        "Blizzard hail guaranteed hit"
+        "Signal Beam10% secondary confusion",
+        "Hurricane30% secondary confusion and weather accuracy",
+        "Dynamic Punch100% secondary confusion"
       ],
       "membership": [
-        "Thunder Kyogre seed[37,2,3,4]",
-        "Blizzard Abomasnow seed[11,2,3,4]"
+        "Signal Beam Beheeyem seed[2,2,3,4]",
+        "Hurricane Moltres seed[13,2,3,4]",
+        "Dynamic Punch Golurk seed[44,2,3,4]"
       ],
-      "native_precheck": "51 synthetic scenarios84 boundaries; neutral seeds, all four weather types, weather-before-attack same turn, stage extremes and tied Unaware, No Guard/Compound Eyes/Hustle/Victory Star, Substitute/Protect, Fly/Dig, actual called attacks, immunity/absorption and terminal.",
-      "native_command": "node --test test/weather-accuracy-native.test.cjs",
+      "native_precheck": "44 synthetic scenarios62 boundaries; positive/negative chance seeds, followup self hit/lifetime, Own Tempo/Shield Dust/Magic Guard/Serene Grace, Lum, Substitute/Protect, existing confusion, lethal hit, actual Sleep Talk, Hurricane rain/sun/hail, Ghost immunity, Helmet/Mummy contact. Chance persists on KO/Own Tempo/existing confusion; only new eligible confusion consumes duration.",
+      "native_command": "node --test test/confusion-secondary-native.test.cjs",
       "native_result": "1 passed; implementation pending",
-      "planned_command": "JAX_PLATFORMS=cpu JAX_ENABLE_COMPILATION_CACHE=true JAX_COMPILATION_CACHE_DIR=\"$PWD/work/jax-cache\" JAX_EXPLAIN_CACHE_MISSES=true OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 XLA_PYTHON_CLIENT_PREALLOCATE=false timeout 900s .venv-jax/bin/python -m unittest test.test_weather_accuracy_engine -v -f",
+      "planned_command": "JAX_PLATFORMS=cpu JAX_ENABLE_COMPILATION_CACHE=true JAX_COMPILATION_CACHE_DIR=\"$PWD/work/jax-cache\" JAX_EXPLAIN_CACHE_MISSES=true OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 XLA_PYTHON_CLIENT_PREALLOCATE=false timeout 900s .venv-jax/bin/python -m unittest test.test_confusion_secondary_engine -v -f",
       "command_status": "planned; module not yet implemented",
       "excluded": [
-        "Hurricane needs secondary confusion; weather suppression abilities remain gated",
-        "Broad CPU/device/campaign/profiling gates deferred; full-format closure pending"
+        "Water Pulse/Confusion/Psybeam retain existing move-identity-bound proven_unreachable exclusions",
+        "Other secondary effects and broad CPU/device/campaign/profiling gates deferred; full-format closure pending"
       ]
     },
     "stopping_reason": null,
@@ -561,27 +563,27 @@
     "combined_return_home_block": "docs/GPU_HANDOFF.md#one-return-home-block-correctness-plus-g3-v6-measurements",
     "pending_status_checkpoint": "Current status/field/hook GPU checks are wired into the49-check runner; no GPU execution during travel. Preserve matching-source CPU results and do not transfer earlier GPU/CPU evidence across changed source.",
     "expanded_checkpoint": {
-      "status": "schema71_grouped_focused_CPU_complete_GPU_deferred",
-      "engine_schema": 71,
-      "modules": 77,
-      "native_scenarios": 2510,
-      "native_boundaries": 7363,
+      "status": "schema72_grouped_focused_CPU_complete_GPU_deferred",
+      "engine_schema": 72,
+      "modules": 78,
+      "native_scenarios": 2561,
+      "native_boundaries": 7447,
       "initial_field_evidence": "test-logs/g4-cpu-conformance/schema5-checkpoint.json",
       "source": "Use latest committed checkout and runner source/fixture fingerprints; earlier source_commit fields describe historical preparation.",
       "handoff_prepared": false,
-      "source_commit": "Publishing commit; exact fingerprints in schema71-checkpoint.json",
-      "source_identity": "test-logs/g4-cpu-conformance/schema71-checkpoint.json",
-      "checks": 133
+      "source_commit": "Publishing commit; exact fingerprints in schema72-checkpoint.json",
+      "source_identity": "test-logs/g4-cpu-conformance/schema72-checkpoint.json",
+      "checks": 134
     },
     "pending_candidate": {
-      "family": "Thunder / Blizzard",
+      "family": "Signal Beam / Hurricane / Dynamic Punch",
       "status": "native_only_precheck_passed_implementation_pending",
-      "cases": 51,
-      "boundaries": 84,
-      "fixture": "test-logs/g4-cpu-conformance/weather-accuracy-precheck.json.gz",
-      "native_command": "node --test test/weather-accuracy-native.test.cjs",
+      "cases": 44,
+      "boundaries": 62,
+      "fixture": "test-logs/g4-cpu-conformance/confusion-secondary-precheck.json.gz",
+      "native_command": "node --test test/confusion-secondary-native.test.cjs",
       "included_in_checkpoint_runner": false,
-      "next": "Implement live weather accuracy and exact skipped RNG queries with one shared CPU checkpoint."
+      "next": "Implement strict secondary confusion and Hurricane weather callback with one shared CPU checkpoint."
     }
   },
   "historical_records": {

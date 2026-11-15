@@ -19,6 +19,10 @@ ITEM_IMPLEMENTED=jnp.asarray([key=='rockyhelmet' for key in t.ITEMS],jnp.bool_)
 
 
 def supported(row):
+    if row.get('id') in ('thunder','blizzard'):
+        if row.get('onModifyMove')!={'$callback':f"moves:{row['id']}:onModifyMove"} or row.get('accuracy')!=70 or row.get('basePower')!=120:return False
+        clean=dict(row);clean.pop('onModifyMove')
+        return t.simple_secondary(clean)
     if row.get('id')=='clearsmog':
         if row.get('basePower')!=50 or row.get('onHit')!={'$callback':'moves:clearsmog:onHit'}:return False
         clean=dict(row);clean.pop('onHit')

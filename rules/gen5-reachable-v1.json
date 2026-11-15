@@ -19003,10 +19003,22 @@
           "file": "data/mods/gen8/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/weather-accuracy.json.gz",
+          "native": "reference/weather-accuracy-cases.cjs",
+          "scope": "Independent51 synthetic scenarios84 boundaries; live rain/sun/hail weather accuracy before queries, neutral/all-weather/midturn/stages/Unaware/Victory Star modifier sorts, abilities, Substitute/Protect/Fly/Dig, called moves, immunity/absorption and terminal with continuation. Hurricane secondary confusion and full-format closure pending",
+          "test": "test/test_weather_accuracy_engine.py"
+        }
+      ],
       "field": "onModifyMove",
       "id": "moves:blizzard:onModifyMove",
-      "implementation": null,
+      "implementation": {
+        "family": "weather_accuracy",
+        "file": "simulator/weather_accuracy.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:blizzard",
@@ -19018,7 +19030,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "3459092dd0c1f121b0c73bbb79c6350e284083f479a5a601e6422ebe5f5b5090",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -29911,10 +29923,22 @@
           "file": "data/moves.ts"
         }
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "fixture": "test-logs/g4-cpu-conformance/weather-accuracy.json.gz",
+          "native": "reference/weather-accuracy-cases.cjs",
+          "scope": "Independent51 synthetic scenarios84 boundaries; live rain/sun/hail weather accuracy before queries, neutral/all-weather/midturn/stages/Unaware/Victory Star modifier sorts, abilities, Substitute/Protect/Fly/Dig, called moves, immunity/absorption and terminal with continuation. Hurricane secondary confusion and full-format closure pending",
+          "test": "test/test_weather_accuracy_engine.py"
+        }
+      ],
       "field": "onModifyMove",
       "id": "moves:thunder:onModifyMove",
-      "implementation": null,
+      "implementation": {
+        "family": "weather_accuracy",
+        "file": "simulator/weather_accuracy.py",
+        "scheduler": "simulator/shared_engine.py",
+        "scope": "Implemented branches under explicit current capability masks only; complete callback/indirect/interaction validation pending"
+      },
       "incoming": [
         {
           "entry": "moves:thunder",
@@ -29926,7 +29950,7 @@
       "reachability": "unresolved",
       "reachabilityAudit": "unresolved-callback-activation",
       "sha256": "6f4c5aaa1a7db7e84dd6f92ccdfa4006c3a7726660386473e4e6b56c7f048d09",
-      "status": "unsupported"
+      "status": "partial"
     },
     {
       "definitions": [
@@ -55108,8 +55132,8 @@
         }
       ],
       "kind": "moves",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "weather-accuracy-positive-witness",
       "status": "partial"
     },
     {
@@ -70003,8 +70027,8 @@
         }
       ],
       "kind": "moves",
-      "reachability": "unresolved",
-      "reachabilityAudit": "unresolved-membership",
+      "reachability": "required",
+      "reachabilityAudit": "weather-accuracy-positive-witness",
       "status": "partial"
     },
     {
@@ -102324,6 +102348,112 @@
           }
         ]
       },
+      "weather-accuracy-positive-witness": {
+        "bound": [
+          "moves:blizzard",
+          "moves:thunder"
+        ],
+        "conclusion": "required",
+        "kind": "moves",
+        "reasoning": "Pinned Thunder Kyogre seed[37,2,3,4] and Blizzard Abomasnow seed[11,2,3,4] prove membership. Directed weather accuracy cases do not close full-format behavior. Hurricane remains gated by secondary confusion.",
+        "references": [
+          "data/random-battles/gen5/teams.ts:103-494 (cullMovePool/randomMoveset)",
+          "data/random-battles/gen5/teams.ts:496-566 (ability filters/fallback)",
+          "data/random-battles/gen5/teams.ts:568-816 (item returns and randomSet)",
+          "data/random-battles/gen5/teams.ts:850-1014 (team eligibility)",
+          "data/random-battles/gen9/teams.ts:675-693 (addMove)",
+          "data/random-battles/gen9/teams.ts:1442-1497 (getLevel/getForme)",
+          "data/random-battles/gen9/teams.ts:1641-1683 (getPokemonPool)"
+        ],
+        "witnesses": [
+          {
+            "id": "thunder",
+            "kind": "move",
+            "seed": [
+              37,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Drizzle",
+              "evs": {
+                "atk": 0,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "N",
+              "item": "Choice Scarf",
+              "ivs": {
+                "atk": 0,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 69,
+              "moves": [
+                "icebeam",
+                "waterspout",
+                "thunder",
+                "surf"
+              ],
+              "name": "Kyogre",
+              "role": "Fast Attacker",
+              "shiny": false,
+              "species": "Kyogre",
+              "speciesId": "kyogre"
+            }
+          },
+          {
+            "id": "blizzard",
+            "kind": "move",
+            "seed": [
+              11,
+              2,
+              3,
+              4
+            ],
+            "set": {
+              "ability": "Snow Warning",
+              "evs": {
+                "atk": 85,
+                "def": 85,
+                "hp": 85,
+                "spa": 85,
+                "spd": 85,
+                "spe": 85
+              },
+              "gender": "",
+              "item": "Leftovers",
+              "ivs": {
+                "atk": 31,
+                "def": 31,
+                "hp": 31,
+                "spa": 31,
+                "spd": 31,
+                "spe": 31
+              },
+              "level": 82,
+              "moves": [
+                "iceshard",
+                "woodhammer",
+                "blizzard",
+                "earthquake"
+              ],
+              "name": "Abomasnow",
+              "role": "Bulky Attacker",
+              "shiny": false,
+              "species": "Abomasnow",
+              "speciesId": "abomasnow"
+            }
+          }
+        ]
+      },
       "weight-based-positive-witness": {
         "bound": [
           "moves:grassknot",
@@ -102502,8 +102632,8 @@
       },
       "entries": {
         "proven_unreachable": 542,
-        "required": 109,
-        "unresolved": 1117
+        "required": 111,
+        "unresolved": 1115
       },
       "roots": {
         "proven_unreachable": 0,

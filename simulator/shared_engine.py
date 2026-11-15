@@ -62,6 +62,7 @@ from . import custap_priority as custap_ops
 from . import hp_power as hp_power_ops
 from . import stat_power as stat_power_ops
 from . import boost_reset as boost_reset_ops
+from . import weather_accuracy as weather_accuracy_ops
 from . import species_items as species_item_ops
 from . import ability_creation as creation_ops
 from . import suppression as suppression_ops
@@ -76,7 +77,7 @@ import sys
 def _engine():
     return sys.modules[__name__]
 
-SCHEMA = 71
+SCHEMA = 72
 ROSTER, SLOTS, QUEUE, EVENTS, DRAWS, HISTORY = 6, 4, 8, 128, 128, 2048
 OK, PENDING, INVALID, UNSUPPORTED, CAPACITY, TERMINAL, STALE = range(7)
 RETRY=7
@@ -681,14 +682,15 @@ def _use_move(c,frame):
         def try_hit(c):
             def accuracy(c):
                 c=accuracy_ability_ops.modify_sort(c,actor,_engine(),target=target)
-                queries=(ACCURACY[move]>0)&(~pursuit_ops.boosted(c[0],target,move,_engine()))
+                move_accuracy=weather_accuracy_ops.accuracy(c[0],move,ACCURACY[move])
+                queries=(move_accuracy>0)&(~pursuit_ops.boosted(c[0],target,move,_engine()))
                 c=_when(queries,lambda c:unaware_ops.pair(c,_engine()),c)
                 c=accuracy_ability_ops.accuracy_sort(c,_engine())
                 sure=accuracy_ability_ops.sure_hit(c[0],actor,target,_engine())
-                c,roll=jax.lax.cond((ACCURACY[move]>0)&(~sure)&(~pursuit_ops.boosted(c[0],target,move,_engine())),lambda c:_draw(c,0,100,ACC),lambda c:(c,jnp.uint32(0)),c)
-                base_accuracy=hook_ops.accuracy(ACCURACY[move],c[0],actor,target,tables.CATEGORY[move])
+                c,roll=jax.lax.cond((move_accuracy>0)&(~sure)&(~pursuit_ops.boosted(c[0],target,move,_engine())),lambda c:_draw(c,0,100,ACC),lambda c:(c,jnp.uint32(0)),c)
+                base_accuracy=hook_ops.accuracy(move_accuracy,c[0],actor,target,tables.CATEGORY[move])
                 threshold=field_ops.accuracy(base_accuracy,c[0],actor,target,_engine())
-                hit=sure|pursuit_ops.boosted(c[0],target,move,_engine())|(ACCURACY[move]==0)|(roll<threshold.astype(jnp.uint32))
+                hit=sure|pursuit_ops.boosted(c[0],target,move,_engine())|(move_accuracy==0)|(roll<threshold.astype(jnp.uint32))
                 def miss(c):
                     s,t=c;t=t._replace(events=t.events.at[move_row,7].set(1))
                     return hit_ops.crash(_event((s,t),MISS,actor,mon,move,target,tm),actor,move,_engine())
